@@ -21,7 +21,7 @@ export const PracticeRecordsView: React.FC = () => {
   const allStudents = StorageService.getStudents();
   const students = useMemo(() => scopeStudents(allStudents), [allStudents, scopeStudents]);
   const practiceList = useMemo(
-    () => scopeByStudentIds(StorageService.getPracticeRecords(), allStudents),
+    () => scopeByStudentIds<PracticeRecord>(StorageService.getPracticeRecords(), allStudents),
     [allStudents, scopeByStudentIds]
   );
 

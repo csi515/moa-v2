@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
+import type { PracticeRecord } from '@/core/lessons/types';
 import { usePianoExpectedDay } from '../attendance/usePianoExpectedDay';
 import {
   resolveDayStatus,
@@ -30,7 +31,7 @@ export function useStaffDashboardData() {
 
   const pendingPracticeCount = useMemo(
     () =>
-      scopeByStudentIds(StorageService.getPracticeRecords(), allStudents).filter(
+      scopeByStudentIds<PracticeRecord>(StorageService.getPracticeRecords(), allStudents).filter(
         (record) => record.source === 'parent' && !record.staffReviewed
       ).length,
     [allStudents, scopeByStudentIds, refreshKey]

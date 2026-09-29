@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { StorageService } from '@/services/storage';
 import type { Booking } from '@/core/types/schedule';
@@ -17,7 +17,23 @@ function isStudentInStaffScope(student: Student, staffId: string, myClassIds: Se
   return (student.classIds || []).some((classId) => myClassIds.has(classId));
 }
 
-export function useStaffScope() {
+export interface StaffScopeState {
+  isStaff: boolean;
+  staffId: string | null | undefined;
+  isScoped: boolean;
+  scopeStudents: (students: Student[]) => Student[];
+  scopeClasses: (classes: ClassItem[]) => ClassItem[];
+  scopeBookings: (bookings: Booking[], students?: Student[]) => Booking[];
+  scopeMembersForPilates: (members: Student[], bookings: Booking[]) => Student[];
+  scopeByStudentIds: <T extends { studentId: string }>(items: T[], students: Student[]) => T[];
+  scopeLessons: (lessons: LessonRecord[], students?: Student[]) => LessonRecord[];
+  scopeConsultations: (consultations: Consultation[]) => Consultation[];
+  scopeMakeupItems: (items: MakeupItem[], students: Student[]) => MakeupItem[];
+  scopeRecitalEvents: (events: AcademyEvent[], students: Student[]) => AcademyEvent[];
+  getMyStudentIds: (students: Student[]) => Set<string>;
+}
+
+export function useStaffScope(): StaffScopeState {
   const { isStaff, staffId } = usePermissions();
 
   const isScoped = isStaff && !!staffId;
@@ -88,13 +104,12 @@ export function useStaffScope() {
     [isScoped, staffId, myClassIds]
   );
 
-  const scopeByStudentIds = useMemo(
-    () =>
-      <T extends { studentId: string }>(items: T[], students: Student[]): T[] => {
-        if (!isScoped) return items;
-        const ids = getMyStudentIds(students);
-        return items.filter((i) => ids.has(i.studentId));
-      },
+  const scopeByStudentIds = useCallback(
+    <T extends { studentId: string }>(items: T[], students: Student[]): T[] => {
+      if (!isScoped) return items;
+      const ids = getMyStudentIds(students);
+      return items.filter((i) => ids.has(i.studentId));
+    },
     [isScoped, getMyStudentIds]
   );
 

@@ -3,15 +3,15 @@ import { useTable } from "@refinedev/core";
 import { Plus, Search, UserCheck } from "lucide-react";
 
 export const StudentListPage: React.FC = () => {
-  const { tableQueryResult } = useTable({
+  const { tableQuery } = useTable({
     resource: "customers",
     pagination: {
       pageSize: 10,
     },
   });
 
-  const students = tableQueryResult?.data?.data || [];
-  const isLoading = tableQueryResult?.isLoading;
+  const students = (tableQuery?.data?.data as any[]) || [];
+  const isLoading = tableQuery?.isLoading;
 
   return (
     <div className="space-y-6">
