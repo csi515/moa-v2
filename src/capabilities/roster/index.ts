@@ -1,0 +1,1 @@
+export { rosterCapability } from './manifest';

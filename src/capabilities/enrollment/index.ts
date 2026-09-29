@@ -1,0 +1,1 @@
+export { enrollmentCapability } from './manifest';

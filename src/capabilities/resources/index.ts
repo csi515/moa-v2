@@ -1,0 +1,1 @@
+export { resourcesCapability } from './manifest';
