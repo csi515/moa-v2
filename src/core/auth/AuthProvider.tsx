@@ -1,8 +1,12 @@
 import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { Session, User } from '@supabase/supabase-js';
-import { StorageService } from '../../services/storage';
 import * as authService from './services/authService';
-import { clearLocalPushTokensForUser, resetAppPushRegistrationContext } from '@/core/push';
+import {
+  requestSignOut,
+  registerPromptListener,
+  registerCompletionListener,
+  dismissPrompt,
+} from './services/signOutCoordinator';
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog';
 import type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
 
@@ -19,18 +23,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const SIGN_OUT_COPY = {
-  unsyncedTitle: '저장되지 않은 변경사항',
-  unsyncedBody:
-    '저장되지 않은 변경사항이 있습니다.\n인터넷 연결을 확인한 뒤 다시 시도해 주세요.',
-  retry: '다시 시도',
-  cancel: '취소',
-  forceAction: '로그아웃',
-  forceTitle: '로그아웃',
-  forceBody:
-    '저장되지 않은 변경사항은 복구되지 않을 수 있습니다.\n그래도 로그아웃하시겠습니까?',
-} as const;
-
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
@@ -43,6 +35,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       .finally(() => setLoading(false));
 
     return authService.onAuthStateChange(setSession);
+  }, []);
+
+  useEffect(() => {
+    const unregisterPrompt = registerPromptListener(setSignOutPrompt);
+    const unregisterCompletion = registerCompletionListener(() => setSession(null));
+    return () => {
+      unregisterPrompt();
+      unregisterCompletion();
+    };
   }, []);
 
   const signIn = async (email: string, password: string) => {
@@ -72,54 +73,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     await authService.signInWithNaver();
   };
 
-  const completeSignOut = async () => {
-    const userId = session?.user?.id;
-    StorageService.clearOrganization();
-    StorageService.clearBusinessCachesOnSignOut();
-    if (userId) clearLocalPushTokensForUser(userId);
-    resetAppPushRegistrationContext();
-    await authService.signOut();
-    setSession(null);
-  };
-
-  const openForcePrompt = () => {
-    setSignOutPrompt({
-      title: SIGN_OUT_COPY.forceTitle,
-      message: SIGN_OUT_COPY.forceBody,
-      confirmText: SIGN_OUT_COPY.forceAction,
-      cancelText: SIGN_OUT_COPY.cancel,
-      isDestructive: true,
-      onConfirm: () => {
-        void completeSignOut();
-      },
-    });
-  };
-
   const signOut = async (options?: { force?: boolean }) => {
-    if (options?.force) {
-      setSignOutPrompt(null);
-      await completeSignOut();
-      return;
-    }
-
-    const prepared = await StorageService.prepareSignOut();
-    if (prepared === 'blocked') {
-      setSignOutPrompt({
-        title: SIGN_OUT_COPY.unsyncedTitle,
-        message: SIGN_OUT_COPY.unsyncedBody,
-        confirmText: SIGN_OUT_COPY.retry,
-        cancelText: SIGN_OUT_COPY.cancel,
-        altText: SIGN_OUT_COPY.forceAction,
-        onConfirm: () => {
-          void signOut();
-        },
-        onAlt: openForcePrompt,
-      });
-      return;
-    }
-
-    setSignOutPrompt(null);
-    await completeSignOut();
+    await requestSignOut(options);
   };
 
   return (
@@ -136,7 +91,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }}
     >
       {children}
-      <ConfirmDialog options={signOutPrompt} onDismiss={() => setSignOutPrompt(null)} />
+      <ConfirmDialog options={signOutPrompt} onDismiss={dismissPrompt} />
     </AuthContext.Provider>
   );
 };

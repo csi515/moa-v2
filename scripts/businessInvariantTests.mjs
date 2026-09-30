@@ -227,6 +227,7 @@ export const INVENTORY_CANDIDATES = {
   'test:security-boundary-harden': 'authorization(rls and rpc boundary hardening). ci-cd static security에 있음',
   'test:access-control': 'authorization(refine access control adapter integration). ci-cd static security에 있음',
   'test:student-crud': 'students(refine student crud data provider contract). ci-cd static integration에 있음',
+  'test:logout-protection': 'auth(conditional logout protection with offline pending mutation guard). ci-cd static integration에 있음',
 };
 
 export function loadPackageScripts() {

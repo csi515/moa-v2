@@ -1,9 +1,9 @@
 import type { AuthProvider } from "@refinedev/core";
 import { supabase } from "@/lib/supabase/client";
 import { StorageService } from "@/services/storage";
-import { clearLocalPushTokensForUser, resetAppPushRegistrationContext } from "@/core/push";
 import * as authService from "@/core/auth/services/authService";
 import * as orgService from "@/core/organizations/services/organizationService";
+import { requestSignOut } from "@/core/auth/services/signOutCoordinator";
 
 export const authProvider: AuthProvider = {
   login: async ({ email, password, provider }) => {
@@ -82,28 +82,34 @@ export const authProvider: AuthProvider = {
     }
   },
 
-  logout: async () => {
+  logout: async (params?: any) => {
     try {
-      const activeUser = StorageService.getActiveUser();
-      if (activeUser?.id) {
-        clearLocalPushTokensForUser(activeUser.id);
+      const result = await requestSignOut({ force: params?.force });
+      if (result === 'signed_out') {
+        return {
+          success: true,
+          redirectTo: "/login",
+        };
       }
-      resetAppPushRegistrationContext();
-      StorageService.clearOrganization();
-      StorageService.clearBusinessCachesOnSignOut();
-      orgService.clearStoredOrganizationId();
 
-      if (supabase) {
-        await authService.signOut();
-      }
+      // 실제 pending offline mutation이 존재하여 확인 팝업이 표시된 상태
+      return {
+        success: false,
+        error: {
+          name: "SignOutBlockedError",
+          message: "저장되지 않은 오프라인 변경사항이 있어 로그아웃이 보류되었습니다.",
+        },
+      };
     } catch (err: any) {
-      console.warn("[authProvider] logout cleanup warning:", err?.message || err);
+      console.warn("[authProvider] logout error:", err?.message || err);
+      return {
+        success: false,
+        error: {
+          name: "SignOutError",
+          message: err?.message || "로그아웃 처리에 실패했습니다.",
+        },
+      };
     }
-
-    return {
-      success: true,
-      redirectTo: "/login",
-    };
   },
 
   check: async () => {

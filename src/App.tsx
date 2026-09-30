@@ -15,6 +15,7 @@ import { AppProvider } from "@/context/AppContext";
 import { SupabaseRoleSync } from "@/SupabaseRoleSync";
 import { SupabaseAppGate } from "@/SupabaseAppGate";
 import { IndustryAppRouter } from "@/app/industry/IndustryAppRouter";
+import { registerQueryClientClear } from "@/core/auth/services/signOutCoordinator";
 
 import { authProvider } from "./providers/authProvider";
 import { accessControlProvider } from "./providers/accessControlProvider";
@@ -38,6 +39,10 @@ const queryClient = new QueryClient({
       retry: 1,
     },
   },
+});
+
+registerQueryClientClear(() => {
+  queryClient.clear();
 });
 
 export const App: React.FC = () => {
@@ -157,4 +162,3 @@ export const App: React.FC = () => {
 };
 
 export default App;
-
