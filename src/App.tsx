@@ -23,7 +23,12 @@ import { dataProvider } from "./providers/dataProvider";
 import { Header } from "./components/layout/Header";
 import { Layout } from "./components/layout/Layout";
 import { DashboardPage } from "./pages/dashboard";
-import { StudentListPage } from "./pages/students";
+import {
+  StudentListPage,
+  StudentCreatePage,
+  StudentShowPage,
+  StudentEditPage,
+} from "./pages/students";
 import { LoginPage } from "./pages/auth/LoginPage";
 
 const queryClient = new QueryClient({
@@ -60,6 +65,9 @@ export const App: React.FC = () => {
                   {
                     name: "customers",
                     list: "/students",
+                    create: "/students/create",
+                    edit: "/students/:id/edit",
+                    show: "/students/:id",
                     meta: {
                       label: "원생 관리",
                       icon: <Users className="h-4 w-4" />,
@@ -117,6 +125,9 @@ export const App: React.FC = () => {
                     >
                       <Route path="/dashboard" element={<DashboardPage />} />
                       <Route path="/students" element={<StudentListPage />} />
+                      <Route path="/students/create" element={<StudentCreatePage />} />
+                      <Route path="/students/:id" element={<StudentShowPage />} />
+                      <Route path="/students/:id/edit" element={<StudentEditPage />} />
                       <Route path="/schedules" element={<DashboardPage />} />
                       <Route path="/billing" element={<DashboardPage />} />
                     </Route>
