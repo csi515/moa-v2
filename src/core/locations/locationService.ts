@@ -25,6 +25,7 @@ type StoredLocationSelection = {
 };
 
 function readStoredSelection(): StoredLocationSelection | string | null {
+  if (typeof localStorage === 'undefined') return null;
   const raw = localStorage.getItem(LOCATION_ID_STORAGE_KEY);
   if (!raw) return null;
   try {
@@ -52,6 +53,7 @@ export function getStoredLocationId(organizationId?: string | null): string | nu
 }
 
 export function storeLocationId(locationId: string, organizationId?: string | null): void {
+  if (typeof localStorage === 'undefined') return;
   if (organizationId) {
     localStorage.setItem(
       LOCATION_ID_STORAGE_KEY,
@@ -63,6 +65,7 @@ export function storeLocationId(locationId: string, organizationId?: string | nu
 }
 
 export function clearStoredLocationId(): void {
+  if (typeof localStorage === 'undefined') return;
   localStorage.removeItem(LOCATION_ID_STORAGE_KEY);
 }
 

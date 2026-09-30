@@ -1,136 +1,308 @@
 import type { AccessControlProvider } from "@refinedev/core";
 import { StorageService } from "@/services/storage";
 import * as orgService from "@/core/organizations/services/organizationService";
+import { getStoredLocationId, locationService } from "@/core/locations/locationService";
 import { createAuthorizationApi } from "@/core/authorization/authorizationApi";
-import { isKnownPermission } from "@/core/authorization/registry";
-import { isOrgAdminRole } from "@/core/authorization/roleDefaults";
-import type { Permission } from "@/core/authorization/types";
+import { isKnownPermission, isKnownScopeType } from "@/core/authorization/registry";
+import type { AuthorizationGrant, AuthScopeType, Permission } from "@/core/authorization/types";
+import type { User } from "@/types";
 
 /**
- * Maps Refine resource and action pairs to MOA canonical permissions.
+ * AccessControl Context Resolver.
+ * Resolves the authenticated user, active organization, and grants from the single source of truth.
+ * Custom resolvers can be injected for testing and isolation.
  */
-function resolveMoaPermission(resource?: string, action?: string): Permission | string | null {
-  if (!resource) return null;
-  const res = resource.toLowerCase();
-  const act = (action || "list").toLowerCase();
+export interface AccessControlContextResolver {
+  getActiveUser: () => User | null;
+  getOrganizationId: () => string | null;
+  getLocationId: () => string | null;
+  listAccessGrants?: (organizationId: string) => Promise<AuthorizationGrant[]>;
+}
 
-  // Explicit permission mapping by resource
+type GrantsCacheEntry = {
+  timestamp: number;
+  userId: string;
+  grants: AuthorizationGrant[];
+};
+const CACHE_TTL_MS = 10_000;
+
+/**
+ * Canonical mapping between Refine (resource, action) pairs and MOA canonical permissions.
+ * Unmapped pairs return null (Fail-Closed).
+ */
+export function resolveMoaPermission(resource?: string, action?: string): Permission | null {
+  if (!resource) return null;
+  const res = resource.trim().toLowerCase();
+  const act = (action || "list").trim().toLowerCase();
+
+  // 1. Direct canonical permission check (e.g., resource="customers", action="read" -> "customers.read")
+  const directCandidate = `${res}.${act}`;
+  if (isKnownPermission(directCandidate)) {
+    return directCandidate;
+  }
+
+  // 2. Explicit mappings by resource
   switch (res) {
     case "customers":
     case "students":
-      return act === "list" || act === "show" || act === "read"
-        ? "customers.read"
-        : "customers.write";
+    case "users":
+      if (act === "list" || act === "show" || act === "read" || act === "export") {
+        return "customers.read";
+      }
+      if (
+        act === "create" ||
+        act === "edit" ||
+        act === "delete" ||
+        act === "write" ||
+        act === "import"
+      ) {
+        return "customers.write";
+      }
+      return null;
+
+    case "schedules":
+    case "attendance":
+      // 수업 일정 및 출석 관리는 원생/수업 정보(customers)와 연동 (rooms 임의 매핑 제거)
+      if (act === "list" || act === "show" || act === "read" || act === "export") {
+        return "customers.read";
+      }
+      if (act === "create" || act === "edit" || act === "delete" || act === "write") {
+        return "customers.write";
+      }
+      return null;
 
     case "tuition_invoices":
     case "sales":
     case "billing":
     case "payments":
-      if (act === "delete" || act === "refund") return "sales.refund";
-      if (act === "create" || act === "edit") return "sales.create";
-      if (act === "finance" || act === "audit") return "finance.read";
-      return "sales.read";
+      if (act === "delete" || act === "refund") {
+        return "sales.refund";
+      }
+      if (act === "create" || act === "edit" || act === "write") {
+        return "sales.create";
+      }
+      if (act === "finance" || act === "audit") {
+        return "finance.read";
+      }
+      if (act === "list" || act === "show" || act === "read" || act === "export") {
+        return "sales.read";
+      }
+      return null;
 
-    case "schedules":
-    case "attendance":
-    case "rooms":
-      return act === "list" || act === "show" || act === "read"
-        ? "rooms.read"
-        : "rooms.manage";
+    case "finance":
+      if (act === "list" || act === "show" || act === "read" || act === "audit") {
+        return "finance.read";
+      }
+      return null;
 
     case "staff":
     case "instructors":
     case "members":
-      return act === "list" || act === "show" || act === "read"
-        ? "staff.read"
-        : "staff.manage";
+      if (act === "list" || act === "show" || act === "read" || act === "export") {
+        return "staff.read";
+      }
+      if (
+        act === "create" ||
+        act === "edit" ||
+        act === "delete" ||
+        act === "write" ||
+        act === "manage"
+      ) {
+        return "staff.manage";
+      }
+      return null;
+
+    case "rooms":
+    case "practice_rooms":
+      if (act === "list" || act === "show" || act === "read" || act === "export") {
+        return "rooms.read";
+      }
+      if (
+        act === "create" ||
+        act === "edit" ||
+        act === "delete" ||
+        act === "write" ||
+        act === "manage"
+      ) {
+        return "rooms.manage";
+      }
+      return null;
 
     case "locations":
-      return "locations.read";
+      if (act === "list" || act === "show" || act === "read") {
+        return "locations.read";
+      }
+      return null;
 
     case "reports":
     case "analytics":
-      return "reports.read";
+      if (act === "list" || act === "show" || act === "read" || act === "export") {
+        return "reports.read";
+      }
+      return null;
 
     case "dashboard":
-      return "customers.read";
-
-    default: {
-      const candidate = `${res}.${act}`;
-      if (isKnownPermission(candidate)) return candidate;
+      if (act === "list" || act === "show" || act === "read") {
+        return "customers.read";
+      }
       return null;
-    }
+
+    default:
+      return null;
   }
 }
 
-export const accessControlProvider: AccessControlProvider = {
-  can: async ({ resource, action, params }) => {
-    const activeUser = StorageService.getActiveUser();
-    const organizationId =
-      (params?.organizationId as string | undefined) ||
-      orgService.getStoredOrganizationId() ||
-      "";
-    const role = (params?.role as string | undefined) || activeUser?.role || null;
-    const locationId = (params?.locationId as string | undefined) || null;
-    const customerId =
-      (params?.customerId as string | undefined) ||
-      activeUser?.parentCustomerId ||
-      null;
+/**
+ * Creates an AccessControlProvider bound to a context resolver.
+ * Ensures caller params cannot escalate permissions or bypass authentication.
+ */
+export function createAccessControlProvider(
+  customResolver?: Partial<AccessControlContextResolver>
+): AccessControlProvider {
+  const resolver: AccessControlContextResolver = {
+    getActiveUser: () => StorageService.getActiveUser(),
+    getOrganizationId: () => orgService.getStoredOrganizationId(),
+    getLocationId: () => getStoredLocationId(),
+    listAccessGrants: (orgId: string) => locationService.listAccessGrants(orgId),
+    ...customResolver,
+  };
 
-    // Director / Owner / Manager bypass (matches RLS is_org_admin)
-    if (isOrgAdminRole(role)) {
-      return { can: true };
+  const grantsCache = new Map<string, GrantsCacheEntry>();
+
+  async function getCachedGrants(
+    organizationId: string,
+    userId: string,
+    fetcher?: (orgId: string) => Promise<AuthorizationGrant[]>
+  ): Promise<AuthorizationGrant[]> {
+    if (!organizationId || !userId || !fetcher) return [];
+
+    const cacheKey = `${organizationId}:${userId}`;
+    const now = Date.now();
+    const cached = grantsCache.get(cacheKey);
+
+    if (cached && cached.userId === userId && now - cached.timestamp < CACHE_TTL_MS) {
+      return cached.grants;
     }
 
-    // Unassigned organization check
-    if (!organizationId) {
-      // Allow public or generic reads if unauthenticated
+    try {
+      const grants = await fetcher(organizationId);
+      grantsCache.set(cacheKey, { timestamp: now, userId, grants });
+      return grants;
+    } catch {
+      return [];
+    }
+  }
+
+  return {
+    can: async ({ resource, action, params }) => {
+      // 1. Public or Auth resources: Always allow without authentication
       if (resource === "auth" || resource === "public") {
         return { can: true };
       }
-      return {
-        can: false,
-        reason: "소속 사업장을 선택해 주세요.",
-      };
-    }
 
-    // Determine target permission
-    const explicitPermission = params?.permission as string | undefined;
-    const targetPermission = explicitPermission || resolveMoaPermission(resource, action);
+      // 2. Resolve Active Context from Single Source of Truth
+      const activeUser = resolver.getActiveUser();
+      if (!activeUser || !activeUser.id) {
+        return { can: false, reason: "로그인이 필요합니다." };
+      }
 
-    if (!targetPermission) {
-      // If no permission rule is defined, default to allowing read and restricting mutation
-      const isMutation = action === "create" || action === "edit" || action === "delete";
-      if (isMutation) {
+      const organizationId = resolver.getOrganizationId() || "";
+      if (!organizationId) {
+        return { can: false, reason: "소속 사업장을 선택해 주세요." };
+      }
+
+      // 절대 params.role이나 params.organizationId를 사용하지 않음 (권한 상승 방지)
+      const role = activeUser.role || null;
+      const activeLocationId = resolver.getLocationId() || null;
+      const parentCustomerId = activeUser.parentCustomerId || null;
+
+      // 3. Resolve Target Canonical Permission (Fail-Closed)
+      let targetPermission: Permission | null = null;
+      if (params?.permission && typeof params.permission === "string") {
+        if (isKnownPermission(params.permission)) {
+          targetPermission = params.permission;
+        } else {
+          return { can: false, reason: "유효하지 않은 권한 식별자입니다." };
+        }
+      } else {
+        targetPermission = resolveMoaPermission(resource, action);
+      }
+
+      if (!targetPermission) {
+        // Fail-Closed: 알려지지 않은 리소스나 액션은 기본 거부
         return {
           can: false,
-          reason: "해당 작업을 수행할 권한이 없습니다.",
+          reason: "해당 리소스 또는 작업에 대한 권한이 정의되지 않았습니다.",
         };
       }
+
+      // 4. Resolve Scope from params (권한 상승이 아닌 개별 데이터 스코프 대상 식별용으로만 사용)
+      let scopeType: AuthScopeType = "organization";
+      let scopeId: string | null = null;
+
+      if (params?.scopeType && isKnownScopeType(params.scopeType)) {
+        scopeType = params.scopeType;
+        scopeId = (params.scopeId as string) || null;
+      } else if (params?.locationId) {
+        scopeType = "location";
+        scopeId = String(params.locationId);
+      } else if (params?.customerId) {
+        scopeType = "customer";
+        scopeId = String(params.customerId);
+      } else if (params?.resourceId) {
+        scopeType = "resource";
+        scopeId = String(params.resourceId);
+      } else if (params?.id != null) {
+        const res = (resource || "").toLowerCase();
+        if (res === "locations") {
+          scopeType = "location";
+          scopeId = String(params.id);
+        } else if (res === "customers" || res === "students") {
+          scopeType = "customer";
+          scopeId = String(params.id);
+        } else if (res === "rooms" || res === "practice_rooms") {
+          scopeType = "resource";
+          scopeId = String(params.id);
+        }
+      }
+
+      if (scopeType === "organization" && targetPermission === "locations.read" && activeLocationId) {
+        scopeType = "location";
+        scopeId = activeLocationId;
+      }
+
+      // 5. Fetch Extra Grants (세션 유저 기준)
+      const extraGrants = await getCachedGrants(
+        organizationId,
+        activeUser.id,
+        resolver.listAccessGrants
+      );
+
+      // 6. Delegate to MOA Canonical Authorization API
+      const authApi = createAuthorizationApi({
+        organizationId,
+        role,
+        locationId: scopeType === "location" ? (scopeId || activeLocationId) : activeLocationId,
+        customerId: parentCustomerId,
+        extraGrants,
+      });
+
+      const allowed = authApi.can({
+        permission: targetPermission,
+        scopeType,
+        scopeId: scopeId || undefined,
+      });
+
+      if (!allowed) {
+        return {
+          can: false,
+          reason: "해당 리소스에 접근할 권한이 없습니다.",
+        };
+      }
+
       return { can: true };
-    }
+    },
+  };
+}
 
-    const authApi = createAuthorizationApi({
-      organizationId,
-      role,
-      locationId,
-      customerId,
-      extraGrants: (params?.extraGrants as any) || [],
-    });
-
-    const allowed = authApi.can({
-      permission: targetPermission,
-      scopeType: locationId ? "location" : "organization",
-      scopeId: locationId || undefined,
-    });
-
-    if (!allowed) {
-      return {
-        can: false,
-        reason: "해당 리소스에 접근할 권한이 없습니다.",
-      };
-    }
-
-    return { can: true };
-  },
-};
+export const accessControlProvider: AccessControlProvider = createAccessControlProvider();
