@@ -19,9 +19,9 @@ import {
   BookingCalendarView,
   InstructorListView,
   MemberListView,
-  PassManagementView,
   ServiceManagementView,
 } from '@/industries/pilates';
+import { PassManagementView } from '@/capabilities/billing/ui/PassManagementView';
 import { SkinSidebar } from './layout/SkinSidebar';
 import { SkinBottomNav } from './layout/SkinBottomNav';
 import { SkinDashboardView } from './components/dashboard/SkinDashboardView';

@@ -9,7 +9,7 @@ import {
   findInstructorClassOverlap,
   findStaffTimeConflict,
   findTreatmentRoomConflict,
-} from '@/industries/skin/bookingRooms';
+} from '@/capabilities/booking/domain/bookingRooms';
 import type { StaffWorkWindow } from '@/types';
 
 export type BookingFormLabels = {

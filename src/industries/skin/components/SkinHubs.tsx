@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { useModuleLabels } from '@/core/labels';
-import { PilatesCustomerHubView } from '@/industries/pilates/components/PilatesCustomerHubView';
-import { PilatesScheduleHubView } from '@/industries/pilates/components/PilatesScheduleHubView';
+import { BookingCustomerHubView } from '@/capabilities/booking/ui/BookingCustomerHubView';
+import { BookingScheduleHubView } from '@/capabilities/booking/ui/BookingScheduleHubView';
 
 export const SkinScheduleHubView: FC<{
   bookingsView: FC;
@@ -9,7 +9,7 @@ export const SkinScheduleHubView: FC<{
 }> = ({ bookingsView, servicesView }) => {
   const labels = useModuleLabels();
   return (
-    <PilatesScheduleHubView
+    <BookingScheduleHubView
       bookingsView={bookingsView}
       servicesView={servicesView}
       bookingsLabel={labels.schedule.singular}
@@ -24,7 +24,7 @@ export const SkinCustomerHubView: FC<{
 }> = ({ membersView, passesView }) => {
   const labels = useModuleLabels();
   return (
-    <PilatesCustomerHubView
+    <BookingCustomerHubView
       membersView={membersView}
       passesView={passesView}
       membersLabel={labels.customer.singular}

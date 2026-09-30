@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useStorageRefresh, useStaffScope } from '@/hooks';
 import { usePermissions } from '@/core/auth/usePermissions';
@@ -18,7 +18,7 @@ import { getConfiguredRooms } from '@/core/academy/utils/academyRooms';
 import {
   findStaffTimeConflict,
   findTreatmentRoomConflict,
-} from '@/industries/skin/bookingRooms';
+} from '@/capabilities/booking/domain/bookingRooms';
 import { notifyBookingChange } from '@/core/academy/services/academyAlertService';
 import { EmptyState, FilterTabs, Modal, PageHeader } from '@/shared/components';
 import { executeBookingCreate } from './executeBookingCreate';

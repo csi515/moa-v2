@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { Booking, SlotRecruitment } from '@/core/types/schedule';
-import { isUnassignedCustomerRequest } from '@/industries/skin/bookingRooms';
+import { isUnassignedCustomerRequest } from '@/capabilities/booking/domain/bookingRooms';
 import type { FilterTabItem } from '@/shared/components';
 
 export type BookingFilter = 'today' | 'upcoming' | 'all';

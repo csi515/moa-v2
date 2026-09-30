@@ -33,7 +33,7 @@ import {
   AchievementsManagementView,
   ReportsManagementView,
 } from './index';
-import { PassManagementView } from '@/industries/pilates/components/passes/PassManagementView';
+import { PassManagementView } from '@/capabilities/billing/ui/PassManagementView';
 import { PianoScheduleView } from './components/schedule';
 import { PianoConsultationHubView } from './components/consultations';
 import { SongProgressStaffView } from './components/songProgress';
