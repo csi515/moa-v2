@@ -224,6 +224,7 @@ export const INVENTORY_CANDIDATES = {
   'test:legacy-public-lockdown': 'authorization(legacy public tables drop / anon exposure). ci-cd static security에 있음',
   'test:legacy-booking-cleanup': 'authorization(legacy booking-app public objects drop / anon exposure). ci-cd static security에 있음',
   'test:grant-authenticated-payroll-join-requests': 'authorization(core payroll/join request table grants + hydrate table grant coverage). ci-cd static security에 있음',
+  'test:security-boundary-harden': 'authorization(rls and rpc boundary hardening). ci-cd static security에 있음',
 };
 
 export function loadPackageScripts() {

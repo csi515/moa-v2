@@ -30,6 +30,7 @@
     "test:legacy-public-lockdown": "tsx scripts/legacy-public-lockdown.test.ts",
     "test:legacy-booking-cleanup": "tsx scripts/legacy-booking-cleanup.test.ts",
     "test:grant-authenticated-payroll-join-requests": "tsx scripts/grant-authenticated-payroll-join-requests.test.ts",
+    "test:security-boundary-harden": "tsx scripts/security-boundary-harden.test.ts",
     "test:finance": "node scripts/run-finance-tests.mjs",
     "test:invoice-dedupe": "tsx src/capabilities/billing/finance/invoiceDedupe.test.ts",
     "test:invoice-textbook-link": "tsx src/capabilities/billing/finance/invoiceTextbookLink.test.ts",
