@@ -4,11 +4,11 @@ import { Users, Calendar, CreditCard, LayoutDashboard, Settings } from "lucide-r
 import { cn } from "@/shared/lib/utils";
 
 const navigationItems = [
-  { name: "대시보드", href: "/", icon: LayoutDashboard },
+  { name: "업종 워크스페이스", href: "/", icon: LayoutDashboard },
   { name: "원생 관리", href: "/students", icon: Users },
   { name: "출석/수업", href: "/schedules", icon: Calendar },
   { name: "수강료/결제", href: "/billing", icon: CreditCard },
-  { name: "설정", href: "/settings", icon: Settings },
+  { name: "운영 대시보드", href: "/dashboard", icon: LayoutDashboard },
 ];
 
 export const Sidebar: React.FC = () => {
