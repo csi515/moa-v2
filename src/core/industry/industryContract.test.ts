@@ -364,6 +364,28 @@ function run(): void {
     'Core catalog must not own runtime capability composition'
   );
 
+  // 19. Independent Industry Manifest Contract & Unknown Industry Fallback
+  const dummyDef = defineIndustry({
+    id: 'dummy_test_industry',
+    label: '테스트업종',
+    description: '독립 신규 업종 계약 테스트',
+    category: 'education',
+    moduleId: undefined,
+    selectable: false,
+  });
+  assert.equal(dummyDef.id, 'dummy_test_industry');
+  assert.equal(dummyDef.moduleId, undefined);
+
+  // unknown/신규 미등록 업종에 대해서는 Generic Shell로 안전 호환되어 시스템 폭발 방지
+  assert.equal(shouldUseGenericShell('dummy_test_industry'), true);
+  assert.equal(resolveIndustryAppKind('dummy_test_industry'), 'generic');
+
+  // 기존 Piano 및 모듈 업종의 정상 호환성 보장
+  assert.equal(shouldUseGenericShell('piano'), false);
+  assert.equal(resolveIndustryAppKind('piano'), 'module');
+  assert.equal(parseIndustryType('piano'), 'piano');
+  assert.equal(parseIndustryType('unknown_xyz_industry'), null);
+
   console.log(
     `industryContract.test.ts OK (${INDUSTRY_IDS.length} industries, ${MODULE_INDUSTRY_IDS.length} modules)`
   );
