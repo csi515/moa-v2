@@ -350,6 +350,7 @@ async function testAccessControl() {
     assert.equal(unknownAct.can, false);
     assert.match(unknownAct.reason || "", /권한이 정의되지 않았습니다/);
 
+    // 미등록 params.permission → deny (유효하지 않은 권한 식별자)
     const invalidExplicitPerm = await staffProvider.can({
       resource: "students",
       action: "list",
@@ -357,6 +358,60 @@ async function testAccessControl() {
     });
     assert.equal(invalidExplicitPerm.can, false);
     assert.match(invalidExplicitPerm.reason || "", /유효하지 않은 권한 식별자/);
+  }
+
+  // ---------------------------------------------------------------------------
+  // 14. params.permission override 차단 (핵심 보안 검증)
+  //
+  // resource/action → canonical permission 매핑을 우회하는 모든 시도를 차단한다.
+  // params.permission이 registry에 등록된 valid permission이더라도 허용하지 않는다.
+  // ---------------------------------------------------------------------------
+  {
+    const staffProvider = createAccessControlProvider({
+      getActiveUser: () => mockUser("staff"),
+      getOrganizationId: () => ORG_A,
+    });
+
+    // staff는 finance.read 권한이 없다.
+    // params.permission으로 finance.read를 직접 지정해도 deny되어야 한다.
+    const escalateViaValidPerm = await staffProvider.can({
+      resource: "customers",
+      action: "list",
+      params: { permission: "finance.read" },
+    });
+    assert.equal(escalateViaValidPerm.can, false,
+      "params.permission with valid registry permission must be denied (override path closed)");
+    assert.match(
+      escalateViaValidPerm.reason || "",
+      /params\.permission.*허용되지 않습니다/,
+    );
+
+    // staff는 staff.manage 권한이 없다.
+    // params.permission으로 staff.manage를 직접 지정해도 deny되어야 한다.
+    const escalateToManage = await staffProvider.can({
+      resource: "customers",
+      action: "list",
+      params: { permission: "staff.manage" },
+    });
+    assert.equal(escalateToManage.can, false,
+      "params.permission staff.manage must be denied regardless of resource/action");
+    assert.match(
+      escalateToManage.reason || "",
+      /params\.permission.*허용되지 않습니다/,
+    );
+
+    // owner도 params.permission override는 허용되지 않는다.
+    const ownerOverride = createAccessControlProvider({
+      getActiveUser: () => mockUser("owner"),
+      getOrganizationId: () => ORG_A,
+    });
+    const ownerTryOverride = await ownerOverride.can({
+      resource: "customers",
+      action: "list",
+      params: { permission: "staff.manage" },
+    });
+    assert.equal(ownerTryOverride.can, false,
+      "even owner cannot supply params.permission to override resource/action mapping");
   }
 
   // ---------------------------------------------------------------------------

@@ -217,16 +217,30 @@ export function createAccessControlProvider(
       const parentCustomerId = activeUser.parentCustomerId || null;
 
       // 3. Resolve Target Canonical Permission (Fail-Closed)
-      let targetPermission: Permission | null = null;
-      if (params?.permission && typeof params.permission === "string") {
-        if (isKnownPermission(params.permission)) {
-          targetPermission = params.permission;
-        } else {
+      //
+      // 보안 원칙: resource/action → registry 매핑만 허용한다.
+      // params.permission은 permission authority로 사용하지 않는다.
+      // 호출자가 params.permission으로 임의 canonical permission을 지정하는 경로를 닫는다.
+      //
+      // params.permission 처리 규칙:
+      //   - 미등록 permission → deny (유효하지 않은 권한 식별자)
+      //   - 등록된 permission이더라도 → deny (resource/action 우회 방지)
+      //
+      // 올바른 흐름: resource + action → resolveMoaPermission() → canonical permission
+      if (params?.permission != null) {
+        const suppliedPerm = typeof params.permission === "string" ? params.permission : "";
+        if (!isKnownPermission(suppliedPerm)) {
           return { can: false, reason: "유효하지 않은 권한 식별자입니다." };
         }
-      } else {
-        targetPermission = resolveMoaPermission(resource, action);
+        // 등록된 permission이더라도 호출자가 직접 지정하는 것은 허용하지 않는다.
+        return {
+          can: false,
+          reason: "params.permission을 통한 권한 지정은 허용되지 않습니다.",
+        };
       }
+
+      // resource + action 기반 매핑만 신뢰한다.
+      const targetPermission: Permission | null = resolveMoaPermission(resource, action);
 
       if (!targetPermission) {
         // Fail-Closed: 알려지지 않은 리소스나 액션은 기본 거부
