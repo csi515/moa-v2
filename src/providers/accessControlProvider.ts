@@ -15,7 +15,7 @@ import type { User } from "@/types";
 export interface AccessControlContextResolver {
   getActiveUser: () => User | null;
   getOrganizationId: () => string | null;
-  getLocationId: () => string | null;
+  getLocationId: (organizationId?: string | null) => string | null;
   listAccessGrants?: (organizationId: string) => Promise<AuthorizationGrant[]>;
 }
 
@@ -152,6 +152,17 @@ export function resolveMoaPermission(resource?: string, action?: string): Permis
   }
 }
 
+let activeContextResolver: Partial<AccessControlContextResolver> | null = null;
+
+/**
+ * OrganizationProvider 등 활성 컨텍스트 소스로부터 권한 평가 authority를 동적으로 바인딩한다.
+ */
+export function bindAccessControlContextResolver(
+  resolver: Partial<AccessControlContextResolver> | null
+): void {
+  activeContextResolver = resolver;
+}
+
 /**
  * Creates an AccessControlProvider bound to a context resolver.
  * Ensures caller params cannot escalate permissions or bypass authentication.
@@ -160,11 +171,41 @@ export function createAccessControlProvider(
   customResolver?: Partial<AccessControlContextResolver>
 ): AccessControlProvider {
   const resolver: AccessControlContextResolver = {
-    getActiveUser: () => StorageService.getActiveUser(),
-    getOrganizationId: () => orgService.getStoredOrganizationId(),
-    getLocationId: () => getStoredLocationId(),
-    listAccessGrants: (orgId: string) => locationService.listAccessGrants(orgId),
-    ...customResolver,
+    getActiveUser: () => {
+      if (activeContextResolver?.getActiveUser) return activeContextResolver.getActiveUser();
+      if (customResolver?.getActiveUser) return customResolver.getActiveUser();
+      try {
+        return StorageService.getActiveUser();
+      } catch {
+        return null;
+      }
+    },
+    getOrganizationId: () => {
+      if (activeContextResolver?.getOrganizationId) return activeContextResolver.getOrganizationId();
+      if (customResolver?.getOrganizationId) return customResolver.getOrganizationId();
+      try {
+        return orgService.getStoredOrganizationId();
+      } catch {
+        return null;
+      }
+    },
+    getLocationId: (orgId?: string | null) => {
+      if (activeContextResolver?.getLocationId) {
+        return activeContextResolver.getLocationId(orgId);
+      }
+      if (customResolver?.getLocationId) {
+        return customResolver.getLocationId(orgId);
+      }
+      try {
+        return getStoredLocationId(orgId);
+      } catch {
+        return null;
+      }
+    },
+    listAccessGrants: (orgId: string) =>
+      activeContextResolver?.listAccessGrants?.(orgId) ??
+      customResolver?.listAccessGrants?.(orgId) ??
+      locationService.listAccessGrants(orgId),
   };
 
   const grantsCache = new Map<string, GrantsCacheEntry>();
@@ -213,7 +254,7 @@ export function createAccessControlProvider(
 
       // 절대 params.role이나 params.organizationId를 사용하지 않음 (권한 상승 방지)
       const role = activeUser.role || null;
-      const activeLocationId = resolver.getLocationId() || null;
+      const activeLocationId = resolver.getLocationId(organizationId) || null;
       const parentCustomerId = activeUser.parentCustomerId || null;
 
       // 3. Resolve Target Canonical Permission (Fail-Closed)

@@ -6,6 +6,7 @@ import assert from "node:assert/strict";
 import {
   createAccessControlProvider,
   resolveMoaPermission,
+  bindAccessControlContextResolver,
 } from "./accessControlProvider";
 import type { AuthorizationGrant } from "@/core/authorization/types";
 import type { User } from "@/types";
@@ -433,6 +434,39 @@ async function testAccessControl() {
     });
     assert.equal((await parentProvider.can({ resource: "students", action: "list" })).can, false);
     assert.equal((await parentProvider.can({ resource: "finance", action: "read" })).can, false);
+  }
+
+  // ---------------------------------------------------------------------------
+  // 15. Organization Context Authority & Dynamic Resolver Binding 검증
+  // ---------------------------------------------------------------------------
+  {
+    const provider = createAccessControlProvider();
+
+    // 1) Organization A 선택 시
+    bindAccessControlContextResolver({
+      getActiveUser: () => mockUser("owner"),
+      getOrganizationId: () => ORG_A,
+    });
+    assert.equal((await provider.can({ resource: "students", action: "list" })).can, true);
+
+    // 2) Organization B로 스위치 시 -> B authority로 즉시 반영
+    bindAccessControlContextResolver({
+      getActiveUser: () => mockUser("staff"), // B에서는 staff role
+      getOrganizationId: () => ORG_B,
+    });
+    assert.equal((await provider.can({ resource: "finance", action: "read" })).can, false, "staff on Org B cannot read finance");
+
+    // 3) Stale localStorage 방지: selectedMembership이 null (선택 해제)인 상태
+    bindAccessControlContextResolver({
+      getActiveUser: () => mockUser("owner"),
+      getOrganizationId: () => null, // selectedMembership이 없으므로 null
+    });
+    const unselectedRes = await provider.can({ resource: "students", action: "list" });
+    assert.equal(unselectedRes.can, false, "must be denied when active selected membership is null");
+    assert.equal(unselectedRes.reason, "소속 사업장을 선택해 주세요.");
+
+    // 바인딩 원복
+    bindAccessControlContextResolver(null);
   }
 
   console.log("accessControlProvider.test.ts: all assertions passed");
