@@ -17,7 +17,7 @@ function run() {
   assert.equal(command.includes('recordTextbookPaymentAtomic'), false);
 
   const modal = readFileSync(
-    join(here, '../../../../core/academy/components/tuition/CombinedPaymentModal.tsx'),
+    join(here, '../../components/tuition/CombinedPaymentModal.tsx'),
     'utf8'
   );
   assert.match(modal, /useCombinedPaymentSubmit/);

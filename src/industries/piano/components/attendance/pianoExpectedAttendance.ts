@@ -1,5 +1,5 @@
 import type { ClassItem, MakeupItem, Student } from '@/types';
-import { weekdayFromIsoDate } from '@/core/academy/utils/weekdayKo';
+import { weekdayFromIsoDate } from '@/shared/utils/weekdayKo';
 
 export interface ExpectedStudentOnDate {
   student: Student;

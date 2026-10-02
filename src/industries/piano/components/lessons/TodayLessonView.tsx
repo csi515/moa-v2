@@ -9,11 +9,11 @@ import { TuitionService } from '@/core/finance';
 import { EmptyState, PageHeader } from '@/shared/components';
 import type { AttendanceRecord, AttendanceStatus, ClassItem, LessonRecord, Student } from '@/types';
 import { todayIsoLocal } from '@/shared/utils/localDate';
-import { weekdayFromDate } from '@/core/academy/utils/weekdayKo';
+import { weekdayFromDate } from '@/shared/utils/weekdayKo';
 import { syncLessonHomeworkToWeeklyAssignment } from '../../services/lessonHomeworkSync';
 import { syncLessonCurriculumProgress } from '../../services/lessonCurriculumSync';
 import { saveAttendanceWithPass } from '@/core/schedules/attendancePassAtomic';
-import { notifyParentAbsence } from '@/core/academy/services/academyAlertService';
+import { notifyParentAbsence } from '@/core/parent/services/academyAlertService';
 import { consumeOpenUncheckedLessons } from '@/core/customer/studentJoinInbox';
 import { LessonSessionModal, type LessonSessionForm } from './LessonSessionModal';
 import {

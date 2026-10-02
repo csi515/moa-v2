@@ -14,13 +14,11 @@ import { DaycareSidebar } from './layout/DaycareSidebar';
 import { DaycareBottomNav } from './layout/DaycareBottomNav';
 import { DaycareDashboardView } from './components/dashboard/DaycareDashboardView';
 import { StudentListView } from './components/students/StudentListView';
-import {
-  ClassManagementView,
-  ClassScheduleHubView,
-  ConsultationRecordsView,
-  CustomerHubView,
-  SettingsHubView,
-} from '@/core/academy';
+import { CustomerHubView } from '@/core/customer';
+import { SettingsHubView } from '@/core/organizations/components/SettingsHubView';
+import { ClassManagementView, ClassScheduleHubView } from '@/capabilities/scheduling';
+import { ConsultationRecordsView } from '@/capabilities/consultation';
+import { GuardianEnrollmentRequestsView } from '@/capabilities/enrollment';
 import {
   attendanceViewEntry,
   financeViewEntries,
@@ -37,7 +35,11 @@ const daycareSettingsHub = () => (
 );
 
 const customerHub = () => (
-  <CustomerHubView listView={StudentListView} enrollmentLabel="학부모 등록 요청" />
+  <CustomerHubView
+    listView={StudentListView}
+    enrollmentLabel="학부모 등록 요청"
+    guardianEnrollmentView={GuardianEnrollmentRequestsView}
+  />
 );
 
 const careHub = () => (

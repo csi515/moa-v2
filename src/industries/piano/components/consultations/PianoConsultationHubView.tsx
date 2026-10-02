@@ -1,7 +1,7 @@
 import { useState, type FC } from 'react';
 import { CalendarPlus, MessageSquareText, QrCode } from 'lucide-react';
 import { PageHeader, SegmentedControl } from '@/shared/components';
-import { ConsultationRecordsView } from '@/core/academy';
+import { ConsultationRecordsView } from '@/capabilities/consultation';
 import { ReservationInboxView } from '@/core/schedules/components/ReservationInboxView';
 import { ConsultationQrModal } from '@/core/schedules/components/ConsultationQrModal';
 import { CreateConsultationScheduleModal } from '@/core/schedules/components/CreateConsultationScheduleModal';

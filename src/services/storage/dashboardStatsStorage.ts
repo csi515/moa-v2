@@ -3,7 +3,7 @@ import type { StorageApi } from './helpers';
 import { storageApi } from './storageApi';
 import { pickUniqueDayAttendanceStatuses } from '../../core/attendance/dayAttendance';
 import { todayIsoLocal, yearMonthLocal } from '../../shared/utils/localDate';
-import { filterMonthlyBillingStudents } from '../../core/academy/utils/billingMode';
+import { filterMonthlyBillingStudents } from '@/capabilities/billing/utils/billingMode';
 
 type AttRow = { date: string; status: string; studentId?: string; classId?: string };
 

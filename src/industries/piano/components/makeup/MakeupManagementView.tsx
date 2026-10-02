@@ -18,11 +18,11 @@ import { formatPhone } from '@/utils/formatters';
 import {
   findMakeupSlotConflicts,
   formatConflictSummary,
-} from '@/core/academy/utils/scheduleConflicts';
-import { notifyParentMakeupScheduled } from '@/core/academy/services/academyAlertService';
+} from '@/capabilities/scheduling';
+import { notifyParentMakeupScheduled } from '@/core/parent/services/academyAlertService';
 import { scheduleMakeupAtomic } from '@/core/schedules/makeupScheduleAtomic';
 import { todayIsoLocal } from '@/shared/utils/localDate';
-import { getAcademyRoomNames } from '@/core/academy/utils/academyRooms';
+import { getAcademyRoomNames } from '@/core/organizations/utils/academyRooms';
 import {
   Sparkles,
   Calendar,

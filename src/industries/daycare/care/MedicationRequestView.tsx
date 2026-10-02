@@ -1,4 +1,4 @@
-﻿import { useMemo, useState, type FC, type FormEvent } from 'react';
+import { useMemo, useState, type FC, type FormEvent } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
@@ -10,7 +10,7 @@ import { MEDICATION_STATUS_LABEL } from './types';
 import { MEDICATION_DEFAULTS } from './careDefaults';
 import { CareDateSearchBar } from './components/CareDateSearchBar';
 import { useModuleLabels } from '@/core/labels';
-import { notifyBookingChange } from '@/core/academy/services/academyAlertService';
+import { notifyBookingChange } from '@/core/parent/services/academyAlertService';
 
 type StatusFilter = 'ALL' | MedicationStatus;
 

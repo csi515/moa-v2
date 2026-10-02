@@ -1,5 +1,5 @@
 import { sessionPassService } from '@/core/schedules/sessionPassService';
-import { isSessionPassBillingStudent } from '@/core/academy/utils/billingMode';
+import { isSessionPassBillingStudent } from '@/capabilities/billing/utils/billingMode';
 import { planAttendancePassChange } from '@/core/schedules/attendancePassPlan';
 import { StorageService } from '@/services/storage';
 import type { AttendanceRecord, AttendanceStatus, Student } from '@/types';

@@ -3,16 +3,14 @@ export {
   StudentListView,
   StudentDetailModal,
   StudentFormModal,
-  ParentManagementView,
-  ClassManagementView,
-  WeeklyTimetableView,
-  ConsultationRecordsView,
-  TuitionManagementView,
-  UnpaidManagementView,
-  TeacherManagementView,
-  AcademyCalendarView,
-  AcademySettingsView,
-} from '@/core/academy';
+} from '@/capabilities/roster';
+export { ParentManagementView } from '@/core/parent/components/ParentManagementView';
+export { TeacherManagementView } from '@/core/staff/components/TeacherManagementView';
+export { AcademyCalendarView } from './components/calendar/AcademyCalendarView';
+export { AcademySettingsView } from '@/core/organizations/components/AcademySettingsView';
+export { ClassManagementView, WeeklyTimetableView } from '@/capabilities/scheduling';
+export { TuitionManagementView, UnpaidManagementView } from '@/capabilities/billing';
+export { ConsultationRecordsView } from '@/capabilities/consultation';
 export { DashboardView } from './components/dashboard/DashboardView';
 /** @legacy `lessons` 딥링크는 출결 허브로 연결. 화면 코드는 회귀·참조용 유지 */
 export { LessonsHubView } from './components/lessons/LessonsHubView';

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useApp } from '@/context/AppContext';
-import { weekdayFromDate } from '@/core/academy/utils/weekdayKo';
+import { weekdayFromDate } from '@/shared/utils/weekdayKo';
 import { consumePlaceStudentOnTimetable, peekPlaceStudentOnTimetable } from '@/core/customer/studentJoinInbox';
 import { useMediaQuery, useStaffScope, useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';

@@ -5,7 +5,7 @@ import { StorageService } from '@/services/storage';
 import { PageHeader, SummaryMetricCard, FilterBar, SearchField } from '@/shared/components';
 import { PracticeRecord } from '@/types';
 import { consumeOpenPendingPractice } from '@/core/customer/studentJoinInbox';
-import { notifyParentPracticeReviewed } from '@/core/academy/services/academyAlertService';
+import { notifyParentPracticeReviewed } from '@/core/parent/services/academyAlertService';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   BookOpenCheck,

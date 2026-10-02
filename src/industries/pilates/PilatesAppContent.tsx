@@ -24,7 +24,7 @@ import {
   attendanceViewEntry,
   financeViewEntries,
 } from '@/core/industry/commonViewEntries';
-import { SettingsHubView } from '@/core/academy';
+import { SettingsHubView } from '@/core/organizations/components/SettingsHubView';
 import { PilatesScheduleHubView } from './components/PilatesScheduleHubView';
 import { PilatesCustomerHubView } from './components/PilatesCustomerHubView';
 

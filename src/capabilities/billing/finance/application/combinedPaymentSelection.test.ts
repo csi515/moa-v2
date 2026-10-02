@@ -306,7 +306,7 @@ async function runAsyncCases(): Promise<void> {
 
   const here = dirname(fileURLToPath(import.meta.url));
   const modal = readFileSync(
-    join(here, '../../../../core/academy/components/tuition/CombinedPaymentModal.tsx'),
+    join(here, '../../components/tuition/CombinedPaymentModal.tsx'),
     'utf8'
   );
   assert.match(modal, /useCombinedPaymentSubmit/);
@@ -316,7 +316,7 @@ async function runAsyncCases(): Promise<void> {
   assert.equal(modal.includes('showToast'), false);
 
   const view = readFileSync(
-    join(here, '../../../../core/academy/components/tuition/TuitionManagementView.tsx'),
+    join(here, '../../components/tuition/TuitionManagementView.tsx'),
     'utf8'
   );
   assert.match(view, /useTuitionInvoicePayment/);

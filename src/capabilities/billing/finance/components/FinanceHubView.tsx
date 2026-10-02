@@ -8,8 +8,8 @@ import { PageHeader, SegmentedControl } from '@/shared/components';
 import { FinanceOverviewView } from './FinanceOverviewView';
 import { IncomeManagementView } from './IncomeManagementView';
 import { ExpenseManagementView } from './ExpenseManagementView';
-import { TuitionManagementView } from '@/core/academy/components/tuition/TuitionManagementView';
-import { UnpaidManagementView } from '@/core/academy/components/unpaid/UnpaidManagementView';
+import { TuitionManagementView } from '@/capabilities/billing/components/tuition/TuitionManagementView';
+import { UnpaidManagementView } from '@/capabilities/billing/components/unpaid/UnpaidManagementView';
 import { TeacherPayrollView } from './TeacherPayrollView';
 
 export type FinanceHubSegment =

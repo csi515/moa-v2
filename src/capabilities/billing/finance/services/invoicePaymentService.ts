@@ -8,7 +8,7 @@ import type {
   TuitionPayment,
 } from '@/types';
 import type { StorageApi } from '@/services/storage/helpers';
-import { isMonthlyBillingStudent } from '@/core/academy/utils/billingMode';
+import { isMonthlyBillingStudent } from '../../utils/billingMode';
 import { todayIsoLocal, yearMonthLocal } from '@/shared/utils/localDate';
 import {
   buildInvoiceNotes,
@@ -16,8 +16,8 @@ import {
   collectPendingTextbookSales,
   computeInvoiceTotal,
   resolveIncludeExtras,
-} from '@/core/academy/utils/invoiceExtras';
-import { defaultDueDateForMonth } from '@/core/academy/components/tuition/tuitionUtils';
+} from '../../utils/invoiceExtras';
+import { defaultDueDateForMonth } from '@/capabilities/billing/components/tuition/tuitionUtils';
 import { listMonthlyTuitionMissingInvoices } from '@/capabilities/billing/finance/monthlyTuitionEnsure';
 import { findMonthlyTuitionInvoice } from '@/capabilities/billing/finance/monthlyTuitionStatus';
 import type { IncomeEntry } from '@/capabilities/billing/finance/types';

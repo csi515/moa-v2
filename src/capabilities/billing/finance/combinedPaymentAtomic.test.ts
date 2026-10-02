@@ -214,7 +214,7 @@ function run() {
   assert.equal(saleService.includes('for (const item of tuitionItems)'), false);
 
   const modal = readFileSync(
-    join(here, '../../../core/academy/components/tuition/CombinedPaymentModal.tsx'),
+    join(here, '../components/tuition/CombinedPaymentModal.tsx'),
     'utf8'
   );
   assert.match(modal, /useCombinedPaymentSubmit/);

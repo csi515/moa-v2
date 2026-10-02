@@ -154,8 +154,8 @@ function run() {
   assert.equal(helperSrc.includes('.paidDate'), false);
 
   const displayFiles = [
-    '../../../core/academy/components/students/detail/StudentDetailTuitionTab.tsx',
-    '../../../core/academy/components/tuition/TuitionInvoiceListView.tsx',
+    '../../../capabilities/roster/components/detail/StudentDetailTuitionTab.tsx',
+    '../components/tuition/TuitionInvoiceListView.tsx',
     '../../../modules/parent/views/ParentTuitionView.tsx',
     '../../../core/customer/CustomerHomeView.tsx',
   ];

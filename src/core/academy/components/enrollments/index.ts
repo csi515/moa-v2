@@ -1,1 +1,0 @@
-export { GuardianEnrollmentRequestsView } from './GuardianEnrollmentRequestsView';

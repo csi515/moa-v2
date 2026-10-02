@@ -88,11 +88,11 @@ function run() {
     '../../../src/industries/piano/services/textbookSaleService.ts',
     '../../../src/core/finance/services/tuitionService.ts',
     '../../../src/core/finance/services/invoicePaymentService.ts',
-    '../../../src/core/academy/components/students/useStudentDetailModal.ts',
+    '../../../src/capabilities/roster/components/useStudentDetailModal.ts',
     '../../../src/core/schedules/components/CreateConsultationScheduleModal.tsx',
     '../../../src/shared/components/layout/Header.tsx',
     '../../../src/core/dashboard/IndustryDashboardShell.tsx',
-    '../../../src/core/academy/components/students/StudentListView.tsx',
+    '../../../src/capabilities/roster/components/StudentListView.tsx',
   ];
   for (const rel of pianoFiles) {
     const src = readFileSync(join(here, rel), 'utf8');

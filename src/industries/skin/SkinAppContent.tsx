@@ -10,7 +10,7 @@ import {
 import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
 import { SupabaseRoleSync } from '@/SupabaseRoleSync';
 import { isSupabaseConfigured } from '@/lib/supabase';
-import { SettingsHubView } from '@/core/academy';
+import { SettingsHubView } from '@/core/organizations/components/SettingsHubView';
 import {
   attendanceViewEntry,
   financeViewEntries,

@@ -7,7 +7,7 @@
 import { getCoreClient, getPianoClient, isSupabaseConfigured } from '@/lib/supabase';
 import { getOrganizationId, getStorageAdapter, STORAGE_KEYS } from '@/services/adapters';
 import { StorageService } from '@/services/storage';
-import { isSessionPassBillingStudent } from '@/core/academy/utils/billingMode';
+import { isSessionPassBillingStudent } from '@/core/students/billingMode';
 import type { AttendanceRecord, AttendanceStatus, Student } from '@/types';
 import type { SessionPass } from '@/core/types/schedule';
 import { sessionPassService } from './sessionPassService';

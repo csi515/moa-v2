@@ -1,4 +1,4 @@
-import { isMonthlyBillingStudent } from '@/core/academy/utils/billingMode';
+import { isMonthlyBillingStudent } from '../utils/billingMode';
 import type { Student, TuitionInvoice } from '@/types';
 import { findExistingStudentMonthInvoice } from './invoiceDedupe';
 

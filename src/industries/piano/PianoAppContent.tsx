@@ -17,11 +17,11 @@ import { isSupabaseConfigured } from '@/lib/supabase';
 import { financeViewEntries, hubViewAliases } from '@/core/industry/commonViewEntries';
 import { AttendanceManagementView } from '@/capabilities/attendance';
 import { PianoAttendanceView } from './components/attendance/PianoAttendanceView';
-import {
-  CustomerHubView,
-  SettingsHubView,
-  ClassManagementView,
-} from '@/core/academy';
+import { CustomerHubView } from '@/core/customer';
+import { SettingsHubView } from '@/core/organizations/components/SettingsHubView';
+import { StudentListView } from '@/capabilities/roster';
+import { ClassManagementView } from '@/capabilities/scheduling';
+import { GuardianEnrollmentRequestsView } from '@/capabilities/enrollment';
 import {
   DashboardView,
   RecitalManagementView,
@@ -62,7 +62,13 @@ const consultationAvailabilitySettings = () => (
   />
 );
 
-const customerHub = () => <CustomerHubView enrollmentLabel="등록" />;
+const customerHub = () => (
+  <CustomerHubView
+    listView={StudentListView}
+    enrollmentLabel="등록"
+    guardianEnrollmentView={GuardianEnrollmentRequestsView}
+  />
+);
 const scheduleHub = () => <PianoScheduleView />;
 const attendanceHub = () => <PianoAttendanceView />;
 

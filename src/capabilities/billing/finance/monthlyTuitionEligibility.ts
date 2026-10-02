@@ -1,4 +1,4 @@
-import { isMonthlyBillingStudent } from '@/core/academy/utils/billingMode';
+import { isMonthlyBillingStudent } from '../utils/billingMode';
 import { yearMonthLocal } from '@/shared/utils/localDate';
 import type { Student } from '@/types';
 

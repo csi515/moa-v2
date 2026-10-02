@@ -1,10 +1,10 @@
-﻿import type { ClassItem, DayOfWeek, Student, Teacher } from '@/types';
+import type { ClassItem, DayOfWeek, Student, Teacher } from '@/types';
 import { StorageService } from '@/services/storage';
 import {
   findClassConflicts,
   formatConflictSummary,
   type ClassSlotCandidate,
-} from '@/core/academy/utils/scheduleConflicts';
+} from '@/capabilities/scheduling';
 
 export const TIMETABLE_DAYS: DayOfWeek[] = ['월', '화', '수', '목', '금', '토', '일'];
 

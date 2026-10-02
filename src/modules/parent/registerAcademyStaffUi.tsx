@@ -3,7 +3,8 @@ import { ParentInviteResultModal } from './ParentInviteResultModal';
 import {
   registerAcademyGuardianInvite,
   registerAcademyParentInviteResult,
-} from '@/core/academy/academyStaffUi';
+} from '@/core/staff/staffUi';
 
 registerAcademyGuardianInvite((props) => <GuardianLinkInviteModal {...props} />);
 registerAcademyParentInviteResult((props) => <ParentInviteResultModal {...props} />);
+

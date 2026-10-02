@@ -185,7 +185,7 @@ function run() {
   assert.match(today, /saveAttendanceWithPass/);
 
   const studentDetail = readFileSync(
-    join(here, '../../core/academy/components/students/useStudentDetailModal.ts'),
+    join(here, '../../capabilities/roster/components/useStudentDetailModal.ts'),
     'utf8'
   );
   assert.match(studentDetail, /saveAttendanceWithPass/);

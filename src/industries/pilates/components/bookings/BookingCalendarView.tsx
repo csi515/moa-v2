@@ -14,12 +14,12 @@ import { isOutsideStaffHours } from '@/capabilities/scheduling/availability/wind
 import { confirmBookingDeposit } from '@/core/schedules/confirmBookingDeposit';
 import { PilatesSlotList } from './PilatesSlotList';
 import { BookingFormModal } from './BookingFormModal';
-import { getConfiguredRooms } from '@/core/academy/utils/academyRooms';
+import { getConfiguredRooms } from '@/core/organizations/utils/academyRooms';
 import {
   findStaffTimeConflict,
   findTreatmentRoomConflict,
 } from '@/capabilities/booking/domain/bookingRooms';
-import { notifyBookingChange } from '@/core/academy/services/academyAlertService';
+import { notifyBookingChange } from '@/core/parent/services/academyAlertService';
 import { EmptyState, FilterTabs, Modal, PageHeader } from '@/shared/components';
 import { executeBookingCreate } from './executeBookingCreate';
 import { mergeScopedBookingsWithInbox, useBookingFilters } from './useBookingFilters';

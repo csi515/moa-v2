@@ -4,8 +4,8 @@ import {
   registerStudentDetailExtension,
   type StudentDetailExtension,
   type StudentDetailExtraTabProps,
-} from '@/core/academy/components/students/detail/studentDetailExtensions';
-import type { DetailTab, DetailTabConfigItem, DetailTabCounts } from '@/core/academy/components/students/detail/types';
+} from '@/capabilities/roster/components/detail/studentDetailExtensions';
+import type { DetailTab, DetailTabConfigItem, DetailTabCounts } from '@/capabilities/roster/components/detail/types';
 import { SkinChartTab } from '@/industries/skin/components/charts/SkinChartTab';
 
 const SKIN_HIDDEN_DETAIL_TABS = new Set<DetailTab>(['classes', 'practice', 'videos', 'textbooks']);

@@ -14,12 +14,10 @@ import { GymSidebar } from './layout/GymSidebar';
 import { GymBottomNav } from './layout/GymBottomNav';
 import { GymDashboardView } from './components/dashboard/GymDashboardView';
 import { StudentListView } from './components/students/StudentListView';
-import {
-  ClassManagementView,
-  ClassScheduleHubView,
-  CustomerHubView,
-  SettingsHubView,
-} from '@/core/academy';
+import { CustomerHubView } from '@/core/customer';
+import { SettingsHubView } from '@/core/organizations/components/SettingsHubView';
+import { ClassManagementView, ClassScheduleHubView } from '@/capabilities/scheduling';
+import { GuardianEnrollmentRequestsView } from '@/capabilities/enrollment';
 import {
   attendanceViewEntry,
   financeViewEntries,
@@ -34,7 +32,13 @@ const gymSettingsHub = () => (
   />
 );
 
-const customerHub = () => <CustomerHubView listView={StudentListView} enrollmentLabel="회원 등록 요청" />;
+const customerHub = () => (
+  <CustomerHubView
+    listView={StudentListView}
+    enrollmentLabel="회원 등록 요청"
+    guardianEnrollmentView={GuardianEnrollmentRequestsView}
+  />
+);
 
 const GYM_VIEW_MAP: Record<string, () => ReactNode> = {
   dashboard: () => <GymDashboardView />,

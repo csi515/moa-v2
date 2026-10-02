@@ -4,7 +4,7 @@ import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { getPlaceLabel } from '@/core/industry/industryUi';
 import { useStaffGrants, useStaffScope } from '@/hooks';
-import { AcademyCalendarView } from '@/core/academy';
+import { AcademyCalendarView } from '../calendar/AcademyCalendarView';
 import { SegmentedControl } from '@/shared/components';
 import { MakeupManagementView } from '../makeup/MakeupManagementView';
 import { PracticeRoomBookingView } from '../practiceRooms/PracticeRoomBookingView';

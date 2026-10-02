@@ -7,4 +7,4 @@ export {
   getTodayClasses,
   getUpcomingWeekOccurrences,
   type DerivedClassOccurrence,
-} from '@/core/academy/utils/classOccurrenceHelpers';
+} from '@/core/schedules/utils/classOccurrenceHelpers';

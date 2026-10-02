@@ -75,7 +75,7 @@
     "test:attendance-features": "tsx src/capabilities/attendance/domain/features.test.ts",
     "test:pin-check-in": "tsx src/capabilities/attendance/application/attendanceService.test.ts",
     "test:pin-notify-copy": "tsx src/capabilities/attendance/domain/attendanceNotifyCopy.test.ts",
-    "test:absence-notify": "tsx src/core/academy/services/absenceNotifyPolicy.test.ts",
+    "test:absence-notify": "tsx src/core/parent/services/absenceNotifyPolicy.test.ts",
     "test:makeup-schedule-atomic": "tsx src/core/schedules/makeupScheduleAtomic.test.ts",
     "test:pending-mutations": "tsx src/services/adapters/pendingMutations.test.ts",
     "test:resource-reservation": "tsx src/core/resources/resourceReservation.test.ts",

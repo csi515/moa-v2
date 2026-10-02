@@ -3,7 +3,7 @@ import { useApp } from '@/context/AppContext';
 import { StorageService } from '@/services/storage';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { Modal } from '@/shared/components';
-import { notifyBookingChange } from '@/core/academy/services/academyAlertService';
+import { notifyBookingChange } from '@/core/parent/services/academyAlertService';
 import { PICKUP_OUTSIDE_LABEL, type AuthorizedPickup } from '../types';
 import type { TodayCareClose } from '../dailyClose';
 

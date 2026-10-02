@@ -9,7 +9,7 @@ import {
 import {
   getTodayClasses,
   getUpcomingWeekOccurrences,
-} from '@/core/academy/utils/classOccurrenceHelpers';
+} from '@/core/schedules/utils/classOccurrenceHelpers';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 
 function statusLabel(status: string): string {

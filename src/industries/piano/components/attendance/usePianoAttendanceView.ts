@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { StorageService } from '@/services/storage';
-import { notifyParentAbsence } from '@/core/academy/services/academyAlertService';
+import { notifyParentAbsence } from '@/core/parent/services/academyAlertService';
 import { isAttendanceModuleEnabled } from '@/capabilities/attendance';
 import type { Student } from '@/types';
 import { usePianoExpectedDay } from './usePianoExpectedDay';

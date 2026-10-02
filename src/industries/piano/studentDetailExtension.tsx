@@ -8,8 +8,9 @@ import {
   type StudentDetailExtension,
   type StudentDetailHeaderActionsProps,
   type StudentDetailModalsProps,
-} from '@/core/academy/components/students/detail/studentDetailExtensions';
-import type { DetailTabConfigItem, DetailTabCounts } from '@/core/academy/components/students/detail/types';
+  type StudentDetailExtraTabProps,
+} from '@/capabilities/roster/components/detail/studentDetailExtensions';
+import type { DetailTabConfigItem, DetailTabCounts } from '@/capabilities/roster/components/detail/types';
 import { PERFORMANCE_VIDEO_TYPE_LABEL } from '@/industries/piano/config/eventLabels';
 import { applySessionPassForAttendance } from '@/industries/piano/services/lessonPassConsume';
 import { RecitalService } from '@/industries/piano/services/recitalService';
@@ -17,6 +18,10 @@ import { NewSaleModal } from '@/industries/piano/components/textbooks/NewSaleMod
 import { TextbookPaymentModal } from '@/industries/piano/components/textbooks/TextbookPaymentModal';
 import { TextbookReceiptModal } from '@/industries/piano/components/textbooks/TextbookReceiptModal';
 import { TeacherDirectPassModal } from '@/industries/piano/components/songProgress';
+
+import { StudentDetailTextbooksTab } from './components/students/detail/StudentDetailTextbooksTab';
+import { StudentDetailPracticeTab } from './components/students/detail/StudentDetailPracticeTab';
+import { StudentDetailVideosTab } from './components/students/detail/StudentDetailVideosTab';
 
 function PianoHeaderActions({ student }: StudentDetailHeaderActionsProps) {
   const { showToast } = useApp();
@@ -93,10 +98,87 @@ function PianoStudentDetailModals({
   );
 }
 
+function renderPianoExtraTab({ tab, modal }: StudentDetailExtraTabProps) {
+  if (!modal) return null;
+
+  if (tab === 'textbooks') {
+    return (
+      <StudentDetailTextbooksTab
+        studentSales={modal.studentSales}
+        billingSummary={modal.billingSummary}
+        onOpenSaleModal={() => modal.textbooks.setIsStudentSaleModalOpen(true)}
+        onOpenPaymentModal={(sale) => {
+          modal.textbooks.setSelectedStudentSaleForPay(sale);
+          modal.textbooks.setIsStudentTbPaymentModalOpen(true);
+        }}
+        onOpenReceiptModal={(sale) => {
+          modal.textbooks.setTbReceiptSale(sale);
+          modal.textbooks.setIsTbReceiptOpen(true);
+        }}
+      />
+    );
+  }
+
+  if (tab === 'practice') {
+    return (
+      <StudentDetailPracticeTab
+        allPractice={modal.allPractice}
+        allLessons={modal.allLessons}
+        totalPracticeMinutes={modal.totalPracticeMinutes}
+        isAddPrOpen={modal.practice.isAddPrOpen}
+        setIsAddPrOpen={modal.practice.setIsAddPrOpen}
+        newPrDate={modal.practice.newPrDate}
+        setNewPrDate={modal.practice.setNewPrDate}
+        newPrMinutes={modal.practice.newPrMinutes}
+        setNewPrMinutes={modal.practice.setNewPrMinutes}
+        newPrSong={modal.practice.newPrSong}
+        setNewPrSong={modal.practice.setNewPrSong}
+        newPrDifficulty={modal.practice.newPrDifficulty}
+        setNewPrDifficulty={modal.practice.setNewPrDifficulty}
+        onSavePractice={modal.practice.onSave}
+      />
+    );
+  }
+
+  if (tab === 'videos') {
+    return (
+      <StudentDetailVideosTab
+        allVideos={modal.allVideos}
+        recitalEvents={modal.recitalEvents}
+        videoTypeLabel={modal.videos.videoTypeLabel}
+        isAddVideoOpen={modal.videos.isAddVideoOpen}
+        setIsAddVideoOpen={modal.videos.setIsAddVideoOpen}
+        newVideoTitle={modal.videos.newVideoTitle}
+        setNewVideoTitle={modal.videos.setNewVideoTitle}
+        newVideoUrl={modal.videos.newVideoUrl}
+        setNewVideoUrl={modal.videos.setNewVideoUrl}
+        newVideoDate={modal.videos.newVideoDate}
+        setNewVideoDate={modal.videos.setNewVideoDate}
+        newVideoType={modal.videos.newVideoType}
+        setNewVideoType={modal.videos.setNewVideoType}
+        newVideoEventId={modal.videos.newVideoEventId}
+        setNewVideoEventId={modal.videos.setNewVideoEventId}
+        newVideoSong={modal.videos.newVideoSong}
+        setNewVideoSong={modal.videos.setNewVideoSong}
+        newVideoMemo={modal.videos.newVideoMemo}
+        setNewVideoMemo={modal.videos.setNewVideoMemo}
+        previewVideoId={modal.videos.previewVideoId}
+        setPreviewVideoId={modal.videos.setPreviewVideoId}
+        onSaveVideo={modal.videos.onSave}
+        onVideoEventChange={modal.videos.onEventChange}
+        onDeleteVideo={modal.videos.onDelete}
+      />
+    );
+  }
+
+  return null;
+}
+
 const pianoStudentDetailExtension: StudentDetailExtension = {
   industryId: 'piano',
   resolveTabs: (tabs: DetailTabConfigItem[], _counts: DetailTabCounts) => tabs,
   renderHeaderActions: (props) => React.createElement(PianoHeaderActions, props),
+  renderExtraTab: renderPianoExtraTab,
   renderModals: (props) => React.createElement(PianoStudentDetailModals, props),
   applyAttendanceSideEffect: applySessionPassForAttendance,
   performanceVideoTypeLabel: PERFORMANCE_VIDEO_TYPE_LABEL,

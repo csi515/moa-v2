@@ -4,7 +4,7 @@ import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useTabGuard } from '@/shared/navigation/useTabGuard';
 import { ModuleLabelsProvider } from '@/core/labels';
-import { AcademySettingsView } from '@/core/academy';
+import { AcademySettingsView } from '@/core/organizations/components/AcademySettingsView';
 import { accountViewEntry } from '@/core/industry/commonViewEntries';
 import { ToastContainer, ConfirmDialog } from '@/shared/components';
 import { EmptyState } from '@/shared/components/ui';

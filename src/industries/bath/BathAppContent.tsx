@@ -2,7 +2,7 @@ import type { FC, ReactNode } from 'react';
 import { CalendarDays, LayoutDashboard, Users } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { useTabGuard } from '@/shared/navigation/useTabGuard';
-import { AcademySettingsView } from '@/core/academy';
+import { AcademySettingsView } from '@/core/organizations/components/AcademySettingsView';
 import { accountViewEntry } from '@/core/industry/commonViewEntries';
 import { ToastContainer, ConfirmDialog } from '@/shared/components';
 import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';

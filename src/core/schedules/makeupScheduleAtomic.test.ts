@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import {
   findMakeupSlotConflicts,
   timesOverlap,
-} from '@/core/academy/utils/scheduleConflicts';
+} from '@/capabilities/scheduling/utils/scheduleConflicts';
 import type { ClassItem, MakeupItem } from '@/types';
 import { mapMakeupScheduleError } from './makeupScheduleErrors';
 
