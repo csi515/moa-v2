@@ -21,6 +21,17 @@ import {
   parseIndustryType,
   shouldUseGenericShell,
 } from './types';
+import {
+  getCustomerLabel,
+  getOwnerLabel,
+  getPlaceLabel,
+  getPlaceNamePlaceholder,
+  isAppointmentIndustry,
+  isDaycareIndustry,
+  isGymIndustry,
+  isPilatesIndustry,
+  isSkinClinicIndustry,
+} from './industryUi';
 import { CLASS_BASED_CORE_ADMIN_TABS, CLASS_BASED_CORE_STAFF_TABS } from './pluginTypes';
 import { resolveIndustryAppKind } from './industryAppResolve';
 import {
@@ -385,6 +396,73 @@ function run(): void {
   assert.equal(resolveIndustryAppKind('piano'), 'module');
   assert.equal(parseIndustryType('piano'), 'piano');
   assert.equal(parseIndustryType('unknown_xyz_industry'), null);
+
+  // 20. Industry Plugin Manifest UI Labels Contract
+  const pluginMap = new Map(snap.pluginRecords.map((r) => [r.id, r]));
+  const pianoRec = pluginMap.get('piano');
+  assert.ok(pianoRec);
+  assert.equal(pianoRec.placeLabel, '학원');
+  assert.equal(pianoRec.ownerLabel, '원장');
+  assert.equal(pianoRec.placeNamePlaceholder, '예: 행복 피아노 학원');
+  assert.equal(pianoRec.customerLabel, '원생');
+
+  const pilatesRec = pluginMap.get('pilates');
+  assert.ok(pilatesRec);
+  assert.equal(pilatesRec.placeLabel, '스튜디오');
+  assert.equal(pilatesRec.ownerLabel, '대표');
+  assert.equal(pilatesRec.placeNamePlaceholder, '예: 밸런스 필라테스');
+  assert.equal(pilatesRec.customerLabel, '회원');
+
+  const gymRec = pluginMap.get('gym');
+  assert.ok(gymRec);
+  assert.equal(gymRec.placeLabel, '체육관');
+  assert.equal(gymRec.ownerLabel, '대표');
+  assert.equal(gymRec.placeNamePlaceholder, '예: 강남 체육관');
+  assert.equal(gymRec.customerLabel, '회원');
+
+  const daycareRec = pluginMap.get('daycare');
+  assert.ok(daycareRec);
+  assert.equal(daycareRec.placeLabel, '원');
+  assert.equal(daycareRec.ownerLabel, '원장');
+  assert.equal(daycareRec.placeNamePlaceholder, '예: 햇살 어린이집');
+  assert.equal(daycareRec.customerLabel, '원아');
+
+  const skinRec = pluginMap.get('skin_clinic');
+  assert.ok(skinRec);
+  assert.equal(skinRec.placeLabel, '샵');
+  assert.equal(skinRec.ownerLabel, '대표');
+  assert.equal(skinRec.placeNamePlaceholder, '예: 하루 피부관리');
+  assert.equal(skinRec.customerLabel, '고객');
+
+  const retailRec = pluginMap.get('retail');
+  assert.ok(retailRec);
+  assert.equal(retailRec.placeLabel, '학원');
+  assert.equal(retailRec.ownerLabel, '대표');
+  assert.equal(retailRec.placeNamePlaceholder, '예: 행복 학원');
+  assert.equal(retailRec.customerLabel, '원생');
+
+  const bathRec = pluginMap.get('sauna_jjimjilbang');
+  assert.ok(bathRec);
+  assert.equal(bathRec.placeLabel, '학원');
+  assert.equal(bathRec.ownerLabel, '대표');
+  assert.equal(bathRec.placeNamePlaceholder, '예: 행복 학원');
+  assert.equal(bathRec.customerLabel, '원생');
+
+  // fallback checks with null/undefined
+  assert.equal(getPlaceLabel(null), '학원');
+  assert.equal(getOwnerLabel(null), '대표');
+  assert.equal(getPlaceNamePlaceholder(null), '예: 행복 학원');
+  assert.equal(getCustomerLabel(null), '원생');
+  assert.equal(isAppointmentIndustry(null), false);
+  assert.equal(isPilatesIndustry(null), false);
+  assert.equal(isSkinClinicIndustry(null), false);
+  assert.equal(isGymIndustry(null), false);
+  assert.equal(isDaycareIndustry(null), false);
+
+  assert.equal(getPlaceLabel('academy'), '학원');
+  assert.equal(getPlaceNamePlaceholder('academy'), '예: 행복 학원');
+  assert.equal(getCustomerLabel('academy'), '원생');
+  assert.equal(isAppointmentIndustry('academy'), false);
 
   console.log(
     `industryContract.test.ts OK (${INDUSTRY_IDS.length} industries, ${MODULE_INDUSTRY_IDS.length} modules)`

@@ -29,6 +29,11 @@ export const retailPluginManifest: IndustryPluginManifest = {
   showSchoolFields: false,
   showPickupFields: false,
   levelLabel: '회원 등급',
+  placeLabel: '학원',
+  ownerLabel: '대표',
+  placeNamePlaceholder: '예: 행복 학원',
+  customerLabel: '원생',
+  isAppointment: false,
   adminTabs: withNoticesTabs([
     'dashboard',
     'sales',

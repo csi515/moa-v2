@@ -36,6 +36,11 @@ export const pianoPluginManifest: IndustryPluginManifest = {
   syncCapabilities: ['piano', 'education'],
   levelLabel: '레벨',
   levelOptions: PIANO_STUDENT_LEVELS,
+  placeLabel: '학원',
+  ownerLabel: '원장',
+  placeNamePlaceholder: '예: 행복 피아노 학원',
+  customerLabel: '원생',
+  isAppointment: false,
   adminTabs: withNoticesTabs([
     'dashboard',
     'students',

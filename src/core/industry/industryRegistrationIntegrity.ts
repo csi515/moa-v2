@@ -20,6 +20,10 @@ export type PluginRecord = {
   aliases: string[];
   /** plugin이 `./sync/register*` 를 static import 하는지. 픽스처는 생략 가능. */
   eagerRegisterImport?: boolean;
+  placeLabel?: string | null;
+  ownerLabel?: string | null;
+  placeNamePlaceholder?: string | null;
+  customerLabel?: string | null;
 };
 
 export type IndustryModuleAppRecord = {
@@ -124,6 +128,10 @@ export function parsePluginRecord(src: string, file: string): PluginRecord {
       (m) => m[1]
     ),
     eagerRegisterImport: /import\s+['"]\.\/sync\/register/.test(src),
+    placeLabel: src.match(/placeLabel:\s*'([^']+)'/)?.[1] ?? null,
+    ownerLabel: src.match(/ownerLabel:\s*'([^']+)'/)?.[1] ?? null,
+    placeNamePlaceholder: src.match(/placeNamePlaceholder:\s*'([^']+)'/)?.[1] ?? null,
+    customerLabel: src.match(/customerLabel:\s*'([^']+)'/)?.[1] ?? null,
   };
 }
 
@@ -214,6 +222,18 @@ export function collectIndustryRegistrationGaps(snap: IndustryRegistrationSnapsh
     }
     if (rec.attendanceDefault == null) {
       gaps.push(`업종 기본값 누락: ${rec.file} attendanceDefault`);
+    }
+    if (rec.id && !rec.placeLabel) {
+      gaps.push(`UI 라벨 누락: ${rec.file} placeLabel`);
+    }
+    if (rec.id && !rec.ownerLabel) {
+      gaps.push(`UI 라벨 누락: ${rec.file} ownerLabel`);
+    }
+    if (rec.id && !rec.placeNamePlaceholder) {
+      gaps.push(`UI placeholder 누락: ${rec.file} placeNamePlaceholder`);
+    }
+    if (rec.id && !rec.customerLabel) {
+      gaps.push(`UI 라벨 누락: ${rec.file} customerLabel`);
     }
     if (rec.syncCapabilities.length > 0 && rec.eagerRegisterImport === false) {
       gaps.push(

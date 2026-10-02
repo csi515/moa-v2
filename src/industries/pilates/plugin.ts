@@ -23,6 +23,11 @@ export const pilatesPluginManifest: IndustryPluginManifest = {
   showSchoolFields: true,
   showPickupFields: true,
   levelLabel: '레벨',
+  placeLabel: '스튜디오',
+  ownerLabel: '대표',
+  placeNamePlaceholder: '예: 밸런스 필라테스',
+  customerLabel: '회원',
+  isAppointment: true,
   adminTabs: withNoticesTabs([
     'dashboard',
     'bookings',

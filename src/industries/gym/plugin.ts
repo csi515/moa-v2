@@ -26,6 +26,11 @@ export const gymPluginManifest: IndustryPluginManifest = {
   showPickupFields: true,
   levelLabel: '수업 레벨',
   levelOptions: GYM_CLASS_LEVELS,
+  placeLabel: '체육관',
+  ownerLabel: '대표',
+  placeNamePlaceholder: '예: 강남 체육관',
+  customerLabel: '회원',
+  isAppointment: false,
   adminTabs: [...CLASS_BASED_CORE_ADMIN_TABS, 'shuttle'],
   staffTabs: [...CLASS_BASED_CORE_STAFF_TABS, 'shuttle'],
 };

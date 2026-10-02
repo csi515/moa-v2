@@ -28,6 +28,11 @@ export const skinPluginManifest: IndustryPluginManifest = {
   showSchoolFields: false,
   showPickupFields: false,
   levelLabel: '관리 단계',
+  placeLabel: '샵',
+  ownerLabel: '대표',
+  placeNamePlaceholder: '예: 하루 피부관리',
+  customerLabel: '고객',
+  isAppointment: true,
   adminTabs: withNoticesTabs([
     'dashboard',
     'bookings',

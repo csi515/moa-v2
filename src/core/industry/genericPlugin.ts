@@ -29,6 +29,11 @@ export function buildGenericPluginManifest(definition: IndustryDefinition): Indu
     showSchoolFields: false,
     showPickupFields: false,
     levelLabel: '레벨',
+    placeLabel: '학원',
+    ownerLabel: definition.id === 'academy' ? '원장' : '대표',
+    placeNamePlaceholder: '예: 행복 학원',
+    customerLabel: '원생',
+    isAppointment: false,
     adminTabs: [...GENERIC_ADMIN_TABS],
     staffTabs: ['dashboard', 'settings', 'account'],
   };

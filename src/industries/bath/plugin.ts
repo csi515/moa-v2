@@ -24,6 +24,11 @@ export const bathPluginManifest: IndustryPluginManifest = {
   showSchoolFields: false,
   showPickupFields: false,
   levelLabel: '이용 등급',
+  placeLabel: '학원',
+  ownerLabel: '대표',
+  placeNamePlaceholder: '예: 행복 학원',
+  customerLabel: '원생',
+  isAppointment: false,
   adminTabs: withNoticesTabs(['dashboard', 'members', 'bookings', 'settings']),
   staffTabs: withNoticesTabs(['dashboard', 'members', 'bookings']),
 };

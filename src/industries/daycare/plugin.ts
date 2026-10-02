@@ -28,6 +28,11 @@ export const daycarePluginManifest: IndustryPluginManifest = {
   syncCapabilities: ['daycare'],
   levelLabel: '연령반',
   levelOptions: DAYCARE_AGE_CLASSES,
+  placeLabel: '원',
+  ownerLabel: '원장',
+  placeNamePlaceholder: '예: 햇살 어린이집',
+  customerLabel: '원아',
+  isAppointment: false,
   adminTabs: [
     ...CLASS_BASED_CORE_ADMIN_TABS,
     'consultations',

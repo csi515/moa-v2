@@ -40,6 +40,16 @@ export interface IndustryPluginManifest {
    * registry는 구현의 소유자가 아니다.
    */
   syncCapabilities?: string[];
+  /** 장소 명칭 (예: '학원', '스튜디오', '체육관', '원', '샵') */
+  placeLabel?: string;
+  /** 사업주 호칭 (예: '원장', '대표') */
+  ownerLabel?: string;
+  /** 사업장 이름 입력 예시 */
+  placeNamePlaceholder?: string;
+  /** 고객 명칭 (예: '원생', '회원', '원아', '고객') */
+  customerLabel?: string;
+  /** 예약·서비스 중심 업종 여부 */
+  isAppointment?: boolean;
 }
 
 export type IndustryPlugin = IndustryPluginManifest;
