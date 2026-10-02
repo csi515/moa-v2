@@ -180,6 +180,7 @@ export const WorkplaceSettingsView: FC = () => {
         'success'
       );
     } catch (err) {
+      StorageService.saveSettings(previous);
       setSettings(previous);
       showToast(
         err instanceof Error ? err.message : '출결 설정 저장 중 오류가 발생했습니다.',
@@ -199,7 +200,6 @@ export const WorkplaceSettingsView: FC = () => {
         address: displayAddress,
         rooms: getConfiguredRooms(settings),
       };
-      StorageService.saveSettings(nextSettings);
       
       if (org.currentOrganization) {
         await orgService.updateOrganization(org.currentOrganization.id, {
@@ -230,6 +230,7 @@ export const WorkplaceSettingsView: FC = () => {
         await org.refreshOrganizations();
       }
       
+      StorageService.saveSettings(nextSettings);
       setSettings(nextSettings);
       triggerRefresh();
       showToast('사업장 설정이 저장되었습니다.', 'success');
