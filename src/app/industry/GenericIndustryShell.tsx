@@ -4,7 +4,7 @@ import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useTabGuard } from '@/shared/navigation/useTabGuard';
 import { ModuleLabelsProvider } from '@/core/labels';
-import { AcademySettingsView } from '@/core/organizations/components/AcademySettingsView';
+import { WorkplaceSettingsView } from '@/core/organizations/components/WorkplaceSettingsView';
 import { accountViewEntry } from '@/core/industry/commonViewEntries';
 import { ToastContainer, ConfirmDialog } from '@/shared/components';
 import { EmptyState } from '@/shared/components/ui';
@@ -35,7 +35,7 @@ const GENERIC_MAIN_TABS: NavMenuItem[] = GENERIC_NAV_SECTIONS[0].items;
 
 const GENERIC_VIEW_MAP: Record<string, () => ReactNode> = {
   dashboard: () => <GenericHomeView />,
-  settings: () => <AcademySettingsView />,
+  settings: () => <WorkplaceSettingsView />,
   ...accountViewEntry,
 };
 

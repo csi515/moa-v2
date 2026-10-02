@@ -9,8 +9,8 @@ import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import { StorageHydrator } from '@/StorageHydrator';
 import { SupabaseRoleSync } from '@/SupabaseRoleSync';
 import { ParentChildrenHome } from './ParentChildrenHome';
-import { ParentAcademyPicker } from './ParentAcademyPicker';
-import { ParentAcademyPortal, useStudentFromEnrollment } from './ParentAcademyPortal';
+import { ParentOrganizationPicker } from './ParentAcademyPicker';
+import { ParentOrganizationPortal, useStudentFromEnrollment } from './ParentAcademyPortal';
 import { ParentLinkConsentModal } from './ParentLinkConsentModal';
 import { GuardianLinkQrScanner } from './components/GuardianLinkQrScanner';
 import { ParentAccountSection } from './ParentAccountSection';
@@ -215,7 +215,7 @@ function ParentShellContent() {
         )}
 
         {step === 'children' && <ParentChildrenHome addRequest={addChildRequest} />}
-        {step === 'academies' && <ParentAcademyPicker />}
+        {step === 'academies' && <ParentOrganizationPicker />}
         {step === 'portal' && <ParentPortalHydrated />}
 
         {step === 'children' && portalTree && portalTree.children.length > 0 && (
@@ -347,7 +347,7 @@ function ParentPortalWithStudent({
   }
 
   return (
-    <ParentAcademyPortal
+    <ParentOrganizationPortal
       student={student}
       organizationId={organizationId}
       organizationName={organizationName}

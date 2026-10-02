@@ -2,7 +2,7 @@ import type { FC, ReactNode } from 'react';
 import { CalendarDays, LayoutDashboard, Users } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { useTabGuard } from '@/shared/navigation/useTabGuard';
-import { AcademySettingsView } from '@/core/organizations/components/AcademySettingsView';
+import { WorkplaceSettingsView } from '@/core/organizations/components/WorkplaceSettingsView';
 import { accountViewEntry } from '@/core/industry/commonViewEntries';
 import { ToastContainer, ConfirmDialog } from '@/shared/components';
 import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
@@ -12,7 +12,7 @@ import { BathSidebar } from './layout/BathSidebar';
 import { BathBottomNav } from './layout/BathBottomNav';
 import { BathPlaceholderView } from './components/BathPlaceholderView';
 
-const bathSettings = () => <AcademySettingsView />;
+const bathSettings = () => <WorkplaceSettingsView />;
 
 const BATH_VIEW_MAP: Record<string, () => ReactNode> = {
   dashboard: () => (

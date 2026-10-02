@@ -3,7 +3,7 @@ import { Settings } from 'lucide-react';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import type { NavTab } from '@/shared/navigation/navigationTypes';
 import { PageHeader, SegmentedControl } from '@/shared/components';
-import { AcademySettingsView } from './AcademySettingsView';
+import { WorkplaceSettingsView } from './WorkplaceSettingsView';
 import { TeacherManagementView } from '@/core/staff/components/TeacherManagementView';
 import { ParentNoticeView } from '@/core/notices';
 import { MyAccountView } from '@/core/account';
@@ -83,7 +83,7 @@ export const SettingsHubView: FC<{
         ))}
       </div>
     );
-  } else if (uiSegment === 'workplace') body = <AcademySettingsView />;
+  } else if (uiSegment === 'workplace') body = <WorkplaceSettingsView />;
   else if (uiSegment === 'staff') body = <StaffView />;
   else if (uiSegment === 'notices') body = <ParentNoticeView />;
   else body = <MyAccountView />;

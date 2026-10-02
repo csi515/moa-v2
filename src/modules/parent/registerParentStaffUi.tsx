@@ -7,5 +7,3 @@ import {
 
 registerGuardianInvite((props) => <GuardianLinkInviteModal {...props} />);
 registerParentInviteResult((props) => <ParentInviteResultModal {...props} />);
-
-

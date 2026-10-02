@@ -9,7 +9,7 @@ import {
 } from '@/core/parent/types/globalParent';
 import { getIndustryLabel } from '@/core/industry/types';
 
-export const ParentAcademyPicker: React.FC = () => {
+export const ParentOrganizationPicker: React.FC = () => {
   const { selectedStudent, selectEnrollment } = useParentPortal();
 
   if (!selectedStudent) return null;
@@ -99,3 +99,7 @@ function EnrollmentSection({
     </div>
   );
 }
+
+/** @deprecated Use ParentOrganizationPicker */
+export const ParentAcademyPicker = ParentOrganizationPicker;
+

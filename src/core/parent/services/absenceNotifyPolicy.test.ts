@@ -68,7 +68,10 @@ function run() {
   );
 
   const here = dirname(fileURLToPath(import.meta.url));
-  const alert = readFileSync(join(here, 'academyAlertService.ts'), 'utf8');
+  const alert = readFileSync(
+    join(here, '../../../capabilities/attendance/notifications/absenceNotification.ts'),
+    'utf8'
+  );
   assert.match(alert, /shouldNotifyParentAbsence/);
   assert.match(alert, /eventKey/);
 

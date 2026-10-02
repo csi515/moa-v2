@@ -7,7 +7,7 @@ export {
 export { ParentManagementView } from '@/core/parent/components/ParentManagementView';
 export { TeacherManagementView } from '@/core/staff/components/TeacherManagementView';
 export { AcademyCalendarView } from './components/calendar/AcademyCalendarView';
-export { AcademySettingsView } from '@/core/organizations/components/AcademySettingsView';
+export { WorkplaceSettingsView, AcademySettingsView } from '@/core/organizations/components/WorkplaceSettingsView';
 export { ClassManagementView, WeeklyTimetableView } from '@/capabilities/scheduling';
 export { TuitionManagementView, UnpaidManagementView } from '@/capabilities/billing';
 export { ConsultationRecordsView } from '@/capabilities/consultation';

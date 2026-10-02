@@ -26,7 +26,7 @@ import {
 } from './parentPortalNav';
 import { consumePendingPortalTab } from '@/core/push';
 
-export interface ParentAcademyPortalProps {
+export interface ParentOrganizationPortalProps {
   student: Student;
   organizationId: string;
   organizationName: string;
@@ -36,7 +36,10 @@ export interface ParentAcademyPortalProps {
   onBack?: () => void;
 }
 
-export const ParentAcademyPortal: React.FC<ParentAcademyPortalProps> = ({
+/** @deprecated Use ParentOrganizationPortalProps */
+export type ParentAcademyPortalProps = ParentOrganizationPortalProps;
+
+export const ParentOrganizationPortal: React.FC<ParentOrganizationPortalProps> = ({
   student,
   organizationId,
   organizationName,
@@ -285,6 +288,10 @@ export const ParentAcademyPortal: React.FC<ParentAcademyPortalProps> = ({
     </div>
   );
 };
+
+/** @deprecated Use ParentOrganizationPortal */
+export const ParentAcademyPortal = ParentOrganizationPortal;
+
 
 /** StorageHydrator 이후 customer_id로 Student 조회 (StudentService 경로) */
 export function useStudentFromEnrollment(customerId: string): Student | null {

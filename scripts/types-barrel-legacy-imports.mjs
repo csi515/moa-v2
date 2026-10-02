@@ -51,7 +51,6 @@ export const TYPES_BARREL_LEGACY_IMPORT_FILES = new Set([
   'src/industries/piano/components/calendar/AcademyCalendarView.tsx',
   'src/industries/piano/components/calendar/visibleStaffCalendarEvents.ts',
   'src/core/parent/components/ParentManagementView.tsx',
-  'src/core/organizations/components/AcademySettingsView.tsx',
   'src/capabilities/roster/components/StudentDetailModal.tsx',
   'src/capabilities/roster/components/StudentFormModal.tsx',
   'src/capabilities/roster/components/StudentListView.tsx',

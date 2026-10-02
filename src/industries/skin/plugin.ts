@@ -1,7 +1,7 @@
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
 import { withNoticesTabs } from '@/core/industry/pluginTypes';
 import { registerSkinStudentDetailExtension } from './studentDetailExtension';
-import './registerAcademySettings';
+import './registerStaffSettings';
 
 /** 학생 상세 — 시술 기록 탭 (Core는 Module을 import하지 않음) */
 registerSkinStudentDetailExtension();
