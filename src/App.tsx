@@ -30,6 +30,8 @@ import {
   StudentShowPage,
   StudentEditPage,
 } from "./pages/students";
+import { WeeklyTimetableView } from "@/capabilities/scheduling";
+import { TuitionManagementView } from "@/capabilities/billing";
 import { LoginPage } from "./pages/auth/LoginPage";
 
 const queryClient = new QueryClient({
@@ -133,8 +135,8 @@ export const App: React.FC = () => {
                       <Route path="/students/create" element={<StudentCreatePage />} />
                       <Route path="/students/:id" element={<StudentShowPage />} />
                       <Route path="/students/:id/edit" element={<StudentEditPage />} />
-                      <Route path="/schedules" element={<DashboardPage />} />
-                      <Route path="/billing" element={<DashboardPage />} />
+                      <Route path="/schedules" element={<WeeklyTimetableView />} />
+                      <Route path="/billing" element={<TuitionManagementView />} />
                     </Route>
                   </Route>
 
