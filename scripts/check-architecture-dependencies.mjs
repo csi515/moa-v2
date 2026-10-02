@@ -8,11 +8,10 @@
  *       capability→같은 capability의 Core compatibility shim
  *
  * 기존 위반은 LEGACY allowlist. 신규 위반은 즉시 실패.
- * src/core/academy 는 legacy aggregation — 스냅샷 밖 신규 파일·
- * capability/industry/composition import 는 즉시 실패.
+ * src/core/academy 는 영구 금지 — 디렉터리 또는 하위 파일 존재 시 즉시 실패.
  * 실행: npm run check:architecture
  */
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, unlinkSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, unlinkSync, rmdirSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -123,15 +122,11 @@ export const LEGACY_ALLOWLIST = {
   },
 };
 
-/**
- * src/core/academy 현재 파일 스냅샷. 신규 업무의 기본 위치가 아니다.
- * 이미 있는 파일만 legacy로 인정한다. 새 파일을 여기 추가하지 않는다.
- * 파일을 삭제한 뒤에만 이 목록에서 뺀다.
- */
-export const ACADEMY_LEGACY_FILES = new Set();
+export const CORE_ACADEMY_FORBIDDEN_MESSAGE =
+  'src/core/academy is permanently forbidden. Move the code to Core, Capability, Industry, Shared, or Infrastructure.';
 
 function isAcademyRel(rel) {
-  return rel.startsWith('src/core/academy/');
+  return rel === 'src/core/academy' || rel.startsWith('src/core/academy/');
 }
 
 const FORBIDDEN_FROM = {
@@ -157,6 +152,27 @@ function walk(dir, out = []) {
 
 function toPosix(filePath) {
   return relative(root, filePath).replace(/\\/g, '/');
+}
+
+export function findCoreAcademyViolations(dir = join(srcRoot, 'core', 'academy')) {
+  if (!existsSync(dir)) return null;
+  const files = walk(dir).map((f) => toPosix(f));
+  return { dir: toPosix(dir), files };
+}
+
+export function assertCoreAcademyForbidden(dir = join(srcRoot, 'core', 'academy')) {
+  const violation = findCoreAcademyViolations(dir);
+  if (violation) {
+    console.error(CORE_ACADEMY_FORBIDDEN_MESSAGE);
+    if (violation.files.length > 0) {
+      for (const file of violation.files) {
+        console.error(`  - ${file}`);
+      }
+    } else {
+      console.error(`  - ${violation.dir} (directory)`);
+    }
+    process.exit(1);
+  }
 }
 
 function layerOfRel(rel) {
@@ -338,6 +354,11 @@ function scanFile(filePath) {
   const kinds = new Set();
   const details = [];
   const rel = toPosix(filePath);
+
+  if (isAcademyRel(rel)) {
+    kinds.add('core_academy_forbidden');
+    details.push(CORE_ACADEMY_FORBIDDEN_MESSAGE);
+  }
 
   if (isTestFile(filePath)) {
     return { kinds, details };
@@ -551,8 +572,6 @@ function expectedLegacyKeys() {
   return keys.sort();
 }
 
-function assertAcademySnapshot() {}
-
 function assertStorageServiceIndustrySnapshot() {
   const missing = [...STORAGE_SERVICE_INDUSTRY_LEGACY_FILES]
     .filter((rel) => !existsSync(join(root, rel)))
@@ -617,9 +636,17 @@ function selfTest() {
   const domainFacadesOriginal = readFileSync(domainFacadesFile, 'utf8');
   const typesIndexFile = join(root, FROZEN_TYPES_INDEX_REL);
   const typesIndexOriginal = readFileSync(typesIndexFile, 'utf8');
-  const academyNewRel = 'src/core/academy/_architecture_probe.tmp.ts';
+  const academyDir = join(srcRoot, 'core', 'academy');
+  const academyProbeRel = 'src/core/academy/_architecture_probe.tmp.ts';
 
   try {
+    probes.push(
+      writeProbe(
+        academyDir,
+        '_architecture_probe.tmp.ts',
+        'export const academyProbe = true;\n'
+      )
+    );
     probes.push(
       writeProbe(
         join(srcRoot, 'core'),
@@ -810,9 +837,16 @@ function selfTest() {
       (row) => row.kind === 'storage_facade_slice' && row.file === FROZEN_DOMAIN_FACADES_REL
     );
     const shimCycleHit = next.some((row) => row.kind === 'capability_shim_cycle');
-    const academyNewFileHit = false;
-    const academyImportHit = false;
-    const snapshotFalsePositive = false;
+    const academyDirViolation = findCoreAcademyViolations(academyDir);
+    const academyFileHit = next.some(
+      (row) => row.kind === 'core_academy_forbidden' && row.file === academyProbeRel
+    );
+    if (!academyDirViolation) {
+      throw new Error('architecture self-test: src/core/academy 디렉터리 존재를 잡지 못했습니다.');
+    }
+    if (!academyFileHit) {
+      throw new Error('architecture self-test: src/core/academy 파일 위반을 잡지 못했습니다.');
+    }
     const coreContextHit = next.some(
       (row) =>
         row.kind === 'context_import' &&
@@ -962,6 +996,7 @@ function selfTest() {
       !storageMethodHit ||
       !storageSliceHit ||
       !shimCycleHit ||
+      !academyFileHit ||
       !coreContextHit ||
       !coreRelativeContextHit ||
       !coreAppUiHit ||
@@ -982,7 +1017,7 @@ function selfTest() {
       throw new Error('architecture self-test: 계층 위반을 잡지 못했습니다.');
     }
     console.log(
-      'architecture self-test: core→industry / capability→industry / services→industry / StorageService (@/ + .ts + relative + industry + freeze) / legacy attendance / capability→shim cycle / academy freeze(full scan) / Core·Capability→AppContext / appUi / relative context / registry→impl / catalog composition / Core·Capability→Composition / types barrel freeze / new @/types import 탐지 ok'
+      'architecture self-test: core→industry / capability→industry / services→industry / StorageService (@/ + .ts + relative + industry + freeze) / legacy attendance / capability→shim cycle / permanently forbid core academy / Core·Capability→AppContext / appUi / relative context / registry→impl / catalog composition / Core·Capability→Composition / types barrel freeze / new @/types import 탐지 ok'
     );
   } finally {
     writeFileSync(registryFile, registryOriginal, 'utf8');
@@ -991,9 +1026,24 @@ function selfTest() {
     writeFileSync(domainFacadesFile, domainFacadesOriginal, 'utf8');
     writeFileSync(typesIndexFile, typesIndexOriginal, 'utf8');
     for (const probe of probes) removeIfExists(probe);
+    if (existsSync(academyDir)) {
+      try {
+        rmdirSync(academyDir);
+      } catch {
+        // ignore
+      }
+    }
   }
 
   const { next: cleaned } = collectViolations();
+  const leftoverAcademyDir = existsSync(academyDir);
+  if (leftoverAcademyDir) {
+    throw new Error('architecture self-test: probe 정리 후에도 core academy 디렉터리가 남았습니다.');
+  }
+  const leftoverAcademy = cleaned.some((row) => row.kind === 'core_academy_forbidden');
+  if (leftoverAcademy) {
+    throw new Error('architecture self-test: probe 정리 후에도 core academy 위반이 남았습니다.');
+  }
   const leftoverRegistry = cleaned.some((row) => row.kind === 'registry_impl_import');
   if (leftoverRegistry) {
     throw new Error('architecture self-test: probe 정리 후에도 registry 구현 import 위반이 남았습니다.');
@@ -1040,7 +1090,7 @@ function main() {
   const { next, known, typesImportStale } = collectViolations();
   printInventory(known);
   assertLegacyFrozen(known);
-  assertAcademySnapshot();
+  assertCoreAcademyForbidden();
   assertStorageServiceIndustrySnapshot();
   if (typesImportStale.length > 0) {
     console.error("types barrel inventory에 있으나 '@/types' import가 없습니다. 이전한 항목만 목록에서 제거하세요:");
