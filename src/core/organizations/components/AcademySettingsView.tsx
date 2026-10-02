@@ -30,12 +30,12 @@ import {
 } from 'lucide-react';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { getIndustryAccent, getCustomerLabel, getOwnerLabel, getPlaceLabel, isSkinClinicIndustry } from '@/core/industry/industryUi';
-import { renderAcademyStaffHoursFields } from '@/core/staff/staffUi';
+import { renderStaffHoursFields } from '@/core/staff/staffUi';
 import { useModuleLabels } from '@/core/labels';
 import * as orgService from '@/core/organizations/services/organizationService';
 import {
-  ACADEMY_ROOM_KIND_LABEL,
-  createAcademyRoom,
+  ROOM_KIND_LABEL,
+  createRoom,
   getConfiguredRooms,
 } from '../utils/academyRooms';
 import type { AcademyRoomKind } from '@/types';
@@ -145,7 +145,7 @@ export const AcademySettingsView: FC = () => {
       ...settings,
       rooms: [
         ...rooms,
-        createAcademyRoom({
+        createRoom({
           name: skinRooms ? `관리실 ${rooms.length + 1}` : `강의실 ${rooms.length + 1}`,
           kind: skinRooms ? 'treatment' : 'classroom',
         }),
@@ -421,7 +421,7 @@ export const AcademySettingsView: FC = () => {
                     />
                   </FormField>
                 )}
-                {renderAcademyStaffHoursFields({
+                {renderStaffHoursFields({
                   teachers: StorageService.getTeachers().filter((t) => t.status === 'active'),
                   windows: settings.staffHours || [],
                   onChange: (staffHours) => setSettings({ ...settings, staffHours }),
@@ -489,11 +489,11 @@ export const AcademySettingsView: FC = () => {
                         className={`${FORM_CONTROL_CLASS} sm:w-32 min-h-[44px]`}
                       >
                         {skinRooms ? (
-                          <option value="treatment">{ACADEMY_ROOM_KIND_LABEL.treatment}</option>
+                          <option value="treatment">{ROOM_KIND_LABEL.treatment}</option>
                         ) : (
                           <>
-                            <option value="classroom">{ACADEMY_ROOM_KIND_LABEL.classroom}</option>
-                            <option value="practice">{ACADEMY_ROOM_KIND_LABEL.practice}</option>
+                            <option value="classroom">{ROOM_KIND_LABEL.classroom}</option>
+                            <option value="practice">{ROOM_KIND_LABEL.practice}</option>
                           </>
                         )}
                       </select>

@@ -15,7 +15,7 @@ import {
   type InviteParentResult,
 } from '@/core/parent/services/parentAccountService';
 import { sendParentInvitationEmail } from '@/core/parent/services/parentInviteService';
-import { renderAcademyParentInviteResult } from '@/core/staff/staffUi';
+import { renderParentInviteResult } from '@/core/staff/staffUi';
 import { formatGuardianRelationship, searchParents } from '@/core/parent';
 import { AccountStatusBadge } from '@/core/accounts/AccountStatusBadge';
 import { StorageService } from '@/services/storage';
@@ -340,7 +340,7 @@ export const ParentManagementView: React.FC = () => {
 
       {inviteResult &&
         inviteResult.status === 'invited' &&
-        renderAcademyParentInviteResult({
+        renderParentInviteResult({
           parentName:
             parents.find((p) => p.id === inviteResult.parentCustomerId)?.name || contactLabel,
           email: inviteResult.email || '',

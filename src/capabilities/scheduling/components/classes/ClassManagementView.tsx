@@ -11,7 +11,7 @@ import {
   findClassConflicts,
   formatConflictSummary,
 } from '../../utils/scheduleConflicts';
-import { getAcademyRoomNames } from '@/core/organizations/utils/academyRooms';
+import { getRoomNames } from '@/core/organizations/utils/academyRooms';
 import {
   GraduationCap,
   Plus,
@@ -44,7 +44,7 @@ export const ClassManagementView: React.FC = () => {
 
   const roomNames = useMemo(
     () =>
-      getAcademyRoomNames({
+      getRoomNames({
         settings: StorageService.getSettings(),
         classes,
       }),
@@ -71,7 +71,7 @@ export const ClassManagementView: React.FC = () => {
 
   const handleOpenCreate = () => {
     setEditingClass(null);
-    const rooms = getAcademyRoomNames({
+    const rooms = getRoomNames({
       settings: StorageService.getSettings(),
       classes: StorageService.getClasses(),
     });

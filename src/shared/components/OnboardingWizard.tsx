@@ -87,7 +87,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
   });
   const [isSaving, setIsSaving] = useState(false);
 
-  const [academyForm, setAcademyForm] = useState({
+  const [organizationForm, setOrganizationForm] = useState({
     name: saved.name || org?.currentOrganization?.name || '',
     directorName: saved.directorName || StorageService.getActiveUser().name || '',
     phone: saved.phone || '',
@@ -176,9 +176,9 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
   const goNext = () => setStep((s) => Math.min(s + 1, TOTAL_STEPS - 1));
   const goPrev = () => setStep((s) => Math.max(s - 1, 0));
 
-  const handleAcademyNext = async (e: React.FormEvent) => {
+  const handleOrganizationNext = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!academyForm.name.trim()) {
+    if (!organizationForm.name.trim()) {
       showToast('학원명은 필수입니다.', 'warning');
       return;
     }
@@ -187,9 +187,9 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       const formatted = formatOrganizationAddress(addressParts);
       await persistLocalAndOrg(
         {
-          name: academyForm.name.trim(),
-          directorName: academyForm.directorName.trim(),
-          phone: academyForm.phone.trim(),
+          name: organizationForm.name.trim(),
+          directorName: organizationForm.directorName.trim(),
+          phone: organizationForm.phone.trim(),
           address: formatted,
         },
         addressParts
@@ -449,7 +449,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
 
         <div className="overflow-y-auto flex-1">
           {step === 0 && (
-            <form onSubmit={handleAcademyNext} className="p-6 space-y-4">
+            <form onSubmit={handleOrganizationNext} className="p-6 space-y-4">
               <p className="text-sm text-slate-500">
                 학원 기본 정보입니다. <span className="font-semibold text-slate-700">학원명만 필수</span>
                 이며, 나머지는 나중에 설정해도 됩니다.
@@ -462,8 +462,8 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                   type="text"
                   required
                   placeholder="예: 행복 피아노 학원"
-                  value={academyForm.name}
-                  onChange={(e) => setAcademyForm({ ...academyForm, name: e.target.value })}
+                  value={organizationForm.name}
+                  onChange={(e) => setOrganizationForm({ ...organizationForm, name: e.target.value })}
                   className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none font-bold min-h-[44px]"
                 />
               </div>
@@ -473,8 +473,8 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                 </label>
                 <input
                   type="text"
-                  value={academyForm.directorName}
-                  onChange={(e) => setAcademyForm({ ...academyForm, directorName: e.target.value })}
+                  value={organizationForm.directorName}
+                  onChange={(e) => setOrganizationForm({ ...organizationForm, directorName: e.target.value })}
                   className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none min-h-[44px]"
                 />
               </div>
@@ -484,8 +484,8 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                 </label>
                 <input
                   type="tel"
-                  value={academyForm.phone}
-                  onChange={(e) => setAcademyForm({ ...academyForm, phone: e.target.value })}
+                  value={organizationForm.phone}
+                  onChange={(e) => setOrganizationForm({ ...organizationForm, phone: e.target.value })}
                   className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none font-mono min-h-[44px]"
                 />
               </div>

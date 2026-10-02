@@ -3,7 +3,7 @@ import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useOptionalOrganization } from '@/core/organizations/OrganizationProvider';
 import { isAttendanceModuleEnabled } from '@/core/attendance/features';
-import { renderAcademyParentInviteResult } from '@/core/staff/staffUi';
+import { renderParentInviteResult } from '@/core/staff/staffUi';
 import type { StudentRegistrationInviteResult } from '@/core/students/services/studentRegistrationService';
 import {
   registerStudentWithParent,
@@ -581,7 +581,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
       </Modal>
 
       {inviteModal &&
-        renderAcademyParentInviteResult({
+        renderParentInviteResult({
           parentName: inviteModal.parentName,
           email: inviteModal.email,
           organizationName:

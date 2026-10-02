@@ -60,3 +60,8 @@ export interface AcademySettings {
     };
   };
 }
+
+export type OrganizationRoomKind = AcademyRoomKind;
+export type OrganizationRoom = AcademyRoom;
+export type OrganizationSettings = AcademySettings;
+

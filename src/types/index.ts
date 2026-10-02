@@ -180,6 +180,9 @@ export type {
   AcademyRoom,
   AcademyRoomKind,
   AcademySettings,
+  OrganizationRoom,
+  OrganizationRoomKind,
+  OrganizationSettings,
   SettingsRetailCatalogItem as RetailProduct,
 } from '@/core/organizations/settingsTypes';
 

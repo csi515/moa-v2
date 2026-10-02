@@ -22,7 +22,7 @@ import {
 } from '@/capabilities/scheduling';
 import { scheduleMakeupAtomic } from '@/core/schedules/makeupScheduleAtomic';
 import { todayIsoLocal } from '@/shared/utils/localDate';
-import { getAcademyRoomNames } from '@/core/organizations/utils/academyRooms';
+import { getRoomNames } from '@/core/organizations/utils/academyRooms';
 import {
   Sparkles,
   Calendar,
@@ -65,7 +65,7 @@ export const MakeupManagementView: React.FC = () => {
   const classes = StorageService.getClasses();
   const rooms = useMemo(
     () =>
-      getAcademyRoomNames({
+      getRoomNames({
         settings: StorageService.getSettings(),
         classes,
       }),

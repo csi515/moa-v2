@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import type { Student } from '@/types';
-import { renderAcademyGuardianInvite } from '@/core/staff/staffUi';
+import { renderGuardianInvite } from '@/core/staff/staffUi';
 import { X, Phone, Edit, UserMinus, UserCheck, ClipboardCheck, CreditCard, MessageSquare, ChevronDown } from 'lucide-react';
 import { StudentDetailInfoTab } from './detail/StudentDetailInfoTab';
 import { StudentDetailClassesTab } from './detail/StudentDetailClassesTab';
@@ -437,7 +437,7 @@ const StudentDetailModalContent: React.FC<
         onCloseDetail: onClose,
       })}
 
-      {renderAcademyGuardianInvite({
+      {renderGuardianInvite({
         studentId: student.id,
         studentName: student.name,
         isOpen: modal.guardianLinkOpen,

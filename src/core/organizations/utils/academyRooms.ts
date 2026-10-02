@@ -1,12 +1,15 @@
 import type { AcademyRoom, AcademyRoomKind, AcademySettings, ClassItem } from '@/types';
 
-export const ACADEMY_ROOM_KIND_LABEL: Record<AcademyRoomKind, string> = {
+export const ROOM_KIND_LABEL: Record<AcademyRoomKind, string> = {
   classroom: '강의실',
   practice: '연습실',
   treatment: '관리실',
 };
 
-export function createAcademyRoom(
+/** @deprecated Use ROOM_KIND_LABEL */
+export const ACADEMY_ROOM_KIND_LABEL = ROOM_KIND_LABEL;
+
+export function createRoom(
   partial?: Partial<AcademyRoom> & { name?: string }
 ): AcademyRoom {
   return {
@@ -15,6 +18,9 @@ export function createAcademyRoom(
     kind: partial?.kind || 'classroom',
   };
 }
+
+/** @deprecated Use createRoom */
+export const createAcademyRoom = createRoom;
 
 /** 설정에 등록된 실 목록 (비어 있으면 빈 배열) */
 export function getConfiguredRooms(
@@ -34,7 +40,7 @@ export function getConfiguredRooms(
  * 반 개설·보강용 실 이름 목록.
  * 설정 rooms 우선, 없으면 기존 반/보강 문자열에서 유도.
  */
-export function getAcademyRoomNames(params: {
+export function getRoomNames(params: {
   settings?: AcademySettings | null;
   classes?: ClassItem[];
   extraRooms?: string[];
@@ -49,6 +55,9 @@ export function getAcademyRoomNames(params: {
   return Array.from(new Set([...fromClasses, ...extras]));
 }
 
+/** @deprecated Use getRoomNames */
+export const getAcademyRoomNames = getRoomNames;
+
 export function getPracticeRoomNames(params: {
   settings?: AcademySettings | null;
   classes?: ClassItem[];
@@ -58,10 +67,14 @@ export function getPracticeRoomNames(params: {
   if (configured.length > 0) {
     return Array.from(new Set(configured.map((r) => r.name)));
   }
-  return getAcademyRoomNames(params);
+  return getRoomNames(params);
 }
 
-export function formatAcademyRoomLabel(room: AcademyRoom): string {
-  return `${room.name} (${ACADEMY_ROOM_KIND_LABEL[room.kind]})`;
+export function formatRoomLabel(room: AcademyRoom): string {
+  return `${room.name} (${ROOM_KIND_LABEL[room.kind]})`;
 }
+
+/** @deprecated Use formatRoomLabel */
+export const formatAcademyRoomLabel = formatRoomLabel;
+
 
