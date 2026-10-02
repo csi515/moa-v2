@@ -44,7 +44,7 @@ jobs:
 
   security-db:
     needs: quality
-    if: vars.ENABLE_SECURITY_AUDIT == 'true' || secrets.ENABLE_SECURITY_AUDIT == 'true'
+    if: vars.ENABLE_SECURITY_AUDIT == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
