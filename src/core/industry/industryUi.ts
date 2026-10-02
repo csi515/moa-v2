@@ -79,3 +79,39 @@ export function getModuleTheme(industry: IndustryType | string | null | undefine
 export function getIndustryAccent(industry: IndustryType | string | null | undefined): IndustryAccent {
   return getIndustryPlugin(industry).accent;
 }
+
+/** 비용 명칭 (수강료·이용료·보육료 등) */
+export function getFeeLabel(industry: IndustryType | string | null | undefined): string {
+  if (!industry) return '수강료';
+  return getIndustryPlugin(industry).feeLabel ?? '수강료';
+}
+
+/** 수납 계좌 입력 placeholder */
+export function getBankAccountPlaceholder(industry: IndustryType | string | null | undefined): string {
+  if (!industry) return '예: 국민은행 123456-04-123456 (예금주: 선율음악학원)';
+  return getIndustryPlugin(industry).bankAccountPlaceholder ?? '예: 국민은행 123456-04-123456 (예금주: 선율음악학원)';
+}
+
+/** 예약금 UI 표시 여부 */
+export function supportsDeposit(industry: IndustryType | string | null | undefined): boolean {
+  if (!industry) return false;
+  return Boolean(getIndustryPlugin(industry).supportsDeposit);
+}
+
+/** 설정 화면의 교재 관리 바로가기 표시 여부 */
+export function showsTextbooksLink(industry: IndustryType | string | null | undefined): boolean {
+  if (!industry) return false;
+  return Boolean(getIndustryPlugin(industry).showsTextbooksLink);
+}
+
+/** 실(강의실·관리실 등) UI 설정 */
+export function getRoomConfig(industry: IndustryType | string | null | undefined) {
+  return getIndustryPlugin(industry).roomConfig ?? {
+    sectionTitle: '강의실 · 연습실',
+    sectionDescription: '반 개설·보강 예약 시 선택할 공간입니다. 학원에서 쓰는 실 이름을 등록해 주세요.',
+    defaultPrefix: '강의실',
+    defaultKind: 'classroom' as const,
+    placeholder: '예: 피아노 1실',
+    allowedKinds: ['classroom', 'practice'] as const,
+  };
+}

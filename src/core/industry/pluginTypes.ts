@@ -50,6 +50,27 @@ export interface IndustryPluginManifest {
   customerLabel?: string;
   /** 예약·서비스 중심 업종 여부 */
   isAppointment?: boolean;
+  /** 비용 명칭 (예: '수강료', '이용료', '보육료') */
+  feeLabel?: string;
+  /** 수납 계좌 입력 placeholder */
+  bankAccountPlaceholder?: string;
+  /** 예약금 설정 UI 표시 여부 */
+  supportsDeposit?: boolean;
+  /** 설정에서 교재 관리 바로가기 링크 표시 여부 */
+  showsTextbooksLink?: boolean;
+  /** 공간/실(강의실·관리실 등) 관련 UI 설정 */
+  roomConfig?: IndustryRoomConfig;
+}
+
+export type IndustryRoomKind = 'classroom' | 'practice' | 'treatment';
+
+export interface IndustryRoomConfig {
+  sectionTitle: string;
+  sectionDescription: string;
+  defaultPrefix: string;
+  defaultKind: IndustryRoomKind;
+  placeholder: string;
+  allowedKinds: readonly IndustryRoomKind[];
 }
 
 export type IndustryPlugin = IndustryPluginManifest;

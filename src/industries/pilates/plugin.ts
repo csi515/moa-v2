@@ -28,6 +28,18 @@ export const pilatesPluginManifest: IndustryPluginManifest = {
   placeNamePlaceholder: '예: 밸런스 필라테스',
   customerLabel: '회원',
   isAppointment: true,
+  feeLabel: '수강료',
+  bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 선율음악학원)',
+  supportsDeposit: true,
+  showsTextbooksLink: false,
+  roomConfig: {
+    sectionTitle: '강의실 · 연습실',
+    sectionDescription: '반 개설·보강 예약 시 선택할 공간입니다. 스튜디오에서 쓰는 실 이름을 등록해 주세요.',
+    defaultPrefix: '강의실',
+    defaultKind: 'classroom',
+    placeholder: '예: 1번 룸',
+    allowedKinds: ['classroom', 'practice'],
+  },
   adminTabs: withNoticesTabs([
     'dashboard',
     'bookings',

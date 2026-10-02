@@ -14,6 +14,11 @@ import {
   isGymIndustry,
   isPilatesIndustry,
   isSkinClinicIndustry,
+  getFeeLabel,
+  getBankAccountPlaceholder,
+  supportsDeposit,
+  showsTextbooksLink,
+  getRoomConfig,
 } from './industryUi';
 import type { IndustryPluginManifest } from './pluginTypes';
 
@@ -37,6 +42,18 @@ const mockPlugins: IndustryPluginManifest[] = [
     placeNamePlaceholder: '예: 행복 피아노 학원',
     customerLabel: '원생',
     isAppointment: false,
+    feeLabel: '수강료',
+    bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 선율음악학원)',
+    supportsDeposit: false,
+    showsTextbooksLink: true,
+    roomConfig: {
+      sectionTitle: '강의실 · 연습실',
+      sectionDescription: '반 개설·보강 예약 시 선택할 공간입니다. 학원에서 쓰는 실 이름을 등록해 주세요.',
+      defaultPrefix: '강의실',
+      defaultKind: 'classroom',
+      placeholder: '예: 피아노 1실',
+      allowedKinds: ['classroom', 'practice'],
+    },
   },
   {
     id: 'pilates',
@@ -94,6 +111,7 @@ const mockPlugins: IndustryPluginManifest[] = [
     placeNamePlaceholder: '예: 햇살 어린이집',
     customerLabel: '원아',
     isAppointment: false,
+    feeLabel: '보육료',
   },
   {
     id: 'skin_clinic',
@@ -113,6 +131,18 @@ const mockPlugins: IndustryPluginManifest[] = [
     placeNamePlaceholder: '예: 하루 피부관리',
     customerLabel: '고객',
     isAppointment: true,
+    feeLabel: '이용료',
+    bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 샵 이름)',
+    supportsDeposit: true,
+    showsTextbooksLink: false,
+    roomConfig: {
+      sectionTitle: '관리실',
+      sectionDescription: '예약 시 배정할 관리실 이름을 등록해 주세요.',
+      defaultPrefix: '관리실',
+      defaultKind: 'treatment',
+      placeholder: '예: 1번 관리실',
+      allowedKinds: ['treatment'],
+    },
   },
   {
     id: 'retail',
@@ -256,6 +286,36 @@ function run(): void {
   assert.equal(getPlaceNamePlaceholder(''), '예: 행복 학원');
   assert.equal(getCustomerLabel(''), '원생');
   assert.equal(isAppointmentIndustry(''), false);
+
+  // 10. getFeeLabel
+  assert.equal(getFeeLabel('piano'), '수강료');
+  assert.equal(getFeeLabel('daycare'), '보육료');
+  assert.equal(getFeeLabel('skin_clinic'), '이용료');
+  assert.equal(getFeeLabel(null), '수강료');
+  assert.equal(getFeeLabel(undefined), '수강료');
+
+  // 11. getBankAccountPlaceholder
+  assert.equal(getBankAccountPlaceholder('skin_clinic'), '예: 국민은행 123456-04-123456 (예금주: 샵 이름)');
+  assert.equal(getBankAccountPlaceholder('piano'), '예: 국민은행 123456-04-123456 (예금주: 선율음악학원)');
+
+  // 12. supportsDeposit
+  assert.equal(supportsDeposit('skin_clinic'), true);
+  assert.equal(supportsDeposit('piano'), false);
+  assert.equal(supportsDeposit(null), false);
+
+  // 13. showsTextbooksLink
+  assert.equal(showsTextbooksLink('piano'), true);
+  assert.equal(showsTextbooksLink('skin_clinic'), false);
+  assert.equal(showsTextbooksLink(null), false);
+
+  // 14. getRoomConfig
+  const pianoRooms = getRoomConfig('piano');
+  assert.equal(pianoRooms.sectionTitle, '강의실 · 연습실');
+  assert.equal(pianoRooms.defaultKind, 'classroom');
+  const skinRooms = getRoomConfig('skin_clinic');
+  assert.equal(skinRooms.sectionTitle, '관리실');
+  assert.equal(skinRooms.defaultKind, 'treatment');
+  assert.deepEqual([...skinRooms.allowedKinds], ['treatment']);
 
   console.log('industryUi.test.ts OK (all industry UI label parity verified)');
 }

@@ -33,6 +33,18 @@ export const daycarePluginManifest: IndustryPluginManifest = {
   placeNamePlaceholder: '예: 햇살 어린이집',
   customerLabel: '원아',
   isAppointment: false,
+  feeLabel: '보육료',
+  bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 선율음악학원)',
+  supportsDeposit: false,
+  showsTextbooksLink: false,
+  roomConfig: {
+    sectionTitle: '강의실 · 연습실',
+    sectionDescription: '반 개설·보강 예약 시 선택할 공간입니다. 원에서 쓰는 실 이름을 등록해 주세요.',
+    defaultPrefix: '강의실',
+    defaultKind: 'classroom',
+    placeholder: '예: 피아노 1실',
+    allowedKinds: ['classroom', 'practice'],
+  },
   adminTabs: [
     ...CLASS_BASED_CORE_ADMIN_TABS,
     'consultations',

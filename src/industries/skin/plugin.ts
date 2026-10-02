@@ -33,6 +33,18 @@ export const skinPluginManifest: IndustryPluginManifest = {
   placeNamePlaceholder: '예: 하루 피부관리',
   customerLabel: '고객',
   isAppointment: true,
+  feeLabel: '이용료',
+  bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 샵 이름)',
+  supportsDeposit: true,
+  showsTextbooksLink: false,
+  roomConfig: {
+    sectionTitle: '관리실',
+    sectionDescription: '예약 시 배정할 관리실 이름을 등록해 주세요.',
+    defaultPrefix: '관리실',
+    defaultKind: 'treatment',
+    placeholder: '예: 1번 관리실',
+    allowedKinds: ['treatment'],
+  },
   adminTabs: withNoticesTabs([
     'dashboard',
     'bookings',

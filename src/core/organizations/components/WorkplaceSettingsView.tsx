@@ -29,7 +29,7 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
-import { getIndustryAccent, getCustomerLabel, getOwnerLabel, getPlaceLabel, isSkinClinicIndustry } from '@/core/industry/industryUi';
+import { getIndustryAccent, getCustomerLabel, getOwnerLabel, getPlaceLabel, getFeeLabel, getBankAccountPlaceholder, supportsDeposit as industrySupportsDeposit, showsTextbooksLink as industryShowsTextbooksLink, getRoomConfig } from '@/core/industry/industryUi';
 import { renderStaffHoursFields } from '@/core/staff/staffUi';
 import { useModuleLabels } from '@/core/labels';
 import * as orgService from '@/core/organizations/services/organizationService';
@@ -53,14 +53,17 @@ export const WorkplaceSettingsView: FC = () => {
   const { showToast, triggerRefresh, setActiveTab } = useApp();
   const { industry, isAdmin } = usePermissions();
   const labels = useModuleLabels();
-  const skin = isSkinClinicIndustry(industry);
   const placeLabel = getPlaceLabel(industry);
   const customerLabel = labels.customer.singular || getCustomerLabel(industry);
   const contactLabel = labels.contact.singular;
   const ownerLabel = getOwnerLabel(industry);
-  const feeLabel = industry === 'skin_clinic' ? '이용료' : industry === 'daycare' ? '보육료' : '수강료';
+  const feeLabel = getFeeLabel(industry);
   const staffLabel = labels.staff.singular;
   const org = useOrganization();
+  const roomCfg = getRoomConfig(industry);
+  const depositSupported = industrySupportsDeposit(industry);
+  const textbooksLinkVisible = industryShowsTextbooksLink(industry);
+  const bankAccountPlaceholder = getBankAccountPlaceholder(industry);
 
   const accent = getIndustryAccent(industry);
   const accentBtn = `${accent.btn} ${accent.btnHover}`;
@@ -138,15 +141,14 @@ export const WorkplaceSettingsView: FC = () => {
     });
   };
 
-  const skinRooms = isSkinClinicIndustry(industry);
   const addRoom = () => {
     setSettings({
       ...settings,
       rooms: [
         ...rooms,
         createRoom({
-          name: skinRooms ? `관리실 ${rooms.length + 1}` : `강의실 ${rooms.length + 1}`,
-          kind: skinRooms ? 'treatment' : 'classroom',
+          name: `${roomCfg.defaultPrefix} ${rooms.length + 1}`,
+          kind: roomCfg.defaultKind,
         }),
       ],
     });
@@ -392,7 +394,7 @@ export const WorkplaceSettingsView: FC = () => {
               )}
             </div>
 
-            {skin && (
+            {depositSupported && (
               <div className="space-y-3 rounded-xl border border-rose-100 bg-rose-50/40 p-3">
                 <label className="flex items-start gap-2">
                   <input
@@ -434,11 +436,7 @@ export const WorkplaceSettingsView: FC = () => {
             <FormField label="수납용 계좌번호 안내 (영수증 및 청구서에 표기)">
               <input
                 type="text"
-                placeholder={
-                  skin
-                    ? '예: 국민은행 123456-04-123456 (예금주: 샵 이름)'
-                    : '예: 국민은행 123456-04-123456 (예금주: 선율음악학원)'
-                }
+                placeholder={bankAccountPlaceholder}
                 value={typeof settings.bankAccount === 'string' ? settings.bankAccount : ''}
                 onChange={(e) => setSettings({ ...settings, bankAccount: e.target.value })}
                 className={FORM_CONTROL_CLASS}
@@ -449,7 +447,7 @@ export const WorkplaceSettingsView: FC = () => {
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <DoorOpen className={`w-4 h-4 ${accentIcon}`} />
-                  <p className="text-sm font-bold text-slate-800">{skinRooms ? '관리실' : '강의실 · 연습실'}</p>
+                  <p className="text-sm font-bold text-slate-800">{roomCfg.sectionTitle}</p>
                 </div>
                 <button
                   type="button"
@@ -461,9 +459,7 @@ export const WorkplaceSettingsView: FC = () => {
                 </button>
               </div>
               <p className="text-xs text-slate-500 leading-relaxed">
-                {skinRooms
-                  ? '예약 시 배정할 관리실 이름을 등록해 주세요.'
-                  : '반 개설·보강 예약 시 선택할 공간입니다. 학원에서 쓰는 실 이름을 등록해 주세요.'}
+                {roomCfg.sectionDescription}
               </p>
               {rooms.length === 0 ? (
                 <p className="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5">
@@ -481,7 +477,7 @@ export const WorkplaceSettingsView: FC = () => {
                         value={room.name}
                         onChange={(e) => updateRoom(room.id, { name: e.target.value })}
                         className={`${FORM_CONTROL_CLASS} flex-1 min-h-[44px]`}
-                        placeholder={skinRooms ? '예: 1번 관리실' : '예: 피아노 1실'}
+                        placeholder={roomCfg.placeholder}
                       />
                       <select
                         value={room.kind}
@@ -490,13 +486,14 @@ export const WorkplaceSettingsView: FC = () => {
                         }
                         className={`${FORM_CONTROL_CLASS} sm:w-32 min-h-[44px]`}
                       >
-                        {skinRooms ? (
+                        {(roomCfg.allowedKinds as string[]).includes('treatment') && (
                           <option value="treatment">{ROOM_KIND_LABEL.treatment}</option>
-                        ) : (
-                          <>
-                            <option value="classroom">{ROOM_KIND_LABEL.classroom}</option>
-                            <option value="practice">{ROOM_KIND_LABEL.practice}</option>
-                          </>
+                        )}
+                        {(roomCfg.allowedKinds as string[]).includes('classroom') && (
+                          <option value="classroom">{ROOM_KIND_LABEL.classroom}</option>
+                        )}
+                        {(roomCfg.allowedKinds as string[]).includes('practice') && (
+                          <option value="practice">{ROOM_KIND_LABEL.practice}</option>
                         )}
                       </select>
                       <button
@@ -511,7 +508,7 @@ export const WorkplaceSettingsView: FC = () => {
                   ))}
                 </ul>
               )}
-              {industry === 'piano' && (
+              {textbooksLinkVisible && (
                 <button
                   type="button"
                   onClick={() => setActiveTab('textbooks')}
@@ -580,7 +577,7 @@ export const WorkplaceSettingsView: FC = () => {
             contactLabel={contactLabel}
             feeLabel={feeLabel}
             staffLabel={staffLabel}
-            isSkin={skin}
+            isSkin={depositSupported}
           />
         </div>
       </div>
