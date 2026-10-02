@@ -213,6 +213,8 @@ export const WorkplaceSettingsView: FC = () => {
             address: displayAddress,
             defaultTuitionFee: settings.defaultTuitionFee,
             defaultPaymentDay: settings.defaultPaymentDay,
+            defaultBillingMode: settings.defaultBillingMode,
+            includeExtrasInMonthlyInvoice: settings.includeExtrasInMonthlyInvoice,
             bankAccount: settings.bankAccount,
             depositEnabled: settings.depositEnabled,
             depositAmount: settings.depositAmount,
