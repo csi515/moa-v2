@@ -34,6 +34,7 @@ import {
   ReportsManagementView,
 } from './index';
 import { PassManagementView } from '@/capabilities/billing/ui/PassManagementView';
+import { pianoPassConfig } from './config/passConfig';
 import { PianoScheduleView } from './components/schedule';
 import { PianoConsultationHubView } from './components/consultations';
 import { SongProgressStaffView } from './components/songProgress';
@@ -82,7 +83,7 @@ const PIANO_VIEW_MAP: Record<string, () => ReactNode> = {
   practice: () => <PracticeRecordsView />,
   resources: () => <ResourceManagementView />,
   textbooks: () => <TextbookManagementView />,
-  passes: () => <PassManagementView variant="piano" />,
+  passes: () => <PassManagementView config={pianoPassConfig} />,
   recitals: () => <RecitalManagementView />,
   curriculum: () => <CurriculumManagementView />,
   assignments: () => <AssignmentsManagementView />,

@@ -21,90 +21,81 @@ const STATUS_LABEL: Record<SessionPassStatus, string> = {
   cancelled: '취소',
 };
 
-export type PassManagementVariant = 'pilates' | 'piano' | 'skin';
+export interface PassManagementConfig {
+  accent?: string;
+  accentHover?: string;
+  accentText?: string;
+  filterActive?: string;
+  title?: string;
+  description?: string;
+  createLabel?: string;
+  emptyTitle?: string;
+  customerLabel?: string;
+  passName?: string;
+  defaultPassLabel?: string;
+  defaultTotalSessions?: number;
+  preferSessionPassStudents?: boolean;
+  billingModeChangeNotice?: string;
+}
 
-const VARIANT: Record<
-  PassManagementVariant,
-  {
-    accent: string;
-    accentHover: string;
-    accentText: string;
-    filterActive: string;
-    title: string;
-    description: string;
-    createLabel: string;
-    emptyTitle: string;
-    customerLabel: string;
-    defaultPassLabel: string;
-    preferSessionPassStudents: boolean;
-  }
-> = {
-  pilates: {
-    accent: 'bg-teal-600',
-    accentHover: 'hover:bg-teal-700',
-    accentText: 'text-teal-600',
-    filterActive: 'bg-teal-600 text-white',
-    title: '이용권 관리',
-    description: '횟수제 이용권을 등록하고 잔여 횟수를 관리합니다. 수업 완료 시 1회 차감됩니다. 이 기기에서만 저장되며 다른 기기와 동기화되지 않습니다.',
-    createLabel: '+ 이용권 등록',
-    emptyTitle: '이용권이 없습니다',
-    customerLabel: '회원',
-    defaultPassLabel: '10회 이용권',
-    preferSessionPassStudents: false,
-  },
-  skin: {
-    accent: 'bg-rose-600',
-    accentHover: 'hover:bg-rose-700',
-    accentText: 'text-rose-600',
-    filterActive: 'bg-rose-600 text-white',
-    title: '관리권 관리',
-    description: '횟수제 관리권을 등록하고 잔여 횟수를 관리합니다. 시술 완료 시 1회 차감됩니다. 이 기기에서만 저장되며 다른 기기와 동기화되지 않습니다.',
-    createLabel: '+ 관리권 등록',
-    emptyTitle: '관리권이 없습니다',
-    customerLabel: '고객',
-    defaultPassLabel: '10회 관리권',
-    preferSessionPassStudents: false,
-  },
-  piano: {
-    accent: 'bg-indigo-600',
-    accentHover: 'hover:bg-indigo-700',
-    accentText: 'text-indigo-600',
-    filterActive: 'bg-indigo-600 text-white',
-    title: '회차권 관리',
-    description:
-      '레슨 회차권을 등록·관리합니다. 수강 형태가 회차권인 원생은 출석(레슨) 시 1회 차감됩니다. 이 기기에서만 저장되며 다른 기기·재무 모듈과 동기화되지 않습니다.',
-    createLabel: '+ 회차권 등록',
-    emptyTitle: '회차권이 없습니다',
-    customerLabel: '원생',
-    defaultPassLabel: '8회 레슨권',
-    preferSessionPassStudents: true,
-  },
+export interface PassManagementViewProps extends PassManagementConfig {
+  config?: PassManagementConfig;
+}
+
+const DEFAULT_CONFIG: Required<PassManagementConfig> = {
+  accent: 'bg-teal-600',
+  accentHover: 'hover:bg-teal-700',
+  accentText: 'text-teal-600',
+  filterActive: 'bg-teal-600 text-white',
+  title: '이용권 관리',
+  description:
+    '횟수제 이용권을 등록하고 잔여 횟수를 관리합니다. 수업 완료 시 1회 차감됩니다. 이 기기에서만 저장되며 다른 기기와 동기화되지 않습니다.',
+  createLabel: '+ 이용권 등록',
+  emptyTitle: '이용권이 없습니다',
+  customerLabel: '회원',
+  passName: '이용권',
+  defaultPassLabel: '10회 이용권',
+  defaultTotalSessions: 10,
+  preferSessionPassStudents: false,
+  billingModeChangeNotice: '',
 };
 
-export const PassManagementView: React.FC<{ variant?: PassManagementVariant }> = ({
-  variant = 'pilates',
-}) => {
-  const ui = VARIANT[variant];
+export const PassManagementView: React.FC<PassManagementViewProps> = (props) => {
+  const { config: explicitConfig, ...directProps } = props;
+
+  const cfg: Required<PassManagementConfig> = useMemo(() => {
+    const merged: PassManagementConfig = {
+      ...DEFAULT_CONFIG,
+      ...explicitConfig,
+    };
+    for (const [key, value] of Object.entries(directProps)) {
+      if (value !== undefined) {
+        (merged as Record<string, unknown>)[key] = value;
+      }
+    }
+    return merged as Required<PassManagementConfig>;
+  }, [explicitConfig, directProps]);
+
   const { showToast } = useApp();
   const refreshKey = useStorageRefresh('sessionPasses');
   const [filter, setFilter] = useState<PassFilter>('active');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [memberId, setMemberId] = useState('');
-  const [label, setLabel] = useState(ui.defaultPassLabel);
-  const [totalSessions, setTotalSessions] = useState(variant === 'piano' ? 8 : 10);
+  const [label, setLabel] = useState(cfg.defaultPassLabel);
+  const [totalSessions, setTotalSessions] = useState(cfg.defaultTotalSessions);
   const [expiresAt, setExpiresAt] = useState('');
   const [memo, setMemo] = useState('');
 
   const members = useMemo(() => {
     const list = StorageService.getStudents().filter((s) => s.status === 'active');
-    if (!ui.preferSessionPassStudents) return list;
+    if (!cfg.preferSessionPassStudents) return list;
     return [...list].sort((a, b) => {
       const aPass = a.billingMode === 'session_pass' ? 0 : 1;
       const bPass = b.billingMode === 'session_pass' ? 0 : 1;
       return aPass - bPass || a.name.localeCompare(b.name, 'ko');
     });
-  }, [refreshKey, ui.preferSessionPassStudents]);
+  }, [refreshKey, cfg.preferSessionPassStudents]);
 
   const passes = useMemo(() => ScheduleService.getSessionPasses(), [refreshKey]);
 
@@ -115,8 +106,8 @@ export const PassManagementView: React.FC<{ variant?: PassManagementVariant }> =
   }, [passes, filter]);
 
   const openCreate = () => {
-    setLabel(ui.defaultPassLabel);
-    setTotalSessions(variant === 'piano' ? 8 : 10);
+    setLabel(cfg.defaultPassLabel);
+    setTotalSessions(cfg.defaultTotalSessions);
     const preferred = members.find((m) => m.billingMode === 'session_pass') || members[0];
     setMemberId(preferred?.id || '');
     setExpiresAt('');
@@ -128,7 +119,7 @@ export const PassManagementView: React.FC<{ variant?: PassManagementVariant }> =
     e.preventDefault();
     const member = members.find((m) => m.id === memberId);
     if (!member) {
-      showToast(`${ui.customerLabel}을(를) 선택해 주세요.`, 'warning');
+      showToast(`${cfg.customerLabel}을(를) 선택해 주세요.`, 'warning');
       return;
     }
     if (totalSessions < 1) {
@@ -139,7 +130,7 @@ export const PassManagementView: React.FC<{ variant?: PassManagementVariant }> =
     ScheduleService.saveSessionPass({
       customerId: member.id,
       customerName: member.name,
-      label: label.trim() || ui.defaultPassLabel,
+      label: label.trim() || cfg.defaultPassLabel,
       totalSessions,
       usedSessions: 0,
       status: 'active',
@@ -154,13 +145,11 @@ export const PassManagementView: React.FC<{ variant?: PassManagementVariant }> =
         billingMode: 'session_pass',
       });
       showToast(
-        variant === 'piano'
-          ? '회차권이 등록되었고, 원생 수강 형태를 회차권으로 맞췄습니다.'
-          : `${variant === 'skin' ? '관리권' : '이용권'}이 등록되었습니다.`,
+        cfg.billingModeChangeNotice || `${cfg.passName}이 등록되었습니다.`,
         'success'
       );
     } else {
-      showToast(`${variant === 'piano' ? '회차권' : variant === 'skin' ? '관리권' : '이용권'}이 등록되었습니다.`, 'success');
+      showToast(`${cfg.passName}이 등록되었습니다.`, 'success');
     }
 
     setIsModalOpen(false);
@@ -170,31 +159,31 @@ export const PassManagementView: React.FC<{ variant?: PassManagementVariant }> =
 
   const cancelPass = (pass: SessionPass) => {
     ScheduleService.saveSessionPass({ ...pass, status: 'cancelled' });
-    showToast(`${variant === 'piano' ? '회차권' : variant === 'skin' ? '관리권' : '이용권'}을 취소했습니다.`, 'info');
+    showToast(`${cfg.passName}을 취소했습니다.`, 'info');
   };
 
   return (
     <div className="space-y-4 pb-4">
       <PageHeader
         icon={<Ticket className="w-5 h-5" />}
-        iconClassName={ui.accentText}
-        title={ui.title}
-        description={ui.description}
+        iconClassName={cfg.accentText}
+        title={cfg.title}
+        description={cfg.description}
         actions={
           <button
             type="button"
             onClick={openCreate}
-            className={`px-4 py-2.5 ${ui.accent} ${ui.accentHover} text-white text-sm font-bold rounded-xl min-h-[44px]`}
+            className={`px-4 py-2.5 ${cfg.accent} ${cfg.accentHover} text-white text-sm font-bold rounded-xl min-h-[44px]`}
           >
-            {ui.createLabel}
+            {cfg.createLabel}
           </button>
         }
       />
 
-      <FilterTabs tabs={FILTERS} active={filter} onChange={setFilter} activeClassName={ui.filterActive} />
+      <FilterTabs tabs={FILTERS} active={filter} onChange={setFilter} activeClassName={cfg.filterActive} />
 
       {filtered.length === 0 ? (
-        <EmptyState icon={<Ticket className="w-10 h-10" />} title={ui.emptyTitle} />
+        <EmptyState icon={<Ticket className="w-10 h-10" />} title={cfg.emptyTitle} />
       ) : (
         <div className="space-y-3">
           {filtered.map((pass) => {
@@ -205,7 +194,7 @@ export const PassManagementView: React.FC<{ variant?: PassManagementVariant }> =
                   <div>
                     <p className="font-bold text-slate-900">{pass.customerName}</p>
                     <p className="text-sm text-slate-600 mt-0.5">{pass.label}</p>
-                    <p className={`text-xs font-semibold mt-1 ${ui.accentText}`}>
+                    <p className={`text-xs font-semibold mt-1 ${cfg.accentText}`}>
                       잔여 {remaining}회 / 전체 {pass.totalSessions}회
                       {pass.expiresAt ? ` · ~${pass.expiresAt.slice(0, 10)}` : ''}
                     </p>
@@ -235,12 +224,12 @@ export const PassManagementView: React.FC<{ variant?: PassManagementVariant }> =
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={variant === 'piano' ? '회차권 등록' : variant === 'skin' ? '관리권 등록' : '이용권 등록'}
+        title={`${cfg.passName} 등록`}
       >
         <form onSubmit={handleCreate} className="p-6 space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">
-              {ui.customerLabel} *
+              {cfg.customerLabel} *
             </label>
             <select
               required
@@ -259,14 +248,14 @@ export const PassManagementView: React.FC<{ variant?: PassManagementVariant }> =
           </div>
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">
-              {variant === 'piano' ? '회차권 이름' : variant === 'skin' ? '관리권 이름' : '이용권 이름'}
+              {cfg.passName} 이름
             </label>
             <input
               type="text"
               value={label}
               onChange={(e) => setLabel(e.target.value)}
               className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px]"
-              placeholder={ui.defaultPassLabel}
+              placeholder={cfg.defaultPassLabel}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -302,7 +291,7 @@ export const PassManagementView: React.FC<{ variant?: PassManagementVariant }> =
           </div>
           <button
             type="submit"
-            className={`w-full py-3 ${ui.accent} ${ui.accentHover} text-white font-bold rounded-xl min-h-[48px]`}
+            className={`w-full py-3 ${cfg.accent} ${cfg.accentHover} text-white font-bold rounded-xl min-h-[48px]`}
           >
             저장
           </button>

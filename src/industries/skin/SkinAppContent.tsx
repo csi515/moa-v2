@@ -22,6 +22,7 @@ import {
   ServiceManagementView,
 } from '@/industries/pilates';
 import { PassManagementView } from '@/capabilities/billing/ui/PassManagementView';
+import { skinPassConfig } from './config/passConfig';
 import { SkinSidebar } from './layout/SkinSidebar';
 import { SkinBottomNav } from './layout/SkinBottomNav';
 import { SkinDashboardView } from './components/dashboard/SkinDashboardView';
@@ -40,7 +41,7 @@ const skinSettingsHub = () => (
 const customerHub = () => (
   <SkinCustomerHubView
     membersView={MemberListView}
-    passesView={() => <PassManagementView variant="skin" />}
+    passesView={() => <PassManagementView config={skinPassConfig} />}
   />
 );
 
