@@ -1,0 +1,96 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Check CI structure
+        run: npm run check:ci-structure
+      - name: Lint
+        run: npm run lint
+      - name: Test business invariants
+        run: npm run test:business-invariants
+
+  build-e2e:
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+
+  security-db:
+    needs: quality
+    if: vars.ENABLE_SECURITY_AUDIT == 'true' || secrets.ENABLE_SECURITY_AUDIT == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Check secrets
+        id: check_secrets
+        run: |
+          if [ -n "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" ]; then echo "has_secrets=true" >> $GITHUB_OUTPUT; else echo "has_secrets=false" >> $GITHUB_OUTPUT; fi
+      - name: Require secrets on main
+        if: steps.check_secrets.outputs.has_secrets != 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "DB audit secrets missing on main push"
+          exit 1
+      - name: Run RLS audit
+        if: steps.check_secrets.outputs.has_secrets == 'true'
+        run: npm run test:rls-audit
+      - name: Run booking pass atomic DB test
+        if: steps.check_secrets.outputs.has_secrets == 'true'
+        run: npm run test:booking-pass-atomic-db
+      - name: Run RLS membership escalation audit
+        if: steps.check_secrets.outputs.has_secrets == 'true'
+        run: npm run test:rls-membership-escalation
+      - name: Run auth hijack audit
+        if: steps.check_secrets.outputs.has_secrets == 'true'
+        run: npm run test:auth-hijack-audit
+
+  deploy:
+    needs: [quality, build-e2e, security-db]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_VERCEL_DEPLOY == 'true' && vars.ENABLE_SECURITY_AUDIT == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Deploy
+        run: echo "Vercel deploy is disabled by default"

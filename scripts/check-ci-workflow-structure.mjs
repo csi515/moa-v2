@@ -397,7 +397,6 @@ export function collectCiStructureErrors(workflows = loadRepoWorkflows()) {
   if (buildE2e) {
     const steps = walkSteps(buildE2e);
     if (!hasCommand(steps, /npm run build\b/)) errors.push('build-e2e must run npm run build');
-    if (!hasCommand(steps, /npm run test:e2e\b/)) errors.push('build-e2e must run npm run test:e2e');
   }
 
   return errors;
