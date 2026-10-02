@@ -18,8 +18,8 @@ import { formatPhone } from '@/utils/formatters';
 import {
   findMakeupSlotConflicts,
   formatConflictSummary,
+  notifyParentMakeupScheduled,
 } from '@/capabilities/scheduling';
-import { notifyParentMakeupScheduled } from '@/core/parent/services/academyAlertService';
 import { scheduleMakeupAtomic } from '@/core/schedules/makeupScheduleAtomic';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import { getAcademyRoomNames } from '@/core/organizations/utils/academyRooms';

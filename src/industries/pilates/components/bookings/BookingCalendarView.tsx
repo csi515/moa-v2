@@ -19,7 +19,7 @@ import {
   findStaffTimeConflict,
   findTreatmentRoomConflict,
 } from '@/capabilities/booking/domain/bookingRooms';
-import { notifyBookingChange } from '@/core/parent/services/academyAlertService';
+import { notifyBookingChange } from '@/capabilities/booking';
 import { EmptyState, FilterTabs, Modal, PageHeader } from '@/shared/components';
 import { executeBookingCreate } from './executeBookingCreate';
 import { mergeScopedBookingsWithInbox, useBookingFilters } from './useBookingFilters';

@@ -4,3 +4,4 @@ export * from './capacity';
 export * from './calendar';
 export * from './components';
 export * from './utils/scheduleConflicts';
+export * from './notifications';

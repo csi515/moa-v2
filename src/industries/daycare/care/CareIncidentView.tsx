@@ -6,7 +6,7 @@ import { EmptyState, Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { AlertTriangle, Plus, Save, Trash2 } from 'lucide-react';
 import { useModuleLabels } from '@/core/labels';
-import { notifyBookingChange } from '@/core/parent/services/academyAlertService';
+import { notifyBookingChange } from '@/capabilities/booking';
 import type { CareIncident } from './types';
 
 function toLocalInput(value?: string): string {

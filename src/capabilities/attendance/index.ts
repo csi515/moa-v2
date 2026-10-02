@@ -27,3 +27,4 @@ export {
   runPinAttendanceValidation,
   PIN_ATTENDANCE_SCENARIO_CHECKLIST,
 } from './domain/pinAttendanceValidation';
+export * from './notifications';

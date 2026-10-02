@@ -1,0 +1,1 @@
+export { notifyParentMakeupScheduled } from './makeupNotification';

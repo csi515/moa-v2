@@ -15,7 +15,7 @@ import {
   formatConflictSummary,
 } from '@/capabilities/scheduling';
 import { getPracticeRoomNames } from '@/core/organizations/utils/academyRooms';
-import { notifyParentPracticeRoomBooked } from '@/core/parent/services/academyAlertService';
+import { notifyParentPracticeRoomBooked } from '@/capabilities/booking';
 import {
   practiceRoomReservationService,
   seoulDateFromIso,

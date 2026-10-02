@@ -13,7 +13,7 @@ import { weekdayFromDate } from '@/shared/utils/weekdayKo';
 import { syncLessonHomeworkToWeeklyAssignment } from '../../services/lessonHomeworkSync';
 import { syncLessonCurriculumProgress } from '../../services/lessonCurriculumSync';
 import { saveAttendanceWithPass } from '@/core/schedules/attendancePassAtomic';
-import { notifyParentAbsence } from '@/core/parent/services/academyAlertService';
+import { notifyParentAbsence } from '@/capabilities/attendance';
 import { consumeOpenUncheckedLessons } from '@/core/customer/studentJoinInbox';
 import { LessonSessionModal, type LessonSessionForm } from './LessonSessionModal';
 import {

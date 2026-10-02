@@ -10,7 +10,7 @@ import { MEDICATION_STATUS_LABEL } from './types';
 import { MEDICATION_DEFAULTS } from './careDefaults';
 import { CareDateSearchBar } from './components/CareDateSearchBar';
 import { useModuleLabels } from '@/core/labels';
-import { notifyBookingChange } from '@/core/parent/services/academyAlertService';
+import { notifyBookingChange } from '@/capabilities/booking';
 
 type StatusFilter = 'ALL' | MedicationStatus;
 

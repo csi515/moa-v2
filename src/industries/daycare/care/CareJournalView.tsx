@@ -15,7 +15,7 @@ import { CARE_JOURNAL_MOOD_LABEL } from './types';
 import { CARE_JOURNAL_DEFAULTS } from './careDefaults';
 import { CareDateSearchBar } from './components/CareDateSearchBar';
 import { useModuleLabels } from '@/core/labels';
-import { notifyBookingChange } from '@/core/parent/services/academyAlertService';
+import { notifyBookingChange } from '@/capabilities/booking';
 import { buildTodayCareClose } from './dailyClose';
 import { peekCareFocus, requestCareFocus, subscribeCareFocus, takeCareFocus } from './careFocus';
 import { DailyCloseList } from './components/DailyCloseList';

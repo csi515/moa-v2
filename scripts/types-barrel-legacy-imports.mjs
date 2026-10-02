@@ -73,7 +73,6 @@ export const TYPES_BARREL_LEGACY_IMPORT_FILES = new Set([
   'src/capabilities/roster/components/studentListHelpers.ts',
   'src/capabilities/roster/components/useStudentDetailModal.ts',
   'src/core/staff/components/TeacherManagementView.tsx',
-  'src/core/parent/services/academyAlertService.ts',
   'src/core/organizations/utils/academyRooms.ts',
   'src/core/schedules/utils/classOccurrenceHelpers.ts',
   'src/core/auth/permissions.ts',

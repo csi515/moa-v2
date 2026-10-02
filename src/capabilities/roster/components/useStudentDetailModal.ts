@@ -10,7 +10,7 @@ import { getGuardiansForStudent, getPrimaryGuardian } from '@/core/parent';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { getIndustryPlugin } from '@/core/industry/registry';
 import { isSupabaseConfigured } from '@/lib/supabase';
-import { notifyParentAbsence } from '@/core/parent/services/academyAlertService';
+import { notifyParentAbsence } from '@/capabilities/attendance';
 import { saveAttendanceWithPass } from '@/core/schedules/attendancePassAtomic';
 import { todayIsoLocal, yearMonthLocal } from '@/shared/utils/localDate';
 import {
