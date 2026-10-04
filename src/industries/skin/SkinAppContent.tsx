@@ -15,10 +15,8 @@ import {
   attendanceViewEntry,
   financeViewEntries,
 } from '@/core/industry/commonViewEntries';
-import {
-  InstructorListView,
-  MemberListView,
-} from '@/industries/pilates';
+import { InstructorListView } from './components/instructors/InstructorListView';
+import { MemberListView } from './components/members/MemberListView';
 import { BookingCalendarView } from '@/capabilities/booking/ui/BookingCalendarView';
 import { ServiceManagementView } from '@/capabilities/booking/ui/ServiceManagementView';
 import { PassManagementView } from '@/capabilities/billing/ui/PassManagementView';
