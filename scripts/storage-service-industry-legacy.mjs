@@ -49,7 +49,6 @@ export const STORAGE_SERVICE_INDUSTRY_LEGACY_FILES = new Set([
   'src/industries/piano/services/lessonPassConsume.ts',
   'src/industries/piano/services/pinDayAttendanceSync.ts',
   'src/industries/piano/services/recitalService.ts',
-  'src/industries/pilates/components/bookings/BookingCalendarView.tsx',
   'src/industries/pilates/components/dashboard/PilatesDashboardView.tsx',
   'src/industries/retail/components/settings/RetailPointsSettingsView.tsx',
   'src/capabilities/roster/components/StudentFormModal.tsx',

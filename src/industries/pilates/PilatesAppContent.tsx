@@ -12,10 +12,10 @@ import { SupabaseRoleSync } from '@/SupabaseRoleSync';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { PilatesSidebar } from './layout/PilatesSidebar';
 import { PilatesBottomNav } from './layout/PilatesBottomNav';
+import { BookingCalendarView } from '@/capabilities/booking/ui/BookingCalendarView';
+import { ServiceManagementView } from '@/capabilities/booking/ui/ServiceManagementView';
 import {
   PilatesDashboardView,
-  BookingCalendarView,
-  ServiceManagementView,
   MemberListView,
   InstructorListView,
   PassManagementView,

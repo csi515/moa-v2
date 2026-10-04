@@ -218,7 +218,7 @@ function run() {
   assert.doesNotMatch(coreCapacity, /from '@\/modules\//);
   assert.doesNotMatch(coreCapacity, /pilates|skin|retail|daycare/i);
 
-  const pilatesValidate = readSrc('src/industries/pilates/components/bookings/validateBookingCreate.ts');
+  const pilatesValidate = readSrc('src/capabilities/booking/ui/validateBookingCreate.ts');
   assert.match(pilatesValidate, /getSlotCapacityInfo/);
 
   const reservationSvc = readSrc('src/core/schedules/services/reservationService.ts');
