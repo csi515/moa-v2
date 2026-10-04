@@ -14,7 +14,14 @@ import type { AttendanceSession } from '../domain/types';
 import { PinCheckInKioskView } from './PinCheckInKioskView';
 import { PageHeader, SummaryMetricCard, FilterBar, SearchField, EmptyState } from '@/shared/components';
 import { SegmentedControl } from '@/shared/components/ui/SegmentedControl';
-import { getCustomerListTab, getIndustryAccent, isAppointmentIndustry, isSkinClinicIndustry } from '@/core/industry/industryUi';
+import { getCustomerListTab, getIndustryAccent, isSkinClinicIndustry } from '@/core/industry/industryUi';
+import {
+  attendanceManageTitle,
+  attendanceMemoSavedToast,
+  attendancePinDisabledDescription,
+  attendancePresentLabel,
+  attendancePresentTimeLabel,
+} from '@/core/attendance/attendanceIndustryCopy';
 import { useModuleLabels } from '@/core/labels';
 import type { Student } from '@/types';
 import {
@@ -38,7 +45,6 @@ const ATTENDANCE_SUB_TABS: { value: AttendanceSubTab; label: string }[] = [
 export const AttendanceManagementView: React.FC = () => {
   const { attendanceEnabled, industry } = usePermissions();
   const labels = useModuleLabels();
-  const skin = isSkinClinicIndustry(industry);
   const memberLabel = labels.customer.singular;
   const activeMemberLabel = labels.customer.singular;
   const { isScoped, scopeStudents } = useStaffScope();
@@ -58,7 +64,6 @@ export const AttendanceManagementView: React.FC = () => {
           ? 'indigo'
           : 'indigo';
   const customerTab = getCustomerListTab(industry);
-  const isDaycare = industry === 'daycare';
 
   const [subTab, setSubTab] = useState<AttendanceSubTab>('overview');
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
@@ -137,10 +142,7 @@ export const AttendanceManagementView: React.FC = () => {
         updatedAt: now,
       });
     }
-    showToast(
-      industry === 'daycare' ? '하원·전달 메모를 저장했습니다.' : '출석 메모를 저장했습니다.',
-      'success'
-    );
+    showToast(attendanceMemoSavedToast(industry), 'success');
     setMemoTarget(null);
     triggerRefresh();
   };
@@ -150,11 +152,7 @@ export const AttendanceManagementView: React.FC = () => {
       <EmptyState
         icon={<CheckSquare className="w-10 h-10" />}
         title="PIN 출결이 꺼져 있습니다"
-        description={
-          skin
-            ? `설정에서 ${labels.customer.singular} PIN 출결을 활성화하면 PIN 출석 키오스크를 사용할 수 있습니다.`
-            : '설정에서 학생 PIN 출결을 활성화하면 PIN 출석 키오스크를 사용할 수 있습니다.'
-        }
+        description={attendancePinDisabledDescription(industry, labels.customer.singular)}
         action={
           <button
             type="button"
@@ -176,7 +174,7 @@ export const AttendanceManagementView: React.FC = () => {
         density="compact"
         icon={<CheckSquare className="w-6 h-6" />}
         iconClassName={accent.icon}
-        title={isDaycare ? '등원 관리' : 'PIN 출석'}
+        title={attendanceManageTitle(industry)}
         actions={
           <SegmentedControl
             value={subTab}
@@ -215,7 +213,7 @@ export const AttendanceManagementView: React.FC = () => {
           <div className="grid grid-cols-3 gap-3">
             <SummaryMetricCard label={activeMemberLabel} value={`${stats.total}명`} variant={metricVariant} />
             <SummaryMetricCard
-              label={isDaycare ? '등원' : '출석'}
+              label={attendancePresentLabel(industry)}
               value={`${stats.checkedIn}명`}
               variant="emerald"
             />
@@ -290,7 +288,7 @@ export const AttendanceManagementView: React.FC = () => {
                       <tr className="bg-slate-50 text-slate-500">
                         <th className="text-left px-4 py-3 font-bold">이름</th>
                         <th className="text-left px-4 py-3 font-bold">상태</th>
-                        <th className="text-left px-4 py-3 font-bold">{isDaycare ? '등원' : '출석 시각'}</th>
+                        <th className="text-left px-4 py-3 font-bold">{attendancePresentTimeLabel(industry)}</th>
                         <th className="text-left px-4 py-3 font-bold">PIN</th>
                         <th className="text-left px-4 py-3 font-bold">메모</th>
                       </tr>
@@ -406,7 +404,7 @@ export const AttendanceManagementView: React.FC = () => {
                         <div className="grid grid-cols-1 gap-1.5 text-xs">
                           <div className="bg-slate-50 rounded-lg px-2 py-1.5">
                             <p className="text-slate-400 font-semibold text-[10px]">
-                              {isDaycare ? '등원' : '출석 시각'}
+                              {attendancePresentTimeLabel(industry)}
                             </p>
                             <p className="font-mono font-bold text-slate-700">
                               {formatSessionTime(session?.checkInAt)}
