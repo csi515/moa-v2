@@ -16,7 +16,7 @@ import {
   isInvoiceVisibleToParent,
 } from '@/core/finance/paymentMethodLabels';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
-import { getPlaceLabel } from '@/core/industry/industryUi';
+import { getPlaceLabel, showsTextbooksLink } from '@/core/industry/industryUi';
 import type { Student, TuitionInvoice } from '@/types';
 import { Copy, X } from 'lucide-react';
 import { Section } from './shared';
@@ -145,7 +145,7 @@ export function ParentTuitionView({
   industryType?: IndustryType | string;
 }) {
   const industry = normalizeIndustryType(industryType);
-  const showTextbooks = industry === 'piano';
+  const showTextbooks = showsTextbooksLink(industry);
   const settings = TuitionService.getSettings();
   const bankAccountText = formatBankAccountText(settings.bankAccount);
 
