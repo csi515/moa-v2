@@ -16,11 +16,11 @@ import {
   financeViewEntries,
 } from '@/core/industry/commonViewEntries';
 import {
-  BookingCalendarView,
   InstructorListView,
   MemberListView,
-  ServiceManagementView,
 } from '@/industries/pilates';
+import { BookingCalendarView } from '@/capabilities/booking/ui/BookingCalendarView';
+import { ServiceManagementView } from '@/capabilities/booking/ui/ServiceManagementView';
 import { PassManagementView } from '@/capabilities/billing/ui/PassManagementView';
 import { skinPassConfig } from './config/passConfig';
 import { SkinSidebar } from './layout/SkinSidebar';

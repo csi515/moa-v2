@@ -265,7 +265,7 @@ function run() {
   assert.match(skinFacade, /@\/capabilities\/scheduling/);
   assert.doesNotMatch(skinFacade, /function isOutsideStaffHours/);
 
-  const pilatesValidate = readSrc('src/industries/pilates/components/bookings/validateBookingCreate.ts');
+  const pilatesValidate = readSrc('src/capabilities/booking/ui/validateBookingCreate.ts');
   assert.match(pilatesValidate, /@\/capabilities\/scheduling/);
   assert.doesNotMatch(pilatesValidate, /@\/modules\/skin\/staffHours/);
 

@@ -83,7 +83,7 @@ function run() {
   );
 
   const calendar = readFileSync(
-    join(srcRoot, 'industries/pilates/components/bookings/BookingCalendarView.tsx'),
+    join(srcRoot, 'capabilities/booking/ui/BookingCalendarView.tsx'),
     'utf8'
   );
   assert.match(calendar, /ScheduleService\.updateBookingStatus/);
