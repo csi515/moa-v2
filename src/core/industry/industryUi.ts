@@ -12,6 +12,11 @@ export function resolveIndustry(
   return normalizeIndustryType(industry);
 }
 
+export function isPianoIndustry(industry: IndustryType | string | null | undefined): boolean {
+  if (!industry) return false;
+  return getIndustryPlugin(industry).id === 'piano';
+}
+
 export function isPilatesIndustry(industry: IndustryType | string | null | undefined): boolean {
   if (!industry) return false;
   return getIndustryPlugin(industry).id === 'pilates';

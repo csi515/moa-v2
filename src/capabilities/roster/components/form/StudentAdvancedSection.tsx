@@ -12,6 +12,7 @@ import {
   rosterRegularFeeLabel,
 } from './rosterFormCopy';
 import type { StudentFormData } from './studentFormTypes';
+import { enrollmentModeLabel } from './enrollmentFormCopy';
 
 interface Props {
   formData: StudentFormData;
@@ -146,7 +147,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="sm:col-span-2">
                 <label className="block text-[11px] font-semibold text-slate-500 mb-1.5">
-                  수강 형태
+                  {enrollmentModeLabel(industry)}
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {(

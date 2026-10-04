@@ -147,6 +147,7 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:user-facing-error': 'shared UI error copy',
   'test:parent-home-copy': 'parent home industry copy',
   'test:roster-piano-copy': 'roster form industry copy',
+  'test:enrollment-form-copy': 'roster enrollment form industry copy',
   'test:parent-more-menu': 'parent more menu industry copy',
   'test:foreground-coordinator': 'mobile/app lifecycle',
   'test:mobile-lifecycle': 'mobile lifecycle',

@@ -13,6 +13,7 @@ import { StudentService } from '@/core/students';
 import { ScheduleService } from '@/core/services/scheduleService';
 import type { DayOfWeek, Student } from '@/types';
 import { todayIsoLocal } from '@/shared/utils/localDate';
+import { enrollmentModeLabel } from './form/enrollmentFormCopy';
 import { StudentFormModal } from './StudentFormModal';
 import { StudentDetailModal } from './StudentDetailModal';
 import { getStudentStatusBadge } from '@/utils/formatters';
@@ -494,7 +495,7 @@ export const StudentListView: React.FC = () => {
                     <th className="py-2.5 px-3">{labels.customer.singular}</th>
                     <th className="py-2.5 px-3">{isPiano ? '반' : labels.service.singular}</th>
                     <th className="py-2.5 px-3">담당</th>
-                    {isPiano && <th className="py-2.5 px-3">수강 형태</th>}
+                    {isPiano && <th className="py-2.5 px-3">{enrollmentModeLabel(industry)}</th>}
                     {isPiano && <th className="py-2.5 px-3">회차권</th>}
                     <th className="py-2.5 px-3">오늘 출결</th>
                     <th className="py-2.5 px-3">이번 달 수납</th>

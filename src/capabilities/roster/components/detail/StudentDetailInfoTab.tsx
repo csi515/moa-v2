@@ -12,7 +12,9 @@ import {
 } from '@/core/transport';
 import { formatCurrency, formatPhone, getLevelColor } from '@/utils/formatters';
 import { Award, Bus, Link2, MapPin, Star } from 'lucide-react';
+import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
+import { enrollmentModeLabel } from '../form/enrollmentFormCopy';
 import { combineStudentNotes } from '../form/studentFormTypes';
 
 interface StudentDetailInfoTabProps {
@@ -46,6 +48,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
   onEdit,
   onOpenGuardianLink,
 }) => {
+  const { industry } = usePermissions();
   const labels = useModuleLabels();
   const customerLabel = labels.customer.singular;
   const contactLabel = labels.contact.singular;
@@ -221,7 +224,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
         </div>
         {showTuition && (
         <div className="flex justify-between py-1.5 border-b border-slate-200/60">
-          <span className="text-slate-500">수강 형태</span>
+          <span className="text-slate-500">{enrollmentModeLabel(industry)}</span>
           <span className="font-bold text-slate-800">
             {student.billingMode === 'session_pass' ? '회차권' : '일반'}
           </span>
