@@ -263,41 +263,41 @@ function run(): void {
   assert.equal(getCustomerLabel('sauna_jjimjbang'), '원생');
 
   // 8. Generic (Academy)
-  assert.equal(getPlaceLabel('academy'), '학원');
+  assert.equal(getPlaceLabel('academy'), '사업장');
   assert.equal(getOwnerLabel('academy'), '원장');
-  assert.equal(getPlaceNamePlaceholder('academy'), '예: 행복 학원');
-  assert.equal(getCustomerLabel('academy'), '원생');
+  assert.equal(getPlaceNamePlaceholder('academy'), '예: 행복 사업장');
+  assert.equal(getCustomerLabel('academy'), '고객');
   assert.equal(isAppointmentIndustry('academy'), false);
 
   // 9. Null / Undefined / Empty
-  assert.equal(getPlaceLabel(null), '학원');
+  assert.equal(getPlaceLabel(null), '사업장');
   assert.equal(getOwnerLabel(null), '대표');
-  assert.equal(getPlaceNamePlaceholder(null), '예: 행복 학원');
-  assert.equal(getCustomerLabel(null), '원생');
+  assert.equal(getPlaceNamePlaceholder(null), '예: 행복 사업장');
+  assert.equal(getCustomerLabel(null), '고객');
   assert.equal(isAppointmentIndustry(null), false);
   assert.equal(isPilatesIndustry(null), false);
   assert.equal(isSkinClinicIndustry(null), false);
   assert.equal(isGymIndustry(null), false);
   assert.equal(isDaycareIndustry(null), false);
 
-  assert.equal(getPlaceLabel(undefined), '학원');
+  assert.equal(getPlaceLabel(undefined), '사업장');
   assert.equal(getOwnerLabel(undefined), '대표');
-  assert.equal(getPlaceNamePlaceholder(undefined), '예: 행복 학원');
-  assert.equal(getCustomerLabel(undefined), '원생');
+  assert.equal(getPlaceNamePlaceholder(undefined), '예: 행복 사업장');
+  assert.equal(getCustomerLabel(undefined), '고객');
   assert.equal(isAppointmentIndustry(undefined), false);
 
-  assert.equal(getPlaceLabel(''), '학원');
+  assert.equal(getPlaceLabel(''), '사업장');
   assert.equal(getOwnerLabel(''), '대표');
-  assert.equal(getPlaceNamePlaceholder(''), '예: 행복 학원');
-  assert.equal(getCustomerLabel(''), '원생');
+  assert.equal(getPlaceNamePlaceholder(''), '예: 행복 사업장');
+  assert.equal(getCustomerLabel(''), '고객');
   assert.equal(isAppointmentIndustry(''), false);
 
   // 10. getFeeLabel
   assert.equal(getFeeLabel('piano'), '수강료');
   assert.equal(getFeeLabel('daycare'), '보육료');
   assert.equal(getFeeLabel('skin_clinic'), '이용료');
-  assert.equal(getFeeLabel(null), '수강료');
-  assert.equal(getFeeLabel(undefined), '수강료');
+  assert.equal(getFeeLabel(null), '이용료');
+  assert.equal(getFeeLabel(undefined), '이용료');
 
   // 11. getBankAccountPlaceholder
   assert.equal(getBankAccountPlaceholder('skin_clinic'), '예: 국민은행 123456-04-123456 (예금주: 샵 이름)');

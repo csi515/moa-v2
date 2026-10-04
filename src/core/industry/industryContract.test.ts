@@ -449,19 +449,19 @@ function run(): void {
   assert.equal(bathRec.customerLabel, '원생');
 
   // fallback checks with null/undefined
-  assert.equal(getPlaceLabel(null), '학원');
+  assert.equal(getPlaceLabel(null), '사업장');
   assert.equal(getOwnerLabel(null), '대표');
-  assert.equal(getPlaceNamePlaceholder(null), '예: 행복 학원');
-  assert.equal(getCustomerLabel(null), '원생');
+  assert.equal(getPlaceNamePlaceholder(null), '예: 행복 사업장');
+  assert.equal(getCustomerLabel(null), '고객');
   assert.equal(isAppointmentIndustry(null), false);
   assert.equal(isPilatesIndustry(null), false);
   assert.equal(isSkinClinicIndustry(null), false);
   assert.equal(isGymIndustry(null), false);
   assert.equal(isDaycareIndustry(null), false);
 
-  assert.equal(getPlaceLabel('academy'), '학원');
-  assert.equal(getPlaceNamePlaceholder('academy'), '예: 행복 학원');
-  assert.equal(getCustomerLabel('academy'), '원생');
+  assert.equal(getPlaceLabel('academy'), '사업장');
+  assert.equal(getPlaceNamePlaceholder('academy'), '예: 행복 사업장');
+  assert.equal(getCustomerLabel('academy'), '고객');
   assert.equal(isAppointmentIndustry('academy'), false);
 
   console.log(
