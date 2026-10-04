@@ -2,6 +2,7 @@ import type { NavTab } from '@/shared/navigation/navigationTypes';
 import type { IndustryPluginManifest } from './pluginTypes';
 import type { IndustryDefinition } from './catalog';
 import { withNoticesTabs } from './pluginTypes';
+import { defaultExpenseCategories } from './defaultExpenseCategories';
 
 const GENERIC_CORE_TABS: NavTab[] = ['dashboard', 'settings', 'account'];
 const GENERIC_ADMIN_TABS = withNoticesTabs(GENERIC_CORE_TABS);
@@ -48,5 +49,6 @@ export function buildGenericPluginManifest(definition: IndustryDefinition): Indu
     },
     adminTabs: [...GENERIC_ADMIN_TABS],
     staffTabs: ['dashboard', 'settings', 'account'],
-  };
+    getExpenseCategories: () => defaultExpenseCategories(),
+};
 }

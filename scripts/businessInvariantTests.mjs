@@ -199,6 +199,7 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:pilates-booking-validate': 'pilates UI',
   'test:retail-staff-sale-perm': 'retail staff CI',
   'test:daycare-ops': 'daycare sync',
+  'test:expense-categories': 'industry expense category plugin unit',
 };
 
 /**

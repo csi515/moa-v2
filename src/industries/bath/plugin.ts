@@ -1,5 +1,6 @@
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
 import { withNoticesTabs } from '@/core/industry/pluginTypes';
+import { bathExpenseCategories } from './expenseCategories';
 
 /** 사우나·찜질방(Bath) 플러그인 매니페스트 — 골격만. 업무 로직 없음 */
 export const bathPluginManifest: IndustryPluginManifest = {
@@ -43,4 +44,5 @@ export const bathPluginManifest: IndustryPluginManifest = {
   },
   adminTabs: withNoticesTabs(['dashboard', 'members', 'bookings', 'settings']),
   staffTabs: withNoticesTabs(['dashboard', 'members', 'bookings']),
+  getExpenseCategories: bathExpenseCategories,
 };
