@@ -88,6 +88,7 @@
     "test:parent-home-copy": "tsx src/modules/parent/views/parentHomeCopy.test.ts",
     "test:roster-piano-copy": "tsx src/capabilities/roster/components/form/rosterFormCopy.test.ts",
     "test:enrollment-form-copy": "tsx src/capabilities/roster/components/form/enrollmentFormCopy.test.ts",
+    "test:roster-list-flags": "tsx src/capabilities/roster/components/rosterListIndustryFlags.test.ts",
     "test:makeup-schedule-atomic": "tsx src/core/schedules/makeupScheduleAtomic.test.ts",
     "test:pending-mutations": "tsx src/services/adapters/pendingMutations.test.ts",
     "test:resource-reservation": "tsx src/core/resources/resourceReservation.test.ts",

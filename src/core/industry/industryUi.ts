@@ -1,6 +1,6 @@
 import type { NavTab } from '@/shared/navigation/navigationTypes';
 import type { ModuleTheme } from '@/shared/components/layout/moduleTheme';
-import { normalizeIndustryType, type IndustryType } from './types';
+import { isBlankIndustryInput, normalizeIndustryType, type IndustryType } from './types';
 import { getIndustryPlugin, getInstalledIndustryPlugin } from './registry';
 import type { IndustryAccent } from './pluginTypes';
 
@@ -139,3 +139,69 @@ export function getRoomConfig(industry: IndustryType | string | null | undefined
     allowedKinds: ['classroom', 'practice'] as const,
   };
 }
+
+export interface RosterListPresentation {
+  searchPlaceholder: string | null;
+  filterButtonAriaLabel: string;
+  showFilterFieldLabels: boolean;
+  staffFilterLabel: string | null;
+  controlMinHeight: 36 | 44;
+  fitAdvancedFilterGrid: boolean;
+  showSessionColumns: boolean;
+  withdrawnLabel: string;
+  filterEmptyUsesSearchHint: boolean;
+}
+
+const DEFAULT_ROSTER_LIST: RosterListPresentation = {
+  searchPlaceholder: null,
+  filterButtonAriaLabel: '추가 필터',
+  showFilterFieldLabels: false,
+  staffFilterLabel: null,
+  controlMinHeight: 36,
+  fitAdvancedFilterGrid: false,
+  showSessionColumns: false,
+  withdrawnLabel: '퇴원',
+  filterEmptyUsesSearchHint: false,
+};
+
+/**
+ * 공유 명단 차이. 빈 업종은 플러그인이 피아노로 떨어져도 피아노 목록을 켜지 않는다.
+ * 지금 목록은 industry === 'piano' 일 때만 회차권 열을 보여 준다.
+ */
+export function getRosterListPresentation(
+  industry: IndustryType | string | null | undefined,
+): RosterListPresentation {
+  if (isBlankIndustryInput(industry)) return DEFAULT_ROSTER_LIST;
+  const raw = getIndustryPlugin(industry).rosterList;
+  if (!raw) return DEFAULT_ROSTER_LIST;
+  return {
+    searchPlaceholder: raw.searchPlaceholder ?? null,
+    filterButtonAriaLabel: raw.filterButtonAriaLabel ?? DEFAULT_ROSTER_LIST.filterButtonAriaLabel,
+    showFilterFieldLabels: Boolean(raw.showFilterFieldLabels),
+    staffFilterLabel: raw.staffFilterLabel ?? null,
+    controlMinHeight: raw.controlMinHeight === 44 ? 44 : 36,
+    fitAdvancedFilterGrid: Boolean(raw.fitAdvancedFilterGrid),
+    showSessionColumns: Boolean(raw.showSessionColumns),
+    withdrawnLabel: raw.withdrawnLabel ?? DEFAULT_ROSTER_LIST.withdrawnLabel,
+    filterEmptyUsesSearchHint: Boolean(raw.filterEmptyUsesSearchHint),
+  };
+}
+
+export function rosterSearchPlaceholder(
+  presentation: RosterListPresentation,
+  contactSingular: string,
+): string {
+  return presentation.searchPlaceholder ?? `이름 · ${contactSingular} · ${contactSingular} 전화`;
+}
+
+export function rosterFilterEmptyDescription(
+  presentation: RosterListPresentation,
+  customerSingular: string,
+): string {
+  const ended = presentation.withdrawnLabel;
+  if (presentation.filterEmptyUsesSearchHint) {
+    return `검색어나 필터를 바꿔보세요. ${ended} ${customerSingular}은 ‘${ended}’ 또는 ‘전체’에서 볼 수 있습니다.`;
+  }
+  return `${ended} 상태의 ${customerSingular}은 ‘${ended}’ 또는 ‘전체’ 필터에서 볼 수 있습니다.`;
+}
+

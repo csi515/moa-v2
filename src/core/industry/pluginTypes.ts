@@ -7,6 +7,32 @@ export interface IndustryExpenseCategory {
   label: string;
 }
 
+/**
+ * 공유 명단(StudentListView)이 업종 id 대신 읽는 차이.
+ * 없는 필드는 기본 목록이다. 회차권·수강 형태 열을 기본값으로 두면
+ * 체육관·어린이집·필라테스 목록에 피아노 열이 붙는다.
+ */
+export interface IndustryRosterListConfig {
+  /** 없으면 `이름 · {연락처} · {연락처} 전화` */
+  searchPlaceholder?: string;
+  /** 없으면 '추가 필터' */
+  filterButtonAriaLabel?: string;
+  /** 담당·반·요일·정렬 필드 위 라벨 */
+  showFilterFieldLabels?: boolean;
+  /** 없으면 모듈 staff singular */
+  staffFilterLabel?: string;
+  /** 상태 칩·필터 버튼 최소 높이. 기본 36 */
+  controlMinHeight?: 36 | 44;
+  /** 고급 필터 lg 열 수를 보이는 칸에 맞춘다. 아니면 5열 고정 */
+  fitAdvancedFilterGrid?: boolean;
+  /** 수강 형태·회차권 열과 회차권 조회 */
+  showSessionColumns?: boolean;
+  /** withdrawn 칩·배지. 기본 '퇴원' */
+  withdrawnLabel?: string;
+  /** 필터 결과 없음 안내를 검색 힌트 문장으로 */
+  filterEmptyUsesSearchHint?: boolean;
+}
+
 export interface IndustryAccent {
   btn: string;
   btnHover: string;
@@ -69,6 +95,11 @@ export interface IndustryPluginManifest {
    * 지금은 피아노·어린이집만 true. 부가 동기화 본문은 바꾸지 않는다.
    */
   runsPinCheckInSideEffects?: boolean;
+  /**
+   * 공유 명단 목록의 업종 차이.
+   * 목록은 업종 id를 비교하지 않고 이 설정만 읽는다.
+   */
+  rosterList?: IndustryRosterListConfig;
   /** 공간/실(강의실·관리실 등) 관련 UI 설정 */
   roomConfig?: IndustryRoomConfig;
   /**

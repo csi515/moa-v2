@@ -2,7 +2,11 @@ import React, { useState, useMemo } from 'react';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { getIndustryPlugin } from '@/core/industry/registry';
-import { isSkinClinicIndustry } from '@/core/industry/industryUi';
+import {
+  getRosterListPresentation,
+  rosterFilterEmptyDescription,
+  rosterSearchPlaceholder,
+} from '@/core/industry/industryUi';
 import { useModuleLabels } from '@/core/labels';
 import { studentUsesShuttleService } from '@/core/transport';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
@@ -64,10 +68,12 @@ export const StudentListView: React.FC = () => {
   ]);
   const { industry } = usePermissions();
   const showPickupFields = getIndustryPlugin(industry).showPickupFields;
+  const rosterList = getRosterListPresentation(industry);
+  const showSessionColumns = rosterList.showSessionColumns;
   const labels = useModuleLabels();
-  const skin = isSkinClinicIndustry(industry);
-  const isPiano = industry === 'piano';
-  const endedLabel = skin ? '종료' : '퇴원';
+  const endedLabel = rosterList.withdrawnLabel;
+  const staffFilterName = rosterList.staffFilterLabel ?? labels.staff.singular;
+  const controlMinClass = rosterList.controlMinHeight === 44 ? 'min-h-[44px]' : 'min-h-[36px]';
   const { isScoped, staffId, scopeStudents } = useStaffScope();
 
   const students = useMemo(
@@ -104,8 +110,8 @@ export const StudentListView: React.FC = () => {
     [yearMonth, refreshKey]
   );
   const sessionPasses = useMemo(
-    () => (isPiano ? ScheduleService.getSessionPasses() : []),
-    [isPiano, refreshKey]
+    () => (showSessionColumns ? ScheduleService.getSessionPasses() : []),
+    [showSessionColumns, refreshKey]
   );
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -216,9 +222,7 @@ export const StudentListView: React.FC = () => {
     setSelectedStudentId(null);
   };
 
-  const searchPlaceholder = isPiano
-    ? '학생·학부모 이름 또는 전화번호'
-    : `이름 · ${labels.contact.singular} · ${labels.contact.singular} 전화`;
+  const searchPlaceholder = rosterSearchPlaceholder(rosterList, labels.contact.singular);
 
   const advancedFilterColumns = [
     !isScoped,
@@ -281,9 +285,7 @@ export const StudentListView: React.FC = () => {
                 key={chip.value}
                 type="button"
                 onClick={() => setStatusFilter(chip.value)}
-                className={`${
-                  isPiano ? 'min-h-[44px]' : 'min-h-[36px]'
-                } px-3 rounded-lg text-xs font-bold transition-colors ${
+                className={`${controlMinClass} px-3 rounded-lg text-xs font-bold transition-colors ${
                   isActive
                     ? 'bg-indigo-600 text-white'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -296,19 +298,13 @@ export const StudentListView: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowAdvancedFilters((prev) => !prev)}
-            className={`${
-              isPiano ? 'min-h-[44px]' : 'min-h-[36px]'
-            } ml-auto px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors ${
+            className={`${controlMinClass} ml-auto px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors ${
               showAdvancedFilters || advancedFilterCount > 0
                 ? 'bg-slate-800 text-white'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
             aria-expanded={showAdvancedFilters}
-            aria-label={
-              isPiano
-                ? '추가 필터 (담당 선생님, 반, 요일, 정렬)'
-                : '추가 필터'
-            }
+            aria-label={rosterList.filterButtonAriaLabel}
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
             필터
@@ -321,7 +317,7 @@ export const StudentListView: React.FC = () => {
         {showAdvancedFilters && (
           <div
             className={`grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 border-t border-slate-100 ${
-              isPiano
+              rosterList.fitAdvancedFilterGrid
                 ? advancedFilterColumns >= 5
                   ? 'lg:grid-cols-5'
                   : advancedFilterColumns === 4
@@ -332,18 +328,16 @@ export const StudentListView: React.FC = () => {
           >
             {!isScoped && (
               <label className="block min-w-0 space-y-1">
-                {isPiano ? (
-                  <span className="text-[10px] font-bold text-slate-500 px-0.5">담당 선생님</span>
+                {rosterList.showFilterFieldLabels ? (
+                  <span className="text-[10px] font-bold text-slate-500 px-0.5">{staffFilterName}</span>
                 ) : null}
                 <select
                   value={teacherFilter}
                   onChange={(e) => setTeacherFilter(e.target.value)}
                   className="w-full px-3 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
-                  aria-label={isPiano ? '담당 선생님' : labels.staff.singular}
+                  aria-label={staffFilterName}
                 >
-                  <option value="ALL">
-                    {isPiano ? '담당 선생님 전체' : `${labels.staff.singular} 전체`}
-                  </option>
+                  <option value="ALL">{staffFilterName} 전체</option>
                   {teachers.map((t) => (
                     <option key={t.id} value={t.id}>
                       {t.name}
@@ -354,14 +348,14 @@ export const StudentListView: React.FC = () => {
             )}
 
             <label className="block min-w-0 space-y-1">
-              {isPiano ? (
-                <span className="text-[10px] font-bold text-slate-500 px-0.5">반</span>
+              {rosterList.showFilterFieldLabels ? (
+                <span className="text-[10px] font-bold text-slate-500 px-0.5">{labels.service.singular}</span>
               ) : null}
               <select
                 value={classFilter}
                 onChange={(e) => setClassFilter(e.target.value)}
                 className="w-full px-3 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
-                aria-label={isPiano ? '반' : labels.service.singular}
+                aria-label={labels.service.singular}
               >
                 <option value="ALL">반 전체</option>
                 {classes.map((c) => (
@@ -373,7 +367,7 @@ export const StudentListView: React.FC = () => {
             </label>
 
             <label className="block min-w-0 space-y-1">
-              {isPiano ? (
+              {rosterList.showFilterFieldLabels ? (
                 <span className="text-[10px] font-bold text-slate-500 px-0.5">요일</span>
               ) : null}
               <select
@@ -406,7 +400,7 @@ export const StudentListView: React.FC = () => {
             )}
 
             <label className="block min-w-0 space-y-1">
-              {isPiano ? (
+              {rosterList.showFilterFieldLabels ? (
                 <span className="text-[10px] font-bold text-slate-500 px-0.5">정렬</span>
               ) : null}
               <div className="flex items-center gap-1.5 px-3 min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600">
@@ -469,11 +463,7 @@ export const StudentListView: React.FC = () => {
         <EmptyState
           icon={<Users className="w-12 h-12" />}
           title={`조건에 맞는 ${labels.customer.singular}이 없습니다`}
-          description={
-            skin
-              ? `검색어나 필터를 바꿔보세요. 종료 ${labels.customer.singular}은 ‘종료’ 또는 ‘전체’에서 볼 수 있습니다.`
-              : `${endedLabel} 상태의 ${labels.customer.singular}은 ‘${endedLabel}’ 또는 ‘전체’ 필터에서 볼 수 있습니다.`
-          }
+          description={rosterFilterEmptyDescription(rosterList, labels.customer.singular)}
           action={
             <button
               type="button"
@@ -493,10 +483,10 @@ export const StudentListView: React.FC = () => {
                 <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
                   <tr>
                     <th className="py-2.5 px-3">{labels.customer.singular}</th>
-                    <th className="py-2.5 px-3">{isPiano ? '반' : labels.service.singular}</th>
+                    <th className="py-2.5 px-3">{labels.service.singular}</th>
                     <th className="py-2.5 px-3">담당</th>
-                    {isPiano && <th className="py-2.5 px-3">{enrollmentModeLabel(industry)}</th>}
-                    {isPiano && <th className="py-2.5 px-3">회차권</th>}
+                    {showSessionColumns && <th className="py-2.5 px-3">{enrollmentModeLabel(industry)}</th>}
+                    {showSessionColumns && <th className="py-2.5 px-3">회차권</th>}
                     <th className="py-2.5 px-3">오늘 출결</th>
                     <th className="py-2.5 px-3">이번 달 수납</th>
                     <th className="py-2.5 px-3 text-right"> </th>
@@ -507,8 +497,8 @@ export const StudentListView: React.FC = () => {
                     const badge = getStudentStatusBadge(st.status);
                     const att = getTodayAttendanceSignal(st.id, todayAttendanceByStudent);
                     const bill = getMonthBillingSignal(billingByStudent.get(st.id));
-                    const billingModeLabel = isPiano ? getPianoBillingModeLabel(st) : '';
-                    const passLabel = isPiano
+                    const billingModeLabel = showSessionColumns ? getPianoBillingModeLabel(st) : '';
+                    const passLabel = showSessionColumns
                       ? getPianoSessionPassColumnLabel(st.id, sessionPasses)
                       : '';
                     return (
@@ -534,7 +524,7 @@ export const StudentListView: React.FC = () => {
                                   <span
                                     className={`px-1.5 py-0.5 rounded-md font-bold text-[10px] ${badge.bg}`}
                                   >
-                                    {skin && st.status === 'withdrawn' ? endedLabel : badge.label}
+                                    {st.status === 'withdrawn' && endedLabel !== badge.label ? endedLabel : badge.label}
                                   </span>
                                 )}
                                 {showPickupFields && studentUsesShuttleService(st) && (
@@ -553,7 +543,7 @@ export const StudentListView: React.FC = () => {
                         <td className="py-2.5 px-3 text-slate-600 font-medium">
                           {st.teacherName || '-'}
                         </td>
-                        {isPiano && (
+                        {showSessionColumns && (
                           <td className="py-2.5 px-3">
                             <span
                               className={`inline-flex px-1.5 py-0.5 rounded-md text-[10px] font-bold ${
@@ -566,7 +556,7 @@ export const StudentListView: React.FC = () => {
                             </span>
                           </td>
                         )}
-                        {isPiano && (
+                        {showSessionColumns && (
                           <td
                             className={`py-2.5 px-3 font-bold ${
                               passLabel === '해당 없음' ? 'text-slate-400' : 'text-indigo-700'
@@ -599,8 +589,8 @@ export const StudentListView: React.FC = () => {
               const att = getTodayAttendanceSignal(st.id, todayAttendanceByStudent);
               const bill = getMonthBillingSignal(billingByStudent.get(st.id));
               const guardian = getPrimaryGuardian(st.id);
-              const billingModeLabel = isPiano ? getPianoBillingModeLabel(st) : '';
-              const passLabel = isPiano
+              const billingModeLabel = showSessionColumns ? getPianoBillingModeLabel(st) : '';
+              const passLabel = showSessionColumns
                 ? getPianoSessionPassColumnLabel(st.id, sessionPasses)
                 : '';
               return (
@@ -625,10 +615,10 @@ export const StudentListView: React.FC = () => {
                             <span
                               className={`px-1.5 py-0.5 rounded-md font-bold text-[10px] ${badge.bg}`}
                             >
-                              {skin && st.status === 'withdrawn' ? endedLabel : badge.label}
+                              {st.status === 'withdrawn' && endedLabel !== badge.label ? endedLabel : badge.label}
                             </span>
                           )}
-                          {isPiano && (
+                          {showSessionColumns && (
                             <span
                               className={`px-1.5 py-0.5 rounded-md font-bold text-[10px] ${
                                 billingModeLabel === '회차권'
@@ -651,7 +641,7 @@ export const StudentListView: React.FC = () => {
 
                   <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 text-[11px] font-bold">
                     <span className={signalClass(att.tone)}>출결 {att.label}</span>
-                    {isPiano && (
+                    {showSessionColumns && (
                       <span
                         className={
                           passLabel === '해당 없음' ? 'text-slate-400' : 'text-indigo-700'

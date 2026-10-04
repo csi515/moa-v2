@@ -48,6 +48,15 @@ export const pianoPluginManifest: IndustryPluginManifest = {
   supportsDeposit: false,
   showsTextbooksLink: true,
   runsPinCheckInSideEffects: true,
+  rosterList: {
+    searchPlaceholder: '학생·학부모 이름 또는 전화번호',
+    filterButtonAriaLabel: '추가 필터 (담당 선생님, 반, 요일, 정렬)',
+    showFilterFieldLabels: true,
+    staffFilterLabel: '담당 선생님',
+    controlMinHeight: 44,
+    fitAdvancedFilterGrid: true,
+    showSessionColumns: true,
+  },
   roomConfig: {
     sectionTitle: '강의실 · 연습실',
     sectionDescription: '반 개설·보강 예약 시 선택할 공간입니다. 학원에서 쓰는 실 이름을 등록해 주세요.',
