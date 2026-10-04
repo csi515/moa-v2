@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { usePermissions } from '@/core/auth/usePermissions';
-import { isSkinClinicIndustry } from '@/core/industry/industryUi';
+import { pinRevealHandoff } from '@/core/attendance/attendanceIndustryCopy';
 import { useModuleLabels } from '@/core/labels';
 import { useOptionalOrganization } from '@/core/organizations/OrganizationProvider';
 import { attendanceStorage } from '@/capabilities/attendance/infrastructure/attendanceStorage';
@@ -13,11 +13,10 @@ interface CustomerPinPanelProps {
   student: Student;
 }
 
-/** 원생별 출결 PIN 설정 패널 */
+/** 출결 PIN 설정 패널 */
 export const CustomerPinPanel: React.FC<CustomerPinPanelProps> = ({ student }) => {
   const { attendanceEnabled, industry } = usePermissions();
   const labels = useModuleLabels();
-  const skin = isSkinClinicIndustry(industry);
   const org = useOptionalOrganization();
   const organizationId = org?.currentOrganization?.id || 'local-org';
 
@@ -96,9 +95,7 @@ export const CustomerPinPanel: React.FC<CustomerPinPanelProps> = ({ student }) =
           <p className="text-[10px] opacity-80">발급된 PIN (한 번만 표시)</p>
           <p className="text-2xl font-black tracking-[0.3em] font-mono mt-1">{revealedPin}</p>
           <p className="text-[10px] opacity-80 mt-2">
-            {skin
-              ? `${labels.contact.singular} 또는 ${labels.customer.singular}에게 전달하세요`
-              : '학부모님 또는 학생에게 전달하세요'}
+            {pinRevealHandoff(industry, labels.contact.singular, labels.customer.singular)}
           </p>
         </div>
       )}

@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal } from '@/shared/components';
 import { FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { usePermissions } from '@/core/auth/usePermissions';
+import { attendanceMemoCopy } from '@/core/attendance/attendanceIndustryCopy';
 import type { Student } from '@/types';
 import type { AttendanceSession } from '../domain/types';
 
@@ -26,14 +27,7 @@ export function AttendanceMemoModal({
   saveButtonClassName: string;
 }) {
   const { industry } = usePermissions();
-  const daycareStyle = industry === 'daycare';
-  const titleSuffix = daycareStyle ? '하원·전달 메모' : '출석 메모';
-  const hint = daycareStyle
-    ? '세션 메모 · 등원 후 전달 사항 기록'
-    : '세션 메모 · 출석 관련 전달 사항';
-  const placeholder = daycareStyle
-    ? '예: 조부모님 하원, 16:30 픽업 예정'
-    : '예: 조부모님이 데리러 오심, 16:30 예정';
+  const { titleSuffix, hint, placeholder } = attendanceMemoCopy(industry);
 
   return (
     <Modal

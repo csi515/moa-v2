@@ -8,9 +8,11 @@ import {
 } from '@/core/attendance/services/attendanceService';
 import { useParentAttendanceSessions } from '@/core/parent/hooks/useParentAttendanceSessions';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
-import { isAppointmentIndustry } from '@/core/industry/industryUi';
+import {
+  attendanceRecordTitle,
+  parentAttendanceEmpty,
+} from '@/core/attendance/attendanceIndustryCopy';
 import type { MakeupStatus, Student } from '@/types';
-import { PIN_ATTENDANCE_PARENT_COPY } from '@/core/attendance/attendanceNotifyCopy';
 import { Section } from './shared';
 
 const MAKEUP_STATUS_LABEL: Record<MakeupStatus, string> = {
@@ -49,12 +51,7 @@ export function ParentAttendanceView({
       : [];
 
   const hasSessions = sessions.length > 0;
-  const title =
-    industry === 'daycare'
-      ? `${student.name} 등하원 기록`
-      : isAppointmentIndustry(industry)
-        ? `${student.name} 출입 기록`
-        : `${student.name} 출결 기록`;
+  const title = attendanceRecordTitle(industry, student.name);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -160,7 +157,7 @@ export function ParentAttendanceView({
           })
         ) : legacyRecords.length === 0 ? (
           <p className="text-sm text-slate-400 text-center py-6 leading-relaxed px-2">
-            {PIN_ATTENDANCE_PARENT_COPY.attendanceEmpty}
+            {parentAttendanceEmpty(industry)}
           </p>
         ) : (
           legacyRecords.map((a) => (

@@ -12,6 +12,15 @@ import {
 } from '../infrastructure/resolveKioskOrganizationId';
 import { Delete, RotateCcw, Settings } from 'lucide-react';
 import { getIndustryAccent } from '@/core/industry/industryUi';
+import {
+  kioskAdminExitBody,
+  kioskAlreadyCheckedMessage,
+  kioskCheckInSuccess,
+  kioskEyebrow,
+  kioskModuleDisabledHint,
+  kioskNoPinHint,
+  kioskRepeatHint,
+} from '@/core/attendance/attendanceIndustryCopy';
 import { runPinCheckInSideEffects } from '../application/pinCheckInSideEffects';
 
 const KEYPAD = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'clear', '0', 'enter'] as const;
@@ -115,17 +124,18 @@ export const PinCheckInKioskView: React.FC<PinCheckInKioskViewProps> = ({
                 showToast(sync.warning, 'warning');
               }
             }
+            const successText = kioskCheckInSuccess(industry, result.customerName);
             setFeedback({
-              text: `${result.customerName} 학생 출석이 완료되었습니다.`,
+              text: successText,
               tone: 'success',
             });
-            showToast(`${result.customerName} 학생 출석이 완료되었습니다.`, 'success');
+            showToast(successText, 'success');
           } else if (result.success === false) {
             const err = result.error;
             const messages: Record<string, string> = {
               invalid_pin: '등록되지 않은 PIN입니다.',
-              already_checked_in: `${result.customerName ?? '학생'}님은 이미 출석 처리되었습니다.`,
-              already_checked_out: `${result.customerName ?? '학생'}님은 이미 출석 처리되었습니다.`,
+              already_checked_in: kioskAlreadyCheckedMessage(industry, result.customerName),
+              already_checked_out: kioskAlreadyCheckedMessage(industry, result.customerName),
               module_disabled: 'PIN 출결이 비활성화되어 있습니다.',
             };
             setFeedback({
@@ -160,7 +170,7 @@ export const PinCheckInKioskView: React.FC<PinCheckInKioskViewProps> = ({
           </div>
           <h3 className="font-bold text-slate-900 text-lg mb-2">PIN 출결이 꺼져 있습니다</h3>
           <p className="text-sm text-slate-500 leading-relaxed mb-6">
-            설정에서 학생 PIN 출결을 활성화한 뒤 사용할 수 있습니다.
+            {kioskModuleDisabledHint(industry)}
           </p>
           <button
             type="button"
@@ -179,7 +189,7 @@ export const PinCheckInKioskView: React.FC<PinCheckInKioskViewProps> = ({
       <div className={shellClass}>
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 max-w-md w-full">
           <div className="text-center mb-6">
-            <p className="text-xs text-slate-500 font-semibold">학생 출석</p>
+            <p className="text-xs text-slate-500 font-semibold">{kioskEyebrow(industry)}</p>
             <h3 className="text-2xl font-black text-slate-900 mt-1">PIN 입력</h3>
           </div>
           <div className="bg-amber-50 rounded-2xl border border-amber-100 p-6 text-center space-y-3">
@@ -189,7 +199,7 @@ export const PinCheckInKioskView: React.FC<PinCheckInKioskViewProps> = ({
             <div>
               <p className="font-bold text-amber-900 mb-2">등록된 PIN이 없습니다</p>
               <p className="text-xs text-amber-700 leading-relaxed">
-                학생 관리에서 출결 PIN을 먼저 발급해 주세요.
+                {kioskNoPinHint(industry)}
               </p>
             </div>
           </div>
@@ -214,9 +224,9 @@ export const PinCheckInKioskView: React.FC<PinCheckInKioskViewProps> = ({
 
       <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 max-w-md w-full relative">
         <div className="text-center mb-6">
-          <p className="text-xs text-slate-500 font-semibold">학생 출석</p>
+          <p className="text-xs text-slate-500 font-semibold">{kioskEyebrow(industry)}</p>
           <h3 className="text-2xl font-black text-slate-900 mt-1">PIN 번호를 입력해주세요</h3>
-          <p className="text-xs text-slate-400 mt-2">이미 출석한 학생이 다시 입력하면 안내만 표시됩니다</p>
+          <p className="text-xs text-slate-400 mt-2">{kioskRepeatHint(industry)}</p>
         </div>
 
         <div
@@ -290,7 +300,7 @@ export const PinCheckInKioskView: React.FC<PinCheckInKioskViewProps> = ({
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-xl">
             <h4 className="font-bold text-slate-900 text-lg">관리자 화면으로 나가기</h4>
             <p className="text-sm text-slate-500">
-              키오스크를 종료하고 일반 관리 화면으로 이동합니다. 학생이 아닌 관리자만 진행하세요.
+              {kioskAdminExitBody(industry)}
             </p>
             <div className="flex gap-2">
               <button

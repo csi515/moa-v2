@@ -8,7 +8,7 @@ import {
 } from '@/core/attendance/services/attendanceService';
 import { useParentAttendanceSessions } from '@/core/parent/hooks/useParentAttendanceSessions';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
-import { isAppointmentIndustry } from '@/core/industry/industryUi';
+import { attendanceRecordTitle } from '@/core/attendance/attendanceIndustryCopy';
 import type { MakeupStatus } from '@/types';
 
 const MAKEUP_STATUS_LABEL: Record<MakeupStatus, string> = {
@@ -49,12 +49,7 @@ export function CustomerAttendanceView({
           .slice(0, 15)
       : [];
 
-  const title =
-    industry === 'daycare'
-      ? `${displayName} 등하원 기록`
-      : isAppointmentIndustry(industry)
-        ? `${displayName} 출입 기록`
-        : `${displayName} 출결 기록`;
+  const title = attendanceRecordTitle(industry, displayName);
 
   const handleRefresh = async () => {
     setRefreshing(true);
