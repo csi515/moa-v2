@@ -34,6 +34,7 @@ export const bathPluginManifest: IndustryPluginManifest = {
   bankAccountPlaceholder: '예: 국민은행 000000-00-000000 (예금주: 홍길동)',
   supportsDeposit: false,
   showsTextbooksLink: false,
+  runsPinCheckInSideEffects: false,
   roomConfig: {
     sectionTitle: '공간',
     sectionDescription: '사업장에서 쓰는 공간 이름을 등록해 주세요.',

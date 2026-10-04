@@ -63,6 +63,12 @@ export interface IndustryPluginManifest {
   supportsDeposit?: boolean;
   /** 설정에서 교재 관리 바로가기 링크 표시 여부 */
   showsTextbooksLink?: boolean;
+  /**
+   * PIN 체크인 성공 후 등록된 부가 동기화(runPinCheckInSideEffects)를 실행할지.
+   * 키오스크는 업종 id를 비교하지 않고 이 플래그만 본다.
+   * 지금은 피아노·어린이집만 true. 부가 동기화 본문은 바꾸지 않는다.
+   */
+  runsPinCheckInSideEffects?: boolean;
   /** 공간/실(강의실·관리실 등) 관련 UI 설정 */
   roomConfig?: IndustryRoomConfig;
   /**

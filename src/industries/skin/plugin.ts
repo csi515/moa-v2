@@ -38,6 +38,7 @@ export const skinPluginManifest: IndustryPluginManifest = {
   bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 샵 이름)',
   supportsDeposit: true,
   showsTextbooksLink: false,
+  runsPinCheckInSideEffects: false,
   roomConfig: {
     sectionTitle: '관리실',
     sectionDescription: '예약 시 배정할 관리실 이름을 등록해 주세요.',
