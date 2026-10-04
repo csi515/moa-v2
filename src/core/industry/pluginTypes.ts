@@ -33,6 +33,45 @@ export interface IndustryRosterListConfig {
   filterEmptyUsesSearchHint?: boolean;
 }
 
+export type FinanceHubSegmentId =
+  | 'overview'
+  | 'income'
+  | 'expenses'
+  | 'tuition'
+  | 'unpaid'
+  | 'payroll';
+
+export type FinanceHubAreaId = 'billing' | 'books';
+
+export interface FinanceHubAreaSegment {
+  value: FinanceHubSegmentId;
+  label: string;
+  description: string;
+}
+
+/** 수납 / 재무 관리처럼 허브를 두 영역으로 나눌 때의 한 영역 */
+export interface FinanceHubAreaNav {
+  id: FinanceHubAreaId;
+  label: string;
+  hint: string;
+  entrySegment: FinanceHubSegmentId;
+  menuLabel: string;
+  segments: readonly FinanceHubAreaSegment[];
+}
+
+/**
+ * 재무 허브 제목과 탭 구조.
+ * 없으면 한 줄 세그먼트(제목 '재무'). 업종 id로 허브를 고르지 않는다.
+ */
+export interface IndustryFinanceHubNav {
+  title: string;
+  /** 분할 허브에서 finance 탭으로 들어올 때의 세그먼트 */
+  financeTabSegment: FinanceHubSegmentId;
+  areas: readonly FinanceHubAreaNav[];
+  /** 재무 요약의 수납 연동 금액·과거 수납 동기화 */
+  showLinkedBillingIncome: boolean;
+}
+
 export interface IndustryAccent {
   btn: string;
   btnHover: string;
@@ -116,6 +155,11 @@ export interface IndustryPluginManifest {
    * 카탈로그에만 있는 별칭(preschool 등)은 기존 기본값을 유지한다.
    */
   getPayrollExpenseCategory?: () => string;
+  /**
+   * 재무 허브 제목·영역 탭.
+   * 이 업종만 설정한다. 없으면 공통 한 줄 허브.
+   */
+  financeHubNav?: IndustryFinanceHubNav;
 }
 
 export type IndustryRoomKind = 'classroom' | 'practice' | 'treatment';
