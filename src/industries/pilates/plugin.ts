@@ -20,7 +20,7 @@ export const pilatesPluginManifest: IndustryPluginManifest = {
   attendanceDefault: false,
   usesClassBasedSchedule: false,
   customerListTab: 'members',
-  showSchoolFields: true,
+  showSchoolFields: false,
   showPickupFields: true,
   levelLabel: '레벨',
   placeLabel: '스튜디오',
