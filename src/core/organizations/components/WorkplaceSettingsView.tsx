@@ -48,6 +48,7 @@ import {
   OrganizationBackupCard,
   OrganizationDangerZoneCard,
 } from './OrganizationSettingsView';
+import { buildWorkplaceSettingsSavePayload } from '../workplaceSettingsSave';
 
 export const WorkplaceSettingsView: FC = () => {
   const { showToast, triggerRefresh, setActiveTab } = useApp();
@@ -207,25 +208,10 @@ export const WorkplaceSettingsView: FC = () => {
         await orgService.updateOrganization(org.currentOrganization.id, {
           name: settings.name,
           addressParts,
-          settings: {
-            name: settings.name,
-            directorName: settings.directorName,
-            phone: settings.phone,
-            businessNumber: settings.businessNumber,
-            address: displayAddress,
-            defaultTuitionFee: settings.defaultTuitionFee,
-            defaultPaymentDay: settings.defaultPaymentDay,
-            defaultBillingMode: settings.defaultBillingMode,
-            includeExtrasInMonthlyInvoice: settings.includeExtrasInMonthlyInvoice,
-            bankAccount: settings.bankAccount,
-            depositEnabled: settings.depositEnabled,
-            depositAmount: settings.depositAmount,
-            staffHours: settings.staffHours,
-            features: settings.features,
+          settings: buildWorkplaceSettingsSavePayload(settings, {
+            displayAddress,
             rooms: getConfiguredRooms(settings),
-            retailCatalog: settings.retailCatalog,
-            skinRetailCoreMigratedAt: settings.skinRetailCoreMigratedAt,
-          },
+          }),
         });
 
         org.patchOrganization(org.currentOrganization.id, { name: settings.name });

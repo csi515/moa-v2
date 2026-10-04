@@ -30,6 +30,7 @@ import {
 } from '@/core/address';
 import type { AcademySettings } from '../settingsTypes';
 import { getDangerZoneSessionLabel } from '@/core/industry/industryUi';
+import { buildCommonOrganizationSettingsSavePayload } from '../workplaceSettingsSave';
 
 export interface OrganizationBasicProfile {
   name: string;
@@ -537,14 +538,7 @@ export const OrganizationSettingsView: FC<{
         await orgService.updateOrganization(org.currentOrganization.id, {
           name: settings.name,
           addressParts,
-          settings: {
-            ...settings,
-            name: settings.name,
-            directorName: settings.directorName,
-            phone: settings.phone,
-            businessNumber: settings.businessNumber,
-            address: displayAddress,
-          },
+          settings: buildCommonOrganizationSettingsSavePayload(settings, displayAddress),
         });
 
         org.patchOrganization(org.currentOrganization.id, { name: settings.name });
