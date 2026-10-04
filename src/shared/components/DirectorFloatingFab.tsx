@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
-import { getCustomerLabel, isSkinClinicIndustry } from '@/core/industry/industryUi';
+import { getCustomerLabel, getFeeLabel } from '@/core/industry/industryUi';
 import { useModuleLabels } from '@/core/labels';
 import {
   Plus,
@@ -18,11 +18,7 @@ export const DirectorFloatingFab: React.FC = () => {
   const { industry } = usePermissions();
   const labels = useModuleLabels();
   const customerLabel = labels.customer.singular || getCustomerLabel(industry);
-  const feeLabel = isSkinClinicIndustry(industry)
-    ? '이용료'
-    : industry === 'daycare'
-      ? '보육료'
-      : '수강료';
+  const feeLabel = getFeeLabel(industry);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleAction = (tab: Parameters<typeof setActiveTab>[0]) => {

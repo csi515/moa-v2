@@ -3,7 +3,7 @@ import { BarChart3, ChevronRight, CreditCard, Landmark } from 'lucide-react';
 import type { NavTab } from '@/shared/navigation/navigationTypes';
 import { useNavSession } from '@/shared/navigation/navSession';
 import { usePermissions } from '@/core/auth/usePermissions';
-import { isAppointmentIndustry } from '@/core/industry/industryUi';
+import { getFeeLabel, isAppointmentIndustry } from '@/core/industry/industryUi';
 import { PageHeader, SegmentedControl } from '@/shared/components';
 import { FinanceOverviewView } from './FinanceOverviewView';
 import { IncomeManagementView } from './IncomeManagementView';
@@ -88,6 +88,9 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
   const { activeTab, setActiveTab } = useNavSession();
   const { industry } = usePermissions();
   const billingEnabled = showBilling && !isAppointmentIndustry(industry);
+  const feeLabel = getFeeLabel(industry);
+  // 탭 기본 이름은 영역명 '수납'. 매니페스트 요금명이 기본값(수강료)과 다를 때만 그 단어를 쓴다.
+  const tuitionTabLabel = feeLabel === '수강료' ? '수납' : feeLabel;
   const isPiano = industry === 'piano';
   const hubTitle = isPiano ? '수납·재무' : '재무';
 
@@ -110,12 +113,12 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
     ];
     if (billingEnabled) {
       base.push(
-        { value: 'tuition', label: industry === 'daycare' ? '보육료' : '수납' },
+        { value: 'tuition', label: tuitionTabLabel },
         { value: 'unpaid', label: '미납' }
       );
     }
     return base;
-  }, [billingEnabled, industry]);
+  }, [billingEnabled, tuitionTabLabel]);
 
   const handlePianoAreaChange = (area: PianoFinanceArea) => {
     if (area === pianoArea) return;
