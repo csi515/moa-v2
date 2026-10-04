@@ -1,4 +1,5 @@
 import type { ParentNoticeKind } from './types';
+import { getFeeLabel, getPlaceLabel } from '@/core/industry/industryUi';
 
 export interface NoticeTemplate {
   id: string;
@@ -42,15 +43,13 @@ export function buildNoticeTemplates(placeWord: string, feeWord: string): Notice
   ];
 }
 
-import { getPlaceLabel } from '@/core/industry/industryUi';
-
-/** 업종 → 사업장/요금 용어 */
+/** 업종 → 사업장/요금 용어. 요금명은 매니페스트 feeLabel(getFeeLabel). */
 export function getNoticePlaceWords(industry: string | null | undefined): {
   placeWord: string;
   feeWord: string;
 } {
-  const placeWord = getPlaceLabel(industry);
-  if (industry === 'daycare') return { placeWord, feeWord: '보육료' };
-  if (industry === 'skin_clinic') return { placeWord, feeWord: '이용료' };
-  return { placeWord, feeWord: '수강료' };
+  return {
+    placeWord: getPlaceLabel(industry),
+    feeWord: getFeeLabel(industry),
+  };
 }
