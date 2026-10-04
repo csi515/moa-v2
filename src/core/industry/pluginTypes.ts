@@ -2,6 +2,11 @@ import type { NavTab } from '@/shared/navigation/navigationTypes';
 import type { ModuleTheme } from '@/shared/components/layout/moduleTheme';
 import type { IndustryOption, IndustryType } from './types';
 
+export interface IndustryExpenseCategory {
+  value: string;
+  label: string;
+}
+
 export interface IndustryAccent {
   btn: string;
   btnHover: string;
@@ -60,6 +65,12 @@ export interface IndustryPluginManifest {
   showsTextbooksLink?: boolean;
   /** 공간/실(강의실·관리실 등) 관련 UI 설정 */
   roomConfig?: IndustryRoomConfig;
+  /**
+   * 이 업종의 지출 카테고리(공통 항목 포함).
+   * 재무 capability는 이 훅만 호출하고 업종 id로 고르지 않는다.
+   * 별칭은 getIndustryPlugin / parseIndustryType이 플러그인을 고르기 전에 푼다.
+   */
+  getExpenseCategories?: () => readonly IndustryExpenseCategory[];
 }
 
 export type IndustryRoomKind = 'classroom' | 'practice' | 'treatment';

@@ -1,5 +1,6 @@
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
 import { withNoticesTabs } from '@/core/industry/pluginTypes';
+import { pilatesExpenseCategories } from './expenseCategories';
 
 /** 필라테스 플러그인 매니페스트 (예약·수업 종류 중심) */
 export const pilatesPluginManifest: IndustryPluginManifest = {
@@ -51,4 +52,5 @@ export const pilatesPluginManifest: IndustryPluginManifest = {
     'settings',
   ]),
   staffTabs: withNoticesTabs(['dashboard', 'bookings', 'members', 'passes', 'attendance']),
+  getExpenseCategories: pilatesExpenseCategories,
 };

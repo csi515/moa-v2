@@ -1,5 +1,10 @@
 import type { IndustryType } from '@/core/industry/types';
-import { isAppointmentIndustry, isSkinClinicIndustry } from '@/core/industry/industryUi';
+import { getIndustryPlugin } from '@/core/industry/pluginHost';
+import {
+  DEFAULT_COMMON_EXPENSE_CATEGORIES,
+  DEFAULT_PIANO_EXPENSE_CATEGORIES,
+  defaultExpenseCategories,
+} from '@/core/industry/defaultExpenseCategories';
 
 export interface CategoryOption {
   value: string;
@@ -7,25 +12,10 @@ export interface CategoryOption {
 }
 
 /** 업종 공통 지출 카테고리 */
-export const COMMON_EXPENSE_CATEGORIES: CategoryOption[] = [
-  { value: 'rent', label: '임대료' },
-  { value: 'utility', label: '관리비/공과금' },
-  { value: 'maintenance', label: '시설 유지보수' },
-  { value: 'salary', label: '인건비/급여' },
-  { value: 'supplies', label: '소모품/비품' },
-  { value: 'marketing', label: '홍보/마케팅' },
-  { value: 'insurance', label: '보험' },
-  { value: 'tax', label: '세금/공과' },
-  { value: 'other', label: '기타' },
-];
+export const COMMON_EXPENSE_CATEGORIES: CategoryOption[] = DEFAULT_COMMON_EXPENSE_CATEGORIES;
 
 /** 피아노 학원 추가 지출 카테고리 */
-export const PIANO_EXPENSE_CATEGORIES: CategoryOption[] = [
-  { value: 'piano_tuning', label: '피아노 조율/수리' },
-  { value: 'textbook', label: '교재/악보 구입' },
-  { value: 'snacks', label: '간식/다과' },
-  { value: 'teacher_salary', label: '강사료' },
-];
+export const PIANO_EXPENSE_CATEGORIES: CategoryOption[] = DEFAULT_PIANO_EXPENSE_CATEGORIES;
 
 /** 피부관리샵 추가 지출 카테고리 */
 export const SKIN_EXPENSE_CATEGORIES: CategoryOption[] = [
@@ -68,20 +58,9 @@ export const DAYCARE_EXPENSE_CATEGORIES: CategoryOption[] = [
 ];
 
 export function getExpenseCategories(industry: IndustryType | string): CategoryOption[] {
-  const base = [...COMMON_EXPENSE_CATEGORIES];
-  if (isSkinClinicIndustry(industry)) {
-    return [...base, ...SKIN_EXPENSE_CATEGORIES];
-  }
-  if (isAppointmentIndustry(industry)) {
-    return [...base, ...PILATES_EXPENSE_CATEGORIES];
-  }
-  if (industry === 'gym' || industry === 'taekwondo') {
-    return [...base, ...GYM_EXPENSE_CATEGORIES];
-  }
-  if (industry === 'daycare') {
-    return [...base, ...DAYCARE_EXPENSE_CATEGORIES];
-  }
-  return [...base, ...PIANO_EXPENSE_CATEGORIES];
+  const owned = getIndustryPlugin(industry).getExpenseCategories?.();
+  const source = owned ?? defaultExpenseCategories();
+  return source.map((item) => ({ value: item.value, label: item.label }));
 }
 
 export function getIncomeCategories(_industry: IndustryType | string): CategoryOption[] {

@@ -1,5 +1,6 @@
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
 import { withNoticesTabs } from '@/core/industry/pluginTypes';
+import { retailExpenseCategories } from './expenseCategories';
 
 /**
  * 소매업 플러그인 매니페스트.
@@ -64,4 +65,5 @@ export const retailPluginManifest: IndustryPluginManifest = {
     'members',
     'income',
   ]),
+  getExpenseCategories: retailExpenseCategories,
 };
