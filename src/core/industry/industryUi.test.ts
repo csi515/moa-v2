@@ -3,6 +3,9 @@
  * 실행: npx tsx src/core/industry/industryUi.test.ts
  */
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { installIndustryPlugin, installIndustryPlugins } from './pluginHost';
 import {
   getCustomerLabel,
@@ -19,6 +22,7 @@ import {
   supportsDeposit,
   showsTextbooksLink,
   getRoomConfig,
+  getDangerZoneSessionLabel,
 } from './industryUi';
 import type { IndustryPluginManifest } from './pluginTypes';
 
@@ -73,6 +77,7 @@ const mockPlugins: IndustryPluginManifest[] = [
     placeNamePlaceholder: '예: 밸런스 필라테스',
     customerLabel: '회원',
     isAppointment: true,
+    supportsDeposit: true,
   },
   {
     id: 'gym',
@@ -300,8 +305,30 @@ function run(): void {
 
   // 12. supportsDeposit
   assert.equal(supportsDeposit('skin_clinic'), true);
+  assert.equal(supportsDeposit('pilates'), true);
   assert.equal(supportsDeposit('piano'), false);
   assert.equal(supportsDeposit(null), false);
+
+  // 예약금 지원과 삭제 확인 명사는 별개다. 필라테스는 예약금이 있어도 수업.
+  assert.equal(getDangerZoneSessionLabel('piano'), '수업');
+  assert.equal(getDangerZoneSessionLabel('pilates'), '수업');
+  assert.equal(getDangerZoneSessionLabel('skin_clinic'), '시술');
+  assert.equal(getDangerZoneSessionLabel('gym'), '수업');
+  assert.equal(getDangerZoneSessionLabel('daycare'), '수업');
+  assert.equal(getDangerZoneSessionLabel(null), '수업');
+
+  const here = dirname(fileURLToPath(import.meta.url));
+  const dangerZone = readFileSync(
+    join(here, '../organizations/components/OrganizationSettingsView.tsx'),
+    'utf8'
+  );
+  const workplace = readFileSync(
+    join(here, '../organizations/components/WorkplaceSettingsView.tsx'),
+    'utf8'
+  );
+  assert.match(dangerZone, /getDangerZoneSessionLabel\(industry\)/);
+  assert.equal(dangerZone.includes("isSkin ? '시술'"), false);
+  assert.equal(workplace.includes('isSkin={depositSupported}'), false);
 
   // 13. showsTextbooksLink
   assert.equal(showsTextbooksLink('piano'), true);

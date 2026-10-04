@@ -22,6 +22,13 @@ export function isSkinClinicIndustry(industry: IndustryType | string | null | un
   return getIndustryPlugin(industry).id === 'skin_clinic';
 }
 
+/** 조직 삭제 확인 문구의 기록 명사. supportsDeposit와 무관하다. */
+export function getDangerZoneSessionLabel(
+  industry: IndustryType | string | null | undefined
+): string {
+  return isSkinClinicIndustry(industry) ? '시술' : '수업';
+}
+
 /** 예약·서비스·이용권 중심 (필라테스·피부관리) */
 export function isAppointmentIndustry(industry: IndustryType | string | null | undefined): boolean {
   if (!industry) return false;

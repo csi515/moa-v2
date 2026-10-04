@@ -577,7 +577,6 @@ export const WorkplaceSettingsView: FC = () => {
             contactLabel={contactLabel}
             feeLabel={feeLabel}
             staffLabel={staffLabel}
-            isSkin={depositSupported}
           />
         </div>
       </div>
