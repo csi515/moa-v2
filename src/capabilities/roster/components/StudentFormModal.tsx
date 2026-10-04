@@ -26,6 +26,7 @@ import { StudentBasicInfoSection } from './form/StudentBasicInfoSection';
 import { GuardianSection } from './form/GuardianSection';
 import { StudentPinSection } from './form/StudentPinSection';
 import { StudentAdvancedSection } from './form/StudentAdvancedSection';
+import { selfAccountEnrollmentNote } from './form/enrollmentFormCopy';
 import { StudentPickupSection } from './form/StudentPickupSection';
 import { StudentFormPostSave } from './form/StudentFormPostSave';
 import {
@@ -517,7 +518,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
                   성인 {customerLabel} ({contactLabel} 없음)
                 </span>
                 <span className="block text-[11px] text-slate-500 mt-0.5">
-                  본인 계정으로 수강하는 경우 {contactLabel} 정보를 생략합니다.
+                  {selfAccountEnrollmentNote(industry, contactLabel)}
                 </span>
               </span>
             </label>
