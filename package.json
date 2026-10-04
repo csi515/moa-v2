@@ -28,6 +28,7 @@
     "test:rls-member-scope-harden": "tsx scripts/rls-member-scope-harden.test.ts",
     "test:multi-role-helpers": "tsx scripts/multiRolePermissionHelpers.test.ts",
     "test:parent-link-hotfix": "tsx scripts/parent-link-hotfix.test.ts",
+    "test:parent-more-menu": "tsx src/modules/parent/views/parentMoreMenu.test.ts",
     "test:staff-invite-token": "tsx scripts/staff-invite-token.test.ts",
     "test:guardian-link-hardening": "tsx scripts/guardian-link-hardening.test.ts",
     "test:guardian-redeem-new-parent": "tsx scripts/guardian-redeem-new-parent.test.ts",

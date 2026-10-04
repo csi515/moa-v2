@@ -19,11 +19,16 @@ import type { IndustryType } from '@/core/industry/types';
 import { getPlaceLabel } from '@/core/industry/industryUi';
 import { normalizeIndustryType } from '@/core/industry/types';
 import { ParentAccountSection } from '../ParentAccountSection';
-import { getParentPortalSecondaryTabs } from '../parentPortalNav';
 import { useParentPortal } from '@/core/parent/context/ParentPortalContext';
 import { ACTIVE_ENROLLMENT_STATUSES } from '@/core/parent/types/globalParent';
 import { unlinkParentEnrollment } from '@/core/parent/services/enrollmentUnlinkService';
 import { useApp } from '@/context/AppContext';
+import {
+  getParentMoreMenuItemCopy,
+  getParentMoreSwitchCopy,
+  getParentMoreUnlinkHint,
+  getParentMoreUnlinkMessage,
+} from './parentMoreMenu';
 
 type MoreItem = {
   id: ParentPortalTab;
@@ -32,55 +37,28 @@ type MoreItem = {
   icon: React.ReactNode;
 };
 
-function getPianoMoreItems(): MoreItem[] {
-  return [
-    { id: 'notices', label: '안내', description: '학원 공지·알림', icon: <Megaphone className="w-5 h-5" /> },
-    { id: 'assignments', label: '과제', description: '이번 주 과제·확인', icon: <BookOpenCheck className="w-5 h-5" /> },
-    { id: 'progress', label: '진도·연습', description: '커리큘럼·연습 기록·완곡 신청', icon: <TrendingUp className="w-5 h-5" /> },
-    { id: 'stamps', label: '완곡 스탬프', description: '자녀 스탬프판·완곡 리포트', icon: <Stamp className="w-5 h-5" /> },
-    { id: 'reports', label: '학습 리포트', description: '월간 학습 리포트', icon: <FileText className="w-5 h-5" /> },
-    { id: 'events', label: '행사', description: '연주회·학원 행사', icon: <Calendar className="w-5 h-5" /> },
-  ];
+function moreItemIcon(id: ParentPortalTab): React.ReactNode {
+  switch (id) {
+    case 'assignments':
+      return <BookOpenCheck className="w-5 h-5" />;
+    case 'progress':
+      return <TrendingUp className="w-5 h-5" />;
+    case 'stamps':
+      return <Stamp className="w-5 h-5" />;
+    case 'reports':
+    case 'incidents':
+      return <FileText className="w-5 h-5" />;
+    case 'events':
+      return <Calendar className="w-5 h-5" />;
+    case 'pickups':
+      return <Users className="w-5 h-5" />;
+    case 'notices':
+    default:
+      return <Megaphone className="w-5 h-5" />;
+  }
 }
 
-function getDefaultMoreItems(industry: IndustryType | string | null | undefined): MoreItem[] {
-  const secondary = getParentPortalSecondaryTabs(industry);
-  const items: MoreItem[] = [
-    {
-      id: 'notices',
-      label: '안내',
-      description: `${getPlaceLabel(industry)} 공지·알림`,
-      icon: <Megaphone className="w-5 h-5" />,
-    },
-  ];
-  if (secondary.includes('events')) {
-    items.push({
-      id: 'events',
-      label: '행사',
-      description: `${getPlaceLabel(industry)} 행사`,
-      icon: <Calendar className="w-5 h-5" />,
-    });
-  }
-  if (secondary.includes('pickups')) {
-    items.push({
-      id: 'pickups',
-      label: '귀가 명단',
-      description: '데려갈 수 있는 사람과 알레르기',
-      icon: <Users className="w-5 h-5" />,
-    });
-  }
-  if (secondary.includes('incidents')) {
-    items.push({
-      id: 'incidents',
-      label: '사고 안내',
-      description: '원에서 전한 사고 기록',
-      icon: <FileText className="w-5 h-5" />,
-    });
-  }
-  return items;
-}
-
-/** 하단 ‘더보기’ — 보조 메뉴·문의·학원 연결 해제·계정 */
+/** 하단 ‘더보기’ — 보조 메뉴·문의·연결 해제·계정 */
 export function ParentMoreView({
   onNavigate,
   onSwitchChild,
@@ -92,7 +70,11 @@ export function ParentMoreView({
 }) {
   const industry = normalizeIndustryType(industryType);
   const place = getPlaceLabel(industry);
-  const items = industry === 'piano' ? getPianoMoreItems() : getDefaultMoreItems(industry);
+  const switchCopy = getParentMoreSwitchCopy(industry);
+  const items: MoreItem[] = getParentMoreMenuItemCopy(industry).map((item) => ({
+    ...item,
+    icon: moreItemIcon(item.id),
+  }));
   const settings = StorageService.getSettings();
   const phone = settings.phone?.trim();
   const { selectedEnrollment, refreshPortalTree, goToChildren } = useParentPortal();
@@ -107,7 +89,7 @@ export function ParentMoreView({
     if (!selectedEnrollment) return;
     openConfirmDialog({
       title: `${place} 연결 해제`,
-      message: `${selectedEnrollment.organizationName} 앱 연결만 해제할까요? 학원 원생(재원) 등록은 유지되며, 퇴원은 학원에서만 처리합니다. 출결·수납 기록은 삭제되지 않고 조회만 가능합니다. 다시 연결하려면 ${place} 연결 코드가 필요합니다.`,
+      message: getParentMoreUnlinkMessage(industry, selectedEnrollment.organizationName),
       isDestructive: true,
       confirmText: '연결 해제',
       onConfirm: () => {
@@ -172,12 +154,8 @@ export function ParentMoreView({
           >
             <Users className="w-5 h-5 text-indigo-600 shrink-0" />
             <span className="min-w-0 flex-1">
-              <span className="block text-sm font-bold text-slate-900">
-                {industry === 'skin_clinic' ? '고객·샵 전환' : `자녀·${place} 전환`}
-              </span>
-              <span className="block text-[11px] text-slate-500">
-                {industry === 'skin_clinic' ? '다른 샵 선택' : `다른 자녀 또는 ${place} 선택`}
-              </span>
+              <span className="block text-sm font-bold text-slate-900">{switchCopy.title}</span>
+              <span className="block text-[11px] text-slate-500">{switchCopy.description}</span>
             </span>
             <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
           </button>
@@ -219,9 +197,7 @@ export function ParentMoreView({
             )}
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-bold text-rose-700">{place} 연결 해제</span>
-              <span className="block text-[11px] text-rose-500/90">
-                앱 연결만 해제 · 학원 재원/퇴원은 별도
-              </span>
+              <span className="block text-[11px] text-rose-500/90">{getParentMoreUnlinkHint(industry)}</span>
             </span>
             <ChevronRight className="w-4 h-4 text-rose-300 shrink-0" />
           </button>
