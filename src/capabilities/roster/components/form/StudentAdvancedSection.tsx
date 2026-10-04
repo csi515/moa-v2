@@ -5,6 +5,12 @@ import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
 import { getStudentLevelLabel, getStudentLevelOptions } from '@/core/students/levelOptions';
 import type { ClassItem, Teacher } from '@/types';
+import {
+  rosterAdvancedSectionTitle,
+  rosterClassAssignHelper,
+  rosterFeeInfoHeading,
+  rosterRegularFeeLabel,
+} from './rosterFormCopy';
 import type { StudentFormData } from './studentFormTypes';
 
 interface Props {
@@ -29,7 +35,10 @@ export const StudentAdvancedSection: React.FC<Props> = ({
   const levelOptions = getStudentLevelOptions(industry);
   const levelLabel = getStudentLevelLabel(industry);
   const serviceLabel = labels.service.singular;
-  const isPiano = industry === 'piano';
+  const sectionTitle = rosterAdvancedSectionTitle(industry);
+  const classAssignHelper = rosterClassAssignHelper(industry, serviceLabel);
+  const feeInfoHeading = rosterFeeInfoHeading(industry);
+  const regularFeeLabel = rosterRegularFeeLabel(industry);
 
   const toggleClass = (classId: string) => {
     const next = formData.classIds.includes(classId)
@@ -47,7 +56,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
       >
         <span className="flex items-center gap-1.5">
           <BookOpen className="w-3.5 h-3.5" />
-          {isPiano ? `수업 · 수강료` : '수업·수강료 (선택)'}
+          {sectionTitle}
         </span>
         {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
       </button>
@@ -95,11 +104,9 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                 <label className="block text-[11px] font-semibold text-slate-500">
                   {serviceLabel} 배정
                 </label>
-                {isPiano && (
-                  <p className="text-[10px] text-slate-400 -mt-1 mb-1">
-                    선택한 {serviceLabel}이(가) 시간표·일정에 반영됩니다. 나중에 추가해도 됩니다.
-                  </p>
-                )}
+                <p className="text-[10px] text-slate-400 -mt-1 mb-1">
+                  {classAssignHelper}
+                </p>
                 {classes.length === 0 ? (
                   <p className="text-xs text-slate-400 px-1">
                     등록된 {serviceLabel}이(가) 없습니다. 먼저 {serviceLabel}을(를) 추가하세요.
@@ -134,7 +141,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
 
           <div>
             <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
-              수강료 정보
+              {feeInfoHeading}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="sm:col-span-2">
@@ -178,7 +185,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                 <>
                   <div>
                     <label className="block text-[11px] font-semibold text-slate-500 mb-1">
-                      정규 수업 수강료
+                      {regularFeeLabel}
                     </label>
                     <CurrencyInput
                       value={formData.tuitionFee}

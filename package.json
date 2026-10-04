@@ -83,6 +83,7 @@
     "test:pin-notify-copy": "tsx src/capabilities/attendance/domain/attendanceNotifyCopy.test.ts",
     "test:absence-notify": "tsx src/core/parent/services/absenceNotifyPolicy.test.ts",
     "test:parent-home-copy": "tsx src/modules/parent/views/parentHomeCopy.test.ts",
+    "test:roster-piano-copy": "tsx src/capabilities/roster/components/form/rosterFormCopy.test.ts",
     "test:makeup-schedule-atomic": "tsx src/core/schedules/makeupScheduleAtomic.test.ts",
     "test:pending-mutations": "tsx src/services/adapters/pendingMutations.test.ts",
     "test:resource-reservation": "tsx src/core/resources/resourceReservation.test.ts",
