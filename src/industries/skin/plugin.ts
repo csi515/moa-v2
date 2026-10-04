@@ -4,6 +4,7 @@ import { registerSkinStudentDetailExtension } from './studentDetailExtension';
 import './registerStaffSettings';
 import { skinExpenseCategories } from './expenseCategories';
 import { skinPayrollExpenseCategory } from './payrollExpenseCategory';
+import { skinBookingAdapter } from './bookingAdapter';
 
 /** 학생 상세 — 시술 기록 탭 (Core는 Module을 import하지 않음) */
 registerSkinStudentDetailExtension();
@@ -66,4 +67,5 @@ export const skinPluginManifest: IndustryPluginManifest = {
   staffTabs: withNoticesTabs(['dashboard', 'bookings', 'members', 'passes', 'retail', 'attendance']),
   getExpenseCategories: skinExpenseCategories,
   getPayrollExpenseCategory: skinPayrollExpenseCategory,
+  bookingAdapter: skinBookingAdapter,
 };

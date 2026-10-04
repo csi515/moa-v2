@@ -3,7 +3,7 @@ import { useApp } from '@/context/AppContext';
 import { useStorageRefresh, useStaffScope } from '@/hooks';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
-import { isPilatesIndustry, isSkinClinicIndustry } from '@/core/industry/industryUi';
+import { resolveBookingUi } from './bookingIndustryAdapter';
 import { ScheduleService } from '@/core/services/scheduleService';
 import { StorageService } from '@/services/storage';
 import type { Booking, BookingStatus } from '@/core/types/schedule';
@@ -29,13 +29,15 @@ export const BookingCalendarView: React.FC = () => {
   const { showToast } = useApp();
   const { industry } = usePermissions();
   const labels = useModuleLabels();
-  const skin = isSkinClinicIndustry(industry);
+  const bookingUi = resolveBookingUi(industry);
+  const appointment = bookingUi.flow === 'appointmentCards';
+  const classSlots = bookingUi.flow === 'classSlots';
   const staffLabel = labels.staff.singular;
   const customerLabel = labels.customer.singular;
   const serviceLabel = labels.service.management;
-  const accentBtn = skin ? 'bg-rose-600 hover:bg-rose-700' : 'bg-teal-600 hover:bg-teal-700';
-  const accentTab = skin ? 'bg-rose-600 text-white' : 'bg-teal-600 text-white';
-  const accentText = skin ? 'text-rose-700' : 'text-teal-700';
+  const accentBtn = bookingUi.calendarAccentBtn;
+  const accentTab = bookingUi.calendarAccentTab;
+  const accentText = bookingUi.calendarAccentText;
   const refreshKey = useStorageRefresh('bookings');
   const { isScoped, staffId, scopeBookings, scopeMembersForPilates } = useStaffScope();
 
@@ -52,10 +54,10 @@ export const BookingCalendarView: React.FC = () => {
     return mergeScopedBookingsWithInbox({
       scoped,
       allRaw: allBookingsRaw,
-      skin,
+      skin: appointment,
       isScoped,
     });
-  }, [allBookingsRaw, scopeBookings, refreshKey, skin, isScoped]);
+  }, [allBookingsRaw, scopeBookings, refreshKey, appointment, isScoped]);
 
   const members = useMemo(
     () =>
@@ -82,7 +84,7 @@ export const BookingCalendarView: React.FC = () => {
     presetRecruitments,
     timeFilters,
   } = useBookingFilters({
-    skin,
+    skin: appointment,
     isScoped,
     staffId,
     staffLabel,
@@ -115,12 +117,12 @@ export const BookingCalendarView: React.FC = () => {
     : null;
 
   useEffect(() => {
-    if (skin || !selectedService) return;
+    if (!classSlots || !selectedService) return;
     form.setSlotCapacity(
       String(draftCapacity ? draftCapacity.maxCapacity : selectedService.maxCapacity || 1)
     );
   }, [
-    skin,
+    classSlots,
     selectedService?.id,
     selectedService?.maxCapacity,
     draftCapacity?.maxCapacity,
@@ -155,8 +157,12 @@ export const BookingCalendarView: React.FC = () => {
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!classSlots && !appointment) {
+      showToast('이 업종에는 예약 규칙이 없어 등록할 수 없습니다.', 'warning');
+      return;
+    }
     const result = executeBookingCreate({
-      skin,
+      skin: appointment,
       form: form.snapshot(),
       members,
       services,
@@ -273,7 +279,7 @@ export const BookingCalendarView: React.FC = () => {
   };
 
   const notifyCustomer = (booking: Booking, title: string, message: string) => {
-    if (!skin && !isPilatesIndustry(industry)) return;
+    if (bookingUi.notifyOnStatus.length === 0) return;
     const student = StorageService.getStudents().find((item) => item.id === booking.customerId);
     notifyBookingChange({
       studentId: booking.customerId,
@@ -286,7 +292,7 @@ export const BookingCalendarView: React.FC = () => {
   };
 
   const rescheduleBooking = (booking: Booking, time: string) => {
-    if (!skin || !time) return;
+    if (!appointment || !time) return;
     const duration = new Date(booking.endsAt).getTime() - new Date(booking.startsAt).getTime();
     const startsAt = `${booking.startsAt.slice(0, 10)}T${time}:00`;
     const endsAt = new Date(new Date(startsAt).getTime() + Math.max(duration, 0)).toISOString();
@@ -319,7 +325,7 @@ export const BookingCalendarView: React.FC = () => {
     notifyCustomer(
       booking,
       '예약 시간 변경',
-      `${booking.serviceName || '시술'} 시간이 ${time}으로 변경되었습니다.`
+      `${booking.serviceName || bookingUi.sessionNoun} 시간이 ${time}으로 변경되었습니다.`
     );
     showToast('예약 시간을 변경했습니다.', 'success');
   };
@@ -369,16 +375,16 @@ export const BookingCalendarView: React.FC = () => {
   };
 
   const updateStatus = async (booking: Booking, status: BookingStatus) => {
-    if (skin && status === 'confirmed' && booking.waitlist) {
+    if (appointment && status === 'confirmed' && booking.waitlist) {
       showToast('대기 신청은 일반 신청으로 올린 뒤 확정하세요.', 'warning');
       return;
     }
-    if (skin && status === 'confirmed' && !booking.staffId) {
+    if (appointment && status === 'confirmed' && !booking.staffId) {
       showToast('확정 전에 관리사를 배정해 주세요.', 'warning');
       return;
     }
     if (
-      skin &&
+      appointment &&
       status === 'confirmed' &&
       booking.staffId &&
       isOutsideStaffHours({
@@ -391,7 +397,7 @@ export const BookingCalendarView: React.FC = () => {
       showToast('관리사 근무시간이 아니어서 확정할 수 없습니다.', 'warning');
       return;
     }
-    if (skin && status === 'confirmed' && booking.staffId) {
+    if (appointment && status === 'confirmed' && booking.staffId) {
       const staffConflict = findStaffTimeConflict({
         staffId: booking.staffId,
         startsAt: booking.startsAt,
@@ -409,14 +415,15 @@ export const BookingCalendarView: React.FC = () => {
       result = await ScheduleService.updateBookingStatus(
         booking.id,
         status,
-        skin ? undefined : { consumeOnNoShow: true }
+        bookingUi.consumePassOnNoShow ? { consumeOnNoShow: true } : undefined
       );
     } catch (err) {
       showToast(err instanceof Error ? err.message : '상태 변경에 실패했습니다.', 'error');
       return;
     }
     if (!result) {
-      const deducting = status === 'completed' || (!skin && status === 'no_show');
+      const deducting =
+        status === 'completed' || (bookingUi.consumePassOnNoShow && status === 'no_show');
       showToast(
         deducting
           ? '이용권 잔여가 없어 완료/결석 처리할 수 없습니다.'
@@ -425,16 +432,13 @@ export const BookingCalendarView: React.FC = () => {
       );
       return;
     }
-    const notice = bookingChangeNotice(booking, status, skin ? '시술' : '수업');
-    const shouldNotify =
-      status === 'confirmed' ||
-      status === 'cancelled' ||
-      (!skin && (status === 'completed' || status === 'no_show'));
+    const notice = bookingChangeNotice(booking, status, bookingUi.sessionNoun || '예약');
+    const shouldNotify = bookingUi.notifyOnStatus.includes(status);
     if (notice && shouldNotify) notifyCustomer(booking, notice.title, notice.message);
-    if (status === 'completed' && skin && !booking.skinCondition && !booking.chartNote) {
+    if (status === 'completed' && appointment && !booking.skinCondition && !booking.chartNote) {
       showToast('시술 기록이 없습니다. 고객 상세의 시술 기록에서 작성할 수 있습니다.', 'info');
     } else if (
-      (status === 'completed' || (!skin && status === 'no_show')) &&
+      (status === 'completed' || (bookingUi.consumePassOnNoShow && status === 'no_show')) &&
       !booking.sessionPassId &&
       !result.sessionPassId
     ) {
@@ -470,7 +474,7 @@ export const BookingCalendarView: React.FC = () => {
         continue;
       }
       if (!booking.sessionPassId && !result.sessionPassId) missingPass += 1;
-      const notice = bookingChangeNotice(booking, 'completed', '수업');
+      const notice = bookingChangeNotice(booking, 'completed', bookingUi.sessionNoun || '수업');
       if (notice) notifyCustomer(booking, notice.title, notice.message);
     }
     if (blocked > 0 && blocked === targets.length) {
@@ -585,7 +589,13 @@ export const BookingCalendarView: React.FC = () => {
         actions={
           <button
             type="button"
-            onClick={form.openCreateModal}
+            onClick={() => {
+              if (!classSlots && !appointment) {
+                showToast('이 업종에는 예약 규칙이 없어 등록할 수 없습니다.', 'warning');
+                return;
+              }
+              form.openCreateModal();
+            }}
             className={`px-4 py-2.5 ${accentBtn} text-white text-sm font-bold rounded-xl min-h-[44px]`}
           >
             + 예약 등록
@@ -609,9 +619,10 @@ export const BookingCalendarView: React.FC = () => {
         activeClassName={accentTab}
       />
 
-      {filtered.length === 0 && (skin || presetRecruitments.length === 0) ? (
-        <EmptyState icon={<span className="text-3xl">📭</span>} title="예약 내역이 없습니다" />
-      ) : !skin ? (
+      {classSlots ? (
+        filtered.length === 0 && presetRecruitments.length === 0 ? (
+          <EmptyState icon={<span className="text-3xl">📭</span>} title="예약 내역이 없습니다" />
+        ) : (
         <PilatesSlotList
           bookings={filtered}
           allBookings={allBookingsRaw}
@@ -625,7 +636,11 @@ export const BookingCalendarView: React.FC = () => {
           onUpdateStatus={updateStatus}
           onCompleteClass={completeClass}
         />
-      ) : (
+        )
+      ) : appointment ? (
+        filtered.length === 0 ? (
+          <EmptyState icon={<span className="text-3xl">📭</span>} title="예약 내역이 없습니다" />
+        ) : (
         <div className="space-y-3">
           {filtered.map((b) => {
             const service =
@@ -682,12 +697,12 @@ export const BookingCalendarView: React.FC = () => {
                           ? '신청'
                           : BOOKING_STATUS_LABEL[b.status]}
                     </span>
-                    {skin && b.status === 'no_show' && b.depositStatus === 'confirmed' && (
+                    {appointment && b.status === 'no_show' && b.depositStatus === 'confirmed' && (
                       <span className="text-xs font-bold px-2 py-1 rounded-lg bg-amber-50 text-amber-800">
                         예약금 미반환
                       </span>
                     )}
-                    {skin && b.depositStatus && b.depositStatus !== 'confirmed' && (
+                    {appointment && b.depositStatus && b.depositStatus !== 'confirmed' && (
                       <button
                         type="button"
                         onClick={() => {
@@ -704,7 +719,7 @@ export const BookingCalendarView: React.FC = () => {
                         입금 확인
                       </button>
                     )}
-                    {skin && b.waitlist && (
+                    {appointment && b.waitlist && (
                       <button
                         type="button"
                         onClick={() => promoteWaitlist(b)}
@@ -713,7 +728,7 @@ export const BookingCalendarView: React.FC = () => {
                         일반 신청으로
                       </button>
                     )}
-                    {skin && (b.status === 'scheduled' || b.status === 'confirmed') && (
+                    {appointment && (b.status === 'scheduled' || b.status === 'confirmed') && (
                       <input
                         type="time"
                         defaultValue={b.startsAt.slice(11, 16)}
@@ -726,39 +741,6 @@ export const BookingCalendarView: React.FC = () => {
                         className="px-2 py-1 text-xs border border-slate-200 rounded-lg min-h-[44px]"
                       />
                     )}
-                    {!skin &&
-                      b.serviceId &&
-                      b.staffId &&
-                      capacity &&
-                      (!isScoped || b.staffId === staffId) && (
-                        <label className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600">
-                          정원
-                          <input
-                            key={`${b.id}-${capacity.maxCapacity}`}
-                            type="number"
-                            min={Math.max(1, capacity.occupied)}
-                            defaultValue={capacity.maxCapacity}
-                            aria-label="이 시간대 정원"
-                            onBlur={(e) => {
-                              const next = Number(e.target.value);
-                              if (!next || next === capacity.maxCapacity) return;
-                              if (next < capacity.occupied) {
-                                showToast('현재 모인 인원보다 작게 줄일 수 없습니다.', 'warning');
-                                e.target.value = String(capacity.maxCapacity);
-                                return;
-                              }
-                              ScheduleService.setSlotRecruitmentCapacity(
-                                b.serviceId!,
-                                b.staffId,
-                                b.startsAt,
-                                next
-                              );
-                              showToast('이 시간대 정원을 저장했습니다.', 'success');
-                            }}
-                            className="w-16 px-2 py-1 text-xs border border-slate-200 rounded-lg min-h-[44px]"
-                          />
-                        </label>
-                      )}
                     {b.serviceId && b.staffId && capacity && (
                       <button
                         type="button"
@@ -768,7 +750,7 @@ export const BookingCalendarView: React.FC = () => {
                         {capacity.closedManually ? '모집 재개' : '모집 마감'}
                       </button>
                     )}
-                    {skin && b.requestedBy === 'customer' && b.status === 'scheduled' && (
+                    {appointment && b.requestedBy === 'customer' && b.status === 'scheduled' && (
                       <div className="flex flex-wrap gap-2 w-full">
                         <select
                           value={b.staffId || ''}
@@ -801,7 +783,7 @@ export const BookingCalendarView: React.FC = () => {
                         </select>
                       </div>
                     )}
-                    {skin && (
+                    {appointment && (
                       <button
                         type="button"
                         onClick={() => form.openChart(b)}
@@ -814,7 +796,7 @@ export const BookingCalendarView: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => updateStatus(b, 'confirmed')}
-                        className={`px-2 py-1 text-xs font-bold ${skin ? 'bg-rose-600' : 'bg-teal-600'} text-white rounded-lg min-h-[44px]`}
+                        className={`px-2 py-1 text-xs font-bold ${bookingUi.statusConfirmBtnClass} text-white rounded-lg min-h-[44px]`}
                       >
                         확정
                       </button>
@@ -843,12 +825,65 @@ export const BookingCalendarView: React.FC = () => {
             );
           })}
         </div>
+        )
+      ) : filtered.length === 0 ? (
+        <EmptyState icon={<span className="text-3xl">📭</span>} title="예약 내역이 없습니다" />
+      ) : (
+        <div className="space-y-3">
+          {filtered.map((b) => (
+            <div key={b.id} className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <p className="font-bold text-slate-900">{b.customerName}</p>
+                  <p className="text-sm text-slate-600 mt-0.5">
+                    {b.serviceName} · {b.staffName || `${staffLabel} 미지정`}
+                  </p>
+                  <p className={`text-xs font-semibold mt-1 ${accentText}`}>
+                    {b.startsAt.slice(0, 16).replace('T', ' ')} ~ {b.endsAt.slice(11, 16)}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-xs font-bold px-2 py-1 rounded-lg bg-slate-100 text-slate-700">
+                    {BOOKING_STATUS_LABEL[b.status]}
+                  </span>
+                  {b.status === 'scheduled' && (
+                    <button
+                      type="button"
+                      onClick={() => updateStatus(b, 'confirmed')}
+                      className={`px-2 py-1 text-xs font-bold ${bookingUi.statusConfirmBtnClass} text-white rounded-lg min-h-[44px]`}
+                    >
+                      확정
+                    </button>
+                  )}
+                  {(b.status === 'scheduled' || b.status === 'confirmed') && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => updateStatus(b, 'completed')}
+                        className="px-2 py-1 text-xs font-bold bg-emerald-600 text-white rounded-lg min-h-[44px]"
+                      >
+                        완료
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => updateStatus(b, 'cancelled')}
+                        className="px-2 py-1 text-xs font-bold bg-rose-100 text-rose-700 rounded-lg min-h-[44px]"
+                      >
+                        취소
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
 
       <BookingFormModal
         isOpen={form.isModalOpen}
         onClose={form.closeCreateModal}
-        skin={skin}
+        skin={appointment}
         isScoped={isScoped}
         staffLabel={staffLabel}
         customerLabel={customerLabel}

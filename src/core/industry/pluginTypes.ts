@@ -1,6 +1,7 @@
 import type { NavTab } from '@/shared/navigation/navigationTypes';
 import type { ModuleTheme } from '@/shared/components/layout/moduleTheme';
 import type { IndustryOption, IndustryType } from './types';
+import type { BookingIndustryAdapter } from './bookingIndustryAdapter';
 
 export interface IndustryExpenseCategory {
   value: string;
@@ -160,6 +161,12 @@ export interface IndustryPluginManifest {
    * 이 업종만 설정한다. 없으면 공통 한 줄 허브.
    */
   financeHubNav?: IndustryFinanceHubNav;
+  /**
+   * 예약·서비스 화면의 업종별 규칙.
+   * 공유 booking UI는 이 훅만 호출하고 업종 id로 고르지 않는다.
+   * 없으면 필라테스 분류나 피부 배정·시간변경·알림 흐름을 적용하지 않는다.
+   */
+  bookingAdapter?: BookingIndustryAdapter;
 }
 
 export type IndustryRoomKind = 'classroom' | 'practice' | 'treatment';
