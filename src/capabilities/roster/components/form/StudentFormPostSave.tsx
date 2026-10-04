@@ -1,9 +1,12 @@
 import React from 'react';
 import type { Student } from '@/types';
+import { ROSTER_TIMETABLE_PLACE_BUTTON } from './rosterFormCopy';
 
 interface Props {
   student: Student;
-  isPiano: boolean;
+  /** 시간표 배치 버튼. 피아노 업종에서만 true. */
+  showTimetablePlacement: boolean;
+  hint: string;
   onOpenDetail: () => void;
   onPlaceTimetable: () => void;
   onOpenAttendance: () => void;
@@ -14,7 +17,8 @@ interface Props {
 /** 등록 직후 다음 작업 안내 */
 export const StudentFormPostSave: React.FC<Props> = ({
   student,
-  isPiano,
+  showTimetablePlacement,
+  hint,
   onOpenDetail,
   onPlaceTimetable,
   onOpenAttendance,
@@ -24,11 +28,7 @@ export const StudentFormPostSave: React.FC<Props> = ({
   <div className="mx-6 mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-3">
     <div>
       <p className="text-sm font-bold text-emerald-900">{student.name} 등록 완료</p>
-      <p className="text-[11px] text-emerald-800/80 mt-0.5">
-        {isPiano
-          ? '아직은 반·시간표에 배정되지 않았습니다. 상세를 보거나 시간표에서 직접 배치하세요.'
-          : '다음 작업을 선택하세요.'}
-      </p>
+      <p className="text-[11px] text-emerald-800/80 mt-0.5">{hint}</p>
     </div>
     <div className="flex flex-wrap gap-2">
       <button
@@ -38,13 +38,13 @@ export const StudentFormPostSave: React.FC<Props> = ({
       >
         상세 보기
       </button>
-      {isPiano ? (
+      {showTimetablePlacement ? (
         <button
           type="button"
           onClick={onPlaceTimetable}
           className="min-h-[44px] px-3 rounded-xl text-xs font-bold bg-indigo-600 text-white border border-indigo-600"
         >
-          시간표에 배치
+          {ROSTER_TIMETABLE_PLACE_BUTTON}
         </button>
       ) : (
         <>

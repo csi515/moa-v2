@@ -41,6 +41,12 @@ import {
   validateStudentForm,
   type StudentFormErrors,
 } from './form/studentFormValidation';
+import {
+  isPianoIndustry,
+  rosterCreateFormDescription,
+  rosterNotesPlaceholder,
+  rosterPostSaveHint,
+} from './form/rosterFormCopy';
 
 interface StudentFormModalProps {
   student?: Student | null;
@@ -61,7 +67,8 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
   const customerLabel = labels.customer.singular;
   const contactLabel = labels.contact.singular;
   const placeLabel = getPlaceLabel(industry);
-  const isPiano = industry === 'piano';
+  const serviceLabel = labels.service.singular;
+  const showTimetablePlacement = isPianoIndustry(industry);
   const org = useOptionalOrganization();
   const organizationId = org?.currentOrganization?.id || 'local-org';
   const formRef = useRef<HTMLFormElement>(null);
@@ -433,7 +440,9 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         onClose={onClose}
         title={isEdit ? `${student!.name} 정보 수정` : `신규 ${customerLabel} 등록`}
         description={
-          isEdit ? '필요한 항목만 수정하세요' : '기본정보 → 보호자 → 수업·수강료 순으로 입력하세요'
+          isEdit
+            ? '필요한 항목만 수정하세요'
+            : rosterCreateFormDescription(industry, contactLabel)
         }
         maxWidth="4xl"
         intent="form"
@@ -451,7 +460,8 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         {postSaveStudent && !inviteModal && (
           <StudentFormPostSave
             student={postSaveStudent}
-            isPiano={isPiano}
+            showTimetablePlacement={showTimetablePlacement}
+            hint={rosterPostSaveHint(industry, serviceLabel)}
             onOpenDetail={() => {
               onSaved(postSaveStudent);
               onClose();
@@ -551,7 +561,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
               rows={3}
               value={formData.specialNotes}
               onChange={(e) => updateFormData({ specialNotes: e.target.value, memo: '' })}
-              placeholder="예: 땅콩 알레르기, 왼손 주의, 학부모 전달사항…"
+              placeholder={rosterNotesPlaceholder(contactLabel)}
               className="w-full px-3 py-2.5 text-sm bg-amber-50/60 border border-amber-100 rounded-xl resize-none focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[88px]"
             />
           </section>
