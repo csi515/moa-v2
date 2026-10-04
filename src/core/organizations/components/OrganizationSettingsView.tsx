@@ -29,6 +29,7 @@ import {
   type OrganizationAddressValue,
 } from '@/core/address';
 import type { AcademySettings } from '../settingsTypes';
+import { getDangerZoneSessionLabel } from '@/core/industry/industryUi';
 
 export interface OrganizationBasicProfile {
   name: string;
@@ -281,7 +282,6 @@ export interface OrganizationDangerZoneCardProps {
   contactLabel?: string;
   feeLabel?: string;
   staffLabel?: string;
-  isSkin?: boolean;
 }
 
 /**
@@ -292,10 +292,10 @@ export const OrganizationDangerZoneCard: FC<OrganizationDangerZoneCardProps> = (
   contactLabel = '보호자',
   feeLabel = '이용료',
   staffLabel = '직원',
-  isSkin = false,
 }) => {
   const { showToast } = useApp();
-  const { isOwner } = usePermissions();
+  const { isOwner, industry } = usePermissions();
+  const sessionLabel = getDangerZoneSessionLabel(industry);
   const org = useOrganization();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmName, setDeleteConfirmName] = useState('');
@@ -389,9 +389,9 @@ export const OrganizationDangerZoneCard: FC<OrganizationDangerZoneCardProps> = (
                 </p>
                 <ul className="text-xs text-slate-600 space-y-1 pl-4 list-disc">
                   <li>모든 {customerLabel} 및 {contactLabel} 정보</li>
-                  <li>출석 및 {isSkin ? '시술' : '수업'} 기록</li>
+                  <li>출석 및 {sessionLabel} 기록</li>
                   <li>{feeLabel} 및 결제 내역</li>
-                  <li>{staffLabel} 및 {isSkin ? '시술' : '수업'} 정보</li>
+                  <li>{staffLabel} 및 {sessionLabel} 정보</li>
                   <li>공지사항 및 기타 데이터</li>
                 </ul>
               </div>
