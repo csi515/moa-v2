@@ -11,7 +11,7 @@ import { formatGuardianLinkCode } from '@/core/platform/deepLinkParser';
 import { buildParentInviteUrl } from '@/core/parent/services/parentInviteService';
 import { GuardianLinkQrDisplay } from '@/modules/parent/components/GuardianLinkQrDisplay';
 import { useModuleLabels } from '@/core/labels';
-import { isSkinClinicIndustry } from '@/core/industry/industryUi';
+import { guardianLinkContactLabel } from '@/modules/parent/guardianLinkContactLabel';
 import { usePermissions } from '@/core/auth/usePermissions';
 
 interface GuardianLinkInviteModalProps {
@@ -30,7 +30,7 @@ export const GuardianLinkInviteModal: React.FC<GuardianLinkInviteModalProps> = (
   const { currentOrganization } = useOrganization();
   const { industry } = usePermissions();
   const labels = useModuleLabels();
-  const contactLabel = isSkinClinicIndustry(industry) ? labels.contact.singular : '학부모';
+  const contactLabel = guardianLinkContactLabel(industry, labels.contact.singular);
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
@@ -123,7 +123,7 @@ export const GuardianLinkInviteModal: React.FC<GuardianLinkInviteModalProps> = (
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-bold flex items-center gap-2">
             <Link2 className="w-4 h-4 text-indigo-600" />
-            학부모에게 MOA 연결 안내
+            {contactLabel}에게 MOA 연결 안내
           </h3>
           <button type="button" onClick={handleClose} aria-label="닫기">
             <X className="w-5 h-5 text-slate-400" />
@@ -153,7 +153,7 @@ export const GuardianLinkInviteModal: React.FC<GuardianLinkInviteModalProps> = (
                 {activeTokens.map((t) => (
                   <li key={t.id} className="flex items-center justify-between gap-2 text-[11px] text-slate-600">
                     <span className="min-w-0">
-                      {t.metadata?.parent_customer_id ? '학부모 초대' : 'QR·코드'} ·{' '}
+                      {t.metadata?.parent_customer_id ? `${contactLabel} 초대` : 'QR·코드'} ·{' '}
                       {new Date(t.createdAt).toLocaleDateString('ko-KR')} 발급
                       {t.expiresAt ? ` · ${new Date(t.expiresAt).toLocaleDateString('ko-KR')}까지` : ''}
                     </span>
@@ -206,7 +206,7 @@ export const GuardianLinkInviteModal: React.FC<GuardianLinkInviteModalProps> = (
                 ? '생성 중...'
                 : genericActiveCount > 0
                   ? '새 코드 재발급 (이전 코드 폐기)'
-                  : '학부모 연결 QR 만들기'}
+                  : `${contactLabel} 연결 QR 만들기`}
             </button>
           </div>
         ) : (
