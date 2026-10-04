@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { StorageService } from '@/services/storage';
 import { ACADEMY_EVENT_TYPE_LABEL, PERFORMANCE_VIDEO_TYPE_LABEL } from '@/industries/piano/config/eventLabels';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
+import { parentEventsSectionTitle } from './parentEventsSectionTitle';
 import type { Student } from '@/types';
 import { Section } from './shared';
 
@@ -33,8 +34,7 @@ export function ParentEventsView({
       ? StorageService.getPerformanceVideosByStudentId(student.id).slice(0, 12)
       : [];
 
-  const sectionTitle =
-    industry === 'gym' ? '체육관 일정' : industry === 'daycare' ? '원 일정' : '학원 일정·행사';
+  const sectionTitle = parentEventsSectionTitle(industry);
 
   return (
     <div className="space-y-4">
