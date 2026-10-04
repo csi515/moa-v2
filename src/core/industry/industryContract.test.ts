@@ -436,17 +436,17 @@ function run(): void {
 
   const retailRec = pluginMap.get('retail');
   assert.ok(retailRec);
-  assert.equal(retailRec.placeLabel, '학원');
+  assert.equal(retailRec.placeLabel, '매장');
   assert.equal(retailRec.ownerLabel, '대표');
-  assert.equal(retailRec.placeNamePlaceholder, '예: 행복 학원');
-  assert.equal(retailRec.customerLabel, '원생');
+  assert.equal(retailRec.placeNamePlaceholder, '예: 행복 매장');
+  assert.equal(retailRec.customerLabel, '고객');
 
   const bathRec = pluginMap.get('sauna_jjimjilbang');
   assert.ok(bathRec);
-  assert.equal(bathRec.placeLabel, '학원');
+  assert.equal(bathRec.placeLabel, '사업장');
   assert.equal(bathRec.ownerLabel, '대표');
-  assert.equal(bathRec.placeNamePlaceholder, '예: 행복 학원');
-  assert.equal(bathRec.customerLabel, '원생');
+  assert.equal(bathRec.placeNamePlaceholder, '예: 행복 사업장');
+  assert.equal(bathRec.customerLabel, '고객');
 
   // fallback checks with null/undefined
   assert.equal(getPlaceLabel(null), '사업장');
