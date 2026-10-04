@@ -40,8 +40,8 @@ export function isDaycareIndustry(industry: IndustryType | string | null | undef
 
 /** 회원이 보는 장소 명칭. 피아노 전용 메뉴는 호출하지 않는다. */
 export function getPlaceLabel(industry: IndustryType | string | null | undefined): string {
-  if (!industry) return '학원';
-  return getIndustryPlugin(industry).placeLabel ?? '학원';
+  if (!industry) return '사업장';
+  return getIndustryPlugin(industry).placeLabel ?? '사업장';
 }
 
 /** 사업주(owner) 호칭. 교육·돌봄은 원장, 그 외는 대표. */
@@ -52,14 +52,14 @@ export function getOwnerLabel(industry: IndustryType | string | null | undefined
 
 /** 사업장 이름 입력 예시 (생성·가입 폼용) */
 export function getPlaceNamePlaceholder(industry: IndustryType | string | null | undefined): string {
-  if (!industry) return '예: 행복 학원';
-  return getIndustryPlugin(industry).placeNamePlaceholder ?? '예: 행복 학원';
+  if (!industry) return '예: 행복 사업장';
+  return getIndustryPlugin(industry).placeNamePlaceholder ?? '예: 행복 사업장';
 }
 
 /** 보호자 화면용 고객 명칭. 앱 안에서는 useModuleLabels를 우선한다. */
 export function getCustomerLabel(industry: IndustryType | string | null | undefined): string {
-  if (!industry) return '원생';
-  return getIndustryPlugin(industry).customerLabel ?? '원생';
+  if (!industry) return '고객';
+  return getIndustryPlugin(industry).customerLabel ?? '고객';
 }
 
 /** 클래스(반) 기반 수업 — 플러그인 매니페스트 기준 */
@@ -82,14 +82,14 @@ export function getIndustryAccent(industry: IndustryType | string | null | undef
 
 /** 비용 명칭 (수강료·이용료·보육료 등) */
 export function getFeeLabel(industry: IndustryType | string | null | undefined): string {
-  if (!industry) return '수강료';
-  return getIndustryPlugin(industry).feeLabel ?? '수강료';
+  if (!industry) return '이용료';
+  return getIndustryPlugin(industry).feeLabel ?? '이용료';
 }
 
 /** 수납 계좌 입력 placeholder */
 export function getBankAccountPlaceholder(industry: IndustryType | string | null | undefined): string {
-  if (!industry) return '예: 국민은행 123456-04-123456 (예금주: 선율음악학원)';
-  return getIndustryPlugin(industry).bankAccountPlaceholder ?? '예: 국민은행 123456-04-123456 (예금주: 선율음악학원)';
+  if (!industry) return '예: 국민은행 000000-00-000000 (예금주: 홍길동)';
+  return getIndustryPlugin(industry).bankAccountPlaceholder ?? '예: 국민은행 000000-00-000000 (예금주: 홍길동)';
 }
 
 /** 예약금 UI 표시 여부 */
@@ -107,11 +107,11 @@ export function showsTextbooksLink(industry: IndustryType | string | null | unde
 /** 실(강의실·관리실 등) UI 설정 */
 export function getRoomConfig(industry: IndustryType | string | null | undefined) {
   return getIndustryPlugin(industry).roomConfig ?? {
-    sectionTitle: '강의실 · 연습실',
-    sectionDescription: '반 개설·보강 예약 시 선택할 공간입니다. 학원에서 쓰는 실 이름을 등록해 주세요.',
-    defaultPrefix: '강의실',
+    sectionTitle: '공간',
+    sectionDescription: '사업장에서 쓰는 공간 이름을 등록해 주세요.',
+    defaultPrefix: '공간',
     defaultKind: 'classroom' as const,
-    placeholder: '예: 피아노 1실',
+    placeholder: '예: 1실',
     allowedKinds: ['classroom', 'practice'] as const,
   };
 }

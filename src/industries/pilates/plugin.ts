@@ -29,7 +29,7 @@ export const pilatesPluginManifest: IndustryPluginManifest = {
   customerLabel: '회원',
   isAppointment: true,
   feeLabel: '수강료',
-  bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 선율음악학원)',
+  bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 스튜디오)',
   supportsDeposit: true,
   showsTextbooksLink: false,
   roomConfig: {
