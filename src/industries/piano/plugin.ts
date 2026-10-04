@@ -7,6 +7,7 @@ import { syncDayAttendanceFromPinCheckIn } from './services/pinDayAttendanceSync
 import { registerPianoStudentDetailExtension } from './studentDetailExtension';
 import { PIANO_STUDENT_LEVELS } from './types/studentLevel';
 import { pianoExpenseCategories } from './expenseCategories';
+import { pianoPayrollExpenseCategory } from './payrollExpenseCategory';
 
 /** 피아노 PIN 체크인 → 당일 등원(DAY_ATTENDANCE) 동기화 (Core 키오스크는 Module을 import하지 않음) */
 registerPinCheckInSideEffect(syncDayAttendanceFromPinCheckIn);
@@ -109,4 +110,5 @@ export const pianoPluginManifest: IndustryPluginManifest = {
     'reports',
   ]),
   getExpenseCategories: pianoExpenseCategories,
+  getPayrollExpenseCategory: pianoPayrollExpenseCategory,
 };
