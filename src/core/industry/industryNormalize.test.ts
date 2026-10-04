@@ -16,13 +16,27 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveIndustryAppKind } from './industryAppResolve';
+import { INDUSTRY_DEFINITIONS } from './catalog';
+import { buildGenericPluginManifest } from './genericPlugin';
+import { installIndustryPlugin } from './pluginHost';
 import { resolveHydrateModules } from '../../services/adapters/hydrateModules';
 import {
   getParentPortalNav,
   getParentPortalSecondaryTabs,
 } from '../../modules/parent/parentPortalNav';
 
+function declaredSyncCapabilities(pluginRel: string): string[] {
+  const src = readFileSync(join(dirname(fileURLToPath(import.meta.url)), pluginRel), 'utf8');
+  const block = src.match(/syncCapabilities:\s*\[([^\]]*)\]/)?.[1] ?? '';
+  return [...block.matchAll(/'([^']+)'/g)].map((match) => match[1]);
+}
+
 function run() {
+  installIndustryPlugin({
+    ...buildGenericPluginManifest(INDUSTRY_DEFINITIONS.piano),
+    syncCapabilities: declaredSyncCapabilities('../../industries/piano/plugin.ts'),
+  });
+
   assert.equal(DEFAULT_CREATE_INDUSTRY_TYPE, 'piano');
 
   assert.equal(parseIndustryType('piano'), 'piano');
