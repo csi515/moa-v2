@@ -20,7 +20,7 @@ import {
   getStudentStatusBadge,
 } from '@/utils/formatters';
 import type { AttendanceStatus, ClassItem, DayOfWeek } from '@/types';
-import { isSkinClinicIndustry } from '@/core/industry/industryUi';
+import { getStudentExitActionLabel } from './studentExitActionLabel';
 import { useModuleLabels } from '@/core/labels';
 import { DetailTab, getDetailTabConfig } from './detail/types';
 import {
@@ -199,10 +199,12 @@ export function useStudentDetailModal({
 
   const totalPracticeMinutes = allPractice.reduce((sum, p) => sum + p.minutes, 0);
 
+  const exitActionLabel = getStudentExitActionLabel(industry);
+
   /** 소프트 종료·퇴원 — 하드 삭제하지 않고 이력 유지, 기본 목록에서 숨김 */
   const handleWithdraw = () => {
     const who = labels.customer.singular;
-    const ended = isSkinClinicIndustry(industry) ? '종료' : '퇴원';
+    const ended = exitActionLabel;
     if (student.status === 'withdrawn') {
       openConfirmDialog({
         title: '재원으로 복귀',
@@ -545,6 +547,7 @@ export function useStudentDetailModal({
     isSupabaseConfigured: isSupabaseConfigured(),
     onEdit,
     handleWithdraw,
+    exitActionLabel,
     openQuickAttendance,
     openQuickConsultation,
     openQuickTuition,

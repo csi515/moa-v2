@@ -148,9 +148,7 @@ const StudentDetailModalContent: React.FC<
                 title={
                   student.status === 'withdrawn'
                     ? '재원 복귀'
-                    : modal.industryPlugin.id === 'skin_clinic'
-                      ? '종료 처리'
-                      : '퇴원 처리'
+                    : `${modal.exitActionLabel} 처리`
                 }
               >
                 {student.status === 'withdrawn' ? (
