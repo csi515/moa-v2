@@ -1,5 +1,5 @@
 import { dataProvider as refineSupabaseDataProvider } from "@refinedev/supabase";
-import type { DataProvider } from "@refinedev/core";
+import type { CrudFilter, DataProvider } from "@refinedev/core";
 import { supabase } from "@/lib/supabase/client";
 import * as orgService from "@/core/organizations/services/organizationService";
 import { StorageService } from "@/services/storage";
@@ -15,6 +15,30 @@ export class SupabaseClientNotConfiguredError extends Error {
     );
     this.name = "SupabaseClientNotConfiguredError";
   }
+}
+
+/**
+ * Thrown when a tenant-scoped DataProvider call has no resolved active organization.
+ * Fail closed: do not query or write without an organization filter.
+ */
+export class ActiveOrganizationRequiredError extends Error {
+  constructor() {
+    super("Active organization is required for tenant-scoped data access.");
+    this.name = "ActiveOrganizationRequiredError";
+  }
+}
+
+/**
+ * Refine resources this provider actually serves that have organization_id.
+ * - customers: useTable / useForm / useShow (core.customers.organization_id)
+ * - schedules: Refine resource, core.schedules.organization_id
+ * - tuition_invoices: Refine resource for invoice rows (core.payments.organization_id)
+ * dashboard is navigation-only and is not included.
+ */
+export const TENANT_SCOPED_RESOURCES = ["customers", "schedules", "tuition_invoices"] as const;
+
+export function isTenantScopedResource(resource: string): boolean {
+  return (TENANT_SCOPED_RESOURCES as readonly string[]).includes(resource);
 }
 
 /**
@@ -41,80 +65,119 @@ function resolveActiveOrgId(): string | null {
   return orgService.getStoredOrganizationId() || StorageService.getOrganizationId() || null;
 }
 
-export function createMoaDataProvider(): DataProvider {
-  if (!supabase) {
-    return createUnconfiguredDataProvider();
+function stripOrganizationIdFilters(filters: CrudFilter[]): CrudFilter[] {
+  const result: CrudFilter[] = [];
+  for (const filter of filters) {
+    if ("field" in filter && filter.field === "organization_id") {
+      continue;
+    }
+    if ((filter.operator === "or" || filter.operator === "and") && Array.isArray(filter.value)) {
+      const nested = stripOrganizationIdFilters(filter.value);
+      if (nested.length === 0) continue;
+      result.push({ ...filter, value: nested });
+      continue;
+    }
+    result.push(filter);
   }
+  return result;
+}
 
-  const baseProvider = refineSupabaseDataProvider(supabase);
+function withoutOrganizationId<T>(variables: T): T {
+  const safe = { ...(variables as Record<string, unknown>) };
+  delete safe.organization_id;
+  return safe as T;
+}
+
+/**
+ * Wraps an inner DataProvider so tenant-scoped resources cannot be read or written
+ * outside the resolved active organization. The inner provider is injectable for tests.
+ */
+export function guardTenantDataProvider(
+  baseProvider: DataProvider,
+  resolveOrgId: () => string | null = resolveActiveOrgId
+): DataProvider {
+  const requireActiveOrgId = (): string => {
+    const activeOrgId = resolveOrgId();
+    if (!activeOrgId) {
+      throw new ActiveOrganizationRequiredError();
+    }
+    return activeOrgId;
+  };
 
   return {
     ...baseProvider,
 
     getList: async (params) => {
-      const { resource, filters = [] } = params;
-      const activeOrgId = resolveActiveOrgId();
-
-      // customers 리소스에 대한 테넌트 필터 보장
-      if (resource === "customers" && activeOrgId) {
-        const hasOrgFilter = filters.some(
-          (f) => "field" in f && f.field === "organization_id"
-        );
-        if (!hasOrgFilter) {
-          params = {
-            ...params,
-            filters: [
-              ...filters,
-              {
-                field: "organization_id",
-                operator: "eq",
-                value: activeOrgId,
-              },
-            ],
-          };
-        }
+      if (!isTenantScopedResource(params.resource)) {
+        return baseProvider.getList(params);
       }
 
-      return baseProvider.getList(params);
+      const activeOrgId = requireActiveOrgId();
+      return baseProvider.getList({
+        ...params,
+        filters: [
+          ...stripOrganizationIdFilters(params.filters ?? []),
+          {
+            field: "organization_id",
+            operator: "eq",
+            value: activeOrgId,
+          },
+        ],
+      });
     },
 
     create: async (params) => {
-      let { resource, variables } = params;
-      const activeOrgId = resolveActiveOrgId();
-
-      // customers 신규 등록 시 현재 활성 사업장 ID 자동 주입
-      if (resource === "customers") {
-        const record = variables as Record<string, any>;
-        if (!record.organization_id && activeOrgId) {
-          variables = {
-            ...record,
-            organization_id: activeOrgId,
-          } as typeof variables;
-        }
+      if (!isTenantScopedResource(params.resource)) {
+        return baseProvider.create(params);
       }
+
+      const activeOrgId = requireActiveOrgId();
+      const variables = {
+        ...(params.variables as Record<string, unknown>),
+        organization_id: activeOrgId,
+      };
 
       return baseProvider.create({
         ...params,
-        variables,
+        variables: variables as typeof params.variables,
       });
     },
 
     update: async (params) => {
-      const { resource, variables } = params;
-      let safeVariables = { ...(variables as Record<string, any>) };
-
-      // organization_id 변조 방지 (호출자가 조직을 임의로 이동시키는 것 방지)
-      if (resource === "customers" && "organization_id" in safeVariables) {
-        delete safeVariables.organization_id;
+      if (!isTenantScopedResource(params.resource)) {
+        return baseProvider.update(params);
       }
 
+      requireActiveOrgId();
       return baseProvider.update({
         ...params,
-        variables: safeVariables as typeof variables,
+        variables: withoutOrganizationId(params.variables),
+      });
+    },
+
+    updateMany: async (params) => {
+      if (!baseProvider.updateMany) {
+        throw new Error("updateMany is not implemented");
+      }
+      if (!isTenantScopedResource(params.resource)) {
+        return baseProvider.updateMany(params);
+      }
+
+      requireActiveOrgId();
+      return baseProvider.updateMany({
+        ...params,
+        variables: withoutOrganizationId(params.variables),
       });
     },
   };
 }
 
-export const dataProvider: DataProvider = createMoaDataProvider();
+export function createMoaDataProvider(): DataProvider {
+  if (!supabase) {
+    return createUnconfiguredDataProvider();
+  }
 
+  return guardTenantDataProvider(refineSupabaseDataProvider(supabase));
+}
+
+export const dataProvider: DataProvider = createMoaDataProvider();
