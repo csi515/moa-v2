@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Loader2, RefreshCw } from 'lucide-react';
 import { StorageService } from '@/services/storage';
 import { getAttendanceBadge } from '@/utils/formatters';
 import {
   formatSessionTime,
   getSessionStatusLabel,
-} from '@/core/attendance/services/attendanceService';
+} from '@/capabilities/attendance/services/attendanceService';
 import { useParentAttendanceSessions } from '@/core/parent/hooks/useParentAttendanceSessions';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
 import { showsMakeupList } from '@/core/industry/industryUi';
-import { attendanceRecordTitle } from '@/core/attendance/attendanceIndustryCopy';
+import { attendanceRecordTitle } from '@/capabilities/attendance/attendanceIndustryCopy';
 import type { MakeupStatus } from '@/types';
 
 const MAKEUP_STATUS_LABEL: Record<MakeupStatus, string> = {

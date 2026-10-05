@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { StorageService } from '@/services/storage';
 import { useStorageRefresh } from '@/hooks';
-import { TuitionService } from '@/core/finance';
+import { TuitionService } from '@/capabilities/finance';
 import { formatCurrency } from '@/utils/formatters';
 import {
   formatSessionTime,
   getSessionStatusLabel,
-} from '@/core/attendance/services/attendanceService';
+} from '@/capabilities/attendance/services/attendanceService';
 import { useParentAttendanceSessions } from '@/core/parent/hooks/useParentAttendanceSessions';
 import { ParentNoticePreview } from './parentHomeShared';
 import { CARE_JOURNAL_MOOD_LABEL, MEDICATION_STATUS_LABEL, PICKUP_OUTSIDE_LABEL } from '@/industries/daycare/care';

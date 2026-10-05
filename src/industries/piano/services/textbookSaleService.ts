@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   PaymentMethod,
   Student,
   Textbook,
@@ -12,8 +12,8 @@ import {
   deleteLinkedIncome,
   deleteLinkedIncomesForPaymentIds,
   upsertLinkedIncome,
-} from '@/core/finance/billingIncomeLink';
-import type { LinkedTextbookPaymentOptions } from '@/core/finance/linkedTextbookSettle';
+} from '@/capabilities/finance/billingIncomeLink';
+import type { LinkedTextbookPaymentOptions } from '@/capabilities/finance/linkedTextbookSettle';
 import { textbookCoreStock } from '@/industries/piano/services/textbookCoreStock';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import {

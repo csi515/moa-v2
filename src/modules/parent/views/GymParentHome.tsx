@@ -1,10 +1,10 @@
-import { StorageService } from '@/services/storage';
-import { TuitionService } from '@/core/finance';
+﻿import { StorageService } from '@/services/storage';
+import { TuitionService } from '@/capabilities/finance';
 import { formatCurrency } from '@/utils/formatters';
 import {
   formatSessionTime,
   getSessionStatusLabel,
-} from '@/core/attendance/services/attendanceService';
+} from '@/capabilities/attendance/services/attendanceService';
 import { useParentAttendanceSessions } from '@/core/parent/hooks/useParentAttendanceSessions';
 import { useStorageRefresh } from '@/hooks';
 import type { ParentPortalTab } from '@/types/education';

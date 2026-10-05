@@ -1,6 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import { Student } from '@/types';
-import { CustomerPinPanel } from '@/core/attendance';
+import { CustomerPinPanel } from '@/capabilities/attendance';
 import { formatGuardianRelationship } from '@/core/parent';
 import type { GuardianInfo } from '@/core/parent/types';
 import { ScheduleService } from '@/core/services/scheduleService';

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 교재비 수납 원자 클라이언트.
  * 온라인: core.record_textbook_payment
  * 로컬 스냅샷 updatedSale 로 DB를 덮지 않는다.
@@ -9,12 +9,12 @@ import { getOrganizationId } from '@/services/adapters';
 import { pianoRowToPayment } from '@/services/adapters/sync/piano/textbookPaymentMappers';
 import { pianoRowToSale } from '@/services/adapters/sync/piano/textbookSalesMappers';
 import type { PaymentMethod, TextbookPayment, TextbookSale } from '@/types';
-import { upsertLinkedIncome } from '@/core/finance/billingIncomeLink';
-import { createAdapterFinanceMirrorPort } from '@/core/finance/financePaymentMirrorAdapter';
+import { upsertLinkedIncome } from '@/capabilities/finance/billingIncomeLink';
+import { createAdapterFinanceMirrorPort } from '@/capabilities/finance/financePaymentMirrorAdapter';
 import {
   projectIfRemoteApplied,
   textbookPaymentMirrorJobs,
-} from '@/core/finance/financePaymentMirror';
+} from '@/capabilities/finance/financePaymentMirror';
 import { requireTextbookOrgId } from './textbookSaleDb';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 

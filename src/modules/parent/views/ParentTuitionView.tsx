@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import { StorageService } from '@/services/storage';
 import {
   lastTuitionPaymentSummaryText,
   TuitionService,
-} from '@/core/finance';
+} from '@/capabilities/finance';
 import { ScheduleService } from '@/core/services/scheduleService';
 import { getPassRemaining } from '@/core/schedules/sessionPassUtils';
 import {
@@ -14,13 +14,13 @@ import {
 import {
   formatBankAccountText,
   isInvoiceVisibleToParent,
-} from '@/core/finance/paymentMethodLabels';
+} from '@/capabilities/finance/paymentMethodLabels';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
 import { getPlaceLabel, showsTextbooksLink } from '@/core/industry/industryUi';
 import type { Student, TuitionInvoice } from '@/types';
 import { Copy, X } from 'lucide-react';
 import { Section } from './shared';
-import { buildYearMonthOptions } from '@/core/finance/categories';
+import { buildYearMonthOptions } from '@/capabilities/finance/categories';
 
 function statusLabel(status: 'paid' | 'partial' | 'unpaid'): string {
   if (status === 'paid') return '완납';

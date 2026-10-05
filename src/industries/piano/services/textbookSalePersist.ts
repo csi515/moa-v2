@@ -1,5 +1,5 @@
-import type { PaymentMethod, TextbookPayment, TextbookSale } from '@/types';
-import type { IncomeEntry } from '@/core/finance/types';
+﻿import type { PaymentMethod, TextbookPayment, TextbookSale } from '@/types';
+import type { IncomeEntry } from '@/capabilities/finance/types';
 
 function buildReceiptNumber(): string {
   const now = new Date();

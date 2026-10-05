@@ -1,5 +1,5 @@
-import type { ClassItem, DayOfWeek } from '@/types';
-import { DAY_ATTENDANCE_CLASS_ID } from '@/core/attendance/dayAttendance';
+﻿import type { ClassItem, DayOfWeek } from '@/types';
+import { DAY_ATTENDANCE_CLASS_ID } from '@/capabilities/attendance/dayAttendance';
 
 const WEEKDAY_KO: DayOfWeek[] = ['일', '월', '화', '수', '목', '금', '토'];
 

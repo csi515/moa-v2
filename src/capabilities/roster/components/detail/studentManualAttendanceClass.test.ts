@@ -1,10 +1,10 @@
-/**
+﻿/**
  * 학생 상세 수동 출결 — 반 선택 로직
  * 실행: npx tsx src/core/academy/components/students/detail/studentManualAttendanceClass.test.ts
  */
 import assert from 'node:assert/strict';
 import type { ClassItem } from '@/types';
-import { DAY_ATTENDANCE_CLASS_ID } from '@/core/attendance/dayAttendance';
+import { DAY_ATTENDANCE_CLASS_ID } from '@/capabilities/attendance/dayAttendance';
 import {
   getEnrolledClassesOnDate,
   nextManualAttendanceClassId,

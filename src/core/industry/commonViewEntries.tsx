@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
+﻿import type { ReactNode } from 'react';
 import { MyAccountView } from '@/core/account';
-import { AttendanceManagementView } from '@/core/attendance';
-import { FinanceHubView } from '@/core/finance';
+import { AttendanceManagementView } from '@/capabilities/attendance';
+import { FinanceHubView } from '@/capabilities/finance';
 
 /** 동일 허브 화면을 여러 딥링크 탭에 연결 */
 export function hubViewAliases(

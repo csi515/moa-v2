@@ -1,5 +1,5 @@
-import { getCoreClient } from '@/lib/supabase';
-import type { AttendanceSession } from '@/core/attendance/types';
+﻿import { getCoreClient } from '@/lib/supabase';
+import type { AttendanceSession } from '@/capabilities/attendance/types';
 import { coreRowToSession } from '@/services/adapters/sync/attendanceEntityMappers';
 
 /** 학부모 포털: Supabase RLS로 자녀 출결 세션 조회 */

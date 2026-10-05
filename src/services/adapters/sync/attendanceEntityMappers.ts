@@ -1,5 +1,5 @@
-import type { Json } from '@/lib/supabase/database.types';
-import type { AttendanceSession, CheckInMethod } from '@/core/attendance/types';
+﻿import type { Json } from '@/lib/supabase/database.types';
+import type { AttendanceSession, CheckInMethod } from '@/capabilities/attendance/types';
 
 type DbCheckInMethod = 'pin' | 'qr' | 'nfc' | 'kiosk' | 'manual';
 

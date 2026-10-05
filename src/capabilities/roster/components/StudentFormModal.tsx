@@ -1,8 +1,8 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react';
+﻿import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useOptionalOrganization } from '@/core/organizations/OrganizationProvider';
-import { isAttendanceModuleEnabled } from '@/core/attendance/features';
+import { isAttendanceModuleEnabled } from '@/capabilities/attendance/features';
 import { renderParentInviteResult } from '@/core/staff/staffUi';
 import type { StudentRegistrationInviteResult } from '@/core/students/services/studentRegistrationService';
 import {

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 결석 알림 정책 — 전이·당일·이벤트 키.
  * 실행: npm run test:absence-notify
  */
@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { DAY_ATTENDANCE_CLASS_ID } from '@/core/attendance/dayAttendance';
+import { DAY_ATTENDANCE_CLASS_ID } from '@/capabilities/attendance/dayAttendance';
 import { absenceEventKey, shouldNotifyParentAbsence } from './absenceNotifyPolicy';
 
 function run() {

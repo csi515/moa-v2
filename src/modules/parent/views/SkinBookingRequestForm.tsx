@@ -1,11 +1,11 @@
-import { useState, type FormEvent } from 'react';
+﻿import { useState, type FormEvent } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useApp } from '@/context/AppContext';
 import { ScheduleService } from '@/core/services/scheduleService';
 import { StorageService } from '@/services/storage';
 import { getSlotCapacityInfo } from '@/capabilities/scheduling/capacity';
 import { isOutsideStaffHours } from '@/capabilities/scheduling/availability/windows';
-import { formatBankAccountText } from '@/core/finance/paymentMethodLabels';
+import { formatBankAccountText } from '@/capabilities/finance/paymentMethodLabels';
 import { findStaffTimeConflict } from '@/industries/skin/bookingRooms';
 import type { Student } from '@/types';
 

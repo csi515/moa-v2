@@ -1,1 +1,1 @@
-export { ExpenseManagementView } from '@/core/finance';
+﻿export { ExpenseManagementView } from '@/capabilities/finance';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { KeyRound, ChevronRight } from 'lucide-react';
 import {
   ACTIVE_ENROLLMENT_STATUSES,
@@ -6,7 +6,7 @@ import {
   type GlobalStudent,
   type StudentEnrollment,
 } from '@/core/parent/types/globalParent';
-import { PIN_ATTENDANCE_PARENT_COPY } from '@/core/attendance/attendanceNotifyCopy';
+import { PIN_ATTENDANCE_PARENT_COPY } from '@/capabilities/attendance/attendanceNotifyCopy';
 import { ParentEnrollmentPinEditor } from './ParentEnrollmentPinEditor';
 
 interface ParentChildPinSectionProps {

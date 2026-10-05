@@ -1,13 +1,13 @@
-import React from 'react';
+﻿import React from 'react';
 import { TuitionInvoice, StudentMonthlyBillingSummary, TextbookSale, PaymentMethod } from '@/types';
 import { formatCurrency, getInvoiceStatusBadge } from '@/utils/formatters';
-import { ONSITE_PAYMENT_METHOD_OPTIONS } from '@/core/finance/paymentMethodLabels';
-import { resolveInvoiceBaseFee } from '@/core/finance/invoiceModel';
+import { ONSITE_PAYMENT_METHOD_OPTIONS } from '@/capabilities/finance/paymentMethodLabels';
+import { resolveInvoiceBaseFee } from '@/capabilities/finance/invoiceModel';
 import {
   getLatestTuitionPaymentForInvoice,
   lastTuitionPaymentSummaryText,
-} from '@/core/finance/latestTuitionPayment';
-import { TuitionService } from '@/core/finance';
+} from '@/capabilities/finance/latestTuitionPayment';
+import { TuitionService } from '@/capabilities/finance';
 import { BookOpen, Plus } from 'lucide-react';
 
 interface StudentDetailTuitionTabProps {

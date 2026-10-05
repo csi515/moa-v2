@@ -118,6 +118,17 @@ export interface IndustryAccent {
  * AppContent/Labels는 src/app/industry/industryModules.tsx에서 등록하고,
  * 탭·테마·출결 기본값 등은 이 매니페스트로 통일한다.
  */
+// === Modular Industry Manifests ===
+// Core shared fields (if any) are defined in genericManifest.ts
+export * from './manifests/genericManifest';
+export * from './manifests/attendanceManifest';
+export * from './manifests/financeManifest';
+export * from './manifests/bookingManifest';
+export * from './manifests/parentManifest';
+
+// Maintain backward compatibility by re‑exporting the original name
+export type IndustryPlugin = IndustryPluginManifest;
+
 export interface IndustryPluginManifest {
   id: IndustryType;
   option: IndustryOption;
@@ -286,7 +297,6 @@ export interface IndustryRoomConfig {
   allowedKinds: readonly IndustryRoomKind[];
 }
 
-export type IndustryPlugin = IndustryPluginManifest;
 
 const OWNER_FINANCE_TABS: NavTab[] = ['finance', 'income', 'expenses', 'payroll'];
 

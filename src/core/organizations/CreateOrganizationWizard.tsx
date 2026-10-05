@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+﻿import React, { useRef, useState } from 'react';
 import { useOrganization } from './OrganizationProvider';
 import {
   Building2,
@@ -17,8 +17,8 @@ import {
   isAppointmentIndustry,
 } from '../industry/industryUi';
 import { StorageService } from '@/services/storage';
-import { withAttendanceModuleEnabled } from '@/core/attendance/features';
-import { PIN_ATTENDANCE_DIRECTOR_COPY } from '@/core/attendance/attendanceNotifyCopy';
+import { withAttendanceModuleEnabled } from '@/capabilities/attendance/features';
+import { PIN_ATTENDANCE_DIRECTOR_COPY } from '@/capabilities/attendance/attendanceNotifyCopy';
 import { userFacingErrorMessage } from '@/shared/errors/userFacingError';
 import {
   OrganizationLocationSetupError,

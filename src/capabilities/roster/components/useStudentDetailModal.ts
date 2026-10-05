@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { StorageService } from '@/services/storage';
 import { StudentService } from '@/core/students';
-import { TuitionService } from '@/core/finance';
+import { TuitionService } from '@/capabilities/finance';
 import { LessonService } from '@/core/lessons';
 import type { PerformanceVideo, Student, TextbookSale, TuitionInvoice, PaymentMethod } from '@/types';
 import { isValidYouTubeUrl } from '@/utils/youtube';

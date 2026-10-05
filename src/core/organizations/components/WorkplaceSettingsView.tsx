@@ -1,4 +1,4 @@
-import { useEffect, useState, type FC, type FormEvent } from 'react';
+﻿import { useEffect, useState, type FC, type FormEvent } from 'react';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
@@ -15,7 +15,7 @@ import {
   isAttendanceModuleEnabled,
   PIN_ATTENDANCE_DIRECTOR_COPY,
   withAttendanceModuleEnabled,
-} from '@/core/attendance';
+} from '@/capabilities/attendance';
 import { IndustryFeatureGuidePanel } from '@/core/help';
 import { LegalLinks } from '@/core/legal';
 import {

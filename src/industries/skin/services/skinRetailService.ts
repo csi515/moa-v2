@@ -1,10 +1,10 @@
-import { productService } from '@/capabilities/commerce';
+﻿import { productService } from '@/capabilities/commerce';
 import { inventoryService } from '@/capabilities/commerce';
 import { saleService, saleReturnService } from '@/capabilities/commerce';
 import type { SalePaymentMethod, SaleReturnWithItems } from '@/capabilities/commerce';
 import { customerLinkService } from '@/core/customer/services/customerLinkService';
 import type { CustomerSearchResult } from '@/core/customer/services/customerLinkService';
-import { recordRetailSaleReturnIncomeReversal } from '@/core/finance/billingIncomeLink';
+import { recordRetailSaleReturnIncomeReversal } from '@/capabilities/finance/billingIncomeLink';
 import { StorageService } from '@/services/storage';
 import type { PaymentMethod } from '@/types';
 import { migrateSkinRetailCatalogIfNeeded } from './skinRetailCatalogMigrate';

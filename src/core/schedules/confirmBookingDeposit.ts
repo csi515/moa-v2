@@ -1,9 +1,9 @@
-import type { Booking } from '@/core/types/schedule';
-import type { IncomeEntry } from '@/core/finance/types';
+﻿import type { Booking } from '@/core/types/schedule';
+import type { IncomeEntry } from '@/capabilities/finance/types';
 import {
   findIncomeByPaymentSource,
   upsertLinkedIncome,
-} from '@/core/finance/billingIncomeLink';
+} from '@/capabilities/finance/billingIncomeLink';
 import { ScheduleService } from '@/core/services/scheduleService';
 import { StorageService } from '@/services/storage';
 

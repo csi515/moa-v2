@@ -1,5 +1,5 @@
-import { StorageService } from '@/services/storage';
-import { TuitionService } from '@/core/finance';
+﻿import { StorageService } from '@/services/storage';
+import { TuitionService } from '@/capabilities/finance';
 import { formatCurrency } from '@/utils/formatters';
 import { ScheduleService } from '@/core/services/scheduleService';
 import type { ParentPortalTab } from '@/types/education';

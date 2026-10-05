@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState, type FC, type MouseEvent } from 'react';
+﻿import { useEffect, useMemo, useState, type FC, type MouseEvent } from 'react';
 import { Clock, CreditCard, Piano } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
 import { StudentService } from '@/core/students';
 import { LessonService } from '@/core/lessons';
-import { TuitionService } from '@/core/finance';
+import { TuitionService } from '@/capabilities/finance';
 import { EmptyState, PageHeader } from '@/shared/components';
 import type { AttendanceRecord, AttendanceStatus, ClassItem, LessonRecord, Student } from '@/types';
 import { todayIsoLocal } from '@/shared/utils/localDate';
