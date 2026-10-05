@@ -207,6 +207,7 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:customer-attendance-makeup-flag': 'customer attendance makeup list plugin flag unit',
   'test:payroll-expense-category': 'payroll expense category plugin unit',
   'test:finance-hub-nav': 'finance hub nav plugin unit',
+  'test:attendance-industry-copy': 'attendance industry copy plugin unit',
 };
 
 /**

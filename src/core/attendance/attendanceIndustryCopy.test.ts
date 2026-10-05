@@ -1,18 +1,21 @@
 /**
- * 출결 화면 문구는 업종 id가 아니라 기존 헬퍼를 따른다.
+ * 출결 화면 문구는 업종 id가 아니라 플러그인 카피와 기존 라벨을 따른다.
  * 실행: npx tsx src/core/attendance/attendanceIndustryCopy.test.ts
  *
  * 피아노·어린이집·피부·필라테스·체육관 문구는 유지한다.
- * 리테일·목욕·일반 업종은 placeLabel/customerLabel에 없을 때 학원·원생을 말하지 않는다.
+ * 리테일·목욕은 placeLabel/customerLabel만 쓴다.
  */
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { studentAttendanceCopy } from '@/core/industry/attendanceStudentCopy';
 import { installIndustryPlugin } from '@/core/industry/pluginHost';
-import { getCustomerLabel, getPlaceLabel } from '@/core/industry/industryUi';
-import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
+import { getAttendanceCopy, getCustomerLabel, getPlaceLabel } from '@/core/industry/industryUi';
+import type { IndustryAttendanceCopy, IndustryPluginManifest } from '@/core/industry/pluginTypes';
 import type { IndustryType } from '@/core/industry/types';
+import { daycareAttendanceCopy } from '@/industries/daycare/attendanceCopy';
+import { skinAttendanceCopy } from '@/industries/skin/attendanceCopy';
 import { PIN_ATTENDANCE_PARENT_COPY } from './attendanceNotifyCopy';
 import {
   attendanceManageTitle,
@@ -52,9 +55,23 @@ function flag(source: string, key: string): boolean {
   return match[1] === 'true';
 }
 
+const ATTENDANCE_COPY: Partial<Record<IndustryType, IndustryAttendanceCopy>> = {
+  piano: studentAttendanceCopy,
+  daycare: daycareAttendanceCopy,
+  skin_clinic: skinAttendanceCopy,
+  pilates: studentAttendanceCopy,
+  gym: studentAttendanceCopy,
+};
+
 function manifestFrom(rel: string): IndustryPluginManifest {
   const source = read(rel);
   const id = quoted(source, 'id') as IndustryType;
+  const attendanceCopy = ATTENDANCE_COPY[id];
+  if (attendanceCopy) {
+    assert.match(source, /attendanceCopy:/, rel);
+  } else {
+    assert.equal(source.includes('attendanceCopy'), false, rel);
+  }
   return {
     id,
     option: { value: id, label: id, description: id },
@@ -73,6 +90,7 @@ function manifestFrom(rel: string): IndustryPluginManifest {
     feeLabel: quoted(source, 'feeLabel'),
     isAppointment: flag(source, 'isAppointment'),
     showsTextbooksLink: flag(source, 'showsTextbooksLink'),
+    attendanceCopy,
   };
 }
 
@@ -87,6 +105,17 @@ for (const rel of [
 ]) {
   installIndustryPlugin(manifestFrom(rel));
 }
+
+assert.equal(getAttendanceCopy('retail'), undefined);
+assert.equal(getAttendanceCopy('sauna_jjimjilbang'), undefined);
+assert.equal(getAttendanceCopy('piano')?.recordNoun, undefined);
+assert.equal(getAttendanceCopy('gym')?.recordNoun, undefined);
+assert.equal(getAttendanceCopy('pilates')?.recordNoun, undefined);
+assert.equal(getAttendanceCopy('skin_clinic')?.recordNoun, undefined);
+assert.equal(getAttendanceCopy('daycare')?.recordNoun, '등하원');
+assert.equal(getAttendanceCopy('piano')?.personNoun, '학생');
+assert.equal(getAttendanceCopy('skin_clinic')?.pinDisabledUsesCustomerLabel, true);
+assert.equal(getAttendanceCopy('skin_clinic')?.pinRevealUsesContactOrCustomer, true);
 
 const name = '김선율';
 
@@ -260,8 +289,23 @@ assert.equal(manageView.includes("industry === 'daycare' ? '등원 관리'"), fa
 assert.match(memoModal, /attendanceMemoCopy\(industry\)/);
 assert.equal(memoModal.includes("industry === 'daycare'"), false);
 assert.match(kioskView, /kioskCheckInSuccess\(industry, result\.customerName\)/);
-assert.match(kioskView, /industry === 'piano' \|\| industry === 'daycare'/);
+assert.match(kioskView, /runsPinCheckInSideEffects\(industry\)/);
 assert.match(pinPanel, /pinRevealHandoff\(industry, labels\.contact\.singular, labels\.customer\.singular\)/);
 assert.equal(pinPanel.includes('학부모님 또는 학생에게 전달하세요'), false);
+
+
+const copySource = read('core/attendance/attendanceIndustryCopy.ts');
+for (const token of [
+  'isDaycareIndustry',
+  'isSkinClinicIndustry',
+  'isPilatesIndustry',
+  'isGymIndustry',
+  'showsTextbooksLink',
+  "=== 'daycare'",
+  "=== 'piano'",
+  "=== 'skin_clinic'",
+]) {
+  assert.equal(copySource.includes(token), false, token);
+}
 
 console.log('attendanceIndustryCopy.test.ts OK');
