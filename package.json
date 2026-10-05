@@ -85,6 +85,7 @@
     "test:pin-check-in": "tsx src/capabilities/attendance/application/attendanceService.test.ts",
     "test:pin-checkin-side-effect": "tsx src/capabilities/attendance/application/pinCheckInSideEffectPlugin.test.ts",
     "test:pin-notify-copy": "tsx src/capabilities/attendance/domain/attendanceNotifyCopy.test.ts",
+    "test:attendance-industry-copy": "tsx src/core/attendance/attendanceIndustryCopy.test.ts",
     "test:absence-notify": "tsx src/core/parent/services/absenceNotifyPolicy.test.ts",
     "test:parent-home-copy": "tsx src/modules/parent/views/parentHomeCopy.test.ts",
     "test:roster-piano-copy": "tsx src/capabilities/roster/components/form/rosterFormCopy.test.ts",

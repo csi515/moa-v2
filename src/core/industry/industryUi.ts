@@ -2,7 +2,7 @@ import type { NavTab } from '@/shared/navigation/navigationTypes';
 import type { ModuleTheme } from '@/shared/components/layout/moduleTheme';
 import { isBlankIndustryInput, normalizeIndustryType, type IndustryType } from './types';
 import { getIndustryPlugin, getInstalledIndustryPlugin } from './registry';
-import type { IndustryAccent } from './pluginTypes';
+import type { IndustryAccent, IndustryAttendanceCopy } from './pluginTypes';
 
 export type { IndustryAccent } from './pluginTypes';
 
@@ -108,6 +108,17 @@ export function getBankAccountPlaceholder(industry: IndustryType | string | null
 export function supportsDeposit(industry: IndustryType | string | null | undefined): boolean {
   if (!industry) return false;
   return Boolean(getIndustryPlugin(industry).supportsDeposit);
+}
+
+
+/**
+ * 출결 문구 훅. 없으면 호출부가 customerLabel·placeLabel·isAppointment로 만든다.
+ * 빈 업종은 설치된 피아노 플러그인을 따른다.
+ */
+export function getAttendanceCopy(
+  industry: IndustryType | string | null | undefined,
+): IndustryAttendanceCopy | undefined {
+  return getIndustryPlugin(industry).attendanceCopy;
 }
 
 /** 설정 화면의 교재 관리 바로가기 표시 여부 */

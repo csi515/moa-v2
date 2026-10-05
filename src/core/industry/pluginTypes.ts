@@ -73,6 +73,38 @@ export interface IndustryFinanceHubNav {
   showLinkedBillingIncome: boolean;
 }
 
+
+/**
+ * 출결 화면에서 라벨만으로 만들 수 없는 문구.
+ * 공유 출결 코어는 업종 id로 고르지 않고 이 설정만 읽는다.
+ * 없으면 예약 업종은 출입, 그 외는 출결·customerLabel·placeLabel.
+ */
+export interface IndustryAttendanceCopy {
+  /** 기록 제목 명사. 없으면 isAppointment면 출입, 아니면 출결 */
+  recordNoun?: '등하원' | '출입' | '출결';
+  manageTitle?: string;
+  presentLabel?: '등원' | '출석';
+  presentTimeLabel?: string;
+  memoSavedToast?: string;
+  memo?: {
+    titleSuffix: string;
+    hint: string;
+    placeholder: string;
+  };
+  /** 키오스크·PIN 사람 명사. 없으면 customerLabel */
+  personNoun?: string;
+  /** PIN 비활성 안내가 호출부 고객 호칭을 쓴다. 아니면 personNoun */
+  pinDisabledUsesCustomerLabel?: boolean;
+  kioskRepeatHint?: string;
+  kioskAdminExitBody?: string;
+  /** 있으면 이 문장. contactOrCustomer가 켜지면 호출부 호칭 조합이 우선 */
+  pinRevealHandoff?: string;
+  /** 연락처 또는 고객 호칭. 학원형 고정 문장보다 우선 */
+  pinRevealUsesContactOrCustomer?: boolean;
+  /** academy면 기존 학원 PIN 빈 목록. 없으면 placeLabel 문장 */
+  parentEmpty?: 'academy';
+}
+
 export interface IndustryAccent {
   btn: string;
   btnHover: string;
@@ -129,6 +161,11 @@ export interface IndustryPluginManifest {
   supportsDeposit?: boolean;
   /** 설정에서 교재 관리 바로가기 링크 표시 여부 */
   showsTextbooksLink?: boolean;
+  /**
+   * 출결 화면 문구 중 placeLabel·customerLabel·isAppointment로 만들 수 없는 부분.
+   * 코어는 업종 id를 비교하지 않고 이 설정만 읽는다.
+   */
+  attendanceCopy?: IndustryAttendanceCopy;
   /**
    * PIN 체크인 성공 후 등록된 부가 동기화(runPinCheckInSideEffects)를 실행할지.
    * 키오스크는 업종 id를 비교하지 않고 이 플래그만 본다.

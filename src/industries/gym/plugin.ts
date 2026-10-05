@@ -3,6 +3,7 @@ import { CLASS_BASED_CORE_ADMIN_TABS, CLASS_BASED_CORE_STAFF_TABS } from '@/core
 import { GYM_CLASS_LEVELS } from './types/classLevel';
 import { gymExpenseCategories } from './expenseCategories';
 import { gymPayrollExpenseCategory } from './payrollExpenseCategory';
+import { studentAttendanceCopy } from '@/core/industry/attendanceStudentCopy';
 
 /** 체육관 플러그인 매니페스트 */
 export const gymPluginManifest: IndustryPluginManifest = {
@@ -37,6 +38,7 @@ export const gymPluginManifest: IndustryPluginManifest = {
   bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 체육관)',
   supportsDeposit: false,
   showsTextbooksLink: false,
+  attendanceCopy: studentAttendanceCopy,
   runsPinCheckInSideEffects: false,
   roomConfig: {
     sectionTitle: '강의실 · 연습실',

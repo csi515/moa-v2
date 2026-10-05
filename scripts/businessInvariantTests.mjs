@@ -206,6 +206,7 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:pin-checkin-side-effect': 'pin check-in side effect plugin flag unit',
   'test:payroll-expense-category': 'payroll expense category plugin unit',
   'test:finance-hub-nav': 'finance hub nav plugin unit',
+  'test:attendance-industry-copy': 'attendance industry copy plugin unit',
 };
 
 /**

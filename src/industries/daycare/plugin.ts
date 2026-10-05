@@ -5,6 +5,7 @@ import './care/bindCareStorage';
 import { DAYCARE_AGE_CLASSES } from './types/ageClass';
 import { daycareExpenseCategories } from './expenseCategories';
 import { daycarePayrollExpenseCategory } from './payrollExpenseCategory';
+import { daycareAttendanceCopy } from './attendanceCopy';
 
 /** 어린이집 플러그인 매니페스트 — 코어 + 상담 + 알림장·투약·가정통신문 */
 export const daycarePluginManifest: IndustryPluginManifest = {
@@ -39,6 +40,7 @@ export const daycarePluginManifest: IndustryPluginManifest = {
   bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 어린이집)',
   supportsDeposit: false,
   showsTextbooksLink: false,
+  attendanceCopy: daycareAttendanceCopy,
   runsPinCheckInSideEffects: true,
   roomConfig: {
     sectionTitle: '강의실 · 연습실',

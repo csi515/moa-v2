@@ -9,6 +9,7 @@ import { PIANO_STUDENT_LEVELS } from './types/studentLevel';
 import { pianoExpenseCategories } from './expenseCategories';
 import { pianoPayrollExpenseCategory } from './payrollExpenseCategory';
 import { pianoFinanceHubNav } from './financeHubNav';
+import { studentAttendanceCopy } from '@/core/industry/attendanceStudentCopy';
 
 /** 피아노 PIN 체크인 → 당일 등원(DAY_ATTENDANCE) 동기화 (Core 키오스크는 Module을 import하지 않음) */
 registerPinCheckInSideEffect(syncDayAttendanceFromPinCheckIn);
@@ -48,6 +49,7 @@ export const pianoPluginManifest: IndustryPluginManifest = {
   bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 선율음악학원)',
   supportsDeposit: false,
   showsTextbooksLink: true,
+  attendanceCopy: studentAttendanceCopy,
   runsPinCheckInSideEffects: true,
   rosterList: {
     searchPlaceholder: '학생·학부모 이름 또는 전화번호',
