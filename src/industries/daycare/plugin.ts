@@ -45,6 +45,7 @@ export const daycarePluginManifest: IndustryPluginManifest = {
   showsMakeupList: false,
   usesWithdrawalExitLabel: true,
   savesAttendanceWithPass: false,
+  showsPracticeRoomTab: false,
   roomConfig: {
     sectionTitle: '강의실 · 연습실',
     sectionDescription: '반 개설·보강 예약 시 선택할 공간입니다. 원에서 쓰는 실 이름을 등록해 주세요.',

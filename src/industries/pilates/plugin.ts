@@ -42,6 +42,7 @@ export const pilatesPluginManifest: IndustryPluginManifest = {
   showsMakeupList: false,
   usesWithdrawalExitLabel: false,
   savesAttendanceWithPass: false,
+  showsPracticeRoomTab: false,
   roomConfig: {
     sectionTitle: '강의실 · 연습실',
     sectionDescription: '반 개설·보강 예약 시 선택할 공간입니다. 스튜디오에서 쓰는 실 이름을 등록해 주세요.',

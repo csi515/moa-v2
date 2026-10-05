@@ -165,6 +165,18 @@ export function showsMakeupList(industry: IndustryType | string | null | undefin
   return Boolean(getIndustryPlugin(industry).showsMakeupList);
 }
 
+/**
+ * 고객 포털 연습실 탭.
+ * 업종 id 비교 대신 플러그인 플래그만 본다. 지금은 피아노만 true.
+ * 빈 값은 레거시 미설정으로 피아노 플러그인을 쓴다(탭이 오늘 보이던 곳).
+ * 비어 있지 않은 미등록 업종은 generic이라 탭이 생기지 않는다.
+ */
+export function showsPracticeRoomTab(
+  industry: IndustryType | string | null | undefined
+): boolean {
+  return Boolean(getIndustryPlugin(industry).showsPracticeRoomTab);
+}
+
 /** 실(강의실·관리실 등) UI 설정 */
 export function getRoomConfig(industry: IndustryType | string | null | undefined) {
   return getIndustryPlugin(industry).roomConfig ?? {
