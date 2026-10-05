@@ -41,6 +41,7 @@ export const skinPluginManifest: IndustryPluginManifest = {
   supportsDeposit: true,
   showsTextbooksLink: false,
   runsPinCheckInSideEffects: false,
+  showsMakeupList: false,
   rosterList: {
     withdrawnLabel: '종료',
     filterEmptyUsesSearchHint: true,

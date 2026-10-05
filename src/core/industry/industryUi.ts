@@ -128,6 +128,15 @@ export function runsPinCheckInSideEffects(
   return Boolean(getInstalledIndustryPlugin(industry)?.runsPinCheckInSideEffects);
 }
 
+/**
+ * 고객 출결 화면의 보강 목록 표시 여부.
+ * 업종 id 비교 대신 플러그인 플래그만 본다. 지금은 피아노만 true.
+ */
+export function showsMakeupList(industry: IndustryType | string | null | undefined): boolean {
+  if (!industry) return false;
+  return Boolean(getIndustryPlugin(industry).showsMakeupList);
+}
+
 /** 실(강의실·관리실 등) UI 설정 */
 export function getRoomConfig(industry: IndustryType | string | null | undefined) {
   return getIndustryPlugin(industry).roomConfig ?? {

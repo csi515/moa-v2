@@ -136,6 +136,12 @@ export interface IndustryPluginManifest {
    */
   runsPinCheckInSideEffects?: boolean;
   /**
+   * 고객 출결 화면에서 보강(makeup) 목록을 로드·표시할지.
+   * 코어는 업종 id를 비교하지 않고 이 플래그만 본다.
+   * 지금은 피아노만 true.
+   */
+  showsMakeupList?: boolean;
+  /**
    * 공유 명단 목록의 업종 차이.
    * 목록은 업종 id를 비교하지 않고 이 설정만 읽는다.
    */

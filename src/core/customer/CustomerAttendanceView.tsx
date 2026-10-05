@@ -8,6 +8,7 @@ import {
 } from '@/core/attendance/services/attendanceService';
 import { useParentAttendanceSessions } from '@/core/parent/hooks/useParentAttendanceSessions';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
+import { showsMakeupList } from '@/core/industry/industryUi';
 import { attendanceRecordTitle } from '@/core/attendance/attendanceIndustryCopy';
 import type { MakeupStatus } from '@/types';
 
@@ -42,12 +43,11 @@ export function CustomerAttendanceView({
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 30);
 
-  const makeups =
-    industry === 'piano'
-      ? StorageService.getMakeupItems()
-          .filter((m) => m.studentId === customerId)
-          .slice(0, 15)
-      : [];
+  const makeups = showsMakeupList(industry)
+    ? StorageService.getMakeupItems()
+        .filter((m) => m.studentId === customerId)
+        .slice(0, 15)
+    : [];
 
   const title = attendanceRecordTitle(industry, displayName);
 
