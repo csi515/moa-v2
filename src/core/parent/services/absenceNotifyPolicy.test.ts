@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { DAY_ATTENDANCE_CLASS_ID } from '@/capabilities/attendance/dayAttendance';
+import { DAY_ATTENDANCE_CLASS_ID } from '@/core/attendance/dayAttendance';
 import { absenceEventKey, shouldNotifyParentAbsence } from './absenceNotifyPolicy';
 
 function run() {

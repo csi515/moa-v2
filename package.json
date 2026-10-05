@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "test": "npm run test:business-invariants",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "tsc --noEmit",
@@ -94,7 +95,7 @@
     "test:staff-practice-guide": "tsx src/core/help/staffPracticeGuideFlag.test.ts",
     "test:attendance-summary-metric": "tsx src/capabilities/attendance/ui/attendanceSummaryMetric.test.ts",
     "test:pin-notify-copy": "tsx src/capabilities/attendance/domain/attendanceNotifyCopy.test.ts",
-    "test:attendance-industry-copy": "tsx src/core/attendance/attendanceIndustryCopy.test.ts",
+    "test:attendance-industry-copy": "tsx src/capabilities/attendance/attendanceIndustryCopy.test.ts",
     "test:absence-notify": "tsx src/core/parent/services/absenceNotifyPolicy.test.ts",
     "test:parent-home-copy": "tsx src/modules/parent/views/parentHomeCopy.test.ts",
     "test:roster-piano-copy": "tsx src/capabilities/roster/components/form/rosterFormCopy.test.ts",

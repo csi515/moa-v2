@@ -2,7 +2,7 @@ export { bathVisitService } from './visitService';
 export { bathRoomService } from './roomService';
 export { bathOfferedService } from './offeredServiceService';
 export { bathBookingService } from './bookingService';
-export { resourceReservationCapability } from '@/core/resources';
+export { resourceReservationCapability } from '@/capabilities/resources';
 export { validateBathBookingInput, isResourceSlotFree } from './bookingValidation';
 export { rowToBathBooking } from './bookingMappers';
 export { validateBathRoomInput } from './roomValidation';

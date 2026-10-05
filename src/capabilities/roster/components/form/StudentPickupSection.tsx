@@ -1,10 +1,10 @@
 import React from 'react';
 import { Bus, MapPin, Plus, Star, Trash2 } from 'lucide-react';
-import type { PickupAddress, ShuttleDirection } from '@/core/transport/types';
+import type { PickupAddress, ShuttleDirection } from '@/capabilities/transport/types';
 import {
   PICKUP_ADDRESS_LABEL_PRESETS,
   SHUTTLE_DIRECTION_OPTIONS,
-} from '@/core/transport/types';
+} from '@/capabilities/transport/types';
 import { FormField, FORM_CONTROL_CLASS, FORM_CONTROL_ERROR_CLASS } from '@/shared/components/ui/FormField';
 import { STUDENT_FORM_FIELD_IDS } from './studentFormValidation';
 import { useModuleLabels } from '@/core/labels';

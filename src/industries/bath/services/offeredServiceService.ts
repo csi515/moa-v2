@@ -2,8 +2,8 @@
  * Bath 인적 서비스 카탈로그.
  * Product가 아님. 예약은 resourceReservationCapability + 향후 staff 충돌.
  */
-import { resourceReservationCapability } from '@/core/resources';
-import type { ResourceReservation } from '@/core/resources';
+import { resourceReservationCapability } from '@/capabilities/resources';
+import type { ResourceReservation } from '@/capabilities/resources';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { getBathClient } from '@/lib/supabase/bathClient';
 import { getOrganizationId } from '@/services/adapters';

@@ -14,7 +14,7 @@ import { getStudentLevelOptions } from '@/core/students/levelOptions';
 import { getIndustryPlugin } from '@/core/industry/registry';
 import { getPlaceLabel, showsTextbooksLink } from '@/core/industry/industryUi';
 import { useModuleLabels } from '@/core/labels';
-import { createPickupAddress, normalizePickupAddresses, sanitizePickupAddressesForSave } from '@/core/transport';
+import { createPickupAddress, normalizePickupAddresses, sanitizePickupAddressesForSave } from '@/capabilities/transport';
 import { searchParents, getGuardiansForStudent } from '@/core/parent/guardianHelpers';
 import { requestPlaceStudentOnTimetable } from '@/core/customer/studentJoinInbox';
 import { StorageService } from '@/services/storage';

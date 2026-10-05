@@ -22,7 +22,7 @@ import {
   attendanceViewEntry,
   financeViewEntries,
 } from '@/core/industry/commonViewEntries';
-import { ShuttleRideRequestView } from '@/core/transport';
+import { ShuttleRideRequestView } from '@/capabilities/transport';
 
 const gymSettingsHub = () => (
   <SettingsHubView

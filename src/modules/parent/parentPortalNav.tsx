@@ -24,6 +24,7 @@ import {
   showsTextbooksLink,
 } from '@/core/industry/industryUi';
 import type { ParentPortalTab } from '@/types/education';
+import { ParentIndustryAdapter } from '@/capabilities/parent/ParentIndustryAdapter';
 
 export type ParentPortalNavItem = {
   id: ParentPortalTab;
@@ -122,34 +123,18 @@ function genericParentNav(industry: IndustryType | null): ParentPortalNavItem[] 
 }
 
 export function getParentPortalNav(industry: IndustryType | string | null | undefined): ParentPortalNavItem[] {
-  const resolved = normalizeIndustryType(industry);
-  if (isDaycareIndustry(resolved)) return DAYCARE_PARENT_NAV;
-  if (isGymIndustry(resolved)) return GYM_PARENT_NAV;
-  if (isSkinClinicIndustry(resolved)) return SKIN_PARENT_NAV;
-  if (isPilatesIndustry(resolved)) return PILATES_PARENT_NAV;
-  if (resolved === 'piano') return PIANO_PARENT_NAV;
-  return genericParentNav(resolved);
+  return ParentIndustryAdapter.getNav(industry);
 }
 
 export function getParentPortalRoleLabel(industry: IndustryType | string | null | undefined): string {
-  const type = normalizeIndustryType(industry);
-  if (type === 'daycare') return '보호자 포털';
-  if (type === 'skin_clinic') return '고객 포털';
-  return '학부모 포털';
+  return ParentIndustryAdapter.getRoleLabel(industry);
 }
 
 /** 하단 네비에는 없지만 홈·더보기에서 이동 가능한 탭 */
 export function getParentPortalSecondaryTabs(
   industry: IndustryType | string | null | undefined
 ): ParentPortalTab[] {
-  const type = normalizeIndustryType(industry);
-  if (type === 'piano') {
-    return ['notices', 'assignments', 'progress', 'stamps', 'reports', 'events', 'more'];
-  }
-  if (type === 'gym') return ['notices', 'events', 'more'];
-  if (type === 'daycare') return ['notices', 'incidents', 'pickups', 'more'];
-  if (type === 'pilates' || type === 'skin_clinic') return ['notices', 'more'];
-  return ['notices', 'more'];
+  return ParentIndustryAdapter.getSecondaryTabs(industry);
 }
 
 /** @deprecated 레거시 import 호환 */

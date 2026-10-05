@@ -19,7 +19,7 @@ import { StorageService } from '@/services/storage';
 import { PageHeader } from '@/shared/components';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { Teacher, type TeacherPayType } from '@/types';
-import { payTypeLabel, payTypeRateUnitLabel, payTypeUsesUnitRate } from '@/capabilities/finance/teacherPayroll';
+import { payTypeLabel, payTypeRateUnitLabel, payTypeUsesUnitRate } from '@/core/finance/teacherPayroll';
 import { normalizeStaffGrants, type StaffGrants } from '@/core/staff/staffGrants';
 import { StaffGrantFields, emptyStaffGrants } from './StaffGrantFields';
 import { formatCurrency } from '@/utils/formatters';

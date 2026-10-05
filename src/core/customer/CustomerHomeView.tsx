@@ -1,17 +1,17 @@
 ﻿import React, { useMemo, useState } from 'react';
 import { Copy } from 'lucide-react';
 import { formatCurrency, getInvoiceStatusBadge } from '@/utils/formatters';
-import { lastTuitionPaymentSummaryText, TuitionService } from '@/capabilities/finance';
+import { lastTuitionPaymentSummaryText, TuitionService } from '@/core/finance';
 import {
   formatBankAccountText,
   isInvoiceVisibleToParent,
-} from '@/capabilities/finance/paymentMethodLabels';
+} from '@/core/finance/paymentMethodLabels';
 import { Modal } from '@/shared/components/ui/Modal';
 import { useParentAttendanceSessions } from '@/core/parent/hooks/useParentAttendanceSessions';
 import {
   formatSessionTime,
   getSessionStatusLabel,
-} from '@/capabilities/attendance/services/attendanceService';
+} from '@/core/attendance/services/attendanceService';
 import type { TuitionInvoice } from '@/types';
 import { CustomerNoticesView } from './CustomerNoticesView';
 import type { getMyPassSummary } from './services/studentPortalService';

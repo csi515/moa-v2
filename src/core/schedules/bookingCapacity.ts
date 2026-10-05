@@ -9,5 +9,5 @@ export {
   findActiveMemberInSlot,
   countSlotOccupancy,
   getSlotCapacityInfo,
-} from '@/capabilities/scheduling/capacity/bookingCapacity';
-export type { SlotBookingGroup, SlotCapacityInfo } from '@/capabilities/scheduling/capacity/bookingCapacity';
+} from '@/core/capacity/bookingCapacity';
+export type { SlotBookingGroup, SlotCapacityInfo } from '@/core/capacity/bookingCapacity';

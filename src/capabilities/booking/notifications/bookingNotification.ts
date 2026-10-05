@@ -1,5 +1,5 @@
 import { publishParentAlert } from '@/core/parent/services/parentAlertInfrastructure';
-import type { PracticeRoomBooking } from '@/core/resources/types';
+import type { PracticeRoomBooking } from '@/capabilities/resources/types';
 
 export interface NotifyBookingChangeParams {
   studentId: string;

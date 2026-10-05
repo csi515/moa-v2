@@ -1,5 +1,5 @@
-import { isBlockingReservationStatus, resourceRangesOverlap } from '@/core/resources/overlap';
-import type { ResourceReservation } from '@/core/resources/types';
+import { isBlockingReservationStatus, resourceRangesOverlap } from '@/capabilities/resources/overlap';
+import type { ResourceReservation } from '@/capabilities/resources/types';
 import type { BathService } from '../types/service';
 import type { BathBookingCreateInput } from '../types/booking';
 

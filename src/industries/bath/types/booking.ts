@@ -1,4 +1,4 @@
-import type { ResourceReservationStatus } from '@/core/resources/types';
+import type { ResourceReservationStatus } from '@/capabilities/resources/types';
 
 export const BATH_BOOKING_KINDS = ['room', 'scrub', 'massage', 'other'] as const;
 export type BathBookingKind = (typeof BATH_BOOKING_KINDS)[number];

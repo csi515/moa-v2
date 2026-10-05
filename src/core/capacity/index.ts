@@ -1,2 +1,2 @@
 /** @deprecated 신규 코드는 `@/capabilities/scheduling`를 사용한다. */
-export * from '@/capabilities/scheduling/capacity/index';
+export * from '@/core/capacity/index';

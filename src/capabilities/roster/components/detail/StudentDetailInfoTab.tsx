@@ -9,7 +9,7 @@ import {
   formatShuttleDirection,
   getDefaultPickupAddress,
   studentUsesShuttleService,
-} from '@/core/transport';
+} from '@/capabilities/transport';
 import { formatCurrency, formatPhone, getLevelColor } from '@/utils/formatters';
 import { Award, Bus, Link2, MapPin, Star } from 'lucide-react';
 import { usePermissions } from '@/core/auth/usePermissions';

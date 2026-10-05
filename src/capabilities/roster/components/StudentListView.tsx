@@ -8,7 +8,7 @@ import {
   rosterSearchPlaceholder,
 } from '@/core/industry/industryUi';
 import { useModuleLabels } from '@/core/labels';
-import { studentUsesShuttleService } from '@/core/transport';
+import { studentUsesShuttleService } from '@/capabilities/transport';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { STORAGE_REFRESH_DOMAINS } from '@/hooks/useStorageRefresh';
 import { getPrimaryGuardian, studentMatchesGuardianQuery } from '@/core/parent/guardianHelpers';

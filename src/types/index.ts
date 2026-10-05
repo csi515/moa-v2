@@ -1,4 +1,4 @@
-import type { PickupAddress } from '@/core/transport/types';
+import type { PickupAddress } from '@/capabilities/transport/types';
 import type { StaffGrants } from '@/core/staff/staffGrants';
 import type { StudentBillingMode } from '@/core/students/billingMode';
 import type { TeacherPayType } from '@/capabilities/billing/finance/billingLedgerTypes';
@@ -140,8 +140,8 @@ export type {
   UnpaidInvoiceItem,
 } from '@/capabilities/billing/finance/billingLedgerTypes';
 
-/** @deprecated 신규 코드는 `@/core/resources` */
-export type { PracticeRoomBooking, PracticeRoomBookingStatus } from '@/core/resources';
+/** @deprecated 신규 코드는 `@/capabilities/resources` */
+export type { PracticeRoomBooking, PracticeRoomBookingStatus } from '@/capabilities/resources/types';
 
 /** @deprecated 신규 코드는 `@/capabilities/consultation` */
 export type { Consultation, ConsultationType } from '@/capabilities/consultation/types';

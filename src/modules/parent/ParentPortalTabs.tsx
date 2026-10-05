@@ -23,6 +23,7 @@ import { normalizeIndustryType } from '@/core/industry/types';
 import { isAppointmentIndustry } from '@/core/industry/industryUi';
 import { useParentPortal } from '@/core/parent/context/ParentPortalContext';
 import { ParentStudentStampView } from '@/industries/piano/components/songProgress';
+import { ParentIndustryAdapter } from '@/capabilities/parent/ParentIndustryAdapter';
 
 export function ParentPortalTabs({
   tab,
@@ -142,10 +143,11 @@ export function ParentPortalTabs({
       return <ParentScheduleView student={student} organizationId={organizationId} />;
     case 'bookings':
       if (isAppointmentIndustry(industry)) {
+        const policy = ParentIndustryAdapter.getPolicy(industryType);
         return (
           <PilatesParentBookingsView
             student={student}
-            variant={industry === 'skin_clinic' ? 'skin' : 'pilates'}
+            variant={policy.bookingVariant === 'skin' ? 'skin' : 'pilates'}
           />
         );
       }

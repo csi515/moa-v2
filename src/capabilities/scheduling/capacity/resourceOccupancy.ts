@@ -1,8 +1,8 @@
 import {
   isBlockingReservationStatus,
   resourceRangesOverlap,
-} from '@/core/resources/overlap';
-import type { ResourceReservationStatus } from '@/core/resources/types';
+} from '@/capabilities/resources/overlap';
+import type { ResourceReservationStatus } from '@/capabilities/resources/types';
 import { computeCapacitySnapshot } from './capacityMath';
 import type { CapacitySnapshot } from './types';
 

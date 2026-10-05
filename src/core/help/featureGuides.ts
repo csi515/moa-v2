@@ -1,7 +1,7 @@
 ﻿import {
   PIN_ATTENDANCE_DIRECTOR_COPY,
   PIN_ATTENDANCE_PARENT_COPY,
-} from '@/capabilities/attendance/attendanceNotifyCopy';
+} from '@/core/attendance/attendanceNotifyCopy';
 import { showsAdultPracticeGuide, showsStaffPracticeGuide } from '@/core/industry/industryUi';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
 import {

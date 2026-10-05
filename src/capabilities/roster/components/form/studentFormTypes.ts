@@ -1,5 +1,5 @@
 import type { GuardianRelationship } from '@/core/parent/types';
-import type { PickupAddress } from '@/core/transport/types';
+import type { PickupAddress } from '@/capabilities/transport/types';
 import type { StudentBillingMode } from '@/core/students/billingMode';
 import type { StudentStatus } from '@/types';
 

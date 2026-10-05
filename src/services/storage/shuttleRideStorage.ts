@@ -1,4 +1,4 @@
-import type { ShuttleRideRequest } from '@/core/transport/types';
+import type { ShuttleRideRequest } from '@/capabilities/transport/types';
 import { STORAGE_KEYS } from '../adapters';
 import { deleteById, generateEntityId, getItem, setItem } from './helpers';
 

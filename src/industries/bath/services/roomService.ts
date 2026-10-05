@@ -4,9 +4,9 @@
  */
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { getBathClient } from '@/lib/supabase/bathClient';
-import { resourceReservationCapability } from '@/core/resources';
+import { resourceReservationCapability } from '@/capabilities/resources';
 import { getOrganizationId } from '@/services/adapters';
-import type { ResourceReservation } from '@/core/resources';
+import type { ResourceReservation } from '@/capabilities/resources';
 import type { BathRoom, BathRoomListQuery, BathRoomWriteInput } from '../types/room';
 import { mapBathRoomRpcError } from './roomErrors';
 import { rowToBathRoom, type BathRoomRow } from './roomMappers';

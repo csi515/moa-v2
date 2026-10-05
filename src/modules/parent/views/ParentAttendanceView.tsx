@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Loader2, RefreshCw } from 'lucide-react';
 import { StorageService } from '@/services/storage';
 import { getAttendanceBadge } from '@/utils/formatters';
@@ -14,6 +14,7 @@ import {
 } from '@/capabilities/attendance/attendanceIndustryCopy';
 import type { MakeupStatus, Student } from '@/types';
 import { Section } from './shared';
+import { ParentIndustryAdapter } from '@/capabilities/parent/ParentIndustryAdapter';
 
 const MAKEUP_STATUS_LABEL: Record<MakeupStatus, string> = {
   pending: '보강 대기',
@@ -43,8 +44,9 @@ export function ParentAttendanceView({
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 30);
 
+  const policy = ParentIndustryAdapter.getPolicy(industryType);
   const makeups =
-    industry === 'piano'
+    policy.showsMakeupList
       ? StorageService.getMakeupItems()
           .filter((m) => m.studentId === student.id)
           .slice(0, 15)

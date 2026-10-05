@@ -1,4 +1,4 @@
-import type { PickupAddress } from '@/core/transport/types';
+import type { PickupAddress } from '@/capabilities/transport/types';
 import type { GuardianFormEntry, StudentFormData } from './studentFormTypes';
 
 export type StudentFormErrors = Partial<Record<string, string>>;

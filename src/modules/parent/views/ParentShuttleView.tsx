@@ -14,7 +14,7 @@ import {
   getDefaultPickupAddress,
   type ShuttleDirection,
   type ShuttleRideRequest,
-} from '@/core/transport';
+} from '@/capabilities/transport';
 import { Section } from './shared';
 
 export function ParentShuttleView({

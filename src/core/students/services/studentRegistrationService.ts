@@ -3,7 +3,7 @@ import type { GuardianRelationship } from '@/core/parent/types';
 import { getPrimaryGuardian } from '@/core/parent/guardianHelpers';
 import { StorageService } from '@/services/storage';
 import { StudentService } from '@/core/students/services/studentService';
-import { isAttendanceModuleEnabled } from '@/capabilities/attendance/features';
+import { isAttendanceModuleEnabled } from '@/core/attendance/features';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import {
   inviteParentWithSync,

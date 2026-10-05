@@ -1,4 +1,4 @@
-﻿import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { StorageService } from '@/services/storage';
 import {
   lastTuitionPaymentSummaryText,
@@ -16,11 +16,11 @@ import {
   isInvoiceVisibleToParent,
 } from '@/capabilities/finance/paymentMethodLabels';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
-import { getPlaceLabel, showsTextbooksLink } from '@/core/industry/industryUi';
 import type { Student, TuitionInvoice } from '@/types';
 import { Copy, X } from 'lucide-react';
 import { Section } from './shared';
 import { buildYearMonthOptions } from '@/capabilities/finance/categories';
+import { ParentIndustryAdapter } from '@/capabilities/parent/ParentIndustryAdapter';
 
 function statusLabel(status: 'paid' | 'partial' | 'unpaid'): string {
   if (status === 'paid') return '완납';
@@ -175,14 +175,7 @@ export function ParentTuitionView({
   const monthInvoices = invoices.filter((i) => i.yearMonth === selectedMonth);
   const monthSales = sales.filter((s) => s.saleDate.startsWith(selectedMonth));
 
-  const feeTitle =
-    industry === 'daycare'
-      ? '보육료'
-      : industry === 'pilates'
-        ? '수강료'
-        : industry === 'skin_clinic'
-        ? '이용료'
-        : '월회비';
+  const feeTitle = ParentIndustryAdapter.getFeeTitle(industryType);
 
   const grandUnpaid = allSummary.grandUnpaid ?? allSummary.totalUnpaid;
   const isPassStudent = student.billingMode === 'session_pass';

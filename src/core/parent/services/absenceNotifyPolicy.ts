@@ -1,5 +1,5 @@
 ﻿import { todayIsoLocal } from '@/shared/utils/localDate';
-import { attendanceClassKey } from '@/capabilities/attendance/attendanceClassKey';
+import { attendanceClassKey } from '@/core/attendance/attendanceClassKey';
 
 export type AbsenceNotifyInput = {
   previousStatus?: string | null;

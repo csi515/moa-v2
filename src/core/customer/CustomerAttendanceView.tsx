@@ -5,11 +5,11 @@ import { getAttendanceBadge } from '@/utils/formatters';
 import {
   formatSessionTime,
   getSessionStatusLabel,
-} from '@/capabilities/attendance/services/attendanceService';
+} from '@/core/attendance/services/attendanceService';
 import { useParentAttendanceSessions } from '@/core/parent/hooks/useParentAttendanceSessions';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
 import { showsMakeupList } from '@/core/industry/industryUi';
-import { attendanceRecordTitle } from '@/capabilities/attendance/attendanceIndustryCopy';
+import { attendanceRecordTitle } from '@/core/attendance/attendanceIndustryCopy';
 import type { MakeupStatus } from '@/types';
 
 const MAKEUP_STATUS_LABEL: Record<MakeupStatus, string> = {

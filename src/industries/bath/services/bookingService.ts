@@ -1,8 +1,8 @@
 /**
  * Bath 예약. 겹침 확정은 DB RPC. 가용성 조회는 참고용.
  */
-import { RESOURCE_RESERVATION_BLOCKING_STATUSES } from '@/core/resources/types';
-import { resourceReservationCapability } from '@/core/resources';
+import { RESOURCE_RESERVATION_BLOCKING_STATUSES } from '@/capabilities/resources/types';
+import { resourceReservationCapability } from '@/capabilities/resources';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { getBathClient } from '@/lib/supabase/bathClient';
 import { getOrganizationId } from '@/services/adapters';

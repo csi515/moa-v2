@@ -1,11 +1,11 @@
-﻿import type { NavTab } from '@/shared/navigation/navigationTypes';
+import type { NavTab } from '@/shared/navigation/navigationTypes';
 import type { IndustryType } from '@/core/industry/types';
 import { getOwnerLabel } from '@/core/industry/industryUi';
 import { getIndustryPlugin } from '@/core/industry/registry';
 import { withOwnerFinanceTabs } from '@/core/industry/pluginTypes';
 import { filterIndustryNavTabs } from '@/core/industry/catalog';
 import type { UserRole } from '@/types';
-import { isAttendanceModuleEnabled } from '@/capabilities/attendance/features';
+import { isAttendanceModuleEnabled } from '@/core/attendance/features';
 import type { AcademySettings } from '@/types';
 import {
   isOrgOwner,

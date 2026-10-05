@@ -1,6 +1,6 @@
 ﻿import { useMemo } from 'react';
 import type { IndustryType } from '@/core/industry/types';
-import { isAttendanceModuleEnabled } from '@/capabilities/attendance/features';
+import { isAttendanceModuleEnabled } from '@/core/attendance/features';
 import { applyStaffGrantTabs, normalizeStaffGrants } from '@/core/staff/staffGrants';
 import { useStorageRefresh } from '@/hooks/useStorageRefresh';
 import { StorageService } from '@/services/storage';
