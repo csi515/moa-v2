@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { installIndustryPlugin } from '@/core/industry/pluginHost';
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
 import type { IndustryType } from '@/core/industry/types';
-import { getFeeLabel, isPianoIndustry } from '@/core/industry/industryUi';
+import { getFeeLabel, showsTextbooksLink } from '@/core/industry/industryUi';
 import { enrollmentModeLabel, selfAccountEnrollmentNote } from './enrollmentFormCopy';
 
 const srcRoot = join(dirname(fileURLToPath(import.meta.url)), '../../../..');
@@ -31,7 +31,8 @@ function manifest(id: IndustryType, feeLabel: string): IndustryPluginManifest {
     theme: 'indigo',
     accent: { btn: '', btnHover: '', icon: '', hoverBg: '', ring: '' },
     attendanceDefault: false,
-    usesClassBasedSchedule: false,
+    usesClassBasedSchedule: id === 'daycare',
+    showsTextbooksLink: id === 'piano',
     customerListTab: 'students',
     showSchoolFields: false,
     showPickupFields: false,
@@ -59,10 +60,10 @@ installIndustryPlugin(manifest('retail', retailFee));
 
 const contact = '보호자';
 
-assert.equal(isPianoIndustry('piano'), true);
-assert.equal(isPianoIndustry('skin_clinic'), false);
-assert.equal(isPianoIndustry('pilates'), false);
-assert.equal(isPianoIndustry(null), false);
+assert.equal(showsTextbooksLink('piano'), true);
+assert.equal(showsTextbooksLink('skin_clinic'), false);
+assert.equal(showsTextbooksLink('pilates'), false);
+assert.equal(showsTextbooksLink(null), false);
 
 assert.equal(getFeeLabel('piano'), '수강료');
 assert.equal(enrollmentModeLabel('piano'), '수강 형태');
@@ -102,7 +103,13 @@ for (const rel of renders) {
   const src = readFileSync(join(rosterRoot, rel), 'utf8');
   assert.doesNotMatch(src, /수강 형태/, `${rel} still hardcodes 수강 형태`);
   assert.doesNotMatch(src, /본인 계정으로 수강하는 경우/, `${rel} still hardcodes piano self-account copy`);
+  assert.doesNotMatch(src, /isPianoIndustry/, `${rel} still calls isPianoIndustry`);
 }
+
+const enrollmentCopy = readFileSync(join(rosterRoot, 'components/form/enrollmentFormCopy.ts'), 'utf8');
+assert.doesNotMatch(enrollmentCopy, /isPianoIndustry/);
+assert.doesNotMatch(enrollmentCopy, /===\s*['"]piano['"]/);
+assert.match(enrollmentCopy, /showsTextbooksLink/);
 
 const advanced = readFileSync(join(rosterRoot, 'components/form/StudentAdvancedSection.tsx'), 'utf8');
 assert.match(advanced, /label: '회차권'/);
