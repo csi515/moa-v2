@@ -223,6 +223,12 @@ export interface IndustryPluginManifest {
    */
   showsCustomerPoints?: boolean;
   /**
+   * 성인 수강생 이용 안내의 연습실 섹션을 보일지.
+   * 코어는 업종 id를 비교하지 않고 이 플래그만 본다.
+   * 지금은 피아노만 true. 빈·공백 업종은 헬퍼가 숨긴다(탭용 showsPracticeRoomTab과 다름).
+   */
+  showsAdultPracticeGuide?: boolean;
+  /**
    * 공유 명단 목록의 업종 차이.
    * 목록은 업종 id를 비교하지 않고 이 설정만 읽는다.
    */

@@ -201,6 +201,19 @@ export function showsCustomerPoints(
   return Boolean(getIndustryPlugin(industry).showsCustomerPoints);
 }
 
+/**
+ * 성인 수강생 이용 안내의 연습실 섹션.
+ * 업종 id 비교 대신 플러그인 플래그만 본다. 지금은 피아노만 true.
+ * 빈·null·undefined·공백만 있는 값은 숨긴다(오늘 featureGuides 조건과 같음).
+ * showsPracticeRoomTab을 재사용하지 않는다 — 그 탭은 빈 업종에서 피아노로 떨어져 보인다.
+ */
+export function showsAdultPracticeGuide(
+  industry: IndustryType | string | null | undefined
+): boolean {
+  if (isBlankIndustryInput(industry)) return false;
+  return Boolean(getIndustryPlugin(industry).showsAdultPracticeGuide);
+}
+
 /** 실(강의실·관리실 등) UI 설정 */
 export function getRoomConfig(industry: IndustryType | string | null | undefined) {
   return getIndustryPlugin(industry).roomConfig ?? {

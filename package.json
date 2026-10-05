@@ -89,6 +89,7 @@
     "test:customer-practice-room-tab": "tsx src/core/customer/customerPracticeRoomTabFlag.test.ts",
     "test:customer-points-flag": "tsx src/core/customer/customerPointsPluginFlag.test.ts",
     "test:public-landing-adult-first": "tsx src/core/public/publicLandingAdultFirstFlag.test.ts",
+    "test:adult-practice-guide-flag": "tsx src/core/help/adultPracticeGuideFlag.test.ts",
     "test:attendance-summary-metric": "tsx src/capabilities/attendance/ui/attendanceSummaryMetric.test.ts",
     "test:pin-notify-copy": "tsx src/capabilities/attendance/domain/attendanceNotifyCopy.test.ts",
     "test:attendance-industry-copy": "tsx src/core/attendance/attendanceIndustryCopy.test.ts",

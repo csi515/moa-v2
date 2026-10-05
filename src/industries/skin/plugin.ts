@@ -50,6 +50,7 @@ export const skinPluginManifest: IndustryPluginManifest = {
   savesAttendanceWithPass: false,
   showsPracticeRoomTab: false,
   showsCustomerPoints: false,
+  showsAdultPracticeGuide: false,
   rosterList: {
     withdrawnLabel: '종료',
     filterEmptyUsesSearchHint: true,

@@ -2,6 +2,7 @@ import {
   PIN_ATTENDANCE_DIRECTOR_COPY,
   PIN_ATTENDANCE_PARENT_COPY,
 } from '@/core/attendance/attendanceNotifyCopy';
+import { showsAdultPracticeGuide } from '@/core/industry/industryUi';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
 import {
   buildBillingSection,
@@ -613,11 +614,9 @@ export function getAdultStudentPortalGuide(industry?: IndustryType | string | nu
   intro: { title: string; body: string };
   sections: FeatureGuideSection[];
 } {
-  const type = industry ? normalizeIndustryType(industry) : null;
-  const sections =
-    type === 'piano'
-      ? ADULT_STUDENT_PORTAL_SECTIONS
-      : ADULT_STUDENT_PORTAL_SECTIONS.filter((s) => s.id !== 'adult-practice');
+  const sections = showsAdultPracticeGuide(industry)
+    ? ADULT_STUDENT_PORTAL_SECTIONS
+    : ADULT_STUDENT_PORTAL_SECTIONS.filter((s) => s.id !== 'adult-practice');
 
   return {
     intro: {
