@@ -43,6 +43,7 @@ export const retailPluginManifest: IndustryPluginManifest = {
   showsMakeupList: false,
   usesWithdrawalExitLabel: false,
   savesAttendanceWithPass: false,
+  showsPracticeRoomTab: false,
   roomConfig: {
     sectionTitle: '공간',
     sectionDescription: '매장에서 쓰는 공간 이름을 등록해 주세요.',

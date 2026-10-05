@@ -6,7 +6,7 @@ import { LoadingScreen } from '@/shared/components/LoadingScreen';
 import { isNativeApp } from '@/core/platform/capacitorPlatform';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { registerAppPush } from '@/core/push';
-import { normalizeIndustryType } from '@/core/industry/types';
+import { showsPracticeRoomTab } from '@/core/industry/industryUi';
 import type { CustomerJoinRequest } from '@/types';
 import { customerJoinService } from './services/customerJoinService';
 import {
@@ -21,10 +21,6 @@ import {
   listMyLinkedCustomerOrganizations,
   type MyLinkedCustomerOrg,
 } from './services/myLinkedCustomerOrgsService';
-
-function showPracticeTab(industryType: string): boolean {
-  return normalizeIndustryType(industryType) === 'piano';
-}
 
 /**
  * 성인 수강생(본인) 포털 셸.
@@ -87,7 +83,7 @@ export const CustomerShell: React.FC = () => {
 
   useEffect(() => {
     if (!enrollment) return;
-    if (tab === 'practice' && !showPracticeTab(enrollment.industryType)) {
+    if (tab === 'practice' && !showsPracticeRoomTab(enrollment.industryType)) {
       setTab('home');
     }
   }, [enrollment, tab]);

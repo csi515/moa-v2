@@ -86,6 +86,7 @@
     "test:pin-checkin-side-effect": "tsx src/capabilities/attendance/application/pinCheckInSideEffectPlugin.test.ts",
     "test:customer-attendance-makeup-flag": "tsx src/core/customer/customerAttendanceMakeupListFlag.test.ts",
     "test:student-detail-pass-save": "tsx src/capabilities/roster/components/studentDetailPassSaveFlag.test.ts",
+    "test:customer-practice-room-tab": "tsx src/core/customer/customerPracticeRoomTabFlag.test.ts",
     "test:attendance-summary-metric": "tsx src/capabilities/attendance/ui/attendanceSummaryMetric.test.ts",
     "test:pin-notify-copy": "tsx src/capabilities/attendance/domain/attendanceNotifyCopy.test.ts",
     "test:attendance-industry-copy": "tsx src/core/attendance/attendanceIndustryCopy.test.ts",

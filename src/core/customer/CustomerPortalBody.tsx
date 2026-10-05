@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type FC } from 'react';
 import { CalendarDays, ClipboardCheck, DoorOpen, Home, LogOut, User } from 'lucide-react';
 import { AdultStudentGuidePanel } from '@/core/help';
-import { normalizeIndustryType } from '@/core/industry/types';
+import { showsPracticeRoomTab } from '@/core/industry/industryUi';
 import { CustomerPracticeRoomView } from './CustomerPracticeRoomView';
 import { CustomerHomeView } from './CustomerHomeView';
 import { CustomerScheduleView } from './CustomerScheduleView';
@@ -15,10 +15,6 @@ import {
 import type { MyLinkedCustomerOrg } from './services/myLinkedCustomerOrgsService';
 
 export type CustomerTab = 'home' | 'schedule' | 'attendance' | 'practice' | 'account';
-
-function showPracticeTab(industryType: string): boolean {
-  return normalizeIndustryType(industryType) === 'piano';
-}
 
 interface Props {
   displayName: string;
@@ -54,7 +50,7 @@ export const CustomerPortalBody: FC<Props> = ({
     [enrollment.customerId]
   );
 
-  const withPractice = showPracticeTab(enrollment.industryType);
+  const withPractice = showsPracticeRoomTab(enrollment.industryType);
   const [pointsActive, setPointsActive] = useState(false);
 
   useEffect(() => {

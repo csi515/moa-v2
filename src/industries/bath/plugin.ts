@@ -38,6 +38,7 @@ export const bathPluginManifest: IndustryPluginManifest = {
   showsMakeupList: false,
   usesWithdrawalExitLabel: false,
   savesAttendanceWithPass: false,
+  showsPracticeRoomTab: false,
   roomConfig: {
     sectionTitle: '공간',
     sectionDescription: '사업장에서 쓰는 공간 이름을 등록해 주세요.',
