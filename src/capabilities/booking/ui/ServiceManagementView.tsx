@@ -1,36 +1,24 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useStorageRefresh } from '@/hooks';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
-import { isSkinClinicIndustry } from '@/core/industry/industryUi';
 import { ScheduleService } from '@/core/services/scheduleService';
 import type { ServiceOffering } from '@/core/types/schedule';
 import { EmptyState, Modal, PageHeader } from '@/shared/components';
 import { formatCurrency } from '@/utils/formatters';
-import { Dumbbell, Sparkles, Trash2 } from 'lucide-react';
-
-const PILATES_CATEGORY: Record<ServiceOffering['category'], string> = {
-  private: '개인',
-  group: '그룹',
-  reformer: '기구',
-  other: '기타',
-};
-
-const SKIN_CATEGORY: Record<ServiceOffering['category'], string> = {
-  private: '1:1',
-  group: '그룹',
-  reformer: '집중',
-  other: '기타',
-};
+import { Calendar, Dumbbell, Sparkles, Trash2 } from 'lucide-react';
+import { resolveBookingUi } from './bookingIndustryAdapter';
 
 export const ServiceManagementView: React.FC = () => {
   const { showToast, openConfirmDialog } = useApp();
   const { industry } = usePermissions();
   const labels = useModuleLabels();
-  const skin = isSkinClinicIndustry(industry);
-  const categoryLabel = skin ? SKIN_CATEGORY : PILATES_CATEGORY;
+  const bookingUi = resolveBookingUi(industry);
+  const categoryLabel = bookingUi.categoryLabels;
   const serviceName = labels.service.management;
+  const ServiceIcon =
+    bookingUi.flow === 'appointmentCards' ? Sparkles : bookingUi.flow === 'classSlots' ? Dumbbell : Calendar;
   useStorageRefresh();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editing, setEditing] = useState<ServiceOffering | null>(null);
@@ -77,7 +65,7 @@ export const ServiceManagementView: React.FC = () => {
       durationMinutes: duration,
       maxCapacity: capacity,
       category,
-      careIntervalDays: skin && careDays ? Number(careDays) : undefined,
+      careIntervalDays: bookingUi.careIntervalLabel && careDays ? Number(careDays) : undefined,
       isActive: true,
       isSchedulable: true,
     });
@@ -102,20 +90,14 @@ export const ServiceManagementView: React.FC = () => {
   return (
     <div className="space-y-4 pb-4">
       <PageHeader
-        icon={skin ? <Sparkles className="w-6 h-6" /> : <Dumbbell className="w-6 h-6" />}
-        iconClassName={skin ? 'text-rose-600' : 'text-purple-600'}
+        icon={<ServiceIcon className="w-6 h-6" />}
+        iconClassName={bookingUi.serviceIconClass}
         title={`${serviceName} 관리`}
-        description={
-          skin
-            ? '1:1·그룹 시술과 시간·요금을 설정합니다'
-            : '개인·그룹·기구 필라테스 수업 종류와 시간·요금을 설정합니다'
-        }
+        description={bookingUi.serviceDescription}
         actions={
           <button
             onClick={openCreate}
-            className={`px-4 py-2.5 text-white text-sm font-bold rounded-xl ${
-              skin ? 'bg-rose-600 hover:bg-rose-700' : 'bg-purple-600 hover:bg-purple-700'
-            }`}
+            className={`px-4 py-2.5 text-white text-sm font-bold rounded-xl ${bookingUi.serviceHeaderBtn}`}
           >
             + {labels.service.singular} 추가
           </button>
@@ -124,7 +106,7 @@ export const ServiceManagementView: React.FC = () => {
 
       {offerings.length === 0 ? (
         <EmptyState
-          icon={skin ? <Sparkles className="w-10 h-10" /> : <Dumbbell className="w-10 h-10" />}
+          icon={<ServiceIcon className="w-10 h-10" />}
           title={`등록된 ${serviceName}이 없습니다`}
           description={`예약 전 ${serviceName}을 먼저 등록해 주세요`}
         />
@@ -156,7 +138,7 @@ export const ServiceManagementView: React.FC = () => {
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
             <label className="block text-xs font-semibold mb-1">{labels.service.singular}명 *</label>
-            <input value={name} onChange={(e) => setName(e.target.value)} className="w-full px-3 py-2 text-sm border rounded-xl" placeholder={skin ? '기본 관리 60분' : '개인 레슨 50분'} required />
+            <input value={name} onChange={(e) => setName(e.target.value)} className="w-full px-3 py-2 text-sm border rounded-xl" placeholder={bookingUi.serviceNamePlaceholder} required />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -168,9 +150,9 @@ export const ServiceManagementView: React.FC = () => {
               <input type="number" min={1} value={capacity} onChange={(e) => setCapacity(Number(e.target.value))} className="w-full px-3 py-2 text-sm border rounded-xl" />
             </div>
           </div>
-          {skin && (
+          {bookingUi.careIntervalLabel && (
             <div>
-              <label className="block text-xs font-semibold mb-1">권장 재방문 간격(일)</label>
+              <label className="block text-xs font-semibold mb-1">{bookingUi.careIntervalLabel}</label>
               <input
                 type="number"
                 min={0}
@@ -196,7 +178,7 @@ export const ServiceManagementView: React.FC = () => {
               </select>
             </div>
           </div>
-          <button type="submit" className={`w-full py-2.5 text-white font-bold rounded-xl text-sm ${skin ? 'bg-rose-600' : 'bg-purple-600'}`}>저장</button>
+          <button type="submit" className={`w-full py-2.5 text-white font-bold rounded-xl text-sm ${bookingUi.serviceSubmitBtn}`}>저장</button>
         </form>
       </Modal>
     </div>
