@@ -227,6 +227,19 @@ export function showsStaffPracticeGuide(
   return Boolean(getIndustryPlugin(industry).showsStaffPracticeGuide);
 }
 
+/**
+ * 재무 요약에 이번 달 수납 연동 수입을 넣을지.
+ * 호출부가 넘긴 업종 인자로 설치된 플러그인 id만 본다.
+ * 빈 값은 피아노 플러그인으로 넘기지 않고, 별칭(preschool 등)도 풀지 않는다.
+ * 지금은 피아노만 true.
+ */
+export function includesLinkedBillingIncome(
+  industry: IndustryType | string | null | undefined
+): boolean {
+  if (isBlankIndustryInput(industry)) return false;
+  return Boolean(getInstalledIndustryPlugin(industry)?.includesLinkedBillingIncome);
+}
+
 /** 실(강의실·관리실 등) UI 설정 */
 export function getRoomConfig(industry: IndustryType | string | null | undefined) {
   return getIndustryPlugin(industry).roomConfig ?? {

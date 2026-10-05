@@ -12,6 +12,7 @@ import { generateEntityId, getItem, setItem, type StorageApi } from './helpers';
 import {
   getTuitionPayments as readTuitionPayments,
 } from '../../core/finance/billingIncomeLink';
+import { includesLinkedBillingIncome } from '../../core/industry/industryUi';
 
 /**
  * 수강료·지출·수입 local persistence + 읽기 집계.
@@ -163,8 +164,9 @@ export function createFinanceStorage(api: StorageApi) {
         expenses.filter((e) => e.date.startsWith(ym)).reduce((sum, e) => sum + e.amount, 0);
 
       const manualIncomeThisMonth = getIncomeForMonth(currentYearMonth, false);
-      const linkedIncomeThisMonth =
-        industry === 'piano' ? getIncomeForMonth(currentYearMonth, true) : 0;
+      const linkedIncomeThisMonth = includesLinkedBillingIncome(industry)
+        ? getIncomeForMonth(currentYearMonth, true)
+        : 0;
       const totalIncomeThisMonth = getIncomeForMonth(currentYearMonth);
       const totalExpenseThisMonth = getExpenseForMonth(currentYearMonth);
 
