@@ -43,6 +43,7 @@
     "test:invoice-dedupe": "tsx src/capabilities/billing/finance/invoiceDedupe.test.ts",
     "test:expense-categories": "tsx src/capabilities/billing/finance/expenseCategories.test.ts",
     "test:payroll-expense-category": "tsx src/capabilities/billing/finance/teacherPayroll/payrollExpenseCategory.test.ts",
+    "test:finance-hub-nav": "tsx src/capabilities/billing/finance/financeHubNav.test.ts",
     "test:invoice-textbook-link": "tsx src/capabilities/billing/finance/invoiceTextbookLink.test.ts",
     "test:invoice-model": "tsx src/capabilities/billing/finance/invoiceModel.test.ts",
     "test:latest-tuition-payment": "tsx src/capabilities/billing/finance/latestTuitionPayment.test.ts",

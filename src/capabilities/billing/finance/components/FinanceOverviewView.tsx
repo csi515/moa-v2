@@ -4,6 +4,7 @@ import { setActiveTab } from '@/shared/navigation/navSession';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useStorageRefresh } from '@/hooks';
 import { billingStorage } from '@/capabilities/billing/infrastructure/billingStorage';
+import { resolveFinanceHubNav } from '@/capabilities/billing/finance/financeHubNav';
 import { formatCurrency } from '@/utils/formatters';
 import { buildYearMonthOptions } from '@/capabilities/billing/finance/categories';
 import {
@@ -60,7 +61,7 @@ export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded
     };
   }, [selectedMonth, summary.monthlyTrend, refreshKey]);
 
-  const isPiano = industry === 'piano';
+  const showLinkedBillingIncome = resolveFinanceHubNav(industry).showLinkedBillingIncome;
 
   return (
     <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
@@ -91,7 +92,7 @@ export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded
           </p>
           <p className="text-[11px] text-slate-400 mt-1">
             일반 {formatCurrency(summary.manualIncomeThisMonth)}
-            {isPiano && ` · 수납연동 ${formatCurrency(summary.linkedIncomeThisMonth)}`}
+            {showLinkedBillingIncome && ` · 수납연동 ${formatCurrency(summary.linkedIncomeThisMonth)}`}
           </p>
         </button>
 
@@ -166,7 +167,7 @@ export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded
         )}
       </div>
 
-      {isPiano && (
+      {showLinkedBillingIncome && (
         <div className="bg-indigo-50/60 rounded-2xl p-3.5 border border-indigo-100 space-y-3">
           <p className="text-xs text-indigo-800 leading-relaxed">
             수강료·교재 납부는 납부일 기준으로 수입 원장에 연동됩니다. 수입 관리에서는 일반 수입(대관
