@@ -62,10 +62,10 @@ assert.doesNotMatch(adultFn, /===\s*['"]piano['"]/);
 assert.doesNotMatch(adultFn, /showsStaffPracticeGuide/);
 
 const ui = readSrc('core/industry/industryUi.ts');
-const fn = ui.slice(
-  ui.indexOf('export function showsStaffPracticeGuide'),
-  ui.indexOf('/** 실(강의실·관리실 등) UI 설정 */')
-);
+const fnStart = ui.indexOf('export function showsStaffPracticeGuide');
+assert.ok(fnStart >= 0, 'showsStaffPracticeGuide must exist');
+// Slice only this function body (up to its closing brace) so later helpers do not leak in.
+const fn = ui.slice(fnStart, ui.indexOf('\n}\n', fnStart) + 3);
 assert.match(fn, /return Boolean\(getIndustryPlugin\(industry\)\.showsStaffPracticeGuide\)/);
 assert.doesNotMatch(fn, /===\s*['"]piano['"]/);
 assert.doesNotMatch(fn, /if \(!industry\) return false/);
