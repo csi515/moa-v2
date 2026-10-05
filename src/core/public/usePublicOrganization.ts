@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { PublicOrgInfo } from '@/types';
-import { normalizeIndustryType } from '@/core/industry/types';
-import { getPlaceLabel, isAppointmentIndustry } from '@/core/industry/industryUi';
+import { getPlaceLabel, publicLandingAdultFirst } from '@/core/industry/industryUi';
 import { supabase } from '@/lib/supabase/client';
 import { publicOrgService } from './services/publicOrgService';
 
@@ -47,10 +46,7 @@ export function usePublicOrganization(code: string) {
   }, [code]);
 
   const placeLabel = getPlaceLabel(org?.industry_type);
-  const adultFirst =
-    !!org &&
-    (isAppointmentIndustry(org.industry_type) ||
-      normalizeIndustryType(org.industry_type) === 'gym');
+  const adultFirst = !!org && publicLandingAdultFirst(org.industry_type);
 
   return {
     org,

@@ -160,6 +160,14 @@ export interface IndustryPluginManifest {
   customerLabel?: string;
   /** 예약·서비스 중심 업종 여부 */
   isAppointment?: boolean;
+  /**
+   * 공개 랜딩에서 성인 가입을 학부모 연결보다 앞에 둘지.
+   * 공개 조직 훅은 업종 id를 비교하지 않고 이 플래그만 본다.
+   * 지금은 체육관과 예약 업종(필라테스·피부)만 true.
+   * taekwondo는 gym 별칭이라 체육관 플래그를 따른다.
+   * 빈 값은 플러그인을 고르기 전에 false다.
+   */
+  publicLandingAdultFirst?: boolean;
   /** 비용 명칭 (예: '수강료', '이용료', '보육료') */
   feeLabel?: string;
   /** 수납 계좌 입력 placeholder */

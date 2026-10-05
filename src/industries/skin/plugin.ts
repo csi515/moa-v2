@@ -38,6 +38,7 @@ export const skinPluginManifest: IndustryPluginManifest = {
   placeNamePlaceholder: '예: 하루 피부관리',
   customerLabel: '고객',
   isAppointment: true,
+  publicLandingAdultFirst: true,
   feeLabel: '이용료',
   bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 샵 이름)',
   supportsDeposit: true,

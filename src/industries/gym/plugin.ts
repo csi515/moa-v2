@@ -35,6 +35,7 @@ export const gymPluginManifest: IndustryPluginManifest = {
   placeNamePlaceholder: '예: 강남 체육관',
   customerLabel: '회원',
   isAppointment: false,
+  publicLandingAdultFirst: true,
   feeLabel: '수강료',
   bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 체육관)',
   supportsDeposit: false,

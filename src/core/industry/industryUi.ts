@@ -40,6 +40,18 @@ export function isAppointmentIndustry(industry: IndustryType | string | null | u
   return Boolean(getIndustryPlugin(industry).isAppointment);
 }
 
+/**
+ * 공개 랜딩에서 성인 가입을 학부모 연결보다 앞에 둘지.
+ * 업종 id 비교 대신 플러그인 플래그만 본다.
+ * 빈 값은 레거시 미설정(piano)으로 풀기 전에 false.
+ */
+export function publicLandingAdultFirst(
+  industry: IndustryType | string | null | undefined
+): boolean {
+  if (isBlankIndustryInput(industry)) return false;
+  return Boolean(getIndustryPlugin(industry).publicLandingAdultFirst);
+}
+
 export function isGymIndustry(industry: IndustryType | string | null | undefined): boolean {
   if (!industry) return false;
   return getIndustryPlugin(industry).id === 'gym';
