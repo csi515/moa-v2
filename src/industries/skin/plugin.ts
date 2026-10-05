@@ -51,6 +51,7 @@ export const skinPluginManifest: IndustryPluginManifest = {
   showsPracticeRoomTab: false,
   showsCustomerPoints: false,
   showsAdultPracticeGuide: false,
+  showsStaffPracticeGuide: false,
   rosterList: {
     withdrawnLabel: '종료',
     filterEmptyUsesSearchHint: true,

@@ -229,6 +229,13 @@ export interface IndustryPluginManifest {
    */
   showsAdultPracticeGuide?: boolean;
   /**
+   * 스태프 기능 안내의 연습실 예약 항목을 보일지.
+   * 코어는 업종 id를 비교하지 않고 이 플래그만 본다.
+   * 지금은 피아노만 true. 빈 값은 getIndustryPlugin이 피아노 플러그인으로 떨어진다.
+   * 성인 수강생 이용 안내(getAdultStudentPortalGuide)와는 별개다.
+   */
+  showsStaffPracticeGuide?: boolean;
+  /**
    * 공유 명단 목록의 업종 차이.
    * 목록은 업종 id를 비교하지 않고 이 설정만 읽는다.
    */
