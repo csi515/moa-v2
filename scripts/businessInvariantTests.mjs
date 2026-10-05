@@ -204,6 +204,7 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:daycare-ops': 'daycare sync',
   'test:expense-categories': 'industry expense category plugin unit',
   'test:pin-checkin-side-effect': 'pin check-in side effect plugin flag unit',
+  'test:customer-attendance-makeup-flag': 'customer attendance makeup list plugin flag unit',
   'test:payroll-expense-category': 'payroll expense category plugin unit',
   'test:finance-hub-nav': 'finance hub nav plugin unit',
 };
