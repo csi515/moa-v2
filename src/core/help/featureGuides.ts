@@ -2,7 +2,7 @@ import {
   PIN_ATTENDANCE_DIRECTOR_COPY,
   PIN_ATTENDANCE_PARENT_COPY,
 } from '@/core/attendance/attendanceNotifyCopy';
-import { showsAdultPracticeGuide } from '@/core/industry/industryUi';
+import { showsAdultPracticeGuide, showsStaffPracticeGuide } from '@/core/industry/industryUi';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
 import {
   buildBillingSection,
@@ -10,6 +10,7 @@ import {
   buildCustomerSection,
   buildGuideSection,
   buildStaffSection,
+  type FeatureGuideItem,
   type FeatureGuideSection,
 } from './guideBuilders';
 
@@ -164,12 +165,6 @@ const PIANO_GUIDE: FeatureGuideSection[] = [
         summary: '결석한 학생의 보강 일정을 시간·연습실·강사와 함께 잡습니다.',
         howTo:
           '일정 등록 시 강사·연습실 충돌이 있으면 확인 후 저장할 수 있습니다. 등록 즉시 학부모 포털 알림과 앱 푸시가 전달됩니다.',
-      },
-      {
-        id: 'practice-rooms',
-        title: '연습실 예약',
-        summary: '학생별 연습실 사용 시간을 잡고 수업·보강과 충돌을 확인합니다.',
-        howTo: '일정 > 연습실에서 예약합니다. 학부모 일정 탭과 앱 푸시로 안내됩니다.',
       },
     ],
   }),
@@ -526,14 +521,34 @@ const GENERIC_INTRO = {
 
 const GENERIC_GUIDE: FeatureGuideSection[] = [COMMON_SETTINGS];
 
+/** 스태프 기능 안내의 연습실 예약. 업종 번들에 넣지 않고 플래그로만 붙인다. */
+const STAFF_PRACTICE_ROOMS_GUIDE_ITEM: FeatureGuideItem = {
+  id: 'practice-rooms',
+  title: '연습실 예약',
+  summary: '학생별 연습실 사용 시간을 잡고 수업·보강과 충돌을 확인합니다.',
+  howTo: '일정 > 연습실에서 예약합니다. 학부모 일정 탭과 앱 푸시로 안내됩니다.',
+};
+
+function withStaffPracticeRoomsGuide(sections: FeatureGuideSection[]): FeatureGuideSection[] {
+  return sections.map((section) => {
+    if (section.id !== 'attendance') return section;
+    if (section.items.some((item) => item.id === 'practice-rooms')) return section;
+    const items = [...section.items];
+    const makeupAt = items.findIndex((item) => item.id === 'makeups');
+    items.splice(makeupAt >= 0 ? makeupAt + 1 : items.length, 0, STAFF_PRACTICE_ROOMS_GUIDE_ITEM);
+    return { ...section, items };
+  });
+}
+
 export function getIndustryFeatureGuide(industry: IndustryType | string | null | undefined): {
   intro: { title: string; body: string };
   sections: FeatureGuideSection[];
 } {
   const type = normalizeIndustryType(industry);
+  const base = (type && GUIDE_BY_INDUSTRY[type]) || GENERIC_GUIDE;
   return {
     intro: (type && INTRO_BY_INDUSTRY[type]) || GENERIC_INTRO,
-    sections: (type && GUIDE_BY_INDUSTRY[type]) || GENERIC_GUIDE,
+    sections: showsStaffPracticeGuide(industry) ? withStaffPracticeRoomsGuide(base) : base,
   };
 }
 

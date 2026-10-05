@@ -214,6 +214,19 @@ export function showsAdultPracticeGuide(
   return Boolean(getIndustryPlugin(industry).showsAdultPracticeGuide);
 }
 
+/**
+ * 스태프 기능 안내의 연습실 예약 항목.
+ * 업종 id 비교 대신 플러그인 플래그만 본다. 지금은 피아노만 true.
+ * 빈 값은 레거시 미설정으로 피아노 플러그인을 쓴다(normalizeIndustryType과 같이 피아노로 떨어짐).
+ * 비어 있지 않은 미등록 업종은 generic이라 항목이 생기지 않는다.
+ * 성인 수강생 이용 안내는 이 플래그를 쓰지 않는다. 빈 업종에서 성인 연습실 안내는 숨긴다.
+ */
+export function showsStaffPracticeGuide(
+  industry: IndustryType | string | null | undefined
+): boolean {
+  return Boolean(getIndustryPlugin(industry).showsStaffPracticeGuide);
+}
+
 /** 실(강의실·관리실 등) UI 설정 */
 export function getRoomConfig(industry: IndustryType | string | null | undefined) {
   return getIndustryPlugin(industry).roomConfig ?? {

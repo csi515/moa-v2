@@ -58,6 +58,7 @@ export const pianoPluginManifest: IndustryPluginManifest = {
   showsPracticeRoomTab: true,
   showsCustomerPoints: false,
   showsAdultPracticeGuide: true,
+  showsStaffPracticeGuide: true,
   rosterList: {
     searchPlaceholder: '학생·학부모 이름 또는 전화번호',
     filterButtonAriaLabel: '추가 필터 (담당 선생님, 반, 요일, 정렬)',
