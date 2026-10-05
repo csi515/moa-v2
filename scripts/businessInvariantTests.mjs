@@ -207,6 +207,7 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:customer-attendance-makeup-flag': 'customer attendance makeup list plugin flag unit',
   'test:student-detail-pass-save': 'student detail attendance pass save plugin flag unit',
   'test:customer-practice-room-tab': 'customer portal practice room tab plugin flag unit',
+  'test:customer-points-flag': 'customer portal points plugin flag unit',
   'test:attendance-summary-metric': 'attendance summary metric plugin unit',
   'test:payroll-expense-category': 'payroll expense category plugin unit',
   'test:finance-hub-nav': 'finance hub nav plugin unit',
