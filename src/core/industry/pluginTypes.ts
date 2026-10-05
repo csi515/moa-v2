@@ -125,6 +125,13 @@ export interface IndustryPluginManifest {
   aliases?: string[];
   theme: ModuleTheme;
   accent: IndustryAccent;
+  /**
+   * 출결 현황 요약 카드 색.
+   * 출결 capability는 업종 id를 비교하지 않고 이 값만 읽는다.
+   * 없으면 indigo. 기본이 아닌 색만 지정한다 (피부 rose, 필라테스 teal, 체육관 amber).
+   * 별칭은 플러그인 id가 아니므로 이 색을 받지 않는다.
+   */
+  attendanceSummaryMetric?: 'rose' | 'teal' | 'amber';
   attendanceDefault: boolean;
   usesClassBasedSchedule: boolean;
   customerListTab: NavTab;

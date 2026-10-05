@@ -26,6 +26,7 @@ export const skinPluginManifest: IndustryPluginManifest = {
     hoverBg: 'hover:bg-rose-50',
     ring: 'focus:ring-rose-500 focus:border-rose-300',
   },
+  attendanceSummaryMetric: 'rose',
   attendanceDefault: false,
   usesClassBasedSchedule: false,
   customerListTab: 'members',

@@ -21,6 +21,7 @@ export const pilatesPluginManifest: IndustryPluginManifest = {
     hoverBg: 'hover:bg-teal-50',
     ring: 'focus:ring-teal-500 focus:border-teal-300',
   },
+  attendanceSummaryMetric: 'teal',
   attendanceDefault: false,
   usesClassBasedSchedule: false,
   customerListTab: 'members',
