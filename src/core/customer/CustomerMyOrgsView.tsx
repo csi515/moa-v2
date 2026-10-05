@@ -1,6 +1,7 @@
 import { useState, type FC } from 'react';
 import { Building2, ChevronRight, Coins } from 'lucide-react';
-import { getIndustryLabel, normalizeIndustryType } from '@/core/industry/types';
+import { showsCustomerPoints } from '@/core/industry/industryUi';
+import { getIndustryLabel } from '@/core/industry/types';
 import { CUSTOMER_MY_ORGS_COPY as COPY } from './customerMyOrgsCopy';
 import { CustomerRetailPointsView } from './CustomerRetailPointsView';
 import {
@@ -16,13 +17,9 @@ interface Props {
   onPointsActiveChange?: (active: boolean) => void;
 }
 
-function isRetailOrg(industryType: string): boolean {
-  return normalizeIndustryType(industryType) === 'retail';
-}
-
 /**
  * 일반 사용자 — Customer로 연결된 사업장 목록.
- * Retail이면 사업장별 포인트 조회로 진입(합산 없음).
+ * 포인트 플래그가 켜진 업종만 사업장별 포인트 조회로 진입(합산 없음).
  */
 export const CustomerMyOrgsView: FC<Props> = ({
   organizations,
@@ -68,7 +65,7 @@ export const CustomerMyOrgsView: FC<Props> = ({
         <ul className="space-y-2">
           {organizations.map((org) => {
             const status = getCustomerStatusLabel(org.customerStatus);
-            const retail = isRetailOrg(org.industryType);
+            const showPoints = showsCustomerPoints(org.industryType);
             return (
               <li
                 key={org.customerId}
@@ -98,7 +95,7 @@ export const CustomerMyOrgsView: FC<Props> = ({
                   </div>
                 </div>
 
-                {retail && (
+                {showPoints && (
                   <button
                     type="button"
                     onClick={() => openPoints(org)}

@@ -177,6 +177,18 @@ export function showsPracticeRoomTab(
   return Boolean(getIndustryPlugin(industry).showsPracticeRoomTab);
 }
 
+/**
+ * 고객 포털 포인트 조회 여부.
+ * 업종 id 비교 대신 플러그인 플래그만 본다. 지금은 소매만 true.
+ * 빈 값은 getIndustryPlugin과 같이 piano로 해석되고, piano는 false다.
+ * 카탈로그에 없는 값은 generic이며 false다. retail로 풀리는 별칭은 없다.
+ */
+export function showsCustomerPoints(
+  industry: IndustryType | string | null | undefined
+): boolean {
+  return Boolean(getIndustryPlugin(industry).showsCustomerPoints);
+}
+
 /** 실(강의실·관리실 등) UI 설정 */
 export function getRoomConfig(industry: IndustryType | string | null | undefined) {
   return getIndustryPlugin(industry).roomConfig ?? {

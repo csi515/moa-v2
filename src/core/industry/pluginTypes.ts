@@ -208,6 +208,13 @@ export interface IndustryPluginManifest {
    */
   showsPracticeRoomTab?: boolean;
   /**
+   * 고객 포털에서 이 사업장의 포인트를 조회할 수 있는지.
+   * 목록 버튼과 조회 서비스는 업종 id를 비교하지 않고 이 플래그만 본다.
+   * 지금은 소매(retail)만 true. 별칭은 parseIndustryType으로 풀리며 retail로 가는 별칭은 없다.
+   * 빈 값은 piano 플러그인이고, piano는 false다.
+   */
+  showsCustomerPoints?: boolean;
+  /**
    * 공유 명단 목록의 업종 차이.
    * 목록은 업종 id를 비교하지 않고 이 설정만 읽는다.
    */

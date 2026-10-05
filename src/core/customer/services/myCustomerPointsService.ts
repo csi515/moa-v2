@@ -1,4 +1,4 @@
-import { normalizeIndustryType } from '@/core/industry/types';
+import { showsCustomerPoints } from '@/core/industry/industryUi';
 import { pointQueryService } from '@/core/loyalty';
 import type { PointTransaction } from '@/core/loyalty';
 import { customerLinkService } from './customerLinkService';
@@ -28,7 +28,7 @@ export const myCustomerPointsService = {
     if (!organizationId || !customerId) {
       throw new Error('사업장·고객 정보가 필요합니다.');
     }
-    if (normalizeIndustryType(params.industryType) !== 'retail') {
+    if (!showsCustomerPoints(params.industryType)) {
       throw new Error('소매 사업장에서만 포인트를 조회할 수 있습니다.');
     }
 
