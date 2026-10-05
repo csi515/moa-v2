@@ -258,7 +258,7 @@ export function useStudentDetailModal({
     const existing = StorageService.getAttendance().find(
       (r) => r.date === newAttDate && r.studentId === student.id && r.classId === classId
     );
-    if (industryPlugin.id === 'piano') {
+    if (industryPlugin.savesAttendanceWithPass) {
       const result = await saveAttendanceWithPass({
         student,
         nextStatus: status,

@@ -194,6 +194,14 @@ export interface IndustryPluginManifest {
    */
   usesWithdrawalExitLabel?: boolean;
   /**
+   * 학생 상세의 출결 저장이 saveAttendanceWithPass를 쓸지.
+   * 공유 모달은 업종 id를 비교하지 않고 이 플래그만 본다.
+   * 지금은 피아노만 true. 그 외는 부가 처리 후 일반 출결 저장.
+   * 빈 업종은 getIndustryPlugin이 피아노 플러그인을 고르므로 그 플래그를 따른다.
+   * 전용 플러그인이 없으면 generic은 definition id가 piano일 때만 true다.
+   */
+  savesAttendanceWithPass?: boolean;
+  /**
    * 공유 명단 목록의 업종 차이.
    * 목록은 업종 id를 비교하지 않고 이 설정만 읽는다.
    */

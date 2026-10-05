@@ -46,6 +46,7 @@ export const skinPluginManifest: IndustryPluginManifest = {
   runsPinCheckInSideEffects: false,
   showsMakeupList: false,
   usesWithdrawalExitLabel: false,
+  savesAttendanceWithPass: false,
   rosterList: {
     withdrawnLabel: '종료',
     filterEmptyUsesSearchHint: true,
