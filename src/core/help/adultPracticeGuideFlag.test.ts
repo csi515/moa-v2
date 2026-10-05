@@ -100,13 +100,18 @@ assert.equal(hasPracticeSection('pilates'), false);
 assert.equal(hasPracticeSection('gym'), false);
 assert.equal(hasPracticeSection('piano'), true);
 
-// 스태프 practice-rooms 안내는 PIANO_GUIDE에 고정. 성인 안내와 조건이 달라 옮기지 않는다.
+// 스태프 practice-rooms 안내는 별도 상수 STAFF_PRACTICE_ROOMS_GUIDE_ITEM에 있다(PIANO_GUIDE 밖).
+// 성인 안내와 조건이 달라 성인 플래그로 붙이지 않는다.
 assert.match(guides, /id:\s*'practice-rooms'/);
 assert.doesNotMatch(guides, /showsAdultPracticeGuide\(.*practice-rooms/);
+const staffItemStart = guides.indexOf('const STAFF_PRACTICE_ROOMS_GUIDE_ITEM');
+assert.ok(staffItemStart >= 0, 'STAFF_PRACTICE_ROOMS_GUIDE_ITEM missing');
+const staffItemSlice = guides.slice(staffItemStart, guides.indexOf('};', staffItemStart) + 2);
+assert.match(staffItemSlice, /id:\s*'practice-rooms'/);
 const pianoGuideSlice = guides.slice(
   guides.indexOf('const PIANO_GUIDE'),
   guides.indexOf('const PILATES_GUIDE')
 );
-assert.match(pianoGuideSlice, /id:\s*'practice-rooms'/);
+assert.doesNotMatch(pianoGuideSlice, /id:\s*'practice-rooms'/);
 
 console.log('adultPracticeGuideFlag.test.ts OK');

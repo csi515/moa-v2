@@ -2,7 +2,7 @@
  * 스태프 기능 안내의 연습실 예약 항목은 업종 id 비교가 아니라
  * showsStaffPracticeGuide 플래그가 결정한다.
  * 빈 업종은 피아노 플러그인으로 떨어져 항목이 남고, 다른 업종은 항목이 생기지 않는다.
- * 성인 수강생 이용 안내는 main과 같이 빈 값(null/undefined/'')에서 연습실 섹션을 숨긴다.
+ * 성인 수강생 이용 안내는 showsAdultPracticeGuide 플래그를 따르고, 빈 값(null/undefined/''/공백)에서 연습실 섹션을 숨긴다.
  * 실행: npx tsx src/core/help/staffPracticeGuideFlag.test.ts
  */
 import assert from 'node:assert/strict';
@@ -47,7 +47,7 @@ const pianoGuideSlice = guides.slice(
 assert.doesNotMatch(pianoGuideSlice, /id:\s*'practice-rooms'/);
 assert.match(guides, /showsStaffPracticeGuide\(/);
 assert.doesNotMatch(guides, /showsPracticeRoomTab/);
-assert.doesNotMatch(guides, /showsAdultPracticeGuide/);
+assert.match(guides, /showsAdultPracticeGuide\(/);
 
 const staffFn = guides.slice(
   guides.indexOf('export function getIndustryFeatureGuide'),
@@ -57,10 +57,9 @@ assert.match(staffFn, /showsStaffPracticeGuide\(industry\)/);
 assert.doesNotMatch(staffFn, /===\s*['"]piano['"]/);
 
 const adultFn = guides.slice(guides.indexOf('export function getAdultStudentPortalGuide'));
-assert.match(adultFn, /industry \? normalizeIndustryType\(industry\) : null/);
-assert.match(adultFn, /type === 'piano'/);
+assert.match(adultFn, /showsAdultPracticeGuide\(industry\)/);
+assert.doesNotMatch(adultFn, /===\s*['"]piano['"]/);
 assert.doesNotMatch(adultFn, /showsStaffPracticeGuide/);
-assert.doesNotMatch(adultFn, /showsAdultPracticeGuide/);
 
 const ui = readSrc('core/industry/industryUi.ts');
 const fn = ui.slice(
@@ -85,9 +84,13 @@ const manifests: { id: string; rel: string }[] = [
 for (const { id, rel } of manifests) {
   const flag = readFlag(rel);
   assert.equal(flag, id === 'piano', `${id} manifest showsStaffPracticeGuide`);
+  // Keep the manifest's showsAdultPracticeGuide flag (#38) so the adult-guide checks below see real values.
+  const adultMatch = readSrc(rel).match(/showsAdultPracticeGuide:\s*(true|false)/);
+  assert.ok(adultMatch, `${rel} must declare showsAdultPracticeGuide`);
   installIndustryPlugin({
     id,
     showsStaffPracticeGuide: flag,
+    showsAdultPracticeGuide: adultMatch[1] === 'true',
   } as IndustryPluginManifest);
   assert.equal(showsStaffPracticeGuide(id), flag, id);
   assert.equal(hasStaffPracticeItem(id), flag, `staff guide ${id}`);
@@ -124,10 +127,10 @@ for (const industry of ['piano', null, undefined, '', '   '] as const) {
   assert.equal(ids[ids.indexOf('makeups') + 1], 'practice-rooms');
 }
 
-for (const hidden of [null, undefined, '']) {
+// Blank / whitespace-only industry hides the adult practice section (combined with #38's showsAdultPracticeGuide).
+for (const hidden of [null, undefined, '', '   ']) {
   assert.equal(hasAdultPracticeSection(hidden), false, `adult blank ${JSON.stringify(hidden)}`);
 }
-assert.equal(hasAdultPracticeSection('   '), true);
 assert.equal(hasAdultPracticeSection('piano'), true);
 assert.equal(hasAdultPracticeSection('pilates'), false);
 assert.equal(hasAdultPracticeSection('gym'), false);
