@@ -30,6 +30,7 @@ export const bathPluginManifest: IndustryPluginManifest = {
   placeNamePlaceholder: '예: 행복 사업장',
   customerLabel: '고객',
   isAppointment: false,
+  publicLandingAdultFirst: false,
   feeLabel: '이용료',
   bankAccountPlaceholder: '예: 국민은행 000000-00-000000 (예금주: 홍길동)',
   supportsDeposit: false,

@@ -45,6 +45,7 @@ export const pianoPluginManifest: IndustryPluginManifest = {
   placeNamePlaceholder: '예: 행복 피아노 학원',
   customerLabel: '원생',
   isAppointment: false,
+  publicLandingAdultFirst: false,
   feeLabel: '수강료',
   bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 선율음악학원)',
   supportsDeposit: false,

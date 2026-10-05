@@ -36,6 +36,7 @@ export const daycarePluginManifest: IndustryPluginManifest = {
   placeNamePlaceholder: '예: 햇살 어린이집',
   customerLabel: '원아',
   isAppointment: false,
+  publicLandingAdultFirst: false,
   feeLabel: '보육료',
   bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 어린이집)',
   supportsDeposit: false,
