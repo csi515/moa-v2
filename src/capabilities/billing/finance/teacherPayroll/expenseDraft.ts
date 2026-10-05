@@ -1,20 +1,24 @@
 import type { Expense, PaymentMethod, Teacher, TeacherPayType } from '@/types';
+import { getIndustryPlugin } from '@/core/industry/pluginHost';
+import { isBlankIndustryInput } from '@/core/industry/types';
 import { formatPayrollFormula } from './labels';
 
-/** 업종별 강사 정산 지출 카테고리 */
+/** 훅이 없거나 이 플러그인이 원문 id·aliases로 청구하지 않을 때의 정산 지출 카테고리. */
+export const DEFAULT_PAYROLL_EXPENSE_CATEGORY = 'salary';
+
+/**
+ * 강사 정산 지출 카테고리.
+ * 업종 id 분기는 하지 않는다. 플러그인 훅이 값을 낸다.
+ * 빈 값은 piano로 바꾸지 않고 기본값을 유지한다.
+ * 별칭은 플러그인 매니페스트 aliases에 있는 것만 그 훅을 쓴다.
+ */
 export function getPayrollExpenseCategory(industry?: string | null): string {
-  if (
-    industry === 'pilates' ||
-    industry === 'skin_clinic' ||
-    industry === 'gym' ||
-    industry === 'taekwondo'
-  ) {
-    return 'instructor_fee';
-  }
-  if (industry === 'daycare' || industry === 'piano') {
-    return 'teacher_salary';
-  }
-  return 'salary';
+  if (isBlankIndustryInput(industry)) return DEFAULT_PAYROLL_EXPENSE_CATEGORY;
+  const raw = String(industry);
+  const plugin = getIndustryPlugin(raw);
+  const claimed = plugin.id === raw || plugin.aliases?.includes(raw) === true;
+  if (!claimed) return DEFAULT_PAYROLL_EXPENSE_CATEGORY;
+  return plugin.getPayrollExpenseCategory?.() ?? DEFAULT_PAYROLL_EXPENSE_CATEGORY;
 }
 
 export function settlementExpenseDate(yearMonth: string): string {

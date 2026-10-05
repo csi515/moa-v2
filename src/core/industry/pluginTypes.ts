@@ -77,6 +77,14 @@ export interface IndustryPluginManifest {
    * 별칭은 getIndustryPlugin / parseIndustryType이 플러그인을 고르기 전에 푼다.
    */
   getExpenseCategories?: () => readonly IndustryExpenseCategory[];
+  /**
+   * 강사 정산 지출 카테고리 value.
+   * 재무 capability는 이 훅만 호출하고 업종 id로 고르지 않는다.
+   * 없으면 기본값 salary.
+   * 적용 대상은 플러그인 id와 이 매니페스트의 aliases뿐이다.
+   * 카탈로그에만 있는 별칭(preschool 등)은 기존 기본값을 유지한다.
+   */
+  getPayrollExpenseCategory?: () => string;
 }
 
 export type IndustryRoomKind = 'classroom' | 'practice' | 'treatment';
