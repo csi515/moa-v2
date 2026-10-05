@@ -1,16 +1,17 @@
-import { parseIndustryType, type IndustryType } from '@/core/industry/types';
+import { getIndustryPlugin } from '@/core/industry/pluginHost';
+import { parseIndustryType } from '@/core/industry/types';
 
 /**
  * 학생 상세의 소프트 종료 확인·버튼에만 쓰는 동작 라벨.
- * 매니페스트·모듈 라벨에는 이 단어를 담는 필드가 없다.
- * 업종 카피에 이미 있는 말만 쓴다: 피아노·어린이집은 퇴원, 피부·그 외는 종료.
+ * 업종 id를 비교하지 않는다. usesWithdrawalExitLabel 이 켜진 플러그인만 '퇴원'.
+ * 지금은 피아노·어린이집 매니페스트만 true다. preschool·kindergarten 은
+ * 어린이집 플러그인으로 풀린 뒤 같은 라벨을 받는다.
+ * 빈 값과 카탈로그 밖은 피아노 플러그인으로 떨어지지 않게 '종료'다.
  */
-const ACADEMY_EXIT_INDUSTRIES = new Set<IndustryType>(['piano', 'daycare']);
-
 export function getStudentExitActionLabel(
   industry: string | null | undefined
 ): '퇴원' | '종료' {
   const resolved = parseIndustryType(industry);
-  if (resolved && ACADEMY_EXIT_INDUSTRIES.has(resolved)) return '퇴원';
-  return '종료';
+  if (!resolved) return '종료';
+  return getIndustryPlugin(resolved).usesWithdrawalExitLabel ? '퇴원' : '종료';
 }

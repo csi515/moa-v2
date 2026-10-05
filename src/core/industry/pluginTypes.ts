@@ -186,6 +186,14 @@ export interface IndustryPluginManifest {
    */
   showsMakeupList?: boolean;
   /**
+   * 학생 상세 소프트 종료 버튼을 '퇴원'으로 쓸지.
+   * 명단 capability는 업종 id를 비교하지 않고 이 플래그만 본다.
+   * 없으면 '종료'. 지금은 피아노·어린이집만 true.
+   * 별칭(preschool 등)은 플러그인으로 풀린 뒤에 이 값을 받는다.
+   * 빈 값과 카탈로그 밖은 플러그인을 보지 않고 '종료'.
+   */
+  usesWithdrawalExitLabel?: boolean;
+  /**
    * 공유 명단 목록의 업종 차이.
    * 목록은 업종 id를 비교하지 않고 이 설정만 읽는다.
    */
