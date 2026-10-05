@@ -202,6 +202,7 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:retail-staff-sale-perm': 'retail staff CI',
   'test:daycare-ops': 'daycare sync',
   'test:expense-categories': 'industry expense category plugin unit',
+  'test:pin-checkin-side-effect': 'pin check-in side effect plugin flag unit',
 };
 
 /**

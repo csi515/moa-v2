@@ -1,7 +1,7 @@
 import type { NavTab } from '@/shared/navigation/navigationTypes';
 import type { ModuleTheme } from '@/shared/components/layout/moduleTheme';
 import { normalizeIndustryType, type IndustryType } from './types';
-import { getIndustryPlugin } from './registry';
+import { getIndustryPlugin, getInstalledIndustryPlugin } from './registry';
 import type { IndustryAccent } from './pluginTypes';
 
 export type { IndustryAccent } from './pluginTypes';
@@ -114,6 +114,18 @@ export function supportsDeposit(industry: IndustryType | string | null | undefin
 export function showsTextbooksLink(industry: IndustryType | string | null | undefined): boolean {
   if (!industry) return false;
   return Boolean(getIndustryPlugin(industry).showsTextbooksLink);
+}
+
+/**
+ * PIN 체크인 성공 후 등록된 부가 동기화를 돌릴지.
+ * 설치된 플러그인 id만 본다. 별칭(preschool 등)은 풀지 않아
+ * 예전 키오스크의 piano/daycare 정확 비교와 같은 업종만 실행한다.
+ */
+export function runsPinCheckInSideEffects(
+  industry: IndustryType | string | null | undefined
+): boolean {
+  if (!industry) return false;
+  return Boolean(getInstalledIndustryPlugin(industry)?.runsPinCheckInSideEffects);
 }
 
 /** 실(강의실·관리실 등) UI 설정 */

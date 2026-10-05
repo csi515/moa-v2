@@ -33,6 +33,7 @@ export const pilatesPluginManifest: IndustryPluginManifest = {
   bankAccountPlaceholder: '예: 국민은행 123456-04-123456 (예금주: 스튜디오)',
   supportsDeposit: true,
   showsTextbooksLink: false,
+  runsPinCheckInSideEffects: false,
   roomConfig: {
     sectionTitle: '강의실 · 연습실',
     sectionDescription: '반 개설·보강 예약 시 선택할 공간입니다. 스튜디오에서 쓰는 실 이름을 등록해 주세요.',

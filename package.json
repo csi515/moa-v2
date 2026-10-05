@@ -81,6 +81,7 @@
     "test:attendance-class-key": "tsx src/capabilities/attendance/domain/attendanceClassKey.test.ts",
     "test:attendance-features": "tsx src/capabilities/attendance/domain/features.test.ts",
     "test:pin-check-in": "tsx src/capabilities/attendance/application/attendanceService.test.ts",
+    "test:pin-checkin-side-effect": "tsx src/capabilities/attendance/application/pinCheckInSideEffectPlugin.test.ts",
     "test:pin-notify-copy": "tsx src/capabilities/attendance/domain/attendanceNotifyCopy.test.ts",
     "test:absence-notify": "tsx src/core/parent/services/absenceNotifyPolicy.test.ts",
     "test:parent-home-copy": "tsx src/modules/parent/views/parentHomeCopy.test.ts",

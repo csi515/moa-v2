@@ -11,7 +11,7 @@ import {
   resolveKioskOrganizationIdFromApp,
 } from '../infrastructure/resolveKioskOrganizationId';
 import { Delete, RotateCcw, Settings } from 'lucide-react';
-import { getIndustryAccent } from '@/core/industry/industryUi';
+import { getIndustryAccent, runsPinCheckInSideEffects } from '@/core/industry/industryUi';
 import {
   kioskAdminExitBody,
   kioskAlreadyCheckedMessage,
@@ -115,10 +115,7 @@ export const PinCheckInKioskView: React.FC<PinCheckInKioskViewProps> = ({
             organizationId
           );
           if (result.success) {
-            if (
-              result.action === 'check_in' &&
-              (industry === 'piano' || industry === 'daycare')
-            ) {
+            if (result.action === 'check_in' && runsPinCheckInSideEffects(industry)) {
               const sync = await runPinCheckInSideEffects(result.customerId);
               if (sync.warning) {
                 showToast(sync.warning, 'warning');
