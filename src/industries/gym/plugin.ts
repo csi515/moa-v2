@@ -22,6 +22,7 @@ export const gymPluginManifest: IndustryPluginManifest = {
     hoverBg: 'hover:bg-orange-50',
     ring: 'focus:ring-orange-500 focus:border-orange-300',
   },
+  attendanceSummaryMetric: 'amber',
   attendanceDefault: true,
   usesClassBasedSchedule: true,
   customerListTab: 'students',

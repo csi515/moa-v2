@@ -92,6 +92,23 @@ export function getIndustryAccent(industry: IndustryType | string | null | undef
   return getIndustryPlugin(industry).accent;
 }
 
+export type AttendanceSummaryMetricVariant = 'rose' | 'teal' | 'amber' | 'indigo';
+
+/**
+ * 출결 현황 요약 카드 색.
+ * 설치된 플러그인 id의 attendanceSummaryMetric만 본다.
+ * 별칭(taekwondo 등)은 예전 industry === 'gym' 정확 비교와 같이 기본 indigo다.
+ * 값이 없으면 indigo (어린이집·피아노·소매·사우나·generic).
+ */
+export function getAttendanceSummaryMetric(
+  industry: IndustryType | string | null | undefined
+): AttendanceSummaryMetricVariant {
+  if (typeof industry !== 'string' || industry.length === 0) return 'indigo';
+  const metric = getInstalledIndustryPlugin(industry)?.attendanceSummaryMetric;
+  if (metric === 'rose' || metric === 'teal' || metric === 'amber') return metric;
+  return 'indigo';
+}
+
 /** 비용 명칭 (수강료·이용료·보육료 등) */
 export function getFeeLabel(industry: IndustryType | string | null | undefined): string {
   if (!industry) return '이용료';

@@ -14,7 +14,7 @@ import type { AttendanceSession } from '../domain/types';
 import { PinCheckInKioskView } from './PinCheckInKioskView';
 import { PageHeader, SummaryMetricCard, FilterBar, SearchField, EmptyState } from '@/shared/components';
 import { SegmentedControl } from '@/shared/components/ui/SegmentedControl';
-import { getCustomerListTab, getIndustryAccent, isSkinClinicIndustry } from '@/core/industry/industryUi';
+import { getAttendanceSummaryMetric, getCustomerListTab, getIndustryAccent } from '@/core/industry/industryUi';
 import {
   attendanceManageTitle,
   attendanceMemoSavedToast,
@@ -53,16 +53,7 @@ export const AttendanceManagementView: React.FC = () => {
   const accent = getIndustryAccent(industry);
   const accentActive = `${accent.btn} text-white`;
   const linkHover = accent.icon.replace('text-', 'hover:text-');
-  const metricVariant =
-    isSkinClinicIndustry(industry)
-      ? 'rose'
-      : industry === 'pilates'
-      ? 'teal'
-      : industry === 'gym'
-        ? 'amber'
-        : industry === 'daycare'
-          ? 'indigo'
-          : 'indigo';
+  const metricVariant = getAttendanceSummaryMetric(industry);
   const customerTab = getCustomerListTab(industry);
 
   const [subTab, setSubTab] = useState<AttendanceSubTab>('overview');
