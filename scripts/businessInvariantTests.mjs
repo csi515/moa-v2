@@ -209,6 +209,7 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:payroll-expense-category': 'payroll expense category plugin unit',
   'test:finance-hub-nav': 'finance hub nav plugin unit',
   'test:attendance-industry-copy': 'attendance industry copy plugin unit',
+  'test:student-exit-label': 'student detail exit label plugin flag unit',
 };
 
 /**

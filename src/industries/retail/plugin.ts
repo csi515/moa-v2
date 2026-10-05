@@ -41,6 +41,7 @@ export const retailPluginManifest: IndustryPluginManifest = {
   showsTextbooksLink: false,
   runsPinCheckInSideEffects: false,
   showsMakeupList: false,
+  usesWithdrawalExitLabel: false,
   roomConfig: {
     sectionTitle: '공간',
     sectionDescription: '매장에서 쓰는 공간 이름을 등록해 주세요.',
