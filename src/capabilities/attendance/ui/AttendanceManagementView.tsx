@@ -21,7 +21,7 @@ import {
   attendancePinDisabledDescription,
   attendancePresentLabel,
   attendancePresentTimeLabel,
-} from '@/core/attendance/attendanceIndustryCopy';
+} from '../attendanceIndustryCopy';
 import { useModuleLabels } from '@/core/labels';
 import type { Student } from '@/types';
 import {

@@ -2,6 +2,7 @@ import { useMemo, useState, type FC, type FormEvent } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
+import { careStorage } from './careStorage';
 import { PageHeader, EmptyState, Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS, FilterTabs } from '@/shared/components/ui';
 import { Pill, Plus, Trash2, Save, CheckCircle2 } from 'lucide-react';
@@ -24,7 +25,7 @@ export const MedicationRequestView: FC = () => {
     () => scopeStudents(StorageService.getStudents()).filter((s) => s.status === 'active'),
     [scopeStudents, refreshKey]
   );
-  const requests = useMemo(() => StorageService.getMedicationRequests(), [refreshKey]);
+  const requests = useMemo(() => careStorage.getMedicationRequests(), [refreshKey]);
 
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
@@ -99,7 +100,7 @@ export const MedicationRequestView: FC = () => {
       return;
     }
 
-    StorageService.saveMedicationRequest({
+    careStorage.saveMedicationRequest({
       id: editing?.id,
       studentId: student.id,
       studentName: student.name,
@@ -120,7 +121,7 @@ export const MedicationRequestView: FC = () => {
 
   const markAdministered = (item: MedicationRequest) => {
     const student = students.find((entry) => entry.id === item.studentId);
-    StorageService.saveMedicationRequest({
+    careStorage.saveMedicationRequest({
       ...item,
       status: 'administered',
       administeredAt: new Date().toISOString(),
@@ -145,7 +146,7 @@ export const MedicationRequestView: FC = () => {
       isDestructive: true,
       confirmText: '삭제',
       onConfirm: () => {
-        StorageService.deleteMedicationRequest(item.id);
+        careStorage.deleteMedicationRequest(item.id);
         showToast('투약 의뢰가 삭제되었습니다.', 'info');
       },
     });

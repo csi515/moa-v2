@@ -66,6 +66,10 @@ export function setSelectedStudentDetailTab(tab: StudentDetailTab | null) {
   emit();
 }
 
+export const setSelectedCustomerId = setSelectedStudentId;
+export const setSelectedCustomerDetailTab = setSelectedStudentDetailTab;
+
+
 /** Navigation UI state. AppContext와 같은 스냅샷을 읽는다. */
 export function useNavSession() {
   const state = useSyncExternalStore(
@@ -78,5 +82,11 @@ export function useNavSession() {
     setActiveTab,
     setSelectedStudentId,
     setSelectedStudentDetailTab,
+    /** Phase 1 & 2: 범용 Customer 앨리어스 */
+    selectedCustomerId: state.selectedStudentId,
+    setSelectedCustomerId: setSelectedStudentId,
+    selectedCustomerDetailTab: state.selectedStudentDetailTab,
+    setSelectedCustomerDetailTab,
   };
 }
+

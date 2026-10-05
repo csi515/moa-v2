@@ -5,6 +5,7 @@ import { getIndustryPlugin, getInstalledIndustryPlugin } from './registry';
 import type { IndustryAccent, IndustryAttendanceCopy } from './pluginTypes';
 
 export type { IndustryAccent } from './pluginTypes';
+export { getIndustryPlugin, getInstalledIndustryPlugin } from './registry';
 
 export function resolveIndustry(
   industry: IndustryType | string | null | undefined

@@ -6,6 +6,9 @@ export type PayrollSettlementStatus = 'pending' | 'confirmed' | 'expensed';
 export interface TeacherPayrollRow {
   teacherId: string;
   teacherName: string;
+  /** Phase 3: 범용 Staff 앨리어스 */
+  staffId?: string;
+  staffName?: string;
   status: Teacher['status'];
   payType: TeacherPayType;
   /** 정산 대상 실적 (레슨 회수 / 출근 회수 / 근무 시간 / 월급=1) */
@@ -32,6 +35,8 @@ export type PayrollAdjustmentDraft = { amount: number; reason?: string };
 
 export interface TeacherPayrollTotals {
   teacherCount: number;
+  /** Phase 3: 범용 Staff 앨리어스 */
+  staffCount?: number;
   pendingAmount: number;
   pendingCount: number;
   settledAmount: number;
@@ -40,3 +45,7 @@ export interface TeacherPayrollTotals {
   attendanceTotal: number;
   workHoursTotal: number;
 }
+
+/** Phase 3: 범용 StaffPayroll 타입 앨리어스 */
+export type StaffPayrollRow = TeacherPayrollRow;
+export type StaffPayrollTotals = TeacherPayrollTotals;

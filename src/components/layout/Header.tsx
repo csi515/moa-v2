@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useGetIdentity, useLogout } from "@refinedev/core";
 import { LogOut, User, Bell, Building2 } from "lucide-react";
 import { useOrganization } from "@/core/organizations/OrganizationProvider";
+import { getIndustryLabel } from "@/core/industry/types";
 
 export const Header: React.FC = () => {
   const { data: user } = useGetIdentity<{ name?: string; email?: string }>();
@@ -25,6 +26,9 @@ export const Header: React.FC = () => {
             <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">
               <Building2 className="h-3.5 w-3.5 text-slate-500" />
               {currentOrganization.name}
+            </span>
+            <span className="hidden sm:inline-block text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100/80 px-2 py-0.5 rounded-md">
+              {getIndustryLabel(currentOrganization.industry_type)}
             </span>
             <button
               type="button"

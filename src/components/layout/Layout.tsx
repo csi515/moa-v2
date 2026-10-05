@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Users, Calendar, CreditCard, LayoutDashboard, Settings } from "lucide-react";
+import { Users, Calendar, CreditCard, LayoutDashboard } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-
-const navigationItems = [
-  { name: "업종 워크스페이스", href: "/", icon: LayoutDashboard },
-  { name: "원생 관리", href: "/students", icon: Users },
-  { name: "출석/수업", href: "/schedules", icon: Calendar },
-  { name: "수강료/결제", href: "/billing", icon: CreditCard },
-  { name: "운영 대시보드", href: "/dashboard", icon: LayoutDashboard },
-];
+import { useTerminology } from "@/core/terminology";
+import { useOrganization } from "@/core/organizations/OrganizationProvider";
 
 export const Sidebar: React.FC = () => {
   const location = useLocation();
+  const { currentOrganization } = useOrganization();
+  const { t } = useTerminology(currentOrganization?.industry_type);
+
+  const navigationItems = useMemo(
+    () => [
+      { name: "업종 워크스페이스", href: "/", icon: LayoutDashboard },
+      { name: `${t('customer.singular', '회원')} 관리`, href: "/students", icon: Users },
+      { name: `${t('attendance.singular', '출결')}/${t('service.singular', '수업')}`, href: "/schedules", icon: Calendar },
+      { name: `${t('billing.fee', '수강료')}/결제`, href: "/billing", icon: CreditCard },
+      { name: "운영 대시보드", href: "/dashboard", icon: LayoutDashboard },
+    ],
+    [t]
+  );
 
   return (
     <aside className="hidden w-64 flex-col border-r border-slate-200 bg-white md:flex">

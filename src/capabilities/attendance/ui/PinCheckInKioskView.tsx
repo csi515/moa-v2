@@ -20,7 +20,7 @@ import {
   kioskModuleDisabledHint,
   kioskNoPinHint,
   kioskRepeatHint,
-} from '@/core/attendance/attendanceIndustryCopy';
+} from '../attendanceIndustryCopy';
 import { runPinCheckInSideEffects } from '../application/pinCheckInSideEffects';
 
 const KEYPAD = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'clear', '0', 'enter'] as const;

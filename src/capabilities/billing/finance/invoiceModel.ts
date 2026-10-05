@@ -44,7 +44,7 @@ export type InvoiceDeliveryState = Pick<
   'invoiceSent' | 'sentAt' | 'cashReceiptRequested'
 >;
 
-export type InvoiceChargeLineKind = 'tuition' | 'discount' | 'textbook' | 'extra' | 'additional';
+export type InvoiceChargeLineKind = 'tuition' | 'discount' | 'textbook' | 'goods' | 'extra' | 'additional';
 
 export type InvoiceChargeLine = {
   kind: InvoiceChargeLineKind;

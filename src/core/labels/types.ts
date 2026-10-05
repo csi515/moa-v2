@@ -1,4 +1,9 @@
-/** 업종별 UI 라벨 (Customer/Staff 도메인 용어) */
+import type {
+  TerminologyBillingLabels,
+  TerminologyFacilityLabels,
+} from '@/core/terminology/types';
+
+/** 업종별 UI 라벨 (Customer/Staff/Billing/Facility 도메인 용어) */
 export interface ModuleLabels {
   customer: {
     singular: string;
@@ -31,4 +36,7 @@ export interface ModuleLabels {
     management: string;
     section?: string;
   };
+  billing?: TerminologyBillingLabels;
+  facility?: TerminologyFacilityLabels;
 }
+

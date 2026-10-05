@@ -2,10 +2,19 @@ import React from "react";
 import { useForm } from "@refinedev/react-hook-form";
 import { useCan, useNavigation } from "@refinedev/core";
 import { ArrowLeft, Save, AlertCircle, ShieldAlert } from "lucide-react";
+import { useTerminology } from "@/core/terminology";
+import { useOrganization } from "@/core/organizations/OrganizationProvider";
 import type { CustomerRecord } from "./list";
 
 export const StudentEditPage: React.FC = () => {
   const { list, show } = useNavigation();
+  const { currentOrganization } = useOrganization();
+  const { t } = useTerminology(currentOrganization?.industry_type);
+  const customerWord = t('customer.singular', '회원');
+  const statusActiveLabel = t('customer.statusActive', '재원');
+  const statusPausedLabel = t('customer.statusLeave', '휴원');
+  const statusInactiveLabel = t('customer.statusWithdrawn', '퇴원');
+
   const { data: canEdit, isLoading: isCheckingAuth } = useCan({
     resource: "customers",
     action: "edit",
@@ -32,7 +41,7 @@ export const StudentEditPage: React.FC = () => {
       <div className="flex h-64 items-center justify-center">
         <div className="inline-flex items-center gap-2 text-slate-500 text-sm">
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
-          원생 정보 및 권한을 확인하는 중...
+          {customerWord} 정보 및 권한을 확인하는 중...
         </div>
       </div>
     );
@@ -43,9 +52,9 @@ export const StudentEditPage: React.FC = () => {
     return (
       <div className="max-w-md mx-auto my-12 rounded-2xl border border-rose-200 bg-rose-50 p-6 text-center shadow-xs">
         <ShieldAlert className="mx-auto h-10 w-10 text-rose-500 mb-3" />
-        <h2 className="text-lg font-bold text-rose-900">원생 수정 권한 없음</h2>
+        <h2 className="text-lg font-bold text-rose-900">{customerWord} 수정 권한 없음</h2>
         <p className="mt-2 text-sm text-rose-700">
-          원생 정보를 수정할 수 있는 권한(customers.write)이 없습니다.
+          {customerWord} 정보를 수정할 수 있는 권한(customers.write)이 없습니다.
         </p>
         <button
           type="button"
@@ -74,9 +83,9 @@ export const StudentEditPage: React.FC = () => {
           </button>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-              {student ? `${student.name} 원생 정보 수정` : "원생 정보 수정"}
+              {student ? `${student.name} ${customerWord} 정보 수정` : `${customerWord} 정보 수정`}
             </h1>
-            <p className="text-sm text-slate-500">원생의 기본 인적 사항 및 상태를 수정합니다.</p>
+            <p className="text-sm text-slate-500">{customerWord}의 기본 인적 사항 및 상태를 수정합니다.</p>
           </div>
         </div>
       </div>
@@ -87,12 +96,12 @@ export const StudentEditPage: React.FC = () => {
           {/* 이름 */}
           <div>
             <label htmlFor="name" className="block text-sm font-semibold text-slate-800 mb-1.5">
-              원생 이름 <span className="text-rose-500">*</span>
+              {customerWord} 이름 <span className="text-rose-500">*</span>
             </label>
             <input
               id="name"
               type="text"
-              {...register("name", { required: "원생 이름을 입력해주세요." })}
+              {...register("name", { required: `${customerWord} 이름을 입력해주세요.` })}
               placeholder="예: 홍길동"
               className={`w-full rounded-xl border px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 ${
                 errors.name
@@ -131,7 +140,7 @@ export const StudentEditPage: React.FC = () => {
                 id="email"
                 type="email"
                 {...register("email")}
-                placeholder="예: student@example.com"
+                placeholder="예: customer@example.com"
                 className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
@@ -140,16 +149,16 @@ export const StudentEditPage: React.FC = () => {
           {/* 상태 */}
           <div>
             <label htmlFor="status" className="block text-sm font-semibold text-slate-800 mb-1.5">
-              원생 상태
+              {customerWord} 상태
             </label>
             <select
               id="status"
               {...register("status")}
               className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <option value="active">재원 (정상 수업 및 출석 가능)</option>
-              <option value="paused">휴원 (일시 정지)</option>
-              <option value="inactive">퇴원 (종료)</option>
+              <option value="active">{statusActiveLabel} (정상 이용 가능)</option>
+              <option value="paused">{statusPausedLabel} (일시 정지)</option>
+              <option value="inactive">{statusInactiveLabel} (종료)</option>
             </select>
           </div>
 

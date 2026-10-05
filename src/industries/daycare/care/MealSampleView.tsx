@@ -1,7 +1,7 @@
 import { useMemo, useState, type FC, type FormEvent } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useStorageRefresh } from '@/hooks';
-import { StorageService } from '@/services/storage';
+import { careStorage } from './careStorage';
 import { EmptyState, Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { Plus, Save, Utensils } from 'lucide-react';
@@ -19,7 +19,7 @@ export const MealSampleView: FC = () => {
   const { showToast, currentUser } = useApp();
   const refreshKey = useStorageRefresh();
   const logs = useMemo(
-    () => StorageService.getMealSampleLogs().sort((a, b) => b.storedAt.localeCompare(a.storedAt)),
+    () => careStorage.getMealSampleLogs().sort((a, b) => b.storedAt.localeCompare(a.storedAt)),
     [refreshKey]
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +32,7 @@ export const MealSampleView: FC = () => {
       return;
     }
     const storedAt = new Date().toISOString();
-    StorageService.saveMealSampleLog({
+    careStorage.saveMealSampleLog({
       menuName: menuName.trim(),
       storedAt,
       disposeAt: mealDisposeAt(storedAt),

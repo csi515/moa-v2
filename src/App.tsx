@@ -118,6 +118,7 @@ export const App: React.FC = () => {
                     {/* 사업장 업종 메인 워크스페이스 화면 */}
                     <Route index element={<IndustryAppRouter />} />
                     <Route path="/workspace" element={<IndustryAppRouter />} />
+                    <Route path="/workspace/:tab" element={<IndustryAppRouter />} />
 
                     {/* Refine 관리 리소스 레이아웃 */}
                     <Route

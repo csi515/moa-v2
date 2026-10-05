@@ -1,7 +1,7 @@
 import { useMemo, useState, type FC, type FormEvent } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useStorageRefresh } from '@/hooks';
-import { StorageService } from '@/services/storage';
+import { careStorage } from './careStorage';
 import { EmptyState, Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { ClipboardCheck, Plus, Printer, Save } from 'lucide-react';
@@ -18,7 +18,7 @@ export const SafetyInspectionView: FC = () => {
   const refreshKey = useStorageRefresh();
   const logs = useMemo(
     () =>
-      StorageService.getSafetyInspectionLogs().sort((a, b) => b.logDate.localeCompare(a.logDate)),
+      careStorage.getSafetyInspectionLogs().sort((a, b) => b.logDate.localeCompare(a.logDate)),
     [refreshKey]
   );
 
@@ -66,7 +66,7 @@ export const SafetyInspectionView: FC = () => {
       showToast('확인한 항목을 하나 이상 선택해 주세요.', 'error');
       return;
     }
-    StorageService.saveSafetyInspectionLog({
+    careStorage.saveSafetyInspectionLog({
       id: editing?.id,
       logDate: form.logDate,
       kind: form.kind,

@@ -14,6 +14,9 @@ import {
   Filter,
 } from "lucide-react";
 
+import { useTerminology } from "@/core/terminology";
+import { useOrganization } from "@/core/organizations/OrganizationProvider";
+
 export interface CustomerRecord {
   id: string;
   organization_id: string;
@@ -27,14 +30,21 @@ export interface CustomerRecord {
   updated_at: string;
 }
 
-const STATUS_LABELS: Record<string, { label: string; bg: string; text: string }> = {
-  active: { label: "재원", bg: "bg-emerald-50", text: "text-emerald-700" },
-  paused: { label: "휴원", bg: "bg-amber-50", text: "text-amber-700" },
-  inactive: { label: "퇴원", bg: "bg-slate-100", text: "text-slate-600" },
-};
-
 export const StudentListPage: React.FC = () => {
   const { create, edit, show } = useNavigation();
+  const { currentOrganization } = useOrganization();
+  const { t } = useTerminology(currentOrganization?.industry_type);
+  const customerWord = t('customer.singular', '회원');
+  const statusActiveLabel = t('customer.statusActive', '재원');
+  const statusPausedLabel = t('customer.statusLeave', '휴원');
+  const statusInactiveLabel = t('customer.statusWithdrawn', '퇴원');
+
+  const statusLabels: Record<string, { label: string; bg: string; text: string }> = {
+    active: { label: statusActiveLabel, bg: "bg-emerald-50", text: "text-emerald-700" },
+    paused: { label: statusPausedLabel, bg: "bg-amber-50", text: "text-amber-700" },
+    inactive: { label: statusInactiveLabel, bg: "bg-slate-100", text: "text-slate-600" },
+  };
+
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
@@ -138,7 +148,7 @@ export const StudentListPage: React.FC = () => {
 
   // 학생 삭제 핸들러
   const handleDelete = (id: string, name: string) => {
-    if (window.confirm(`'${name}' 원생 정보를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) {
+    if (window.confirm(`'${name}' ${customerWord} 정보를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) {
       deleteOne({
         resource: "customers",
         id,
@@ -151,9 +161,9 @@ export const StudentListPage: React.FC = () => {
       {/* 상단 헤더 */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">원생 관리</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">{customerWord} 관리</h1>
           <p className="text-sm text-slate-500">
-            원생 목록 조회 및 신규 등록, 수강권 및 출석 상태를 관리합니다. (총 {total}명)
+            {customerWord} 목록 조회 및 신규 등록, 수강권 및 출석 상태를 관리합니다. (총 {total}명)
           </p>
         </div>
 
@@ -164,7 +174,7 @@ export const StudentListPage: React.FC = () => {
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition-colors"
           >
             <Plus className="h-4 w-4" />
-            원생 신규 등록
+            {customerWord} 신규 등록
           </button>
         )}
       </div>
@@ -178,7 +188,7 @@ export const StudentListPage: React.FC = () => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="원생 이름 검색..."
+              placeholder={`${customerWord} 이름 검색...`}
               className="w-full pl-9 pr-4 py-2 text-sm rounded-xl border border-slate-200 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
@@ -194,9 +204,9 @@ export const StudentListPage: React.FC = () => {
           <Filter className="h-4 w-4 text-slate-400 shrink-0 ml-1" />
           {[
             { id: "all", label: "전체" },
-            { id: "active", label: "재원" },
-            { id: "paused", label: "휴원" },
-            { id: "inactive", label: "퇴원" },
+            { id: "active", label: statusActiveLabel },
+            { id: "paused", label: statusPausedLabel },
+            { id: "inactive", label: statusInactiveLabel },
           ].map((item) => (
             <button
               key={item.id}
@@ -261,7 +271,7 @@ export const StudentListPage: React.FC = () => {
                   <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
                     <div className="inline-flex items-center gap-2">
                       <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
-                      원생 데이터를 불러오는 중...
+                      {customerWord} 데이터를 불러오는 중...
                     </div>
                   </td>
                 </tr>
@@ -269,17 +279,17 @@ export const StudentListPage: React.FC = () => {
                 <tr>
                   <td colSpan={6} className="px-6 py-16 text-center text-slate-500">
                     <UserCheck className="mx-auto h-10 w-10 text-slate-300" />
-                    <p className="mt-2 text-sm font-medium text-slate-700">등록된 원생 데이터가 없습니다.</p>
+                    <p className="mt-2 text-sm font-medium text-slate-700">등록된 {customerWord} 데이터가 없습니다.</p>
                     <p className="text-xs text-slate-400 mt-1">
                       {searchTerm || statusFilter !== "all"
-                        ? "검색 조건에 맞는 원생이 없습니다."
-                        : "신규 원생을 등록하여 관리를 시작하세요."}
+                        ? `검색 조건에 맞는 ${customerWord}이(가) 없습니다.`
+                        : `신규 ${customerWord}을(를) 등록하여 관리를 시작하세요.`}
                     </p>
                   </td>
                 </tr>
               ) : (
                 students.map((student: CustomerRecord) => {
-                  const statusInfo = STATUS_LABELS[student.status] || {
+                  const statusInfo = statusLabels[student.status] || {
                     label: student.status,
                     bg: "bg-slate-100",
                     text: "text-slate-600",

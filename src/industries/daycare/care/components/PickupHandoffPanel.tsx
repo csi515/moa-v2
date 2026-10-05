@@ -1,6 +1,6 @@
 import { useMemo, useState, type FC, type FormEvent } from 'react';
 import { useApp } from '@/context/AppContext';
-import { StorageService } from '@/services/storage';
+import { careStorage } from '../careStorage';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { Modal } from '@/shared/components';
 import { notifyBookingChange } from '@/capabilities/booking';
@@ -37,14 +37,14 @@ export const PickupHandoffPanel: FC<{ close: TodayCareClose }> = ({ close }) => 
   const allowed = useMemo(() => {
     if (!student) return [] as AuthorizedPickup[];
     return (
-      StorageService.getChildLegalRecords().find((record) => record.studentId === student.id)
+      careStorage.getChildLegalRecords().find((record) => record.studentId === student.id)
         ?.authorizedPickups.filter((person) => person.name.trim()) || []
     );
   }, [student]);
 
   const doneToday = useMemo(
     () =>
-      StorageService.getCarePickupLogs().filter((log) => log.pickupDate === close.today),
+      careStorage.getCarePickupLogs().filter((log) => log.pickupDate === close.today),
     [close.today, close.awaitingPickup.length]
   );
 
@@ -71,7 +71,7 @@ export const PickupHandoffPanel: FC<{ close: TodayCareClose }> = ({ close }) => 
     const pickedUpAt = new Date().toISOString();
     const name = pickerName.trim();
     const relationText = relation.trim();
-    StorageService.saveCarePickupLog({
+    careStorage.saveCarePickupLog({
       studentId: student.id,
       studentName: student.name,
       pickupDate: close.today,

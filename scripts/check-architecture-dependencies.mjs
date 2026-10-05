@@ -35,6 +35,10 @@ import {
   typesBarrelUnknownLocalDefs,
 } from './types-barrel-freeze.mjs';
 import { TYPES_BARREL_LEGACY_IMPORT_FILES } from './types-barrel-legacy-imports.mjs';
+import {
+  FROZEN_PLUGIN_TYPES_REL,
+  checkPluginManifestFrozenProperties,
+} from './plugin-manifest-freeze.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..');
@@ -111,10 +115,6 @@ export const LEGACY_ALLOWLIST = {
   'src/capabilities/booking/ui/BookingScheduleHubView.tsx': {
     kinds: ['context_import'],
     reason: 'LEGACY academy booking schedule hub UI',
-  },
-  'src/capabilities/booking/ui/PilatesSlotList.tsx': {
-    kinds: ['context_import'],
-    reason: 'LEGACY shared booking slot list UI',
   },
   'src/capabilities/booking/ui/ServiceManagementView.tsx': {
     kinds: ['context_import'],
@@ -456,6 +456,13 @@ function scanFile(filePath) {
     if (unknown.length > 0) {
       kinds.add('storage_facade_slice');
       details.push(`unfrozen storage slice: ${unknown.join(', ')}`);
+    }
+  }
+  if (rel === FROZEN_PLUGIN_TYPES_REL) {
+    const unknownProps = checkPluginManifestFrozenProperties(source);
+    if (unknownProps.length > 0) {
+      kinds.add('manifest_unfrozen_property');
+      details.push(...unknownProps);
     }
   }
   if (rel === FROZEN_TYPES_INDEX_REL) {

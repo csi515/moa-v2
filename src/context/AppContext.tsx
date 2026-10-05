@@ -15,11 +15,11 @@ import {
 } from '@/shared/feedback/feedbackPolicy';
 import type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
 import { bindUiFeedback, unbindUiFeedback } from '@/shared/feedback/uiFeedback';
-import type { NavTab, StudentDetailTab } from '@/shared/navigation/navigationTypes';
+import type { NavTab, StudentDetailTab, CustomerDetailTab } from '@/shared/navigation/navigationTypes';
 import { useNavSession } from '@/shared/navigation/navSession';
 import type { User } from '@/types';
 
-export type { NavTab, StudentDetailTab } from '@/shared/navigation/navigationTypes';
+export type { NavTab, StudentDetailTab, CustomerDetailTab } from '@/shared/navigation/navigationTypes';
 export type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
 
 /**
@@ -43,8 +43,14 @@ interface AppContextType {
   setActiveTab: (tab: NavTab) => void;
   selectedStudentId: string | null;
   setSelectedStudentId: (id: string | null) => void;
+  /** Phase 1: selectedStudentId의 범용 Customer 앨리어스 */
+  selectedCustomerId: string | null;
+  setSelectedCustomerId: (id: string | null) => void;
   selectedStudentDetailTab: StudentDetailTab | null;
   setSelectedStudentDetailTab: (tab: StudentDetailTab | null) => void;
+  /** Phase 2: selectedStudentDetailTab의 범용 Customer 앨리어스 */
+  selectedCustomerDetailTab: StudentDetailTab | null;
+  setSelectedCustomerDetailTab: (tab: StudentDetailTab | null) => void;
   currentUser: User;
   toasts: ToastMessage[];
   showToast: (
@@ -150,8 +156,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setActiveTab,
         selectedStudentId,
         setSelectedStudentId,
+        selectedCustomerId: selectedStudentId,
+        setSelectedCustomerId: setSelectedStudentId,
         selectedStudentDetailTab,
         setSelectedStudentDetailTab,
+        selectedCustomerDetailTab: selectedStudentDetailTab,
+        setSelectedCustomerDetailTab: setSelectedStudentDetailTab,
         currentUser,
         toasts,
         showToast,

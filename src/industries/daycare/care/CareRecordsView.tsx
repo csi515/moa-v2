@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FC } from 'react';
 import { useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
+import { careStorage } from './careStorage';
 import { FilterTabs } from '@/shared/components/ui';
 import { ChildLegalRecordsView } from './ChildLegalRecordsView';
 import { CareIncidentView } from './CareIncidentView';
@@ -31,7 +32,7 @@ export const CareRecordsView: FC = () => {
 
   const warnings = useMemo(() => {
     const teachers = StorageService.getTeachers().filter((teacher) => teacher.status === 'active');
-    const certs = StorageService.getStaffHealthCerts();
+    const certs = careStorage.getStaffHealthCerts();
     return teachers
       .map((teacher) => ({ teacher, cert: findHealthCert(certs, teacher.id) }))
       .filter((item) => isHealthCertWarning(item.cert?.expiresAt));

@@ -77,3 +77,10 @@ export async function reverseLinkedTextbookPaymentsForTuition(
     }
   }
 }
+
+/**
+ * 범용 부수 상품/부가 항목(Add-on Items) 정산 어댑터 앨리어스.
+ */
+export const settleLinkedAddonSalesOnInvoicePaid = settleLinkedTextbookSalesOnTuitionPaid;
+export const reverseLinkedAddonPaymentsForInvoice = reverseLinkedTextbookPaymentsForTuition;
+

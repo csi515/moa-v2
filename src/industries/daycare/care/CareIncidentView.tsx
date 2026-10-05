@@ -2,6 +2,7 @@ import { useMemo, useState, type FC, type FormEvent } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
+import { careStorage } from './careStorage';
 import { EmptyState, Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { AlertTriangle, Plus, Save, Trash2 } from 'lucide-react';
@@ -34,7 +35,7 @@ export const CareIncidentView: FC = () => {
     () => scopeStudents(StorageService.getStudents()).filter((student) => student.status === 'active'),
     [scopeStudents, refreshKey]
   );
-  const incidents = useMemo(() => StorageService.getCareIncidents(), [refreshKey]);
+  const incidents = useMemo(() => careStorage.getCareIncidents(), [refreshKey]);
   const studentIds = useMemo(() => new Set(students.map((student) => student.id)), [students]);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -104,7 +105,7 @@ export const CareIncidentView: FC = () => {
     }
     const notifiedAt = new Date().toISOString();
     const occurredAt = occurred.toISOString();
-    StorageService.saveCareIncident({
+    careStorage.saveCareIncident({
       id: editing?.id,
       studentId: student.id,
       studentName: student.name,
@@ -135,7 +136,7 @@ export const CareIncidentView: FC = () => {
       isDestructive: true,
       confirmText: '삭제',
       onConfirm: () => {
-        StorageService.deleteCareIncident(item.id);
+        careStorage.deleteCareIncident(item.id);
         showToast('사고 기록이 삭제되었습니다.', 'info');
       },
     });

@@ -1,6 +1,7 @@
 import { useMemo, type FC } from 'react';
 import { useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
+import { careStorage } from './careStorage';
 import { Printer } from 'lucide-react';
 import { CHILD_RECORD_GAP_LABEL, CCTV_VIEW_STATUS_LABEL, SAFETY_CHECK_KIND_LABEL } from './types';
 import { getChildRecordGaps } from './childRecordGaps';
@@ -20,16 +21,16 @@ export const InspectionBinderView: FC = () => {
     () => StorageService.getStudents().filter((student) => student.status === 'active'),
     [refreshKey]
   );
-  const childRecords = useMemo(() => StorageService.getChildLegalRecords(), [refreshKey]);
-  const incidents = useMemo(() => StorageService.getCareIncidents(), [refreshKey]);
+  const childRecords = useMemo(() => careStorage.getChildLegalRecords(), [refreshKey]);
+  const incidents = useMemo(() => careStorage.getCareIncidents(), [refreshKey]);
   const teachers = useMemo(
     () => StorageService.getTeachers().filter((teacher) => teacher.status === 'active'),
     [refreshKey]
   );
-  const certs = useMemo(() => StorageService.getStaffHealthCerts(), [refreshKey]);
-  const safetyLogs = useMemo(() => StorageService.getSafetyInspectionLogs(), [refreshKey]);
-  const meals = useMemo(() => StorageService.getMealSampleLogs(), [refreshKey]);
-  const cctv = useMemo(() => StorageService.getCctvViewRequests(), [refreshKey]);
+  const certs = useMemo(() => careStorage.getStaffHealthCerts(), [refreshKey]);
+  const safetyLogs = useMemo(() => careStorage.getSafetyInspectionLogs(), [refreshKey]);
+  const meals = useMemo(() => careStorage.getMealSampleLogs(), [refreshKey]);
+  const cctv = useMemo(() => careStorage.getCctvViewRequests(), [refreshKey]);
   const recordByStudent = useMemo(
     () => new Map<string, any>(childRecords.map((record) => [record.studentId, record])),
     [childRecords]

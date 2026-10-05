@@ -11,16 +11,25 @@ import {
   FileText,
   ShieldAlert,
 } from "lucide-react";
+import { useTerminology } from "@/core/terminology";
+import { useOrganization } from "@/core/organizations/OrganizationProvider";
 import type { CustomerRecord } from "./list";
-
-const STATUS_LABELS: Record<string, { label: string; bg: string; text: string }> = {
-  active: { label: "재원", bg: "bg-emerald-50", text: "text-emerald-700" },
-  paused: { label: "휴원", bg: "bg-amber-50", text: "text-amber-700" },
-  inactive: { label: "퇴원", bg: "bg-slate-100", text: "text-slate-600" },
-};
 
 export const StudentShowPage: React.FC = () => {
   const { list, edit } = useNavigation();
+  const { currentOrganization } = useOrganization();
+  const { t } = useTerminology(currentOrganization?.industry_type);
+  const customerWord = t('customer.singular', '회원');
+  const statusActiveLabel = t('customer.statusActive', '재원');
+  const statusPausedLabel = t('customer.statusLeave', '휴원');
+  const statusInactiveLabel = t('customer.statusWithdrawn', '퇴원');
+
+  const statusLabels: Record<string, { label: string; bg: string; text: string }> = {
+    active: { label: statusActiveLabel, bg: "bg-emerald-50", text: "text-emerald-700" },
+    paused: { label: statusPausedLabel, bg: "bg-amber-50", text: "text-amber-700" },
+    inactive: { label: statusInactiveLabel, bg: "bg-slate-100", text: "text-slate-600" },
+  };
+
   const { query, result: student } = useShow<CustomerRecord>({
     resource: "customers",
   });
@@ -38,7 +47,7 @@ export const StudentShowPage: React.FC = () => {
 
   const handleDelete = () => {
     if (!student) return;
-    if (window.confirm(`'${student.name}' 원생 정보를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) {
+    if (window.confirm(`'${student.name}' ${customerWord} 정보를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) {
       deleteOne(
         {
           resource: "customers",
@@ -69,9 +78,9 @@ export const StudentShowPage: React.FC = () => {
     return (
       <div className="max-w-md mx-auto my-12 rounded-2xl border border-rose-200 bg-rose-50 p-6 text-center shadow-xs">
         <ShieldAlert className="mx-auto h-10 w-10 text-rose-500 mb-3" />
-        <h2 className="text-lg font-bold text-rose-900">원생 조회 권한 없음</h2>
+        <h2 className="text-lg font-bold text-rose-900">{customerWord} 조회 권한 없음</h2>
         <p className="mt-2 text-sm text-rose-700">
-          원생 정보를 조회할 수 있는 권한(customers.read)이 없습니다.
+          {customerWord} 정보를 조회할 수 있는 권한(customers.read)이 없습니다.
         </p>
         <button
           type="button"
@@ -90,7 +99,7 @@ export const StudentShowPage: React.FC = () => {
       <div className="flex h-64 items-center justify-center">
         <div className="inline-flex items-center gap-2 text-slate-500 text-sm">
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
-          원생 상세 정보를 불러오는 중...
+          {customerWord} 상세 정보를 불러오는 중...
         </div>
       </div>
     );
@@ -100,9 +109,9 @@ export const StudentShowPage: React.FC = () => {
     return (
       <div className="max-w-md mx-auto my-12 rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
         <User className="mx-auto h-10 w-10 text-slate-300 mb-3" />
-        <h2 className="text-lg font-bold text-slate-900">원생을 찾을 수 없습니다</h2>
+        <h2 className="text-lg font-bold text-slate-900">{customerWord}을(를) 찾을 수 없습니다</h2>
         <p className="mt-2 text-sm text-slate-500">
-          요청한 원생 데이터가 존재하지 않거나 접근 권한이 없습니다.
+          요청한 {customerWord} 데이터가 존재하지 않거나 접근 권한이 없습니다.
         </p>
         <button
           type="button"
@@ -116,7 +125,7 @@ export const StudentShowPage: React.FC = () => {
     );
   }
 
-  const statusInfo = STATUS_LABELS[student.status] || {
+  const statusInfo = statusLabels[student.status] || {
     label: student.status,
     bg: "bg-slate-100",
     text: "text-slate-600",
@@ -176,7 +185,7 @@ export const StudentShowPage: React.FC = () => {
       {/* 기본 정보 카드 */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-6">
         <h2 className="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">
-          원생 기본 정보
+          {customerWord} 기본 정보
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

@@ -1,4 +1,5 @@
 import { StorageService } from '@/services/storage';
+import { careStorage } from './careStorage';
 import type { Student } from '@/types';
 
 export interface TodayCareClose {
@@ -22,23 +23,23 @@ export function buildTodayCareClose(students: Student[], today: string): TodayCa
   const checkedInIds = getCheckedInStudentIds(today);
   const checkedIn = students.filter((student) => checkedInIds.has(student.id));
   const written = new Set(
-    StorageService.getCareJournals()
+    careStorage.getCareJournals()
       .filter((journal) => journal.journalDate === today)
       .map((journal) => journal.studentId)
   );
   const pickedUp = new Set(
-    StorageService.getCarePickupLogs()
+    careStorage.getCarePickupLogs()
       .filter((log) => log.pickupDate === today)
       .map((log) => log.studentId)
   );
-  const mealSampleMissing = !StorageService.getMealSampleLogs().some((log) =>
+  const mealSampleMissing = !careStorage.getMealSampleLogs().some((log) =>
     log.storedAt.slice(0, 10) === today
   );
 
   return {
     today,
     missingJournals: checkedIn.filter((student) => !written.has(student.id)),
-    pendingMedications: StorageService.getMedicationRequests()
+    pendingMedications: careStorage.getMedicationRequests()
       .filter((item) => item.requestDate === today && item.status === 'requested')
       .map((item) => ({
         id: item.id,

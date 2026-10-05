@@ -6,6 +6,7 @@ import { useIndustryDashboardMetrics } from '@/core/dashboard/useIndustryDashboa
 import { useModuleLabels } from '@/core/labels';
 import { filterParentNotices } from '@/core/notices';
 import { StorageService } from '@/services/storage';
+import { careStorage } from '@/industries/daycare/care/careStorage';
 import { useStorageRefresh } from '@/hooks';
 import { Baby, BookOpen, Megaphone, Pill } from 'lucide-react';
 import { findHealthCert, healthCertWarningLabel, isHealthCertWarning } from '@/industries/daycare/care/complianceUtils';
@@ -20,18 +21,18 @@ export const DaycareDashboardView: FC = () => {
   const refreshKey = useStorageRefresh();
   const { today, students, checkedInToday, teachers, classes } = useIndustryDashboardMetrics();
   const todayJournals = useMemo(
-    () => StorageService.getCareJournals().filter((j) => j.journalDate === today).length,
+    () => careStorage.getCareJournals().filter((j) => j.journalDate === today).length,
     [refreshKey, today]
   );
   const pendingMeds = useMemo(
     () =>
-      StorageService.getMedicationRequests().filter(
+      careStorage.getMedicationRequests().filter(
         (m) => m.requestDate === today && m.status === 'requested'
       ).length,
     [refreshKey, today]
   );
   const healthWarnings = useMemo(() => {
-    const certs = StorageService.getStaffHealthCerts();
+    const certs = careStorage.getStaffHealthCerts();
     return teachers
       .filter((teacher) => teacher.status === 'active')
       .map((teacher) => ({ teacher, cert: findHealthCert(certs, teacher.id) }))

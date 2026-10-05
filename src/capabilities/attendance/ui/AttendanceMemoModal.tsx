@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal } from '@/shared/components';
 import { FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { usePermissions } from '@/core/auth/usePermissions';
-import { attendanceMemoCopy } from '@/core/attendance/attendanceIndustryCopy';
+import { attendanceMemoCopy } from '../attendanceIndustryCopy';
 import type { Student } from '@/types';
 import type { AttendanceSession } from '../domain/types';
 

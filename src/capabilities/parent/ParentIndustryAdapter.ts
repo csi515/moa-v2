@@ -37,45 +37,45 @@ export interface ParentPortalPolicy {
 const icon = (node: React.ReactNode) => node;
 
 const PIANO_PARENT_NAV: ParentPortalNavItem[] = [
-  { id: 'home', label: '홈', icon: icon(<Home className="w-5 h-5" />) },
-  { id: 'schedule', label: '일정', icon: icon(<CalendarDays className="w-5 h-5" />) },
-  { id: 'attendance', label: '출결', icon: icon(<CheckSquare className="w-5 h-5" />) },
-  { id: 'tuition', label: '수납', icon: icon(<CreditCard className="w-5 h-5" />) },
-  { id: 'more', label: '더보기', icon: icon(<Menu className="w-5 h-5" />) },
+  { id: 'home', label: '홈', icon: icon(React.createElement(Home, { className: 'w-5 h-5' })) },
+  { id: 'schedule', label: '일정', icon: icon(React.createElement(CalendarDays, { className: 'w-5 h-5' })) },
+  { id: 'attendance', label: '출결', icon: icon(React.createElement(CheckSquare, { className: 'w-5 h-5' })) },
+  { id: 'tuition', label: '수납', icon: icon(React.createElement(CreditCard, { className: 'w-5 h-5' })) },
+  { id: 'more', label: '더보기', icon: icon(React.createElement(Menu, { className: 'w-5 h-5' })) },
 ];
 
 const DAYCARE_PARENT_NAV: ParentPortalNavItem[] = [
-  { id: 'home', label: '홈', icon: icon(<Home className="w-5 h-5" />) },
-  { id: 'journals', label: '알림장', icon: icon(<BookOpen className="w-5 h-5" />) },
-  { id: 'medications', label: '투약', icon: icon(<Pill className="w-5 h-5" />) },
-  { id: 'attendance', label: '등하원', icon: icon(<CheckSquare className="w-5 h-5" />) },
-  { id: 'tuition', label: '보육료', icon: icon(<CreditCard className="w-5 h-5" />) },
-  { id: 'more', label: '더보기', icon: icon(<Menu className="w-5 h-5" />) },
+  { id: 'home', label: '홈', icon: icon(React.createElement(Home, { className: 'w-5 h-5' })) },
+  { id: 'journals', label: '알림장', icon: icon(React.createElement(BookOpen, { className: 'w-5 h-5' })) },
+  { id: 'medications', label: '투약', icon: icon(React.createElement(Pill, { className: 'w-5 h-5' })) },
+  { id: 'attendance', label: '등하원', icon: icon(React.createElement(CheckSquare, { className: 'w-5 h-5' })) },
+  { id: 'tuition', label: '보육료', icon: icon(React.createElement(CreditCard, { className: 'w-5 h-5' })) },
+  { id: 'more', label: '더보기', icon: icon(React.createElement(Menu, { className: 'w-5 h-5' })) },
 ];
 
 const GYM_PARENT_NAV: ParentPortalNavItem[] = [
-  { id: 'home', label: '홈', icon: icon(<Home className="w-5 h-5" />) },
-  { id: 'schedule', label: '수업', icon: icon(<CalendarDays className="w-5 h-5" />) },
-  { id: 'shuttle', label: '차량', icon: icon(<Bus className="w-5 h-5" />) },
-  { id: 'attendance', label: '출결', icon: icon(<CheckSquare className="w-5 h-5" />) },
-  { id: 'tuition', label: '수강료', icon: icon(<CreditCard className="w-5 h-5" />) },
-  { id: 'more', label: '더보기', icon: icon(<Menu className="w-5 h-5" />) },
+  { id: 'home', label: '홈', icon: icon(React.createElement(Home, { className: 'w-5 h-5' })) },
+  { id: 'schedule', label: '수업', icon: icon(React.createElement(CalendarDays, { className: 'w-5 h-5' })) },
+  { id: 'shuttle', label: '차량', icon: icon(React.createElement(Bus, { className: 'w-5 h-5' })) },
+  { id: 'attendance', label: '출결', icon: icon(React.createElement(CheckSquare, { className: 'w-5 h-5' })) },
+  { id: 'tuition', label: '수강료', icon: icon(React.createElement(CreditCard, { className: 'w-5 h-5' })) },
+  { id: 'more', label: '더보기', icon: icon(React.createElement(Menu, { className: 'w-5 h-5' })) },
 ];
 
 const PILATES_PARENT_NAV: ParentPortalNavItem[] = [
-  { id: 'home', label: '홈', icon: icon(<Home className="w-5 h-5" />) },
-  { id: 'bookings', label: '예약', icon: icon(<CalendarClock className="w-5 h-5" />) },
-  { id: 'tuition', label: '수강료', icon: icon(<CreditCard className="w-5 h-5" />) },
-  { id: 'attendance', label: '출입', icon: icon(<CheckSquare className="w-5 h-5" />) },
-  { id: 'more', label: '더보기', icon: icon(<Menu className="w-5 h-5" />) },
+  { id: 'home', label: '홈', icon: icon(React.createElement(Home, { className: 'w-5 h-5' })) },
+  { id: 'bookings', label: '예약', icon: icon(React.createElement(CalendarClock, { className: 'w-5 h-5' })) },
+  { id: 'tuition', label: '수강료', icon: icon(React.createElement(CreditCard, { className: 'w-5 h-5' })) },
+  { id: 'attendance', label: '출입', icon: icon(React.createElement(CheckSquare, { className: 'w-5 h-5' })) },
+  { id: 'more', label: '더보기', icon: icon(React.createElement(Menu, { className: 'w-5 h-5' })) },
 ];
 
 const SKIN_PARENT_NAV: ParentPortalNavItem[] = [
-  { id: 'home', label: '홈', icon: icon(<Home className="w-5 h-5" />) },
-  { id: 'bookings', label: '예약', icon: icon(<CalendarClock className="w-5 h-5" />) },
-  { id: 'tuition', label: '이용료', icon: icon(<CreditCard className="w-5 h-5" />) },
-  { id: 'attendance', label: '출입', icon: icon(<CheckSquare className="w-5 h-5" />) },
-  { id: 'more', label: '더보기', icon: icon(<Menu className="w-5 h-5" />) },
+  { id: 'home', label: '홈', icon: icon(React.createElement(Home, { className: 'w-5 h-5' })) },
+  { id: 'bookings', label: '예약', icon: icon(React.createElement(CalendarClock, { className: 'w-5 h-5' })) },
+  { id: 'tuition', label: '이용료', icon: icon(React.createElement(CreditCard, { className: 'w-5 h-5' })) },
+  { id: 'attendance', label: '출입', icon: icon(React.createElement(CheckSquare, { className: 'w-5 h-5' })) },
+  { id: 'more', label: '더보기', icon: icon(React.createElement(Menu, { className: 'w-5 h-5' })) },
 ];
 
 export class ParentIndustryAdapter {
@@ -110,10 +110,10 @@ export class ParentIndustryAdapter {
     const attendanceLabel = isAppointmentIndustry(resolved) ? '출입' : '출결';
 
     return [
-      { id: 'home', label: '홈', icon: icon(<Home className="w-5 h-5" />) },
-      { id: 'attendance', label: attendanceLabel, icon: icon(<CheckSquare className="w-5 h-5" />) },
-      { id: 'tuition', label: fee, icon: icon(<CreditCard className="w-5 h-5" />) },
-      { id: 'more', label: '더보기', icon: icon(<Menu className="w-5 h-5" />) },
+      { id: 'home', label: '홈', icon: icon(React.createElement(Home, { className: 'w-5 h-5' })) },
+      { id: 'attendance', label: attendanceLabel, icon: icon(React.createElement(CheckSquare, { className: 'w-5 h-5' })) },
+      { id: 'tuition', label: fee, icon: icon(React.createElement(CreditCard, { className: 'w-5 h-5' })) },
+      { id: 'more', label: '더보기', icon: icon(React.createElement(Menu, { className: 'w-5 h-5' })) },
     ];
   }
 

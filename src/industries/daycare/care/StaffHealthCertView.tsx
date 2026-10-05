@@ -2,6 +2,7 @@ import { useMemo, type FC } from 'react';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
+import { careStorage } from './careStorage';
 import { FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { findHealthCert, healthCertWarningLabel, isHealthCertWarning } from './complianceUtils';
 
@@ -13,12 +14,12 @@ export const StaffHealthCertView: FC = () => {
     () => StorageService.getTeachers().filter((teacher) => teacher.status === 'active'),
     [refreshKey]
   );
-  const certs = useMemo(() => StorageService.getStaffHealthCerts(), [refreshKey]);
+  const certs = useMemo(() => careStorage.getStaffHealthCerts(), [refreshKey]);
 
   const saveDate = (teacherId: string, teacherName: string, expiresAt: string) => {
     if (!isOwner) return;
     const existing = findHealthCert(certs, teacherId);
-    StorageService.saveStaffHealthCert({
+    careStorage.saveStaffHealthCert({
       id: existing?.id,
       teacherId,
       teacherName,

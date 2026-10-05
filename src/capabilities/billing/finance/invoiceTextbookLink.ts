@@ -93,3 +93,14 @@ export function orphanTextbookInvoiceRefs<T extends { billingInvoiceId?: string 
 ): T[] {
   return sales.filter((sale) => sale.billingInvoiceId === deletedInvoiceId);
 }
+
+/**
+ * 범용 부수 상품/부가 항목(Add-on Items) 결합 청구용 도메인 어댑터 앨리어스.
+ * 교재(Textbook)뿐 아니라 피트니스 라커/운동복, 뷰티 제품, 어린이집 특별활동비 등
+ * 청구서에 부수 품목을 연결할 때 동일한 정산·재연결 규칙을 사용합니다.
+ */
+export type InvoiceAddonRelinkPlan = InvoiceTextbookRelinkPlan;
+export const planInvoiceAddonRelink = planInvoiceTextbookRelink;
+export const applyInvoiceAddonRelink = applyInvoiceTextbookRelink;
+export const orphanAddonInvoiceRefs = orphanTextbookInvoiceRefs;
+

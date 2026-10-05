@@ -2,6 +2,7 @@ import { useMemo, useState, type FC, type FormEvent } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
+import { careStorage } from './careStorage';
 import { EmptyState, Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { ClipboardList, Save } from 'lucide-react';
@@ -26,7 +27,7 @@ export const ChildLegalRecordsView: FC = () => {
     () => scopeStudents(StorageService.getStudents()).filter((student) => student.status === 'active'),
     [scopeStudents, refreshKey]
   );
-  const records = useMemo(() => StorageService.getChildLegalRecords(), [refreshKey]);
+  const records = useMemo(() => careStorage.getChildLegalRecords(), [refreshKey]);
   const recordByStudent = useMemo(
     () => new Map<string, any>(records.map((record) => [record.studentId, record])),
     [records]
@@ -83,7 +84,7 @@ export const ChildLegalRecordsView: FC = () => {
       return;
     }
     const existing = recordByStudent.get(student.id);
-    StorageService.saveChildLegalRecord({
+    careStorage.saveChildLegalRecord({
       id: existing?.id,
       studentId: student.id,
       studentName: student.name,

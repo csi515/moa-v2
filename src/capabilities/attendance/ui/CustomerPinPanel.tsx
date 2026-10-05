@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { usePermissions } from '@/core/auth/usePermissions';
-import { pinRevealHandoff } from '@/core/attendance/attendanceIndustryCopy';
+import { pinRevealHandoff } from '../attendanceIndustryCopy';
 import { useModuleLabels } from '@/core/labels';
 import { useOptionalOrganization } from '@/core/organizations/OrganizationProvider';
 import { attendanceStorage } from '@/capabilities/attendance/infrastructure/attendanceStorage';

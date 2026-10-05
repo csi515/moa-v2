@@ -18,6 +18,7 @@ function capabilityPackageDirs(): string[] {
   return readdirSync(here)
     .filter((name) => {
       if (name.startsWith('_') || name.startsWith('.')) return false;
+      if (name === 'finance') return false; // deprecated shim for billing
       return statSync(join(here, name)).isDirectory();
     })
     .sort();

@@ -2,10 +2,19 @@ import React from "react";
 import { useForm } from "@refinedev/react-hook-form";
 import { useCan, useNavigation } from "@refinedev/core";
 import { ArrowLeft, Save, AlertCircle, ShieldAlert } from "lucide-react";
+import { useTerminology } from "@/core/terminology";
+import { useOrganization } from "@/core/organizations/OrganizationProvider";
 import type { CustomerRecord } from "./list";
 
 export const StudentCreatePage: React.FC = () => {
   const { list } = useNavigation();
+  const { currentOrganization } = useOrganization();
+  const { t } = useTerminology(currentOrganization?.industry_type);
+  const customerWord = t('customer.singular', '회원');
+  const statusActiveLabel = t('customer.statusActive', '재원');
+  const statusPausedLabel = t('customer.statusLeave', '휴원');
+  const statusInactiveLabel = t('customer.statusWithdrawn', '퇴원');
+
   const { data: canCreate, isLoading: isCheckingAuth } = useCan({
     resource: "customers",
     action: "create",
@@ -43,9 +52,9 @@ export const StudentCreatePage: React.FC = () => {
     return (
       <div className="max-w-md mx-auto my-12 rounded-2xl border border-rose-200 bg-rose-50 p-6 text-center shadow-xs">
         <ShieldAlert className="mx-auto h-10 w-10 text-rose-500 mb-3" />
-        <h2 className="text-lg font-bold text-rose-900">원생 등록 권한 없음</h2>
+        <h2 className="text-lg font-bold text-rose-900">{customerWord} 등록 권한 없음</h2>
         <p className="mt-2 text-sm text-rose-700">
-          원생을 신규 등록할 수 있는 권한(customers.write)이 없습니다. 관리자에게 문의하세요.
+          {customerWord}을(를) 신규 등록할 수 있는 권한(customers.write)이 없습니다. 관리자에게 문의하세요.
         </p>
         <button
           type="button"
@@ -73,8 +82,8 @@ export const StudentCreatePage: React.FC = () => {
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">원생 신규 등록</h1>
-            <p className="text-sm text-slate-500">기본 정보를 입력하여 신규 원생을 등록합니다.</p>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">{customerWord} 신규 등록</h1>
+            <p className="text-sm text-slate-500">기본 정보를 입력하여 신규 {customerWord}을(를) 등록합니다.</p>
           </div>
         </div>
       </div>
@@ -85,12 +94,12 @@ export const StudentCreatePage: React.FC = () => {
           {/* 이름 */}
           <div>
             <label htmlFor="name" className="block text-sm font-semibold text-slate-800 mb-1.5">
-              원생 이름 <span className="text-rose-500">*</span>
+              {customerWord} 이름 <span className="text-rose-500">*</span>
             </label>
             <input
               id="name"
               type="text"
-              {...register("name", { required: "원생 이름을 입력해주세요." })}
+              {...register("name", { required: `${customerWord} 이름을 입력해주세요.` })}
               placeholder="예: 홍길동"
               className={`w-full rounded-xl border px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 ${
                 errors.name
@@ -129,7 +138,7 @@ export const StudentCreatePage: React.FC = () => {
                 id="email"
                 type="email"
                 {...register("email")}
-                placeholder="예: student@example.com"
+                placeholder="예: customer@example.com"
                 className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
@@ -138,16 +147,16 @@ export const StudentCreatePage: React.FC = () => {
           {/* 상태 */}
           <div>
             <label htmlFor="status" className="block text-sm font-semibold text-slate-800 mb-1.5">
-              원생 상태
+              {customerWord} 상태
             </label>
             <select
               id="status"
               {...register("status")}
               className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <option value="active">재원 (정상 수업 및 출석 가능)</option>
-              <option value="paused">휴원 (일시 정지)</option>
-              <option value="inactive">퇴원 (종료)</option>
+              <option value="active">{statusActiveLabel} (정상 이용 가능)</option>
+              <option value="paused">{statusPausedLabel} (일시 정지)</option>
+              <option value="inactive">{statusInactiveLabel} (종료)</option>
             </select>
           </div>
 

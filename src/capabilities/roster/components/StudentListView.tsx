@@ -8,6 +8,7 @@ import {
   rosterSearchPlaceholder,
 } from '@/core/industry/industryUi';
 import { useModuleLabels } from '@/core/labels';
+import { useTerminology } from '@/core/terminology';
 import { studentUsesShuttleService } from '@/capabilities/transport';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { STORAGE_REFRESH_DOMAINS } from '@/hooks/useStorageRefresh';
@@ -71,6 +72,9 @@ export const StudentListView: React.FC = () => {
   const rosterList = getRosterListPresentation(industry);
   const showSessionColumns = rosterList.showSessionColumns;
   const labels = useModuleLabels();
+  const { t } = useTerminology();
+  const activeStatusLabel = t('customer.statusActive', '재원');
+  const leaveStatusLabel = activeStatusLabel === '재원' ? '휴원' : '휴회';
   const endedLabel = rosterList.withdrawnLabel;
   const staffFilterName = rosterList.staffFilterLabel ?? labels.staff.singular;
   const controlMinClass = rosterList.controlMinHeight === 44 ? 'min-h-[44px]' : 'min-h-[36px]';
@@ -233,8 +237,8 @@ export const StudentListView: React.FC = () => {
   ].filter(Boolean).length;
 
   const statusChips: Array<{ value: string; label: string; count: number }> = [
-    { value: 'active', label: '재원', count: activeCount },
-    { value: 'leave', label: '휴원', count: leaveCount },
+    { value: 'active', label: activeStatusLabel, count: activeCount },
+    { value: 'leave', label: leaveStatusLabel, count: leaveCount },
     { value: 'withdrawn', label: endedLabel, count: withdrawnCount },
     { value: 'ALL', label: '전체', count: students.length },
   ];
@@ -425,7 +429,7 @@ export const StudentListView: React.FC = () => {
           <span>
             표시 중:{' '}
             <strong className="text-slate-800">{filteredStudents.length}명</strong>
-            {statusFilter === 'active' && !hasSearchOrExtraFilters ? ' (재원)' : ''}
+            {statusFilter === 'active' && !hasSearchOrExtraFilters ? ` (${activeStatusLabel})` : ''}
           </span>
           {hasSearchOrExtraFilters && (
             <button

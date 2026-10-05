@@ -17,3 +17,4 @@ export {
   type StudentBillingMode,
 } from './billingMode';
 export { getStudentLevelLabel, getStudentLevelOptions, showSchoolFields } from './levelOptions';
+export { studentToCustomer, customerToStudent } from './studentAdapter';

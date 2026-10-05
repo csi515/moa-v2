@@ -21,6 +21,7 @@ import { Copy, X } from 'lucide-react';
 import { Section } from './shared';
 import { buildYearMonthOptions } from '@/capabilities/finance/categories';
 import { ParentIndustryAdapter } from '@/capabilities/parent/ParentIndustryAdapter';
+import { showsTextbooksLink, getPlaceLabel } from '@/core/industry/industryUi';
 
 function statusLabel(status: 'paid' | 'partial' | 'unpaid'): string {
   if (status === 'paid') return '완납';

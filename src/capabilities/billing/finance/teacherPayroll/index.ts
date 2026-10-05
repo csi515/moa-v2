@@ -3,6 +3,8 @@ export type {
   PayrollSettlementStatus,
   TeacherPayrollRow,
   TeacherPayrollTotals,
+  StaffPayrollRow,
+  StaffPayrollTotals,
 } from './types';
 export type { TeacherPayrollSettlement } from './settlements';
 

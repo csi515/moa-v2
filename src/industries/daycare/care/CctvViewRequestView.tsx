@@ -2,7 +2,7 @@ import { useMemo, useState, type FC, type FormEvent } from 'react';
 import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useStorageRefresh } from '@/hooks';
-import { StorageService } from '@/services/storage';
+import { careStorage } from './careStorage';
 import { EmptyState, Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { Plus, Save, Video } from 'lucide-react';
@@ -21,7 +21,7 @@ export const CctvViewRequestView: FC = () => {
   const { isOwner } = usePermissions();
   const refreshKey = useStorageRefresh();
   const requests = useMemo(() => {
-    const list = StorageService.getCctvViewRequests().sort((a, b) => b.requestedAt.localeCompare(a.requestedAt));
+    const list = careStorage.getCctvViewRequests().sort((a, b) => b.requestedAt.localeCompare(a.requestedAt));
     if (isOwner) return list;
     const staffId = currentUser.staffId;
     return list.filter((item) => item.applicantTeacherId && item.applicantTeacherId === staffId);
@@ -36,7 +36,7 @@ export const CctvViewRequestView: FC = () => {
       showToast('열람 목적을 입력해 주세요.', 'error');
       return;
     }
-    StorageService.saveCctvViewRequest({
+    careStorage.saveCctvViewRequest({
       requestedAt: new Date().toISOString(),
       purpose: purpose.trim(),
       applicantName: currentUser.name,
@@ -48,7 +48,7 @@ export const CctvViewRequestView: FC = () => {
   };
 
   const review = (item: CctvViewRequest, status: Extract<CctvViewStatus, 'approved' | 'rejected'>) => {
-    StorageService.saveCctvViewRequest({
+    careStorage.saveCctvViewRequest({
       ...item,
       status,
       reviewedAt: new Date().toISOString(),

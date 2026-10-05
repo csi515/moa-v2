@@ -1,17 +1,7 @@
-import { StorageService } from '@/services/storage';
-import { careStorage } from './careStorage';
-
-let bound = false;
-
 /**
- * Daycare 전용 care storage를 StorageService에 연결한다.
- * services/storage.ts가 Industry를 import하지 않도록 composition/plugin에서 호출한다.
- * cache/hydration/sync 의미는 기존 Object.assign 슬라이스와 동일하다.
+ * @deprecated Phase 1 리팩토링: Daycare care storage는 careStorage를 직접 import하여 사용합니다.
+ * StorageService 전역 몽키패칭(Object.assign)을 제거하여 런타임 사이드이펙트 및 메모리 오염을 차단했습니다.
  */
 export function bindDaycareCareStorage(): void {
-  if (bound) return;
-  bound = true;
-  Object.assign(StorageService, careStorage);
+  // no-op: StorageService 몽키패칭 완전 제거됨
 }
-
-bindDaycareCareStorage();

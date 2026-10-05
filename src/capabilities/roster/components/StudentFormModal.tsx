@@ -1,4 +1,4 @@
-﻿import React, { useMemo, useRef, useState, useEffect } from 'react';
+import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useOptionalOrganization } from '@/core/organizations/OrganizationProvider';
@@ -20,7 +20,14 @@ import { requestPlaceStudentOnTimetable } from '@/core/customer/studentJoinInbox
 import { StorageService } from '@/services/storage';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { Student, Parent } from '@/types';
-import { Save, RefreshCw, StickyNote } from 'lucide-react';
+import {
+  getCustomFieldsForIndustry,
+  extractCustomFieldValues,
+  validateCustomFields,
+  mergeCustomFieldValues,
+} from '@/core/customer/customFields';
+import { CustomFieldsForm } from '@/core/customer/components/CustomFieldsForm';
+import { Save, RefreshCw, StickyNote, SlidersHorizontal } from 'lucide-react';
 import { Modal } from '@/shared/components/ui/Modal';
 import { StudentBasicInfoSection } from './form/StudentBasicInfoSection';
 import { GuardianSection } from './form/GuardianSection';
@@ -81,6 +88,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
   const showPickupFields = getIndustryPlugin(industry).showPickupFields;
   const canInviteParent = isSupabaseConfigured() && organizationId !== 'local-org';
   const isEdit = Boolean(student?.id);
+  const customFieldsDef = useMemo(() => getCustomFieldsForIndustry(industry), [industry]);
 
   const [formData, setFormData] = useState<StudentFormData>({
     name: '',
@@ -108,6 +116,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
   });
 
   const [guardians, setGuardians] = useState<GuardianFormEntry[]>([newGuardianEntry(true)]);
+  const [customFieldValues, setCustomFieldValues] = useState<Record<string, any>>({});
   const [isAdultSelf, setIsAdultSelf] = useState(false);
   const [activeSearchIdx, setActiveSearchIdx] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -123,6 +132,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
 
     let nextForm: StudentFormData;
     let nextGuardians: GuardianFormEntry[];
+    let nextCustomFields: Record<string, any>;
 
     if (student) {
       const linked = getGuardiansForStudent(student.id);
@@ -168,6 +178,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
               invite: false,
             }))
           : [newGuardianEntry(true)];
+      nextCustomFields = extractCustomFieldValues(student.metadata, customFieldsDef);
       setShowAdvanced(true);
     } else {
       nextForm = {
@@ -196,18 +207,22 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         autoGeneratePin: attendanceEnabled,
       };
       nextGuardians = [newGuardianEntry(true)];
+      nextCustomFields = extractCustomFieldValues(null, customFieldsDef);
       setShowAdvanced(false);
     }
 
     setFormData(nextForm);
     setGuardians(nextGuardians);
+    setCustomFieldValues(nextCustomFields);
     setIsAdultSelf(false);
     setRevealedPin(null);
     setActiveSearchIdx(null);
     setPostSaveStudent(null);
     setFieldErrors({});
-    setBaseline(studentFormSnapshot(nextForm, nextGuardians, false));
-  }, [student, isOpen, attendanceEnabled, defaultLevel, teachers, classes, settings]);
+    setBaseline(
+      studentFormSnapshot(nextForm, nextGuardians, false) + JSON.stringify(nextCustomFields)
+    );
+  }, [student, isOpen, attendanceEnabled, defaultLevel, teachers, classes, settings, customFieldsDef]);
 
   const searchResults = useMemo(() => {
     if (activeSearchIdx === null) return [];
@@ -217,7 +232,8 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
 
   const isDirty =
     Boolean(baseline) &&
-    studentFormSnapshot(formData, guardians, isAdultSelf) !== baseline &&
+    studentFormSnapshot(formData, guardians, isAdultSelf) + JSON.stringify(customFieldValues) !==
+      baseline &&
     !postSaveStudent;
 
   const confirmUnsavedClose = (proceed: () => void) => {
@@ -237,6 +253,15 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
     if (patch.usesShuttleService !== undefined || patch.pickupAddresses) {
       setFieldErrors((prev) => ({ ...prev, pickup: undefined }));
     }
+  };
+
+  const updateCustomField = (key: string, value: any) => {
+    setCustomFieldValues((prev) => ({ ...prev, [key]: value }));
+    setFieldErrors((prev) => {
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
   };
 
   const updateGuardian = (idx: number, patch: Partial<GuardianFormEntry>) => {
@@ -340,6 +365,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
       paymentDay: Number(formData.paymentDay) || 10,
       specialNotes: formData.specialNotes.trim() || undefined,
       memo: undefined,
+      metadata: mergeCustomFieldValues(student?.metadata, customFieldValues),
     };
   };
 
@@ -353,8 +379,11 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
       customerLabel,
       contactLabel,
     });
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
+    const customErrors = validateCustomFields(customFieldValues, customFieldsDef);
+    const combinedErrors = { ...errors, ...customErrors };
+
+    if (Object.keys(combinedErrors).length > 0) {
+      setFieldErrors(combinedErrors);
       const first = firstErrorField(errors);
       if (first) {
         requestAnimationFrame(() => focusStudentFormField(first, formRef.current));
@@ -548,6 +577,20 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
             onToggle={() => setShowAdvanced((v) => !v)}
             onChange={updateFormData}
           />
+
+          {customFieldsDef.length > 0 && (
+            <section className="p-4 bg-slate-50/70 border border-slate-200/80 rounded-2xl space-y-3">
+              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-600" /> {placeLabel} 맞춤 항목
+              </h4>
+              <CustomFieldsForm
+                fields={customFieldsDef}
+                values={customFieldValues}
+                onChange={updateCustomField}
+                errors={fieldErrors}
+              />
+            </section>
+          )}
 
           <section>
             <h4 className="text-xs font-bold text-amber-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
