@@ -4,13 +4,15 @@
  * 매니페스트 파일은 import하지 않는다. 라벨은 테스트 픽스처로만 넣는다.
  */
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { installIndustryPlugin } from '@/core/industry/pluginHost';
-import { getFeeLabel, getPlaceLabel } from '@/core/industry/industryUi';
+import { getFeeLabel, getPlaceLabel, showsTextbooksLink } from '@/core/industry/industryUi';
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
 import type { IndustryType } from '@/core/industry/types';
 import {
   ROSTER_TIMETABLE_PLACE_BUTTON,
-  isPianoIndustry,
   rosterAdvancedSectionTitle,
   rosterClassAssignHelper,
   rosterCreateFormDescription,
@@ -30,7 +32,7 @@ function manifest(
     theme: 'indigo',
     accent: { btn: '', btnHover: '', icon: '', hoverBg: '', ring: '' },
     attendanceDefault: false,
-    usesClassBasedSchedule: id === 'piano',
+    usesClassBasedSchedule: id === 'piano' || id === 'gym' || id === 'daycare',
     customerListTab: 'students',
     showSchoolFields: false,
     showPickupFields: false,
@@ -41,7 +43,7 @@ function manifest(
     customerLabel: labels.customerLabel,
     feeLabel: labels.feeLabel,
     isAppointment: false,
-    showsTextbooksLink: false,
+    showsTextbooksLink: id === 'piano',
   };
 }
 
@@ -51,11 +53,45 @@ installIndustryPlugin(manifest('gym', { placeLabel: '체육관', customerLabel: 
 installIndustryPlugin(manifest('skin_clinic', { placeLabel: '샵', customerLabel: '고객', feeLabel: '이용료' }));
 installIndustryPlugin(manifest('retail', { placeLabel: '매장', customerLabel: '고객', feeLabel: '이용료' }));
 installIndustryPlugin(manifest('sauna_jjimjilbang', { placeLabel: '사업장', customerLabel: '고객', feeLabel: '이용료' }));
+installIndustryPlugin(manifest('daycare', { placeLabel: '원', customerLabel: '원아', feeLabel: '보육료' }));
+
+const srcRoot = join(dirname(fileURLToPath(import.meta.url)), '../../../..');
+
+function textbooksFlag(rel: string): boolean {
+  const src = readFileSync(join(srcRoot, rel), 'utf8');
+  const match = src.match(/showsTextbooksLink:\s*(true|false)/);
+  assert.ok(match, `${rel} showsTextbooksLink`);
+  return match[1] === 'true';
+}
+
+assert.equal(textbooksFlag('industries/piano/plugin.ts'), true);
+for (const rel of [
+  'industries/pilates/plugin.ts',
+  'industries/gym/plugin.ts',
+  'industries/daycare/plugin.ts',
+  'industries/skin/plugin.ts',
+  'industries/retail/plugin.ts',
+  'industries/bath/plugin.ts',
+]) {
+  assert.equal(textbooksFlag(rel), false, rel);
+}
+
+const rosterFormFiles = [
+  'capabilities/roster/components/form/rosterFormCopy.ts',
+  'capabilities/roster/components/form/enrollmentFormCopy.ts',
+  'capabilities/roster/components/StudentFormModal.tsx',
+];
+for (const rel of rosterFormFiles) {
+  const src = readFileSync(join(srcRoot, rel), 'utf8');
+  assert.doesNotMatch(src, /isPianoIndustry/, `${rel} still calls isPianoIndustry`);
+  assert.doesNotMatch(src, /===\s*['"]piano['"]/, `${rel} still compares industry id piano`);
+  assert.match(src, /showsTextbooksLink/, `${rel} does not read showsTextbooksLink`);
+}
 
 const PIANO_SERVICE = '반';
 const PIANO_CONTACT = '학부모';
 
-assert.equal(isPianoIndustry('piano'), true);
+assert.equal(showsTextbooksLink('piano'), true);
 assert.equal(rosterAdvancedSectionTitle('piano'), '수업 · 수강료');
 assert.equal(
   rosterClassAssignHelper('piano', PIANO_SERVICE),
@@ -80,10 +116,11 @@ const others: { id: IndustryType; service: string; contact: string }[] = [
   { id: 'skin_clinic', service: '시술', contact: '연락처' },
   { id: 'retail', service: '상품', contact: '연락처' },
   { id: 'sauna_jjimjilbang', service: '시설', contact: '연락처' },
+  { id: 'daycare', service: '반', contact: '보호자' },
 ];
 
 for (const row of others) {
-  assert.equal(isPianoIndustry(row.id), false, row.id);
+  assert.equal(showsTextbooksLink(row.id), false, row.id);
   const fee = getFeeLabel(row.id);
   const place = getPlaceLabel(row.id);
   assert.equal(rosterAdvancedSectionTitle(row.id), `수업·${fee} (선택)`);

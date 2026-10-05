@@ -12,7 +12,7 @@ import {
 } from '@/core/students';
 import { getStudentLevelOptions } from '@/core/students/levelOptions';
 import { getIndustryPlugin } from '@/core/industry/registry';
-import { getPlaceLabel } from '@/core/industry/industryUi';
+import { getPlaceLabel, showsTextbooksLink } from '@/core/industry/industryUi';
 import { useModuleLabels } from '@/core/labels';
 import { createPickupAddress, normalizePickupAddresses, sanitizePickupAddressesForSave } from '@/core/transport';
 import { searchParents, getGuardiansForStudent } from '@/core/parent/guardianHelpers';
@@ -43,7 +43,6 @@ import {
   type StudentFormErrors,
 } from './form/studentFormValidation';
 import {
-  isPianoIndustry,
   rosterCreateFormDescription,
   rosterNotesPlaceholder,
   rosterPostSaveHint,
@@ -69,7 +68,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
   const contactLabel = labels.contact.singular;
   const placeLabel = getPlaceLabel(industry);
   const serviceLabel = labels.service.singular;
-  const showTimetablePlacement = isPianoIndustry(industry);
+  const showTimetablePlacement = showsTextbooksLink(industry);
   const org = useOptionalOrganization();
   const organizationId = org?.currentOrganization?.id || 'local-org';
   const formRef = useRef<HTMLFormElement>(null);
