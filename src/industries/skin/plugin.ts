@@ -52,6 +52,7 @@ export const skinPluginManifest: IndustryPluginManifest = {
   showsCustomerPoints: false,
   showsAdultPracticeGuide: false,
   showsStaffPracticeGuide: false,
+  includesLinkedBillingIncome: false,
   rosterList: {
     withdrawnLabel: '종료',
     filterEmptyUsesSearchHint: true,
