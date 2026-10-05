@@ -40,6 +40,10 @@ export const skinPluginManifest: IndustryPluginManifest = {
   supportsDeposit: true,
   showsTextbooksLink: false,
   runsPinCheckInSideEffects: false,
+  rosterList: {
+    withdrawnLabel: '종료',
+    filterEmptyUsesSearchHint: true,
+  },
   roomConfig: {
     sectionTitle: '관리실',
     sectionDescription: '예약 시 배정할 관리실 이름을 등록해 주세요.',

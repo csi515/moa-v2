@@ -112,7 +112,7 @@ const basic = readFileSync(join(rosterRoot, 'components/form/StudentBasicInfoSec
 assert.match(basic, /showSchoolFields\(industry\)/);
 
 const list = readFileSync(join(rosterRoot, 'components/StudentListView.tsx'), 'utf8');
-assert.match(list, /\{isPiano && <th className="py-2\.5 px-3">\{enrollmentModeLabel\(industry\)\}<\/th>\}/);
-assert.match(list, /\{isPiano && <th className="py-2\.5 px-3">회차권<\/th>\}/);
+assert.match(list, /\{showSessionColumns && <th className="py-2\.5 px-3">\{enrollmentModeLabel\(industry\)\}<\/th>\}/);
+assert.match(list, /\{showSessionColumns && <th className="py-2\.5 px-3">회차권<\/th>\}/);
 
 console.log('enrollmentFormCopy.test.ts OK');
