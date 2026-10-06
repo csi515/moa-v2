@@ -101,3 +101,5 @@ const PIANO_VIEW_MAP: Record<string, () => ReactNode> = {
 
 
 export default PIANO_VIEW_MAP;
+
+export { PianoOverlays as Overlays } from './PianoOverlays';

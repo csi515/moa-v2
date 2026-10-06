@@ -161,7 +161,7 @@ function GenericDashboardView({ onNavigate }: GenericDashboardViewProps) {
 }
 
 /** 모듈 미개발 업종 및 신규 업종용 확장형 공통 셸 */
-export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode> }> = ({ viewMap: externalViewMap }) => {
+export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode>; Overlays?: React.ComponentType | null }> = ({ viewMap: externalViewMap, Overlays }) => {
   const { activeTab, setActiveTab, currentUser } = useApp();
   const { allowedTabs, roleLabel, roleBadge, industry, isOwner } = usePermissions();
   const { currentOrganization } = useOrganization();
@@ -205,6 +205,7 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
     <ModuleLabelsProvider>
       <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
         {isOwner && <DirectorFloatingFab />}
+        {Overlays && <Overlays />}
         {renderView()}
       </div>
     </ModuleLabelsProvider>

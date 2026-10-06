@@ -21,12 +21,14 @@ function wrapIndustryApp(module: IndustryModuleDefinition): IndustryAppComponent
       const [viewMapMod, labelsMod] = await Promise.all([module.loadViewMap(), module.loadLabels()]);
       // @ts-ignore
       const viewMap = ('default' in viewMapMod ? viewMapMod.default : viewMapMod) as Record<string, () => ReactNode>;
+      // @ts-ignore
+      const Overlays = viewMapMod.Overlays || null;
       const { ModuleLabelsProvider } = labelsMod;
       
       function IndustryApp() {
         return (
           <ModuleLabelsProvider>
-            <GenericIndustryShell viewMap={viewMap} />
+            <GenericIndustryShell viewMap={viewMap} Overlays={Overlays} />
           </ModuleLabelsProvider>
         );
       }
