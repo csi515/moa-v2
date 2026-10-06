@@ -1,25 +1,33 @@
 import React, { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Users, Calendar, CreditCard, LayoutDashboard } from "lucide-react";
+import { useMenu } from "@refinedev/core";
+import { LayoutDashboard } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import { useTerminology } from "@/core/terminology";
-import { useOrganization } from "@/core/organizations/OrganizationProvider";
 
 export const Sidebar: React.FC = () => {
   const location = useLocation();
-  const { currentOrganization } = useOrganization();
-  const { t } = useTerminology(currentOrganization?.industry_type);
+  const { menuItems } = useMenu();
 
-  const navigationItems = useMemo(
-    () => [
-      { name: "업종 워크스페이스", href: "/", icon: LayoutDashboard },
-      { name: `${t('customer.singular', '회원')} 관리`, href: "/students", icon: Users },
-      { name: `${t('attendance.singular', '출결')}/${t('service.singular', '수업')}`, href: "/schedules", icon: Calendar },
-      { name: `${t('billing.fee', '수강료')}/결제`, href: "/billing", icon: CreditCard },
-      { name: "운영 대시보드", href: "/dashboard", icon: LayoutDashboard },
-    ],
-    [t]
-  );
+  const navigationItems = useMemo(() => {
+    const items = [
+      {
+        name: "업종 워크스페이스",
+        href: "/",
+        icon: <LayoutDashboard className="h-5 w-5" />,
+      },
+    ];
+
+    for (const item of menuItems) {
+      if (!item.route || item.route === "/") continue;
+      items.push({
+        name: item.label || item.name || "",
+        href: item.route,
+        icon: (item.icon as React.ReactElement) || <LayoutDashboard className="h-5 w-5" />,
+      });
+    }
+
+    return items;
+  }, [menuItems]);
 
   return (
     <aside className="hidden w-64 flex-col border-r border-slate-200 bg-white md:flex">
@@ -29,11 +37,10 @@ export const Sidebar: React.FC = () => {
             item.href === "/"
               ? location.pathname === "/"
               : location.pathname.startsWith(item.href);
-          const Icon = item.icon;
 
           return (
             <Link
-              key={item.name}
+              key={item.href}
               to={item.href}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
@@ -42,7 +49,9 @@ export const Sidebar: React.FC = () => {
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
               )}
             >
-              <Icon className={cn("h-5 w-5", isActive ? "text-indigo-600" : "text-slate-400")} />
+              <span className={cn(isActive ? "text-indigo-600" : "text-slate-400")}>
+                {item.icon}
+              </span>
               {item.name}
             </Link>
           );

@@ -12,6 +12,7 @@ import { GenericIndustryShell } from './GenericIndustryShell';
 import { ParentShell } from '@/modules/parent/ParentShell';
 import { LoadingScreen } from '@/shared/components/LoadingScreen';
 import { APP_BY_INDUSTRY } from './industryModules';
+import { useWorkspaceUrlSync } from './useWorkspaceUrlSync';
 
 function resolveIndustryApp(industryType?: string | null): ComponentType {
   if (resolveIndustryAppKind(industryType) === 'generic') return GenericIndustryShell;
@@ -24,6 +25,7 @@ function resolveIndustryApp(industryType?: string | null): ComponentType {
 
 /** organization.industry_type에 따라 해당 업종 셸만 lazy load */
 export const IndustryAppRouter: React.FC = () => {
+  useWorkspaceUrlSync();
   const { currentOrganization, currentRole } = useOrganization();
 
   if (currentRole === 'parent') {
