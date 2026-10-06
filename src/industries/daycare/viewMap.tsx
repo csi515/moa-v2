@@ -69,18 +69,5 @@ const DAYCARE_VIEW_MAP: Record<string, () => ReactNode> = {
   account: daycareSettingsHub,
 };
 
-export const DaycareAppContent: FC = () => {
-  const { activeTab } = useApp();
-  const { isOwner } = usePermissions();
 
-  useTabGuard();
-
-  const renderView = DAYCARE_VIEW_MAP[activeTab] ?? DAYCARE_VIEW_MAP.dashboard;
-
-  return (
-    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
-      {isOwner && <DirectorFloatingFab />}
-      {renderView()}
-    </div>
-  );
-};
+export default DAYCARE_VIEW_MAP;

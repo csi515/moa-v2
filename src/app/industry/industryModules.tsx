@@ -13,16 +13,20 @@ import {
   type IndustryModuleDefinition,
 } from './defineIndustryModule';
 
+import { GenericIndustryShell } from './GenericIndustryShell';
+
 function wrapIndustryApp(module: IndustryModuleDefinition): IndustryAppComponent {
   return lazy(async () => {
     try {
-      const [appMod, labelsMod] = await Promise.all([module.loadApp(), module.loadLabels()]);
-      const App = appMod[module.appExport];
+      const [viewMapMod, labelsMod] = await Promise.all([module.loadViewMap(), module.loadLabels()]);
+      // @ts-ignore
+      const viewMap = ('default' in viewMapMod ? viewMapMod.default : viewMapMod) as Record<string, () => ReactNode>;
       const { ModuleLabelsProvider } = labelsMod;
+      
       function IndustryApp() {
         return (
           <ModuleLabelsProvider>
-            <App />
+            <GenericIndustryShell viewMap={viewMap} />
           </ModuleLabelsProvider>
         );
       }
@@ -44,50 +48,50 @@ export const INDUSTRY_MODULES: readonly IndustryModuleDefinition[] = [
   defineIndustryModule({
     id: 'piano',
     plugin: pianoPluginManifest,
-    appExport: 'PianoAppContent',
-    loadApp: () => import('@/industries/piano/PianoAppContent'),
+    
+    loadViewMap: () => import('@/industries/piano/viewMap'),
     loadLabels: () => import('@/industries/piano/config/ModuleLabelsProvider'),
   }),
   defineIndustryModule({
     id: 'pilates',
     plugin: pilatesPluginManifest,
-    appExport: 'PilatesAppContent',
-    loadApp: () => import('@/industries/pilates/PilatesAppContent'),
+    
+    loadViewMap: () => import('@/industries/pilates/viewMap'),
     loadLabels: () => import('@/industries/pilates/config/ModuleLabelsProvider'),
   }),
   defineIndustryModule({
     id: 'gym',
     plugin: gymPluginManifest,
-    appExport: 'GymAppContent',
-    loadApp: () => import('@/industries/gym/GymAppContent'),
+    
+    loadViewMap: () => import('@/industries/gym/viewMap'),
     loadLabels: () => import('@/industries/gym/config/ModuleLabelsProvider'),
   }),
   defineIndustryModule({
     id: 'daycare',
     plugin: daycarePluginManifest,
-    appExport: 'DaycareAppContent',
-    loadApp: () => import('@/industries/daycare/DaycareAppContent'),
+    
+    loadViewMap: () => import('@/industries/daycare/viewMap'),
     loadLabels: () => import('@/industries/daycare/config/ModuleLabelsProvider'),
   }),
   defineIndustryModule({
     id: 'skin_clinic',
     plugin: skinPluginManifest,
-    appExport: 'SkinAppContent',
-    loadApp: () => import('@/industries/skin/SkinAppContent'),
+    
+    loadViewMap: () => import('@/industries/skin/viewMap'),
     loadLabels: () => import('@/industries/skin/config/ModuleLabelsProvider'),
   }),
   defineIndustryModule({
     id: 'retail',
     plugin: retailPluginManifest,
-    appExport: 'RetailAppContent',
-    loadApp: () => import('@/industries/retail/RetailAppContent'),
+    
+    loadViewMap: () => import('@/industries/retail/viewMap'),
     loadLabels: () => import('@/industries/retail/config/ModuleLabelsProvider'),
   }),
   defineIndustryModule({
     id: 'sauna_jjimjilbang',
     plugin: bathPluginManifest,
-    appExport: 'BathAppContent',
-    loadApp: () => import('@/industries/bath/BathAppContent'),
+    
+    loadViewMap: () => import('@/industries/bath/viewMap'),
     loadLabels: () => import('@/industries/bath/config/ModuleLabelsProvider'),
   }),
 ];

@@ -57,18 +57,5 @@ const GYM_VIEW_MAP: Record<string, () => ReactNode> = {
   account: gymSettingsHub,
 };
 
-export const GymAppContent: FC = () => {
-  const { activeTab } = useApp();
-  const { isOwner } = usePermissions();
 
-  useTabGuard();
-
-  const renderView = GYM_VIEW_MAP[activeTab] ?? GYM_VIEW_MAP.dashboard;
-
-  return (
-    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
-      {isOwner && <DirectorFloatingFab />}
-      {renderView()}
-    </div>
-  );
-};
+export default GYM_VIEW_MAP;

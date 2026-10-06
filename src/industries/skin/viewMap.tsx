@@ -62,18 +62,5 @@ const SKIN_VIEW_MAP: Record<string, () => ReactNode> = {
   account: skinSettingsHub,
 };
 
-export const SkinAppContent: FC = () => {
-  const { activeTab } = useApp();
-  const { isOwner } = usePermissions();
 
-  useTabGuard();
-
-  const renderView = SKIN_VIEW_MAP[activeTab] ?? SKIN_VIEW_MAP.dashboard;
-
-  return (
-    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
-      {isOwner && <DirectorFloatingFab />}
-      {renderView()}
-    </div>
-  );
-};
+export default SKIN_VIEW_MAP;

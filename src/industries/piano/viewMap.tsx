@@ -99,36 +99,5 @@ const PIANO_VIEW_MAP: Record<string, () => ReactNode> = {
   ...hubViewAliases(pianoSettingsHub, PIANO_SETTINGS_HUB_TABS),
 };
 
-export const PianoAppContent: FC = () => {
-  const { activeTab } = useApp();
-  const { isOwner } = usePermissions();
-  const {
-    showOnboarding,
-    showResumeCard,
-    resumeStepLabel,
-    handleOnboardingComplete,
-    handleResumeContinue,
-    handleResumeSkip,
-  } = usePianoOnboardingUi();
 
-  useTabGuard();
-
-  const renderView = PIANO_VIEW_MAP[activeTab] ?? PIANO_VIEW_MAP.dashboard;
-
-  return (
-    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
-      {isOwner && <DirectorFloatingFab />}
-      {showOnboarding && <OnboardingWizard onComplete={handleOnboardingComplete} />}
-      {showResumeCard && activeTab === 'dashboard' && (
-        <div className="px-4 pt-3 max-w-3xl mx-auto w-full">
-          <OnboardingResumeCard
-            stepLabel={resumeStepLabel}
-            onContinue={handleResumeContinue}
-            onSkip={handleResumeSkip}
-          />
-        </div>
-      )}
-      {renderView()}
-    </div>
-  );
-};
+export default PIANO_VIEW_MAP;

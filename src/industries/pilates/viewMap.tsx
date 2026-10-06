@@ -59,18 +59,5 @@ const PILATES_VIEW_MAP: Record<string, () => ReactNode> = {
   account: pilatesSettingsHub,
 };
 
-export const PilatesAppContent: FC = () => {
-  const { activeTab } = useApp();
-  const { isOwner } = usePermissions();
 
-  useTabGuard();
-
-  const renderView = PILATES_VIEW_MAP[activeTab] ?? PILATES_VIEW_MAP.dashboard;
-
-  return (
-    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
-      {isOwner && <DirectorFloatingFab />}
-      {renderView()}
-    </div>
-  );
-};
+export default PILATES_VIEW_MAP;

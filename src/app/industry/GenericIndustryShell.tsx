@@ -6,7 +6,7 @@ import { useTabGuard } from '@/shared/navigation/useTabGuard';
 import { ModuleLabelsProvider } from '@/core/labels';
 import { WorkplaceSettingsView } from '@/core/organizations/components/WorkplaceSettingsView';
 import { accountViewEntry } from '@/core/industry/commonViewEntries';
-import { ToastContainer, ConfirmDialog } from '@/shared/components';
+import { DirectorFloatingFab, ToastContainer, ConfirmDialog } from '@/shared/components';
 import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
 import { ModuleSidebar } from '@/shared/components/layout/ModuleSidebar';
 import { ModuleBottomNav } from '@/shared/components/layout/ModuleBottomNav';
@@ -161,9 +161,9 @@ function GenericDashboardView({ onNavigate }: GenericDashboardViewProps) {
 }
 
 /** 모듈 미개발 업종 및 신규 업종용 확장형 공통 셸 */
-export const GenericIndustryShell: FC = () => {
+export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode> }> = ({ viewMap: externalViewMap }) => {
   const { activeTab, setActiveTab, currentUser } = useApp();
-  const { allowedTabs, roleLabel, roleBadge, industry } = usePermissions();
+  const { allowedTabs, roleLabel, roleBadge, industry, isOwner } = usePermissions();
   const { currentOrganization } = useOrganization();
   const { t } = useTerminology(currentOrganization?.industry_type || industry);
 
@@ -190,18 +190,21 @@ export const GenericIndustryShell: FC = () => {
 
   useTabGuard();
 
-  const viewMap: Record<string, () => ReactNode> = {
+  const defaultViewMap: Record<string, () => ReactNode> = {
     dashboard: () => <GenericDashboardView onNavigate={setActiveTab} />,
     students: () => <StudentListView />,
     settings: () => <WorkplaceSettingsView />,
     ...accountViewEntry,
   };
 
+  const viewMap = externalViewMap || defaultViewMap;
+
   const renderView = viewMap[activeTab] ?? viewMap.dashboard;
 
   return (
     <ModuleLabelsProvider>
       <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
+        {isOwner && <DirectorFloatingFab />}
         {renderView()}
       </div>
     </ModuleLabelsProvider>

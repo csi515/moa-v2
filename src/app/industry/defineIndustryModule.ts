@@ -7,8 +7,8 @@ export type IndustryAppComponent = LazyExoticComponent<ComponentType>;
 export type IndustryModuleDefinition = {
   id: IndustryType;
   plugin: IndustryPluginManifest;
-  loadApp: () => Promise<Record<string, ComponentType>>;
-  appExport: string;
+  loadViewMap: () => Promise<{ default: Record<string, () => ReactNode> } | Record<string, () => ReactNode>>;
+  
   loadLabels: () => Promise<{ ModuleLabelsProvider: ComponentType<{ children: ReactNode }> }>;
 };
 

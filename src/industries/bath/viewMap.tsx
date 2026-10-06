@@ -43,16 +43,5 @@ const BATH_VIEW_MAP: Record<string, () => ReactNode> = {
   ...accountViewEntry,
 };
 
-export const BathAppContent: FC = () => {
-  const { activeTab } = useApp();
 
-  useTabGuard();
-
-  const renderView = BATH_VIEW_MAP[activeTab] ?? BATH_VIEW_MAP.dashboard;
-
-  return (
-    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
-      {renderView()}
-    </div>
-  );
-};
+export default BATH_VIEW_MAP;

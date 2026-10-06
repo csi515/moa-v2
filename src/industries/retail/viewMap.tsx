@@ -45,18 +45,5 @@ const RETAIL_VIEW_MAP: Record<string, () => ReactNode> = {
   account: retailSettingsHub,
 };
 
-export const RetailAppContent: FC = () => {
-  const { activeTab } = useApp();
-  const { isOwner } = usePermissions();
 
-  useTabGuard();
-
-  const renderView = RETAIL_VIEW_MAP[activeTab] ?? RETAIL_VIEW_MAP.dashboard;
-
-  return (
-    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
-      {isOwner && <DirectorFloatingFab />}
-      {renderView()}
-    </div>
-  );
-};
+export default RETAIL_VIEW_MAP;
