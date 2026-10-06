@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { StorageService } from '@/services/storage';
 import { ACADEMY_EVENT_TYPE_LABEL, PERFORMANCE_VIDEO_TYPE_LABEL } from '@/industries/piano/config/eventLabels';
-import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
-import { parentEventsSectionTitle } from './parentEventsSectionTitle';
+import { getIndustryPlugin } from '@/core/industry/pluginHost';
+import type { IndustryType } from '@/core/industry/types';
 import type { Student } from '@/types';
 import { Section } from './shared';
 
@@ -18,7 +18,8 @@ export function ParentEventsView({
   student: Student;
   industryType?: IndustryType | string;
 }) {
-  const industry = normalizeIndustryType(industryType);
+  const plugin = getIndustryPlugin(industryType);
+  const { showsPerformanceVideos, parentEventsSectionTitle } = plugin;
 
   const events = useMemo(() => {
     return StorageService.getEvents()
@@ -30,11 +31,11 @@ export function ParentEventsView({
   }, [student.id]);
 
   const videos =
-    industry === 'piano'
+    showsPerformanceVideos
       ? StorageService.getPerformanceVideosByStudentId(student.id).slice(0, 12)
       : [];
 
-  const sectionTitle = parentEventsSectionTitle(industry);
+  const sectionTitle = parentEventsSectionTitle || '일정';
 
   return (
     <div className="space-y-4">
@@ -62,7 +63,7 @@ export function ParentEventsView({
         )}
       </Section>
 
-      {industry === 'piano' && (
+      {showsPerformanceVideos && (
         <Section title="연주 영상">
           {videos.length === 0 ? (
             <p className="text-sm text-slate-400 text-center py-4">등록된 연주 영상이 없습니다.</p>

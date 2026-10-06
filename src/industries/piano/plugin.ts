@@ -60,6 +60,9 @@ export const pianoPluginManifest: IndustryPluginManifest = {
   showsAdultPracticeGuide: true,
   showsStaffPracticeGuide: true,
   includesLinkedBillingIncome: true,
+  showsPerformanceVideos: true,
+  showsSongStamps: true,
+  parentEventsSectionTitle: '학원 일정',
   rosterList: {
     searchPlaceholder: '학생·학부모 이름 또는 전화번호',
     filterButtonAriaLabel: '추가 필터 (담당 선생님, 반, 요일, 정렬)',

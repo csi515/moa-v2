@@ -252,6 +252,12 @@ export interface IndustryPluginManifest {
    * 빈 값·별칭은 피아노로 풀지 않는다. 지금은 피아노만 true.
    */
   includesLinkedBillingIncome?: boolean;
+  /** 학부모 포털: 연주 영상 섹션 표시 여부 (피아노 전용 기능) */
+  showsPerformanceVideos?: boolean;
+  /** 학부모 포털: 연습 포도알(스탬프 보드) 표시 여부 (피아노 전용 기능) */
+  showsSongStamps?: boolean;
+  /** 학부모 포털: 일정(이벤트) 섹션 제목 (기본: '일정') */
+  parentEventsSectionTitle?: string;
   /**
    * 공유 명단 목록의 업종 차이.
    * 목록은 업종 id를 비교하지 않고 이 설정만 읽는다.

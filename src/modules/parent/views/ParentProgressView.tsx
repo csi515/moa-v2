@@ -9,6 +9,7 @@ import type { Student } from '@/types';
 import type { IndustryType } from '@/core/industry/types';
 import { CheckCircle2, AlertCircle, Award, Plus } from 'lucide-react';
 import { Section } from './shared';
+import { getIndustryPlugin } from '@/core/industry/pluginHost';
 import { StudentStampBoard } from '@/industries/piano/components/songProgress';
 
 export function ParentProgressView({
@@ -72,7 +73,9 @@ export function ParentProgressView({
 
   const studentLevel = levels.find((l) => l.name === student.level) || levels[0];
   const levelItems = studentLevel ? items.filter((i) => i.levelId === studentLevel.id) : [];
-  const showSongStamps = industryType === 'piano' && Boolean(organizationId);
+  
+  const plugin = getIndustryPlugin(industryType);
+  const showSongStamps = plugin.showsSongStamps && Boolean(organizationId);
 
   const openCreate = () => {
     setForm({
