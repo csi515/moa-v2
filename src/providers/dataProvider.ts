@@ -42,7 +42,8 @@ export const TENANT_SCOPED_RESOURCES = [
   "tuition_invoices", 
   "staff",
   "classes",
-  "class_members"
+  "class_members",
+  "practice_records"
 ] as const;
 
 export function isTenantScopedResource(resource: string): boolean {

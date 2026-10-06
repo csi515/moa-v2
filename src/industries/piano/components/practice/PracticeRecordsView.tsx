@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { useList, useCreate, useDelete } from '@refinedev/core';
 import { useApp } from '@/context/AppContext';
 import { useStaffScope } from '@/hooks';
-import { StorageService } from '@/services/storage';
 import { PageHeader, SummaryMetricCard, FilterBar, SearchField } from '@/shared/components';
 import { PracticeRecord } from '@/types';
 import { consumeOpenPendingPractice } from '@/core/customer/studentJoinInbox';
-import { notifyParentPracticeReviewed } from '@/capabilities/booking';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   BookOpenCheck,
@@ -13,17 +12,63 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
+import { useOrganization } from '@/core/organizations/OrganizationProvider';
 
 export const PracticeRecordsView: React.FC = () => {
-  const { showToast, openConfirmDialog, setSelectedStudentId, setActiveTab } = useApp();
+  const { showToast, openConfirmDialog } = useApp();
+  const { currentOrganization } = useOrganization();
   const { scopeStudents, scopeByStudentIds } = useStaffScope();
 
-  const allStudents = StorageService.getStudents();
+  // 1. Fetch Students via Refine
+  const studentsList = useList<any>({
+    resource: 'customers',
+    filters: [{ field: 'status', operator: 'eq', value: 'active' }],
+    queryOptions: {
+      enabled: !!currentOrganization?.id,
+    },
+  });
+
+  const allStudents = (studentsList as any).data?.data || (studentsList as any).data || (studentsList as any).query?.data?.data || [];
+  const isLoadingStudents = (studentsList as any).isLoading ?? (studentsList as any).query?.isLoading;
   const students = useMemo(() => scopeStudents(allStudents), [allStudents, scopeStudents]);
-  const practiceList = useMemo(
-    () => scopeByStudentIds<PracticeRecord>(StorageService.getPracticeRecords(), allStudents),
-    [allStudents, scopeByStudentIds]
-  );
+
+  // 2. Fetch Practice Records via Refine (piano schema)
+  const practiceListQuery = useList<any>({
+    resource: 'practice_records',
+    meta: { schema: 'piano' },
+    queryOptions: {
+      enabled: !!currentOrganization?.id,
+    },
+  });
+
+  const rawRecords = (practiceListQuery as any).data?.data || (practiceListQuery as any).data || (practiceListQuery as any).query?.data?.data || [];
+  const isLoadingPractice = (practiceListQuery as any).isLoading ?? (practiceListQuery as any).query?.isLoading;
+
+  // Map DB records to UI PracticeRecord type
+  const practiceList = useMemo(() => {
+    const mapped = rawRecords.map((r: any) => {
+      const student = allStudents.find((s: any) => s.id === r.customer_id);
+      return {
+        id: r.id,
+        studentId: r.customer_id,
+        studentName: student?.name || '알 수 없음',
+        date: r.practice_date,
+        minutes: r.minutes,
+        songTitle: r.song_title,
+        textbook: r.textbook || undefined,
+        page: r.page || undefined,
+        homework: r.homework || undefined,
+        teacherEvaluation: r.teacher_evaluation || undefined,
+        difficultyPart: r.difficulty_part || undefined,
+        nextAssignment: r.next_assignment || undefined,
+        source: r.metadata?.source,
+        staffReviewed: r.metadata?.staffReviewed,
+        staffReviewedAt: r.metadata?.staffReviewedAt,
+        staffReviewNote: r.metadata?.staffReviewNote,
+      } as PracticeRecord;
+    });
+    return scopeByStudentIds<PracticeRecord>(mapped, allStudents);
+  }, [rawRecords, allStudents, scopeByStudentIds]);
 
   const [studentFilter, setStudentFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,7 +80,7 @@ export const PracticeRecordsView: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    studentId: students[0]?.id || '',
+    studentId: '',
     date: todayIsoLocal(),
     minutes: 40,
     songTitle: '',
@@ -43,6 +88,13 @@ export const PracticeRecordsView: React.FC = () => {
     homework: '',
     teacherEvaluation: '⭐⭐⭐⭐'
   });
+
+  // Ensure default studentId is set once students load
+  useEffect(() => {
+    if (students.length > 0 && !formData.studentId) {
+      setFormData(prev => ({ ...prev, studentId: students[0].id }));
+    }
+  }, [students, formData.studentId]);
 
   const filteredPractice = useMemo(() => {
     return practiceList.filter((p) => {
@@ -79,6 +131,7 @@ export const PracticeRecordsView: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  const { mutate: deletePractice } = useDelete();
   const handleDelete = (p: PracticeRecord) => {
     openConfirmDialog({
       title: '연습 기록 삭제',
@@ -86,12 +139,22 @@ export const PracticeRecordsView: React.FC = () => {
       isDestructive: true,
       confirmText: '삭제하기',
       onConfirm: () => {
-        StorageService.deletePracticeRecord(p.id);
-        showToast('연습 기록이 삭제되었습니다.', 'info');
+        deletePractice(
+          {
+            resource: 'practice_records',
+            id: p.id,
+            meta: { schema: 'piano' }
+          },
+          {
+            onSuccess: () => showToast('연습 기록이 삭제되었습니다.', 'info'),
+            onError: () => showToast('삭제에 실패했습니다.', 'error')
+          }
+        );
       }
     });
   };
 
+  const { mutate: createPractice, isLoading: isCreating } = useCreate() as any;
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const st = students.find((s) => s.id === formData.studentId);
@@ -104,295 +167,277 @@ export const PracticeRecordsView: React.FC = () => {
       return;
     }
 
-    StorageService.savePracticeRecord({
-      studentId: st.id,
-      studentName: st.name,
-      date: formData.date,
-      minutes: Number(formData.minutes) || 30,
-      songTitle: formData.songTitle.trim(),
-      difficultyPart: formData.difficultyPart.trim(),
-      homework: formData.homework.trim(),
-      teacherEvaluation: formData.teacherEvaluation,
-      source: 'staff',
-      staffReviewed: true,
-    });
-
-    showToast('연습 기록이 등록되었습니다.', 'success');
-    setIsModalOpen(false);
-  };
-
-  const handleReviewParentLog = (p: PracticeRecord) => {
-    StorageService.savePracticeRecord({
-      ...p,
-      staffReviewed: true,
-      staffReviewedAt: new Date().toISOString(),
-      staffReviewNote: p.staffReviewNote || '확인했습니다. 잘했어요!',
-      teacherEvaluation: p.teacherEvaluation || '⭐⭐⭐⭐',
-    });
-    const student = allStudents.find((s) => s.id === p.studentId);
-    notifyParentPracticeReviewed({
-      studentId: p.studentId,
-      studentName: p.studentName,
-      parentPhone: student?.parentPhone,
-      date: p.date,
-      songTitle: p.songTitle,
-    });
-    showToast(`${p.studentName} 가정 연습 일지를 확인했습니다.`, 'success');
+    createPractice(
+      {
+        resource: 'practice_records',
+        meta: { schema: 'piano' },
+        values: {
+          organization_id: currentOrganization?.id,
+          customer_id: st.id,
+          practice_date: formData.date,
+          minutes: Number(formData.minutes) || 30,
+          song_title: formData.songTitle.trim(),
+          difficulty_part: formData.difficultyPart.trim(),
+          homework: formData.homework.trim(),
+          teacher_evaluation: formData.teacherEvaluation,
+          metadata: {
+            source: 'staff',
+            staffReviewed: true
+          }
+        }
+      },
+      {
+        onSuccess: () => {
+          showToast('연습 기록이 등록되었습니다.', 'success');
+          setIsModalOpen(false);
+        },
+        onError: () => showToast('등록에 실패했습니다.', 'error')
+      }
+    );
   };
 
   return (
-    <div className="space-y-4 pb-4">
+    <div className="space-y-6">
       <PageHeader
-        icon={<BookOpenCheck className="w-6 h-6" />}
-        title="학생 연습 기록"
-        description="학생별 일일 연습 시간, 연습곡, 피드백 평가"
+        title="연습 기록"
+        description="학생들의 그랜드피아노 연습실 사용 및 연습 곡목 기록을 관리합니다."
         actions={
-          <button
-            onClick={handleOpenCreate}
-            className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
-          >
+          <button onClick={handleOpenCreate} className="btn-primary flex items-center space-x-2">
             <Plus className="w-4 h-4" />
-            연습 기록 추가
+            <span>기록 추가</span>
           </button>
         }
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <SummaryMetricCard
-          label="총 누적 연습 시간"
+          label="누적 연습 시간"
           value={`${totalMinutes}분`}
-          subtitle={`${(totalMinutes / 60).toFixed(1)}시간`}
         />
-        <SummaryMetricCard label="기록된 연습 일지" value={`${filteredPractice.length}건`} variant="indigo" />
+        <SummaryMetricCard 
+          label="기록된 연습 건수" 
+          value={`${filteredPractice.length}건`} 
+          variant="indigo" 
+        />
         <SummaryMetricCard
-          label="학부모 확인 대기"
+          label="학부모 미확인 건수"
           value={`${pendingParentCount}건`}
-          variant="emerald"
+          variant="amber"
         />
       </div>
 
-      <FilterBar>
-        <select
-          value={studentFilter}
-          onChange={(e) => setStudentFilter(e.target.value)}
-          className="px-3.5 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none font-bold"
-        >
-          <option value="ALL">전체 학생</option>
-          {students.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name} ({s.school})
-            </option>
-          ))}
-        </select>
-        <select
-          value={sourceFilter}
-          onChange={(e) => setSourceFilter(e.target.value as 'ALL' | 'pending_parent')}
-          className="px-3.5 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none font-bold"
-        >
-          <option value="ALL">전체 기록</option>
-          <option value="pending_parent">학부모 확인 대기</option>
-        </select>
-        <SearchField
-          value={searchQuery}
-          onChange={setSearchQuery}
-          placeholder="학생, 연습곡명 검색..."
-          className="flex-1 min-w-[200px]"
-        />
-      </FilterBar>
-
-      {/* Practice List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredPractice.map((p) => (
-          <div
-            key={p.id}
-            className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs hover:border-indigo-200 transition-all flex flex-col justify-between space-y-3"
+      <div className="bg-white rounded-lg shadow-sm border border-slate-200">
+        <FilterBar>
+          <select
+            value={studentFilter}
+            onChange={(e) => setStudentFilter(e.target.value)}
+            className="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500"
           >
-            <div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span
-                    onClick={() => {
-                      setSelectedStudentId(p.studentId);
-                      setActiveTab('students');
-                    }}
-                    className="font-bold text-sm text-slate-900 hover:text-indigo-600 cursor-pointer"
-                  >
-                    {p.studentName}
-                  </span>
-                  <span className="text-xs font-mono text-slate-400 font-medium">{p.date}</span>
-                </div>
+            <option value="ALL">전체 학생</option>
+            {students.map((s) => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+          <select
+            value={sourceFilter}
+            onChange={(e) => setSourceFilter(e.target.value as any)}
+            className="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="ALL">전체 기록</option>
+            <option value="pending_parent">학부모 제출 (미확인)</option>
+          </select>
+          <div className="flex-1" />
+          <SearchField
+            placeholder="학생 이름, 곡명 검색..."
+            value={searchQuery}
+            onChange={setSearchQuery}
+          />
+        </FilterBar>
 
-                <button
-                  onClick={() => handleDelete(p)}
-                  className="p-1 text-slate-300 hover:text-rose-600 rounded-lg"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              <div className="mt-2 flex items-center justify-between bg-indigo-50/60 p-2.5 rounded-xl text-xs">
-                <span className="font-bold text-indigo-900">⏱️ {p.minutes}분 연습</span>
-                <span className="text-amber-500">{p.teacherEvaluation}</span>
-              </div>
-
-              {p.source === 'parent' && (
-                <p className="mt-2 text-[11px] font-bold text-slate-500">
-                  가정 연습 일지
-                  {p.staffReviewed ? ' · 확인 완료' : ' · 확인 대기'}
-                </p>
-              )}
-
-              <div className="mt-3 text-xs space-y-1.5 text-slate-700">
-                <p className="font-bold text-slate-900">🎶 {p.songTitle}</p>
-                {p.difficultyPart && (
-                  <p className="text-slate-600 text-[11px]">
-                    <strong>포인트:</strong> {p.difficultyPart}
-                  </p>
-                )}
-                {p.homework && (
-                  <p className="text-purple-700 text-[11px] font-medium bg-purple-50 p-1.5 rounded-lg">
-                    📝 숙제: {p.homework}
-                  </p>
-                )}
-              </div>
-
-              {p.source === 'parent' && !p.staffReviewed && (
-                <button
-                  type="button"
-                  onClick={() => handleReviewParentLog(p)}
-                  className="mt-3 w-full min-h-[44px] rounded-xl bg-emerald-50 text-emerald-700 text-xs font-bold hover:bg-emerald-100"
-                >
-                  확인 완료
-                </button>
-              )}
-            </div>
+        {(isLoadingStudents || isLoadingPractice) ? (
+          <div className="p-8 text-center text-slate-500">데이터를 불러오는 중입니다...</div>
+        ) : filteredPractice.length === 0 ? (
+          <div className="p-8 text-center text-slate-500">
+            조회된 연습 기록이 없습니다.
           </div>
-        ))}
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="text-xs text-slate-600 bg-slate-50 uppercase border-b border-slate-200">
+                <tr>
+                  <th className="px-4 py-3 font-medium">일자/시간</th>
+                  <th className="px-4 py-3 font-medium">학생</th>
+                  <th className="px-4 py-3 font-medium">연습 곡명</th>
+                  <th className="px-4 py-3 font-medium">어려운 부분/강조</th>
+                  <th className="px-4 py-3 font-medium">과제</th>
+                  <th className="px-4 py-3 font-medium text-center">교사 평가</th>
+                  <th className="px-4 py-3 font-medium">유형</th>
+                  <th className="px-4 py-3 font-medium text-right">관리</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filteredPractice.map((p) => (
+                  <tr key={p.id} className="hover:bg-slate-50">
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-slate-900">{p.date}</div>
+                      <div className="text-slate-500 text-xs">{p.minutes}분</div>
+                    </td>
+                    <td className="px-4 py-3 font-medium text-slate-900">
+                      {p.studentName}
+                    </td>
+                    <td className="px-4 py-3 text-slate-700">{p.songTitle}</td>
+                    <td className="px-4 py-3 text-slate-600">{p.difficultyPart || '-'}</td>
+                    <td className="px-4 py-3 text-slate-600">{p.homework || '-'}</td>
+                    <td className="px-4 py-3 text-center text-amber-500 text-xs">
+                      {p.teacherEvaluation || '-'}
+                    </td>
+                    <td className="px-4 py-3">
+                      {p.source === 'parent' ? (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                          앱 제출
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                          원내 기록
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <button
+                        onClick={() => handleDelete(p)}
+                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded"
+                        title="삭제"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden">
-            <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
-              <h3 className="font-bold text-slate-900 text-base">학생 연습 기록 등록</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+              <h3 className="text-lg font-semibold text-slate-900">연습 기록 추가</h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600"
+                className="text-slate-400 hover:text-slate-500"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
-
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">학생 선택</label>
-                  <select
-                    value={formData.studentId}
-                    onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none font-bold"
-                  >
-                    {students.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.name}
-                      </option>
-                    ))}
-                  </select>
+            
+            <div className="p-6 overflow-y-auto">
+              <form id="practice-form" onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">학생</label>
+                    <select
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                      value={formData.studentId}
+                      onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
+                      required
+                    >
+                      {students.map((s) => (
+                        <option key={s.id} value={s.id}>{s.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">연습 일자</label>
+                    <input
+                      type="date"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                      value={formData.date}
+                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                      required
+                    />
+                  </div>
                 </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">시간 (분)</label>
+                    <input
+                      type="number"
+                      min="1"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                      value={formData.minutes}
+                      onChange={(e) => setFormData({ ...formData, minutes: parseInt(e.target.value) || 0 })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">교사 평가</label>
+                    <select
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-emoji"
+                      value={formData.teacherEvaluation}
+                      onChange={(e) => setFormData({ ...formData, teacherEvaluation: e.target.value })}
+                    >
+                      <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐ (최고)</option>
+                      <option value="⭐⭐⭐⭐">⭐⭐⭐⭐ (우수)</option>
+                      <option value="⭐⭐⭐">⭐⭐⭐ (보통)</option>
+                      <option value="⭐⭐">⭐⭐ (노력요함)</option>
+                      <option value="⭐">⭐ (기초다지기)</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">연습 일자</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">연습 곡명</label>
                   <input
-                    type="date"
+                    type="text"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    value={formData.songTitle}
+                    onChange={(e) => setFormData({ ...formData, songTitle: e.target.value })}
                     required
-                    value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
                   />
                 </div>
-              </div>
 
-              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">연습 시간 (분)</label>
-                  <input
-                    type="number"
-                    step="5"
-                    min="5"
-                    max="300"
-                    required
-                    value={formData.minutes}
-                    onChange={(e) => setFormData({ ...formData, minutes: Number(e.target.value) })}
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none font-bold"
+                  <label className="block text-sm font-medium text-slate-700 mb-1">어려웠던 부분 / 강조 포인트</label>
+                  <textarea
+                    rows={2}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none"
+                    value={formData.difficultyPart}
+                    onChange={(e) => setFormData({ ...formData, difficultyPart: e.target.value })}
                   />
                 </div>
+
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">선생님 평가</label>
-                  <select
-                    value={formData.teacherEvaluation}
-                    onChange={(e) => setFormData({ ...formData, teacherEvaluation: e.target.value })}
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
-                  >
-                    <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐ (최고예요)</option>
-                    <option value="⭐⭐⭐⭐">⭐⭐⭐⭐ (아주 잘함)</option>
-                    <option value="⭐⭐⭐">⭐⭐⭐ (보통)</option>
-                    <option value="⭐⭐">⭐⭐ (분발 필요)</option>
-                  </select>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">다음 과제</label>
+                  <textarea
+                    rows={2}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none"
+                    value={formData.homework}
+                    onChange={(e) => setFormData({ ...formData, homework: e.target.value })}
+                  />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  연습 곡 / 교재 <span className="text-rose-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="예: 하농 1번, 체르니 100번 25번"
-                  value={formData.songTitle}
-                  onChange={(e) => setFormData({ ...formData, songTitle: e.target.value })}
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">어려운 부분 / 집중 지도 포인트</label>
-                <input
-                  type="text"
-                  placeholder="예: 왼손 도약 리듬 집중"
-                  value={formData.difficultyPart}
-                  onChange={(e) => setFormData({ ...formData, difficultyPart: e.target.value })}
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">과제 / 숙제</label>
-                <input
-                  type="text"
-                  placeholder="예: 양손 3회씩 메트로놈에 맞춰 연습"
-                  value={formData.homework}
-                  onChange={(e) => setFormData({ ...formData, homework: e.target.value })}
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 rounded-xl"
-                >
-                  취소
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md"
-                >
-                  저장
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
+            
+            <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end space-x-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50"
+              >
+                취소
+              </button>
+              <button
+                type="submit"
+                form="practice-form"
+                disabled={isCreating}
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              >
+                {isCreating ? '저장 중...' : '저장하기'}
+              </button>
+            </div>
           </div>
         </div>
       )}
