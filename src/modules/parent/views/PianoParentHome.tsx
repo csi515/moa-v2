@@ -113,7 +113,7 @@ export function PianoParentHome({
     <div className="space-y-4 pb-2">
       {/* 오늘 */}
       <section className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-xs">
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-3">
           <h2 className="text-sm font-black text-slate-900">오늘</h2>
           <button
             type="button"
@@ -125,7 +125,7 @@ export function PianoParentHome({
         </div>
 
         {todayClasses.length > 0 ? (
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {todayClasses.map((cls) => (
               <li
                 key={cls.id}
@@ -151,7 +151,7 @@ export function PianoParentHome({
         <button
           type="button"
           onClick={() => onNavigate('attendance')}
-          className="w-full flex items-center justify-between gap-2 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5 min-h-[48px] text-left"
+          className="w-full flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5 min-h-[48px] text-left"
         >
           <div>
             <p className="text-[11px] font-bold text-slate-500">오늘 출결</p>
@@ -171,7 +171,7 @@ export function PianoParentHome({
           <button
             type="button"
             onClick={() => onNavigate('tuition')}
-            className="w-full flex items-center justify-between gap-2 text-left min-h-[48px]"
+            className="w-full flex items-center justify-between gap-3 text-left min-h-[48px]"
           >
             <div>
               <p className="text-[11px] font-bold text-indigo-600">회차권 잔여</p>
@@ -187,7 +187,7 @@ export function PianoParentHome({
         <button
           type="button"
           onClick={() => onNavigate('stamps')}
-          className="w-full flex items-center justify-between gap-2 text-left min-h-[48px]"
+          className="w-full flex items-center justify-between gap-3 text-left min-h-[48px]"
         >
           <div>
             <p className="text-[11px] font-bold text-indigo-600">완곡 스탬프</p>
@@ -202,13 +202,13 @@ export function PianoParentHome({
       {/* 해야 할 일 */}
       {todoItems.length > 0 && (
         <Section title="해야 할 일">
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {todoItems.map((item) => (
               <li key={item.label}>
                 <button
                   type="button"
                   onClick={() => onNavigate(item.tab)}
-                  className={`w-full flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 min-h-[48px] text-left border ${
+                  className={`w-full flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 min-h-[48px] text-left border ${
                     item.warn
                       ? 'bg-rose-50 border-rose-100'
                       : 'bg-slate-50 border-slate-100'
@@ -243,11 +243,11 @@ export function PianoParentHome({
             </button>
           }
         >
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {weekOccurrences.map((occ) => (
               <li
                 key={`${occ.date}-${occ.classItem.id}`}
-                className="flex items-center justify-between gap-2 rounded-xl border border-slate-100 px-3 py-2 min-h-[44px]"
+                className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 px-3 py-2 min-h-[44px]"
               >
                 <div className="min-w-0">
                   <p className="text-sm font-bold text-slate-900 truncate">
@@ -277,16 +277,16 @@ export function PianoParentHome({
           <button
             type="button"
             onClick={() => onNavigate('assignments')}
-            className="w-full text-left space-y-2"
+            className="w-full text-left space-y-2 min-h-[44px] p-3 -mx-2 rounded-xl hover:bg-slate-50 transition-colors active:bg-slate-100"
           >
-            <div className="flex items-start justify-between gap-2">
+            <div className="flex items-start justify-between gap-3">
               <p className="text-sm font-extrabold text-slate-900">{latestLesson.songTitle}</p>
               <span className="text-[11px] font-mono text-slate-400 shrink-0">
                 {latestLesson.date}
               </span>
             </div>
             {latestLesson.homework && (
-              <p className="text-xs text-slate-600 line-clamp-2">{latestLesson.homework}</p>
+              <p className="text-xs text-slate-600 line-clamp-3">{latestLesson.homework}</p>
             )}
           </button>
         </Section>
@@ -294,7 +294,7 @@ export function PianoParentHome({
 
       {recentSessions.length > 0 && (
         <Section title="최근 출결">
-          <button type="button" onClick={() => onNavigate('attendance')} className="w-full text-left">
+          <button type="button" onClick={() => onNavigate('attendance')} className="w-full text-left min-h-[44px] p-3 -mx-2 rounded-xl hover:bg-slate-50 transition-colors active:bg-slate-100">
             <ul className="divide-y divide-slate-50">
               {recentSessions.slice(0, 3).map((s) => {
                 const status = getSessionStatusLabel(s);

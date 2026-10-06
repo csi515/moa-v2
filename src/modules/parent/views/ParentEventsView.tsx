@@ -65,8 +65,8 @@ export function ParentEventsView({
           <EmptyState title="예정된 일정이 없습니다" className="!bg-transparent !border-none !p-4" />
         ) : (
           events.map((ev) => (
-            <div key={ev.id} className="py-3 border-b border-slate-50">
-              <div className="flex items-start justify-between gap-2">
+            <div key={ev.id} className="py-4 border-b border-slate-100">
+              <div className="flex items-start justify-between gap-3">
                 <p className="font-bold text-sm text-slate-900">{ev.title}</p>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-600 shrink-0">
                   {ACADEMY_EVENT_TYPE_LABEL[ev.type] || ev.type}
@@ -89,9 +89,9 @@ export function ParentEventsView({
           {videos.length === 0 ? (
             <EmptyState title="등록된 연주 영상이 없습니다" className="!bg-transparent !border-none !p-4" />
           ) : (
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {videos.map((v) => (
-                <li key={v.id} className="p-3 rounded-xl border border-slate-100 bg-slate-50/80">
+                <li key={v.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50/80">
                   <p className="font-bold text-sm text-slate-900">{v.title}</p>
                   <p className="text-[11px] text-slate-500 mt-1">
                     {PERFORMANCE_VIDEO_TYPE_LABEL[v.eventType]}
@@ -103,7 +103,7 @@ export function ParentEventsView({
                       href={v.youtubeUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex mt-2 text-xs font-bold text-indigo-600 min-h-[44px] items-center"
+                      className="inline-flex mt-2 text-xs font-bold text-indigo-600 min-h-[48px] items-center"
                     >
                       YouTube에서 보기
                     </a>

@@ -124,14 +124,14 @@ export function DaycareParentHome({
 
       <Section title="최근 알림장">
         {latestJournal ? (
-          <button type="button" onClick={() => onNavigate('journals')} className="w-full text-left">
-            <div className="flex items-center justify-between gap-2">
+          <button type="button" onClick={() => onNavigate('journals')} className="w-full text-left min-h-[44px] p-3 -mx-2 rounded-xl hover:bg-slate-50 transition-colors active:bg-slate-100">
+            <div className="flex items-center justify-between gap-3">
               <span className="text-sm font-bold font-mono">{latestJournal.journalDate}</span>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-sky-50 text-sky-700">
                 {CARE_JOURNAL_MOOD_LABEL[latestJournal.mood]}
               </span>
             </div>
-            <p className="text-xs text-slate-600 mt-2 line-clamp-2">{latestJournal.teacherNote}</p>
+            <p className="text-xs text-slate-600 mt-2 line-clamp-3">{latestJournal.teacherNote}</p>
           </button>
         ) : (
           <EmptyState title="아직 알림장이 없습니다" className="!bg-transparent !border-none !p-4" />
@@ -146,13 +146,13 @@ export function DaycareParentHome({
             <button
               type="button"
               onClick={() => onNavigate('medications')}
-              className="w-full text-sm text-slate-500 py-2"
+              className="w-full text-sm text-slate-500 py-2 min-h-[44px] rounded-xl hover:bg-slate-50 active:bg-slate-100 transition-colors"
             >
               대기 중인 투약 의뢰가 없습니다 · 의뢰하기
             </button>
           )
         ) : (
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {pendingMeds.slice(0, 3).map((m) => (
               <li key={m.id}>
                 <button
@@ -173,8 +173,8 @@ export function DaycareParentHome({
 
       {latestIncident && (
         <Section title="최근 사고 안내">
-          <button type="button" onClick={() => onNavigate('incidents')} className="w-full text-left">
-            <p className="text-xs text-slate-700 line-clamp-2">{latestIncident.content}</p>
+          <button type="button" onClick={() => onNavigate('incidents')} className="w-full text-left min-h-[44px] p-3 -mx-2 rounded-xl hover:bg-slate-50 transition-colors active:bg-slate-100">
+            <p className="text-xs text-slate-700 line-clamp-3">{latestIncident.content}</p>
           </button>
         </Section>
       )}

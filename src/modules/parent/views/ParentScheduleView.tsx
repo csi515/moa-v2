@@ -90,7 +90,7 @@ export function ParentScheduleView({
         {todayClasses.length === 0 && todayPractice.length === 0 ? (
           <p className="text-sm text-slate-500 py-2">오늘 예정된 수업·연습이 없습니다.</p>
         ) : (
-          <ul className="space-y-3">
+          <ul className="space-y-4">
             {todayClasses.map((cls) => (
               <li
                 key={cls.id}
@@ -131,11 +131,11 @@ export function ParentScheduleView({
           <p className="text-[11px] text-slate-500 mb-2 leading-relaxed">
             연습실 예약 신청·변경은 학원에 요청해 주세요. (성인 수강생 앱에서는 본인 신청 가능)
           </p>
-          <ul className="space-y-2">
+          <ul className="space-y-4">
             {practiceBookings.map((b) => (
               <li
                 key={b.id}
-                className="flex items-start justify-between gap-2 p-3 rounded-xl border border-amber-100 bg-amber-50/40 min-h-[52px]"
+                className="flex items-start justify-between gap-3 p-3 rounded-xl border border-amber-100 bg-amber-50/40 min-h-[52px]"
               >
                 <div className="min-w-0">
                   <p className="text-sm font-bold text-slate-900">
@@ -160,11 +160,11 @@ export function ParentScheduleView({
       {classes.length > 0 && (
         <>
           <Section title="이번 주">
-            <ul className="space-y-2">
+            <ul className="space-y-4">
               {weekOccurrences.map((occ) => (
                 <li
                   key={`${occ.date}-${occ.classItem.id}`}
-                  className="flex items-start justify-between gap-2 p-3 rounded-xl border border-slate-100 bg-slate-50/80 min-h-[52px]"
+                  className="flex items-start justify-between gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50/80 min-h-[52px]"
                 >
                   <div className="min-w-0">
                     <p className="text-sm font-bold text-slate-900">
@@ -181,7 +181,7 @@ export function ParentScheduleView({
           </Section>
 
           <Section title="등록 반 (매주)">
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {classes.map((cls) => (
                 <li
                   key={cls.id}

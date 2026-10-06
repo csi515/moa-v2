@@ -110,7 +110,7 @@ export function SkinBookingRequestForm({ student }: { student: Student }) {
   }
 
   return (
-    <form onSubmit={submit} className="bg-white border border-slate-200 rounded-2xl p-4 space-y-3">
+    <form onSubmit={submit} className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
       <h3 className="text-sm font-bold text-slate-900">예약 신청</h3>
       <label className="block text-xs font-semibold text-slate-700">
         시술 *
@@ -143,7 +143,7 @@ export function SkinBookingRequestForm({ student }: { student: Student }) {
           ))}
         </select>
       </label>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-4">
         <label className="block text-xs font-semibold text-slate-700">
           날짜 *
           <input
@@ -165,7 +165,7 @@ export function SkinBookingRequestForm({ student }: { student: Student }) {
           />
         </label>
       </div>
-      <label className="flex items-center gap-2 text-xs font-semibold text-slate-700">
+      <label className="flex items-center gap-3 text-sm font-semibold text-slate-700">
         <input
           type="checkbox"
           checked={waitlist}
@@ -174,7 +174,7 @@ export function SkinBookingRequestForm({ student }: { student: Student }) {
         대기 신청 (빈 시간에 연락)
       </label>
       {depositOn && (
-        <div className="rounded-xl border border-rose-100 bg-rose-50/60 p-3 space-y-2">
+        <div className="rounded-xl border border-rose-100 bg-rose-50/60 p-4 space-y-3">
           <p className="text-xs font-bold text-rose-800">
             예약금 {Number(settings.depositAmount || 0).toLocaleString('ko-KR')}원 · 계좌이체
           </p>
@@ -199,7 +199,7 @@ export function SkinBookingRequestForm({ student }: { student: Student }) {
           className="mt-1 w-full px-3 py-2 text-sm border border-slate-200 rounded-xl"
         />
       </label>
-      <div className="flex gap-2">
+      <div className="flex gap-3 pt-2">
         <button type="submit" className="flex-1 py-2.5 min-h-[44px] rounded-xl bg-rose-600 text-white text-sm font-bold">
           신청
         </button>

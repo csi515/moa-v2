@@ -74,15 +74,15 @@ export function PilatesParentHome({
           <button
             type="button"
             onClick={() => onNavigate('bookings')}
-            className="w-full text-sm text-slate-500 py-2"
+            className="w-full text-sm text-slate-500 py-2 min-h-[44px] rounded-xl hover:bg-slate-50 active:bg-slate-100 transition-colors"
           >
             예정된 예약이 없습니다
           </button>
         ) : (
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {upcoming.slice(0, 4).map((b) => (
               <li key={b.id}>
-                <button type="button" onClick={() => onNavigate('bookings')} className="w-full text-left">
+                <button type="button" onClick={() => onNavigate('bookings')} className="w-full text-left min-h-[44px] p-3 -mx-2 rounded-xl hover:bg-slate-50 transition-colors active:bg-slate-100">
                   <p className="text-sm font-bold text-slate-800">{b.serviceName || serviceFallback}</p>
                   <p className="text-[11px] text-slate-400 font-mono">
                     {formatBookingWhen(b.startsAt)}
