@@ -1,4 +1,5 @@
 import { useMemo, useState, type FormEvent } from 'react';
+import { useList, useCreate } from '@refinedev/core';
 import { StorageService } from '@/services/storage';
 import { useStorageRefresh } from '@/hooks';
 import { useApp } from '@/context/AppContext';
@@ -31,13 +32,34 @@ export function ParentProgressView({
   const items = StorageService.getCurriculumItems();
   const progress = StorageService.getCurriculumProgress(student.id);
   const achievements = StorageService.getAchievements(student.id);
-  const practiceRecords = useMemo(
-    () =>
-      StorageService.getPracticeRecords()
-        .filter((p) => p.studentId === student.id)
-        .sort((a, b) => b.date.localeCompare(a.date) || (b.createdAt || '').localeCompare(a.createdAt || '')),
-    [student.id, refreshKey]
-  );
+
+  const practiceRecordsList = useList<any>({
+    resource: 'practice_records',
+    meta: { schema: 'piano' },
+    filters: [
+      { field: 'customer_id', operator: 'eq', value: student.id },
+    ],
+    queryOptions: { enabled: !!student.id },
+  });
+  
+  const rawPracticeRecords = (practiceRecordsList as any).data?.data || (practiceRecordsList as any).query?.data?.data || [];
+  const practiceRecords = useMemo(() => {
+    return rawPracticeRecords.map((r: any) => ({
+      id: r.id,
+      studentId: r.customer_id,
+      studentName: student.name,
+      date: r.practice_date,
+      minutes: r.minutes,
+      songTitle: r.song_title,
+      difficultyPart: r.difficulty_part || undefined,
+      homework: r.homework || undefined,
+      teacherEvaluation: r.teacher_evaluation || undefined,
+      source: r.metadata?.source || 'parent',
+      staffReviewed: r.metadata?.staffReviewed || false,
+      staffReviewNote: r.metadata?.staffReviewNote,
+      createdAt: r.created_at,
+    })).sort((a: any, b: any) => b.date.localeCompare(a.date) || (b.createdAt || '').localeCompare(a.createdAt || ''));
+  }, [rawPracticeRecords, student.name]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form, setForm] = useState({
@@ -63,29 +85,47 @@ export function ParentProgressView({
     setIsModalOpen(true);
   };
 
+  const { mutate: createPracticeRecord } = useCreate() as any;
   const handleSave = (e: FormEvent) => {
     e.preventDefault();
     if (!form.songTitle.trim()) {
       showToast?.('연습한 곡·교재를 입력해 주세요.', 'error');
       return;
     }
-    StorageService.savePracticeRecord({
-      studentId: student.id,
-      studentName: student.name,
-      date: form.date,
-      minutes: Math.max(5, Number(form.minutes) || 30),
-      songTitle: form.songTitle.trim(),
-      homework: form.homework.trim() || undefined,
-      difficultyPart: form.note.trim() || undefined,
-      source: 'parent',
-      staffReviewed: false,
-    });
-    showToast?.(
-      `${currentUser.name || '학부모'}님, 연습 일지를 등록했습니다. 선생님이 확인합니다.`,
-      'success'
+    
+    createPracticeRecord(
+      {
+        resource: 'practice_records',
+        meta: { schema: 'piano' },
+        values: {
+          organization_id: organizationId,
+          customer_id: student.id,
+          practice_date: form.date,
+          minutes: Math.max(5, Number(form.minutes) || 30),
+          song_title: form.songTitle.trim(),
+          homework: form.homework.trim() || null,
+          difficulty_part: form.note.trim() || null,
+          metadata: {
+            source: 'parent',
+            staffReviewed: false,
+            studentName: student.name,
+          }
+        },
+      },
+      {
+        onSuccess: () => {
+          showToast?.(
+            `${currentUser.name || '학부모'}님, 연습 일지를 등록했습니다. 선생님이 확인합니다.`,
+            'success'
+          );
+          setIsModalOpen(false);
+          onRefresh?.();
+        },
+        onError: () => {
+          showToast?.('연습 기록 등록에 실패했습니다.', 'error');
+        }
+      }
     );
-    setIsModalOpen(false);
-    onRefresh?.();
   };
 
   return (

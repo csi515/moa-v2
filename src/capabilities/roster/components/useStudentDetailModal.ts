@@ -1,4 +1,6 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
+import { useList, useCreate } from '@refinedev/core';
+import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { StorageService } from '@/services/storage';
 import { StudentService } from '@/core/students';
@@ -172,10 +174,37 @@ export function useStudentDetailModal({
   const allAttendance = StorageService.getAttendance().filter((a) => a.studentId === student.id);
   const allInvoices = TuitionService.getInvoicesByStudent(student.id);
   const allConsultations = StorageService.getConsultations().filter((c) => c.studentId === student.id);
-  const allPractice = StorageService.getPracticeRecords().filter((p) => p.studentId === student.id);
   const allLessons = LessonService.getLessonRecordsByStudent(student.id);
   const allVideos = StorageService.getPerformanceVideosByStudentId(student.id);
   const recitalEvents = StorageService.getRecitalEvents();
+
+  const practiceRecordsList = useList<any>({
+    resource: 'practice_records',
+    meta: { schema: 'piano' },
+    filters: [
+      { field: 'customer_id', operator: 'eq', value: student.id },
+    ],
+    queryOptions: { enabled: !!student.id },
+  });
+  
+  const rawPracticeRecords = (practiceRecordsList as any).data?.data || (practiceRecordsList as any).query?.data?.data || [];
+  const allPractice = React.useMemo(() => {
+    return rawPracticeRecords.map((r: any) => ({
+      id: r.id,
+      studentId: r.customer_id,
+      studentName: student.name,
+      date: r.practice_date,
+      minutes: r.minutes,
+      songTitle: r.song_title,
+      difficultyPart: r.difficulty_part || undefined,
+      homework: r.homework || undefined,
+      teacherEvaluation: r.teacher_evaluation || undefined,
+      source: r.metadata?.source || 'parent',
+      staffReviewed: r.metadata?.staffReviewed || false,
+      staffReviewNote: r.metadata?.staffReviewNote,
+      createdAt: r.created_at,
+    })).sort((a: any, b: any) => b.date.localeCompare(a.date) || (b.createdAt || '').localeCompare(a.createdAt || ''));
+  }, [rawPracticeRecords, student.name]);
   const studentSales = StorageService.getTextbookSalesByStudentId(student.id);
   const billingSummary = StorageService.getStudentBillingSummary(
     student.id,
@@ -342,27 +371,49 @@ export function useStudentDetailModal({
     setNewCstResult('');
   };
 
+  const { currentOrganization } = useOrganization();
+  const { mutate: createPracticeRecord } = useCreate() as any;
+
   const handleSavePractice = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newPrSong.trim()) {
       showToast('연습곡을 입력해주세요.', 'warning');
       return;
     }
-    StorageService.savePracticeRecord({
-      studentId: student.id,
-      studentName: student.name,
-      date: newPrDate,
-      minutes: Number(newPrMinutes) || 30,
-      songTitle: newPrSong.trim(),
-      difficultyPart: newPrDifficulty.trim(),
-      homework: newPrHomework.trim(),
-      teacherEvaluation: '⭐⭐⭐⭐',
-    });
-    showToast('연습 기록이 저장되었습니다.', 'success');
-    setIsAddPrOpen(false);
-    setNewPrSong('');
-    setNewPrDifficulty('');
-    setNewPrHomework('');
+    
+    createPracticeRecord(
+      {
+        resource: 'practice_records',
+        meta: { schema: 'piano' },
+        values: {
+          organization_id: currentOrganization?.id,
+          customer_id: student.id,
+          practice_date: newPrDate,
+          minutes: Number(newPrMinutes) || 30,
+          song_title: newPrSong.trim(),
+          homework: newPrHomework.trim() || null,
+          difficulty_part: newPrDifficulty.trim() || null,
+          teacher_evaluation: '⭐⭐⭐⭐',
+          metadata: {
+            source: 'staff',
+            staffReviewed: true,
+            studentName: student.name,
+          }
+        },
+      },
+      {
+        onSuccess: () => {
+          showToast('연습 기록이 저장되었습니다.', 'success');
+          setIsAddPrOpen(false);
+          setNewPrSong('');
+          setNewPrDifficulty('');
+          setNewPrHomework('');
+        },
+        onError: () => {
+          showToast('연습 기록 저장에 실패했습니다.', 'error');
+        }
+      }
+    );
   };
 
   const handleSaveVideo = (e: React.FormEvent) => {
