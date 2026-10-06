@@ -66,20 +66,9 @@ export const GymAppContent: FC = () => {
   const renderView = GYM_VIEW_MAP[activeTab] ?? GYM_VIEW_MAP.dashboard;
 
   return (
-    <ModuleAppShell
-      theme="orange"
-      beforeHeader={isSupabaseConfigured() ? <SupabaseRoleSync /> : null}
-      sidebar={<GymSidebar />}
-      bottomNav={<GymBottomNav />}
-      overlays={
-        <>
-          {isOwner && <DirectorFloatingFab />}
-          <ConfirmDialog />
-          <ToastContainer />
-        </>
-      }
-    >
+    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
+      {isOwner && <DirectorFloatingFab />}
       {renderView()}
-    </ModuleAppShell>
+    </div>
   );
 };

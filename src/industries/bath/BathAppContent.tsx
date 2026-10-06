@@ -51,19 +51,8 @@ export const BathAppContent: FC = () => {
   const renderView = BATH_VIEW_MAP[activeTab] ?? BATH_VIEW_MAP.dashboard;
 
   return (
-    <ModuleAppShell
-      theme="orange"
-      beforeHeader={isSupabaseConfigured() ? <SupabaseRoleSync /> : null}
-      sidebar={<BathSidebar />}
-      bottomNav={<BathBottomNav />}
-      overlays={
-        <>
-          <ConfirmDialog />
-          <ToastContainer />
-        </>
-      }
-    >
+    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
       {renderView()}
-    </ModuleAppShell>
+    </div>
   );
 };

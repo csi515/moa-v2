@@ -71,20 +71,9 @@ export const SkinAppContent: FC = () => {
   const renderView = SKIN_VIEW_MAP[activeTab] ?? SKIN_VIEW_MAP.dashboard;
 
   return (
-    <ModuleAppShell
-      theme="rose"
-      beforeHeader={isSupabaseConfigured() ? <SupabaseRoleSync /> : null}
-      sidebar={<SkinSidebar />}
-      bottomNav={<SkinBottomNav />}
-      overlays={
-        <>
-          {isOwner && <DirectorFloatingFab />}
-          <ConfirmDialog />
-          <ToastContainer />
-        </>
-      }
-    >
+    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
+      {isOwner && <DirectorFloatingFab />}
       {renderView()}
-    </ModuleAppShell>
+    </div>
   );
 };

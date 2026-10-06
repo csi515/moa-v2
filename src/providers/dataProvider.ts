@@ -33,9 +33,10 @@ export class ActiveOrganizationRequiredError extends Error {
  * - customers: useTable / useForm / useShow (core.customers.organization_id)
  * - schedules: Refine resource, core.schedules.organization_id
  * - tuition_invoices: Refine resource for invoice rows (core.payments.organization_id)
+ * - staff: Refine resource for teachers/staff (core.staff.organization_id)
  * dashboard is navigation-only and is not included.
  */
-export const TENANT_SCOPED_RESOURCES = ["customers", "schedules", "tuition_invoices"] as const;
+export const TENANT_SCOPED_RESOURCES = ["customers", "schedules", "tuition_invoices", "staff"] as const;
 
 export function isTenantScopedResource(resource: string): boolean {
   return (TENANT_SCOPED_RESOURCES as readonly string[]).includes(resource);

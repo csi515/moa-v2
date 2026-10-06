@@ -201,36 +201,9 @@ export const GenericIndustryShell: FC = () => {
 
   return (
     <ModuleLabelsProvider>
-      <ModuleAppShell
-        theme="indigo"
-        beforeHeader={isSupabaseConfigured() ? <SupabaseRoleSync /> : null}
-        sidebar={
-          <ModuleSidebar
-            theme="indigo"
-            sections={filteredSections}
-            activeTab={activeTab}
-            onNavigate={setActiveTab}
-            user={{ name: currentUser.name, roleLabel, roleBadge }}
-          />
-        }
-        bottomNav={
-          <ModuleBottomNav
-            theme="indigo"
-            mainTabs={mainTabs}
-            moreTabs={[]}
-            activeTab={activeTab}
-            onNavigate={setActiveTab}
-          />
-        }
-        overlays={
-          <>
-            <ConfirmDialog />
-            <ToastContainer />
-          </>
-        }
-      >
+      <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
         {renderView()}
-      </ModuleAppShell>
+      </div>
     </ModuleLabelsProvider>
   );
 };

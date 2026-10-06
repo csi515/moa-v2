@@ -116,20 +116,9 @@ export const PianoAppContent: FC = () => {
   const renderView = PIANO_VIEW_MAP[activeTab] ?? PIANO_VIEW_MAP.dashboard;
 
   return (
-    <ModuleAppShell
-      theme="indigo"
-      beforeHeader={isSupabaseConfigured() ? <SupabaseRoleSync /> : null}
-      sidebar={<PianoSidebar />}
-      bottomNav={<PianoBottomNav />}
-      overlays={
-        <>
-          {isOwner && <DirectorFloatingFab />}
-          {showOnboarding && <OnboardingWizard onComplete={handleOnboardingComplete} />}
-          <ConfirmDialog />
-          <ToastContainer />
-        </>
-      }
-    >
+    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
+      {isOwner && <DirectorFloatingFab />}
+      {showOnboarding && <OnboardingWizard onComplete={handleOnboardingComplete} />}
       {showResumeCard && activeTab === 'dashboard' && (
         <div className="px-4 pt-3 max-w-3xl mx-auto w-full">
           <OnboardingResumeCard
@@ -140,6 +129,6 @@ export const PianoAppContent: FC = () => {
         </div>
       )}
       {renderView()}
-    </ModuleAppShell>
+    </div>
   );
 };

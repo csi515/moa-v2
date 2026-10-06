@@ -78,20 +78,9 @@ export const DaycareAppContent: FC = () => {
   const renderView = DAYCARE_VIEW_MAP[activeTab] ?? DAYCARE_VIEW_MAP.dashboard;
 
   return (
-    <ModuleAppShell
-      theme="sky"
-      beforeHeader={isSupabaseConfigured() ? <SupabaseRoleSync /> : null}
-      sidebar={<DaycareSidebar />}
-      bottomNav={<DaycareBottomNav />}
-      overlays={
-        <>
-          {isOwner && <DirectorFloatingFab />}
-          <ConfirmDialog />
-          <ToastContainer />
-        </>
-      }
-    >
+    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
+      {isOwner && <DirectorFloatingFab />}
       {renderView()}
-    </ModuleAppShell>
+    </div>
   );
 };

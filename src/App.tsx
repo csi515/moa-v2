@@ -100,9 +100,7 @@ const RefineApp: React.FC = () => {
           }
         >
           {/* 사업장 업종 메인 워크스페이스 화면 */}
-          <Route index element={<IndustryAppRouter />} />
-          <Route path="/workspace" element={<IndustryAppRouter />} />
-          <Route path="/workspace/:tab" element={<IndustryAppRouter />} />
+          
 
           {/* Refine 관리 리소스 레이아웃 */}
           <Route
@@ -117,6 +115,9 @@ const RefineApp: React.FC = () => {
               </div>
             }
           >
+            <Route index element={<IndustryAppRouter />} />
+            <Route path="/workspace" element={<IndustryAppRouter />} />
+            <Route path="/workspace/:tab" element={<IndustryAppRouter />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/students" element={<StudentListPage />} />
             <Route path="/students/create" element={<StudentCreatePage />} />
