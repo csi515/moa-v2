@@ -36,7 +36,14 @@ export class ActiveOrganizationRequiredError extends Error {
  * - staff: Refine resource for teachers/staff (core.staff.organization_id)
  * dashboard is navigation-only and is not included.
  */
-export const TENANT_SCOPED_RESOURCES = ["customers", "schedules", "tuition_invoices", "staff"] as const;
+export const TENANT_SCOPED_RESOURCES = [
+  "customers", 
+  "schedules", 
+  "tuition_invoices", 
+  "staff",
+  "classes",
+  "class_members"
+] as const;
 
 export function isTenantScopedResource(resource: string): boolean {
   return (TENANT_SCOPED_RESOURCES as readonly string[]).includes(resource);

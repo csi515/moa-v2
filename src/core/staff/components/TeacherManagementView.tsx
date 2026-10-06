@@ -1,9 +1,10 @@
-﻿import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useModuleLabels } from '@/core/labels';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { isOrgAdmin } from '@/core/auth/permissions';
-import { useStorageRefresh } from '@/hooks/useStorageRefresh';
+import { useList, useCreate, useUpdate, useDelete } from '@refinedev/core';
+
 import { STORAGE_KEYS } from '@/services/adapters/storageKeys';
 import {
   fetchStaffAccountStatuses,
@@ -15,7 +16,6 @@ import {
 import { AccountStatusBadge } from '@/core/accounts/AccountStatusBadge';
 import { StaffInviteResultModal } from '@/core/staff/components/StaffInviteResultModal';
 import { JoinRequestsPanel } from '@/core/organizations/components/JoinRequestsPanel';
-import { StorageService } from '@/services/storage';
 import { PageHeader } from '@/shared/components';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { Teacher, type TeacherPayType } from '@/types';
@@ -40,18 +40,74 @@ import {
 
 export const TeacherManagementView: React.FC = () => {
   const { showToast, openConfirmDialog } = useApp();
-  const refreshKey = useStorageRefresh([
-    STORAGE_KEYS.TEACHERS,
-    STORAGE_KEYS.CLASSES,
-    STORAGE_KEYS.STUDENTS,
-  ]);
   const labels = useModuleLabels();
   const { currentOrganization, currentRole } = useOrganization();
   const canManageAccounts = isOrgAdmin(currentRole);
 
-  const teachers = StorageService.getTeachers();
-  const classes = StorageService.getClasses();
-  const students = StorageService.getStudents();
+  // TanStack Query (via @refinedev/core) 로 데이터 페칭
+  const staffList = useList<any>({
+    resource: 'staff',
+    meta: { select: '*' }
+  });
+  const staffData = (staffList as any).data || staffList.query?.data;
+  const isStaffLoading = (staffList as any).isLoading ?? staffList.query?.isLoading;
+  const classesList = useList<any>({
+    resource: 'classes',
+    meta: { select: '*' }
+  });
+  const classesData = (classesList as any).data || classesList.query?.data;
+  const isClassesLoading = (classesList as any).isLoading ?? classesList.query?.isLoading;
+  const customersList = useList<any>({
+    resource: 'customers',
+    meta: { select: '*' }
+  });
+  const customersData = (customersList as any).data || customersList.query?.data;
+  const isCustomersLoading = (customersList as any).isLoading ?? customersList.query?.isLoading;
+
+  const { mutate: createStaff } = useCreate<any>();
+  const { mutate: updateStaff } = useUpdate<any>();
+  const { mutate: deleteStaff } = useDelete<any>();
+
+  // DB 스키마 -> UI 모델(Teacher) 어댑터
+  const teachers: Teacher[] = useMemo(() => {
+    if (isStaffLoading || isClassesLoading || isCustomersLoading) return <div className="p-8 flex justify-center"><Loader2 className="w-8 h-8 animate-spin" /></div>;
+
+  return (staffData?.data || []).map(row => ({
+      id: row.id,
+      name: row.name,
+      phone: row.phone || '',
+      email: row.email || undefined,
+      userId: row.user_id,
+      status: row.status as Teacher['status'],
+      hireDate: (row.metadata as any)?.hireDate || row.created_at,
+      payType: (row.metadata as any)?.payType,
+      payRate: (row.metadata as any)?.payRate,
+      hourlyRate: (row.metadata as any)?.hourlyRate,
+      salary: (row.metadata as any)?.salary,
+      color: (row.metadata as any)?.color,
+      specialty: (row.metadata as any)?.specialty,
+      memo: (row.metadata as any)?.memo,
+      grants: (row.metadata as any)?.grants,
+    }));
+  }, [staffData]);
+
+  const classes = useMemo(() => {
+    return (classesData?.data || []).map(row => ({
+      id: row.id,
+      name: row.name,
+      teacherId: (row.metadata as any)?.teacherId,
+    }));
+  }, [classesData]);
+
+  const students = useMemo(() => {
+    return (customersData?.data || []).map(row => ({
+      id: row.id,
+      name: row.name,
+      status: row.status,
+      teacherId: row.teacher_id,
+    }));
+  }, [customersData]);
+
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
@@ -85,7 +141,7 @@ export const TeacherManagementView: React.FC = () => {
 
   useEffect(() => {
     loadAccountStatuses();
-  }, [loadAccountStatuses, refreshKey]);
+  }, [loadAccountStatuses]);
 
   const resolveStatus = (teacher: Teacher): StaffAccountStatus => {
     const fromServer = statusMap.get(teacher.id);
@@ -154,7 +210,12 @@ export const TeacherManagementView: React.FC = () => {
       isDestructive: true,
       confirmText: '삭제하기',
       onConfirm: () => {
-        StorageService.deleteTeacher(t.id);
+        deleteStaff({
+          resource: 'staff',
+          id: t.id,
+        }, {
+          onSuccess: () => showToast(`${labels.staff.singular} 정보가 삭제되었습니다.`, 'success'),
+        });
         showToast('선생님 정보가 삭제되었습니다.', 'info');
       }
     });
@@ -164,32 +225,51 @@ export const TeacherManagementView: React.FC = () => {
     e.preventDefault();
     if (!formData.name.trim()) return;
 
-    StorageService.saveTeacher({
-      ...(editingTeacher ? { id: editingTeacher.id } : {}),
+    const baseData = {
       name: formData.name.trim(),
       phone: formData.phone.trim(),
-      email: formData.email.trim(),
-      hireDate: formData.hireDate,
-      specialty: formData.specialty.trim(),
+      email: formData.email.trim() || null,
       status: formData.status,
-      color: formData.color,
-      payType: formData.payType,
-      hourlyRate:
-        formData.payType === 'hourly' ||
-        formData.payType === 'attendance' ||
-        formData.payType === 'work_hours'
-          ? Number(formData.hourlyRate) || 0
-          : undefined,
-      salary: formData.payType === 'monthly' ? Number(formData.salary) || 0 : undefined,
-      grants: formData.grants,
-    } as Teacher);
+      metadata: {
+        hireDate: formData.hireDate,
+        specialty: formData.specialty.trim(),
+        color: formData.color,
+        payType: formData.payType,
+        hourlyRate:
+          formData.payType === 'hourly' ||
+          formData.payType === 'attendance' ||
+          formData.payType === 'work_hours'
+            ? Number(formData.hourlyRate) || 0
+            : undefined,
+        salary: formData.payType === 'monthly' ? Number(formData.salary) || 0 : undefined,
+        grants: formData.grants,
+      }
+    };
 
-    showToast(
-      editingTeacher ? `${labels.staff.singular} 정보가 수정되었습니다.` : `신규 ${labels.staff.singular}가 등록되었습니다.`,
-      'success'
-    );
-    setIsModalOpen(false);
-    loadAccountStatuses();
+    if (editingTeacher) {
+      updateStaff({
+        resource: 'staff',
+        id: editingTeacher.id,
+        values: baseData,
+      }, {
+        onSuccess: () => {
+          showToast(`${labels.staff.singular} 정보가 수정되었습니다.`, 'success');
+          setIsModalOpen(false);
+          loadAccountStatuses();
+        }
+      });
+    } else {
+      createStaff({
+        resource: 'staff',
+        values: baseData,
+      }, {
+        onSuccess: () => {
+          showToast(`새 ${labels.staff.singular}가 등록되었습니다.`, 'success');
+          setIsModalOpen(false);
+          loadAccountStatuses();
+        }
+      });
+    }
   };
 
   const handleInvite = async (teacher: Teacher) => {
