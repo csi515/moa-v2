@@ -1,4 +1,6 @@
 import { useMemo } from 'react';
+import { useList } from '@refinedev/core';
+import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { StorageService } from '@/services/storage';
 import { ACADEMY_EVENT_TYPE_LABEL, PERFORMANCE_VIDEO_TYPE_LABEL } from '@/industries/piano/config/eventLabels';
 import { getIndustryPlugin } from '@/core/industry/pluginHost';
@@ -18,17 +20,35 @@ export function ParentEventsView({
   student: Student;
   industryType?: IndustryType | string;
 }) {
+  const { currentOrganization } = useOrganization();
   const plugin = getIndustryPlugin(industryType);
   const { showsPerformanceVideos, parentEventsSectionTitle } = plugin;
 
+  const data = useList<any>({
+    resource: 'events',
+    meta: { schema: 'core' },
+    filters: [{ field: 'organization_id', operator: 'eq', value: currentOrganization?.id }],
+    queryOptions: { enabled: !!currentOrganization?.id },
+  });
+  const rawEvents = (data as any).data?.data || (data as any).data || (data as any).query?.data?.data || [];
+
   const events = useMemo(() => {
-    return StorageService.getEvents()
-      .filter((e) => {
-        if (!e.participantIds || e.participantIds.length === 0) return true;
-        return e.participantIds.includes(student.id);
+    return rawEvents
+      .filter((e: any) => {
+        const participantIds = e.metadata?.participantIds || [];
+        if (participantIds.length === 0) return true;
+        return participantIds.includes(student.id);
       })
-      .sort((a, b) => b.startDate.localeCompare(a.startDate));
-  }, [student.id]);
+      .map((e: any) => ({
+        id: e.id,
+        title: e.title,
+        type: e.event_type,
+        startDate: e.start_date,
+        endDate: e.end_date,
+        description: e.description,
+      }))
+      .sort((a: any, b: any) => b.startDate.localeCompare(a.startDate));
+  }, [rawEvents, student.id]);
 
   const videos =
     showsPerformanceVideos

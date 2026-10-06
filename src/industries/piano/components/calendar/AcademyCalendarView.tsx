@@ -50,7 +50,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
   // Fetch events from Refine (piano schema)
   const eventsList = useList<any>({
     resource: 'events',
-    meta: { schema: 'piano' },
+    meta: { schema: 'core' },
     queryOptions: { enabled: !!currentOrganization?.id },
   });
   const rawEvents = (eventsList as any).data?.data || (eventsList as any).query?.data?.data || [];
@@ -161,7 +161,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
     createEvent(
       {
         resource: 'events',
-        meta: { schema: 'piano' },
+        meta: { schema: 'core' },
         values: {
           organization_id: currentOrganization?.id,
           title: newEvent.title.trim(),
@@ -184,7 +184,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
 
   const handleDeleteEvent = (id: string) => {
     deleteEvent(
-      { resource: 'events', id, meta: { schema: 'piano' } },
+      { resource: 'events', id, meta: { schema: 'core' } },
       {
         onSuccess: () => showToast('일정이 삭제되었습니다.', 'info'),
         onError: () => showToast('삭제에 실패했습니다.', 'error'),

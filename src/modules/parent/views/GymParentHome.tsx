@@ -1,4 +1,5 @@
 ﻿import { StorageService } from '@/services/storage';
+import { useList } from '@refinedev/core';
 import { TuitionService } from '@/capabilities/finance';
 import { formatCurrency } from '@/utils/formatters';
 import {
@@ -23,6 +24,13 @@ export function GymParentHome({
   organizationId: string;
   onNavigate: (t: ParentPortalTab) => void;
 }) {
+  const eventsData = useList<any>({
+    resource: 'events',
+    meta: { schema: 'core' },
+    filters: [{ field: 'organization_id', operator: 'eq', value: organizationId }],
+    queryOptions: { enabled: !!organizationId },
+  });
+  const rawEvents = (eventsData as any).data?.data || (eventsData as any).data || (eventsData as any).query?.data?.data || [];
   const today = new Date().toISOString().slice(0, 10);
   const refreshKey = useStorageRefresh();
   const summary = TuitionService.getStudentBillingSummary(student.id);
@@ -30,11 +38,12 @@ export function GymParentHome({
   const classes = StorageService.getClasses().filter((c) =>
     (student.classIds || []).includes(c.id)
   );
-  const upcomingEvents = StorageService.getEvents()
+  const upcomingEvents = rawEvents
     .filter((e) => {
-      if (e.startDate < today) return false;
-      if (!e.participantIds || e.participantIds.length === 0) return true;
-      return e.participantIds.includes(student.id);
+      if (e.start_date < today) return false;
+      const participantIds = e.metadata?.participantIds || [];
+        if (!participantIds || participantIds.length === 0) return true;
+      return participantIds.includes(student.id);
     })
     .sort((a, b) => a.startDate.localeCompare(b.startDate))
     .slice(0, 3);
@@ -112,7 +121,7 @@ export function GymParentHome({
               <li key={e.id}>
                 <button type="button" onClick={() => onNavigate('events')} className="w-full text-left">
                   <p className="text-sm font-bold text-slate-800">{e.title}</p>
-                  <p className="text-[11px] text-slate-400 font-mono">{e.startDate}</p>
+                  <p className="text-[11px] text-slate-400 font-mono">{e.start_date}</p>
                 </button>
               </li>
             ))}
