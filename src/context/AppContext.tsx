@@ -4,15 +4,16 @@ import React, {
   useContext,
   useEffect,
   useState,
+  useMemo,
   type ReactNode,
 } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useActiveUser } from '@/shared/session/useActiveUser';
 import type { FeedbackTone, WorkStatusMessage } from '@/shared/feedback/feedbackPolicy';
 import type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
 import { bindUiFeedback, unbindUiFeedback } from '@/shared/feedback/uiFeedback';
 import { feedbackStore, type ToastMessage } from '@/shared/feedback/feedbackStore';
 import type { NavTab, StudentDetailTab, CustomerDetailTab } from '@/shared/navigation/navigationTypes';
-import { useNavSession } from '@/shared/navigation/navSession';
 import type { User } from '@/types';
 
 export type { NavTab, StudentDetailTab, CustomerDetailTab } from '@/shared/navigation/navigationTypes';
@@ -21,9 +22,9 @@ export type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
 /**
  * AppContext
  * 
- * Phase 1 리팩토링:
- * UI State(toasts, dialog, workStatus)는 AppContext에서 제거되어 상태 변경 시의 전역 렌더링을 방지합니다.
- * 하위 호환성을 위해 함수 인터페이스(showToast 등)만 유지하며, 실제 상태는 feedbackStore가 관리합니다.
+ * Phase 2 리팩토링:
+ * - navSession.ts 제거. URL 기반 라우팅 동기화 적용.
+ * - activeTab, selectedStudentId 등은 URL Path와 쿼리 스트링에서 파생됩니다.
  */
 
 interface AppContextType {
@@ -39,7 +40,6 @@ interface AppContextType {
   setSelectedCustomerDetailTab: (tab: StudentDetailTab | null) => void;
   currentUser: User;
   
-  // @deprecated - 상태가 분리되었으므로 항상 빈 배열을 반환합니다. 렌더링에는 사용하지 마세요.
   toasts: ToastMessage[];
   showToast: (
     message: string,
@@ -48,12 +48,10 @@ interface AppContextType {
   ) => void;
   dismissToast: (id: string) => void;
   
-  // @deprecated - 항상 null을 반환합니다.
   confirmDialog: ConfirmDialogOptions | null;
   openConfirmDialog: (options: ConfirmDialogOptions) => void;
   closeConfirmDialog: () => void;
   
-  // @deprecated - 항상 null을 반환합니다.
   workStatus: WorkStatusMessage | null;
   showWorkStatus: (input: { title: string; message: string; tone?: FeedbackTone }) => void;
   clearWorkStatus: () => void;
@@ -65,16 +63,43 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const {
-    activeTab,
-    setActiveTab,
-    selectedStudentId,
-    setSelectedStudentId,
-    selectedStudentDetailTab,
-    setSelectedStudentDetailTab,
-  } = useNavSession();
   const currentUser = useActiveUser();
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // URL에서 파생된 상태
+  const activeTab = useMemo<NavTab>(() => {
+    const parts = location.pathname.split('/').filter(Boolean);
+    if (parts[0] === 'workspace' && parts[1]) {
+      return parts[1] as NavTab;
+    }
+    return 'dashboard';
+  }, [location.pathname]);
+
+  const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const selectedStudentId = searchParams.get('studentId');
+  const selectedStudentDetailTab = (searchParams.get('studentTab') as StudentDetailTab) || null;
+
+  const setActiveTab = useCallback((tab: NavTab) => {
+    const target = tab === 'dashboard' ? '/workspace' : `/workspace/${tab}`;
+    navigate(`${target}${location.search}`);
+  }, [navigate, location.search]);
+
+  const setSelectedStudentId = useCallback((id: string | null) => {
+    const params = new URLSearchParams(location.search);
+    if (id) params.set('studentId', id);
+    else params.delete('studentId');
+    navigate(`${location.pathname}?${params.toString()}`);
+  }, [navigate, location.pathname, location.search]);
+
+  const setSelectedStudentDetailTab = useCallback((tab: StudentDetailTab | null) => {
+    const params = new URLSearchParams(location.search);
+    if (tab) params.set('studentTab', tab);
+    else params.delete('studentTab');
+    navigate(`${location.pathname}?${params.toString()}`);
+  }, [navigate, location.pathname, location.search]);
 
   const triggerRefresh = useCallback(() => {
     setRefreshKey((prev) => prev + 1);

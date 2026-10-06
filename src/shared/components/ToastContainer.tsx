@@ -5,10 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { WorkStatusBanner } from './WorkStatusBanner';
 
 export const ToastContainer: React.FC = () => {
-  const toasts = useFeedbackStore((state) => state.toasts);
-  const dismissToast = useFeedbackStore((state) => state.dismissToast);
-  const workStatus = useFeedbackStore((state) => state.workStatus);
-  const clearWorkStatus = useFeedbackStore((state) => state.clearWorkStatus);
+  const { toasts, dismissToast, workStatus, clearWorkStatus } = useFeedbackStore();
 
   return (
     <div className="fixed mobile-overlay-bottom left-4 right-20 md:left-auto md:right-6 z-50 flex flex-col gap-2 max-w-sm pointer-events-none">

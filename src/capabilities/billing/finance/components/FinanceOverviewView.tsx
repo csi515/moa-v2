@@ -1,6 +1,6 @@
-﻿import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { showToast, triggerRefresh } from '@/shared/feedback/uiFeedback';
-import { setActiveTab } from '@/shared/navigation/navSession';
+import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useStorageRefresh } from '@/hooks';
 import { billingStorage } from '@/capabilities/billing/infrastructure/billingStorage';
@@ -25,6 +25,7 @@ import {
 } from 'recharts';
 
 export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
+  const { setActiveTab } = useApp();
   const { industry } = usePermissions();
   const refreshKey = useStorageRefresh('finance');
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));

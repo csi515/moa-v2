@@ -148,16 +148,16 @@ const RefineApp: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <OrganizationProvider>
-          <AppProvider>
-            <SupabaseRoleSync />
-            <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
+          <OrganizationProvider>
+            <AppProvider>
+              <SupabaseRoleSync />
               <RefineApp />
-            </BrowserRouter>
-          </AppProvider>
-        </OrganizationProvider>
-      </AuthProvider>
+            </AppProvider>
+          </OrganizationProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 };

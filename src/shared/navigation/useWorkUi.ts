@@ -1,19 +1,9 @@
-import { useActiveUser } from '@/shared/session/useActiveUser';
-import { openConfirmDialog, showToast, triggerRefresh } from '@/shared/feedback/uiFeedback';
-import { useNavSession } from './navSession';
+import { useApp } from '@/context/AppContext';
 
 /**
- * Core UI가 쓰는 업무 화면 상태.
- * AppContext를 re-export하지 않는다. nav session + Storage user + bound feedback.
+ * Core UI가 사용하는 업무 화면 상태.
+ * AppContext를 감싸는 래퍼입니다.
  */
 export function useWorkUi() {
-  const currentUser = useActiveUser();
-  const nav = useNavSession();
-  return {
-    currentUser,
-    ...nav,
-    showToast,
-    openConfirmDialog,
-    triggerRefresh,
-  };
+  return useApp();
 }
