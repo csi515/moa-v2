@@ -1,18 +1,5 @@
 import type { FC, ReactNode } from 'react';
 import { UserCog } from 'lucide-react';
-import { useApp } from '@/context/AppContext';
-import { usePermissions } from '@/core/auth/usePermissions';
-import { useTabGuard } from '@/shared/navigation/useTabGuard';
-import {
-  DirectorFloatingFab,
-  ToastContainer,
-  ConfirmDialog,
-} from '@/shared/components';
-import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
-import { SupabaseRoleSync } from '@/SupabaseRoleSync';
-import { isSupabaseConfigured } from '@/lib/supabase';
-import { RetailSidebar } from './layout/RetailSidebar';
-import { RetailBottomNav } from './layout/RetailBottomNav';
 import { RetailPlaceholderView } from './components/RetailPlaceholderView';
 import { RetailHomeView } from './components/home/RetailHomeView';
 import { ProductListView } from './components/products/ProductListView';

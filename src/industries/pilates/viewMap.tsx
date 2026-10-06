@@ -1,17 +1,5 @@
+import type { NavTab } from '@/context/AppContext';
 import type { FC, ReactNode } from 'react';
-import { useApp, type NavTab } from '@/context/AppContext';
-import { usePermissions } from '@/core/auth/usePermissions';
-import { useTabGuard } from '@/shared/navigation/useTabGuard';
-import {
-  DirectorFloatingFab,
-  ToastContainer,
-  ConfirmDialog,
-} from '@/shared/components';
-import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
-import { SupabaseRoleSync } from '@/SupabaseRoleSync';
-import { isSupabaseConfigured } from '@/lib/supabase';
-import { PilatesSidebar } from './layout/PilatesSidebar';
-import { PilatesBottomNav } from './layout/PilatesBottomNav';
 import { BookingCalendarView } from '@/capabilities/booking/ui/BookingCalendarView';
 import { ServiceManagementView } from '@/capabilities/booking/ui/ServiceManagementView';
 import {

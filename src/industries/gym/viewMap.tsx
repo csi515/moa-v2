@@ -1,17 +1,5 @@
+import type { NavTab } from '@/context/AppContext';
 import type { FC, ReactNode } from 'react';
-import { useApp, type NavTab } from '@/context/AppContext';
-import { usePermissions } from '@/core/auth/usePermissions';
-import { useTabGuard } from '@/shared/navigation/useTabGuard';
-import {
-  DirectorFloatingFab,
-  ToastContainer,
-  ConfirmDialog,
-} from '@/shared/components';
-import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
-import { SupabaseRoleSync } from '@/SupabaseRoleSync';
-import { isSupabaseConfigured } from '@/lib/supabase';
-import { GymSidebar } from './layout/GymSidebar';
-import { GymBottomNav } from './layout/GymBottomNav';
 import { GymDashboardView } from './components/dashboard/GymDashboardView';
 import { StudentListView } from './components/students/StudentListView';
 import { CustomerHubView } from '@/core/customer';

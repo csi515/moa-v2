@@ -1,15 +1,5 @@
+import type { NavTab } from '@/context/AppContext';
 import type { FC, ReactNode } from 'react';
-import { useApp, type NavTab } from '@/context/AppContext';
-import { usePermissions } from '@/core/auth/usePermissions';
-import { useTabGuard } from '@/shared/navigation/useTabGuard';
-import {
-  DirectorFloatingFab,
-  ToastContainer,
-  ConfirmDialog,
-} from '@/shared/components';
-import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
-import { SupabaseRoleSync } from '@/SupabaseRoleSync';
-import { isSupabaseConfigured } from '@/lib/supabase';
 import { SettingsHubView } from '@/core/organizations/components/SettingsHubView';
 import {
   attendanceViewEntry,
@@ -21,8 +11,6 @@ import { BookingCalendarView } from '@/capabilities/booking/ui/BookingCalendarVi
 import { ServiceManagementView } from '@/capabilities/booking/ui/ServiceManagementView';
 import { PassManagementView } from '@/capabilities/billing/ui/PassManagementView';
 import { skinPassConfig } from './config/passConfig';
-import { SkinSidebar } from './layout/SkinSidebar';
-import { SkinBottomNav } from './layout/SkinBottomNav';
 import { SkinDashboardView } from './components/dashboard/SkinDashboardView';
 import { SkinCustomerHubView, SkinScheduleHubView } from './components/SkinHubs';
 import { SkinRetailView } from './components/retail/SkinRetailView';

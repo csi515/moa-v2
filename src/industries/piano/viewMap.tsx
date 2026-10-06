@@ -1,19 +1,4 @@
 import { type FC, type ReactNode } from 'react';
-import { useApp } from '@/context/AppContext';
-import { usePermissions } from '@/core/auth/usePermissions';
-import { useTabGuard } from '@/shared/navigation/useTabGuard';
-import {
-  DirectorFloatingFab,
-  ToastContainer,
-  ConfirmDialog,
-  OnboardingWizard,
-} from '@/shared/components';
-import { OnboardingResumeCard } from '@/shared/components/onboarding/OnboardingResumeCard';
-import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
-import { PianoSidebar } from './layout/PianoSidebar';
-import { PianoBottomNav } from './layout/PianoBottomNav';
-import { SupabaseRoleSync } from '@/SupabaseRoleSync';
-import { isSupabaseConfigured } from '@/lib/supabase';
 import { financeViewEntries, hubViewAliases } from '@/core/industry/commonViewEntries';
 import { AttendanceManagementView } from '@/capabilities/attendance';
 import { PianoAttendanceView } from './components/attendance/PianoAttendanceView';
@@ -45,7 +30,6 @@ import {
   PIANO_SCHEDULE_HUB_TABS,
   PIANO_SETTINGS_HUB_TABS,
 } from './config/hubRoutes';
-import { usePianoOnboardingUi } from './hooks/usePianoOnboardingUi';
 import { AvailabilitySettingsView } from '@/capabilities/scheduling/availability';
 
 const pianoSettingsHub = () => (

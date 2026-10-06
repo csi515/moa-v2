@@ -1,15 +1,7 @@
 import type { FC, ReactNode } from 'react';
 import { CalendarDays, LayoutDashboard, Users } from 'lucide-react';
-import { useApp } from '@/context/AppContext';
-import { useTabGuard } from '@/shared/navigation/useTabGuard';
 import { WorkplaceSettingsView } from '@/core/organizations/components/WorkplaceSettingsView';
 import { accountViewEntry } from '@/core/industry/commonViewEntries';
-import { ToastContainer, ConfirmDialog } from '@/shared/components';
-import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
-import { SupabaseRoleSync } from '@/SupabaseRoleSync';
-import { isSupabaseConfigured } from '@/lib/supabase';
-import { BathSidebar } from './layout/BathSidebar';
-import { BathBottomNav } from './layout/BathBottomNav';
 import { BathPlaceholderView } from './components/BathPlaceholderView';
 
 const bathSettings = () => <WorkplaceSettingsView />;
