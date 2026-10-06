@@ -7,14 +7,10 @@ import React, {
   type ReactNode,
 } from 'react';
 import { useActiveUser } from '@/shared/session/useActiveUser';
-import {
-  MAX_VISIBLE_TOASTS,
-  nextWorkStatusId,
-  type FeedbackTone,
-  type WorkStatusMessage,
-} from '@/shared/feedback/feedbackPolicy';
+import type { FeedbackTone, WorkStatusMessage } from '@/shared/feedback/feedbackPolicy';
 import type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
 import { bindUiFeedback, unbindUiFeedback } from '@/shared/feedback/uiFeedback';
+import { feedbackStore, type ToastMessage } from '@/shared/feedback/feedbackStore';
 import type { NavTab, StudentDetailTab, CustomerDetailTab } from '@/shared/navigation/navigationTypes';
 import { useNavSession } from '@/shared/navigation/navSession';
 import type { User } from '@/types';
@@ -23,35 +19,27 @@ export type { NavTab, StudentDetailTab, CustomerDetailTab } from '@/shared/navig
 export type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
 
 /**
- * AppContext 역할:
- * - UI state: activeTab, selectedStudent*, toast, dialog (탭/학생은 nav session SoT)
- * - session user mirror: currentUser (ACTIVE_USER 변경 시만 갱신)
- * - triggerRefresh / refreshKey: 명시적 전체 UI 무효화(설정 저장 등). storage 매 write마다 올리지 않음.
- *
- * Domain data(students/bookings/…)는 AppContext에 두지 않음 → useStorageRefresh(domain) 구독.
+ * AppContext
+ * 
+ * Phase 1 리팩토링:
+ * UI State(toasts, dialog, workStatus)는 AppContext에서 제거되어 상태 변경 시의 전역 렌더링을 방지합니다.
+ * 하위 호환성을 위해 함수 인터페이스(showToast 등)만 유지하며, 실제 상태는 feedbackStore가 관리합니다.
  */
-
-export interface ToastMessage {
-  id: string;
-  title?: string;
-  message: string;
-  type: 'success' | 'error' | 'info' | 'warning';
-}
 
 interface AppContextType {
   activeTab: NavTab;
   setActiveTab: (tab: NavTab) => void;
   selectedStudentId: string | null;
   setSelectedStudentId: (id: string | null) => void;
-  /** Phase 1: selectedStudentId의 범용 Customer 앨리어스 */
   selectedCustomerId: string | null;
   setSelectedCustomerId: (id: string | null) => void;
   selectedStudentDetailTab: StudentDetailTab | null;
   setSelectedStudentDetailTab: (tab: StudentDetailTab | null) => void;
-  /** Phase 2: selectedStudentDetailTab의 범용 Customer 앨리어스 */
   selectedCustomerDetailTab: StudentDetailTab | null;
   setSelectedCustomerDetailTab: (tab: StudentDetailTab | null) => void;
   currentUser: User;
+  
+  // @deprecated - 상태가 분리되었으므로 항상 빈 배열을 반환합니다. 렌더링에는 사용하지 마세요.
   toasts: ToastMessage[];
   showToast: (
     message: string,
@@ -59,22 +47,18 @@ interface AppContextType {
     title?: string
   ) => void;
   dismissToast: (id: string) => void;
+  
+  // @deprecated - 항상 null을 반환합니다.
   confirmDialog: ConfirmDialogOptions | null;
   openConfirmDialog: (options: ConfirmDialogOptions) => void;
   closeConfirmDialog: () => void;
-  /**
-   * 결제/예약/등록처럼 화면에 남겨야 하는 결과.
-   * 짧은 성공/경고는 showToast, 필드 수정은 FormField.error.
-   */
+  
+  // @deprecated - 항상 null을 반환합니다.
   workStatus: WorkStatusMessage | null;
   showWorkStatus: (input: { title: string; message: string; tone?: FeedbackTone }) => void;
   clearWorkStatus: () => void;
-  /**
-   * 명시적 전역 UI 무효화 카운터.
-   * StorageService 매 변경으로 증가하지 않음 — triggerRefresh() 또는 hydrate('*') 연동 화면만.
-   */
+  
   refreshKey: number;
-  /** 설정 저장·교차 탭 등 storage 키 구독만으로 부족한 경우의 명시적 갱신 */
   triggerRefresh: () => void;
 }
 
@@ -90,64 +74,18 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setSelectedStudentDetailTab,
   } = useNavSession();
   const currentUser = useActiveUser();
-  const [toasts, setToasts] = useState<ToastMessage[]>([]);
-  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogOptions | null>(null);
-  const [workStatus, setWorkStatus] = useState<WorkStatusMessage | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
   const triggerRefresh = useCallback(() => {
     setRefreshKey((prev) => prev + 1);
   }, []);
 
-  const showToast = useCallback(
-    (
-      message: string,
-      type: 'success' | 'error' | 'info' | 'warning' = 'success',
-      title?: string
-    ) => {
-      const id = Date.now().toString() + Math.random().toString(36).slice(2, 6);
-      setToasts((prev) => [...prev, { id, message, type, title }].slice(-MAX_VISIBLE_TOASTS));
-      setTimeout(() => {
-        setToasts((prev) => prev.filter((t) => t.id !== id));
-      }, 4000);
-    },
-    []
-  );
-
-  const dismissToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  }, []);
-
-  const openConfirmDialog = useCallback((options: ConfirmDialogOptions) => {
-    setConfirmDialog(options);
-  }, []);
-
-  const closeConfirmDialog = useCallback(() => {
-    setConfirmDialog(null);
-  }, []);
-
   useEffect(() => {
-    bindUiFeedback({ showToast, openConfirmDialog, triggerRefresh });
+    bindUiFeedback({ triggerRefresh });
     return () => {
       unbindUiFeedback();
     };
-  }, [showToast, openConfirmDialog, triggerRefresh]);
-
-  const showWorkStatus = useCallback(
-    (input: { title: string; message: string; tone?: FeedbackTone }) => {
-      setWorkStatus({
-        id: nextWorkStatusId(),
-        title: input.title,
-        message: input.message,
-        tone: input.tone ?? 'info',
-      });
-    },
-    []
-  );
-
-  const clearWorkStatus = useCallback(() => {
-    setWorkStatus(null);
-  }, []);
+  }, [triggerRefresh]);
 
   return (
     <AppContext.Provider
@@ -163,15 +101,19 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         selectedCustomerDetailTab: selectedStudentDetailTab,
         setSelectedCustomerDetailTab: setSelectedStudentDetailTab,
         currentUser,
-        toasts,
-        showToast,
-        dismissToast,
-        confirmDialog,
-        openConfirmDialog,
-        closeConfirmDialog,
-        workStatus,
-        showWorkStatus,
-        clearWorkStatus,
+        
+        toasts: [],
+        showToast: feedbackStore.showToast,
+        dismissToast: feedbackStore.dismissToast,
+        
+        confirmDialog: null,
+        openConfirmDialog: feedbackStore.openConfirmDialog,
+        closeConfirmDialog: feedbackStore.closeConfirmDialog,
+        
+        workStatus: null,
+        showWorkStatus: feedbackStore.showWorkStatus,
+        clearWorkStatus: feedbackStore.clearWorkStatus,
+        
         refreshKey,
         triggerRefresh,
       }}

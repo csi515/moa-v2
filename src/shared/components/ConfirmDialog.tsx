@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { useOptionalApp, type ConfirmDialogOptions } from '@/context/AppContext';
+import { useFeedbackStore } from '@/shared/feedback/feedbackStore';
 import { AlertTriangle } from 'lucide-react';
 import { Modal } from './ui/Modal';
+import type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
 
 interface ConfirmDialogProps {
   options?: ConfirmDialogOptions | null;
@@ -9,9 +10,9 @@ interface ConfirmDialogProps {
 }
 
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ options, onDismiss }) => {
-  const app = useOptionalApp();
-  const confirmDialog = options !== undefined ? options : app?.confirmDialog ?? null;
-  const closeConfirmDialog = onDismiss ?? app?.closeConfirmDialog ?? (() => {});
+  const store = useFeedbackStore();
+  const confirmDialog = options !== undefined ? options : store.confirmDialog;
+  const closeConfirmDialog = onDismiss ?? store.closeConfirmDialog;
 
   useEffect(() => {
     if (!confirmDialog) return;

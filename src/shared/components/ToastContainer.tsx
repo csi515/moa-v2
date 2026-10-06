@@ -1,13 +1,14 @@
 import React from 'react';
-import { useApp } from '@/context/AppContext';
+import { useFeedbackStore } from '@/shared/feedback/feedbackStore';
 import { CheckCircle2, AlertCircle, Info, AlertTriangle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { WorkStatusBanner } from './WorkStatusBanner';
-import { MAX_VISIBLE_TOASTS } from '@/shared/feedback/feedbackPolicy';
 
 export const ToastContainer: React.FC = () => {
-  const { toasts, dismissToast, workStatus, clearWorkStatus } = useApp();
-  const visibleToasts = toasts.slice(-MAX_VISIBLE_TOASTS);
+  const toasts = useFeedbackStore((state) => state.toasts);
+  const dismissToast = useFeedbackStore((state) => state.dismissToast);
+  const workStatus = useFeedbackStore((state) => state.workStatus);
+  const clearWorkStatus = useFeedbackStore((state) => state.clearWorkStatus);
 
   return (
     <div className="fixed mobile-overlay-bottom left-4 right-20 md:left-auto md:right-6 z-50 flex flex-col gap-2 max-w-sm pointer-events-none">
@@ -17,7 +18,7 @@ export const ToastContainer: React.FC = () => {
         </div>
       )}
       <AnimatePresence>
-        {visibleToasts.map((toast) => {
+        {toasts.map((toast) => {
           let bg = 'bg-slate-900 text-white';
           let icon = <Info className="w-5 h-5 text-sky-400 shrink-0" />;
 

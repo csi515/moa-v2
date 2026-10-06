@@ -1,4 +1,5 @@
 import type { ConfirmDialogOptions } from './confirmTypes';
+import { feedbackStore } from './feedbackStore';
 
 export type ShowToast = (
   message: string,
@@ -7,30 +8,24 @@ export type ShowToast = (
 ) => void;
 
 type UiFeedbackApi = {
-  showToast: ShowToast;
-  openConfirmDialog: (options: ConfirmDialogOptions) => void;
   triggerRefresh: () => void;
 };
 
 function unbound(): never {
-  throw new Error('UI feedback is not bound. Render inside AppProvider.');
+  throw new Error('UI feedback triggerRefresh is not bound. Render inside AppProvider.');
 }
 
 let api: UiFeedbackApi = {
-  showToast: unbound,
-  openConfirmDialog: unbound,
   triggerRefresh: unbound,
 };
 
-/** AppProvider가 toast/confirm/refresh 구현을 연결한다. */
+/** AppProvider가 triggerRefresh를 연결합니다. */
 export function bindUiFeedback(next: UiFeedbackApi) {
   api = next;
 }
 
 export function unbindUiFeedback() {
   api = {
-    showToast: unbound,
-    openConfirmDialog: unbound,
     triggerRefresh: unbound,
   };
 }
@@ -40,11 +35,11 @@ export function showToast(
   type?: 'success' | 'error' | 'info' | 'warning',
   title?: string
 ) {
-  api.showToast(message, type, title);
+  feedbackStore.showToast(message, type, title);
 }
 
 export function openConfirmDialog(options: ConfirmDialogOptions) {
-  api.openConfirmDialog(options);
+  feedbackStore.openConfirmDialog(options);
 }
 
 export function triggerRefresh() {
