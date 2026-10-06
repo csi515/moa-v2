@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useList } from '@refinedev/core';
 import { useApp } from '@/context/AppContext';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { coreScheduleService, reservationService } from '@/core/schedules';
@@ -7,8 +8,7 @@ import {
   consumeOpenConsultationInquiries,
   consumeOpenConsultationReservations,
 } from '@/core/customer/studentJoinInbox';
-import { useStaffScope, useStorageRefresh } from '@/hooks';
-import { StorageService } from '@/services/storage';
+import { useStaffScope } from '@/hooks';
 import type { CustomerJoinRequest, ReservationDetail } from '@/types';
 import { inquiryBelongsToStaff, reservationBelongsToStaff } from './staffConsultationScope';
 import {
@@ -68,13 +68,18 @@ export function consultationStatusLabel(status: string): { label: string; classN
 export function usePianoConsultationHub() {
   const { showToast, setActiveTab } = useApp();
   const { currentOrganization } = useOrganization();
-  const refreshKey = useStorageRefresh();
   const { isScoped, staffId, scopeStudents } = useStaffScope();
 
-  /** 스토리지 파생 */
+  /** Refine으로 학생 목록 조회 */
+  const studentsList = useList<any>({
+    resource: 'customers',
+    filters: [{ field: 'status', operator: 'eq', value: 'active' }],
+    queryOptions: { enabled: !!currentOrganization?.id },
+  });
+  const allStudents = (studentsList as any).data?.data || (studentsList as any).query?.data?.data || [];
   const assignedStudents = useMemo(
-    () => scopeStudents(StorageService.getStudents()),
-    [scopeStudents, refreshKey]
+    () => scopeStudents(allStudents),
+    [scopeStudents, allStudents]
   );
 
   /** 서버 상태 */
@@ -199,7 +204,7 @@ export function usePianoConsultationHub() {
     return () => {
       cancelled = true;
     };
-  }, [currentOrganization?.id, isScoped, keepInquiry, refreshKey]);
+  }, [currentOrganization?.id, isScoped, keepInquiry]);
 
   const pendingToday = todayRows.filter((r) => r.status === 'requested').length;
 

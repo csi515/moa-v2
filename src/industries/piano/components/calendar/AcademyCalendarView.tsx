@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
+import { useList, useCreate, useDelete } from '@refinedev/core';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { getPlaceLabel } from '@/core/industry/industryUi';
 import { usePublicHolidays, holidaysOnDate, holidaysForMonth } from '@/core/calendar';
-import { useStaffScope, useStorageRefresh } from '@/hooks';
-import { StorageService } from '@/services/storage';
+import { useStaffScope } from '@/hooks';
+import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { PageHeader, FilterBar, Modal } from '@/shared/components';
 import { AcademyEvent } from '@/types';
 import { visibleStaffCalendarEvents } from './visibleStaffCalendarEvents';
@@ -23,6 +24,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
   embedded = false,
 }) => {
   const { showToast } = useApp();
+  const { currentOrganization } = useOrganization();
   const { industry } = usePermissions();
   const placeLabel = getPlaceLabel(industry);
   const scheduleLabel = `${placeLabel} 일정`;
@@ -32,16 +34,47 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
   const [currentYear, setCurrentYear] = useState(now.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(now.getMonth() + 1);
   const [selectedDay, setSelectedDay] = useState<number | null>(now.getDate());
-  useStorageRefresh();
-  const publicHolidays = usePublicHolidays(currentYear);
-  const allStudents = StorageService.getStudents();
+
+  // Fetch students from Refine (core schema)
+  const studentsList = useList<any>({
+    resource: 'customers',
+    filters: [{ field: 'status', operator: 'eq', value: 'active' }],
+    queryOptions: { enabled: !!currentOrganization?.id },
+  });
+  const allStudents = (studentsList as any).data?.data || (studentsList as any).query?.data?.data || [];
   const students = useMemo(
     () => (isScoped ? scopeStudents(allStudents) : allStudents),
     [allStudents, isScoped, scopeStudents]
   );
+
+  // Fetch events from Refine (piano schema)
+  const eventsList = useList<any>({
+    resource: 'events',
+    meta: { schema: 'piano' },
+    queryOptions: { enabled: !!currentOrganization?.id },
+  });
+  const rawEvents = (eventsList as any).data?.data || (eventsList as any).query?.data?.data || [];
+
+  // Map DB rows to AcademyEvent interface
+  const dbEvents = useMemo<AcademyEvent[]>(() =>
+    rawEvents.map((r: any) => ({
+      id: r.id,
+      title: r.title,
+      startDate: r.start_date,
+      endDate: r.end_date || undefined,
+      type: r.event_type as AcademyEvent['type'],
+      description: r.description || undefined,
+      color: r.color || '#4f46e5',
+      participationFee: r.metadata?.participationFee,
+      studentIds: r.metadata?.studentIds,
+    })),
+    [rawEvents]
+  );
+
+  const publicHolidays = usePublicHolidays(currentYear);
   const events = useMemo(
-    () => visibleStaffCalendarEvents(StorageService.getEvents(), allStudents, isScoped, scopeRecitalEvents),
-    [isScoped, scopeRecitalEvents, allStudents]
+    () => visibleStaffCalendarEvents(dbEvents, allStudents, isScoped, scopeRecitalEvents),
+    [dbEvents, allStudents, isScoped, scopeRecitalEvents]
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -113,29 +146,50 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
     };
   }, [selectedDay, currentYearMonthStr, events, birthdayStudents, publicHolidays]);
 
+  const { mutate: createEvent, isLoading: isCreating } = useCreate() as any;
+  const { mutate: deleteEvent } = useDelete();
+
   const handleAddEvent = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newEvent.title.trim()) return;
 
-    StorageService.saveEvent({
-      title: newEvent.title.trim(),
-      startDate: newEvent.startDate,
-      type: newEvent.type,
-      description: newEvent.description.trim() || undefined,
-      color: newEvent.color,
-      participationFee:
-        newEvent.type === 'concert' || newEvent.type === 'competition'
-          ? Number(newEvent.participationFee) || undefined
-          : undefined,
-    });
+    const participationFee =
+      newEvent.type === 'concert' || newEvent.type === 'competition'
+        ? Number(newEvent.participationFee) || undefined
+        : undefined;
 
-    showToast(`'${newEvent.title.trim()}' 일정이 등록되었습니다.`, 'success');
-    setIsModalOpen(false);
+    createEvent(
+      {
+        resource: 'events',
+        meta: { schema: 'piano' },
+        values: {
+          organization_id: currentOrganization?.id,
+          title: newEvent.title.trim(),
+          start_date: newEvent.startDate,
+          event_type: newEvent.type,
+          description: newEvent.description.trim() || null,
+          color: newEvent.color,
+          metadata: participationFee ? { participationFee } : {},
+        },
+      },
+      {
+        onSuccess: () => {
+          showToast(`'${newEvent.title.trim()}' 일정이 등록되었습니다.`, 'success');
+          setIsModalOpen(false);
+        },
+        onError: () => showToast('일정 등록에 실패했습니다.', 'error'),
+      }
+    );
   };
 
   const handleDeleteEvent = (id: string) => {
-    StorageService.deleteEvent(id);
-    showToast('일정이 삭제되었습니다.', 'info');
+    deleteEvent(
+      { resource: 'events', id, meta: { schema: 'piano' } },
+      {
+        onSuccess: () => showToast('일정이 삭제되었습니다.', 'info'),
+        onError: () => showToast('삭제에 실패했습니다.', 'error'),
+      }
+    );
   };
 
   const openCreateModal = () => {
