@@ -11,6 +11,7 @@ import { CheckCircle2, AlertCircle, Award, Plus } from 'lucide-react';
 import { Section } from './shared';
 import { getIndustryPlugin } from '@/core/industry/pluginHost';
 import { StudentStampBoard } from '@/industries/piano/components/songProgress';
+import { EmptyState } from '@/shared/components';
 
 export function ParentProgressView({
   student,
@@ -146,7 +147,7 @@ export function ParentProgressView({
 
       <Section title={`커리큘럼 진도 (${student.level || '미설정'})`}>
         {levelItems.length === 0 ? (
-          <p className="text-sm text-slate-400 text-center py-4">등록된 커리큘럼이 없습니다.</p>
+          <EmptyState title="등록된 커리큘럼이 없습니다" className="!bg-transparent !border-none !p-4" />
         ) : (
           levelItems.map((item) => {
             const prog = progress.find((p) => p.curriculumItemId === item.id);
@@ -171,7 +172,7 @@ export function ParentProgressView({
 
       <Section title="시험·콩쿠르·등급">
         {achievements.length === 0 ? (
-          <p className="text-sm text-slate-400 text-center py-4">기록이 없습니다.</p>
+          <EmptyState title="기록이 없습니다" className="!bg-transparent !border-none !p-4" />
         ) : (
           achievements.map((a) => (
             <div key={a.id} className="py-2 border-b border-slate-50">
@@ -203,7 +204,7 @@ export function ParentProgressView({
           </div>
         )}
         {practiceRecords.length === 0 ? (
-          <p className="text-sm text-slate-400 text-center py-4">연습 기록이 없습니다.</p>
+          <EmptyState title="연습 기록이 없습니다" className="!bg-transparent !border-none !p-4" />
         ) : (
           practiceRecords.slice(0, 12).map((p) => (
             <div key={p.id} className="py-2.5 border-b border-slate-50 text-sm space-y-1">

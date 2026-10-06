@@ -4,6 +4,7 @@ import { LessonService } from '@/core/lessons';
 import type { Student } from '@/types';
 import { CheckCircle2 } from 'lucide-react';
 import { Section } from './shared';
+import { EmptyState } from '@/shared/components';
 
 export function ParentAssignmentsView({
   student,
@@ -31,7 +32,7 @@ export function ParentAssignmentsView({
     <div className="space-y-4">
       {assignments.length === 0 ? (
         <Section title="주간 과제">
-          <p className="text-sm text-slate-400 text-center py-8">등록된 과제가 없습니다.</p>
+          <EmptyState title="등록된 과제가 없습니다" className="!bg-transparent !border-none !p-4" />
         </Section>
       ) : (
         assignments.map((a) => (
@@ -84,7 +85,7 @@ export function ParentAssignmentsView({
 
       <Section title="수업 피드백">
         {lessonFeedback.length === 0 ? (
-          <p className="text-sm text-slate-400 text-center py-6">아직 수업 피드백이 없습니다.</p>
+          <EmptyState title="아직 수업 피드백이 없습니다" className="!bg-transparent !border-none !p-4" />
         ) : (
           <div className="space-y-3">
             {lessonFeedback.map((l) => (

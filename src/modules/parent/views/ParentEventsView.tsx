@@ -7,6 +7,7 @@ import { getIndustryPlugin } from '@/core/industry/pluginHost';
 import type { IndustryType } from '@/core/industry/types';
 import type { Student } from '@/types';
 import { Section } from './shared';
+import { EmptyState } from '@/shared/components';
 
 function isYoutubeUrl(url: string): boolean {
   return /youtu\.?be/i.test(url);
@@ -61,7 +62,7 @@ export function ParentEventsView({
     <div className="space-y-4">
       <Section title={sectionTitle}>
         {events.length === 0 ? (
-          <p className="text-sm text-slate-400 text-center py-6">예정된 일정이 없습니다.</p>
+          <EmptyState title="예정된 일정이 없습니다" className="!bg-transparent !border-none !p-4" />
         ) : (
           events.map((ev) => (
             <div key={ev.id} className="py-3 border-b border-slate-50">
@@ -86,7 +87,7 @@ export function ParentEventsView({
       {showsPerformanceVideos && (
         <Section title="연주 영상">
           {videos.length === 0 ? (
-            <p className="text-sm text-slate-400 text-center py-4">등록된 연주 영상이 없습니다.</p>
+            <EmptyState title="등록된 연주 영상이 없습니다" className="!bg-transparent !border-none !p-4" />
           ) : (
             <ul className="space-y-3">
               {videos.map((v) => (

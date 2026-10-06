@@ -4,6 +4,7 @@ import { useStorageRefresh } from '@/hooks';
 import type { Student } from '@/types';
 import { CARE_JOURNAL_MOOD_LABEL } from '@/industries/daycare/care';
 import { Section } from './shared';
+import { EmptyState } from '@/shared/components';
 
 export function ParentCareJournalView({ student }: { student: Student }) {
   const refreshKey = useStorageRefresh();
@@ -18,7 +19,7 @@ export function ParentCareJournalView({ student }: { student: Student }) {
   return (
     <Section title={`${student.name} 알림장`}>
       {journals.length === 0 ? (
-        <p className="text-sm text-slate-400 text-center py-6">아직 작성된 알림장이 없습니다.</p>
+        <EmptyState title="아직 작성된 알림장이 없습니다" className="!bg-transparent !border-none !p-4" />
       ) : (
         <div className="space-y-3">
           {journals.map((j) => (

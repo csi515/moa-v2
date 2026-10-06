@@ -13,6 +13,7 @@ import type { Student } from '@/types';
 import { SummaryMetricCard } from '@/shared/components';
 import { Section } from './shared';
 import { ParentHeroCard, ParentNoticePreview } from './parentHomeShared';
+import { EmptyState } from '@/shared/components';
 
 /** 체육관 학부모 홈 */
 export function GymParentHome({
@@ -91,7 +92,7 @@ export function GymParentHome({
 
       <Section title="내 수업 반">
         {classes.length === 0 ? (
-          <p className="text-sm text-slate-400 text-center py-4">등록된 수업 반이 없습니다.</p>
+          <EmptyState title="등록된 수업 반이 없습니다" className="!bg-transparent !border-none !p-4" />
         ) : (
           <button type="button" onClick={() => onNavigate('schedule')} className="w-full text-left space-y-2">
             {classes.map((cls) => (

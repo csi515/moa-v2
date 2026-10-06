@@ -3,6 +3,7 @@ import { StorageService } from '@/services/storage';
 import { useStorageRefresh } from '@/hooks';
 import type { Student } from '@/types';
 import { Section } from './shared';
+import { EmptyState } from '@/shared/components';
 
 function formatWhen(value?: string): string {
   if (!value) return '—';
@@ -24,7 +25,7 @@ export function ParentIncidentView({ student }: { student: Student }) {
   return (
     <Section title={`${student.name} 사고 안내`}>
       {incidents.length === 0 ? (
-        <p className="text-sm text-slate-400 text-center py-6">전달된 사고 기록이 없습니다.</p>
+        <EmptyState title="전달된 사고 기록이 없습니다" className="!bg-transparent !border-none !p-4" />
       ) : (
         <div className="space-y-3">
           {incidents.map((item) => (

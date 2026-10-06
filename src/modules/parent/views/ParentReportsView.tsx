@@ -2,6 +2,7 @@ import React from 'react';
 import { StorageService } from '@/services/storage';
 import type { Student } from '@/types';
 import { MiniStat, Section } from './shared';
+import { EmptyState } from '@/shared/components';
 
 export function ParentReportsView({ student }: { student: Student }) {
   const reports = StorageService.getLearningReports(student.id, true);
@@ -10,7 +11,7 @@ export function ParentReportsView({ student }: { student: Student }) {
     <div className="space-y-4">
       {reports.length === 0 ? (
         <Section title="학습 리포트">
-          <p className="text-sm text-slate-400 text-center py-6">발행된 리포트가 없습니다.</p>
+          <EmptyState title="발행된 리포트가 없습니다" className="!bg-transparent !border-none !p-4" />
         </Section>
       ) : (
         reports.map((r) => (

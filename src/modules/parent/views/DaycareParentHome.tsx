@@ -14,6 +14,7 @@ import type { ParentPortalTab } from '@/types/education';
 import type { Student } from '@/types';
 import { SummaryMetricCard } from '@/shared/components';
 import { Section } from './shared';
+import { EmptyState } from '@/shared/components';
 
 export function DaycareParentHome({
   student,
@@ -133,14 +134,14 @@ export function DaycareParentHome({
             <p className="text-xs text-slate-600 mt-2 line-clamp-2">{latestJournal.teacherNote}</p>
           </button>
         ) : (
-          <p className="text-sm text-slate-400 text-center py-4">아직 알림장이 없습니다.</p>
+          <EmptyState title="아직 알림장이 없습니다" className="!bg-transparent !border-none !p-4" />
         )}
       </Section>
 
       <Section title="투약 대기">
         {pendingMeds.length === 0 ? (
           readOnly ? (
-            <p className="text-sm text-slate-400 text-center py-4">투약 기록이 없습니다.</p>
+            <EmptyState title="투약 기록이 없습니다" className="!bg-transparent !border-none !p-4" />
           ) : (
             <button
               type="button"

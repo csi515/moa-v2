@@ -22,6 +22,7 @@ import { Section } from './shared';
 import { buildYearMonthOptions } from '@/capabilities/finance/categories';
 import { ParentIndustryAdapter } from '@/capabilities/parent/ParentIndustryAdapter';
 import { showsTextbooksLink, getPlaceLabel } from '@/core/industry/industryUi';
+import { EmptyState } from '@/shared/components';
 
 function statusLabel(status: 'paid' | 'partial' | 'unpaid'): string {
   if (status === 'paid') return '완납';
@@ -215,7 +216,7 @@ export function ParentTuitionView({
             <p className="text-2xl font-black text-slate-900 mt-0.5">{passRemaining}회</p>
           </div>
           {sessionPasses.length === 0 ? (
-            <p className="text-sm text-slate-400 text-center py-4">등록된 회차권이 없습니다.</p>
+            <EmptyState title="등록된 회차권이 없습니다" className="!bg-transparent !border-none !p-4" />
           ) : (
             <ul className="space-y-2">
               {sessionPasses.map((pass) => (
@@ -363,7 +364,7 @@ export function ParentTuitionView({
 
       <Section title={`${feeTitle} 청구서`}>
         {monthInvoices.length === 0 ? (
-          <p className="text-sm text-slate-400 text-center py-4">해당 월 청구가 없습니다.</p>
+          <EmptyState title="해당 월 청구가 없습니다" className="!bg-transparent !border-none !p-4" />
         ) : (
           monthInvoices.map((inv) => (
             <button
