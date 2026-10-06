@@ -17,6 +17,7 @@ import { AccountStatusBadge } from '@/core/accounts/AccountStatusBadge';
 import { StaffInviteResultModal } from '@/core/staff/components/StaffInviteResultModal';
 import { JoinRequestsPanel } from '@/core/organizations/components/JoinRequestsPanel';
 import { PageHeader } from '@/shared/components';
+import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { Teacher, type TeacherPayType } from '@/types';
 import { payTypeLabel, payTypeRateUnitLabel, payTypeUsesUnitRate } from '@/core/finance/teacherPayroll';
@@ -70,7 +71,7 @@ export const TeacherManagementView: React.FC = () => {
 
   // DB 스키마 -> UI 모델(Teacher) 어댑터
   const teachers: Teacher[] = useMemo(() => {
-    if (isStaffLoading || isClassesLoading || isCustomersLoading) return <div className="p-8 flex justify-center"><Loader2 className="w-8 h-8 animate-spin" /></div>;
+    if (isStaffLoading || isClassesLoading || isCustomersLoading) return [];
 
   return (staffData?.data || []).map(row => ({
       id: row.id,
@@ -329,6 +330,10 @@ export const TeacherManagementView: React.FC = () => {
       },
     });
   };
+
+  if (isStaffLoading || isClassesLoading || isCustomersLoading) {
+    return <PageListSkeleton rows={3} message="직원 목록을 불러오는 중입니다..." />;
+  }
 
   return (
     <div className="space-y-4 pb-4">
