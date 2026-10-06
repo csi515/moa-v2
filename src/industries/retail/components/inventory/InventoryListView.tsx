@@ -1,3 +1,4 @@
+import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import { useCallback, useEffect, useMemo, useState, type FC } from 'react';
 import { PackagePlus, SlidersHorizontal, Warehouse } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
@@ -160,7 +161,7 @@ export const InventoryListView: FC = () => {
       </FilterBar>
 
       {loading ? (
-        <p className="text-sm text-slate-500 py-8 text-center">불러오는 중…</p>
+        <PageListSkeleton rows={3} message="목록을 불러오는 중..." />
       ) : filtered.length === 0 ? (
         <EmptyState
           icon={<Warehouse className="w-10 h-10" />}

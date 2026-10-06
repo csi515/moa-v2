@@ -1,3 +1,4 @@
+import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { ShoppingBag } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
@@ -146,7 +147,7 @@ export function SkinRetailView() {
       />
 
       {loading ? (
-        <p className="text-sm text-slate-500 py-8 text-center">불러오는 중…</p>
+        <PageListSkeleton rows={3} message="목록을 불러오는 중..." />
       ) : catalog.length === 0 ? (
         <EmptyState title="등록된 상품이 없습니다" description="판매할 상품을 먼저 등록해 주세요" />
       ) : (

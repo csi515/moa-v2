@@ -1,3 +1,4 @@
+import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import React, { useEffect, useState, useMemo } from 'react';
 import { useList, useCreate, useDelete } from '@refinedev/core';
 import { useApp } from '@/context/AppContext';
@@ -255,7 +256,7 @@ export const PracticeRecordsView: React.FC = () => {
         </FilterBar>
 
         {(isLoadingStudents || isLoadingPractice) ? (
-          <div className="p-8 text-center text-slate-500">데이터를 불러오는 중입니다...</div>
+          <PageListSkeleton rows={4} message="데이터를 불러오는 중입니다..." />
         ) : filteredPractice.length === 0 ? (
           <div className="p-8 text-center text-slate-500">
             조회된 연습 기록이 없습니다.

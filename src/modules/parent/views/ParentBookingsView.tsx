@@ -1,3 +1,4 @@
+import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { reservationService } from '@/core/schedules';
@@ -122,7 +123,7 @@ export const MyReservationsView: React.FC<ParentBookingsViewProps> = () => {
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="inline-block w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-          <p className="mt-4 text-sm text-slate-600">예약 목록을 불러오는 중...</p>
+          <PageListSkeleton rows={3} message="예약 목록을 불러오는 중..." />
         </div>
       </div>
     );
