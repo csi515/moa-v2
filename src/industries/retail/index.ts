@@ -1,6 +1,5 @@
 export { ModuleLabelsProvider, useModuleLabels } from './config/ModuleLabelsProvider';
 export { retailModuleLabels } from './config/labels';
-export { RetailAppContent } from './RetailAppContent';
 export { retailPluginManifest } from './plugin';
 export type {
   Product,

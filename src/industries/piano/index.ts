@@ -38,7 +38,6 @@ export {
   SongProgressStaffView,
   songProgressService,
 } from './components/songProgress';
-export { PianoAppContent } from './PianoAppContent';
 
 // Module config
 export { pianoModuleLabels, type ModuleLabels } from './config/labels';
