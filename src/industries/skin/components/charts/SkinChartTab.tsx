@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ScheduleService } from '@/core/services/scheduleService';
+import { useScheduleService } from '@/core/services/useScheduleService';
 import { useApp } from '@/context/AppContext';
 import { useStorageRefresh } from '@/hooks';
 import { EmptyState } from '@/shared/components';
@@ -10,13 +10,14 @@ import { BOOKING_STATUS_LABEL } from '@/core/schedules/bookingStatusLabel';
 export function SkinChartTab({ customerId }: { customerId: string }) {
   const { showToast } = useApp();
   const refreshKey = useStorageRefresh();
+  const scheduleService = useScheduleService();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [skinCondition, setSkinCondition] = useState('');
   const [chartNote, setChartNote] = useState('');
 
   const bookings = useMemo(
     () =>
-      ScheduleService.getBookings()
+      scheduleService.getBookings()
         .filter((b) => b.customerId === customerId && b.status !== 'cancelled')
         .sort((a, b) => b.startsAt.localeCompare(a.startsAt)),
     [customerId, refreshKey]
@@ -29,7 +30,7 @@ export function SkinChartTab({ customerId }: { customerId: string }) {
   };
 
   const saveChart = (booking: Booking) => {
-    ScheduleService.saveBooking({
+    scheduleService.saveBooking({
       ...booking,
       skinCondition: skinCondition.trim() || undefined,
       chartNote: chartNote.trim() || undefined,

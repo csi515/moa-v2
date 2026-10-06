@@ -1,7 +1,7 @@
 ﻿import { useState, type FormEvent } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useApp } from '@/context/AppContext';
-import { ScheduleService } from '@/core/services/scheduleService';
+import { useScheduleService } from '@/core/services/useScheduleService';
 import { StorageService } from '@/services/storage';
 import { getSlotCapacityInfo } from '@/capabilities/scheduling/capacity';
 import { isOutsideStaffHours } from '@/capabilities/scheduling/availability/windows';
@@ -19,11 +19,12 @@ export function SkinBookingRequestForm({ student }: { student: Student }) {
   const [time, setTime] = useState('10:00');
   const [memo, setMemo] = useState('');
   const [waitlist, setWaitlist] = useState(false);
+  const scheduleService = useScheduleService();
   const settings = StorageService.getSettings();
   const depositOn = settings.depositEnabled === true;
   const accountText = formatBankAccountText(settings.bankAccount);
 
-  const services = ScheduleService.getActiveServiceOfferings();
+  const services = scheduleService.getActiveServiceOfferings();
   const staff = StorageService.getTeachers().filter((t) => t.status === 'active');
 
   const submit = (e: FormEvent) => {
@@ -52,8 +53,8 @@ export function SkinBookingRequestForm({ student }: { student: Student }) {
         service,
         staffId: instructor.id,
         startsAt,
-        bookings: ScheduleService.getBookings(),
-        recruitments: ScheduleService.getSlotRecruitments(),
+        bookings: scheduleService.getBookings(),
+        recruitments: scheduleService.getSlotRecruitments(),
       });
       if (capacity.isClosed) {
         showToast('선택한 관리사 시간대는 예약할 수 없습니다.', 'warning');
@@ -63,14 +64,14 @@ export function SkinBookingRequestForm({ student }: { student: Student }) {
         staffId: instructor.id,
         startsAt,
         endsAt,
-        bookings: ScheduleService.getBookings(),
+        bookings: scheduleService.getBookings(),
       });
       if (staffConflict) {
         showToast('선택한 관리사는 이 시간에 이미 예약이 있습니다.', 'warning');
         return;
       }
     }
-    ScheduleService.saveBooking({
+    scheduleService.saveBooking({
       customerId: student.id,
       customerName: student.name,
       staffId: instructor?.id,

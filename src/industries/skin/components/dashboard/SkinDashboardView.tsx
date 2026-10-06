@@ -3,7 +3,7 @@ import { useApp } from '@/context/AppContext';
 import { useStorageRefresh, useStaffScope } from '@/hooks';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
-import { ScheduleService } from '@/core/services/scheduleService';
+import { useScheduleService } from '@/core/services/useScheduleService';
 import { isUnassignedCustomerRequest } from '@/industries/skin/bookingRooms';
 import { StorageService } from '@/services/storage';
 import { PageHeader, SummaryMetricCard, EmptyState } from '@/shared/components';
@@ -20,9 +20,10 @@ const SkinStaffDashboard: React.FC = () => {
   const service = labels.service.singular;
 
   const today = new Date().toISOString().slice(0, 10);
-  const allBookingsRaw = ScheduleService.getBookings();
+  const scheduleService = useScheduleService();
+  const allBookingsRaw = scheduleService.getBookings();
   const todayBookings = useMemo(() => {
-    const scoped = scopeBookings(ScheduleService.getBookingsByDate(today));
+    const scoped = scopeBookings(scheduleService.getBookingsByDate(today));
     const inbox = allBookingsRaw.filter(
       (b) => isUnassignedCustomerRequest(b) && b.startsAt.startsWith(today)
     );
@@ -126,6 +127,7 @@ const SkinStaffDashboard: React.FC = () => {
 };
 
 const SkinAdminDashboard: React.FC = () => {
+  const scheduleService = useScheduleService();
   const { setActiveTab } = useApp();
   const labels = useModuleLabels();
   const refreshKey = useStorageRefresh('bookings');
@@ -135,13 +137,13 @@ const SkinAdminDashboard: React.FC = () => {
 
   const today = new Date().toISOString().slice(0, 10);
   const todayBookings = useMemo(
-    () => ScheduleService.getBookingsByDate(today),
+    () => scheduleService.getBookingsByDate(today),
     [today, refreshKey]
   );
-  const upcoming = useMemo(() => ScheduleService.getUpcomingBookings(5), [refreshKey]);
+  const upcoming = useMemo(() => scheduleService.getUpcomingBookings(5), [refreshKey]);
   const members = StorageService.getStudents().filter((s) => s.status === 'active');
   const staffCount = StorageService.getTeachers().filter((t) => t.status === 'active').length;
-  const services = ScheduleService.getActiveServiceOfferings();
+  const services = scheduleService.getActiveServiceOfferings();
   const confirmedToday = todayBookings.filter(
     (b) => b.status === 'confirmed' || b.status === 'scheduled'
   ).length;
@@ -150,7 +152,7 @@ const SkinAdminDashboard: React.FC = () => {
   ).length;
   const revisit = useMemo(() => {
     const latest = new Map<string, { name: string; startsAt: string; serviceId?: string }>();
-    for (const booking of ScheduleService.getBookings()) {
+    for (const booking of scheduleService.getBookings()) {
       if (booking.status !== 'completed' || booking.waitlist) continue;
       const prev = latest.get(booking.customerId);
       if (!prev || booking.startsAt > prev.startsAt) {

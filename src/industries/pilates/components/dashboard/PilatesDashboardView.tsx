@@ -2,7 +2,7 @@
 import { useApp } from '@/context/AppContext';
 import { useStorageRefresh, useStaffScope } from '@/hooks';
 import { usePermissions } from '@/core/auth/usePermissions';
-import { ScheduleService } from '@/core/services/scheduleService';
+import { useScheduleService } from '@/core/services/useScheduleService';
 import {
   buildSlotKey,
   buildSlotOccupancyIndex,
@@ -21,17 +21,18 @@ const PilatesStaffDashboard: React.FC = () => {
   const { scopeBookings, scopeMembersForPilates, staffId } = useStaffScope();
 
   const today = new Date().toISOString().slice(0, 10);
-  const allBookingsRaw = ScheduleService.getBookings();
+  const scheduleService = useScheduleService();
+  const allBookingsRaw = scheduleService.getBookings();
   const occupancyIndex = useMemo(
     () => buildSlotOccupancyIndex(allBookingsRaw),
     [allBookingsRaw, refreshKey]
   );
   const todayBookings = useMemo(
-    () => scopeBookings(ScheduleService.getBookingsByDate(today)),
+    () => scopeBookings(scheduleService.getBookingsByDate(today)),
     [today, scopeBookings, refreshKey]
   );
   const upcoming = useMemo(
-    () => scopeBookings(ScheduleService.getUpcomingBookings(5)),
+    () => scopeBookings(scheduleService.getUpcomingBookings(5)),
     [scopeBookings, refreshKey]
   );
   const members = useMemo(
@@ -84,7 +85,7 @@ const PilatesStaffDashboard: React.FC = () => {
             </button>
           </div>
           {todayBookings.length === 0 &&
-          !ScheduleService.getSlotRecruitments().some(
+          !scheduleService.getSlotRecruitments().some(
             (item) =>
               item.maxCapacity &&
               item.staffId &&
@@ -111,7 +112,7 @@ const PilatesStaffDashboard: React.FC = () => {
             <div className="space-y-1.5">
               {groupBookingsIntoSlots(todayBookings)
                 .concat(
-                  ScheduleService.getSlotRecruitments()
+                  scheduleService.getSlotRecruitments()
                     .filter((item) => {
                       if (!item.serviceId || !item.staffId || !item.maxCapacity) return false;
                       if (staffId && item.staffId !== staffId) return false;
@@ -130,7 +131,7 @@ const PilatesStaffDashboard: React.FC = () => {
                       staffId: item.staffId,
                       startsAt: item.startsAt,
                       serviceName:
-                        ScheduleService.getServiceOfferings().find((service) => service.id === item.serviceId)?.name ||
+                        scheduleService.getServiceOfferings().find((service) => service.id === item.serviceId)?.name ||
                         '수업',
                       staffName: '',
                       endsAt: '',
@@ -138,7 +139,7 @@ const PilatesStaffDashboard: React.FC = () => {
                     }))
                 )
                 .map((group) => {
-                const service = ScheduleService.getServiceOfferings().find((s) => s.id === group.serviceId);
+                const service = scheduleService.getServiceOfferings().find((s) => s.id === group.serviceId);
                 const capacity =
                   service && group.staffId
                     ? getSlotCapacityInfo({
@@ -146,7 +147,7 @@ const PilatesStaffDashboard: React.FC = () => {
                         staffId: group.staffId,
                         startsAt: group.startsAt,
                         bookings: allBookingsRaw,
-                        recruitments: ScheduleService.getSlotRecruitments(),
+                        recruitments: scheduleService.getSlotRecruitments(),
                         occupancyIndex,
                       })
                     : null;
@@ -212,18 +213,19 @@ const PilatesStaffDashboard: React.FC = () => {
 };
 
 const PilatesAdminDashboard: React.FC = () => {
+  const scheduleService = useScheduleService();
   const { setActiveTab } = useApp();
   const refreshKey = useStorageRefresh('bookings');
 
   const today = new Date().toISOString().slice(0, 10);
   const todayBookings = useMemo(
-    () => ScheduleService.getBookingsByDate(today),
+    () => scheduleService.getBookingsByDate(today),
     [today, refreshKey]
   );
-  const upcoming = useMemo(() => ScheduleService.getUpcomingBookings(5), [refreshKey]);
+  const upcoming = useMemo(() => scheduleService.getUpcomingBookings(5), [refreshKey]);
   const members = StorageService.getStudents().filter((s) => s.status === 'active');
   const instructors = StorageService.getTeachers().filter((t) => t.status === 'active');
-  const services = ScheduleService.getActiveServiceOfferings();
+  const services = scheduleService.getActiveServiceOfferings();
 
   const confirmedToday = todayBookings.filter((b) => b.status === 'confirmed' || b.status === 'scheduled').length;
 
