@@ -313,8 +313,8 @@ export function collectCiStructureErrors(workflows = loadRepoWorkflows()) {
       if (!needs.includes(id)) errors.push(`deploy must need ${id}`);
     }
     const deployIf = String(deploy.if || '');
-    if (!deployIf.includes('ENABLE_VERCEL_DEPLOY')) {
-      errors.push('deploy if must keep ENABLE_VERCEL_DEPLOY');
+    if (!deployIf.includes('ENABLE_CLOUDFLARE_DEPLOY') && !deployIf.includes('ENABLE_VERCEL_DEPLOY')) {
+      errors.push('deploy if must keep ENABLE_CLOUDFLARE_DEPLOY');
     }
     if (!deployIf.includes('ENABLE_SECURITY_AUDIT')) {
       errors.push('deploy if must keep ENABLE_SECURITY_AUDIT');
