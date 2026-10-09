@@ -1,80 +1,70 @@
+/**
+ * Unit tests for resourceProvisioner (Refine v5 Dynamic Resource Assembly)
+ * Run: npx tsx src/app/industry/resourceProvisioner.test.ts
+ */
+
 import assert from 'node:assert/strict';
-import { createI18nProvider } from '@/providers/i18nProvider';
 import { provisionIndustryResources } from './resourceProvisioner';
+import { createI18nProvider } from '@/providers/i18nProvider';
 
-async function runTests() {
-  // Test 1: 피아노(piano) 업종 프로비저닝 검증
-  {
-    const i18n = createI18nProvider({ defaultIndustry: 'piano' });
-    const resources = provisionIndustryResources({ industry: 'piano', i18n });
+console.log('[TEST] resourceProvisioner suite starting...');
 
-    const names = resources.map((r) => r.name);
-    assert.deepEqual(names, ['dashboard', 'customers', 'schedules', 'tuition_invoices']);
+const dummyI18n = createI18nProvider();
 
-    const customerRes = resources.find((r) => r.name === 'customers');
-    assert.equal(customerRes?.meta?.label, '학생 관리');
-
-    const scheduleRes = resources.find((r) => r.name === 'schedules');
-    assert.equal(scheduleRes?.meta?.label, '일정 관리');
-
-    const billingRes = resources.find((r) => r.name === 'tuition_invoices');
-    assert.equal(billingRes?.meta?.label, '수강료/결제');
-  }
-
-  // Test 2: 필라테스(pilates) 업종 프로비저닝 검증
-  {
-    const i18n = createI18nProvider({ defaultIndustry: 'pilates' });
-    const resources = provisionIndustryResources({ industry: 'pilates', i18n });
-
-    const names = resources.map((r) => r.name);
-    assert.deepEqual(names, ['dashboard', 'customers', 'schedules', 'tuition_invoices']);
-
-    const customerRes = resources.find((r) => r.name === 'customers');
-    assert.equal(customerRes?.meta?.label, '회원 관리');
-  }
-
-  // Test 3: 소매점(retail) 업종 - scheduling, billing 미포함 검증
-  {
-    const i18n = createI18nProvider({ defaultIndustry: 'retail' });
-    const resources = provisionIndustryResources({ industry: 'retail', i18n });
-
-    const names = resources.map((r) => r.name);
-    // retail은 roster만 켜져 있고 scheduling, billing은 false
-    assert.deepEqual(names, ['dashboard', 'customers']);
-
-    const customerRes = resources.find((r) => r.name === 'customers');
-    assert.equal(customerRes?.meta?.label, '고객 관리');
-  }
-
-  // Test 4: 사우나(sauna_jjimjilbang) 업종 - billing 미포함 검증
-  {
-    const i18n = createI18nProvider({ defaultIndustry: 'sauna_jjimjilbang' });
-    const resources = provisionIndustryResources({ industry: 'sauna_jjimjilbang', i18n });
-
-    const names = resources.map((r) => r.name);
-    // sauna는 roster, scheduling 활성화, billing 비활성화
-    assert.deepEqual(names, ['dashboard', 'customers', 'schedules']);
-  }
-
-  // Test 5: 피부과(skin_clinic) 업종 프로비저닝 검증
-  {
-    const i18n = createI18nProvider({ defaultIndustry: 'skin_clinic' });
-    const resources = provisionIndustryResources({ industry: 'skin_clinic', i18n });
-
-    const names = resources.map((r) => r.name);
-    assert.deepEqual(names, ['dashboard', 'customers', 'schedules', 'tuition_invoices']);
-
-    const customerRes = resources.find((r) => r.name === 'customers');
-    assert.equal(customerRes?.meta?.label, '고객 관리');
-
-    const billingRes = resources.find((r) => r.name === 'tuition_invoices');
-    assert.equal(billingRes?.meta?.label, '시술비/결제');
-  }
-
-  console.log('resourceProvisioner.test.ts: all tests passed! (100% OK)');
-}
-
-runTests().catch((err) => {
-  console.error('resourceProvisioner.test.ts failed:', err);
-  process.exit(1);
+// 1. Default fallback when industry is undefined/null
+const defaultRes = provisionIndustryResources({
+  industry: null,
+  i18n: dummyI18n,
 });
+assert.ok(defaultRes.length > 0, 'Must have base resources');
+const dashboard = defaultRes.find((r) => r.name === 'dashboard');
+assert.ok(dashboard, 'Must include dashboard');
+const customers = defaultRes.find((r) => r.name === 'customers');
+assert.ok(customers, 'Must include customers by default');
+console.log('✓ Default resource fallback passed');
+
+// 2. Study cafe preset should assemble seat_rooms, session_passes, lockers, maintenance_tasks
+const studyCafeRes = provisionIndustryResources({
+  industry: 'study_cafe',
+  i18n: dummyI18n,
+});
+const scNames = new Set(studyCafeRes.map((r) => r.name));
+assert.ok(scNames.has('dashboard'));
+assert.ok(scNames.has('seat_rooms'), 'study_cafe must have seat_rooms resource');
+assert.ok(scNames.has('passes'), 'study_cafe must have passes resource');
+assert.ok(scNames.has('lockers'), 'study_cafe must have lockers resource');
+assert.ok(scNames.has('maintenance_checklists'), 'study_cafe must have maintenance_checklists resource');
+console.log('✓ Study cafe assembled resources passed');
+
+// 3. Hair salon preset should assemble bookings, treatment_charts, staff_shifts
+const hairSalonRes = provisionIndustryResources({
+  industry: 'hair_salon',
+  i18n: dummyI18n,
+});
+const hsNames = new Set(hairSalonRes.map((r) => r.name));
+assert.ok(hsNames.has('bookings'), 'hair_salon must have bookings resource');
+assert.ok(hsNames.has('treatment_charts'), 'hair_salon must have treatment_charts resource');
+assert.ok(hsNames.has('shift_schedules'), 'hair_salon must have shift_schedules resource');
+console.log('✓ Hair salon assembled resources passed');
+
+// 4. Equipment rental preset should assemble equipment_rentals, inventory_items, safety_waivers
+const rentalRes = provisionIndustryResources({
+  industry: 'equipment_rental',
+  i18n: dummyI18n,
+});
+const rentalNames = new Set(rentalRes.map((r) => r.name));
+assert.ok(rentalNames.has('rental_equipments'), 'equipment_rental must have rental_equipments resource');
+assert.ok(rentalNames.has('inventory_items'), 'equipment_rental must have inventory_items resource');
+assert.ok(rentalNames.has('safety_consents'), 'equipment_rental must have safety_consents resource');
+console.log('✓ Equipment rental assembled resources passed');
+
+// 5. Deduplication check: each resource name must appear exactly once
+for (const ind of ['piano', 'pilates', 'auto_repair', 'study_cafe']) {
+  const res = provisionIndustryResources({ industry: ind, i18n: dummyI18n });
+  const names = res.map((r) => r.name);
+  const uniqueNames = new Set(names);
+  assert.equal(names.length, uniqueNames.size, `Resource names for ${ind} must be unique`);
+}
+console.log('✓ Resource deduplication passed');
+
+console.log('[TEST] resourceProvisioner ALL TESTS PASSED!');

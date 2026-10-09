@@ -101,24 +101,12 @@ export const LEGACY_ALLOWLIST = {
     reason: 'LEGACY events labels → piano eventLabels',
   },
   'src/capabilities/billing/ui/PassManagementView.tsx': {
-    kinds: ['context_import', 'storage_service_import'],
+    kinds: ['storage_service_import'],
     reason: 'LEGACY academy pass management UI',
   },
   'src/capabilities/booking/ui/BookingCalendarView.tsx': {
-    kinds: ['context_import', 'storage_service_import'],
+    kinds: ['storage_service_import'],
     reason: 'LEGACY shared booking calendar UI',
-  },
-  'src/capabilities/booking/ui/BookingCustomerHubView.tsx': {
-    kinds: ['context_import'],
-    reason: 'LEGACY academy booking customer hub UI',
-  },
-  'src/capabilities/booking/ui/BookingScheduleHubView.tsx': {
-    kinds: ['context_import'],
-    reason: 'LEGACY academy booking schedule hub UI',
-  },
-  'src/capabilities/booking/ui/ServiceManagementView.tsx': {
-    kinds: ['context_import'],
-    reason: 'LEGACY shared service management UI',
   },
   'src/capabilities/consultation/components/ConsultationRecordsView.tsx': {
     kinds: ['storage_service_import'],

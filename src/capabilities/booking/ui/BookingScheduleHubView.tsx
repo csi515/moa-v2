@@ -1,6 +1,6 @@
 import { useMemo, type FC } from 'react';
 import { Calendar, Dumbbell } from 'lucide-react';
-import { useApp } from '@/context/AppContext';
+import { useAppNavigation } from '@/shared/navigation/useAppNavigation';
 import { useModuleLabels } from '@/core/labels';
 import { PageHeader, SegmentedControl } from '@/shared/components';
 
@@ -21,7 +21,7 @@ export const BookingScheduleHubView: FC<{
   const labels = useModuleLabels();
   const bookingText = bookingsLabel ?? labels.schedule.singular;
   const serviceText = servicesLabel ?? labels.service.management;
-  const { activeTab, setActiveTab } = useApp();
+  const { activeTab, setActiveTab } = useAppNavigation();
   const segment: ScheduleSegment = useMemo(
     () => (activeTab === 'services' ? 'services' : 'bookings'),
     [activeTab]

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { useApp } from '@/context/AppContext';
+import { showToast } from '@/shared/feedback/uiFeedback';
 import { useStorageRefresh, useStaffScope } from '@/hooks';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
@@ -26,7 +26,6 @@ import { mergeScopedBookingsWithInbox, useBookingFilters } from './useBookingFil
 import { useBookingForm } from './useBookingForm';
 
 export const BookingCalendarView: React.FC = () => {
-  const { showToast } = useApp();
   const { industry } = usePermissions();
   const labels = useModuleLabels();
   const bookingUi = resolveBookingUi(industry);

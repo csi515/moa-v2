@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { showToast, triggerRefresh } from '@/shared/feedback/uiFeedback';
-import { useApp } from '@/context/AppContext';
+import { useAppNavigation } from '@/shared/navigation/useAppNavigation';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { studentMatchesGuardianQuery } from '@/core/parent/guardianHelpers';
@@ -43,7 +43,7 @@ const ATTENDANCE_SUB_TABS: { value: AttendanceSubTab; label: string }[] = [
 ];
 
 export const AttendanceManagementView: React.FC = () => {
-  const { setActiveTab, setSelectedStudentId } = useApp();
+  const { setActiveTab, setSelectedStudentId } = useAppNavigation();
   const { attendanceEnabled, industry } = usePermissions();
   const labels = useModuleLabels();
   const memberLabel = labels.customer.singular;

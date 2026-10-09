@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { showToast, openConfirmDialog, triggerRefresh } from '@/shared/feedback/uiFeedback';
-import { useApp } from '@/context/AppContext';
+import { useAppNavigation } from '@/shared/navigation/useAppNavigation';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useStorageRefresh } from '@/hooks';
 import { billingStorage } from '@/capabilities/billing/infrastructure/billingStorage';
@@ -22,7 +22,7 @@ import {
 } from '@/capabilities/billing/finance/teacherPayroll';
 
 export function useTeacherPayroll() {
-  const { setActiveTab } = useApp();
+  const { setActiveTab } = useAppNavigation();
   const { industry } = usePermissions();
   const refreshKey = useStorageRefresh('finance');
 

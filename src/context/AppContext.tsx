@@ -13,6 +13,7 @@ import type { FeedbackTone, WorkStatusMessage } from '@/shared/feedback/feedback
 import type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
 import { bindUiFeedback, unbindUiFeedback } from '@/shared/feedback/uiFeedback';
 import { feedbackStore, type ToastMessage } from '@/shared/feedback/feedbackStore';
+import { bindNavigationBridge, unbindNavigationBridge } from '@/shared/navigation/navigationBridge';
 import type { NavTab, StudentDetailTab, CustomerDetailTab } from '@/shared/navigation/navigationTypes';
 import type { User } from '@/types';
 
@@ -111,6 +112,27 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       unbindUiFeedback();
     };
   }, [triggerRefresh]);
+
+  useEffect(() => {
+    bindNavigationBridge({
+      getActiveTab: () => activeTab,
+      setActiveTab,
+      getSelectedStudentId: () => selectedStudentId,
+      setSelectedStudentId,
+      getSelectedStudentDetailTab: () => selectedStudentDetailTab,
+      setSelectedStudentDetailTab,
+    });
+    return () => {
+      unbindNavigationBridge();
+    };
+  }, [
+    activeTab,
+    setActiveTab,
+    selectedStudentId,
+    setSelectedStudentId,
+    selectedStudentDetailTab,
+    setSelectedStudentDetailTab,
+  ]);
 
   return (
     <AppContext.Provider

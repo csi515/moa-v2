@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useApp } from '@/context/AppContext';
+import { showToast, openConfirmDialog } from '@/shared/feedback/uiFeedback';
 import { useStorageRefresh } from '@/hooks';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
@@ -11,7 +11,6 @@ import { Calendar, Dumbbell, Sparkles, Trash2 } from 'lucide-react';
 import { resolveBookingUi } from './bookingIndustryAdapter';
 
 export const ServiceManagementView: React.FC = () => {
-  const { showToast, openConfirmDialog } = useApp();
   const { industry } = usePermissions();
   const labels = useModuleLabels();
   const bookingUi = resolveBookingUi(industry);

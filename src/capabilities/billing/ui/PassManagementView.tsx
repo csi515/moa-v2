@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Ticket } from 'lucide-react';
-import { useApp } from '@/context/AppContext';
+import { showToast } from '@/shared/feedback/uiFeedback';
 import { useStorageRefresh } from '@/hooks';
 import { ScheduleService } from '@/core/services/scheduleService';
 import { StorageService } from '@/services/storage';
@@ -76,7 +76,6 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
     return merged as Required<PassManagementConfig>;
   }, [explicitConfig, directProps]);
 
-  const { showToast } = useApp();
   const refreshKey = useStorageRefresh('sessionPasses');
   const [filter, setFilter] = useState<PassFilter>('active');
   const [isModalOpen, setIsModalOpen] = useState(false);

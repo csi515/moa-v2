@@ -1,7 +1,7 @@
 import { useMemo, type FC, type ReactNode } from 'react';
 import { BarChart3, ChevronRight, CreditCard, Landmark } from 'lucide-react';
 import type { NavTab } from '@/shared/navigation/navigationTypes';
-import { useApp } from '@/context/AppContext';
+import { useAppNavigation } from '@/shared/navigation/useAppNavigation';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { getFeeLabel, isAppointmentIndustry } from '@/core/industry/industryUi';
 import type { FinanceHubAreaId, FinanceHubSegmentId } from '@/core/industry/pluginTypes';
@@ -58,7 +58,7 @@ function areaIcon(id: FinanceHubAreaId): ReactNode {
 
 /** 재무 업무 영역 허브. 제목과 영역 탭은 플러그인 financeHubNav */
 export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = true }) => {
-  const { activeTab, setActiveTab } = useApp();
+  const { activeTab, setActiveTab } = useAppNavigation();
   const { industry } = usePermissions();
   const billingEnabled = showBilling && !isAppointmentIndustry(industry);
   const feeLabel = getFeeLabel(industry);

@@ -1,6 +1,6 @@
 import { useMemo, type FC } from 'react';
 import { Ticket, Users } from 'lucide-react';
-import { useApp } from '@/context/AppContext';
+import { useAppNavigation } from '@/shared/navigation/useAppNavigation';
 import { useModuleLabels } from '@/core/labels';
 import { PageHeader, SegmentedControl } from '@/shared/components';
 
@@ -21,7 +21,7 @@ export const BookingCustomerHubView: FC<{
   const labels = useModuleLabels();
   const memberText = membersLabel ?? labels.customer.singular;
   const passText = passesLabel ?? '이용권';
-  const { activeTab, setActiveTab } = useApp();
+  const { activeTab, setActiveTab } = useAppNavigation();
   const segment: CustomerSegment = useMemo(
     () => (activeTab === 'passes' ? 'passes' : 'members'),
     [activeTab]

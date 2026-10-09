@@ -52,6 +52,9 @@ export const FROZEN_PLUGIN_MANIFEST_PROPERTIES = new Set([
   'getPayrollExpenseCategory',
   'financeHubNav',
   'bookingAdapter',
+  'showsPerformanceVideos',
+  'showsSongStamps',
+  'parentEventsSectionTitle',
 ]);
 
 /**

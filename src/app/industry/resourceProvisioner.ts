@@ -1,9 +1,57 @@
 import React from 'react';
 import type { ResourceProps } from '@refinedev/core';
-import { Users, Calendar, CreditCard, LayoutDashboard } from 'lucide-react';
+import {
+  Users,
+  Calendar,
+  CreditCard,
+  LayoutDashboard,
+  LayoutGrid,
+  Layers,
+  Lock,
+  Ticket,
+  Package,
+  Receipt,
+  BookOpenCheck,
+  WalletCards,
+  MessageSquareText,
+  Sparkles,
+  FileSignature,
+  CalendarDays,
+  CalendarClock,
+  KanbanSquare,
+  ClipboardCheck,
+  UserCheck,
+  UserCheck2,
+} from 'lucide-react';
 import type { IndustryType } from '@/core/industry/catalog';
 import { getIndustryCapabilities } from './industryCapabilityMap';
 import type { MoaI18nProvider } from '@/providers/i18nProvider';
+import { assemblePreset } from '@/app/presets/presetAssembler';
+import { getIndustryPreset } from '@/app/presets/presetRegistry';
+
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  Users,
+  Calendar,
+  CreditCard,
+  LayoutDashboard,
+  LayoutGrid,
+  Layers,
+  Lock,
+  Ticket,
+  Package,
+  Receipt,
+  BookOpenCheck,
+  WalletCards,
+  MessageSquareText,
+  Sparkles,
+  FileSignature,
+  CalendarDays,
+  CalendarClock,
+  KanbanSquare,
+  ClipboardCheck,
+  UserCheck,
+  UserCheck2,
+};
 
 export interface ProvisionResourcesOptions {
   industry: IndustryType | string | null | undefined;
@@ -13,10 +61,11 @@ export interface ProvisionResourcesOptions {
 /**
  * 활성 업종과 Capability에 따라 Refine의 ResourceProps 배열을 동적으로 프로비저닝합니다.
  *
- * - dashboard: 전 업종 공통
- * - roster: 활성 시 customers ("학생/회원/고객 관리") 프로비저닝
- * - scheduling: 활성 시 schedules ("일정 관리") 프로비저닝
- * - billing: 활성 시 tuition_invoices ("수강료/회비/결제") 프로비저닝
+ * 1. dashboard: 전 업종 공통
+ * 2. roster: 활성 시 customers ("학생/회원/고객 관리") 프로비저닝
+ * 3. scheduling: 활성 시 schedules ("일정 관리") 프로비저닝
+ * 4. billing: 활성 시 tuition_invoices ("수강료/회비/결제") 프로비저닝
+ * 5. Preset Assembler: 활성 업종 프리셋에 포함된 모든 Capability 리소스 (lockers, passes, rentals 등) 동적 결합
  */
 export function provisionIndustryResources(
   options: ProvisionResourcesOptions
@@ -77,6 +126,37 @@ export function provisionIndustryResources(
         icon: React.createElement(CreditCard, { className: 'h-4 w-4' }),
       },
     });
+  }
+
+  // 5. Preset Assembler를 통한 동적 Capability 리소스 병합
+  if (industry) {
+    const preset = getIndustryPreset(industry);
+    if (preset) {
+      try {
+        const assembled = assemblePreset(preset.id);
+        const existingNames = new Set(resources.map((r) => r.name));
+
+        for (const item of assembled.resources) {
+          if (!existingNames.has(item.name)) {
+            existingNames.add(item.name);
+            const IconComponent = (item.meta.icon && ICON_MAP[item.meta.icon]) || LayoutGrid;
+            resources.push({
+              name: item.name,
+              list: item.list,
+              create: item.create,
+              edit: item.edit,
+              show: item.show,
+              meta: {
+                ...item.meta,
+                icon: React.createElement(IconComponent, { className: 'h-4 w-4' }),
+              },
+            });
+          }
+        }
+      } catch (err) {
+        console.warn(`[provisionIndustryResources] Preset assembly skipped for ${industry}:`, err);
+      }
+    }
   }
 
   return resources;
