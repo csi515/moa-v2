@@ -1,11 +1,39 @@
-import { type FC, type ReactNode, useMemo, useState } from 'react';
-import { Home, Settings, User, Users, UserPlus, ArrowRight, Building2, Sparkles } from 'lucide-react';
+import { type FC, type ReactNode, useMemo, useState, lazy, Suspense } from 'react';
+import {
+  Home,
+  Settings,
+  User,
+  Users,
+  UserPlus,
+  ArrowRight,
+  Building2,
+  Sparkles,
+  Calendar,
+  CheckCircle2,
+  Ticket,
+  Lock,
+  Wallet,
+} from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useTabGuard } from '@/shared/navigation/useTabGuard';
 import { ModuleLabelsProvider } from '@/core/labels';
 import { WorkplaceSettingsView } from '@/core/organizations/components/WorkplaceSettingsView';
-import { accountViewEntry } from '@/core/industry/commonViewEntries';
+import { accountViewEntry, financeViewEntries } from '@/core/industry/commonViewEntries';
+import { getIndustryPreset } from '@/app/presets/presetRegistry';
+
+const AttendanceView = lazy(() =>
+  import('@/capabilities/attendance').then((m) => ({ default: m.AttendanceManagementView }))
+);
+const BookingView = lazy(() =>
+  import('@/capabilities/booking/ui/BookingCalendarView').then((m) => ({ default: m.BookingCalendarView }))
+);
+const PassesView = lazy(() =>
+  import('@/pages/passes/list').then((m) => ({ default: m.PassesListPage }))
+);
+const LockersView = lazy(() =>
+  import('@/pages/lockers/grid').then((m) => ({ default: m.LockersGridPage }))
+);
 import { DirectorFloatingFab, ToastContainer, ConfirmDialog } from '@/shared/components';
 import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
 import { ModuleSidebar } from '@/shared/components/layout/ModuleSidebar';
@@ -169,17 +197,54 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
 
   const customerWord = t('customer.singular', '고객');
 
-  const navSections: NavMenuSection[] = useMemo(() => [
-    {
-      title: '메뉴',
-      items: [
-        { tab: 'dashboard', label: '홈', icon: <Home className="w-4 h-4" /> },
-        { tab: 'students', label: `${customerWord} 관리`, icon: <Users className="w-4 h-4" /> },
-        { tab: 'settings', label: '설정', icon: <Settings className="w-4 h-4" /> },
-        { tab: 'account', label: '내 계정', icon: <User className="w-4 h-4" /> },
-      ],
-    },
-  ], [customerWord]);
+  const preset = useMemo(() => {
+    return getIndustryPreset(currentOrganization?.industry_type || industry);
+  }, [currentOrganization?.industry_type, industry]);
+
+  const enabledCaps = useMemo(() => {
+    const fromSettings = (currentOrganization?.settings as any)?.capabilities;
+    if (Array.isArray(fromSettings) && fromSettings.length > 0) return fromSettings as string[];
+    return (preset?.capabilities ?? []) as string[];
+  }, [currentOrganization?.settings, preset]);
+
+  const navSections: NavMenuSection[] = useMemo(() => {
+    const items: NavMenuItem[] = [
+      { tab: 'dashboard', label: '홈', icon: <Home className="w-4 h-4" /> },
+      { tab: 'students', label: `${customerWord} 관리`, icon: <Users className="w-4 h-4" /> },
+    ];
+
+    if (enabledCaps.includes('booking') || enabledCaps.includes('seat_room')) {
+      items.push({ tab: 'bookings', label: '예약·공간', icon: <Calendar className="w-4 h-4" /> });
+    }
+    if (enabledCaps.includes('attendance')) {
+      items.push({ tab: 'attendance', label: '출결 관리', icon: <CheckCircle2 className="w-4 h-4" /> });
+    }
+    if (enabledCaps.includes('passes')) {
+      items.push({ tab: 'passes', label: '이용권·회원권', icon: <Ticket className="w-4 h-4" /> });
+    }
+    if (enabledCaps.includes('locker')) {
+      items.push({ tab: 'lockers', label: '사물함·락커', icon: <Lock className="w-4 h-4" /> });
+    }
+    if (
+      enabledCaps.includes('billing_invoicing') ||
+      enabledCaps.includes('ledger_simple') ||
+      enabledCaps.includes('credit_wallet')
+    ) {
+      items.push({ tab: 'finance', label: '수납·정산', icon: <Wallet className="w-4 h-4" /> });
+    }
+
+    items.push(
+      { tab: 'settings', label: '설정', icon: <Settings className="w-4 h-4" /> },
+      { tab: 'account', label: '내 계정', icon: <User className="w-4 h-4" /> }
+    );
+
+    return [
+      {
+        title: '메뉴',
+        items,
+      },
+    ];
+  }, [customerWord, enabledCaps]);
 
   const mainTabs = useMemo(() => navSections[0].items, [navSections]);
 
@@ -193,6 +258,27 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
   const defaultViewMap: Record<string, () => ReactNode> = {
     dashboard: () => <GenericDashboardView onNavigate={setActiveTab} />,
     students: () => <StudentListView />,
+    bookings: () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">예약 화면을 불러오는 중...</div>}>
+        <BookingView />
+      </Suspense>
+    ),
+    attendance: () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">출결 화면을 불러오는 중...</div>}>
+        <AttendanceView />
+      </Suspense>
+    ),
+    passes: () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">이용권 화면을 불러오는 중...</div>}>
+        <PassesView />
+      </Suspense>
+    ),
+    lockers: () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">사물함 화면을 불러오는 중...</div>}>
+        <LockersView />
+      </Suspense>
+    ),
+    ...financeViewEntries,
     settings: () => <WorkplaceSettingsView />,
     ...accountViewEntry,
   };

@@ -39,6 +39,8 @@ export interface PresetPayload {
   rooms?: PresetRoomConfig[];
   locker_count?: number;
   operating_hours: PresetOperatingHoursConfig;
+  capabilities?: readonly PresetCapabilityId[];
+  business_rules?: Record<string, unknown>;
   [key: string]: unknown;
 }
 
@@ -58,6 +60,7 @@ export function normalizeIndustryKey(industry: string): string {
   if (norm === 'piano_academy' || norm === 'piano') return 'piano';
   if (norm === 'sauna' || norm === 'sauna_jjimjilbang') return 'sauna';
   if (norm === 'pilates') return 'pilates';
+  if (norm === 'taekwondo' || norm === 'taekwondo_academy') return 'taekwondo_academy';
   if (norm === 'custom') return 'custom';
   return norm;
 }
@@ -170,7 +173,6 @@ export function getStandardPresetsForIndustry(industry: string): {
       };
 
     case 'custom':
-    default:
       return {
         roles: [{ name: '관리자', rank_order: 1, permissions: ['*'] }],
         operating_hours: {
@@ -180,6 +182,86 @@ export function getStandardPresetsForIndustry(industry: string): {
           slot_minutes: 60,
         },
       };
+
+    default: {
+      const preset = getIndustryPreset(normKey);
+      if (preset) {
+        const roles: PresetRoleConfig[] =
+          preset.roles && preset.roles.length > 0
+            ? preset.roles.map((r) => ({
+                name: r.name,
+                rank_order: r.rank_order,
+                permissions: [...r.permissions],
+              }))
+            : [{ name: '대표', rank_order: 1, permissions: ['*'] }];
+
+        const rooms: PresetRoomConfig[] | undefined =
+          preset.resourceTypes && preset.resourceTypes.length > 0
+            ? preset.resourceTypes.map((rt) => ({
+                name: rt.name,
+                capacity:
+                  rt.capacity ?? (rt.type === 'bay' || rt.type === 'court' || rt.type === 'room' ? 2 : 1),
+              }))
+            : undefined;
+
+        const locker_count = preset.capabilities.includes('locker') ? 50 : undefined;
+
+        let operating_hours: PresetOperatingHoursConfig;
+        if (preset.category === 'fitness' || preset.category === 'wellness') {
+          operating_hours = {
+            day_type: 'ALL_WEEK',
+            start_time: '06:00',
+            end_time: '23:00',
+            slot_minutes: 60,
+          };
+        } else if (preset.category === 'education' || preset.category === 'childcare') {
+          operating_hours = {
+            day_type: 'WEEKDAY',
+            start_time: '13:00',
+            end_time: '21:00',
+            slot_minutes: 30,
+          };
+        } else if (preset.category === 'beauty') {
+          operating_hours = {
+            day_type: 'WEEKDAY',
+            start_time: '10:00',
+            end_time: '20:00',
+            slot_minutes: 60,
+          };
+        } else if (preset.category === 'studio' || (preset.category as string) === 'space_rental') {
+          operating_hours = {
+            day_type: 'ALL_WEEK',
+            start_time: '09:00',
+            end_time: '22:00',
+            slot_minutes: 60,
+          };
+        } else {
+          operating_hours = {
+            day_type: 'WEEKDAY',
+            start_time: '09:00',
+            end_time: '18:00',
+            slot_minutes: 60,
+          };
+        }
+
+        return {
+          roles,
+          rooms,
+          locker_count,
+          operating_hours,
+        };
+      }
+
+      return {
+        roles: [{ name: '관리자', rank_order: 1, permissions: ['*'] }],
+        operating_hours: {
+          day_type: 'WEEKDAY',
+          start_time: '09:00',
+          end_time: '18:00',
+          slot_minutes: 60,
+        },
+      };
+    }
   }
 }
 
@@ -223,6 +305,7 @@ export function buildPresetPayload(
 ): PresetPayload {
   const normKey = normalizeIndustryKey(industry);
   const defaults = getStandardPresetsForIndustry(normKey);
+  const preset = getIndustryPreset(normKey);
 
   // 1. Roles 병합 (사용자 지정 roles 우선)
   const roles: PresetRoleConfig[] =
@@ -259,6 +342,8 @@ export function buildPresetPayload(
     industry: normKey,
     roles,
     operating_hours,
+    ...(preset?.capabilities ? { capabilities: preset.capabilities } : {}),
+    ...(preset?.businessRules ? { business_rules: preset.businessRules } : {}),
     ...formValues,
   };
 

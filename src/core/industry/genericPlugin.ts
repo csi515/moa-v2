@@ -4,7 +4,17 @@ import type { IndustryDefinition } from './catalog';
 import { withNoticesTabs } from './pluginTypes';
 import { defaultExpenseCategories } from './defaultExpenseCategories';
 
-const GENERIC_CORE_TABS: NavTab[] = ['dashboard', 'students', 'settings', 'account'];
+const GENERIC_CORE_TABS: NavTab[] = [
+  'dashboard',
+  'students',
+  'bookings',
+  'attendance',
+  'passes',
+  'lockers',
+  'inventory',
+  'settings',
+  'account',
+];
 const GENERIC_ADMIN_TABS = withNoticesTabs(GENERIC_CORE_TABS);
 
 /** 모듈 없는 업종용 기본 플러그인 매니페스트 */
@@ -58,7 +68,7 @@ export function buildGenericPluginManifest(definition: IndustryDefinition): Indu
       allowedKinds: ['classroom', 'practice'],
     },
     adminTabs: [...GENERIC_ADMIN_TABS],
-    staffTabs: ['dashboard', 'students', 'settings', 'account'],
+    staffTabs: ['dashboard', 'students', 'bookings', 'attendance', 'passes', 'lockers', 'settings', 'account'],
     getExpenseCategories: () => defaultExpenseCategories(),
 };
 }

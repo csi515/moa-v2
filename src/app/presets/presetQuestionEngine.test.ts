@@ -6,6 +6,7 @@ import {
   getStandardPresetsForIndustry,
   QuickSetupFormZodSchema,
 } from './presetQuestionEngine';
+import { listIndustryPresets } from './presetRegistry';
 
 console.log('[TEST] presetQuestionEngine suite starting...');
 
@@ -141,4 +142,58 @@ const invalidParsed = QuickSetupFormZodSchema.safeParse({
 assert.equal(invalidParsed.success, false);
 console.log('✓ QuickSetupFormZodSchema validation passed');
 
+// 9. 40-Vertical Presets dynamic provisioning verification
+const studyCafePayload = buildPresetPayload('study_cafe');
+assert.equal(studyCafePayload.industry, 'study_cafe');
+assert.ok(studyCafePayload.roles.length >= 1, 'Study cafe should have at least 1 role');
+assert.equal(studyCafePayload.locker_count, 50, 'Study cafe has locker capability');
+assert.ok(studyCafePayload.rooms && studyCafePayload.rooms.length > 0, 'Study cafe should have spaces');
+assert.ok(
+  Array.isArray(studyCafePayload.capabilities) && studyCafePayload.capabilities.includes('seat_room'),
+  'Study cafe should include seat_room capability'
+);
+console.log('✓ study_cafe preset provisioning passed');
+
+const taekwondoPayload = buildPresetPayload('taekwondo');
+assert.equal(taekwondoPayload.industry, 'taekwondo_academy');
+assert.ok(taekwondoPayload.roles.some((r) => r.name === '관장'), 'Taekwondo should have 관장 role');
+assert.ok(taekwondoPayload.roles.some((r) => r.name === '사범'), 'Taekwondo should have 사범 role');
+assert.equal(taekwondoPayload.operating_hours.slot_minutes, 30, 'Taekwondo education slot 30m');
+console.log('✓ taekwondo preset provisioning passed');
+
+const hairSalonPayload = buildPresetPayload('hair_salon');
+assert.equal(hairSalonPayload.industry, 'hair_salon');
+assert.ok(hairSalonPayload.roles.some((r) => r.name === '원장'), 'Hair salon should have 원장 role');
+assert.ok(hairSalonPayload.roles.some((r) => r.name.includes('디자이너')), 'Hair salon should have designer role');
+assert.equal(hairSalonPayload.operating_hours.start_time, '10:00');
+console.log('✓ hair_salon preset provisioning passed');
+
+const rentalPayload = buildPresetPayload('equipment_rental');
+assert.equal(rentalPayload.industry, 'equipment_rental');
+assert.ok(
+  Array.isArray(rentalPayload.capabilities) && rentalPayload.capabilities.includes('rental_equipment'),
+  'Equipment rental should include rental_equipment capability'
+);
+console.log('✓ equipment_rental preset provisioning passed');
+
+// 10. All 42 Presets batch verification
+const allPresets = listIndustryPresets();
+assert.ok(allPresets.length >= 40, `Expected at least 40 presets, got ${allPresets.length}`);
+
+for (const p of allPresets) {
+  const defaults = getStandardPresetsForIndustry(p.id);
+  assert.ok(defaults.roles.length > 0, `Preset ${p.id} must have default roles`);
+  assert.ok(defaults.operating_hours.start_time, `Preset ${p.id} must have start_time`);
+  assert.ok(defaults.operating_hours.end_time, `Preset ${p.id} must have end_time`);
+  assert.ok(defaults.operating_hours.slot_minutes > 0, `Preset ${p.id} must have slot_minutes`);
+
+  const payload = buildPresetPayload(p.id);
+  assert.equal(payload.industry, p.id);
+  assert.ok(payload.roles.length > 0);
+  assert.ok(Array.isArray(payload.capabilities));
+}
+console.log(`✓ All ${allPresets.length} industry presets batch verified successfully!`);
+
 console.log('[TEST] presetQuestionEngine ALL TESTS PASSED!');
+
+

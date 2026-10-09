@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '@refinedev/react-hook-form';
 import {
@@ -18,10 +18,20 @@ import {
   AlertCircle,
   HelpCircle,
   Settings2,
+  Search,
+  Filter,
+  ChevronDown,
+  ChevronUp,
+  Tag,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
 import { useTenant } from '@/core/auth/context/TenantContext';
 import { applyDomainErrorToForm } from '@/core/utils/formErrorAdapter';
+import {
+  listIndustryPresets,
+  getIndustryPreset,
+} from '@/app/presets/presetRegistry';
 import {
   getQuestionsForIndustry,
   getStandardPresetsForIndustry,
@@ -73,6 +83,37 @@ const INDUSTRY_CARDS = [
   },
 ];
 
+const CAPABILITY_LABEL_MAP: Record<string, string> = {
+  attendance: '출결 체크인',
+  booking: '예약 관리',
+  passes: '이용권·회원권',
+  locker: '사물함·락커',
+  inventory: '재고 관리',
+  seat_room: '좌석·공간 배정',
+  rental_equipment: '장비 렌탈',
+  maintenance_checklist: '점검 체크리스트',
+  instructor_match: '강사 매칭',
+  shift_schedule: '교대 근무',
+  task_pipeline: '작업 파이프라인',
+  billing_invoicing: '청구·인보이스',
+  ledger_simple: '간편 장부',
+  credit_wallet: '충전금·크레딧',
+  consultation_crm: '상담 CRM',
+  treatment_chart: '시술 차트',
+  safety_consent: '안전 서약',
+};
+
+const CATEGORY_TABS = [
+  { id: 'all', label: '전체' },
+  { id: 'education', label: '교육·학원' },
+  { id: 'fitness', label: '운동·피트니스' },
+  { id: 'beauty', label: '뷰티' },
+  { id: 'wellness', label: '웰니스·스파' },
+  { id: 'studio', label: '공간·스튜디오' },
+  { id: 'childcare', label: '키즈·돌봄' },
+  { id: 'other', label: '기타 서비스' },
+];
+
 export const QuickSetupPage: React.FC = () => {
   const navigate = useNavigate();
   const { switchTenant } = useTenant();
@@ -80,6 +121,37 @@ export const QuickSetupPage: React.FC = () => {
   const [selectedIndustry, setSelectedIndustry] = useState<string>('piano');
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [generalError, setGeneralError] = useState<string | null>(null);
+
+  // 40개 전체 업종 브라우저 상태
+  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchKeyword, setSearchKeyword] = useState('');
+
+  const allPresets = useMemo(() => listIndustryPresets(), []);
+
+  const filteredPresets = useMemo(() => {
+    return allPresets.filter((p) => {
+      const matchCat =
+        selectedCategory === 'all' ||
+        p.category === selectedCategory ||
+        (selectedCategory === 'other' &&
+          !['education', 'fitness', 'beauty', 'wellness', 'studio', 'childcare'].includes(
+            p.category
+          ));
+
+      const matchSearch =
+        !searchKeyword.trim() ||
+        p.name.toLowerCase().includes(searchKeyword.toLowerCase().trim()) ||
+        p.description.toLowerCase().includes(searchKeyword.toLowerCase().trim()) ||
+        p.id.toLowerCase().includes(searchKeyword.toLowerCase().trim());
+
+      return matchCat && matchSearch;
+    });
+  }, [allPresets, selectedCategory, searchKeyword]);
+
+  const activePreset = useMemo(() => {
+    return getIndustryPreset(selectedIndustry);
+  }, [selectedIndustry]);
 
   // Pre-fill 상태 관리
   const [roles, setRoles] = useState<PresetRoleConfig[]>([]);
@@ -329,6 +401,141 @@ export const QuickSetupPage: React.FC = () => {
                     </button>
                   );
                 })}
+              </div>
+
+              {/* 40개 전체 업종 토글 & 브라우저 */}
+              <div className="mt-4 pt-4 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setIsCatalogOpen(!isCatalogOpen)}
+                  className="w-full flex items-center justify-between p-3.5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-slate-100/80 transition text-sm font-semibold text-slate-700"
+                >
+                  <div className="flex items-center gap-2">
+                    <SlidersHorizontal className="w-4 h-4 text-indigo-600" />
+                    <span>40개 전체 업종 프리셋 카탈로그 ({allPresets.length}개 업종)</span>
+                  </div>
+                  {isCatalogOpen ? (
+                    <ChevronUp className="w-4 h-4 text-slate-500" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-slate-500" />
+                  )}
+                </button>
+
+                {isCatalogOpen && (
+                  <div className="mt-3 p-4 bg-slate-50/70 rounded-2xl border border-slate-200 space-y-3.5 animate-fade-in">
+                    {/* 검색창 */}
+                    <div className="relative">
+                      <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        value={searchKeyword}
+                        onChange={(e) => setSearchKeyword(e.target.value)}
+                        placeholder="업종명 또는 키워드로 검색 (예: 태권도, 네일, 골프, 스터디카페, 세차장...)"
+                        className="w-full h-10 pl-9 pr-4 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                      />
+                    </div>
+
+                    {/* 카테고리 필터 탭 */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {CATEGORY_TABS.map((tab) => (
+                        <button
+                          key={tab.id}
+                          type="button"
+                          onClick={() => setSelectedCategory(tab.id)}
+                          className={`text-xs px-3 py-1 rounded-full font-medium transition ${
+                            selectedCategory === tab.id
+                              ? 'bg-indigo-600 text-white shadow-2xs'
+                              : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                          }`}
+                        >
+                          {tab.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* 업종 카드 그리드 */}
+                    <div className="max-h-72 overflow-y-auto pr-1 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {filteredPresets.map((preset) => {
+                        const isSelected = selectedIndustry === preset.id;
+                        return (
+                          <button
+                            key={preset.id}
+                            type="button"
+                            onClick={() => {
+                              applyIndustryDefaults(preset.id);
+                            }}
+                            className={`p-3 text-left rounded-xl border transition flex flex-col justify-between ${
+                              isSelected
+                                ? 'border-indigo-600 bg-indigo-50 shadow-xs'
+                                : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
+                            }`}
+                          >
+                            <div className="flex items-start justify-between gap-1 mb-1">
+                              <span className="text-xs font-bold text-slate-900">{preset.name}</span>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded-sm bg-slate-100 text-slate-600 shrink-0">
+                                {preset.category}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-slate-500 line-clamp-1 mb-2">
+                              {preset.description}
+                            </p>
+                            <div className="flex flex-wrap gap-1">
+                              {preset.capabilities.slice(0, 3).map((cap) => (
+                                <span
+                                  key={cap}
+                                  className="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600"
+                                >
+                                  {CAPABILITY_LABEL_MAP[cap] || cap}
+                                </span>
+                              ))}
+                              {preset.capabilities.length > 3 && (
+                                <span className="text-[9px] text-slate-400">
+                                  +{preset.capabilities.length - 3}
+                                </span>
+                              )}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* 선택된 업종 및 활성화 Capability 요약 배너 */}
+              <div className="mt-4 p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-indigo-700 bg-white px-2 py-0.5 rounded-md border border-indigo-200">
+                      현재 선택: {activePreset?.name || (selectedIndustry === 'custom' ? '직접 설정' : selectedIndustry)}
+                    </span>
+                    {activePreset?.readinessLevel && (
+                      <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-md">
+                        {activePreset.readinessLevel === 'verified'
+                          ? '운영 검증'
+                          : activePreset.readinessLevel === 'basic_ui'
+                          ? '기본 UI 지원'
+                          : activePreset.readinessLevel}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    {activePreset?.description || '사용자 정의 커스텀 설정으로 진행합니다.'}
+                  </p>
+                </div>
+                {activePreset?.capabilities && activePreset.capabilities.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 sm:max-w-md">
+                    {activePreset.capabilities.map((cap) => (
+                      <span
+                        key={cap}
+                        className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-white text-slate-700 border border-slate-200 shadow-2xs"
+                      >
+                        <Tag className="w-2.5 h-2.5 text-indigo-500" />
+                        {CAPABILITY_LABEL_MAP[cap] || cap}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
