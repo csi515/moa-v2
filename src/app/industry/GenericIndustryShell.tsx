@@ -29,10 +29,10 @@ const BookingView = lazy(() =>
   import('@/capabilities/booking/ui/BookingCalendarView').then((m) => ({ default: m.BookingCalendarView }))
 );
 const PassesView = lazy(() =>
-  import('@/pages/passes/list').then((m) => ({ default: m.PassesListPage }))
+  import('@/capabilities/billing/ui/PassManagementView').then((m) => ({ default: m.PassManagementView }))
 );
 const LockersView = lazy(() =>
-  import('@/pages/lockers/grid').then((m) => ({ default: m.LockersGridPage }))
+  import('@/capabilities/locker').then((m) => ({ default: m.LockerManagementView }))
 );
 import { DirectorFloatingFab, ToastContainer, ConfirmDialog } from '@/shared/components';
 import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
