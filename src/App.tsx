@@ -38,6 +38,11 @@ import {
 import { WeeklyTimetableView } from "@/capabilities/scheduling";
 import { TuitionManagementView } from "@/capabilities/billing";
 import { LoginPage } from "./pages/auth/LoginPage";
+import { ClaimTokenPage } from "./pages/customer/ClaimTokenPage";
+import { MyPassView } from "./pages/customer/MyPassView";
+import { RolesPage } from "./pages/settings/RolesPage";
+import { AcceptStaffInvitePage } from "./pages/invite/AcceptStaffInvitePage";
+import { QuickSetupPage } from "./pages/onboarding/QuickSetupPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -125,8 +130,14 @@ const RefineApp: React.FC = () => {
             <Route path="/students/:id/edit" element={<StudentEditPage />} />
             <Route path="/schedules" element={<WeeklyTimetableView />} />
             <Route path="/billing" element={<TuitionManagementView />} />
+            <Route path="/customer/pass" element={<MyPassView />} />
+            <Route path="/settings/roles" element={<RolesPage />} />
+            <Route path="/onboarding/quick" element={<QuickSetupPage />} />
           </Route>
         </Route>
+
+        <Route path="/claim/:token" element={<ClaimTokenPage />} />
+        <Route path="/invite/staff/:token" element={<AcceptStaffInvitePage />} />
 
         <Route
           element={

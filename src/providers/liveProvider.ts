@@ -28,6 +28,15 @@ const REFINE_TO_SUPABASE_EVENTS: Record<string, string> = {
   "*": "*",
 };
 
+/** 실시간 동기화 지원 핵심 테넌트 리소스 목록 */
+export const REALTIME_TENANT_RESOURCES = [
+  ...TENANT_SCOPED_RESOURCES,
+  "onboarding_tokens",
+  "attendance_sessions",
+  "session_passes",
+  "lockers",
+] as const;
+
 function resolveSafeOrgId(): string | null {
   try {
     if (typeof localStorage !== "undefined") {
@@ -41,7 +50,8 @@ function resolveSafeOrgId(): string | null {
 
 /**
  * Supabase Realtime 기반 Moa LiveProvider 생성 팩토리.
- * 테넌트 격리(organization_id 자동 필터링) 및 리소스 변경 이벤트를 실시간 중계합니다.
+ * 테넌트 격리(organization_id / tenant_id 자동 필터링) 및 리소스 변경 이벤트를 실시간 중계합니다.
+ * 'onboarding_tokens', 'customers', 'attendance_sessions' 등의 이벤트 발생 시 Refine 캐시를 자동 무효화합니다.
  */
 export function createMoaLiveProvider(
   client: SupabaseClient<any, any, any> | null,
@@ -63,13 +73,18 @@ export function createMoaLiveProvider(
       const resource = channel.replace("resources/", "");
       const activeOrgId = resolveOrgId();
 
-      // 테넌트 격리 필터 구성: 테넌트 종속 리소스는 현재 활성 organization_id 이벤트만 수신
+      // 테넌트 격리 필터 구성: 리소스별 테넌트 컬럼 지원 (onboarding_tokens는 tenant_id, 나머지는 organization_id)
       let filter: string | undefined = undefined;
-      if (isTenantScopedResource(resource) && activeOrgId) {
-        filter = `organization_id=eq.${activeOrgId}`;
+      const isRealtimeTarget =
+        isTenantScopedResource(resource) ||
+        (REALTIME_TENANT_RESOURCES as readonly string[]).includes(resource);
+
+      if (isRealtimeTarget && activeOrgId) {
+        const tenantColumn = resource === "onboarding_tokens" ? "tenant_id" : "organization_id";
+        filter = `${tenantColumn}=eq.${activeOrgId}`;
       }
 
-      // 외부 params.filters에 첫 번째 필터가 명시된 경우
+      // 외부 params.filters에 첫 번째 필터가 명시된 경우 오버라이드
       if (!filter && params?.filters && params.filters.length > 0) {
         const firstFilter = params.filters[0];
         if ("field" in firstFilter && firstFilter.field) {

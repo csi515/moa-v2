@@ -6,16 +6,23 @@ import {
   UserCheck,
   ChevronLeft,
   ChevronRight,
-  ArrowUpDown,
   Edit2,
   Trash2,
   Eye,
-  AlertCircle,
-  Filter,
+  QrCode,
+  Ticket,
+  CalendarCheck,
+  Phone,
+  Mail,
 } from "lucide-react";
 
 import { useTerminology } from "@/core/terminology";
 import { useOrganization } from "@/core/organizations/OrganizationProvider";
+import { StoreClaimModal, CounterClaimScanner } from "@/core/auth";
+import {
+  ResponsiveTable,
+  type ResponsiveColumn,
+} from "@/components/ui/responsive-table";
 
 export interface CustomerRecord {
   id: string;
@@ -34,20 +41,26 @@ export const StudentListPage: React.FC = () => {
   const { create, edit, show } = useNavigation();
   const { currentOrganization } = useOrganization();
   const { t } = useTerminology(currentOrganization?.industry_type);
-  const customerWord = t('customer.singular', '회원');
-  const statusActiveLabel = t('customer.statusActive', '재원');
-  const statusPausedLabel = t('customer.statusLeave', '휴원');
-  const statusInactiveLabel = t('customer.statusWithdrawn', '퇴원');
+  const customerWord = t("customer.singular", "회원");
+  const statusActiveLabel = t("customer.statusActive", "재원");
+  const statusPausedLabel = t("customer.statusLeave", "휴원");
+  const statusInactiveLabel = t("customer.statusWithdrawn", "퇴원");
 
-  const statusLabels: Record<string, { label: string; bg: string; text: string }> = {
-    active: { label: statusActiveLabel, bg: "bg-emerald-50", text: "text-emerald-700" },
-    paused: { label: statusPausedLabel, bg: "bg-amber-50", text: "text-amber-700" },
-    inactive: { label: statusInactiveLabel, bg: "bg-slate-100", text: "text-slate-600" },
+  const statusLabels: Record<
+    string,
+    { label: string; bg: string; text: string }
+  > = {
+    active: { label: statusActiveLabel, bg: "bg-emerald-50 border-emerald-200", text: "text-emerald-700" },
+    paused: { label: statusPausedLabel, bg: "bg-amber-50 border-amber-200", text: "text-amber-700" },
+    inactive: { label: statusInactiveLabel, bg: "bg-slate-100 border-slate-200", text: "text-slate-600" },
   };
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [claimTarget, setClaimTarget] = useState<{ id: string; name: string } | null>(null);
+  const [showScanner, setShowScanner] = useState<boolean>(false);
 
+  // Refine 선언형 useTable: URL 쿼리와 자동 동기화 (syncWithLocation: true)
   const {
     tableQuery,
     currentPage,
@@ -60,6 +73,7 @@ export const StudentListPage: React.FC = () => {
     setFilters,
   } = useTable<CustomerRecord>({
     resource: "customers",
+    syncWithLocation: true,
     pagination: {
       pageSize: 10,
     },
@@ -156,6 +170,187 @@ export const StudentListPage: React.FC = () => {
     }
   };
 
+  // 데스크톱 테이블 컬럼 정의
+  const columns: ResponsiveColumn<CustomerRecord>[] = [
+    {
+      key: "name",
+      header: `${customerWord} 이름`,
+      sortable: true,
+      sortOrder: sorters?.find((s) => s.field === "name")?.order as any,
+      onSort: () => handleSortToggle("name"),
+      render: (student) => (
+        <button
+          type="button"
+          onClick={() => show("customers", student.id)}
+          className="font-bold text-slate-900 hover:text-indigo-600 hover:underline text-left"
+        >
+          {student.name}
+        </button>
+      ),
+    },
+    {
+      key: "phone",
+      header: "연락처",
+      render: (student) => (
+        <span className="text-slate-600 font-mono text-xs">{student.phone || "-"}</span>
+      ),
+    },
+    {
+      key: "email",
+      header: "이메일",
+      render: (student) => (
+        <span className="text-slate-500 text-xs">{student.email || "-"}</span>
+      ),
+    },
+    {
+      key: "status",
+      header: "상태",
+      render: (student) => {
+        const info = statusLabels[student.status] || {
+          label: student.status,
+          bg: "bg-slate-100 border-slate-200",
+          text: "text-slate-600",
+        };
+        return (
+          <span
+            className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${info.bg} ${info.text}`}
+          >
+            {info.label}
+          </span>
+        );
+      },
+    },
+    {
+      key: "created_at",
+      header: "등록일자",
+      sortable: true,
+      sortOrder: sorters?.find((s) => s.field === "created_at")?.order as any,
+      onSort: () => handleSortToggle("created_at"),
+      render: (student) => (
+        <span className="text-slate-400 text-xs font-mono">
+          {student.created_at ? student.created_at.slice(0, 10) : "-"}
+        </span>
+      ),
+    },
+    {
+      key: "actions",
+      header: "작업",
+      align: "right",
+      render: (student) => (
+        <div className="flex items-center justify-end gap-1.5">
+          <button
+            type="button"
+            onClick={() => setClaimTarget({ id: student.id, name: student.name })}
+            className="p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors"
+            title="스마트폰 1회용 QR 연결"
+          >
+            <QrCode className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => show("customers", student.id)}
+            className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors"
+            title="상세보기"
+          >
+            <Eye className="h-4 w-4" />
+          </button>
+          {canEdit?.can && (
+            <button
+              type="button"
+              onClick={() => edit("customers", student.id)}
+              className="p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors"
+              title="수정"
+            >
+              <Edit2 className="h-4 w-4" />
+            </button>
+          )}
+          {canDelete?.can && (
+            <button
+              type="button"
+              onClick={() => handleDelete(student.id, student.name)}
+              disabled={isDeleting}
+              className="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors disabled:opacity-50"
+              title="삭제"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      ),
+    },
+  ];
+
+  // 모바일 전용 카드 렌더러 (엄지존 최적화, 가로 스크롤 전면 배제)
+  const renderMobileCard = (student: CustomerRecord) => {
+    const statusInfo = statusLabels[student.status] || {
+      label: student.status,
+      bg: "bg-slate-100 border-slate-200",
+      text: "text-slate-600",
+    };
+
+    return (
+      <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs space-y-3">
+        {/* 상단: 이름 + 상태 뱃지 */}
+        <div className="flex items-start justify-between">
+          <div>
+            <button
+              type="button"
+              onClick={() => show("customers", student.id)}
+              className="text-base font-bold text-slate-900 hover:text-indigo-600 text-left"
+            >
+              {student.name}
+            </button>
+            <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
+              {student.phone ? (
+                <span className="flex items-center gap-1 font-mono">
+                  <Phone className="w-3 h-3 text-slate-400" />
+                  {student.phone}
+                </span>
+              ) : (
+                <span className="text-slate-400">연락처 없음</span>
+              )}
+            </div>
+          </div>
+          <span
+            className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${statusInfo.bg} ${statusInfo.text}`}
+          >
+            {statusInfo.label}
+          </span>
+        </div>
+
+        {/* 원터치 액션 버튼 그룹 (모바일 h-12 터치 타깃) */}
+        <div className="pt-2 border-t border-slate-100 grid grid-cols-3 gap-2">
+          <button
+            type="button"
+            onClick={() => setClaimTarget({ id: student.id, name: student.name })}
+            className="h-11 flex items-center justify-center gap-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold transition"
+          >
+            <QrCode className="w-4 h-4" />
+            <span>QR 연결</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => show("customers", student.id)}
+            className="h-11 flex items-center justify-center gap-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition"
+          >
+            <Ticket className="w-4 h-4" />
+            <span>수강권</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => edit("customers", student.id)}
+            className="h-11 flex items-center justify-center gap-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition"
+          >
+            <Edit2 className="w-4 h-4" />
+            <span>수정</span>
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6">
       {/* 상단 헤더 */}
@@ -167,200 +362,96 @@ export const StudentListPage: React.FC = () => {
           </p>
         </div>
 
-        {canCreate?.can && (
+        <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => create("customers")}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition-colors"
+            onClick={() => setShowScanner((prev) => !prev)}
+            className={`h-12 inline-flex items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-colors border ${
+              showScanner
+                ? "bg-indigo-50 border-indigo-200 text-indigo-700"
+                : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-2xs"
+            }`}
           >
-            <Plus className="h-4 w-4" />
-            {customerWord} 신규 등록
+            <QrCode className="h-4 w-4" />
+            <span>QR 빠른 등록</span>
           </button>
-        )}
+
+          {canCreate?.can && (
+            <button
+              type="button"
+              onClick={() => create("customers")}
+              className="h-12 inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 text-sm font-semibold text-white shadow-md shadow-indigo-100 hover:bg-indigo-700 transition-colors"
+            >
+              <Plus className="h-4 w-4" />
+              <span>{customerWord} 신규 등록</span>
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* QR 스캐너 패널 (열려있을 때) */}
+      {showScanner && (
+        <div className="animate-in fade-in duration-200">
+          <CounterClaimScanner
+            tenantId={currentOrganization?.id || ""}
+            onSuccess={() => {
+              tableQuery.refetch();
+            }}
+          />
+        </div>
+      )}
 
       {/* 필터 및 검색 바 */}
       <div className="flex flex-col sm:flex-row gap-3">
         <form onSubmit={handleSearch} className="flex-1 flex gap-2">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={`${customerWord} 이름 검색...`}
-              className="w-full pl-9 pr-4 py-2 text-sm rounded-xl border border-slate-200 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full h-12 pl-10 pr-4 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 bg-white shadow-2xs"
             />
           </div>
           <button
             type="submit"
-            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition-colors"
+            className="h-12 px-5 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800 transition shadow-xs shrink-0"
           >
             검색
           </button>
         </form>
 
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-          <Filter className="h-4 w-4 text-slate-400 shrink-0 ml-1" />
-          {[
-            { id: "all", label: "전체" },
-            { id: "active", label: statusActiveLabel },
-            { id: "paused", label: statusPausedLabel },
-            { id: "inactive", label: statusInactiveLabel },
-          ].map((item) => (
+        <div className="flex items-center gap-2">
+          {["all", "active", "paused", "inactive"].map((st) => (
             <button
-              key={item.id}
+              key={st}
               type="button"
-              onClick={() => handleStatusFilterChange(item.id)}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors shrink-0 ${
-                statusFilter === item.id
-                  ? "bg-indigo-600 text-white"
-                  : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
+              onClick={() => handleStatusFilterChange(st)}
+              className={`h-12 px-3.5 rounded-xl text-xs font-semibold transition border ${
+                statusFilter === st
+                  ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+                  : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
               }`}
             >
-              {item.label}
+              {st === "all" ? "전체" : statusLabels[st]?.label || st}
             </button>
           ))}
         </div>
       </div>
 
-      {/* 테이블 영역 */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-            <thead className="bg-slate-50 text-slate-600">
-              <tr>
-                <th
-                  scope="col"
-                  className="px-6 py-3.5 font-semibold cursor-pointer hover:bg-slate-100 select-none"
-                  onClick={() => handleSortToggle("name")}
-                >
-                  <div className="flex items-center gap-1.5">
-                    이름
-                    <ArrowUpDown className="h-3.5 w-3.5 text-slate-400" />
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3.5 font-semibold">연락처</th>
-                <th scope="col" className="px-6 py-3.5 font-semibold">이메일</th>
-                <th
-                  scope="col"
-                  className="px-6 py-3.5 font-semibold cursor-pointer hover:bg-slate-100 select-none"
-                  onClick={() => handleSortToggle("status")}
-                >
-                  <div className="flex items-center gap-1.5">
-                    상태
-                    <ArrowUpDown className="h-3.5 w-3.5 text-slate-400" />
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3.5 font-semibold cursor-pointer hover:bg-slate-100 select-none"
-                  onClick={() => handleSortToggle("created_at")}
-                >
-                  <div className="flex items-center gap-1.5">
-                    등록일
-                    <ArrowUpDown className="h-3.5 w-3.5 text-slate-400" />
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3.5 text-right font-semibold">관리</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200 bg-white">
-              {isLoading ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
-                    <div className="inline-flex items-center gap-2">
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
-                      {customerWord} 데이터를 불러오는 중...
-                    </div>
-                  </td>
-                </tr>
-              ) : students.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-16 text-center text-slate-500">
-                    <UserCheck className="mx-auto h-10 w-10 text-slate-300" />
-                    <p className="mt-2 text-sm font-medium text-slate-700">등록된 {customerWord} 데이터가 없습니다.</p>
-                    <p className="text-xs text-slate-400 mt-1">
-                      {searchTerm || statusFilter !== "all"
-                        ? `검색 조건에 맞는 ${customerWord}이(가) 없습니다.`
-                        : `신규 ${customerWord}을(를) 등록하여 관리를 시작하세요.`}
-                    </p>
-                  </td>
-                </tr>
-              ) : (
-                students.map((student: CustomerRecord) => {
-                  const statusInfo = statusLabels[student.status] || {
-                    label: student.status,
-                    bg: "bg-slate-100",
-                    text: "text-slate-600",
-                  };
+      {/* 반응형 테이블 (데스크톱 표준 Table ↔ 모바일 카드 리스트) */}
+      <ResponsiveTable<CustomerRecord>
+        data={students}
+        columns={columns}
+        renderMobileCard={renderMobileCard}
+        keyExtractor={(student) => student.id}
+        isLoading={isLoading}
+      />
 
-                  return (
-                    <tr key={student.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-slate-900">
-                        <button
-                          type="button"
-                          onClick={() => show("customers", student.id)}
-                          className="hover:text-indigo-600 hover:underline"
-                        >
-                          {student.name}
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 text-slate-600">{student.phone || "-"}</td>
-                      <td className="px-6 py-4 text-slate-500">{student.email || "-"}</td>
-                      <td className="px-6 py-4">
-                        <span
-                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusInfo.bg} ${statusInfo.text}`}
-                        >
-                          {statusInfo.label}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-slate-500 text-xs">
-                        {student.created_at ? student.created_at.slice(0, 10) : "-"}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() => show("customers", student.id)}
-                            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
-                            title="상세보기"
-                          >
-                            <Eye className="h-4 w-4" />
-                          </button>
-                          {canEdit?.can && (
-                            <button
-                              type="button"
-                              onClick={() => edit("customers", student.id)}
-                              className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                              title="수정"
-                            >
-                              <Edit2 className="h-4 w-4" />
-                            </button>
-                          )}
-                          {canDelete?.can && (
-                            <button
-                              type="button"
-                              onClick={() => handleDelete(student.id, student.name)}
-                              disabled={isDeleting}
-                              className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors disabled:opacity-50"
-                              title="삭제"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* 페이지네이션 바 */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-6 py-4 border-t border-slate-200 bg-white">
+      {/* 페이지네이션 바 */}
+      {students.length > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-6 py-4 rounded-2xl border border-slate-200 bg-white shadow-2xs">
           <div className="flex items-center gap-2 text-xs text-slate-500">
             <span>페이지 당</span>
             <select
@@ -382,7 +473,7 @@ export const StudentListPage: React.FC = () => {
               type="button"
               onClick={() => setCurrentPage(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="h-10 w-10 flex items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
               title="이전 페이지"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -394,14 +485,23 @@ export const StudentListPage: React.FC = () => {
               type="button"
               onClick={() => setCurrentPage(currentPage + 1)}
               disabled={currentPage >= pageCount}
-              className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="h-10 w-10 flex items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
               title="다음 페이지"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* 스마트폰 1회용 QR 연결 모달 */}
+      <StoreClaimModal
+        isOpen={!!claimTarget}
+        onClose={() => setClaimTarget(null)}
+        tenantId={currentOrganization?.id || ""}
+        customerId={claimTarget?.id || ""}
+        customerName={claimTarget?.name}
+      />
     </div>
   );
 };

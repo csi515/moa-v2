@@ -19,6 +19,21 @@ export const CAPABILITY_IDS = [
   'roster',
   'enrollment',
   'consultation',
+  'passes',
+  'locker',
+  'inventory',
+  'seat_room',
+  'rental_equipment',
+  'maintenance_checklist',
+  'instructor_match',
+  'shift_schedule',
+  'task_pipeline',
+  'billing_invoicing',
+  'ledger_simple',
+  'credit_wallet',
+  'consultation_crm',
+  'treatment_chart',
+  'safety_consent',
 ] as const;
 
 export type CapabilityId = (typeof CAPABILITY_IDS)[number];

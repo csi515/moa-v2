@@ -73,6 +73,21 @@ export const CAPABILITY_IMPLEMENTATION_TABS: Readonly<Record<CapabilityId, reado
   resources: ['practice-rooms', 'resources'],
   transport: ['shuttle'],
   commerce: ['sales', 'retail', 'inventory', 'textbooks'],
+  passes: ['passes', 'tickets'],
+  locker: ['lockers'],
+  inventory: ['inventory', 'stock'],
+  seat_room: ['seat-rooms', 'spaces'],
+  rental_equipment: ['rentals', 'equipment'],
+  maintenance_checklist: ['maintenance', 'checklists'],
+  instructor_match: ['instructors', 'matching'],
+  shift_schedule: ['shifts', 'staff-schedule'],
+  task_pipeline: ['pipelines', 'orders'],
+  billing_invoicing: ['billing-invoices', 'invoices'],
+  ledger_simple: ['ledger', 'closing'],
+  credit_wallet: ['wallets', 'credits'],
+  consultation_crm: ['consultations', 'crm'],
+  treatment_chart: ['charts', 'treatments'],
+  safety_consent: ['consents', 'waivers'],
 };
 
 installCapabilityNavFilter(filterIndustryNavTabs);

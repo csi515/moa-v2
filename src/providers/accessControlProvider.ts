@@ -6,6 +6,7 @@ import { createAuthorizationApi } from "@/core/authorization/authorizationApi";
 import { isKnownPermission, isKnownScopeType } from "@/core/authorization/registry";
 import type { AuthorizationGrant, AuthScopeType, Permission } from "@/core/authorization/types";
 import type { User } from "@/types";
+import { evaluateCustomPermission } from "@/domain/permissions";
 
 /**
  * AccessControl Context Resolver.
@@ -256,6 +257,18 @@ export function createAccessControlProvider(
       const role = activeUser.role || null;
       const activeLocationId = resolver.getLocationId(organizationId) || null;
       const parentCustomerId = activeUser.parentCustomerId || null;
+
+      // 2.5 Evaluate Tenant Custom Role Permissions with Wildcards (Hybrid RBAC)
+      const userPermissions =
+        (activeUser as any)?.permissions ||
+        (activeUser as any)?.customRole?.permissions ||
+        [];
+      const requiredActionStr = `${resource}:${action || "view"}`;
+      if (Array.isArray(userPermissions) && userPermissions.length > 0) {
+        if (evaluateCustomPermission(userPermissions, requiredActionStr, role)) {
+          return { can: true };
+        }
+      }
 
       // 3. Resolve Target Canonical Permission (Fail-Closed)
       //

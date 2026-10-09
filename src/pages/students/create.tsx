@@ -4,6 +4,7 @@ import { useCan, useNavigation } from "@refinedev/core";
 import { ArrowLeft, Save, AlertCircle, ShieldAlert } from "lucide-react";
 import { useTerminology } from "@/core/terminology";
 import { useOrganization } from "@/core/organizations/OrganizationProvider";
+import { applyFormErrors } from "@/core/utils/formErrorAdapter";
 import type { CustomerRecord } from "./list";
 
 export const StudentCreatePage: React.FC = () => {
@@ -24,12 +25,23 @@ export const StudentCreatePage: React.FC = () => {
     refineCore: { onFinish, formLoading },
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<CustomerRecord>({
     refineCoreProps: {
       resource: "customers",
       action: "create",
       redirect: "list",
+      onMutationError: (error: any) => {
+        applyFormErrors(
+          {
+            success: false,
+            error: error?.message || "등록 중 오류가 발생했습니다.",
+            errors: error?.errors,
+          },
+          setError as any
+        );
+      },
     },
     defaultValues: {
       status: "active",
@@ -59,7 +71,7 @@ export const StudentCreatePage: React.FC = () => {
         <button
           type="button"
           onClick={() => list("customers")}
-          className="mt-5 inline-flex items-center gap-1.5 px-4 py-2 bg-white border border-rose-200 text-rose-800 rounded-xl text-sm font-semibold hover:bg-rose-100"
+          className="mt-5 inline-flex items-center gap-1.5 h-12 px-5 bg-white border border-rose-200 text-rose-800 rounded-xl text-sm font-semibold hover:bg-rose-100 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           목록으로 돌아가기
@@ -76,7 +88,7 @@ export const StudentCreatePage: React.FC = () => {
           <button
             type="button"
             onClick={() => list("customers")}
-            className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors"
+            className="w-12 h-12 flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors"
             title="목록으로"
           >
             <ArrowLeft className="h-5 w-5" />
@@ -101,7 +113,7 @@ export const StudentCreatePage: React.FC = () => {
               type="text"
               {...register("name", { required: `${customerWord} 이름을 입력해주세요.` })}
               placeholder="예: 홍길동"
-              className={`w-full rounded-xl border px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 ${
+              className={`w-full h-12 rounded-xl border px-4 text-sm focus:outline-none focus:ring-2 ${
                 errors.name
                   ? "border-rose-300 focus:ring-rose-500 bg-rose-50/30"
                   : "border-slate-200 focus:ring-indigo-500"
@@ -115,7 +127,7 @@ export const StudentCreatePage: React.FC = () => {
             )}
           </div>
 
-          {/* 연락처 & 이메일 */}
+          {/* 연락처 & 이메일 (모바일 가상 키패드 최적화) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="phone" className="block text-sm font-semibold text-slate-800 mb-1.5">
@@ -124,10 +136,22 @@ export const StudentCreatePage: React.FC = () => {
               <input
                 id="phone"
                 type="tel"
+                inputMode="tel"
+                pattern="[0-9\-]*"
                 {...register("phone")}
-                placeholder="예: 010-1234-5678"
-                className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="예: 01012345678"
+                className={`w-full h-12 rounded-xl border px-4 text-sm focus:outline-none focus:ring-2 ${
+                  errors.phone
+                    ? "border-rose-300 focus:ring-rose-500 bg-rose-50/30"
+                    : "border-slate-200 focus:ring-indigo-500"
+                }`}
               />
+              {errors.phone && (
+                <p className="mt-1.5 text-xs text-rose-600 flex items-center gap-1">
+                  <AlertCircle className="h-3.5 w-3.5" />
+                  {errors.phone.message as string}
+                </p>
+              )}
             </div>
 
             <div>
@@ -139,7 +163,7 @@ export const StudentCreatePage: React.FC = () => {
                 type="email"
                 {...register("email")}
                 placeholder="예: customer@example.com"
-                className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full h-12 rounded-xl border border-slate-200 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
           </div>
@@ -152,7 +176,7 @@ export const StudentCreatePage: React.FC = () => {
             <select
               id="status"
               {...register("status")}
-              className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <option value="active">{statusActiveLabel} (정상 이용 가능)</option>
               <option value="paused">{statusPausedLabel} (일시 정지)</option>
@@ -170,24 +194,24 @@ export const StudentCreatePage: React.FC = () => {
               rows={4}
               {...register("memo")}
               placeholder="학습 목표, 건강 상태, 상담 기록 등을 자유롭게 입력하세요."
-              className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-xl border border-slate-200 p-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
-          {/* 하단 버튼 */}
+          {/* 하단 버튼 (엄지존 h-12) */}
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
             <button
               type="button"
               onClick={() => list("customers")}
               disabled={formLoading}
-              className="px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+              className="h-12 px-6 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
             >
               취소
             </button>
             <button
               type="submit"
               disabled={formLoading}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors"
+              className="h-12 inline-flex items-center gap-2 px-6 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-sm font-semibold shadow-md shadow-indigo-100 transition-colors"
             >
               {formLoading ? (
                 <>

@@ -158,6 +158,8 @@ export interface Database {
           staff_id: string | null;
           parent_customer_id: string | null;
           is_active: boolean;
+          custom_role_id: string | null;
+          token_version: number;
           joined_at: string;
           created_at: string;
           updated_at: string;
@@ -170,6 +172,8 @@ export interface Database {
           staff_id?: string | null;
           parent_customer_id?: string | null;
           is_active?: boolean;
+          custom_role_id?: string | null;
+          token_version?: number;
           joined_at?: string;
           created_at?: string;
           updated_at?: string;
@@ -182,6 +186,8 @@ export interface Database {
           staff_id?: string | null;
           parent_customer_id?: string | null;
           is_active?: boolean;
+          custom_role_id?: string | null;
+          token_version?: number;
           joined_at?: string;
           created_at?: string;
           updated_at?: string;
@@ -2115,9 +2121,142 @@ export interface Database {
         Update: Partial<Database['core']['Tables']['guardian_link_attempts']['Insert']>;
         Relationships: [];
       };
+      onboarding_tokens: {
+        Row: {
+          id: string;
+          tenant_id: string;
+          issuer_type: 'STORE' | 'CUSTOMER' | 'STORE_STAFF_INVITE';
+          claim_token: string;
+          customer_id: string | null;
+          payload: Json;
+          expires_at: string;
+          is_used: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          tenant_id: string;
+          issuer_type: 'STORE' | 'CUSTOMER' | 'STORE_STAFF_INVITE';
+          claim_token: string;
+          customer_id?: string | null;
+          payload?: Json;
+          expires_at?: string;
+          is_used?: boolean;
+          created_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['onboarding_tokens']['Insert']>;
+        Relationships: [];
+      };
+      tenant_operating_hours: {
+        Row: {
+          id: string;
+          tenant_id: string;
+          day_type: string;
+          start_time: string;
+          end_time: string;
+          slot_minutes: number;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          tenant_id: string;
+          day_type: string;
+          start_time: string;
+          end_time: string;
+          slot_minutes?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['tenant_operating_hours']['Insert']>;
+        Relationships: [];
+      };
+      tenant_roles: {
+        Row: {
+          id: string;
+          tenant_id: string;
+          name: string;
+          rank_order: number;
+          permissions: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          tenant_id: string;
+          name: string;
+          rank_order?: number;
+          permissions?: Json;
+          created_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['tenant_roles']['Insert']>;
+        Relationships: [];
+      };
+      lockers: {
+        Row: {
+          id: string;
+          tenant_id: string;
+          locker_number: string;
+          section: string;
+          status: string;
+          assigned_customer_id: string | null;
+          deposit_amount: number | null;
+          monthly_fee: number | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          tenant_id: string;
+          locker_number: string;
+          section?: string;
+          status?: string;
+          assigned_customer_id?: string | null;
+          deposit_amount?: number | null;
+          monthly_fee?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['lockers']['Insert']>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
+      create_organization_with_preset: {
+        Args: {
+          p_org_name: string;
+          p_industry: string;
+          p_custom_config?: Json;
+        };
+        Returns: Json;
+      };
+      claim_staff_invite: {
+        Args: {
+          p_token: string;
+        };
+        Returns: Json;
+      };
+      revoke_member_access: {
+        Args: {
+          p_member_id: string;
+        };
+        Returns: Json;
+      };
+      claim_store_token: {
+        Args: {
+          p_token: string;
+        };
+        Returns: Json;
+      };
+      consume_customer_qr: {
+        Args: {
+          p_token: string;
+          p_tenant_id: string;
+        };
+        Returns: Json;
+      };
       create_organization: {
         Args: {
           p_name: string;
