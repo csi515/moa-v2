@@ -74,12 +74,14 @@ export function parseIndustryModuleApps(src: string): Omit<IndustryModuleAppReco
     const block = m[1];
     const id = block.match(/\bid:\s*'([a-z][a-z0-9_]*)'/)?.[1];
     if (!id) return [];
+    const appExport = block.match(/appExport:\s*'([A-Za-z][A-Za-z0-9]*)'/)?.[1] ?? null;
+    const loadAppSpec =
+      block.match(/(?:loadViewMap|loadApp):\s*\(\)\s*=>\s*import\(['"](@\/industries\/[^'"]+)['"]\)/)?.[1] ?? null;
     return [
       {
         id,
-        appExport: block.match(/appExport:\s*'([A-Za-z][A-Za-z0-9]*)'/)?.[1] ?? null,
-        loadAppSpec:
-          block.match(/loadApp:\s*\(\)\s*=>\s*import\(['"](@\/industries\/[^'"]+)['"]\)/)?.[1] ?? null,
+        appExport: appExport ?? (block.includes('loadViewMap') ? 'default' : null),
+        loadAppSpec,
       },
     ];
   });
@@ -342,9 +344,11 @@ export function readIndustryRegistrationSnapshot(srcRoot: string): IndustryRegis
     if (file && app.appExport) {
       const appSrc = readFileSync(file, 'utf8');
       const exported =
-        appSrc.includes(`export const ${app.appExport}`) ||
-        appSrc.includes(`export { ${app.appExport}`) ||
-        new RegExp(`export\\s*\\{[^}]*\\b${app.appExport}\\b`).test(appSrc);
+        app.appExport === 'default'
+          ? /export\s+default\b/.test(appSrc)
+          : appSrc.includes(`export const ${app.appExport}`) ||
+            appSrc.includes(`export { ${app.appExport}`) ||
+            new RegExp(`export\\s*\\{[^}]*\\b${app.appExport}\\b`).test(appSrc);
       if (!exported) {
         extraGaps.push(`AppContent export 없음: ${app.id} ${app.appExport}`);
       }

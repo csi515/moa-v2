@@ -30,7 +30,7 @@ import {
   type PresetRoomConfig,
   type PresetOperatingHoursConfig,
   type IndustryQuestionField,
-} from '@/core/presets/presetQuestionEngine';
+} from '@/app/presets/presetQuestionEngine';
 
 interface QuickSetupFormData {
   name: string;

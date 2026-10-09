@@ -217,6 +217,7 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:linked-income-plugin': 'finance summary linked income plugin flag unit',
   'test:attendance-industry-copy': 'attendance industry copy plugin unit',
   'test:student-exit-label': 'student detail exit label plugin flag unit',
+  'test:preset-assembler': 'preset assembler composition unit',
 };
 
 /**

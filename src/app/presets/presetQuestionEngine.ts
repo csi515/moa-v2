@@ -2,13 +2,13 @@ import { z } from 'zod';
 import {
   CAPABILITY_BUNDLES,
   getIndustryPreset,
-  type CapabilityModuleBundle,
 } from './presetRegistry';
 import type {
+  CapabilityModuleBundle,
   CapabilitySetupSchema,
   PresetCapabilityId,
   SetupFieldDefinition,
-} from './types';
+} from '@/core/presets/types';
 
 export interface IndustryQuestionField extends SetupFieldDefinition {
   capabilityId: PresetCapabilityId;

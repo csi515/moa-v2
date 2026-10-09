@@ -83,12 +83,41 @@ export interface CapabilityResourceDefinition {
   resources: CapabilityResourceItem[];
 }
 
+export type PresetReadinessLevel =
+  | 'configured' // 1. 구성만 등록됨
+  | 'basic_ui' // 2. 기본 화면 제공
+  | 'workflow' // 3. 주요 업무 흐름 구현
+  | 'persisted' // 4. 데이터 저장과 조회 구현
+  | 'isolated' // 5. 권한 및 테넌트 격리 검증
+  | 'verified'; // 6. 핵심 회귀 테스트 통과
+
+export interface PresetRoleTemplate {
+  name: string;
+  rank_order: number;
+  permissions: string[];
+  description?: string;
+}
+
+export interface PresetResourceTemplate {
+  name: string;
+  type: 'room' | 'seat' | 'equipment' | 'locker' | 'bay' | 'vehicle' | 'court' | 'table';
+  capacity?: number;
+}
+
 export interface IndustryPresetDefinition {
   id: string;
   name: string;
   description: string;
   category: string;
   capabilities: readonly PresetCapabilityId[];
+  requiredCapabilities?: readonly PresetCapabilityId[];
+  optionalCapabilities?: readonly PresetCapabilityId[];
+  defaultSettings?: Record<string, unknown>;
+  businessRules?: Record<string, string | number | boolean>;
+  resourceTypes?: readonly PresetResourceTemplate[];
+  roles?: readonly PresetRoleTemplate[];
+  onboardingSteps?: readonly string[];
+  readinessLevel?: PresetReadinessLevel;
 }
 
 export interface AssembledPresetResult {
@@ -97,4 +126,10 @@ export interface AssembledPresetResult {
   setupSchemas: CapabilitySetupSchema[];
   resources: CapabilityResourceItem[];
   allFields: SetupFieldDefinition[];
+}
+
+export interface CapabilityModuleBundle {
+  capabilityId: PresetCapabilityId;
+  setupSchema: CapabilitySetupSchema;
+  resources: CapabilityResourceDefinition;
 }

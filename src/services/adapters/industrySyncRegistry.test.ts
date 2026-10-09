@@ -115,11 +115,11 @@ async function run() {
   assert.match(modulesSrc, /import \{ pianoPluginManifest \}/);
   assert.match(modulesSrc, /import \{ daycarePluginManifest \}/);
   assert.match(modulesSrc, /import \{ bathPluginManifest \}/);
-  assert.match(modulesSrc, /loadApp:\s*\(\)\s*=>\s*import\(/);
+  assert.match(modulesSrc, /(?:loadViewMap|loadApp):\s*\(\)\s*=>\s*import\(/);
   assert.doesNotMatch(modulesSrc, /registerPianoSync|registerDaycareSync|registerBathSync/);
-  assert.doesNotMatch(readSrc('industries/piano/PianoAppContent.tsx'), /registerIndustrySyncCapability/);
-  assert.doesNotMatch(readSrc('industries/daycare/DaycareAppContent.tsx'), /registerIndustrySyncCapability/);
-  assert.doesNotMatch(readSrc('industries/bath/BathAppContent.tsx'), /registerIndustrySyncCapability/);
+  assert.doesNotMatch(readSrc('industries/piano/viewMap.tsx'), /registerIndustrySyncCapability/);
+  assert.doesNotMatch(readSrc('industries/daycare/viewMap.tsx'), /registerIndustrySyncCapability/);
+  assert.doesNotMatch(readSrc('industries/bath/viewMap.tsx'), /registerIndustrySyncCapability/);
 
   const expectedPianoKeys = [
     STORAGE_KEYS.STUDENTS,

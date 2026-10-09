@@ -19,7 +19,7 @@
     "test:architecture": "node scripts/check-architecture-dependencies.mjs --self-test",
     "test:capability-contract": "tsx src/capabilities/capabilityContract.test.ts",
     "test:capability-public-api": "tsx src/capabilities/publicApi.test.ts",
-    "test:preset-assembler": "tsx src/core/presets/presetAssembler.test.ts",
+    "test:preset-assembler": "tsx src/app/presets/presetAssembler.test.ts",
     "test:request-context": "tsx src/core/application/requestContext.test.ts",
     "test:command-executor": "tsx src/core/application/commandExecutor.test.ts",
     "test:bulk-import": "tsx src/core/students/bulkImport/studentBulkImport.test.ts",
