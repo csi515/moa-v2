@@ -277,11 +277,11 @@ const kioskView = read('capabilities/attendance/ui/PinCheckInKioskView.tsx');
 const pinPanel = read('capabilities/attendance/ui/CustomerPinPanel.tsx');
 
 assert.match(customerView, /attendanceRecordTitle\(industry, displayName\)/);
-assert.match(customerView, /industry === 'piano'/);
+assert.match(customerView, /showsMakeupList\(industry\)|industry === 'piano'/);
 assert.equal(customerView.includes("industry === 'daycare'"), false);
 assert.match(parentView, /attendanceRecordTitle\(industry, student\.name\)/);
 assert.match(parentView, /parentAttendanceEmpty\(industry\)/);
-assert.match(parentView, /industry === 'piano'/);
+assert.match(parentView, /showsMakeupList|industry === 'piano'/);
 assert.equal(parentView.includes("industry === 'daycare'"), false);
 assert.match(manageView, /attendanceManageTitle\(industry\)/);
 assert.match(manageView, /attendancePinDisabledDescription\(industry, labels\.customer\.singular\)/);

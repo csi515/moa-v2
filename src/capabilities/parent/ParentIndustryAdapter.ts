@@ -17,6 +17,7 @@ import {
   getPlaceLabel,
   isAppointmentIndustry,
   getIndustryPlugin,
+  getIndustryPluginAdapter,
 } from '@/core/industry/industryUi';
 import type { ParentPortalTab } from '@/types/education';
 
@@ -80,18 +81,18 @@ const SKIN_PARENT_NAV: ParentPortalNavItem[] = [
 
 export class ParentIndustryAdapter {
   static getPolicy(industryType?: IndustryType | string | null): ParentPortalPolicy {
+    const adapter = getIndustryPluginAdapter(industryType);
     const norm = normalizeIndustryType(industryType);
-    const plugin = norm ? getIndustryPlugin(norm) : getIndustryPlugin('piano');
 
     let bookingVariant: 'skin' | 'pilates' | 'standard' = 'standard';
     if (norm === 'skin_clinic') bookingVariant = 'skin';
     else if (norm === 'pilates') bookingVariant = 'pilates';
 
     return {
-      showPickupFields: Boolean(plugin.showPickupFields),
-      showsPracticeRoomTab: Boolean(plugin.showsPracticeRoomTab),
-      showsCustomerPoints: Boolean(plugin.showsCustomerPoints),
-      showsMakeupList: Boolean(plugin.showsMakeupList),
+      showPickupFields: adapter.hasFeature('pickup_fields'),
+      showsPracticeRoomTab: adapter.hasFeature('practice_room_tab'),
+      showsCustomerPoints: adapter.hasFeature('customer_points'),
+      showsMakeupList: adapter.hasFeature('makeup_list'),
       bookingVariant,
     };
   }
@@ -104,17 +105,31 @@ export class ParentIndustryAdapter {
     if (resolved === 'pilates') return PILATES_PARENT_NAV;
     if (resolved === 'piano') return PIANO_PARENT_NAV;
 
-    const place = getPlaceLabel(resolved);
-    const customer = getCustomerLabel(resolved);
-    const fee = getFeeLabel(resolved);
+    const adapter = getIndustryPluginAdapter(industryType);
+    const fee = adapter.getLabel('fee', '이용료');
     const attendanceLabel = isAppointmentIndustry(resolved) ? '출입' : '출결';
 
-    return [
+    const navItems: ParentPortalNavItem[] = [
       { id: 'home', label: '홈', icon: icon(React.createElement(Home, { className: 'w-5 h-5' })) },
+    ];
+
+    if (adapter.hasFeature('class_based_schedule')) {
+      navItems.push({ id: 'schedule', label: '수업', icon: icon(React.createElement(CalendarDays, { className: 'w-5 h-5' })) });
+    } else if (isAppointmentIndustry(resolved)) {
+      navItems.push({ id: 'bookings', label: '예약', icon: icon(React.createElement(CalendarClock, { className: 'w-5 h-5' })) });
+    }
+
+    if (adapter.hasFeature('pickup_fields')) {
+      navItems.push({ id: 'shuttle', label: '차량', icon: icon(React.createElement(Bus, { className: 'w-5 h-5' })) });
+    }
+
+    navItems.push(
       { id: 'attendance', label: attendanceLabel, icon: icon(React.createElement(CheckSquare, { className: 'w-5 h-5' })) },
       { id: 'tuition', label: fee, icon: icon(React.createElement(CreditCard, { className: 'w-5 h-5' })) },
-      { id: 'more', label: '더보기', icon: icon(React.createElement(Menu, { className: 'w-5 h-5' })) },
-    ];
+      { id: 'more', label: '더보기', icon: icon(React.createElement(Menu, { className: 'w-5 h-5' })) }
+    );
+
+    return navItems;
   }
 
   static getRoleLabel(industryType?: IndustryType | string | null): string {
@@ -138,6 +153,6 @@ export class ParentIndustryAdapter {
   static getFeeTitle(industryType?: IndustryType | string | null): string {
     const type = normalizeIndustryType(industryType);
     if (type === 'daycare') return '보호자 결제/보육료';
-    return getFeeLabel(type) || '수납';
+    return getIndustryPluginAdapter(industryType).getLabel('fee', '수납');
   }
 }

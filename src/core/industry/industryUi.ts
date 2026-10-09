@@ -3,9 +3,21 @@ import type { ModuleTheme } from '@/shared/components/layout/moduleTheme';
 import { isBlankIndustryInput, normalizeIndustryType, type IndustryType } from './types';
 import { getIndustryPlugin, getInstalledIndustryPlugin } from './registry';
 import type { IndustryAccent, IndustryAttendanceCopy } from './pluginTypes';
+import {
+  getIndustryPluginAdapter,
+  IndustryAdapter,
+  type IndustryFeatureKey,
+  type IndustryPluginAdapter,
+} from './IndustryAdapter';
 
 export type { IndustryAccent } from './pluginTypes';
 export { getIndustryPlugin, getInstalledIndustryPlugin } from './registry';
+export {
+  getIndustryPluginAdapter,
+  IndustryAdapter,
+  type IndustryFeatureKey,
+  type IndustryPluginAdapter,
+};
 
 export function resolveIndustry(
   industry: IndustryType | string | null | undefined
@@ -89,7 +101,7 @@ export function getCustomerLabel(industry: IndustryType | string | null | undefi
 
 /** 클래스(반) 기반 수업 — 플러그인 매니페스트 기준 */
 export function usesClassBasedSchedule(industry: IndustryType | string | null | undefined): boolean {
-  return getIndustryPlugin(industry).usesClassBasedSchedule;
+  return getIndustryPluginAdapter(industry).hasFeature('class_based_schedule');
 }
 
 /** 원생/회원 목록 탭 */
@@ -137,7 +149,7 @@ export function getBankAccountPlaceholder(industry: IndustryType | string | null
 /** 예약금 UI 표시 여부 */
 export function supportsDeposit(industry: IndustryType | string | null | undefined): boolean {
   if (!industry) return false;
-  return Boolean(getIndustryPlugin(industry).supportsDeposit);
+  return getIndustryPluginAdapter(industry).hasFeature('deposit');
 }
 
 
@@ -148,13 +160,13 @@ export function supportsDeposit(industry: IndustryType | string | null | undefin
 export function getAttendanceCopy(
   industry: IndustryType | string | null | undefined,
 ): IndustryAttendanceCopy | undefined {
-  return getIndustryPlugin(industry).attendanceCopy;
+  return getIndustryPluginAdapter(industry).attendanceCopy;
 }
 
 /** 설정 화면의 교재 관리 바로가기 표시 여부 */
 export function showsTextbooksLink(industry: IndustryType | string | null | undefined): boolean {
   if (!industry) return false;
-  return Boolean(getIndustryPlugin(industry).showsTextbooksLink);
+  return getIndustryPluginAdapter(industry).hasFeature('textbooks_link');
 }
 
 /**
@@ -175,7 +187,7 @@ export function runsPinCheckInSideEffects(
  */
 export function showsMakeupList(industry: IndustryType | string | null | undefined): boolean {
   if (!industry) return false;
-  return Boolean(getIndustryPlugin(industry).showsMakeupList);
+  return getIndustryPluginAdapter(industry).hasFeature('makeup_list');
 }
 
 /**
@@ -187,7 +199,7 @@ export function showsMakeupList(industry: IndustryType | string | null | undefin
 export function showsPracticeRoomTab(
   industry: IndustryType | string | null | undefined
 ): boolean {
-  return Boolean(getIndustryPlugin(industry).showsPracticeRoomTab);
+  return getIndustryPluginAdapter(industry).hasFeature('practice_room_tab');
 }
 
 /**
@@ -199,7 +211,7 @@ export function showsPracticeRoomTab(
 export function showsCustomerPoints(
   industry: IndustryType | string | null | undefined
 ): boolean {
-  return Boolean(getIndustryPlugin(industry).showsCustomerPoints);
+  return getIndustryPluginAdapter(industry).hasFeature('customer_points');
 }
 
 /**
@@ -212,7 +224,7 @@ export function showsAdultPracticeGuide(
   industry: IndustryType | string | null | undefined
 ): boolean {
   if (isBlankIndustryInput(industry)) return false;
-  return Boolean(getIndustryPlugin(industry).showsAdultPracticeGuide);
+  return getIndustryPluginAdapter(industry).hasFeature('adult_practice_guide');
 }
 
 /**
@@ -225,7 +237,7 @@ export function showsAdultPracticeGuide(
 export function showsStaffPracticeGuide(
   industry: IndustryType | string | null | undefined
 ): boolean {
-  return Boolean(getIndustryPlugin(industry).showsStaffPracticeGuide);
+  return getIndustryPluginAdapter(industry).hasFeature('staff_practice_guide');
 }
 
 /**

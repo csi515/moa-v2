@@ -56,7 +56,7 @@ jobs:
 
   security-db:
     needs: quality
-    if: vars.ENABLE_SECURITY_AUDIT == 'true'
+    if: vars.ENABLE_SECURITY_AUDIT == 'true' || secrets.SUPABASE_SERVICE_ROLE_KEY != ''
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -92,7 +92,7 @@ jobs:
 
   deploy:
     needs: [quality, build-e2e, security-db]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_CLOUDFLARE_DEPLOY == 'true' && vars.ENABLE_SECURITY_AUDIT == 'true'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_CLOUDFLARE_DEPLOY == 'true' && (vars.ENABLE_SECURITY_AUDIT == 'true' || secrets.SUPABASE_SERVICE_ROLE_KEY != '')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

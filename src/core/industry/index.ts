@@ -48,3 +48,12 @@ export {
 export { IndustryPicker } from './IndustryPicker';
 export { resolveIndustryAppKind } from './industryAppResolve';
 export { defineIndustry } from './definitions';
+export {
+  IndustryAdapter,
+  DefaultFallbackPluginAdapter,
+  StandardIndustryPluginAdapter,
+  getIndustryPluginAdapter,
+  type IndustryPluginAdapter,
+  type IndustryFeatureKey,
+  type IndustryLabelKey,
+} from './IndustryAdapter';

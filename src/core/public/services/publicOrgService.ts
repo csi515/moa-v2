@@ -56,6 +56,43 @@ export const publicOrgService = {
   },
 
   /**
+   * Get organization details by public code or vanity slug safely
+   */
+  async getOrganizationBySlugOrCode(slugOrCode: string): Promise<PublicOrgInfo | null> {
+    if (!isSupabaseConfigured()) {
+      return null;
+    }
+    const clean = slugOrCode.trim();
+    if (!clean) return null;
+
+    // 1. If 8 alphanumeric characters, try direct public_code match first
+    if (clean.length === 8 && /^[A-Za-z0-9]+$/.test(clean)) {
+      try {
+        const org = await this.getOrganizationByCode(clean);
+        if (org) return org;
+      } catch {
+        // Fall back to search
+      }
+    }
+
+    // 2. Search by query and match slug or public_code
+    try {
+      const list = await this.searchOrganizations(clean);
+      const exact = list.find(
+        (o) =>
+          (o.slug && o.slug.toLowerCase() === clean.toLowerCase()) ||
+          (o.public_code && o.public_code.toUpperCase() === clean.toUpperCase())
+      );
+      if (exact) return exact;
+      if (list.length > 0) return list[0];
+    } catch {
+      // ignore
+    }
+
+    return null;
+  },
+
+  /**
    * Submit consultation request (no auth required)
    */
   async submitConsultation(
