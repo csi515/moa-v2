@@ -15,3 +15,4 @@ export { StatCard } from './StatCard';
 export { OnboardingWizard } from './OnboardingWizard';
 export { OnboardingResumeCard } from './onboarding/OnboardingResumeCard';
 export * from './ui';
+export * from './calendar';

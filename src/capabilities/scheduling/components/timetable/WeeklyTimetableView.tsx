@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useStaffScope, useIsDesktop, useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
-import { PageHeader } from '@/shared/components';
+import { PageHeader, UnifiedScheduleCalendar, type CalendarEventItem } from '@/shared/components';
 import { ClassItem, DayOfWeek } from '@/types';
 import {
   Clock,
@@ -106,6 +106,35 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
     if (roomFilter !== 'ALL' && cls.room !== roomFilter) return false;
     return true;
   });
+
+  const calendarEvents: CalendarEventItem<ClassItem>[] = useMemo(() => {
+    const list: CalendarEventItem<ClassItem>[] = [];
+
+    for (const cls of filteredClasses) {
+      const enrolled = students.filter(
+        (s) => s.status === 'active' && s.classIds?.includes(cls.id)
+      ).length;
+
+      for (const day of cls.daysOfWeek) {
+        list.push({
+          id: `${cls.id}_${day}`,
+          title: cls.name,
+          subtitle: `${cls.teacherName} · ${cls.room}`,
+          dayOfWeek: day,
+          startTime: cls.startTime,
+          endTime: cls.endTime,
+          colorTheme: 'indigo',
+          capacity: {
+            current: enrolled,
+            max: cls.capacity,
+          },
+          raw: cls,
+        });
+      }
+    }
+
+    return list;
+  }, [filteredClasses, students]);
 
   const selectedDayDate = isoDateForWeekdayThisWeek(selectedDay);
   const dayMakeups = scheduledMakeups.filter((m) => {
@@ -409,93 +438,36 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
         )}
 
         {showWeeklyView && (
-          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-            <div className="overflow-x-auto">
-              <div className="min-w-[860px]">
-                <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50/80 text-center text-xs font-bold text-slate-700">
-                  <div className="py-2 px-2 border-r border-slate-200 text-slate-400">시간</div>
-                  {DAYS.map((day) => (
-                    <div
-                      key={day}
-                      className={`py-2 px-2 border-r border-slate-200 last:border-r-0 ${
-                        day === todayDay ? 'bg-indigo-50 text-indigo-700' : ''
-                      }`}
-                    >
-                      <span className={day === '토' ? 'text-indigo-600 font-extrabold' : ''}>
-                        {day}요일
+          <UnifiedScheduleCalendar<ClassItem>
+            mode="recurring_timetable"
+            availableViews={['week', 'day']}
+            events={calendarEvents}
+            renderEventCard={(event) => {
+              const cls = event.raw;
+              return (
+                <div
+                  className="p-1.5 rounded-lg text-white text-xs cursor-pointer shadow-2xs hover:scale-[1.02] active:scale-[0.98] transition-all text-left w-full h-full"
+                  style={{ backgroundColor: cls.color || '#4f46e5' }}
+                >
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="font-bold text-[11px] truncate">{cls.name}</span>
+                    <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded shrink-0">
+                      {cls.room}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-white/90 mt-1">
+                    <span className="truncate">{cls.teacherName}</span>
+                    {event.capacity && (
+                      <span className="font-bold shrink-0">
+                        {event.capacity.current}/{event.capacity.max}
                       </span>
-                    </div>
-                  ))}
+                    )}
+                  </div>
                 </div>
-
-                <div className="divide-y divide-slate-200">
-                  {TIME_SLOTS.map((slot) => (
-                    <div key={slot} className="grid grid-cols-7 min-h-[56px]">
-                      <div className="p-1.5 border-r border-slate-200 bg-slate-50/40 text-center flex flex-col justify-start items-center">
-                        <span className="font-mono text-xs font-bold text-slate-600">{slot}</span>
-                      </div>
-
-                      {DAYS.map((day) => {
-                        const slotClasses = getClassesForSlot(day, slot);
-                        const slotMakeups = getMakeupsForSlot(day, slot);
-                        return (
-                          <div
-                            key={day}
-                            className={`p-1 border-r border-slate-200 last:border-r-0 hover:bg-indigo-50/20 transition-colors space-y-1 ${
-                              day === todayDay ? 'bg-indigo-50/30' : ''
-                            }`}
-                          >
-                            {slotClasses.map((cls) => {
-                              const enrolled = students.filter(
-                                (s) => s.status === 'active' && s.classIds?.includes(cls.id)
-                              );
-                              return (
-                                <button
-                                  key={cls.id}
-                                  type="button"
-                                  onClick={() => setSelectedClass(cls)}
-                                  className="w-full p-1.5 rounded-lg text-white text-xs cursor-pointer shadow-2xs hover:scale-[1.02] active:scale-[0.98] transition-all text-left"
-                                  style={{ backgroundColor: cls.color || '#4f46e5' }}
-                                >
-                                  <div className="flex items-center justify-between gap-1">
-                                    <span className="font-bold text-[11px] truncate">{cls.name}</span>
-                                    <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded shrink-0">
-                                      {cls.room}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center justify-between text-[10px] text-white/90 mt-1">
-                                    <span className="truncate">{cls.teacherName}</span>
-                                    <span className="font-bold shrink-0">
-                                      {enrolled.length}/{cls.capacity}
-                                    </span>
-                                  </div>
-                                </button>
-                              );
-                            })}
-                            {slotMakeups.map((m) => (
-                              <button
-                                key={m.attendanceId}
-                                type="button"
-                                onClick={() => setActiveTab('makeups')}
-                                className="w-full p-1.5 rounded-lg bg-purple-600 text-white text-xs cursor-pointer shadow-2xs hover:bg-purple-700 text-left"
-                              >
-                                <div className="font-bold text-[11px] truncate">
-                                  보강 · {m.studentName}
-                                </div>
-                                <div className="text-[10px] text-white/90 mt-0.5 truncate">
-                                  {m.makeUpRoom || m.makeUpTeacherName || '일정 확인'}
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+              );
+            }}
+            onEventClick={(event) => setSelectedClass(event.raw)}
+          />
         )}
       </div>
 

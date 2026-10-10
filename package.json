@@ -74,6 +74,7 @@
     "test:session-pass-booking-rules": "tsx src/core/schedules/sessionPassBookingRules.test.ts",
     "test:session-pass-org-integrity": "tsx scripts/sessionPassOrgIntegrity.test.ts",
     "test:booking-pass-atomic": "tsx src/core/schedules/bookingPassAtomic.test.ts",
+    "test:reschedule-booking": "tsx src/capabilities/booking/domain/rescheduleBooking.test.ts",
     "test:parent-booking-cancel": "tsx src/core/schedules/parentBookingCancel.test.ts",
     "test:booking-write-path": "tsx src/core/schedules/bookingWritePath.test.ts",
     "test:industry-sync-registry": "tsx src/services/adapters/industrySyncRegistry.test.ts",

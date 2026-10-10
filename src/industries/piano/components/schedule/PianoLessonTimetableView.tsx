@@ -1,12 +1,20 @@
-import { type FC } from 'react';
-import { Clock, Filter, Users } from 'lucide-react';
-import { EmptyState } from '@/shared/components';
+import { useMemo, type FC } from 'react';
+import { Clock, Filter, Users, X } from 'lucide-react';
+import { EmptyState, UnifiedScheduleCalendar, type CalendarEventItem } from '@/shared/components';
 import { FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import type { ClassItem } from '@/types';
 import {
-  PianoTimetableDesktopGrid,
   PianoTimetableStudentPool,
+  DND_STUDENT_MIME,
+  type DragPlacementPayload,
 } from './PianoTimetablePanels';
+import {
+  TIMETABLE_DAYS,
+  resolveTimetableSlots,
+  getPlacementsForSlot,
+  slotEndTime,
+  type SlotPlacement,
+} from './pianoTimetablePlacement';
 import { PianoTimetableMobileList } from './PianoTimetableMobileList';
 import { PianoTimetableStudentPicker } from './PianoTimetableStudentPicker';
 import { usePianoLessonTimetable } from './usePianoLessonTimetable';
@@ -50,19 +58,92 @@ export const PianoLessonTimetableView: FC = () => {
 
   const renderTimetable = (sectionClasses: ClassItem[], sectionTeacherId?: string) => {
     if (useDragGrid) {
-      return (
-        <PianoTimetableDesktopGrid
-          todayDay={todayDay}
-          classes={sectionClasses}
-          students={students}
-          onDropStudent={(studentId, day, startTime) => {
-            const student = students.find((s) => s.id === studentId);
-            if (student) placeStudent(student, day, startTime, sectionTeacherId);
-          }}
-          onDropPlacement={(payload, day, startTime) =>
-            movePlacement(payload, day, startTime, sectionTeacherId)
+      const slots = resolveTimetableSlots(sectionClasses);
+      const sectionEvents: CalendarEventItem<SlotPlacement>[] = [];
+
+      for (const day of TIMETABLE_DAYS) {
+        for (const slot of slots) {
+          const placements = getPlacementsForSlot(students, sectionClasses, day, slot);
+          for (const p of placements) {
+            sectionEvents.push({
+              id: `${p.student.id}_${p.classItem.id}_${day}_${slot}`,
+              title: p.student.name,
+              subtitle: p.classItem.teacherName || p.classItem.name,
+              dayOfWeek: day,
+              startTime: slot,
+              endTime: slotEndTime(slot),
+              colorTheme: 'indigo',
+              isDraggable: p.editable,
+              raw: p,
+            });
           }
-          onRemove={handleRemove}
+        }
+      }
+
+      return (
+        <UnifiedScheduleCalendar<SlotPlacement>
+          mode="recurring_timetable"
+          availableViews={['week', 'day']}
+          events={sectionEvents}
+          onEventMove={async (event, target) => {
+            if (!target.dayOfWeek) return false;
+            const payload: DragPlacementPayload = {
+              studentId: event.raw.student.id,
+              day: event.dayOfWeek!,
+              startTime: event.raw.classItem.startTime || event.startTime,
+              classId: event.raw.classItem.id,
+            };
+            movePlacement(payload, target.dayOfWeek, target.startTime, sectionTeacherId);
+            return true;
+          }}
+          onExternalDrop={(e, target) => {
+            if (!target.dayOfWeek) return;
+            const studentId =
+              e.dataTransfer.getData(DND_STUDENT_MIME) || e.dataTransfer.getData('text/plain');
+            if (studentId) {
+              const student = students.find((s) => s.id === studentId);
+              if (student) placeStudent(student, target.dayOfWeek, target.startTime, sectionTeacherId);
+            }
+          }}
+          renderEventCard={(event) => {
+            const p = event.raw;
+            return (
+              <div
+                className={`group rounded-lg px-2 py-1 text-left text-white shadow-2xs ${
+                  p.editable ? 'cursor-grab active:cursor-grabbing' : 'cursor-default opacity-95'
+                }`}
+                style={{ backgroundColor: p.classItem.color || '#4f46e5' }}
+              >
+                <div className="flex items-start justify-between gap-1">
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-bold truncate">{p.student.name}</p>
+                    <p className="text-[10px] text-white/85 truncate">
+                      {p.classItem.teacherName || p.classItem.name}
+                      {!p.editable ? ' · 반' : ''}
+                    </p>
+                  </div>
+                  {p.editable && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemove(p, event.dayOfWeek!, event.startTime);
+                      }}
+                      className="opacity-0 group-hover:opacity-100 p-0.5 rounded bg-black/20 hover:bg-black/35 shrink-0 cursor-pointer"
+                      aria-label={`${p.student.name} 배치 제거`}
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          }}
+          onSlotClick={(slot) => {
+            if (slot.dayOfWeek) {
+              openPickerForSlot(slot.dayOfWeek, slot.startTime, sectionTeacherId);
+            }
+          }}
         />
       );
     }
@@ -187,28 +268,8 @@ export const PianoLessonTimetableView: FC = () => {
             ))
           )}
         </div>
-      ) : useDragGrid ? (
-        <PianoTimetableDesktopGrid
-          todayDay={todayDay}
-          classes={visibleClasses}
-          students={students}
-          onDropStudent={handleDropStudent}
-          onDropPlacement={(payload, day, startTime) => movePlacement(payload, day, startTime)}
-          onRemove={handleRemove}
-        />
       ) : (
-        <PianoTimetableMobileList
-          selectedDay={selectedDay}
-          todayDay={todayDay}
-          classes={visibleClasses}
-          students={students}
-          pendingStudentId={pendingStudentId}
-          onSelectDay={setSelectedDay}
-          onPickSlotForAdd={(day, startTime) => openPickerForSlot(day, startTime)}
-          onPlacePending={(day, startTime) => placePending(day, startTime)}
-          onRemove={handleRemove}
-          onStartPlaceStudent={(student) => startPlaceStudent(student)}
-        />
+        renderTimetable(visibleClasses)
       )}
 
       <PianoTimetableStudentPicker

@@ -229,6 +229,7 @@ export const INVENTORY_CANDIDATES = {
   'test:types-ownership': 'P19 type ownership. architecture 후보',
   'test:industry-capability-map': 'industry contract 후보',
   'test:booking-query': 'booking unit 후보',
+  'test:reschedule-booking': 'booking capability rescheduleBooking domain unit 후보',
   'test:resource': 'resources capability. reservation과 별개',
   'test:availability': 'scheduling capability 후보',
   'test:customer-session': 'platform/session 후보',

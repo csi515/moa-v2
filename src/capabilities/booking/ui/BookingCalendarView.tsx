@@ -12,15 +12,17 @@ import { bookingChangeNotice } from '@/core/schedules/bookingChangeNotice';
 import { buildSlotOccupancyIndex, getSlotCapacityInfo } from '@/capabilities/scheduling/capacity';
 import { isOutsideStaffHours } from '@/capabilities/scheduling/availability/windows';
 import { confirmBookingDeposit } from '@/core/schedules/confirmBookingDeposit';
-import { PilatesSlotList } from './PilatesSlotList';
+import { CapacitySlotList } from './CapacitySlotList';
 import { BookingFormModal } from './BookingFormModal';
 import { getConfiguredRooms } from '@/core/organizations/utils/academyRooms';
 import {
   findStaffTimeConflict,
   findTreatmentRoomConflict,
 } from '@/capabilities/booking/domain/bookingRooms';
+import { rescheduleBooking } from '@/capabilities/booking/domain/rescheduleBooking';
 import { notifyBookingChange } from '@/capabilities/booking';
-import { EmptyState, FilterTabs, Modal, PageHeader } from '@/shared/components';
+import { EmptyState, FilterTabs, Modal, PageHeader, UnifiedScheduleCalendar, type CalendarEventItem, type CalendarResourceColumn, type CalendarSlotTarget } from '@/shared/components';
+import { Calendar, List } from 'lucide-react';
 import { executeBookingCreate } from './executeBookingCreate';
 import { mergeScopedBookingsWithInbox, useBookingFilters } from './useBookingFilters';
 import { useBookingForm } from './useBookingForm';
@@ -110,6 +112,145 @@ export const BookingCalendarView: React.FC = () => {
       bookings: allBookingsRaw,
       recruitments,
     });
+
+  const [displayMode, setDisplayMode] = React.useState<'calendar' | 'list'>('calendar');
+  const [selectedBookingForDetail, setSelectedBookingForDetail] = React.useState<Booking | null>(null);
+
+  const resourceColumns: CalendarResourceColumn[] = useMemo(() => {
+    if (treatmentRooms.length > 0) {
+      return treatmentRooms.map((r) => ({
+        id: r.id,
+        name: r.name,
+        category: 'room' as const,
+      }));
+    }
+    return instructors.map((inst) => ({
+      id: inst.id,
+      name: inst.name,
+      category: 'staff' as const,
+    }));
+  }, [treatmentRooms, instructors]);
+
+  const calendarEvents: CalendarEventItem<Booking>[] = useMemo(() => {
+    return allBookings.map((b) => {
+      const service =
+        services.find((s) => s.id === b.serviceId) ??
+        ScheduleService.getServiceOfferings().find((s) => s.id === b.serviceId);
+      const capacity =
+        service && b.serviceId && b.staffId
+          ? getSlotCapacityInfo({
+              service,
+              staffId: b.staffId,
+              startsAt: b.startsAt,
+              bookings: allBookingsRaw,
+              recruitments,
+              occupancyIndex,
+            })
+          : null;
+
+      const date = b.startsAt.slice(0, 10);
+      const startTime = b.startsAt.slice(11, 16);
+      const endTime = b.endsAt.slice(11, 16);
+      const isEditable = !isScoped || b.staffId === staffId;
+      const isInactive = b.status === 'completed' || b.status === 'cancelled';
+
+      return {
+        id: b.id,
+        title: b.customerName,
+        subtitle: `${b.serviceName || bookingUi.sessionNoun || '예약'} · ${b.staffName || `${staffLabel} 미지정`}${b.roomName ? ` · ${b.roomName}` : ''}`,
+        date,
+        startTime,
+        endTime,
+        staffId: b.staffId,
+        staffName: b.staffName,
+        roomId: b.roomId,
+        roomName: b.roomName,
+        status: b.status,
+        colorTheme: appointment ? 'rose' : 'teal',
+        isDraggable: isEditable && !isInactive,
+        isResizable: isEditable && !isInactive,
+        capacity: capacity
+          ? {
+              current: capacity.occupied,
+              max: capacity.maxCapacity,
+              isClosed: capacity.isClosed,
+            }
+          : undefined,
+        raw: b,
+      };
+    });
+  }, [
+    allBookings,
+    services,
+    allBookingsRaw,
+    recruitments,
+    occupancyIndex,
+    isScoped,
+    staffId,
+    appointment,
+    bookingUi.sessionNoun,
+    staffLabel,
+  ]);
+
+  const handleCalendarEventMove = async (
+    event: CalendarEventItem<Booking>,
+    target: CalendarSlotTarget
+  ) => {
+    if (!target.date || !target.startTime) return false;
+    const duration =
+      new Date(event.raw.endsAt).getTime() - new Date(event.raw.startsAt).getTime();
+    const startsAt = `${target.date}T${target.startTime}:00`;
+    const endsAt = new Date(
+      new Date(startsAt).getTime() + Math.max(duration, 30 * 60 * 1000)
+    )
+      .toISOString()
+      .slice(0, 19);
+
+    const result = rescheduleBooking({
+      bookingId: event.id,
+      startsAt,
+      endsAt,
+      staffId: target.staffId ?? event.staffId,
+      roomId: target.roomId ?? event.roomId,
+    });
+
+    if (!result.ok) {
+      if (result.message) showToast(result.message, 'warning');
+      return false;
+    }
+    showToast('예약 일정을 변경했습니다.', 'success');
+    return true;
+  };
+
+  const handleCalendarEventResize = async (
+    event: CalendarEventItem<Booking>,
+    target: { endTime: string }
+  ) => {
+    const date = event.date || event.raw.startsAt.slice(0, 10);
+    const startsAt = event.raw.startsAt;
+    const endsAt = `${date}T${target.endTime}:00`;
+
+    const result = rescheduleBooking({
+      bookingId: event.id,
+      startsAt,
+      endsAt,
+    });
+
+    if (!result.ok) {
+      if (result.message) showToast(result.message, 'warning');
+      return false;
+    }
+    showToast('예약 이용 시간을 변경했습니다.', 'success');
+    return true;
+  };
+
+  const handleCalendarSlotClick = (slot: CalendarSlotTarget) => {
+    if (slot.date) form.setDate(slot.date);
+    if (slot.startTime) form.setTime(slot.startTime);
+    if (slot.staffId) form.setFormStaffId(slot.staffId);
+    if (slot.roomId) form.setRoomId(slot.roomId);
+    form.openCreateModal();
+  };
 
   const memberRemaining = form.memberId
     ? ScheduleService.getCustomerRemainingSessions(form.memberId)
@@ -290,43 +431,25 @@ export const BookingCalendarView: React.FC = () => {
     });
   };
 
-  const rescheduleBooking = (booking: Booking, time: string) => {
+  const handleLegacyReschedule = (booking: Booking, time: string) => {
     if (!appointment || !time) return;
     const duration = new Date(booking.endsAt).getTime() - new Date(booking.startsAt).getTime();
     const startsAt = `${booking.startsAt.slice(0, 10)}T${time}:00`;
-    const endsAt = new Date(new Date(startsAt).getTime() + Math.max(duration, 0)).toISOString();
-    if (
-      booking.staffId &&
-      isOutsideStaffHours({
-        staffId: booking.staffId,
-        startsAt,
-        endsAt,
-        windows: StorageService.getSettings().staffHours,
-      })
-    ) {
-      showToast('관리사 근무시간이 아닙니다.', 'warning');
-      return;
+    const endsAt = new Date(new Date(startsAt).getTime() + Math.max(duration, 0)).toISOString().slice(0, 19);
+    const res = rescheduleBooking({
+      bookingId: booking.id,
+      startsAt,
+      endsAt,
+      staffId: booking.staffId,
+      staffName: booking.staffName,
+      roomId: booking.roomId,
+      roomName: booking.roomName,
+    });
+    if (!res.ok && res.message) {
+      showToast(res.message, 'warning');
+    } else if (res.ok) {
+      showToast('예약 시간을 변경했습니다.', 'success');
     }
-    if (!booking.waitlist && booking.staffId) {
-      const conflict = findStaffTimeConflict({
-        staffId: booking.staffId,
-        startsAt,
-        endsAt,
-        bookings: ScheduleService.getBookings(),
-        ignoreId: booking.id,
-      });
-      if (conflict) {
-        showToast('이 관리사는 해당 시간에 다른 예약이 있습니다.', 'warning');
-        return;
-      }
-    }
-    ScheduleService.saveBooking({ ...booking, startsAt, endsAt });
-    notifyCustomer(
-      booking,
-      '예약 시간 변경',
-      `${booking.serviceName || bookingUi.sessionNoun} 시간이 ${time}으로 변경되었습니다.`
-    );
-    showToast('예약 시간을 변경했습니다.', 'success');
   };
 
   const promoteWaitlist = (booking: Booking) => {
@@ -586,43 +709,83 @@ export const BookingCalendarView: React.FC = () => {
         title={labels.schedule.management}
         description={`${staffLabel}별로 같은 시간이라도 따로 예약·정원·모집 마감됩니다`}
         actions={
-          <button
-            type="button"
-            onClick={() => {
-              if (!classSlots && !appointment) {
-                showToast('이 업종에는 예약 규칙이 없어 등록할 수 없습니다.', 'warning');
-                return;
-              }
-              form.openCreateModal();
-            }}
-            className={`px-4 py-2.5 ${accentBtn} text-white text-sm font-bold rounded-xl min-h-[44px]`}
-          >
-            + 예약 등록
-          </button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-1 text-xs font-bold text-slate-600">
+              <button
+                type="button"
+                onClick={() => setDisplayMode('calendar')}
+                className={`px-3 py-1.5 min-h-[36px] rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                  displayMode === 'calendar'
+                    ? 'bg-white text-indigo-700 shadow-2xs font-extrabold'
+                    : 'hover:text-slate-900'
+                }`}
+              >
+                <Calendar className="w-4 h-4" />
+                캘린더
+              </button>
+              <button
+                type="button"
+                onClick={() => setDisplayMode('list')}
+                className={`px-3 py-1.5 min-h-[36px] rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                  displayMode === 'list'
+                    ? 'bg-white text-indigo-700 shadow-2xs font-extrabold'
+                    : 'hover:text-slate-900'
+                }`}
+              >
+                <List className="w-4 h-4" />
+                목록
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                if (!classSlots && !appointment) {
+                  showToast('이 업종에는 예약 규칙이 없어 등록할 수 없습니다.', 'warning');
+                  return;
+                }
+                form.openCreateModal();
+              }}
+              className={`px-4 py-2.5 ${accentBtn} text-white text-sm font-bold rounded-xl min-h-[44px] cursor-pointer`}
+            >
+              + 예약 등록
+            </button>
+          </div>
         }
       />
 
-      {!isScoped && instructors.length > 0 && (
-        <FilterTabs
-          tabs={instructorTabs}
-          active={instructorFilter}
-          onChange={setInstructorFilter}
-          activeClassName={accentTab}
+      {displayMode === 'calendar' ? (
+        <UnifiedScheduleCalendar<Booking>
+          mode="appointment_timeline"
+          events={calendarEvents}
+          resources={resourceColumns}
+          onEventMove={handleCalendarEventMove}
+          onEventResize={handleCalendarEventResize}
+          onSlotClick={handleCalendarSlotClick}
+          onEventClick={(ev) => setSelectedBookingForDetail(ev.raw)}
         />
-      )}
+      ) : (
+        <>
+          {!isScoped && instructors.length > 0 && (
+            <FilterTabs
+              tabs={instructorTabs}
+              active={instructorFilter}
+              onChange={setInstructorFilter}
+              activeClassName={accentTab}
+            />
+          )}
 
-      <FilterTabs
-        tabs={timeFilters}
-        active={filter}
-        onChange={setFilter}
-        activeClassName={accentTab}
-      />
+          <FilterTabs
+            tabs={timeFilters}
+            active={filter}
+            onChange={setFilter}
+            activeClassName={accentTab}
+          />
 
       {classSlots ? (
         filtered.length === 0 && presetRecruitments.length === 0 ? (
           <EmptyState icon={<span className="text-3xl">📭</span>} title="예약 내역이 없습니다" />
         ) : (
-        <PilatesSlotList
+        <CapacitySlotList
           bookings={filtered}
           allBookings={allBookingsRaw}
           services={ScheduleService.getServiceOfferings()}
@@ -734,7 +897,7 @@ export const BookingCalendarView: React.FC = () => {
                         aria-label="예약 시간 변경"
                         onBlur={(e) => {
                           if (e.target.value && e.target.value !== b.startsAt.slice(11, 16)) {
-                            rescheduleBooking(b, e.target.value);
+                            handleLegacyReschedule(b, e.target.value);
                           }
                         }}
                         className="px-2 py-1 text-xs border border-slate-200 rounded-lg min-h-[44px]"
@@ -878,6 +1041,112 @@ export const BookingCalendarView: React.FC = () => {
           ))}
         </div>
       )}
+        </>
+      )}
+
+      <Modal
+        isOpen={Boolean(selectedBookingForDetail)}
+        onClose={() => setSelectedBookingForDetail(null)}
+        title="예약 상세 정보"
+      >
+        {selectedBookingForDetail && (
+          <div className="p-6 space-y-4">
+            <div>
+              <p className="text-lg font-black text-slate-900">
+                {selectedBookingForDetail.customerName}
+              </p>
+              <p className="text-sm text-slate-600 mt-1">
+                {selectedBookingForDetail.serviceName} · {selectedBookingForDetail.staffName || `${staffLabel} 미지정`}
+                {selectedBookingForDetail.roomName ? ` · ${selectedBookingForDetail.roomName}` : ''}
+              </p>
+              <p className="text-xs font-mono font-bold text-teal-700 mt-1">
+                {selectedBookingForDetail.startsAt.slice(0, 16).replace('T', ' ')} ~ {selectedBookingForDetail.endsAt.slice(11, 16)}
+              </p>
+              {selectedBookingForDetail.memo && (
+                <p className="text-xs text-slate-500 mt-2 p-3 bg-slate-50 rounded-xl whitespace-pre-wrap">
+                  {selectedBookingForDetail.memo}
+                </p>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 pt-2 border-t border-slate-100 flex-wrap">
+              <span className="text-xs font-bold px-2 py-1 rounded-lg bg-slate-100 text-slate-700">
+                {BOOKING_STATUS_LABEL[selectedBookingForDetail.status]}
+              </span>
+
+              {appointment && selectedBookingForDetail.depositStatus && selectedBookingForDetail.depositStatus !== 'confirmed' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const { createdIncome, income } = confirmBookingDeposit(selectedBookingForDetail);
+                    showToast(
+                      createdIncome && income
+                        ? `예약금 입금 확인 · 수입 ${income.amount.toLocaleString('ko-KR')}원 반영`
+                        : '예약금 입금을 확인했습니다.',
+                      'success'
+                    );
+                    setSelectedBookingForDetail(null);
+                  }}
+                  className="px-3 py-1.5 text-xs font-bold bg-rose-50 text-rose-700 rounded-lg min-h-[44px]"
+                >
+                  입금 확인
+                </button>
+              )}
+
+              {appointment && selectedBookingForDetail.waitlist && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    promoteWaitlist(selectedBookingForDetail);
+                    setSelectedBookingForDetail(null);
+                  }}
+                  className="px-3 py-1.5 text-xs font-bold bg-slate-100 text-slate-700 rounded-lg min-h-[44px]"
+                >
+                  일반 신청으로
+                </button>
+              )}
+
+              {selectedBookingForDetail.status === 'scheduled' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    updateStatus(selectedBookingForDetail, 'confirmed');
+                    setSelectedBookingForDetail(null);
+                  }}
+                  className={`px-3 py-1.5 text-xs font-bold ${bookingUi.statusConfirmBtnClass} text-white rounded-lg min-h-[44px]`}
+                >
+                  확정
+                </button>
+              )}
+
+              {(selectedBookingForDetail.status === 'scheduled' || selectedBookingForDetail.status === 'confirmed') && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      updateStatus(selectedBookingForDetail, 'completed');
+                      setSelectedBookingForDetail(null);
+                    }}
+                    className="px-3 py-1.5 text-xs font-bold bg-emerald-600 text-white rounded-lg min-h-[44px]"
+                  >
+                    완료
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      updateStatus(selectedBookingForDetail, 'cancelled');
+                      setSelectedBookingForDetail(null);
+                    }}
+                    className="px-3 py-1.5 text-xs font-bold bg-rose-100 text-rose-700 rounded-lg min-h-[44px]"
+                  >
+                    취소
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </Modal>
 
       <BookingFormModal
         isOpen={form.isModalOpen}
