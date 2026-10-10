@@ -17,6 +17,7 @@ export interface TerminologyCustomerLabels {
   add: string;
   search: string;
   statusActive?: string;
+  statusPaused?: string;
   statusWithdrawn?: string;
 }
 
@@ -47,6 +48,12 @@ export interface TerminologyScheduleLabels {
   section?: string;
 }
 
+export interface TerminologyAttendanceLabels {
+  noun: string;
+  checkIn: string;
+  checkOut: string;
+}
+
 export interface TerminologyBillingLabels {
   fee: string;
   unpaid: string;
@@ -67,6 +74,7 @@ export interface TerminologyDictionary {
   staff: TerminologyStaffLabels;
   service: TerminologyServiceLabels;
   schedule: TerminologyScheduleLabels;
+  attendance?: TerminologyAttendanceLabels;
   billing: TerminologyBillingLabels;
   facility: TerminologyFacilityLabels;
 }
@@ -79,6 +87,7 @@ export type KnownTermKey =
   | 'customer.add'
   | 'customer.search'
   | 'customer.statusActive'
+  | 'customer.statusPaused'
   | 'customer.statusWithdrawn'
   | 'contact.singular'
   | 'contact.plural'
@@ -95,13 +104,25 @@ export type KnownTermKey =
   | 'schedule.plural'
   | 'schedule.management'
   | 'schedule.section'
+  | 'attendance.noun'
+  | 'attendance.checkIn'
+  | 'attendance.checkOut'
   | 'billing.fee'
   | 'billing.unpaid'
   | 'billing.pass'
   | 'billing.payment'
   | 'facility.place'
   | 'facility.owner'
-  | 'facility.room';
+  | 'facility.room'
+  // 단축 별칭 (Shortcut Aliases)
+  | 'customer'
+  | 'contact'
+  | 'staff'
+  | 'service'
+  | 'schedule'
+  | 'attendance'
+  | 'fee'
+  | 'place';
 
 /** IDE 자동완성을 보존하면서 확장을 허용하는 개방형 유니온 */
 export type TermKey = KnownTermKey | (string & {});

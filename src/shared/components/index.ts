@@ -5,6 +5,7 @@ export { ModuleBottomNav } from './layout/ModuleBottomNav';
 export { MODULE_THEMES, type ModuleTheme } from './layout/moduleTheme';
 export { LoadingScreen } from './LoadingScreen';
 export { AppErrorBoundary } from './AppErrorBoundary';
+export { PluginErrorBoundary } from './PluginErrorBoundary';
 export { WorkStatusBanner } from './WorkStatusBanner';
 export { PwaInstallPrompt } from './PwaInstallPrompt';
 export { DirectorFloatingFab } from './DirectorFloatingFab';

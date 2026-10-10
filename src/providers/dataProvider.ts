@@ -135,6 +135,25 @@ export function guardTenantDataProvider(
       });
     },
 
+    getOne: async (params) => {
+      if (!isTenantScopedResource(params.resource)) {
+        return baseProvider.getOne(params);
+      }
+      requireActiveOrgId();
+      return baseProvider.getOne(params);
+    },
+
+    getMany: async (params) => {
+      if (!baseProvider.getMany) {
+        throw new Error("getMany is not implemented");
+      }
+      if (!isTenantScopedResource(params.resource)) {
+        return baseProvider.getMany(params);
+      }
+      requireActiveOrgId();
+      return baseProvider.getMany(params);
+    },
+
     create: async (params) => {
       if (!isTenantScopedResource(params.resource)) {
         return baseProvider.create(params);
@@ -177,6 +196,28 @@ export function guardTenantDataProvider(
         ...params,
         variables: withoutOrganizationId(params.variables),
       });
+    },
+
+    deleteOne: async (params) => {
+      if (!baseProvider.deleteOne) {
+        throw new Error("deleteOne is not implemented");
+      }
+      if (!isTenantScopedResource(params.resource)) {
+        return baseProvider.deleteOne(params);
+      }
+      requireActiveOrgId();
+      return baseProvider.deleteOne(params);
+    },
+
+    deleteMany: async (params) => {
+      if (!baseProvider.deleteMany) {
+        throw new Error("deleteMany is not implemented");
+      }
+      if (!isTenantScopedResource(params.resource)) {
+        return baseProvider.deleteMany(params);
+      }
+      requireActiveOrgId();
+      return baseProvider.deleteMany(params);
     },
   };
 }

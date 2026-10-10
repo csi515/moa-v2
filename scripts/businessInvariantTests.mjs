@@ -233,6 +233,8 @@ export const INVENTORY_CANDIDATES = {
   'test:attendance-pipeline': 'attendance capability unified attendance pipeline unit 후보',
   'test:payroll-calc-metrics': 'finance teacher payroll performance metrics calculation unit 후보',
   'test:roster-schema': 'roster capability industry roster schema configuration unit 후보',
+  'test:data-provider': 'authorization(dataProvider tenant pinning and guard) 후보',
+  'test:terminology': 'industry(universal taxonomy and terminology dictionary) 후보',
   'test:resource': 'resources capability. reservation과 별개',
   'test:availability': 'scheduling capability 후보',
   'test:customer-session': 'platform/session 후보',

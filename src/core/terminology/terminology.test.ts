@@ -116,11 +116,27 @@ function run() {
   assert.equal(translateTerm(gymDict, 'facility.owner'), '관장');
   assert.equal(translateTerm(gymDict, 'unknown.key' as any, '기본값'), '기본값');
 
+  // 단축 별칭 (Shortcut Aliases) 검증
+  assert.equal(translateTerm(gymDict, 'customer'), '회원');
+  assert.equal(translateTerm(gymDict, 'staff'), '강사');
+  assert.equal(translateTerm(gymDict, 'fee'), '회비');
+  assert.equal(translateTerm(gymDict, 'place'), '체육관');
+  assert.equal(translateTerm(gymDict, 'attendance'), '출결');
+
+  // statusPaused 및 attendance 폴백 검증
+  assert.equal(translateTerm(pianoDict, 'customer.statusPaused'), '휴원');
+  assert.equal(translateTerm(pilatesDict, 'customer.statusPaused'), '휴회');
+  assert.equal(translateTerm(pianoDict, 'attendance.checkIn'), '등원');
+  assert.equal(translateTerm(pilatesDict, 'attendance.checkIn'), '출석');
+
   // 5. createTranslator 검증
   const t = createTranslator(daycareDict);
   assert.equal(t('customer.singular'), '원아');
+  assert.equal(t('customer'), '원아');
   assert.equal(t('billing.fee'), '보육료');
+  assert.equal(t('fee'), '보육료');
   assert.equal(t('facility.place'), '어린이집');
+  assert.equal(t('place'), '어린이집');
   assert.equal(t('facility.owner'), '원장');
   assert.equal(t('facility.room'), '보육실');
   assert.equal(t('invalid.path' as any, '대체어'), '대체어');

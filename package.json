@@ -39,6 +39,8 @@
     "test:grant-authenticated-payroll-join-requests": "tsx scripts/grant-authenticated-payroll-join-requests.test.ts",
     "test:security-boundary-harden": "tsx scripts/security-boundary-harden.test.ts",
     "test:access-control": "tsx src/providers/accessControlProvider.test.ts",
+    "test:data-provider": "tsx src/providers/dataProvider.test.ts",
+    "test:terminology": "tsx src/core/terminology/terminology.test.ts",
     "test:student-crud": "tsx src/pages/students/studentCrud.test.ts",
     "test:logout-protection": "tsx src/core/auth/services/signOutCoordinator.test.ts",
     "test:finance": "node scripts/run-finance-tests.mjs",

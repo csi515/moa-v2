@@ -89,11 +89,31 @@ export const SupabaseAppGate: FC<SupabaseAppGateProps> = ({ children }) => {
 
   // 5. 학부모 포털 활성 상태
   if (parentPortalActive || portalMode === 'parent') {
+    if (currentOrganization?.id) {
+      return (
+        <StorageHydrator
+          organizationId={currentOrganization.id}
+          industryType={currentOrganization.industry_type}
+        >
+          <ParentShell />
+        </StorageHydrator>
+      );
+    }
     return <ParentShell />;
   }
 
   // 6. 성인 수강생/고객 포털 활성 상태
   if (customerPortalActive || portalMode === 'customer') {
+    if (currentOrganization?.id) {
+      return (
+        <StorageHydrator
+          organizationId={currentOrganization.id}
+          industryType={currentOrganization.industry_type}
+        >
+          <CustomerShell />
+        </StorageHydrator>
+      );
+    }
     return <CustomerShell />;
   }
 

@@ -14,6 +14,7 @@ import { OrganizationProvider, useOrganization } from "@/core/organizations/Orga
 import { AppProvider } from "@/context/AppContext";
 import { SupabaseRoleSync } from "@/SupabaseRoleSync";
 import { SupabaseAppGate } from "@/SupabaseAppGate";
+import { AppBootstrapGate } from "@/core/application/AppBootstrapGate";
 import { IndustryAppRouter } from "@/app/industry/IndustryAppRouter";
 import { provisionIndustryResources } from "@/app/industry/resourceProvisioner";
 import { registerQueryClientClear } from "@/core/auth/services/signOutCoordinator";
@@ -190,7 +191,9 @@ export const App: React.FC = () => {
           <OrganizationProvider>
             <AppProvider>
               <SupabaseRoleSync />
-              <RefineApp />
+              <AppBootstrapGate>
+                <RefineApp />
+              </AppBootstrapGate>
             </AppProvider>
           </OrganizationProvider>
         </AuthProvider>

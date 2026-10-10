@@ -23,6 +23,7 @@ export const DEFAULT_TERMINOLOGY_DICTIONARY: TerminologyDictionary = {
     add: '학생 등록',
     search: '학생 검색',
     statusActive: '재원',
+    statusPaused: '휴원',
     statusWithdrawn: '퇴원',
   },
   contact: {
@@ -47,6 +48,11 @@ export const DEFAULT_TERMINOLOGY_DICTIONARY: TerminologyDictionary = {
     plural: '일정',
     management: '시간표',
     section: '일정',
+  },
+  attendance: {
+    noun: '출결',
+    checkIn: '등원',
+    checkOut: '하원',
   },
   billing: {
     fee: '수강료',
@@ -352,6 +358,7 @@ export const INDUSTRY_DICTIONARIES: Record<string, TerminologyDictionary> = {
       add: '학생 등록',
       search: '학생 검색',
       statusActive: '재원',
+      statusPaused: '휴원',
       statusWithdrawn: '퇴원',
     },
     contact: {
@@ -377,6 +384,11 @@ export const INDUSTRY_DICTIONARIES: Record<string, TerminologyDictionary> = {
       management: '주간 시간표',
       section: '일정',
     },
+    attendance: {
+      noun: '출결',
+      checkIn: '등원',
+      checkOut: '하원',
+    },
     billing: {
       fee: '수강료',
       unpaid: '미납 수강료',
@@ -398,6 +410,7 @@ export const INDUSTRY_DICTIONARIES: Record<string, TerminologyDictionary> = {
       add: '회원 등록',
       search: '회원 검색',
       statusActive: '이용중',
+      statusPaused: '휴회',
       statusWithdrawn: '만료',
     },
     contact: {
@@ -422,6 +435,11 @@ export const INDUSTRY_DICTIONARIES: Record<string, TerminologyDictionary> = {
       plural: '예약',
       management: '예약 캘린더',
       section: '예약',
+    },
+    attendance: {
+      noun: '출석',
+      checkIn: '출석',
+      checkOut: '퇴실',
     },
     billing: {
       fee: '이용료',

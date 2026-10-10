@@ -14,6 +14,7 @@ import {
 } from './defineIndustryModule';
 
 import { GenericIndustryShell } from './GenericIndustryShell';
+import { PluginErrorBoundary } from '@/shared/components/PluginErrorBoundary';
 
 function wrapIndustryApp(module: IndustryModuleDefinition): IndustryAppComponent {
   return lazy(async () => {
@@ -27,9 +28,11 @@ function wrapIndustryApp(module: IndustryModuleDefinition): IndustryAppComponent
       
       function IndustryApp() {
         return (
-          <ModuleLabelsProvider>
-            <GenericIndustryShell viewMap={viewMap} Overlays={Overlays} />
-          </ModuleLabelsProvider>
+          <PluginErrorBoundary pluginName={module.id}>
+            <ModuleLabelsProvider>
+              <GenericIndustryShell viewMap={viewMap} Overlays={Overlays} />
+            </ModuleLabelsProvider>
+          </PluginErrorBoundary>
         );
       }
       return { default: IndustryApp };

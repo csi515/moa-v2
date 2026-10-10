@@ -74,8 +74,8 @@ export const StudentListView: React.FC = () => {
   const labels = useModuleLabels();
   const { t } = useTerminology();
   const activeStatusLabel = t('customer.statusActive', '재원');
-  const leaveStatusLabel = activeStatusLabel === '재원' ? '휴원' : '휴회';
-  const endedLabel = rosterList.withdrawnLabel;
+  const leaveStatusLabel = t('customer.statusPaused', '휴원');
+  const endedLabel = t('customer.statusWithdrawn', rosterList.withdrawnLabel);
   const staffFilterName = rosterList.staffFilterLabel ?? labels.staff.singular;
   const controlMinClass = rosterList.controlMinHeight === 44 ? 'min-h-[44px]' : 'min-h-[36px]';
   const { isScoped, staffId, scopeStudents } = useStaffScope();

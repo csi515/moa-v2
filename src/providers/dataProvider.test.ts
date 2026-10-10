@@ -58,7 +58,15 @@ function orgFilters(params: any) {
 async function testDataProviderGuard() {
   assert.deepEqual(
     [...TENANT_SCOPED_RESOURCES],
-    ["customers", "schedules", "tuition_invoices"]
+    [
+      "customers",
+      "schedules",
+      "tuition_invoices",
+      "staff",
+      "classes",
+      "class_members",
+      "practice_records",
+    ]
   );
 
   for (const resource of TENANT_SCOPED_RESOURCES) {
@@ -92,6 +100,13 @@ async function testDataProviderGuard() {
     const nested = getList.params.filters.find((f: any) => f.operator === "or");
     assert.deepEqual(nested.value, [{ field: "name", operator: "contains", value: "kim" }]);
 
+    await provider.getOne({
+      resource,
+      id: "row-1",
+    });
+    const gotOne = base.calls.find((c) => c.method === "getOne");
+    assert.ok(gotOne, `${resource} getOne reached the inner provider`);
+
     await provider.create({
       resource,
       variables: { name: "row", organization_id: FOREIGN_ORG },
@@ -118,6 +133,13 @@ async function testDataProviderGuard() {
     assert.equal(updatedMany.params.variables.organization_id, undefined);
     assert.equal(updatedMany.params.variables.status, "inactive");
     assert.deepEqual(updatedMany.params.ids, ["row-1", "row-2"]);
+
+    await provider.deleteOne({
+      resource,
+      id: "row-1",
+    });
+    const deleted = base.calls.find((c) => c.method === "deleteOne");
+    assert.ok(deleted, `${resource} deleteOne reached the inner provider`);
   }
 
   {
@@ -126,6 +148,10 @@ async function testDataProviderGuard() {
     for (const resource of TENANT_SCOPED_RESOURCES) {
       await assert.rejects(
         () => provider.getList({ resource, filters: [{ field: "organization_id", operator: "eq", value: FOREIGN_ORG }] }),
+        ActiveOrganizationRequiredError
+      );
+      await assert.rejects(
+        () => provider.getOne({ resource, id: "1" }),
         ActiveOrganizationRequiredError
       );
       await assert.rejects(
@@ -140,6 +166,10 @@ async function testDataProviderGuard() {
         () => provider.updateMany({ resource, ids: ["1"], variables: { organization_id: FOREIGN_ORG } }),
         ActiveOrganizationRequiredError
       );
+      await assert.rejects(
+        () => provider.deleteOne({ resource, id: "1" }),
+        ActiveOrganizationRequiredError
+      );
     }
     assert.equal(base.calls.length, 0, "fail closed does not call the inner provider");
   }
@@ -152,7 +182,7 @@ async function testDataProviderGuard() {
       filters: [{ field: "organization_id", operator: "eq", value: FOREIGN_ORG }],
     });
     await provider.create({
-      resource: "staff",
+      resource: "dashboard",
       variables: { name: "other", organization_id: FOREIGN_ORG },
     });
     assert.equal(base.calls[0].params.filters[0].value, FOREIGN_ORG);

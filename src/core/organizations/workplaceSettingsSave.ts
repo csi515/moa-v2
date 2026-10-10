@@ -26,12 +26,30 @@ export function omitSkinOnlyOrganizationSettings<T extends object>(
   return next;
 }
 
+/**
+ * 저장 페이로드에서 금지된 키(Skin 카탈로그/마이그레이션 등)가 포함되지 않도록 검증합니다.
+ */
+export function validateWorkplaceSettingsPayload(
+  payload: Partial<AcademySettings>
+): { valid: boolean; violations: string[] } {
+  const violations: string[] = [];
+  for (const key of SKIN_ONLY_ORGANIZATION_SETTINGS_KEYS) {
+    if (Object.prototype.hasOwnProperty.call(payload, key)) {
+      violations.push(`Forbidden skin-only key detected in settings payload: ${key}`);
+    }
+  }
+  return {
+    valid: violations.length === 0,
+    violations,
+  };
+}
+
 /** WorkplaceSettingsView → updateOrganization settings. Skin 전용 키는 포함하지 않는다. */
 export function buildWorkplaceSettingsSavePayload(
   settings: AcademySettings,
   options: { displayAddress: string; rooms: AcademyRoom[] }
 ): Partial<AcademySettings> {
-  return {
+  const payload: Partial<AcademySettings> = {
     name: settings.name,
     directorName: settings.directorName,
     phone: settings.phone,
@@ -48,6 +66,13 @@ export function buildWorkplaceSettingsSavePayload(
     features: settings.features,
     rooms: options.rooms,
   };
+
+  const validation = validateWorkplaceSettingsPayload(payload);
+  if (!validation.valid) {
+    throw new Error(validation.violations.join(', '));
+  }
+
+  return payload;
 }
 
 /** OrganizationSettingsView 처럼 settings 를 펼친 공통 저장에서 skin 키만 제거한다. */
@@ -55,7 +80,7 @@ export function buildCommonOrganizationSettingsSavePayload(
   settings: AcademySettings,
   displayAddress: string
 ): Partial<AcademySettings> {
-  return omitSkinOnlyOrganizationSettings({
+  const sanitized = omitSkinOnlyOrganizationSettings({
     ...settings,
     name: settings.name,
     directorName: settings.directorName,
@@ -63,4 +88,11 @@ export function buildCommonOrganizationSettingsSavePayload(
     businessNumber: settings.businessNumber,
     address: displayAddress,
   });
+
+  const validation = validateWorkplaceSettingsPayload(sanitized);
+  if (!validation.valid) {
+    throw new Error(validation.violations.join(', '));
+  }
+
+  return sanitized;
 }
