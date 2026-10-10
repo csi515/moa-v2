@@ -11,9 +11,15 @@ interface Props {
   formData: StudentFormData;
   onChange: (patch: Partial<StudentFormData>) => void;
   nameError?: string;
+  showSchoolFields?: boolean;
 }
 
-export const StudentBasicInfoSection: React.FC<Props> = ({ formData, onChange, nameError }) => {
+export const StudentBasicInfoSection: React.FC<Props> = ({
+  formData,
+  onChange,
+  nameError,
+  showSchoolFields: showSchoolProp,
+}) => {
   const { industry } = usePermissions();
   const labels = useModuleLabels();
   const customerLabel = labels.customer.singular;

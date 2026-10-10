@@ -12,7 +12,7 @@ import {
 } from '@/capabilities/roster/components/detail/studentDetailExtensions';
 import type { DetailTabConfigItem, DetailTabCounts } from '@/capabilities/roster/components/detail/types';
 import { PERFORMANCE_VIDEO_TYPE_LABEL } from '@/industries/piano/config/eventLabels';
-import { applySessionPassForAttendance } from '@/industries/piano/services/lessonPassConsume';
+import { applySessionPassForAttendance } from '@/core/schedules/attendancePassAtomic';
 import { RecitalService } from '@/industries/piano/services/recitalService';
 import { NewSaleModal } from '@/industries/piano/components/textbooks/NewSaleModal';
 import { TextbookPaymentModal } from '@/industries/piano/components/textbooks/TextbookPaymentModal';
@@ -183,6 +183,9 @@ const pianoStudentDetailExtension: StudentDetailExtension = {
   applyAttendanceSideEffect: applySessionPassForAttendance,
   performanceVideoTypeLabel: PERFORMANCE_VIDEO_TYPE_LABEL,
   mapEventTypeToVideoType: RecitalService.eventTypeToVideoType,
+  showsPracticeRecords: true,
+  practiceRecordsResource: 'practice_records',
+  practiceRecordsSchema: 'piano',
 };
 
 /** Core 학생 상세가 piano Module을 import하지 않도록 plugin에서 등록 */

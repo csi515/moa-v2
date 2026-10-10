@@ -32,6 +32,50 @@ export function countLessonsForTeacher(
   ).length;
 }
 
+export function countBookingsForStaff(
+  bookings: Array<{ staffId?: string; startsAt: string; status: string }>,
+  staffId: string,
+  yearMonth: string
+): number {
+  return bookings.filter(
+    (b) =>
+      b.staffId === staffId &&
+      b.startsAt.startsWith(yearMonth) &&
+      (b.status === 'completed' || b.status === 'confirmed')
+  ).length;
+}
+
+export interface StaffPerformanceMetrics {
+  lessonCount: number;
+  bookingCount: number;
+  workHours: number;
+  totalServiceUnits: number;
+}
+
+export function computeStaffPerformanceMetrics(params: {
+  staffId: string;
+  yearMonth: string;
+  lessons?: LessonRecord[];
+  bookings?: Array<{ staffId?: string; startsAt: string; status: string }>;
+  workHours?: number;
+}): StaffPerformanceMetrics {
+  const lessonCount = params.lessons
+    ? countLessonsForTeacher(params.lessons, params.staffId, params.yearMonth)
+    : 0;
+  const bookingCount = params.bookings
+    ? countBookingsForStaff(params.bookings, params.staffId, params.yearMonth)
+    : 0;
+  const workHours = params.workHours || 0;
+  const totalServiceUnits = lessonCount + bookingCount;
+
+  return {
+    lessonCount,
+    bookingCount,
+    workHours,
+    totalServiceUnits,
+  };
+}
+
 export function computePayrollAmount(params: {
   payType: TeacherPayType;
   quantity: number;

@@ -42,3 +42,53 @@ export function registerStudentStampBoardSlot(
 export function getStudentStampBoardSlot(): ComponentType<StudentStampBoardSlotProps> | null {
   return studentStampBoardSlot;
 }
+
+/** 범용 포털 탭 슬롯 인터페이스 */
+export interface GenericParentPortalTabSlotProps {
+  student: any;
+  organizationId: string;
+  readOnly?: boolean;
+  showToast: (msg: string, type?: 'success' | 'error' | 'info' | 'warning') => void;
+  onRefresh: () => void;
+  onNavigate: (tab: any) => void;
+  industryType?: string;
+  [key: string]: any;
+}
+
+const customTabSlots = new Map<string, ComponentType<GenericParentPortalTabSlotProps>>();
+
+export function registerParentPortalTabSlot(
+  tabId: string,
+  component: ComponentType<GenericParentPortalTabSlotProps>
+): void {
+  customTabSlots.set(tabId, component);
+}
+
+export function getParentPortalTabSlot(
+  tabId: string
+): ComponentType<GenericParentPortalTabSlotProps> | undefined {
+  return customTabSlots.get(tabId);
+}
+
+/** 범용 포털 홈 위젯 슬롯 인터페이스 */
+export interface ParentHomeWidgetSlotProps {
+  student: any;
+  organizationId: string;
+  onNavigate: (tab: any) => void;
+  industryType?: string;
+}
+
+const homeWidgetSlots = new Map<string, ComponentType<ParentHomeWidgetSlotProps>>();
+
+export function registerParentHomeWidgetSlot(
+  industryOrKey: string,
+  component: ComponentType<ParentHomeWidgetSlotProps>
+): void {
+  homeWidgetSlots.set(industryOrKey, component);
+}
+
+export function getParentHomeWidgetSlot(
+  industryOrKey: string
+): ComponentType<ParentHomeWidgetSlotProps> | undefined {
+  return homeWidgetSlots.get(industryOrKey);
+}

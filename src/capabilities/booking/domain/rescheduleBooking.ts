@@ -1,6 +1,7 @@
 import { ScheduleService } from '@/core/services/scheduleService';
-import { StorageService } from '@/services/storage';
+import { StudentService } from '@/core/students/services/studentService';
 import type { Booking } from '@/core/types/schedule';
+import type { StaffWorkWindow } from '@/core/staff/workWindow';
 import {
   findStaffTimeConflict,
   findTreatmentRoomConflict,
@@ -18,6 +19,7 @@ export interface RescheduleBookingParams {
   roomId?: string;
   roomName?: string;
   notify?: boolean;
+  staffHours?: StaffWorkWindow[];
 }
 
 export type RescheduleConflictType =
@@ -76,7 +78,7 @@ export function rescheduleBooking(
       staffId: targetStaffId,
       startsAt: params.startsAt,
       endsAt: params.endsAt,
-      windows: StorageService.getSettings().staffHours,
+      windows: params.staffHours ?? ScheduleService.getStaffHours(),
     });
     if (isOutside) {
       return {
@@ -161,7 +163,7 @@ export function rescheduleBooking(
 
   // 7. 고객 알림 발송 (기본 true)
   if (params.notify !== false) {
-    const student = StorageService.getStudents().find((s) => s.id === saved.customerId);
+    const student = StudentService.getStudentById(saved.customerId);
     notifyBookingChange({
       studentId: saved.customerId,
       studentName: saved.customerName,

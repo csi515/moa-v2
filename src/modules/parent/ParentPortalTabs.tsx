@@ -23,7 +23,8 @@ import { normalizeIndustryType } from '@/core/industry/types';
 import { isAppointmentIndustry } from '@/core/industry/industryUi';
 import { useParentPortal } from '@/core/parent/context/ParentPortalContext';
 import { ParentIndustryAdapter } from '@/capabilities/parent/ParentIndustryAdapter';
-import { getParentStudentStampViewSlot } from './slots/parentPortalSlots';
+import { getParentStudentStampViewSlot, getParentPortalTabSlot } from './slots/parentPortalSlots';
+import './slots/initParentPortalSlots';
 
 export function ParentPortalTabs({
   tab,
@@ -60,6 +61,22 @@ export function ParentPortalTabs({
     if (fromTree.length > 0) return fromTree;
     return [{ id: student.id, name: student.name }];
   }, [portalTree?.children, organizationId, student.id, student.name]);
+
+  // 커스텀 탭 슬롯 검사
+  const CustomTabSlot = getParentPortalTabSlot(tab);
+  if (CustomTabSlot) {
+    return (
+      <CustomTabSlot
+        student={student}
+        organizationId={organizationId}
+        readOnly={readOnly}
+        showToast={showToast}
+        onRefresh={onRefresh}
+        onNavigate={onNavigate}
+        industryType={industryType}
+      />
+    );
+  }
 
   switch (tab) {
     case 'home':

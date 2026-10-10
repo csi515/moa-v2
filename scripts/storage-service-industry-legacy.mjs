@@ -38,7 +38,6 @@ export const STORAGE_SERVICE_INDUSTRY_LEGACY_FILES = new Set([
   'src/industries/piano/hooks/usePianoOnboardingUi.ts',
   'src/industries/piano/services/lessonCurriculumSync.ts',
   'src/industries/piano/services/lessonHomeworkSync.ts',
-  'src/industries/piano/services/lessonPassConsume.ts',
   'src/industries/piano/services/pinDayAttendanceSync.ts',
   'src/industries/piano/services/recitalService.ts',
   'src/industries/pilates/components/dashboard/PilatesDashboardView.tsx',

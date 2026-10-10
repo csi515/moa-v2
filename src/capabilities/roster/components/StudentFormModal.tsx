@@ -14,6 +14,7 @@ import { getStudentLevelOptions } from '@/core/students/levelOptions';
 import { getIndustryPlugin } from '@/core/industry/registry';
 import { getPlaceLabel, showsTextbooksLink } from '@/core/industry/industryUi';
 import { useModuleLabels } from '@/core/labels';
+import { getRosterConfigForIndustry } from '../config/rosterSchemaConfig';
 import { createPickupAddress, normalizePickupAddresses, sanitizePickupAddressesForSave } from '@/capabilities/transport';
 import { searchParents, getGuardiansForStudent } from '@/core/parent/guardianHelpers';
 import { requestPlaceStudentOnTimetable } from '@/core/customer/studentJoinInbox';
@@ -85,7 +86,18 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
   const settings = StorageService.getSettings();
   const attendanceEnabled = isAttendanceModuleEnabled(settings, industry);
   const defaultLevel = getStudentLevelOptions(industry)[0];
-  const showPickupFields = getIndustryPlugin(industry).showPickupFields;
+  const rosterConfig = useMemo(
+    () =>
+      getRosterConfigForIndustry(industry, {
+        customerLabel,
+        staffLabel: labels.staff.singular,
+        serviceLabel,
+        placeLabel,
+      }),
+    [industry, customerLabel, labels.staff.singular, serviceLabel, placeLabel]
+  );
+  const showPickupFields = rosterConfig.showPickupFields;
+  const showSchoolFields = rosterConfig.showSchoolFields;
   const canInviteParent = isSupabaseConfigured() && organizationId !== 'local-org';
   const isEdit = Boolean(student?.id);
   const customFieldsDef = useMemo(() => getCustomFieldsForIndustry(industry), [industry]);
@@ -522,6 +534,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
             formData={formData}
             onChange={updateFormData}
             nameError={fieldErrors.name}
+            showSchoolFields={showSchoolFields}
           />
 
           <div className="space-y-3">
@@ -654,3 +667,5 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
     </>
   );
 };
+
+export const UnifiedStudentFormModal = StudentFormModal;

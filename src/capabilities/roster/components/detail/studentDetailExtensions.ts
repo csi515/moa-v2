@@ -71,6 +71,10 @@ export interface StudentDetailExtension {
   performanceVideoTypeLabel?: Record<string, string>;
   /** 행사 선택 시 영상 eventType 매핑 (없으면 'other') */
   mapEventTypeToVideoType?: StudentDetailMapEventToVideoType;
+  /** 연습 기록 관리 활성화 여부 */
+  showsPracticeRecords?: boolean;
+  practiceRecordsResource?: string;
+  practiceRecordsSchema?: string;
 }
 
 const extensions = new Map<string, StudentDetailExtension>();

@@ -167,6 +167,7 @@ function run() {
   assert.match(atomic, /update_attendance_status_with_pass/);
   assert.match(atomic, /writeLocalMirror/);
   assert.match(atomic, /Session pass refund failed/);
+  assert.match(atomic, /export function applySessionPassForAttendance/);
   assert.equal(atomic.includes('upsertThenDiffDelete'), false);
 
   const pin = readFileSync(join(here, '../../industries/piano/services/pinDayAttendanceSync.ts'), 'utf8');

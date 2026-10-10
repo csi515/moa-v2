@@ -1,61 +1,6 @@
-import { sessionPassService } from '@/core/schedules/sessionPassService';
-import { isSessionPassBillingStudent } from '@/capabilities/billing/utils/billingMode';
-import { planAttendancePassChange } from '@/core/schedules/attendancePassPlan';
-import { StorageService } from '@/services/storage';
-import type { AttendanceRecord, AttendanceStatus, Student } from '@/types';
-
 /**
- * 회차권 학생 출결 — 로컬/demo 계획.
- * 온라인 production은 saveAttendanceWithPass → update_attendance_status_with_pass.
+ * @deprecated 회차권 출결 차감/복구 로직은 `@/core/schedules/attendancePassAtomic`으로 승격되었습니다.
+ * 하위 호환성을 위해 유지하며, 신규 코드는 core 모듈을 직접 참조하세요.
  */
-export function applySessionPassForAttendance(params: {
-  student: Student;
-  nextStatus: AttendanceStatus;
-  previous?: Pick<AttendanceRecord, 'id' | 'status' | 'sessionPassId'> | null;
-  date: string;
-}): { sessionPassId?: string; warning?: string } {
-  if (!isSessionPassBillingStudent(params.student)) {
-    return { sessionPassId: undefined };
-  }
+export { applySessionPassForAttendance } from '@/core/schedules/attendancePassAtomic';
 
-  const siblings = StorageService.getAttendance()
-    .filter((r) => r.studentId === params.student.id && r.date === params.date)
-    .map((r) => ({ id: r.id, status: r.status, sessionPassId: r.sessionPassId }));
-
-  const plan = planAttendancePassChange({
-    applyPass: true,
-    previousStatus: params.previous?.status,
-    nextStatus: params.nextStatus,
-    previousSessionPassId: params.previous?.sessionPassId,
-    previousId: params.previous?.id,
-    siblings,
-  });
-
-  if (plan.action === 'reuse') {
-    return { sessionPassId: plan.sessionPassId };
-  }
-  if (plan.action === 'consume') {
-    const consumed = sessionPassService.consume(params.student.id);
-    if (!consumed) {
-      return {
-        sessionPassId: undefined,
-        warning: `${params.student.name} 학생의 회차권이 없거나 잔여 횟수가 없습니다.`,
-      };
-    }
-    return { sessionPassId: consumed };
-  }
-  if (plan.action === 'refund') {
-    const refunded = sessionPassService.refund(plan.sessionPassId);
-    if (!refunded) {
-      return {
-        sessionPassId: params.previous?.sessionPassId,
-        warning: `${params.student.name} 학생의 회차권을 복구할 수 없습니다.`,
-      };
-    }
-    return { sessionPassId: undefined };
-  }
-  if (plan.action === 'keep') {
-    return { sessionPassId: undefined };
-  }
-  return { sessionPassId: plan.sessionPassId };
-}

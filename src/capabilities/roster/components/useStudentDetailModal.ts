@@ -178,13 +178,18 @@ export function useStudentDetailModal({
   const allVideos = StorageService.getPerformanceVideosByStudentId(student.id);
   const recitalEvents = StorageService.getRecitalEvents();
 
+  const studentDetailExtension = getStudentDetailExtension(industryPlugin.id);
+  const showsPracticeRecords = Boolean(studentDetailExtension?.showsPracticeRecords);
+  const practiceRecordsResource = studentDetailExtension?.practiceRecordsResource || 'practice_records';
+  const practiceRecordsSchema = studentDetailExtension?.practiceRecordsSchema;
+
   const practiceRecordsList = useList<any>({
-    resource: 'practice_records',
-    meta: { schema: 'piano' },
+    resource: practiceRecordsResource,
+    ...(practiceRecordsSchema ? { meta: { schema: practiceRecordsSchema } } : {}),
     filters: [
       { field: 'customer_id', operator: 'eq', value: student.id },
     ],
-    queryOptions: { enabled: !!student.id },
+    queryOptions: { enabled: !!student.id && showsPracticeRecords },
   });
   
   const rawPracticeRecords = (practiceRecordsList as any).data?.data || (practiceRecordsList as any).query?.data?.data || [];
@@ -383,8 +388,8 @@ export function useStudentDetailModal({
     
     createPracticeRecord(
       {
-        resource: 'practice_records',
-        meta: { schema: 'piano' },
+        resource: practiceRecordsResource,
+        ...(practiceRecordsSchema ? { meta: { schema: practiceRecordsSchema } } : {}),
         values: {
           organization_id: currentOrganization?.id,
           customer_id: student.id,

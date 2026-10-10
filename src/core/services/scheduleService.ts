@@ -1,4 +1,5 @@
 import { StorageService } from '@/services/storage';
+import type { StaffWorkWindow } from '@/core/staff/workWindow';
 import type {
   Booking,
   BookingStatus,
@@ -43,6 +44,10 @@ export const ScheduleService = {
 
   saveBooking(booking: Omit<Booking, 'id'> & { id?: string }): Booking {
     return StorageService.saveBooking(booking);
+  },
+
+  getStaffHours(): StaffWorkWindow[] {
+    return StorageService.getSettings().staffHours || [];
   },
 
   /**
