@@ -239,32 +239,23 @@ Deno.serve(async (req: Request) => {
       let matchedOrgId: string | null = null;
 
       if (normalizedPhone) {
-        // 동일 전화번호의 customer 검색
-        const { data: customerCandidates } = await admin
-          .from("customers")
-          .select("id, organization_id, auth_user_id, user_id, metadata")
-          .or(`phone.eq.${rawPhone},phone.eq.${normalizedPhone}`);
+        // Atomic RPC 호출: core.link_toss_customer_by_phone
+        // 계정 탈취(hijack defense) 방어 및 row lock(FOR UPDATE) 원자적 수행
+        const { data: linkRes, error: linkErr } = await admin.rpc(
+          "link_toss_customer_by_phone",
+          {
+            p_user_id: authUserId,
+            p_toss_user_key: userKey,
+            p_phone: rawPhone || normalizedPhone,
+          }
+        );
 
-        if (customerCandidates && customerCandidates.length > 0) {
-          const targetCustomer = customerCandidates[0];
-          matchedCustomerId = targetCustomer.id;
-          matchedOrgId = targetCustomer.organization_id;
-
-          // 동일 customer_id 유지하면서 auth_user_id 연결 및 metadata에 toss_user_key 주입
-          const existingMeta = (targetCustomer.metadata as Record<string, unknown>) || {};
-          await admin
-            .from("customers")
-            .update({
-              auth_user_id: authUserId,
-              user_id: targetCustomer.user_id || authUserId,
-              metadata: {
-                ...existingMeta,
-                toss_user_key: userKey,
-                toss_linked_at: new Date().toISOString(),
-              },
-              updated_at: new Date().toISOString(),
-            })
-            .eq("id", targetCustomer.id);
+        if (linkErr) {
+          console.warn("[auth-toss] link_toss_customer_by_phone warning:", linkErr.message);
+          // 탈취 방어 등으로 실패한 경우 다른 사용자의 고객 데이터를 덮어쓰지 않음
+        } else if (linkRes && (linkRes as any).success && (linkRes as any).linked_customer_id) {
+          matchedCustomerId = (linkRes as any).linked_customer_id;
+          matchedOrgId = (linkRes as any).organization_id;
         }
       }
 
@@ -272,16 +263,22 @@ Deno.serve(async (req: Request) => {
       const { data: memberRecords } = await admin
         .from("organization_members")
         .select("id, organization_id, role")
-        .eq("user_id", authUserId);
+        .eq("user_id", authUserId)
+        .eq("is_active", true);
 
-      const hasStaffMembership = Boolean(memberRecords && memberRecords.length > 0);
+      // 매칭된 고객 조직의 멤버십을 우선적으로 평가하여 교차 테넌트 권한 오염 방지
+      const matchedOrgMembership = memberRecords?.find(
+        (m: { organization_id: string }) => !matchedOrgId || m.organization_id === matchedOrgId
+      ) || memberRecords?.[0];
+
+      const hasStaffMembership = Boolean(matchedOrgMembership);
       const hasCustomerRecord = Boolean(matchedCustomerId);
 
       let computedRole: "owner" | "staff" | "customer" | "both" = "customer";
       if (hasStaffMembership && hasCustomerRecord) {
         computedRole = "both";
       } else if (hasStaffMembership) {
-        const primaryRole = memberRecords[0]?.role;
+        const primaryRole = (matchedOrgMembership as any)?.role;
         computedRole = primaryRole === "owner" ? "owner" : "staff";
       } else {
         computedRole = "customer";

@@ -147,6 +147,27 @@ function run() {
   assert.equal(moduleLabelCompatible.billing?.fee, '수강료');
   assert.equal(moduleLabelCompatible.facility?.place, '학원');
 
+  // 7. 피아노 외 업종에서 피아노 전용 용어(학생, 학원, 원장, 수강료) 노출 방지 회귀 검증
+  const nonPianoCases = [
+    { id: 'study_cafe', expectedCustomer: '고객', expectedPlace: '스튜디오', expectedFee: '이용료' },
+    { id: 'auto_repair', expectedCustomer: '고객', expectedPlace: '정비소', expectedFee: '정비료' },
+    { id: 'pet_hotel', expectedCustomer: '보호자', expectedPlace: '호텔·샵', expectedFee: '이용료' },
+    { id: 'guesthouse', expectedCustomer: '투숙객', expectedPlace: '게스트하우스', expectedFee: '숙박료' },
+    { id: 'cafe', expectedCustomer: '고객', expectedPlace: '매장', expectedFee: '결제액' },
+    { id: 'custom_service_xyz', expectedCustomer: '고객', expectedPlace: '사업장', expectedFee: '이용료' },
+  ];
+
+  for (const c of nonPianoCases) {
+    const dict = getTerminologyDictionary(c.id);
+    assert.notEqual(dict.customer.singular, '학생', `${c.id}: 피아노 전용 고객 용어(학생) 노출됨`);
+    assert.notEqual(dict.billing.fee, '수강료', `${c.id}: 피아노 전용 결제 용어(수강료) 노출됨`);
+    assert.notEqual(dict.facility.place, '학원', `${c.id}: 피아노 전용 장소 용어(학원) 노출됨`);
+    assert.equal(dict.customer.singular, c.expectedCustomer, `${c.id}: 기대 고객 호칭 불일치`);
+    assert.equal(dict.facility.place, c.expectedPlace, `${c.id}: 기대 장소 호칭 불일치`);
+    assert.equal(dict.billing.fee, c.expectedFee, `${c.id}: 기대 요금 호칭 불일치`);
+    assert.equal(dict.facility.owner, '대표', `${c.id}: 대표 호칭이어야 함`);
+  }
+
   console.log('terminology.test.ts: all tests passed! (100% OK)');
 }
 

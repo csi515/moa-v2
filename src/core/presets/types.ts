@@ -126,6 +126,7 @@ export interface AssembledPresetResult {
   setupSchemas: CapabilitySetupSchema[];
   resources: CapabilityResourceItem[];
   allFields: SetupFieldDefinition[];
+  skippedOptionalCapabilities?: readonly PresetCapabilityId[];
 }
 
 export interface CapabilityModuleBundle {
@@ -135,7 +136,17 @@ export interface CapabilityModuleBundle {
 }
 
 // ============================================================================
-// Domain Capability Pack Configurations (수평적 미세 플래그 수렴을 위한 도메인 팩)
+// Legacy Plugin Facade Contracts (레거시 업종 플러그인 호환 어댑터 계약)
+//
+// [아키텍처 원칙]
+// Moa-v2의 최종 아키텍처는 Core – Capability – Preset 3계층으로 단일화되며,
+// 별도의 Domain Capability 계층은 존재하지 않습니다.
+//
+// 아래의 *CapabilityConfig 및 PresetManifest 타입은 기존 레거시 업종 모듈(피아노,
+// 피부, 헬스 등)과의 하위 호환성을 유지하기 위해 IndustryAdapter에서 사용하는
+// 호환용 파사드 계약(Facade Contract)입니다.
+// 실제 다업종 프리셋 조립 엔진은 위의 IndustryPresetDefinition 및 17대 원자적
+// Capability 번들을 사용합니다.
 // ============================================================================
 
 export interface PresetLabels {
@@ -147,7 +158,7 @@ export interface PresetLabels {
 }
 
 /**
- * 1. 공간·시설 도메인 기능 팩 (Facility Capability Pack)
+ * 1. 공간·시설 호환 설정 (Facility Legacy Plugin Config)
  * 공간/실(roomConfig), 연습실 예약, 사물함/락커 등 물리 자원 관리 설정
  */
 export interface FacilityCapabilityConfig {
@@ -161,7 +172,7 @@ export interface FacilityCapabilityConfig {
 }
 
 /**
- * 2. 수납·정산·재무 도메인 기능 팩 (Billing Capability Pack)
+ * 2. 수납·정산·재무 호환 설정 (Billing Legacy Plugin Config)
  * 수강료/이용료, 정산 계정 과목, 교재/상품 판매 링크, 재무 요약 표시 메타데이터
  */
 export interface BillingCapabilityConfig {
@@ -177,7 +188,7 @@ export interface BillingCapabilityConfig {
 }
 
 /**
- * 3. 출결·체크인 도메인 기능 팩 (Attendance Capability Pack)
+ * 3. 출결·체크인 호환 설정 (Attendance Legacy Plugin Config)
  * 수업/출입 명사, 반 기반 일정 여부, 회차권 차감 정책, 키오스크 테마 및 부가 동기화
  */
 export interface AttendanceCapabilityConfig {
@@ -191,7 +202,7 @@ export interface AttendanceCapabilityConfig {
 }
 
 /**
- * 4. 고객·학부모 포털 슬롯 및 정책 도메인 기능 팩 (Portal Capability Pack)
+ * 4. 고객·학부모 포털 슬롯 및 정책 호환 설정 (Portal Legacy Plugin Config)
  * 포털 명칭, 1차/2차 네비게이션 탭, 포털 전용 기능 플래그 및 커스텀 뷰 슬롯 주입 계약
  */
 export interface PortalCapabilityConfig {
@@ -211,7 +222,7 @@ export interface PortalCapabilityConfig {
 }
 
 /**
- * 5. 예약·상담 도메인 기능 팩 (Booking Capability Pack)
+ * 5. 예약·상담 호환 설정 (Booking Legacy Plugin Config)
  * 1:1 예약, 진료/상담 시간표, 예약금 및 업종별 예약 어댑터
  */
 export interface BookingCapabilityConfig {
@@ -222,8 +233,8 @@ export interface BookingCapabilityConfig {
 }
 
 /**
- * Core Preset 통합 계약 (CorePluginContract / PresetManifest)
- * Core-Capability-Preset 3계층 아키텍처에서 Preset이 선언하는 표준 매니페스트
+ * Legacy Preset Manifest (IndustryAdapter 호환용 매니페스트 계약)
+ * 레거시 IndustryAdapter가 기존 플러그인을 파사드로 래핑하여 제공하는 매니페스트
  */
 export interface PresetManifest {
   readonly id: string;

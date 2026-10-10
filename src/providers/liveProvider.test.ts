@@ -97,18 +97,60 @@ console.log("[TEST] liveProvider pure logic running...");
     },
   });
 
-  // Simulate Supabase Realtime UPDATE event
+  // Simulate Supabase Realtime UPDATE event for same tenant
   assert.ok(listenerFn);
   listenerFn({
     eventType: "UPDATE",
     commit_timestamp: "2026-10-09T00:00:00Z",
-    new: { id: "session-999", status: "present" },
+    new: { id: "session-999", status: "present", organization_id: "org-test" },
   });
 
   assert.equal(receivedEvent.channel, "resources/attendance_sessions");
   assert.equal(receivedEvent.type, "updated");
   assert.equal(receivedEvent.payload.id, "session-999");
   assert.equal(receivedEvent.payload.status, "present");
+
+  // Cross-tenant event suppression: Simulate Realtime event belonging to a different tenant
+  let foreignEventCalled = false;
+  provider.subscribe({
+    channel: "resources/attendance_sessions",
+    types: ["*"],
+    callback: () => {
+      foreignEventCalled = true;
+    },
+  });
+
+  assert.ok(listenerFn);
+  listenerFn({
+    eventType: "INSERT",
+    commit_timestamp: "2026-10-09T00:00:00Z",
+    new: { id: "session-cross-tenant", status: "present", organization_id: "org-foreign" },
+  });
+  assert.equal(foreignEventCalled, false, "foreign tenant realtime event must be dropped by listener");
+}
+
+// 4. Fail-closed: Missing activeOrgId returns safe no-op channel for tenant resources
+{
+  let channelCreated = false;
+  const mockClient: any = {
+    channel: () => {
+      channelCreated = true;
+      return {};
+    },
+  };
+
+  const provider = createMoaLiveProvider(mockClient, {
+    resolveOrgId: () => null,
+  });
+
+  const noopChannel = provider.subscribe({
+    channel: "resources/customers",
+    types: ["*"],
+    callback: () => {},
+  });
+
+  assert.equal(noopChannel.id, "unscoped-customers-noop-channel");
+  assert.equal(channelCreated, false, "client.channel must not be invoked when activeOrgId is unresolved");
 }
 
 console.log("[TEST] liveProvider tests ALL PASSED!");

@@ -84,6 +84,13 @@ async function testDataProviderGuard() {
       "shift_schedules",
       "task_pipelines",
       "treatment_charts",
+      "session_passes",
+      "tenant_roles",
+      "onboarding_tokens",
+      "attendance_sessions",
+      "services",
+      "reservations",
+      "events",
     ]
   );
 
@@ -163,6 +170,103 @@ async function testDataProviderGuard() {
     });
     const deleted = base.calls.find((c) => c.method === "deleteOne");
     assert.ok(deleted, `${resource} deleteOne reached the inner provider`);
+  }
+
+  // Cross-tenant data isolation and ID swapping rejection tests
+  {
+    for (const resource of ["customers", "passes", "lockers", "session_passes"]) {
+      const tenantColumn = getTenantColumnForResource(resource);
+
+      // 1. getOne rejects foreign tenant record
+      {
+        const foreignBase: any = {
+          getOne: async () => ({ data: { id: "row-foreign", [tenantColumn]: FOREIGN_ORG } }),
+        };
+        const guarded = guardTenantDataProvider(foreignBase, () => ACTIVE_ORG);
+        await assert.rejects(
+          () => guarded.getOne({ resource, id: "row-foreign" }),
+          (err: any) => err.message.includes("does not belong to active organization")
+        );
+      }
+
+      // 2. getMany rejects when any record belongs to foreign tenant
+      {
+        const foreignBase: any = {
+          getMany: async () => ({
+            data: [
+              { id: "row-1", [tenantColumn]: ACTIVE_ORG },
+              { id: "row-2", [tenantColumn]: FOREIGN_ORG },
+            ],
+          }),
+        };
+        const guarded = guardTenantDataProvider(foreignBase, () => ACTIVE_ORG);
+        await assert.rejects(
+          () => guarded.getMany!({ resource, ids: ["row-1", "row-2"] }),
+          (err: any) => err.message.includes("do not belong to active organization")
+        );
+      }
+
+      // 3. update rejects modifying foreign tenant record
+      {
+        const foreignBase: any = {
+          getOne: async () => ({ data: { id: "row-foreign", [tenantColumn]: FOREIGN_ORG } }),
+          update: async () => ({ data: { id: "row-foreign" } }),
+        };
+        const guarded = guardTenantDataProvider(foreignBase, () => ACTIVE_ORG);
+        await assert.rejects(
+          () => guarded.update({ resource, id: "row-foreign", variables: { status: "hacked" } }),
+          (err: any) => err.message.includes("does not belong to active organization")
+        );
+      }
+
+      // 4. updateMany rejects when target includes foreign tenant record
+      {
+        const foreignBase: any = {
+          getMany: async () => ({
+            data: [{ id: "row-foreign", [tenantColumn]: FOREIGN_ORG }],
+          }),
+          updateMany: async () => ({ data: [{ id: "row-foreign" }] }),
+        };
+        const guarded = guardTenantDataProvider(foreignBase, () => ACTIVE_ORG);
+        await assert.rejects(
+          () =>
+            guarded.updateMany!({
+              resource,
+              ids: ["row-foreign"],
+              variables: { status: "hacked" },
+            }),
+          (err: any) => err.message.includes("do not belong to active organization")
+        );
+      }
+
+      // 5. deleteOne rejects deleting foreign tenant record
+      {
+        const foreignBase: any = {
+          getOne: async () => ({ data: { id: "row-foreign", [tenantColumn]: FOREIGN_ORG } }),
+          deleteOne: async () => ({ data: { id: "row-foreign" } }),
+        };
+        const guarded = guardTenantDataProvider(foreignBase, () => ACTIVE_ORG);
+        await assert.rejects(
+          () => guarded.deleteOne!({ resource, id: "row-foreign" }),
+          (err: any) => err.message.includes("does not belong to active organization")
+        );
+      }
+
+      // 6. deleteMany rejects deleting foreign tenant record
+      {
+        const foreignBase: any = {
+          getMany: async () => ({
+            data: [{ id: "row-foreign", [tenantColumn]: FOREIGN_ORG }],
+          }),
+          deleteMany: async () => ({ data: [{ id: "row-foreign" }] }),
+        };
+        const guarded = guardTenantDataProvider(foreignBase, () => ACTIVE_ORG);
+        await assert.rejects(
+          () => guarded.deleteMany!({ resource, ids: ["row-foreign"] }),
+          (err: any) => err.message.includes("do not belong to active organization")
+        );
+      }
+    }
   }
 
   {

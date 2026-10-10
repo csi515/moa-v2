@@ -9,6 +9,7 @@
 import {
   assembleCapabilities,
   assembleAdHocBundles,
+  PresetAssemblyError,
 } from '@/core/presets/presetAssembler';
 import type {
   AssembledPresetResult,
@@ -23,7 +24,7 @@ import {
   getIndustryPreset,
 } from './presetRegistry';
 
-export { assembleCapabilities };
+export { assembleCapabilities, PresetAssemblyError };
 
 /**
  * 특정 업종 프리셋 ID를 기반으로 setupSchema와 resources를 동적 병합

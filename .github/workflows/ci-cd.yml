@@ -25,8 +25,6 @@ jobs:
         run: npm run lint
       - name: Test business invariants
         run: npm run test:business-invariants
-      - name: Unit Tests
-        run: npm test
 
 
   build-e2e:

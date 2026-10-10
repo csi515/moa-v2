@@ -986,7 +986,7 @@ export const INDUSTRY_PRESETS: Record<string, IndustryPresetDefinition> = {
   },
 };
 
-const PRESET_ALIASES: Record<string, string> = {
+export const PRESET_ALIASES: Record<string, string> = {
   gym: 'gym_fitness',
   academy: 'general_academy',
   private_tutoring: 'exam_tutoring',

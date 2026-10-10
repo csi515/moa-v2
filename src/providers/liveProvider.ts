@@ -74,19 +74,28 @@ export function createMoaLiveProvider(
       const resource = channel.replace("resources/", "");
       const activeOrgId = resolveOrgId();
 
-      // 테넌트 격리 필터 구성: 리소스별 테넌트 컬럼 지원 (onboarding_tokens는 tenant_id, 나머지는 organization_id)
-      let filter: string | undefined = undefined;
       const isRealtimeTarget =
         isTenantScopedResource(resource) ||
         (REALTIME_TENANT_RESOURCES as readonly string[]).includes(resource);
 
-      if (isRealtimeTarget && activeOrgId) {
-        const tenantColumn = getTenantColumnForResource(resource);
-        filter = `${tenantColumn}=eq.${activeOrgId}`;
+      // Fail-closed: If resource requires tenant scoping but no active organization is resolved,
+      // return a safe no-op channel rather than subscribing globally without filters.
+      if (isRealtimeTarget && !activeOrgId) {
+        return {
+          id: `unscoped-${resource}-noop-channel`,
+          unsubscribe: () => {},
+        } as any;
       }
 
-      // 외부 params.filters에 첫 번째 필터가 명시된 경우 오버라이드
-      if (!filter && params?.filters && params.filters.length > 0) {
+      // 테넌트 격리 필터 구성: 리소스별 테넌트 컬럼 지원 (onboarding_tokens는 tenant_id, 나머지는 organization_id)
+      let filter: string | undefined = undefined;
+      let tenantColumn: string | undefined = undefined;
+
+      if (isRealtimeTarget && activeOrgId) {
+        tenantColumn = getTenantColumnForResource(resource);
+        filter = `${tenantColumn}=eq.${activeOrgId}`;
+      } else if (params?.filters && params.filters.length > 0) {
+        // 비테넌트 리소스에 한해 외부 params.filters의 첫 번째 필터 허용
         const firstFilter = params.filters[0];
         if ("field" in firstFilter && firstFilter.field) {
           filter = `${firstFilter.field}=eq.${firstFilter.value}`;
@@ -105,6 +114,14 @@ export function createMoaLiveProvider(
 
         if (types.includes("*") || types.includes(refineType)) {
           const record = payload.new || payload.old || {};
+
+          // 심층 방어: 테넌트 리소스의 경우 수신 레코드의 테넌트 ID가 활성 조직과 일치하는지 검증
+          if (isRealtimeTarget && activeOrgId && tenantColumn) {
+            const recordOrg = record[tenantColumn];
+            if (recordOrg && String(recordOrg) !== String(activeOrgId)) {
+              return;
+            }
+          }
 
           // 특정 ID 목록만 감시하는 경우 필터링
           if (params?.ids && params.ids.length > 0) {

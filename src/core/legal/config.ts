@@ -4,10 +4,10 @@ import { appBrand } from '@/core/brand';
 export const legalConfig = {
   serviceName: appBrand.fullName,
   legalEntityName:
-    (import.meta.env.VITE_LEGAL_ENTITY_NAME as string | undefined)?.trim() ||
+    ((typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_LEGAL_ENTITY_NAME) as string | undefined)?.trim() ||
     appBrand.legalEntityDefault,
   contactEmail:
-    (import.meta.env.VITE_SUPPORT_EMAIL as string | undefined)?.trim() || 'support@moa.kr',
+    ((typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_SUPPORT_EMAIL) as string | undefined)?.trim() || 'support@moa.kr',
   privacyEffectiveDate: '2026-09-01',
   termsEffectiveDate: '2026-09-01',
 } as const;

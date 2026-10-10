@@ -20,6 +20,116 @@ const DEFAULT_ONBOARDING_PROGRESS: OnboardingProgress = {
   step: 0,
 };
 
+/**
+ * 설정 부분 업데이트 시 다른 업종의 설정 및 중첩 객체(features, industrySettings 등)가
+ * 덮어쓰여 삭제되지 않도록 재귀적으로 안전하게 병합합니다.
+ */
+export function mergeOrganizationSettings(
+  current: AcademySettings,
+  incoming: Partial<AcademySettings>
+): AcademySettings {
+  const merged: AcademySettings = {
+    ...current,
+    ...incoming,
+  };
+
+  // 1. features 객체 중첩 병합 (attendance, points 등 독립 기능 플래그 보존)
+  if (current.features || incoming.features) {
+    merged.features = {
+      ...current.features,
+      ...incoming.features,
+      ...(current.features?.attendance || incoming.features?.attendance
+        ? {
+            attendance: {
+              ...current.features?.attendance,
+              ...incoming.features?.attendance,
+            },
+          }
+        : {}),
+      ...(current.features?.points || incoming.features?.points
+        ? {
+            points: {
+              ...current.features?.points,
+              ...incoming.features?.points,
+            },
+          }
+        : {}),
+    };
+  }
+
+  // 2. industrySettings 객체 중첩 병합 (업종별 파티션 education, booking, retail 등 상호 보존)
+  if (current.industrySettings || incoming.industrySettings) {
+    merged.industrySettings = {
+      ...current.industrySettings,
+      ...incoming.industrySettings,
+      ...(current.industrySettings?.education || incoming.industrySettings?.education
+        ? {
+            education: {
+              ...current.industrySettings?.education,
+              ...incoming.industrySettings?.education,
+            },
+          }
+        : {}),
+      ...(current.industrySettings?.booking || incoming.industrySettings?.booking
+        ? {
+            booking: {
+              ...current.industrySettings?.booking,
+              ...incoming.industrySettings?.booking,
+            },
+          }
+        : {}),
+      ...(current.industrySettings?.retail || incoming.industrySettings?.retail
+        ? {
+            retail: {
+              ...current.industrySettings?.retail,
+              ...incoming.industrySettings?.retail,
+            },
+          }
+        : {}),
+    };
+  }
+
+  // 3. bankAccount 객체인 경우 병합
+  if (
+    typeof current.bankAccount === 'object' &&
+    current.bankAccount !== null &&
+    typeof incoming.bankAccount === 'object' &&
+    incoming.bankAccount !== null
+  ) {
+    merged.bankAccount = {
+      ...current.bankAccount,
+      ...incoming.bankAccount,
+    };
+  }
+
+  // 4. 레거시 단일 필드 ↔ industrySettings 파티션 간의 상호 동기화 보존
+  if (
+    incoming.industrySettings?.education?.defaultTuitionFee !== undefined &&
+    incoming.defaultTuitionFee === undefined
+  ) {
+    merged.defaultTuitionFee = incoming.industrySettings.education.defaultTuitionFee;
+  } else if (
+    incoming.defaultTuitionFee !== undefined &&
+    merged.industrySettings?.education
+  ) {
+    merged.industrySettings.education.defaultTuitionFee = incoming.defaultTuitionFee;
+  }
+
+  if (
+    incoming.industrySettings?.booking?.depositEnabled !== undefined &&
+    incoming.depositEnabled === undefined
+  ) {
+    merged.depositEnabled = incoming.industrySettings.booking.depositEnabled;
+  } else if (
+    incoming.depositEnabled !== undefined &&
+    merged.industrySettings?.booking
+  ) {
+    merged.industrySettings.booking.depositEnabled = incoming.depositEnabled;
+  }
+
+  return merged;
+}
+
 /** 설정·사용자·온보딩·백업 */
 export function createSettingsStorage(api: StorageApi) {
   return {
@@ -42,7 +152,7 @@ export function createSettingsStorage(api: StorageApi) {
 
     updateSettings(settings: Partial<AcademySettings>): AcademySettings {
       const current = this.getSettings();
-      const updated = { ...current, ...settings };
+      const updated = mergeOrganizationSettings(current, settings);
       setItem(STORAGE_KEYS.SETTINGS, updated);
       return updated;
     },

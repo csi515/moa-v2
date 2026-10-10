@@ -102,12 +102,55 @@ export const INDUSTRY_CAPABILITY_COMPOSITION = {
   },
 } as const satisfies Record<string, IndustryRuntimeCapabilityComposition>;
 
+import { getIndustryPreset } from '@/app/presets/presetRegistry';
+
 function resolveComposition(
   industry: IndustryType | string | null | undefined
 ): IndustryRuntimeCapabilityComposition | undefined {
-  const id = getIndustryDefinition(industry)?.id;
-  if (!id) return undefined;
-  return INDUSTRY_CAPABILITY_COMPOSITION[id as keyof typeof INDUSTRY_CAPABILITY_COMPOSITION];
+  if (!industry) return undefined;
+  const def = getIndustryDefinition(industry);
+  const id = def?.id ?? industry;
+  const dedicated = INDUSTRY_CAPABILITY_COMPOSITION[id as keyof typeof INDUSTRY_CAPABILITY_COMPOSITION];
+  if (dedicated) return dedicated;
+
+  // Fallback: 7대 전용 모듈 외 업종은 Preset 정의(17대 원자적 Capability)로부터 런타임 역량을 도출
+  const preset = getIndustryPreset(id) ?? getIndustryPreset(String(industry));
+  if (preset) {
+    const caps = preset.capabilities;
+    return {
+      capabilities: {
+        roster: true,
+        attendance: caps.includes('attendance'),
+        scheduling: caps.includes('booking') || caps.includes('shift_schedule'),
+        billing: caps.includes('billing_invoicing') || caps.includes('ledger_simple'),
+        booking: caps.includes('booking') || caps.includes('seat_room'),
+        commerce: caps.includes('inventory') || caps.includes('credit_wallet'),
+        resources: caps.includes('seat_room') || caps.includes('rental_equipment'),
+        locker: caps.includes('locker'),
+        passes: caps.includes('passes'),
+        seat_room: caps.includes('seat_room'),
+        rental_equipment: caps.includes('rental_equipment'),
+        maintenance_checklist: caps.includes('maintenance_checklist'),
+        instructor_match: caps.includes('instructor_match'),
+        shift_schedule: caps.includes('shift_schedule'),
+        task_pipeline: caps.includes('task_pipeline'),
+        billing_invoicing: caps.includes('billing_invoicing'),
+        ledger_simple: caps.includes('ledger_simple'),
+        credit_wallet: caps.includes('credit_wallet'),
+        consultation_crm: caps.includes('consultation_crm'),
+        treatment_chart: caps.includes('treatment_chart'),
+        safety_consent: caps.includes('safety_consent'),
+        consultation: caps.includes('consultation_crm'),
+        parent: caps.includes('attendance') && preset.category === 'education',
+        enrollment: preset.category === 'education',
+      },
+      defaults: {
+        attendance: caps.includes('attendance'),
+      },
+    };
+  }
+
+  return undefined;
 }
 
 export function getIndustryCapabilities(

@@ -34,6 +34,10 @@ const PassesView = lazy(() =>
 const LockersView = lazy(() =>
   import('@/pages/lockers/grid').then((m) => ({ default: m.LockersGridPage }))
 );
+const ConsultationView = lazy(() =>
+  import('@/capabilities/consultation').then((m) => ({ default: m.ConsultationRecordsView }))
+);
+import { PluginErrorBoundary } from '@/shared/components/PluginErrorBoundary';
 import { DirectorFloatingFab, ToastContainer, ConfirmDialog } from '@/shared/components';
 import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
 import { ModuleSidebar } from '@/shared/components/layout/ModuleSidebar';
@@ -188,6 +192,40 @@ function GenericDashboardView({ onNavigate }: GenericDashboardViewProps) {
   );
 }
 
+export const TAB_REQUIRED_CAPABILITIES: Record<string, readonly string[]> = {
+  // 기본 5대 기능 및 재무 허브
+  bookings: ['booking', 'seat_room'],
+  attendance: ['attendance'],
+  passes: ['passes'],
+  lockers: ['locker'],
+  inventory: ['inventory'],
+  finance: ['billing_invoicing', 'ledger_simple', 'credit_wallet', 'billing'],
+  tuition: ['billing_invoicing', 'ledger_simple', 'credit_wallet', 'billing'],
+  income: ['billing_invoicing', 'ledger_simple', 'credit_wallet', 'billing'],
+  expenses: ['billing_invoicing', 'ledger_simple', 'credit_wallet', 'billing'],
+  payroll: ['billing_invoicing', 'ledger_simple', 'credit_wallet', 'billing'],
+
+  // 확장 12종 Capability 슬러그 라우트 (URL 슬러그와 1:1 매핑)
+  'seat-rooms': ['seat_room', 'booking'],
+  rentals: ['rental_equipment'],
+  maintenance: ['maintenance_checklist'],
+  instructors: ['instructor_match'],
+  shifts: ['shift_schedule'],
+  pipelines: ['task_pipeline'],
+  'billing-invoices': ['billing_invoicing', 'billing'],
+  ledger: ['ledger_simple', 'billing'],
+  wallets: ['credit_wallet', 'billing'],
+  consultations: ['consultation_crm'],
+  charts: ['treatment_chart'],
+  consents: ['safety_consent'],
+};
+
+export function isTabAllowedForCapabilities(tab: string, enabledCaps: readonly string[]): boolean {
+  const required = TAB_REQUIRED_CAPABILITIES[tab];
+  if (!required) return true;
+  return required.some((cap) => enabledCaps.includes(cap));
+}
+
 /** 모듈 미개발 업종 및 신규 업종용 확장형 공통 셸 */
 export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode>; Overlays?: React.ComponentType | null }> = ({ viewMap: externalViewMap, Overlays }) => {
   const { activeTab, setActiveTab, currentUser } = useApp();
@@ -266,6 +304,11 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
         <BookingView />
       </Suspense>
     ),
+    'seat-rooms': () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">공간·좌석 현황을 불러오는 중...</div>}>
+        <BookingView />
+      </Suspense>
+    ),
     attendance: () => (
       <Suspense fallback={<div className="p-8 text-center text-slate-400">출결 화면을 불러오는 중...</div>}>
         <AttendanceView />
@@ -281,6 +324,26 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
         <LockersView />
       </Suspense>
     ),
+    consultations: () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">상담 내역을 불러오는 중...</div>}>
+        <ConsultationView />
+      </Suspense>
+    ),
+    'billing-invoices': () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">청구서 관리를 불러오는 중...</div>}>
+        {financeViewEntries.finance()}
+      </Suspense>
+    ),
+    ledger: () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">원장 내역을 불러오는 중...</div>}>
+        {financeViewEntries.finance()}
+      </Suspense>
+    ),
+    wallets: () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">크레딧 지갑을 불러오는 중...</div>}>
+        {financeViewEntries.finance()}
+      </Suspense>
+    ),
     ...financeViewEntries,
     settings: () => <WorkplaceSettingsView />,
     ...accountViewEntry,
@@ -289,23 +352,95 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
   const viewMap = externalViewMap || defaultViewMap;
 
   useEffect(() => {
-    if (urlTab && viewMap[urlTab]) {
-      setActiveTab(urlTab);
-      return;
+    const candidateTab = urlTab || location.pathname.replace(/^\//, '').split('/')[0];
+    if (candidateTab && candidateTab !== 'workspace') {
+      setActiveTab(candidateTab);
     }
-    const pathSegment = location.pathname.replace(/^\//, '').split('/')[0];
-    if (pathSegment && pathSegment !== 'workspace' && viewMap[pathSegment]) {
-      setActiveTab(pathSegment);
-    }
-  }, [urlTab, location.pathname, viewMap, setActiveTab]);
+  }, [urlTab, location.pathname, setActiveTab]);
 
-  const renderView = viewMap[activeTab] ?? viewMap.dashboard;
+  const isCurrentTabAllowed = isTabAllowedForCapabilities(activeTab, enabledCaps);
+
+  const renderViewContent = () => {
+    if (!isCurrentTabAllowed) {
+      return (
+        <div className="max-w-xl mx-auto mt-12 p-8 text-center bg-white rounded-3xl border border-slate-200 shadow-xs" data-testid="disabled-feature-notice">
+          <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+            <Lock className="w-6 h-6" />
+          </div>
+          <h2 className="text-lg font-bold text-slate-800">현재 업종에서는 제공되지 않는 기능입니다</h2>
+          <p className="text-xs text-slate-500 mt-1">
+            해당 기능이 활성화되지 않은 업종 프리셋입니다. 필요 시 워크스페이스 설정에서 기능을 추가하세요.
+          </p>
+          <button
+            type="button"
+            onClick={() => setActiveTab('dashboard')}
+            className="mt-4 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-colors"
+          >
+            대시보드로 돌아가기
+          </button>
+        </div>
+      );
+    }
+
+    const viewRenderer = viewMap[activeTab];
+    if (!viewRenderer) {
+      // Capability는 활성화되어 있으나 화면 구현이 Tier 3(화면 연기)인 경우
+      if (TAB_REQUIRED_CAPABILITIES[activeTab]) {
+        return (
+          <div className="max-w-xl mx-auto mt-12 p-8 text-center bg-white rounded-3xl border border-slate-200 shadow-xs" data-testid="deferred-feature-notice">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+              <Building2 className="w-6 h-6" />
+            </div>
+            <h2 className="text-lg font-bold text-slate-800">화면 준비 중인 기능입니다</h2>
+            <p className="text-xs text-slate-500 mt-1">
+              해당 기능({activeTab})의 백엔드 도메인 엔진 및 설정 스키마가 정상 활성화되어 있습니다. 전용 화면은 다음 릴리스에서 제공될 예정입니다.
+            </p>
+            <button
+              type="button"
+              onClick={() => setActiveTab('dashboard')}
+              className="mt-4 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-colors"
+            >
+              대시보드로 돌아가기
+            </button>
+          </div>
+        );
+      }
+
+      // 정의되지 않은 미등록 탭
+      if (activeTab !== 'dashboard') {
+        return (
+          <div className="max-w-xl mx-auto mt-12 p-8 text-center bg-white rounded-3xl border border-slate-200 shadow-xs" data-testid="not-found-notice">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
+              <Lock className="w-6 h-6" />
+            </div>
+            <h2 className="text-lg font-bold text-slate-800">페이지를 찾을 수 없습니다</h2>
+            <p className="text-xs text-slate-500 mt-1">
+              요청하신 경로({activeTab})는 존재하지 않거나 유효하지 않은 기능입니다.
+            </p>
+            <button
+              type="button"
+              onClick={() => setActiveTab('dashboard')}
+              className="mt-4 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-colors"
+            >
+              대시보드로 돌아가기
+            </button>
+          </div>
+        );
+      }
+
+      return viewMap.dashboard ? viewMap.dashboard() : null;
+    }
+
+    return viewRenderer();
+  };
 
   return (
     <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
       {isOwner && <DirectorFloatingFab />}
       {Overlays && <Overlays />}
-      {renderView()}
+      <PluginErrorBoundary pluginName={activeTab}>
+        {renderViewContent()}
+      </PluginErrorBoundary>
     </div>
   );
 };

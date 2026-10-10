@@ -26,7 +26,7 @@ import {
 import type { IndustryType } from '@/core/industry/catalog';
 import { getIndustryCapabilities } from './industryCapabilityMap';
 import type { MoaI18nProvider } from '@/providers/i18nProvider';
-import { assemblePreset } from '@/app/presets/presetAssembler';
+import { assemblePreset, PresetAssemblyError } from '@/app/presets/presetAssembler';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -154,6 +154,10 @@ export function provisionIndustryResources(
           }
         }
       } catch (err) {
+        // 필수 Capability 누락 등 치명적 조립 오류는 명시적으로 상위로 전파
+        if (err instanceof PresetAssemblyError) {
+          throw err;
+        }
         console.warn(`[provisionIndustryResources] Preset assembly skipped for ${industry}:`, err);
       }
     }

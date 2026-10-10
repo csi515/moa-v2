@@ -253,9 +253,13 @@ export const INVENTORY_CANDIDATES = {
   'test:legacy-booking-cleanup': 'authorization(legacy booking-app public objects drop / anon exposure). ci-cd static security에 있음',
   'test:grant-authenticated-payroll-join-requests': 'authorization(core payroll/join request table grants + hydrate table grant coverage). ci-cd static security에 있음',
   'test:security-boundary-harden': 'authorization(rls and rpc boundary hardening). ci-cd static security에 있음',
+  'test:account-linking-security': 'authorization(account linking & token rpc security hardening). ci-cd static security에 있음',
+  'test:tenant-isolation': 'authorization(tenant data isolation & rls regression hardening). ci-cd static security에 있음',
   'test:access-control': 'authorization(refine access control adapter integration). ci-cd static security에 있음',
   'test:student-crud': 'students(refine student crud data provider contract). ci-cd static integration에 있음',
   'test:logout-protection': 'auth(conditional logout protection with offline pending mutation guard). ci-cd static integration에 있음',
+  'test:preset-runtime-parity': 'industry/preset(runtime capability parity, fail-closed assembly, and route guards). preset candidate',
+  'test:settings-storage': 'persistence/settings(multi-vertical settings deep merge). candidate',
 };
 
 export function loadPackageScripts() {

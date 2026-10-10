@@ -59,7 +59,7 @@ export const ClaimTokenPage: React.FC = () => {
             navigate('/customer/pass');
           }, 2000);
         } else {
-          throw new Error('토큰 클레임에 실패했습니다.');
+          throw new Error((data as any)?.error || '토큰 클레임에 실패했습니다.');
         }
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : '토큰 등록 중 오류가 발생했습니다.';

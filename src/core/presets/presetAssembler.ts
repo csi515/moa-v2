@@ -48,6 +48,22 @@ export function clearRegisteredBundles(): void {
 }
 
 /**
+ * 프리셋 조립 실패 에러 (필수 Capability 누락 등)
+ */
+export class PresetAssemblyError extends Error {
+  constructor(
+    public readonly presetId: string,
+    public readonly capabilityId: string,
+    public readonly isRequired: boolean
+  ) {
+    super(
+      `프리셋 [${presetId}]에 필요한 필수 Capability [${capabilityId}]의 번들이 존재하지 않아 조립에 실패했습니다.`
+    );
+    this.name = 'PresetAssemblyError';
+  }
+}
+
+/**
  * 프리셋 정의 객체와 Capability 번들들을 전달받아 setupSchema와 resources를 병합
  */
 export function assembleCapabilities(
@@ -61,6 +77,7 @@ export function assembleCapabilities(
   const seenResourceNames = new Set<string>();
   const seenFieldIds = new Set<string>();
   const allFields: SetupFieldDefinition[] = [];
+  const skippedOptionalCapabilities: PresetCapabilityId[] = [];
 
   const getBundle = (id: string): CapabilityModuleBundle | undefined => {
     if (bundleRegistry instanceof Map) {
@@ -69,10 +86,27 @@ export function assembleCapabilities(
     return bundleRegistry[id as PresetCapabilityId];
   };
 
+  const requiredSet = new Set<string>(
+    preset.requiredCapabilities && preset.requiredCapabilities.length > 0
+      ? preset.requiredCapabilities
+      : preset.capabilities
+  );
+  const optionalSet = new Set<string>(preset.optionalCapabilities ?? []);
+
   for (const capId of preset.capabilities) {
     const bundle = getBundle(capId);
     if (!bundle) {
-      throw new Error(`프리셋 [${preset.id}]에 정의된 Capability [${capId}]의 번들이 존재하지 않습니다.`);
+      const isRequired = requiredSet.has(capId);
+      const isOptional = optionalSet.has(capId) && !isRequired;
+
+      // 선택 Capability 번들 누락 시 안전한 부분 성공(Partial Assembly) 허용
+      if (isOptional) {
+        skippedOptionalCapabilities.push(capId as PresetCapabilityId);
+        continue;
+      }
+
+      // 필수 Capability 번들 누락 시 명시적 조립 실패 처리
+      throw new PresetAssemblyError(preset.id, capId, true);
     }
 
     // 1. setupSchema 병합
@@ -105,6 +139,7 @@ export function assembleCapabilities(
     setupSchemas,
     resources,
     allFields,
+    skippedOptionalCapabilities,
   };
 }
 

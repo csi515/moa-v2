@@ -3,9 +3,11 @@ import brand from '../../../brand.json';
 /** 앱 표시 이름·슬로건 (스토어·런처·UI 공통) */
 export const appBrand = {
   fullName:
-    (import.meta.env.VITE_APP_NAME as string | undefined)?.trim() || brand.fullName,
+    ((typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_APP_NAME) as string | undefined)?.trim() ||
+    brand.fullName,
   shortName:
-    (import.meta.env.VITE_APP_SHORT_NAME as string | undefined)?.trim() || brand.shortName,
+    ((typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_APP_SHORT_NAME) as string | undefined)?.trim() ||
+    brand.shortName,
   /** MOA 약어 */
   acronym: brand.acronym,
   /** 브랜드 의미: 관리하고, 정리하고, 돕다 */
