@@ -2,6 +2,7 @@ import type { AuthProvider } from "@refinedev/core";
 import { supabase } from "@/lib/supabase/client";
 import { StorageService } from "@/services/storage";
 import * as authService from "@/core/auth/services/authService";
+import * as tossAuthService from "@/core/auth/services/tossAuthService";
 import * as orgService from "@/core/organizations/services/organizationService";
 import { requestSignOut } from "@/core/auth/services/signOutCoordinator";
 
@@ -19,6 +20,23 @@ export const authProvider: AuthProvider = {
 
     try {
       if (provider) {
+        if (provider === "toss") {
+          const result = await tossAuthService.loginWithToss();
+          if (!result.success) {
+            return {
+              success: false,
+              error: {
+                name: "Toss Login Error",
+                message: result.error || "토스 로그인 처리에 실패했습니다.",
+              },
+            };
+          }
+          const targetPath = result.role === "customer" ? "/customer/pass" : "/workspace";
+          return {
+            success: true,
+            redirectTo: targetPath,
+          };
+        }
         if (provider === "kakao") {
           await authService.signInWithKakao();
           return { success: true };

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLogin } from "@refinedev/core";
+import { useNavigate } from "react-router-dom";
 import {
   Layers,
   Sparkles,
@@ -10,14 +11,48 @@ import {
 } from "lucide-react";
 import { MobileLoginForm } from "@/components/auth/MobileLoginForm";
 import { useAuth } from "@/core/auth/AuthProvider";
+import { isAppsInToss } from "@/core/auth/domain/platformDetector";
+import { loginWithToss } from "@/core/auth/services/tossAuthService";
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isTossLoading, setIsTossLoading] = useState(false);
 
+  const navigate = useNavigate();
   const { mutate: login, isPending: isLoading } = useLogin();
   const { signInWithKakao } = useAuth();
+
+  const handleTossLogin = async () => {
+    setIsTossLoading(true);
+    setErrorMessage(null);
+    try {
+      const result = await loginWithToss();
+      if (result.success) {
+        // 고객/수강생 역할은 이용권 지갑으로, 사업주/직원 및 통합 권한은 워크스페이스 대시보드로 이동
+        const targetPath = result.role === "customer" ? "/customer/pass" : "/workspace";
+        navigate(targetPath);
+      } else {
+        setErrorMessage(
+          result.error || "토스 로그인 연동에 실패했습니다. 다시 시도해 주세요."
+        );
+      }
+    } catch (err: any) {
+      setErrorMessage(
+        err?.message || "토스 원클릭 로그인 처리 중 오류가 발생했습니다."
+      );
+    } finally {
+      setIsTossLoading(false);
+    }
+  };
+
+  // 앱스인토스 환경 감지 시: 진입 즉시 토스 원클릭 자동 로그인 프로세스 진행
+  useEffect(() => {
+    if (isAppsInToss()) {
+      void handleTossLogin();
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,6 +60,10 @@ export const LoginPage: React.FC = () => {
     login(
       { email, password },
       {
+        onSuccess: (data: any) => {
+          const redirectTo = data?.redirectTo || "/workspace";
+          navigate(redirectTo);
+        },
         onError: (error: any) => {
           setErrorMessage(
             error?.message || "이메일 또는 비밀번호가 올바르지 않습니다."
@@ -140,9 +179,13 @@ export const LoginPage: React.FC = () => {
 
           {/* 데스크톱 우측 타이틀 */}
           <div className="hidden lg:block mb-8">
-            <h2 className="text-2xl font-bold text-slate-900">시스템 로그인</h2>
+            <h2 className="text-2xl font-bold text-slate-900">
+              {isAppsInToss() ? "앱스인토스 로그인" : "시스템 로그인"}
+            </h2>
             <p className="text-xs text-slate-500 mt-1.5">
-              등록된 관리자/직원 계정 또는 고객 계정으로 접속하세요.
+              {isAppsInToss()
+                ? "토스 앱 계정으로 자동 인증하여 접속합니다."
+                : "등록된 사업주/직원 계정 또는 고객 계정으로 접속하세요."}
             </p>
           </div>
 
@@ -156,6 +199,8 @@ export const LoginPage: React.FC = () => {
             isLoading={isLoading}
             errorMessage={errorMessage}
             onKakaoLogin={handleKakaoLogin}
+            onTossLogin={handleTossLogin}
+            isTossLoading={isTossLoading}
           />
         </div>
       </div>

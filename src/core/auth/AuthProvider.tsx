@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import * as authService from './services/authService';
+import { loginWithToss } from './services/tossAuthService';
 import {
   requestSignOut,
   registerPromptListener,
@@ -18,6 +19,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, fullName: string) => Promise<void>;
   signInWithKakao: () => Promise<void>;
   signInWithNaver: () => Promise<void>;
+  signInWithToss: () => Promise<void>;
   signOut: (options?: { force?: boolean }) => Promise<void>;
 }
 
@@ -73,6 +75,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     await authService.signInWithNaver();
   };
 
+  const signInWithToss = async () => {
+    const result = await loginWithToss();
+    if (!result.success) {
+      throw new Error(result.error || '토스 로그인에 실패했습니다.');
+    }
+  };
+
   const signOut = async (options?: { force?: boolean }) => {
     await requestSignOut(options);
   };
@@ -87,6 +96,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         signUp,
         signInWithKakao,
         signInWithNaver,
+        signInWithToss,
         signOut,
       }}
     >
