@@ -8,6 +8,7 @@ import {
   ActiveOrganizationRequiredError,
   guardTenantDataProvider,
   TENANT_SCOPED_RESOURCES,
+  getTenantColumnForResource,
 } from "./dataProvider";
 
 const ACTIVE_ORG = "org-active";
@@ -51,8 +52,8 @@ function mockBaseProvider(): DataProvider & { calls: Call[] } {
   };
 }
 
-function orgFilters(params: any) {
-  return (params.filters ?? []).filter((f: any) => f.field === "organization_id");
+function tenantFilters(params: any, tenantColumn: string) {
+  return (params.filters ?? []).filter((f: any) => f.field === tenantColumn);
 }
 
 async function testDataProviderGuard() {
@@ -66,22 +67,42 @@ async function testDataProviderGuard() {
       "classes",
       "class_members",
       "practice_records",
+      "passes",
+      "lockers",
+      "bookings",
+      "attendance",
+      "billing_invoices",
+      "consultations",
+      "credit_wallets",
+      "instructors",
+      "inventory_items",
+      "simple_ledgers",
+      "maintenance_checklists",
+      "rental_equipments",
+      "safety_consents",
+      "seat_rooms",
+      "shift_schedules",
+      "task_pipelines",
+      "treatment_charts",
     ]
   );
 
   for (const resource of TENANT_SCOPED_RESOURCES) {
+    const tenantColumn = getTenantColumnForResource(resource);
     const base = mockBaseProvider();
     const provider = guardTenantDataProvider(base, () => ACTIVE_ORG);
 
     await provider.getList({
       resource,
       filters: [
+        { field: tenantColumn, operator: "eq", value: FOREIGN_ORG },
         { field: "organization_id", operator: "eq", value: FOREIGN_ORG },
+        { field: "tenant_id", operator: "eq", value: FOREIGN_ORG },
         { field: "status", operator: "eq", value: "active" },
         {
           operator: "or",
           value: [
-            { field: "organization_id", operator: "eq", value: FOREIGN_ORG },
+            { field: tenantColumn, operator: "eq", value: FOREIGN_ORG },
             { field: "name", operator: "contains", value: "kim" },
           ],
         },
@@ -90,10 +111,10 @@ async function testDataProviderGuard() {
 
     const getList = base.calls.find((c) => c.method === "getList");
     assert.ok(getList, `${resource} getList reached the inner provider`);
-    const org = orgFilters(getList.params);
-    assert.equal(org.length, 1, `${resource} keeps a single organization_id filter`);
-    assert.equal(org[0].operator, "eq");
-    assert.equal(org[0].value, ACTIVE_ORG, `${resource} overwrites a foreign organization_id`);
+    const tenant = tenantFilters(getList.params, tenantColumn);
+    assert.equal(tenant.length, 1, `${resource} keeps a single ${tenantColumn} filter`);
+    assert.equal(tenant[0].operator, "eq");
+    assert.equal(tenant[0].value, ACTIVE_ORG, `${resource} overwrites a foreign ${tenantColumn}`);
     assert.ok(
       getList.params.filters.some((f: any) => f.field === "status" && f.value === "active")
     );
@@ -109,28 +130,30 @@ async function testDataProviderGuard() {
 
     await provider.create({
       resource,
-      variables: { name: "row", organization_id: FOREIGN_ORG },
+      variables: { name: "row", [tenantColumn]: FOREIGN_ORG, organization_id: FOREIGN_ORG, tenant_id: FOREIGN_ORG },
     });
     const created = base.calls.find((c) => c.method === "create");
-    assert.equal(created.params.variables.organization_id, ACTIVE_ORG);
+    assert.equal(created.params.variables[tenantColumn], ACTIVE_ORG);
     assert.equal(created.params.variables.name, "row");
 
     await provider.update({
       resource,
       id: "row-1",
-      variables: { name: "edited", organization_id: FOREIGN_ORG },
+      variables: { name: "edited", [tenantColumn]: FOREIGN_ORG, organization_id: FOREIGN_ORG, tenant_id: FOREIGN_ORG },
     });
     const updated = base.calls.find((c) => c.method === "update");
     assert.equal(updated.params.variables.organization_id, undefined);
+    assert.equal(updated.params.variables.tenant_id, undefined);
     assert.equal(updated.params.variables.name, "edited");
 
     await provider.updateMany({
       resource,
       ids: ["row-1", "row-2"],
-      variables: { status: "inactive", organization_id: FOREIGN_ORG },
+      variables: { status: "inactive", [tenantColumn]: FOREIGN_ORG, organization_id: FOREIGN_ORG, tenant_id: FOREIGN_ORG },
     });
     const updatedMany = base.calls.find((c) => c.method === "updateMany");
     assert.equal(updatedMany.params.variables.organization_id, undefined);
+    assert.equal(updatedMany.params.variables.tenant_id, undefined);
     assert.equal(updatedMany.params.variables.status, "inactive");
     assert.deepEqual(updatedMany.params.ids, ["row-1", "row-2"]);
 

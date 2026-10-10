@@ -288,6 +288,39 @@ export interface Database {
           },
         ];
       };
+      customer_phone_history: {
+        Row: {
+          id: string;
+          customer_id: string;
+          organization_id: string;
+          old_phone: string | null;
+          new_phone: string;
+          changed_by: string | null;
+          change_reason: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          customer_id: string;
+          organization_id: string;
+          old_phone?: string | null;
+          new_phone: string;
+          changed_by?: string | null;
+          change_reason?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          customer_id?: string;
+          organization_id?: string;
+          old_phone?: string | null;
+          new_phone?: string;
+          changed_by?: string | null;
+          change_reason?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       attendance_sessions: {
         Row: {
           id: string;

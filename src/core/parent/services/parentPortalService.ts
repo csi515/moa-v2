@@ -1,4 +1,5 @@
 import { getCoreClient } from '@/lib/supabase';
+import { normalizeToE164 } from '@/domain/phoneValidation';
 import type {
   ParentPortalTree,
   GlobalParent,
@@ -88,13 +89,23 @@ export async function ensureGlobalParentProfile(): Promise<string | null> {
 }
 
 export async function updateMyParentPhone(phone: string): Promise<string | null> {
-  const { data, error } = await getCoreClient().rpc('update_my_parent_phone' as never, {
-    p_phone: phone.trim() || null,
-  } as never);
-  if (error) throw error;
+  const norm = normalizeToE164(phone);
+  const normalizedPhone = norm.isValid ? norm.e164 : phone.trim();
 
-  const row = (data ?? {}) as { phone?: string | null };
-  return row.phone ? String(row.phone) : null;
+  let res = await getCoreClient().rpc('update_customer_phone_atomic' as never, {
+    p_new_phone_e164: normalizedPhone || null,
+  } as never);
+
+  if (res.error && (res.error.message.includes('function') || res.error.message.includes('does not exist'))) {
+    res = await getCoreClient().rpc('update_my_parent_phone' as never, {
+      p_phone: normalizedPhone || null,
+    } as never);
+  }
+
+  if (res.error) throw res.error;
+
+  const row = (res.data ?? {}) as { new_phone_e164?: string | null; phone?: string | null };
+  return row.new_phone_e164 || (row.phone ? String(row.phone) : null);
 }
 
 export async function fetchParentPortalTree(): Promise<ParentPortalTree> {

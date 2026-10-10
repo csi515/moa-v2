@@ -67,6 +67,59 @@ export const DEFAULT_TERMINOLOGY_DICTIONARY: TerminologyDictionary = {
   },
 };
 
+export const DEFAULT_EN_TERMINOLOGY_DICTIONARY: TerminologyDictionary = {
+  customer: {
+    singular: 'Student',
+    plural: 'Students',
+    management: 'Student Management',
+    section: 'Students',
+    add: 'Enroll Student',
+    search: 'Search Students',
+    statusActive: 'Active',
+    statusPaused: 'On Hold',
+    statusWithdrawn: 'Withdrawn',
+  },
+  contact: {
+    singular: 'Parent/Guardian',
+    plural: 'Parents/Guardians',
+    management: 'Parent Management',
+  },
+  staff: {
+    singular: 'Instructor',
+    plural: 'Instructors',
+    management: 'Staff Management',
+    section: 'Staff',
+  },
+  service: {
+    singular: 'Class',
+    plural: 'Classes',
+    management: 'Class Management',
+    section: 'Classes',
+  },
+  schedule: {
+    singular: 'Schedule',
+    plural: 'Schedules',
+    management: 'Timetable',
+    section: 'Schedule',
+  },
+  attendance: {
+    noun: 'Attendance',
+    checkIn: 'Check-in',
+    checkOut: 'Check-out',
+  },
+  billing: {
+    fee: 'Tuition Fee',
+    unpaid: 'Unpaid Tuition',
+    pass: 'Membership Pass',
+    payment: 'Payment',
+  },
+  facility: {
+    place: 'Academy',
+    owner: 'Director',
+    room: 'Classroom',
+  },
+};
+
 /** 업종 카테고리별 템플릿 사전 (신규 업종 자동 상속용) */
 export const CATEGORY_DICTIONARIES: Record<string, TerminologyDictionary> = {
   education: {
@@ -787,8 +840,13 @@ export const INDUSTRY_DICTIONARIES: Record<string, TerminologyDictionary> = {
  * 4. DEFAULT_TERMINOLOGY_DICTIONARY
  */
 export function getTerminologyDictionary(
-  industry: IndustryType | string | null | undefined
+  industry: IndustryType | string | null | undefined,
+  locale: 'ko' | 'en' = 'ko'
 ): TerminologyDictionary {
+  if (locale === 'en') {
+    return DEFAULT_EN_TERMINOLOGY_DICTIONARY;
+  }
+
   if (!industry) {
     return DEFAULT_TERMINOLOGY_DICTIONARY;
   }

@@ -16,6 +16,7 @@ import {
 import { getCoreClient, isSupabaseConfigured } from "@/lib/supabase";
 import { shareLink } from "@/core/utils/shareLink";
 import { publicOrgService } from "@/core/public/services/publicOrgService";
+import { AdSlotPlaceholder } from "@/components/ads/AdSlotPlaceholder";
 
 interface StoreData {
   id: string;
@@ -229,17 +230,6 @@ export const PublicStoreLandingPage: React.FC = () => {
         </div>
       )}
 
-      {/* 상단 Google AdSense 배너 컨테이너 */}
-      <div className="border-b border-slate-200 bg-white/70 py-2 text-center backdrop-blur">
-        <div className="mx-auto max-w-4xl px-4">
-          {/* Google AdSense Responsive Unit Slot Template */}
-          {/* <ins className="adsbygoogle" style={{ display: 'block' }} data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins> */}
-          <div className="flex h-14 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50/50 text-xs text-slate-400">
-            광고 영역 (Google AdSense Responsive Unit Container)
-          </div>
-        </div>
-      </div>
-
       {/* Hero Header */}
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4 sm:px-6">
@@ -311,6 +301,9 @@ export const PublicStoreLandingPage: React.FC = () => {
                 )}
               </div>
             </section>
+
+            {/* 본문 In-Feed 광고 슬롯 (CLS 0% 선확보) */}
+            <AdSlotPlaceholder format="in-feed" className="my-8 px-4" />
 
             {/* Operating Hours */}
             <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -424,12 +417,11 @@ export const PublicStoreLandingPage: React.FC = () => {
         </div>
       </main>
 
-      {/* 하단 Google AdSense 배너 컨테이너 */}
+      {/* 푸터 및 사업장 정보 */}
       <footer className="mt-12 border-t border-slate-200 bg-white py-6">
         <div className="mx-auto max-w-4xl px-4">
-          <div className="mb-6 flex h-24 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 text-xs text-slate-400">
-            하단 광고 영역 (Google AdSense Responsive Multiplex / Horizontal Unit)
-          </div>
+          {/* 페이지 최하단 사업장 정보/푸터 바로 윗부분 광고 슬롯 (CLS 0% 선확보) */}
+          <AdSlotPlaceholder format="leaderboard" className="mt-12 mb-4" />
 
           <div className="flex flex-col items-center justify-between gap-3 text-xs text-slate-500 sm:flex-row">
             <p>© {new Date().getFullYear()} {store.name}. Powered by MOA v2.</p>

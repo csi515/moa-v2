@@ -14,6 +14,7 @@ import {
 import { useAuth } from '@/core/auth/AuthProvider';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { CustomerQrDrawer } from '@/core/auth/components/CustomerQrDrawer';
+import { AdSlotPlaceholder } from '@/components/ads/AdSlotPlaceholder';
 
 export const MyPassView: React.FC = () => {
   const { user } = useAuth();
@@ -58,7 +59,7 @@ export const MyPassView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
       {/* Responsive Container: Split-screen on lg, Single-card max-420px on mobile */}
       <div className="w-full max-w-[420px] lg:max-w-5xl mx-auto bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden lg:grid lg:grid-cols-2">
         {/* Left Column (Desktop Visual & Brand, 50%) */}
@@ -203,6 +204,11 @@ export const MyPassView: React.FC = () => {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* 스크롤 최하단 여백 광고 영역 (CLS 0% 선확보) */}
+      <div className="mt-8 mb-4 flex justify-center w-full">
+        <AdSlotPlaceholder format="rectangle" />
       </div>
 
       {/* Customer QR Drawer Component */}

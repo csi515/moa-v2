@@ -951,10 +951,64 @@ export const INDUSTRY_PRESETS: Record<string, IndustryPresetDefinition> = {
     roles: [{ name: '점주', rank_order: 1, permissions: ['*'] }],
     readinessLevel: 'basic_ui',
   },
+
+  daycare: {
+    id: 'daycare',
+    name: '어린이집·유치원',
+    description: '원아 등하원 출결, 보육료 결제, 학부모 상담 및 안전 동의서 관리',
+    category: 'childcare',
+    capabilities: ['attendance', 'billing_invoicing', 'consultation_crm', 'safety_consent'] as const,
+    requiredCapabilities: ['attendance', 'billing_invoicing'] as const,
+    optionalCapabilities: ['consultation_crm', 'safety_consent'] as const,
+    resourceTypes: [{ name: '보육실 (반)', type: 'room', capacity: 15 }],
+    roles: [
+      { name: '원장', rank_order: 1, permissions: ['*'] },
+      { name: '보육교사', rank_order: 2, permissions: ['attendance:*', 'consultation_crm:*'] },
+    ],
+    readinessLevel: 'persisted',
+  },
+
+  sauna_jjimjilbang: {
+    id: 'sauna_jjimjilbang',
+    name: '사우나·찜질방',
+    description: '남녀 락커 배정, 이용권/회원권, 선불 크레딧 및 시설 점검 루틴 관리',
+    category: 'wellness',
+    capabilities: ['locker', 'passes', 'maintenance_checklist', 'credit_wallet'] as const,
+    requiredCapabilities: ['locker', 'passes'] as const,
+    optionalCapabilities: ['maintenance_checklist', 'credit_wallet'] as const,
+    resourceTypes: [{ name: '사물함/락커', type: 'locker', capacity: 100 }],
+    roles: [
+      { name: '사장', rank_order: 1, permissions: ['*'] },
+      { name: '주간 카운터', rank_order: 2, permissions: ['passes:*', 'lockers:*'] },
+      { name: '야간 카운터', rank_order: 3, permissions: ['passes:deduct', 'lockers:assign'] },
+    ],
+    readinessLevel: 'persisted',
+  },
+};
+
+const PRESET_ALIASES: Record<string, string> = {
+  gym: 'gym_fitness',
+  academy: 'general_academy',
+  private_tutoring: 'exam_tutoring',
+  personal_training: 'pt_fitness',
+  golf_lesson: 'indoor_golf',
+  climbing_gym: 'climbing_activity',
+  hotel_pension: 'guesthouse',
+  craft_workshop: 'craft_repair',
+  car_wash: 'self_carwash',
+  sauna: 'sauna_jjimjilbang',
+  sauna_jjimjbang: 'sauna_jjimjilbang',
+  preschool: 'daycare',
+  kindergarten: 'daycare',
 };
 
 export function getIndustryPreset(presetId: string): IndustryPresetDefinition | undefined {
-  return INDUSTRY_PRESETS[presetId];
+  if (!presetId) return undefined;
+  const direct = INDUSTRY_PRESETS[presetId];
+  if (direct) return direct;
+  const aliasedKey = PRESET_ALIASES[presetId];
+  if (aliasedKey) return INDUSTRY_PRESETS[aliasedKey];
+  return undefined;
 }
 
 export function listIndustryPresets(): IndustryPresetDefinition[] {

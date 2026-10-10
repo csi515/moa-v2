@@ -37,9 +37,17 @@ export const ClaimTokenPage: React.FC = () => {
           throw new Error('데이터베이스 서비스에 연결할 수 없습니다.');
         }
 
-        const { data, error } = await getCoreClient().rpc('claim_store_token', {
-          p_token: token,
-        });
+        let res: any = await getCoreClient().rpc('claim_store_token_v2' as never, {
+          p_raw_token: token,
+        } as never);
+
+        if (res.error && (res.error.message.includes('function') || res.error.message.includes('does not exist'))) {
+          res = await getCoreClient().rpc('claim_store_token', {
+            p_token: token,
+          });
+        }
+
+        const { data, error } = res;
 
         if (error) {
           throw new Error(error.message);

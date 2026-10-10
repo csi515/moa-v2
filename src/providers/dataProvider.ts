@@ -43,8 +43,40 @@ export const TENANT_SCOPED_RESOURCES = [
   "staff",
   "classes",
   "class_members",
-  "practice_records"
+  "practice_records",
+  "passes",
+  "lockers",
+  "bookings",
+  "attendance",
+  "billing_invoices",
+  "consultations",
+  "credit_wallets",
+  "instructors",
+  "inventory_items",
+  "simple_ledgers",
+  "maintenance_checklists",
+  "rental_equipments",
+  "safety_consents",
+  "seat_rooms",
+  "shift_schedules",
+  "task_pipelines",
+  "treatment_charts"
 ] as const;
+
+export const TENANT_COLUMN_MAP: Record<string, string> = {
+  passes: "tenant_id",
+  lockers: "tenant_id",
+  seat_rooms: "tenant_id",
+  rental_equipments: "tenant_id",
+  maintenance_checklists: "tenant_id",
+  credit_wallets: "tenant_id",
+  safety_consents: "tenant_id",
+  onboarding_tokens: "tenant_id",
+};
+
+export function getTenantColumnForResource(resource: string): string {
+  return TENANT_COLUMN_MAP[resource] ?? "organization_id";
+}
 
 export function isTenantScopedResource(resource: string): boolean {
   return (TENANT_SCOPED_RESOURCES as readonly string[]).includes(resource);
@@ -74,14 +106,14 @@ function resolveActiveOrgId(): string | null {
   return orgService.getStoredOrganizationId() || StorageService.getOrganizationId() || null;
 }
 
-function stripOrganizationIdFilters(filters: CrudFilter[]): CrudFilter[] {
+function stripTenantFilters(filters: CrudFilter[]): CrudFilter[] {
   const result: CrudFilter[] = [];
   for (const filter of filters) {
-    if ("field" in filter && filter.field === "organization_id") {
+    if ("field" in filter && (filter.field === "organization_id" || filter.field === "tenant_id")) {
       continue;
     }
     if ((filter.operator === "or" || filter.operator === "and") && Array.isArray(filter.value)) {
-      const nested = stripOrganizationIdFilters(filter.value);
+      const nested = stripTenantFilters(filter.value);
       if (nested.length === 0) continue;
       result.push({ ...filter, value: nested });
       continue;
@@ -91,9 +123,10 @@ function stripOrganizationIdFilters(filters: CrudFilter[]): CrudFilter[] {
   return result;
 }
 
-function withoutOrganizationId<T>(variables: T): T {
+function withoutTenantId<T>(variables: T): T {
   const safe = { ...(variables as Record<string, unknown>) };
   delete safe.organization_id;
+  delete safe.tenant_id;
   return safe as T;
 }
 
@@ -122,12 +155,13 @@ export function guardTenantDataProvider(
       }
 
       const activeOrgId = requireActiveOrgId();
+      const tenantColumn = getTenantColumnForResource(params.resource);
       return baseProvider.getList({
         ...params,
         filters: [
-          ...stripOrganizationIdFilters(params.filters ?? []),
+          ...stripTenantFilters(params.filters ?? []),
           {
-            field: "organization_id",
+            field: tenantColumn,
             operator: "eq",
             value: activeOrgId,
           },
@@ -160,9 +194,10 @@ export function guardTenantDataProvider(
       }
 
       const activeOrgId = requireActiveOrgId();
+      const tenantColumn = getTenantColumnForResource(params.resource);
       const variables = {
         ...(params.variables as Record<string, unknown>),
-        organization_id: activeOrgId,
+        [tenantColumn]: activeOrgId,
       };
 
       return baseProvider.create({
@@ -179,7 +214,7 @@ export function guardTenantDataProvider(
       requireActiveOrgId();
       return baseProvider.update({
         ...params,
-        variables: withoutOrganizationId(params.variables),
+        variables: withoutTenantId(params.variables),
       });
     },
 
@@ -194,7 +229,7 @@ export function guardTenantDataProvider(
       requireActiveOrgId();
       return baseProvider.updateMany({
         ...params,
-        variables: withoutOrganizationId(params.variables),
+        variables: withoutTenantId(params.variables),
       });
     },
 

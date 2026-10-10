@@ -11,6 +11,7 @@ import { resolveIndustryAppKind } from '@/core/industry/industryAppResolve';
 import { GenericIndustryShell } from './GenericIndustryShell';
 import { ParentShell } from '@/modules/parent/ParentShell';
 import { LoadingScreen } from '@/shared/components/LoadingScreen';
+import { PluginErrorBoundary } from '@/shared/components/PluginErrorBoundary';
 import { APP_BY_INDUSTRY } from './industryModules';
 
 function resolveIndustryApp(industryType?: string | null): ComponentType {
@@ -31,10 +32,13 @@ export const IndustryAppRouter: React.FC = () => {
   }
 
   const IndustryApp = resolveIndustryApp(currentOrganization?.industry_type);
+  const industryKey = currentOrganization?.industry_type || 'industry';
 
   return (
-    <Suspense fallback={<LoadingScreen message="화면을 불러오는 중..." />}>
-      <IndustryApp />
-    </Suspense>
+    <PluginErrorBoundary pluginName={industryKey}>
+      <Suspense fallback={<LoadingScreen message="화면을 불러오는 중..." />}>
+        <IndustryApp />
+      </Suspense>
+    </PluginErrorBoundary>
   );
 };

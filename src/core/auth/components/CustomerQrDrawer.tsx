@@ -3,6 +3,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { X, Plus, Trash2, Clock, CheckCircle2, User, Users, RefreshCw } from 'lucide-react';
 import { supabase, getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
 import { buildEnrollmentPayload, type ChildEnrollmentInput } from '../domain/claimEngine';
+import { normalizeToE164 } from '@/domain/phoneValidation';
 
 export interface CustomerQrDrawerProps {
   isOpen: boolean;
@@ -25,7 +26,7 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
 
   const [step, setStep] = useState<'FORM' | 'QR'>('FORM');
   const [tokenRecord, setTokenRecord] = useState<{ id: string; claim_token: string; expires_at: string } | null>(null);
-  const [remainingSeconds, setRemainingSeconds] = useState<number>(180); // 3 min TTL
+  const [remainingSeconds, setRemainingSeconds] = useState<number>(300); // 5 min TTL
   const [isUsed, setIsUsed] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -59,10 +60,13 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
   const handleGenerateQr = async () => {
     setErrorMsg(null);
     try {
+      const phoneNorm = normalizeToE164(phone);
+      const cleanPhone = phoneNorm.isValid ? phoneNorm.e164 : phone;
+
       const normalized = buildEnrollmentPayload({
         isSelf,
         name,
-        phone,
+        phone: cleanPhone,
         email: email || undefined,
         children: isSelf ? [] : children,
       });
@@ -74,7 +78,14 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
       setLoading(true);
 
       const rawToken = 'CQ-' + crypto.randomUUID().replace(/-/g, '').slice(0, 10).toUpperCase();
-      const expiresAt = new Date(Date.now() + 3 * 60 * 1000).toISOString();
+      const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString(); // 5 min TTL
+
+      // SHA-256 hash calculation for secure token verification
+      const enc = new TextEncoder().encode(rawToken);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', enc);
+      const tokenHash = Array.from(new Uint8Array(hashBuffer))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
 
       const { data, error } = await getCoreClient()
         .from('onboarding_tokens')
@@ -82,10 +93,11 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
           tenant_id: tenantId,
           issuer_type: 'CUSTOMER',
           claim_token: rawToken,
+          token_hash: tokenHash,
           payload: normalized as any,
           expires_at: expiresAt,
           is_used: false,
-        })
+        } as any)
         .select('id, claim_token, expires_at')
         .single();
 
@@ -94,7 +106,7 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
       }
 
       setTokenRecord(data);
-      setRemainingSeconds(180);
+      setRemainingSeconds(300);
       setStep('QR');
     } catch (err: unknown) {
       setErrorMsg(err instanceof Error ? err.message : 'QR 코드 생성 중 오류가 발생했습니다.');

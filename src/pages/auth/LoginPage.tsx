@@ -19,10 +19,51 @@ export const LoginPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isTossLoading, setIsTossLoading] = useState(false);
+  const [language, setLanguage] = useState<'ko' | 'en'>('ko');
 
   const navigate = useNavigate();
   const { mutate: login, isPending: isLoading } = useLogin();
-  const { signInWithKakao } = useAuth();
+  const { signInWithGoogle, signInWithApple, signInWithKakao, signInWithNaver } = useAuth();
+
+  const handleGoogleLogin = async () => {
+    try {
+      if (signInWithGoogle) {
+        await signInWithGoogle();
+      }
+    } catch (err: any) {
+      setErrorMessage(err?.message || "Google 로그인 연동 실패");
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    try {
+      if (signInWithApple) {
+        await signInWithApple();
+      }
+    } catch (err: any) {
+      setErrorMessage(err?.message || "Apple 로그인 연동 실패");
+    }
+  };
+
+  const handleNaverLogin = async () => {
+    try {
+      if (signInWithNaver) {
+        await signInWithNaver();
+      }
+    } catch (err: any) {
+      setErrorMessage(err?.message || "네이버 로그인 연동 실패");
+    }
+  };
+
+  const handleKakaoLogin = async () => {
+    try {
+      if (signInWithKakao) {
+        await signInWithKakao();
+      }
+    } catch (err: any) {
+      setErrorMessage(err?.message || "카카오 로그인 연동 실패");
+    }
+  };
 
   const handleTossLogin = async () => {
     setIsTossLoading(true);
@@ -73,15 +114,7 @@ export const LoginPage: React.FC = () => {
     );
   };
 
-  const handleKakaoLogin = async () => {
-    try {
-      if (signInWithKakao) {
-        await signInWithKakao();
-      }
-    } catch (err: any) {
-      setErrorMessage(err?.message || "카카오 로그인 연동 실패");
-    }
-  };
+
 
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row bg-slate-50">
@@ -198,9 +231,14 @@ export const LoginPage: React.FC = () => {
             onSubmit={handleSubmit}
             isLoading={isLoading}
             errorMessage={errorMessage}
+            onGoogleLogin={handleGoogleLogin}
+            onAppleLogin={handleAppleLogin}
             onKakaoLogin={handleKakaoLogin}
+            onNaverLogin={handleNaverLogin}
             onTossLogin={handleTossLogin}
             isTossLoading={isTossLoading}
+            language={language}
+            onLanguageChange={setLanguage}
           />
         </div>
       </div>

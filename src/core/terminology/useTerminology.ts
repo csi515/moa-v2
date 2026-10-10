@@ -31,13 +31,18 @@ export interface UseTerminologyResult {
  * @param industryOverride 명시적으로 특정 업종의 용어를 사용하고자 할 때 전달. 미전달 시 컨텍스트 라벨 활용.
  */
 export function useTerminology(
-  industryOverride?: string | null
+  industryOverride?: string | null,
+  localeOverride?: 'ko' | 'en' | null
 ): UseTerminologyResult {
   const contextLabels = useModuleLabels();
 
   const terms = useMemo<TerminologyDictionary>(() => {
+    if (localeOverride === 'en') {
+      return getTerminologyDictionary(industryOverride, 'en');
+    }
+
     if (industryOverride) {
-      return getTerminologyDictionary(industryOverride);
+      return getTerminologyDictionary(industryOverride, 'ko');
     }
 
     // contextLabels에 billing 및 facility가 이미 제공된 경우 그대로 사용

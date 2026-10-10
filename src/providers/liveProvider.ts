@@ -6,6 +6,7 @@ import { StorageService } from "@/services/storage";
 import {
   isTenantScopedResource,
   TENANT_SCOPED_RESOURCES,
+  getTenantColumnForResource,
 } from "./dataProvider";
 
 export interface LiveProviderOptions {
@@ -80,7 +81,7 @@ export function createMoaLiveProvider(
         (REALTIME_TENANT_RESOURCES as readonly string[]).includes(resource);
 
       if (isRealtimeTarget && activeOrgId) {
-        const tenantColumn = resource === "onboarding_tokens" ? "tenant_id" : "organization_id";
+        const tenantColumn = getTenantColumnForResource(resource);
         filter = `${tenantColumn}=eq.${activeOrgId}`;
       }
 

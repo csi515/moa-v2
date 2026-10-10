@@ -25,7 +25,7 @@ import { dataProvider } from "./providers/dataProvider";
 import { notificationProvider } from "./providers/notificationProvider";
 import { createI18nProvider } from "./providers/i18nProvider";
 import { liveProvider } from "./providers/liveProvider";
-import { ToastContainer, ConfirmDialog } from "@/shared/components";
+import { ToastContainer, ConfirmDialog, AppErrorBoundary } from "@/shared/components";
 
 import { Header } from "./components/layout/Header";
 import { Layout } from "./components/layout/Layout";
@@ -133,14 +133,16 @@ const RefineApp: React.FC = () => {
           {/* Refine 관리 리소스 레이아웃 */}
           <Route
             element={
-              <div className="flex min-h-screen flex-col">
-                <Header />
-                <Layout>
-                  <Outlet />
-                </Layout>
-                <ConfirmDialog />
-                <ToastContainer />
-              </div>
+              <AppErrorBoundary>
+                <div className="flex min-h-screen flex-col">
+                  <Header />
+                  <Layout>
+                    <Outlet />
+                  </Layout>
+                  <ConfirmDialog />
+                  <ToastContainer />
+                </div>
+              </AppErrorBoundary>
             }
           >
             <Route index element={<IndustryAppRouter />} />
@@ -158,6 +160,38 @@ const RefineApp: React.FC = () => {
             <Route path="/lockers" element={<LockersGridPage />} />
             <Route path="/settings/roles" element={<RolesPage />} />
             <Route path="/onboarding/quick" element={<QuickSetupPage />} />
+
+            {/* Capability 동적 리소스 경로 라우트 매핑 (Refine 사이드바 연동) */}
+            <Route path="/attendance" element={<IndustryAppRouter />} />
+            <Route path="/attendance/*" element={<IndustryAppRouter />} />
+            <Route path="/bookings" element={<IndustryAppRouter />} />
+            <Route path="/bookings/*" element={<IndustryAppRouter />} />
+            <Route path="/seat-rooms" element={<IndustryAppRouter />} />
+            <Route path="/seat-rooms/*" element={<IndustryAppRouter />} />
+            <Route path="/rentals" element={<IndustryAppRouter />} />
+            <Route path="/rentals/*" element={<IndustryAppRouter />} />
+            <Route path="/maintenance" element={<IndustryAppRouter />} />
+            <Route path="/maintenance/*" element={<IndustryAppRouter />} />
+            <Route path="/instructors" element={<IndustryAppRouter />} />
+            <Route path="/instructors/*" element={<IndustryAppRouter />} />
+            <Route path="/shifts" element={<IndustryAppRouter />} />
+            <Route path="/shifts/*" element={<IndustryAppRouter />} />
+            <Route path="/pipelines" element={<IndustryAppRouter />} />
+            <Route path="/pipelines/*" element={<IndustryAppRouter />} />
+            <Route path="/billing-invoices" element={<IndustryAppRouter />} />
+            <Route path="/billing-invoices/*" element={<IndustryAppRouter />} />
+            <Route path="/ledger" element={<IndustryAppRouter />} />
+            <Route path="/ledger/*" element={<IndustryAppRouter />} />
+            <Route path="/wallets" element={<IndustryAppRouter />} />
+            <Route path="/wallets/*" element={<IndustryAppRouter />} />
+            <Route path="/consultations" element={<IndustryAppRouter />} />
+            <Route path="/consultations/*" element={<IndustryAppRouter />} />
+            <Route path="/charts" element={<IndustryAppRouter />} />
+            <Route path="/charts/*" element={<IndustryAppRouter />} />
+            <Route path="/consents" element={<IndustryAppRouter />} />
+            <Route path="/consents/*" element={<IndustryAppRouter />} />
+            <Route path="/inventory" element={<IndustryAppRouter />} />
+            <Route path="/inventory/*" element={<IndustryAppRouter />} />
           </Route>
         </Route>
 

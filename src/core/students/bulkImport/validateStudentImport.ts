@@ -202,19 +202,19 @@ export function validateStudentImportRows(
         });
         continue;
       }
-      if (row.guardianPhone.length < 10 || row.guardianPhone.length > 11) {
+      if (row.guardianPhone.length < 8 || row.guardianPhone.length > 15) {
         errors.push({
           rowNumber: row.rowNumber,
           field: '보호자전화',
-          message: '학부모(보호자) 연락처는 10~11자리 숫자여야 합니다.',
+          message: '학부모(보호자) 연락처는 8~15자리 숫자여야 합니다.',
         });
         continue;
       }
-    } else if (row.phone && (row.phone.length < 10 || row.phone.length > 11)) {
+    } else if (row.phone && (row.phone.length < 8 || row.phone.length > 15)) {
       errors.push({
         rowNumber: row.rowNumber,
         field: '연락처',
-        message: '연락처는 10~11자리 숫자여야 합니다.',
+        message: '연락처는 8~15자리 숫자여야 합니다.',
       });
       continue;
     }

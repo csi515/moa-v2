@@ -1,4 +1,5 @@
 import { AttendanceStatus, InvoiceStatus, StudentStatus } from '../types';
+import { formatPhoneDisplay } from '@/domain/phoneValidation';
 
 export function formatNumberWithCommas(value: number | string | undefined | null): string {
   if (value === undefined || value === null || value === '') return '';
@@ -55,15 +56,7 @@ export function formatKoreanDate(dateStr?: string): string {
 }
 
 export function formatPhone(phone?: string): string {
-  if (!phone) return '-';
-  const clean = phone.replace(/[^0-9]/g, '');
-  if (clean.length === 11) {
-    return `${clean.slice(0, 3)}-${clean.slice(3, 7)}-${clean.slice(7)}`;
-  }
-  if (clean.length === 10) {
-    return `${clean.slice(0, 3)}-${clean.slice(3, 6)}-${clean.slice(6)}`;
-  }
-  return phone;
+  return formatPhoneDisplay(phone);
 }
 
 export function getAttendanceBadge(status: AttendanceStatus): { label: string; bg: string; text: string; dot: string } {

@@ -268,5 +268,6 @@ export const INDUSTRY_ALIASES: Record<string, IndustryType> = {
   taekwondo: 'gym',
   preschool: 'daycare',
   kindergarten: 'daycare',
+  sauna: 'sauna_jjimjilbang',
   sauna_jjimjbang: 'sauna_jjimjilbang',
 };

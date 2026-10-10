@@ -17,6 +17,8 @@ interface AuthContextType {
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, fullName: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
+  signInWithApple: () => Promise<void>;
   signInWithKakao: () => Promise<void>;
   signInWithNaver: () => Promise<void>;
   signInWithToss: () => Promise<void>;
@@ -67,6 +69,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setSession(nextSession);
   };
 
+  const signInWithGoogle = async () => {
+    await authService.signInWithGoogle();
+  };
+
+  const signInWithApple = async () => {
+    await authService.signInWithApple();
+  };
+
   const signInWithKakao = async () => {
     await authService.signInWithKakao();
   };
@@ -94,6 +104,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loading,
         signIn,
         signUp,
+        signInWithGoogle,
+        signInWithApple,
         signInWithKakao,
         signInWithNaver,
         signInWithToss,

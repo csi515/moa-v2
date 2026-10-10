@@ -59,6 +59,30 @@ export async function signIn({ email, password }: SignInParams): Promise<Session
   return data.session;
 }
 
+/** 구글 OAuth — 글로벌/외국인 표준 (Supabase Auth Providers) */
+export async function signInWithGoogle(): Promise<void> {
+  const { error } = await getCoreClient().auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: getAuthRedirectTo(),
+      skipBrowserRedirect: false,
+    },
+  });
+  if (error) throw error;
+}
+
+/** 애플 OAuth — iOS App Store 심사 필수 및 프라이버시 로그인 */
+export async function signInWithApple(): Promise<void> {
+  const { error } = await getCoreClient().auth.signInWithOAuth({
+    provider: 'apple',
+    options: {
+      redirectTo: getAuthRedirectTo(),
+      skipBrowserRedirect: false,
+    },
+  });
+  if (error) throw error;
+}
+
 /** 카카오 OAuth — 로그인·회원가입 공통 (Supabase Auth Providers) */
 export async function signInWithKakao(): Promise<void> {
   const { error } = await getCoreClient().auth.signInWithOAuth({

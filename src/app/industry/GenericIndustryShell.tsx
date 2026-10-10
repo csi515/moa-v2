@@ -1,4 +1,5 @@
-import { type FC, type ReactNode, useMemo, useState, lazy, Suspense } from 'react';
+import { type FC, type ReactNode, useMemo, useState, useEffect, lazy, Suspense } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import {
   Home,
   Settings,
@@ -17,7 +18,6 @@ import {
 import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useTabGuard } from '@/shared/navigation/useTabGuard';
-import { ModuleLabelsProvider } from '@/core/labels';
 import { WorkplaceSettingsView } from '@/core/organizations/components/WorkplaceSettingsView';
 import { accountViewEntry, financeViewEntries } from '@/core/industry/commonViewEntries';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
@@ -29,10 +29,10 @@ const BookingView = lazy(() =>
   import('@/capabilities/booking/ui/BookingCalendarView').then((m) => ({ default: m.BookingCalendarView }))
 );
 const PassesView = lazy(() =>
-  import('@/capabilities/billing/ui/PassManagementView').then((m) => ({ default: m.PassManagementView }))
+  import('@/pages/passes/list').then((m) => ({ default: m.PassesListPage }))
 );
 const LockersView = lazy(() =>
-  import('@/capabilities/locker').then((m) => ({ default: m.LockerManagementView }))
+  import('@/pages/lockers/grid').then((m) => ({ default: m.LockersGridPage }))
 );
 import { DirectorFloatingFab, ToastContainer, ConfirmDialog } from '@/shared/components';
 import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
@@ -255,6 +255,9 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
 
   useTabGuard();
 
+  const { tab: urlTab } = useParams<{ tab?: string }>();
+  const location = useLocation();
+
   const defaultViewMap: Record<string, () => ReactNode> = {
     dashboard: () => <GenericDashboardView onNavigate={setActiveTab} />,
     students: () => <StudentListView />,
@@ -285,16 +288,25 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
 
   const viewMap = externalViewMap || defaultViewMap;
 
+  useEffect(() => {
+    if (urlTab && viewMap[urlTab]) {
+      setActiveTab(urlTab);
+      return;
+    }
+    const pathSegment = location.pathname.replace(/^\//, '').split('/')[0];
+    if (pathSegment && pathSegment !== 'workspace' && viewMap[pathSegment]) {
+      setActiveTab(pathSegment);
+    }
+  }, [urlTab, location.pathname, viewMap, setActiveTab]);
+
   const renderView = viewMap[activeTab] ?? viewMap.dashboard;
 
   return (
-    <ModuleLabelsProvider>
-      <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
-        {isOwner && <DirectorFloatingFab />}
-        {Overlays && <Overlays />}
-        {renderView()}
-      </div>
-    </ModuleLabelsProvider>
+    <div className="flex-1 p-3 sm:p-4 lg:p-5 max-w-full overflow-x-hidden">
+      {isOwner && <DirectorFloatingFab />}
+      {Overlays && <Overlays />}
+      {renderView()}
+    </div>
   );
 };
 
