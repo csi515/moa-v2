@@ -199,7 +199,7 @@ export function showsMakeupList(industry: IndustryType | string | null | undefin
 export function showsPracticeRoomTab(
   industry: IndustryType | string | null | undefined
 ): boolean {
-  return getIndustryPluginAdapter(industry).hasFeature('practice_room_tab');
+  return Boolean(getIndustryPlugin(industry).showsPracticeRoomTab);
 }
 
 /**
@@ -224,7 +224,7 @@ export function showsAdultPracticeGuide(
   industry: IndustryType | string | null | undefined
 ): boolean {
   if (isBlankIndustryInput(industry)) return false;
-  return getIndustryPluginAdapter(industry).hasFeature('adult_practice_guide');
+  return Boolean(getIndustryPlugin(industry).showsAdultPracticeGuide);
 }
 
 /**
@@ -237,7 +237,7 @@ export function showsAdultPracticeGuide(
 export function showsStaffPracticeGuide(
   industry: IndustryType | string | null | undefined
 ): boolean {
-  return getIndustryPluginAdapter(industry).hasFeature('staff_practice_guide');
+  return Boolean(getIndustryPlugin(industry).showsStaffPracticeGuide);
 }
 
 /**

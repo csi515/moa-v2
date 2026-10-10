@@ -122,6 +122,11 @@ export const LEGACY_ALLOWLIST = {
   },
 };
 
+export const PARENT_PORTAL_INDUSTRY_LEGACY_REASON =
+  'LEGACY Parent Portal industry leak — Phase 3 슬롯/레지스트리 주입으로 제거 대상';
+
+export const PARENT_PORTAL_INDUSTRY_LEGACY_FILES = new Set([]);
+
 export const CORE_ACADEMY_FORBIDDEN_MESSAGE =
   'src/core/academy is permanently forbidden. Move the code to Core, Capability, Industry, Shared, or Infrastructure.';
 
@@ -382,11 +387,21 @@ function scanFile(filePath) {
       details.push(`legacy ${spec}`);
     }
     if (
-      (fromLayer === 'capability' || fromLayer === 'industry') &&
+      (fromLayer === 'capability' || (fromLayer === 'industry' && !rel.startsWith('src/modules/'))) &&
       isStorageServiceFacadeSpec(rel, spec)
     ) {
       kinds.add('storage_service_import');
       details.push(`legacy StorageService (${spec})`);
+    }
+    if (
+      rel.startsWith('src/modules/parent/') &&
+      (spec === '@/industries' ||
+        spec.startsWith('@/industries/') ||
+        spec.includes('/industries/') ||
+        (spec.startsWith('.') && resolveImportRel(rel, spec).startsWith('src/industries/')))
+    ) {
+      kinds.add('parent_portal_industry_leak');
+      details.push(`parent portal must not import industry directly: ${spec}`);
     }
     if (
       (fromLayer === 'core' || fromLayer === 'capability') &&
@@ -498,6 +513,9 @@ function isAllowed(rel, kind) {
   if (kind === 'storage_service_import' && STORAGE_SERVICE_INDUSTRY_LEGACY_FILES.has(rel)) {
     return true;
   }
+  if (kind === 'parent_portal_industry_leak' && PARENT_PORTAL_INDUSTRY_LEGACY_FILES.has(rel)) {
+    return true;
+  }
   return (LEGACY_ALLOWLIST[rel]?.kinds ?? []).includes(kind);
 }
 
@@ -509,8 +527,10 @@ function collectRoots() {
   walk(join(srcRoot, 'app'), files);
   walk(join(srcRoot, 'services'), files);
   walk(join(srcRoot, 'types'), files);
+  walk(join(srcRoot, 'modules'), files);
   return files;
 }
+
 
 function collectTypesBarrelLayerFiles() {
   const files = [];
@@ -576,6 +596,9 @@ function expectedLegacyKeys() {
   for (const file of STORAGE_SERVICE_INDUSTRY_LEGACY_FILES) {
     keys.push(legacyKey(file, 'storage_service_import'));
   }
+  for (const file of PARENT_PORTAL_INDUSTRY_LEGACY_FILES) {
+    keys.push(legacyKey(file, 'parent_portal_industry_leak'));
+  }
   return keys.sort();
 }
 
@@ -613,10 +636,15 @@ function printInventory(known) {
   for (const row of known) {
     const reason =
       LEGACY_ALLOWLIST[row.file]?.reason ??
-      (row.kind === 'storage_service_import' ? STORAGE_SERVICE_INDUSTRY_LEGACY_REASON : '');
+      (row.kind === 'storage_service_import'
+        ? STORAGE_SERVICE_INDUSTRY_LEGACY_REASON
+        : row.kind === 'parent_portal_industry_leak'
+        ? PARENT_PORTAL_INDUSTRY_LEGACY_REASON
+        : '');
     console.log(`  - ${row.file} [${row.kind}] ${reason}`);
   }
 }
+
 
 function writeProbe(dir, name, source) {
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
@@ -790,6 +818,13 @@ function selfTest() {
         join(srcRoot, 'core'),
         '_architecture_probe_types_import.tmp.ts',
         "import type { Student } from '@/types';\n"
+      )
+    );
+    probes.push(
+      writeProbe(
+        join(srcRoot, 'modules', 'parent'),
+        '_architecture_probe_parent_leak.tmp.ts',
+        "import { x } from '@/industries/piano/plugin';\n"
       )
     );
     writeFileSync(
@@ -982,6 +1017,14 @@ function selfTest() {
     if (!typesNewImportHit) {
       throw new Error("architecture self-test: 신규 파일 → '@/types' 를 잡지 못했습니다.");
     }
+    const parentLeakHit = next.some(
+      (row) =>
+        row.kind === 'parent_portal_industry_leak' &&
+        row.file.includes('_architecture_probe_parent_leak.tmp.ts')
+    );
+    if (!parentLeakHit) {
+      throw new Error('architecture self-test: parent portal → industry leak 을 잡지 못했습니다.');
+    }
     if (!industryStorageHit) {
       throw new Error('architecture self-test: Industry → StorageService 를 잡지 못했습니다.');
     }
@@ -1019,12 +1062,13 @@ function selfTest() {
       !typesCapImplHit ||
       !typesNewDefHit ||
       !typesLevelUnionHit ||
-      !typesNewImportHit
+      !typesNewImportHit ||
+      !parentLeakHit
     ) {
       throw new Error('architecture self-test: 계층 위반을 잡지 못했습니다.');
     }
     console.log(
-      'architecture self-test: core→industry / capability→industry / services→industry / StorageService (@/ + .ts + relative + industry + freeze) / legacy attendance / capability→shim cycle / permanently forbid core academy / Core·Capability→AppContext / appUi / relative context / registry→impl / catalog composition / Core·Capability→Composition / types barrel freeze / new @/types import 탐지 ok'
+      'architecture self-test: core→industry / capability→industry / services→industry / StorageService (@/ + .ts + relative + industry + freeze) / legacy attendance / capability→shim cycle / permanently forbid core academy / Core·Capability→AppContext / appUi / relative context / registry→impl / catalog composition / Core·Capability→Composition / types barrel freeze / new @/types import / parent portal leak 탐지 ok'
     );
   } finally {
     writeFileSync(registryFile, registryOriginal, 'utf8');
@@ -1079,6 +1123,10 @@ function selfTest() {
   );
   if (leftoverTypesFreeze) {
     throw new Error('architecture self-test: probe 정리 후에도 types barrel freeze 위반이 남았습니다.');
+  }
+  const leftoverParentLeak = cleaned.some((row) => row.kind === 'parent_portal_industry_leak');
+  if (leftoverParentLeak) {
+    throw new Error('architecture self-test: probe 정리 후에도 parent portal leak 위반이 남았습니다.');
   }
 }
 

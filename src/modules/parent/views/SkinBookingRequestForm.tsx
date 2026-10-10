@@ -1,12 +1,12 @@
-﻿import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useApp } from '@/context/AppContext';
 import { useScheduleService } from '@/core/services/useScheduleService';
 import { StorageService } from '@/services/storage';
 import { getSlotCapacityInfo } from '@/capabilities/scheduling/capacity';
 import { isOutsideStaffHours } from '@/capabilities/scheduling/availability/windows';
+import { findStaffTimeConflict } from '@/capabilities/booking/domain/bookingRooms';
 import { formatBankAccountText } from '@/capabilities/finance/paymentMethodLabels';
-import { findStaffTimeConflict } from '@/industries/skin/bookingRooms';
 import type { Student } from '@/types';
 
 /** 피부관리 고객 — 시술 예약 신청 */

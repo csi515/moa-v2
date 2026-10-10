@@ -127,6 +127,7 @@
     "test:permissions-invariant": "tsx src/core/auth/permissions.invariant.test.ts",
     "test:org-access-invariant": "tsx src/core/invariants/orgAccess.invariant.test.ts",
     "test:point-balance-invariant": "tsx src/core/invariants/pointBalance.invariant.test.ts",
+    "test:capability-packs-finance-isolation": "tsx src/core/invariants/capabilityPacksAndFinanceIsolation.invariant.test.ts",
     "test:business-invariants": "node scripts/run-business-invariant-tests.mjs",
     "test:business-invariants:list": "node scripts/run-business-invariant-tests.mjs --list",
     "test:business-invariants:catalog": "node scripts/businessInvariantTests.test.mjs",

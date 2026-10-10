@@ -10,8 +10,8 @@ import type { IndustryType } from '@/core/industry/types';
 import { CheckCircle2, AlertCircle, Award, Plus } from 'lucide-react';
 import { Section } from './shared';
 import { getIndustryPlugin } from '@/core/industry/pluginHost';
-import { StudentStampBoard } from '@/industries/piano/components/songProgress';
 import { EmptyState } from '@/shared/components';
+import { getStudentStampBoardSlot } from '../slots/parentPortalSlots';
 
 export function ParentProgressView({
   student,
@@ -134,16 +134,20 @@ export function ParentProgressView({
 
   return (
     <div className="space-y-4">
-      {showSongStamps && organizationId && (
-        <StudentStampBoard
-          organizationId={organizationId}
-          customerId={student.id}
-          studentName={student.name}
-          boardSize={20}
-          canRequest={!readOnly}
-          onToast={showToast}
-        />
-      )}
+      {showSongStamps && organizationId && (() => {
+        const StampBoard = getStudentStampBoardSlot();
+        if (!StampBoard) return null;
+        return (
+          <StampBoard
+            organizationId={organizationId}
+            customerId={student.id}
+            studentName={student.name}
+            boardSize={20}
+            canRequest={!readOnly}
+            onToast={showToast}
+          />
+        );
+      })()}
 
       <Section title={`커리큘럼 진도 (${student.level || '미설정'})`}>
         {levelItems.length === 0 ? (

@@ -22,8 +22,8 @@ import { ParentMoreView } from './views/ParentMoreView';
 import { normalizeIndustryType } from '@/core/industry/types';
 import { isAppointmentIndustry } from '@/core/industry/industryUi';
 import { useParentPortal } from '@/core/parent/context/ParentPortalContext';
-import { ParentStudentStampView } from '@/industries/piano/components/songProgress';
 import { ParentIndustryAdapter } from '@/capabilities/parent/ParentIndustryAdapter';
+import { getParentStudentStampViewSlot } from './slots/parentPortalSlots';
 
 export function ParentPortalTabs({
   tab,
@@ -95,9 +95,11 @@ export function ParentPortalTabs({
           onRefresh={onRefresh}
         />
       );
-    case 'stamps':
+    case 'stamps': {
+      const StampView = getParentStudentStampViewSlot();
+      if (!StampView) return null;
       return (
-        <ParentStudentStampView
+        <StampView
           key={student.id}
           organizationId={organizationId}
           childrenOptions={stampChildren}
@@ -105,6 +107,7 @@ export function ParentPortalTabs({
           onToast={showToast}
         />
       );
+    }
     case 'reports':
       return <ParentReportsView student={student} />;
     case 'events':

@@ -82,6 +82,8 @@ const SKIN_PARENT_NAV: ParentPortalNavItem[] = [
 export class ParentIndustryAdapter {
   static getPolicy(industryType?: IndustryType | string | null): ParentPortalPolicy {
     const adapter = getIndustryPluginAdapter(industryType);
+    const portalConfig = adapter.getPortalConfig();
+    const facilityConfig = adapter.getFacilityConfig();
     const norm = normalizeIndustryType(industryType);
 
     let bookingVariant: 'skin' | 'pilates' | 'standard' = 'standard';
@@ -90,9 +92,11 @@ export class ParentIndustryAdapter {
 
     return {
       showPickupFields: adapter.hasFeature('pickup_fields'),
-      showsPracticeRoomTab: adapter.hasFeature('practice_room_tab'),
-      showsCustomerPoints: adapter.hasFeature('customer_points'),
-      showsMakeupList: adapter.hasFeature('makeup_list'),
+      showsPracticeRoomTab: Boolean(
+        portalConfig.features?.showsPracticeRoomTab ?? facilityConfig.features?.practiceRoomBooking
+      ),
+      showsCustomerPoints: Boolean(portalConfig.features?.showsCustomerPoints),
+      showsMakeupList: Boolean(portalConfig.features?.showsMakeupList),
       bookingVariant,
     };
   }

@@ -7,12 +7,16 @@ console.log('[TEST] shareLink running...');
 {
   let sharedPayload: any = null;
   let feedbackMessage = '';
-  (globalThis as any).navigator = {
-    share: async (data: any) => {
-      sharedPayload = data;
+  Object.defineProperty(globalThis, 'navigator', {
+    value: {
+      share: async (data: any) => {
+        sharedPayload = data;
+      },
+      canShare: () => true,
     },
-    canShare: () => true,
-  };
+    configurable: true,
+    writable: true,
+  });
 
   await (async () => {
     const result = await shareLink({
@@ -34,16 +38,20 @@ console.log('[TEST] shareLink running...');
 {
   let clipboardText = '';
   let feedbackMessage = '';
-  (globalThis as any).navigator = {
-    share: async () => {
-      throw new Error('NotSupported');
-    },
-    clipboard: {
-      writeText: async (text: string) => {
-        clipboardText = text;
+  Object.defineProperty(globalThis, 'navigator', {
+    value: {
+      share: async () => {
+        throw new Error('NotSupported');
+      },
+      clipboard: {
+        writeText: async (text: string) => {
+          clipboardText = text;
+        },
       },
     },
-  };
+    configurable: true,
+    writable: true,
+  });
 
   await (async () => {
     const result = await shareLink({
@@ -64,11 +72,15 @@ console.log('[TEST] shareLink running...');
 {
   const abortErr = new Error('Abort');
   abortErr.name = 'AbortError';
-  (globalThis as any).navigator = {
-    share: async () => {
-      throw abortErr;
+  Object.defineProperty(globalThis, 'navigator', {
+    value: {
+      share: async () => {
+        throw abortErr;
+      },
     },
-  };
+    configurable: true,
+    writable: true,
+  });
 
   await (async () => {
     const result = await shareLink({

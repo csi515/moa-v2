@@ -243,12 +243,53 @@ const pilatesAdapter = getIndustryPluginAdapter('pilates');
 assert.equal(pilatesAdapter.bookingAdapter?.flow, 'ticket');
 
 // ========================================================
-// 3. IndustryAdapter 정적 파사드 메서드 검증
+// 4. Capability Pack 도메인 팩 조회 및 프리셋 매니페스트 검증
 // ========================================================
-assert.equal(IndustryAdapter.hasFeature('makeup_list', 'piano'), true);
-assert.equal(IndustryAdapter.hasFeature('makeup_list', 'daycare'), false);
-assert.equal(IndustryAdapter.resolveLabel('customer', 'daycare'), '원아');
-assert.equal(IndustryAdapter.resolveLabel('fee', 'daycare'), '보육료');
-assert.equal(IndustryAdapter.resolveLabel('customer', 'retail'), '고객');
+// Piano Capability Packs
+const pianoFacility = pianoAdapter.getFacilityConfig();
+assert.equal(pianoFacility.features?.practiceRoomBooking, true);
 
-console.log('industryPluginAdapter.test.ts OK (standard adapter & fallback verified)');
+const pianoBilling = pianoAdapter.getBillingConfig();
+assert.equal(pianoBilling.feeLabel, '수강료');
+assert.equal(pianoBilling.showsTextbooksLink, true);
+
+const pianoAttendance = pianoAdapter.getAttendanceConfig();
+assert.equal(pianoAttendance.runKioskSideEffects, true);
+assert.equal(pianoAttendance.recordNoun, '출결');
+
+const pianoPortal = pianoAdapter.getPortalConfig();
+assert.equal(pianoPortal.portalRoleLabel, '학부모 포털');
+assert.equal(pianoPortal.features?.showsPracticeRoomTab, true);
+assert.equal(pianoPortal.features?.showsCustomerPoints, false);
+
+const pianoPreset = pianoAdapter.getPresetManifest();
+assert.equal(pianoPreset.id, 'piano');
+assert.equal(pianoPreset.labels.customer, '원생');
+assert.equal(pianoPreset.capabilities.billing?.feeLabel, '수강료');
+assert.equal(pianoPreset.capabilities.facility?.features?.practiceRoomBooking, true);
+
+// Daycare Capability Packs
+const daycareAttendance = daycareAdapter.getAttendanceConfig();
+assert.equal(daycareAttendance.recordNoun, '등하원');
+
+const daycarePortal = daycareAdapter.getPortalConfig();
+assert.equal(daycarePortal.portalRoleLabel, '보호자 포털');
+
+// Retail Capability Packs
+const retailPortal = retailAdapter.getPortalConfig();
+assert.equal(retailPortal.features?.showsCustomerPoints, true);
+
+// Generic Fallback Capability Packs
+const genericAdapter = getIndustryPluginAdapter('unknown_custom_id');
+const genericPreset = genericAdapter.getPresetManifest();
+assert.equal(genericPreset.id, 'academy');
+assert.equal(typeof genericPreset.labels.customer, 'string');
+assert.equal(typeof genericPreset.capabilities.billing?.feeLabel, 'string');
+
+// IndustryAdapter 파사드 정적 메서드
+assert.equal(IndustryAdapter.getFacilityConfig('piano').features?.practiceRoomBooking, true);
+assert.equal(IndustryAdapter.getPortalConfig('daycare').portalRoleLabel, '보호자 포털');
+assert.equal(IndustryAdapter.getPortalConfig('retail').features?.showsCustomerPoints, true);
+assert.equal(IndustryAdapter.getPresetManifest('piano').labels.place, '학원');
+
+console.log('industryPluginAdapter.test.ts OK (standard adapter, fallback, and capability packs verified)');

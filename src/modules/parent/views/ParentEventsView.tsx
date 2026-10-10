@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useList } from '@refinedev/core';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { StorageService } from '@/services/storage';
-import { ACADEMY_EVENT_TYPE_LABEL, PERFORMANCE_VIDEO_TYPE_LABEL } from '@/industries/piano/config/eventLabels';
+import { ACADEMY_EVENT_TYPE_LABEL, PERFORMANCE_VIDEO_TYPE_LABEL } from '@/types/education';
 import { getIndustryPlugin } from '@/core/industry/pluginHost';
 import type { IndustryType } from '@/core/industry/types';
 import type { Student } from '@/types';

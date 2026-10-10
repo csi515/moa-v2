@@ -7,7 +7,7 @@ import routerBindings, {
 } from "@refinedev/react-router";
 import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Users, Calendar, CreditCard, LayoutDashboard } from "lucide-react";
+import { Users, Calendar, CreditCard, LayoutDashboard, Ticket, Lock } from "lucide-react";
 
 import { AuthProvider } from "@/core/auth/AuthProvider";
 import { OrganizationProvider, useOrganization } from "@/core/organizations/OrganizationProvider";
@@ -43,6 +43,9 @@ import { MyPassView } from "./pages/customer/MyPassView";
 import { RolesPage } from "./pages/settings/RolesPage";
 import { AcceptStaffInvitePage } from "./pages/invite/AcceptStaffInvitePage";
 import { QuickSetupPage } from "./pages/onboarding/QuickSetupPage";
+import { PassesListPage } from "./pages/passes/list";
+import { LockersGridPage } from "./pages/lockers/grid";
+import { PublicStoreLandingPage } from "./pages/public/PublicStoreLandingPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -69,10 +72,29 @@ const RefineApp: React.FC = () => {
   }, [industryType]);
 
   const resources = useMemo(() => {
-    return provisionIndustryResources({
+    const base = provisionIndustryResources({
       industry: industryType,
       i18n: currentI18nProvider,
     });
+    return [
+      ...base,
+      {
+        name: "passes",
+        list: "/passes",
+        meta: {
+          label: "이용권/회원권",
+          icon: React.createElement(Ticket, { className: "h-4 w-4" }),
+        },
+      },
+      {
+        name: "lockers",
+        list: "/lockers",
+        meta: {
+          label: "사물함/락커",
+          icon: React.createElement(Lock, { className: "h-4 w-4" }),
+        },
+      },
+    ];
   }, [industryType, currentI18nProvider]);
 
   return (
@@ -131,11 +153,14 @@ const RefineApp: React.FC = () => {
             <Route path="/schedules" element={<WeeklyTimetableView />} />
             <Route path="/billing" element={<TuitionManagementView />} />
             <Route path="/customer/pass" element={<MyPassView />} />
+            <Route path="/passes" element={<PassesListPage />} />
+            <Route path="/lockers" element={<LockersGridPage />} />
             <Route path="/settings/roles" element={<RolesPage />} />
             <Route path="/onboarding/quick" element={<QuickSetupPage />} />
           </Route>
         </Route>
 
+        <Route path="/p/:slug" element={<PublicStoreLandingPage />} />
         <Route path="/claim/:token" element={<ClaimTokenPage />} />
         <Route path="/invite/staff/:token" element={<AcceptStaffInvitePage />} />
 

@@ -218,6 +218,7 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:attendance-industry-copy': 'attendance industry copy plugin unit',
   'test:student-exit-label': 'student detail exit label plugin flag unit',
   'test:preset-assembler': 'preset assembler composition unit',
+  'test:capability-packs-finance-isolation': 'capability pack grouping & finance isolation invariant',
 };
 
 /**

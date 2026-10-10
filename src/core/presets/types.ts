@@ -133,3 +133,112 @@ export interface CapabilityModuleBundle {
   setupSchema: CapabilitySetupSchema;
   resources: CapabilityResourceDefinition;
 }
+
+// ============================================================================
+// Domain Capability Pack Configurations (수평적 미세 플래그 수렴을 위한 도메인 팩)
+// ============================================================================
+
+export interface PresetLabels {
+  place: string;
+  customer: string;
+  owner: string;
+  fee: string;
+  level: string;
+}
+
+/**
+ * 1. 공간·시설 도메인 기능 팩 (Facility Capability Pack)
+ * 공간/실(roomConfig), 연습실 예약, 사물함/락커 등 물리 자원 관리 설정
+ */
+export interface FacilityCapabilityConfig {
+  enabled: boolean;
+  roomConfig?: import('@/core/industry/pluginTypes').IndustryRoomConfig;
+  features?: {
+    practiceRoomBooking?: boolean;
+    lockers?: boolean;
+    seatAssignment?: boolean;
+  };
+}
+
+/**
+ * 2. 수납·정산·재무 도메인 기능 팩 (Billing Capability Pack)
+ * 수강료/이용료, 정산 계정 과목, 교재/상품 판매 링크, 재무 요약 표시 메타데이터
+ */
+export interface BillingCapabilityConfig {
+  enabled: boolean;
+  feeLabel?: string;
+  bankAccountPlaceholder?: string;
+  supportsDeposit?: boolean;
+  payrollExpenseCategory?: string;
+  showsTextbooksLink?: boolean;
+  displayLinkedIncomeOverview?: boolean;
+  getExpenseCategories?: () => readonly import('@/core/industry/pluginTypes').IndustryExpenseCategory[];
+  financeHubNav?: import('@/core/industry/pluginTypes').IndustryFinanceHubNav;
+}
+
+/**
+ * 3. 출결·체크인 도메인 기능 팩 (Attendance Capability Pack)
+ * 수업/출입 명사, 반 기반 일정 여부, 회차권 차감 정책, 키오스크 테마 및 부가 동기화
+ */
+export interface AttendanceCapabilityConfig {
+  enabled: boolean;
+  recordNoun?: '등하원' | '출입' | '출결';
+  usesClassBasedSchedule?: boolean;
+  passDeductionMode?: 'atomic_rpc' | 'none';
+  summaryMetricColor?: 'rose' | 'teal' | 'amber' | 'indigo';
+  runKioskSideEffects?: boolean;
+  attendanceCopy?: import('@/core/industry/pluginTypes').IndustryAttendanceCopy;
+}
+
+/**
+ * 4. 고객·학부모 포털 슬롯 및 정책 도메인 기능 팩 (Portal Capability Pack)
+ * 포털 명칭, 1차/2차 네비게이션 탭, 포털 전용 기능 플래그 및 커스텀 뷰 슬롯 주입 계약
+ */
+export interface PortalCapabilityConfig {
+  enabled: boolean;
+  portalRoleLabel?: string;
+  primaryTabs?: readonly string[];
+  secondaryTabs?: readonly string[];
+  features?: {
+    showsMakeupList?: boolean;
+    showsCustomerPoints?: boolean;
+    showsPracticeRoomTab?: boolean;
+    showsPerformanceVideos?: boolean;
+    showsSongStamps?: boolean;
+    publicLandingAdultFirst?: boolean;
+  };
+  customViewSlots?: Record<string, unknown>;
+}
+
+/**
+ * 5. 예약·상담 도메인 기능 팩 (Booking Capability Pack)
+ * 1:1 예약, 진료/상담 시간표, 예약금 및 업종별 예약 어댑터
+ */
+export interface BookingCapabilityConfig {
+  enabled: boolean;
+  isAppointment?: boolean;
+  supportsDeposit?: boolean;
+  bookingAdapter?: import('@/core/industry/bookingIndustryAdapter').BookingIndustryAdapter;
+}
+
+/**
+ * Core Preset 통합 계약 (CorePluginContract / PresetManifest)
+ * Core-Capability-Preset 3계층 아키텍처에서 Preset이 선언하는 표준 매니페스트
+ */
+export interface PresetManifest {
+  readonly id: string;
+  readonly name: string;
+  readonly labels: PresetLabels;
+  readonly theme?: {
+    primaryColor?: string;
+    accentColor?: string;
+  };
+  readonly capabilities: {
+    facility?: FacilityCapabilityConfig;
+    billing?: BillingCapabilityConfig;
+    attendance?: AttendanceCapabilityConfig;
+    portal?: PortalCapabilityConfig;
+    booking?: BookingCapabilityConfig;
+  };
+  readonly metadata?: Record<string, unknown>;
+}

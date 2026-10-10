@@ -10,6 +10,13 @@ import { getIndustryPlugin, getInstalledIndustryPlugin } from './registry';
 import { buildGenericPluginManifest } from './genericPlugin';
 import { getIndustryDefinition, INDUSTRY_DEFINITIONS } from './catalog';
 import { isBlankIndustryInput, type IndustryType } from './types';
+import type {
+  FacilityCapabilityConfig,
+  BillingCapabilityConfig,
+  AttendanceCapabilityConfig,
+  PortalCapabilityConfig,
+  PresetManifest,
+} from '@/core/presets/types';
 
 /**
  * 정형화된 비즈니스/UI 기능 키 (Feature Flags)
@@ -70,6 +77,13 @@ export interface IndustryPluginAdapter {
 
   /** 룸/공간 설정 */
   readonly roomConfig: IndustryRoomConfig;
+
+  /** 도메인 기능 팩 (Capability Pack) 설정 조회 */
+  getFacilityConfig(): FacilityCapabilityConfig;
+  getBillingConfig(): BillingCapabilityConfig;
+  getAttendanceConfig(): AttendanceCapabilityConfig;
+  getPortalConfig(): PortalCapabilityConfig;
+  getPresetManifest(): PresetManifest;
 }
 
 /**
@@ -188,6 +202,98 @@ export class DefaultFallbackPluginAdapter implements IndustryPluginAdapter {
       }
     );
   }
+
+  getFacilityConfig(): FacilityCapabilityConfig {
+    const hasPractice = this.hasFeature('practice_room_tab');
+    return {
+      enabled: Boolean(this.manifest.roomConfig || hasPractice),
+      roomConfig: this.roomConfig,
+      features: {
+        practiceRoomBooking: hasPractice,
+        lockers: false,
+      },
+    };
+  }
+
+  getBillingConfig(): BillingCapabilityConfig {
+    return {
+      enabled: true,
+      feeLabel: this.getLabel('fee'),
+      bankAccountPlaceholder: this.manifest.bankAccountPlaceholder,
+      supportsDeposit: this.hasFeature('deposit'),
+      payrollExpenseCategory: this.manifest.getPayrollExpenseCategory?.() ?? 'salary',
+      showsTextbooksLink: this.hasFeature('textbooks_link'),
+      displayLinkedIncomeOverview: this.hasFeature('linked_billing_income'),
+      getExpenseCategories: this.manifest.getExpenseCategories,
+      financeHubNav: this.manifest.financeHubNav,
+    };
+  }
+
+  getAttendanceConfig(): AttendanceCapabilityConfig {
+    const isAppt = Boolean(this.manifest.isAppointment);
+    const defaultNoun = this.manifest.id === 'daycare' ? '등하원' : isAppt ? '출입' : '출결';
+    return {
+      enabled: this.manifest.attendanceDefault !== false,
+      recordNoun: this.manifest.attendanceCopy?.recordNoun ?? defaultNoun,
+      usesClassBasedSchedule: this.hasFeature('class_based_schedule'),
+      passDeductionMode: this.hasFeature('attendance_with_pass') ? 'atomic_rpc' : 'none',
+      summaryMetricColor: (this.manifest.attendanceSummaryMetric as any) ?? 'indigo',
+      runKioskSideEffects: this.hasFeature('pin_side_effects'),
+      attendanceCopy: this.attendanceCopy,
+    };
+  }
+
+  getPortalConfig(): PortalCapabilityConfig {
+    const id = this.manifest.id;
+    const portalRoleLabel =
+      id === 'daycare'
+        ? '보호자 포털'
+        : id === 'skin_clinic'
+          ? '고객 포털'
+          : '학부모 포털';
+
+    return {
+      enabled: true,
+      portalRoleLabel,
+      features: {
+        showsMakeupList: this.hasFeature('makeup_list'),
+        showsCustomerPoints: this.hasFeature('customer_points'),
+        showsPracticeRoomTab: this.hasFeature('practice_room_tab'),
+        showsPerformanceVideos: this.hasFeature('performance_videos'),
+        showsSongStamps: this.hasFeature('song_stamps'),
+        publicLandingAdultFirst: this.hasFeature('public_landing_adult_first'),
+      },
+    };
+  }
+
+  getPresetManifest(): PresetManifest {
+    return {
+      id: this.id,
+      name: this.manifest.option?.label ?? this.id,
+      labels: {
+        place: this.getLabel('place'),
+        customer: this.getLabel('customer'),
+        owner: this.getLabel('owner'),
+        fee: this.getLabel('fee'),
+        level: this.getLabel('level'),
+      },
+      theme: {
+        primaryColor: typeof this.manifest.theme === 'string' ? this.manifest.theme : undefined,
+      },
+      capabilities: {
+        facility: this.getFacilityConfig(),
+        billing: this.getBillingConfig(),
+        attendance: this.getAttendanceConfig(),
+        portal: this.getPortalConfig(),
+        booking: {
+          enabled: Boolean(this.manifest.isAppointment || this.manifest.bookingAdapter),
+          isAppointment: Boolean(this.manifest.isAppointment),
+          supportsDeposit: this.hasFeature('deposit'),
+          bookingAdapter: this.bookingAdapter,
+        },
+      },
+    };
+  }
 }
 
 /**
@@ -272,4 +378,40 @@ export class IndustryAdapter {
   static getRule<T = unknown>(ruleKey: string, defaultValue?: T, industry?: IndustryType | string | null): T {
     return IndustryAdapter.getAdapter(industry).getRule(ruleKey, defaultValue);
   }
+
+  /**
+   * 시설/공간 기능 팩 조회
+   */
+  static getFacilityConfig(industry?: IndustryType | string | null): FacilityCapabilityConfig {
+    return IndustryAdapter.getAdapter(industry).getFacilityConfig();
+  }
+
+  /**
+   * 수납/재무 기능 팩 조회
+   */
+  static getBillingConfig(industry?: IndustryType | string | null): BillingCapabilityConfig {
+    return IndustryAdapter.getAdapter(industry).getBillingConfig();
+  }
+
+  /**
+   * 출결 기능 팩 조회
+   */
+  static getAttendanceConfig(industry?: IndustryType | string | null): AttendanceCapabilityConfig {
+    return IndustryAdapter.getAdapter(industry).getAttendanceConfig();
+  }
+
+  /**
+   * 포털 기능 팩 조회
+   */
+  static getPortalConfig(industry?: IndustryType | string | null): PortalCapabilityConfig {
+    return IndustryAdapter.getAdapter(industry).getPortalConfig();
+  }
+
+  /**
+   * 프리셋 통합 매니페스트 조회
+   */
+  static getPresetManifest(industry?: IndustryType | string | null): PresetManifest {
+    return IndustryAdapter.getAdapter(industry).getPresetManifest();
+  }
 }
+

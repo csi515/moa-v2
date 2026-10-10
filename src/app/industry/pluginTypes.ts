@@ -10,3 +10,13 @@ export {
   StandardIndustryPluginAdapter,
   getIndustryPluginAdapter,
 } from '@/core/industry/IndustryAdapter';
+export type {
+  FacilityCapabilityConfig,
+  BillingCapabilityConfig,
+  AttendanceCapabilityConfig,
+  PortalCapabilityConfig,
+  BookingCapabilityConfig,
+  PresetManifest,
+  PresetLabels,
+} from '@/core/presets/types';
+

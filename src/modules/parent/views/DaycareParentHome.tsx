@@ -1,4 +1,4 @@
-﻿import React, { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { StorageService } from '@/services/storage';
 import { useStorageRefresh } from '@/hooks';
 import { TuitionService } from '@/capabilities/finance';
@@ -9,7 +9,7 @@ import {
 } from '@/capabilities/attendance/services/attendanceService';
 import { useParentAttendanceSessions } from '@/core/parent/hooks/useParentAttendanceSessions';
 import { ParentNoticePreview } from './parentHomeShared';
-import { CARE_JOURNAL_MOOD_LABEL, MEDICATION_STATUS_LABEL, PICKUP_OUTSIDE_LABEL } from '@/industries/daycare/care';
+import { CARE_JOURNAL_MOOD_LABEL, MEDICATION_STATUS_LABEL, PICKUP_OUTSIDE_LABEL } from '@/types/care';
 import type { ParentPortalTab } from '@/types/education';
 import type { Student } from '@/types';
 import { SummaryMetricCard } from '@/shared/components';

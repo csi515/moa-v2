@@ -2205,6 +2205,8 @@ export interface Database {
           monthly_fee: number | null;
           created_at: string;
           updated_at: string;
+          start_date: string | null;
+          expires_at: string | null;
         };
         Insert: {
           id?: string;
@@ -2217,8 +2219,66 @@ export interface Database {
           monthly_fee?: number | null;
           created_at?: string;
           updated_at?: string;
+          start_date?: string | null;
+          expires_at?: string | null;
         };
         Update: Partial<Database['core']['Tables']['lockers']['Insert']>;
+        Relationships: [];
+      };
+      passes: {
+        Row: {
+          id: string;
+          tenant_id: string;
+          customer_id: string | null;
+          pass_name: string;
+          pass_type: string;
+          total_count: number;
+          remaining_count: number;
+          status: string;
+          is_active: boolean;
+          start_date: string;
+          expires_at: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          tenant_id: string;
+          customer_id?: string | null;
+          pass_name: string;
+          pass_type?: string;
+          total_count?: number;
+          remaining_count?: number;
+          status?: string;
+          is_active?: boolean;
+          start_date?: string;
+          expires_at?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['passes']['Insert']>;
+        Relationships: [];
+      };
+      web_push_subscriptions: {
+        Row: {
+          id: string;
+          tenant_id: string | null;
+          user_id: string | null;
+          endpoint: string;
+          p256dh: string;
+          auth: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          tenant_id?: string | null;
+          user_id?: string | null;
+          endpoint: string;
+          p256dh: string;
+          auth: string;
+          created_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['web_push_subscriptions']['Insert']>;
         Relationships: [];
       };
     };
@@ -2241,6 +2301,12 @@ export interface Database {
       revoke_member_access: {
         Args: {
           p_member_id: string;
+        };
+        Returns: Json;
+      };
+      deduct_pass_atomic: {
+        Args: {
+          p_pass_id: string;
         };
         Returns: Json;
       };

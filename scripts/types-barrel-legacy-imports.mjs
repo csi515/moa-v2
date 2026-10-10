@@ -153,7 +153,6 @@ export const TYPES_BARREL_LEGACY_IMPORT_FILES = new Set([
   'src/industries/piano/components/textbooks/tabs/TextbookInventoryTab.tsx',
   'src/industries/piano/components/textbooks/tabs/TextbookPaymentsTab.tsx',
   'src/industries/piano/components/textbooks/tabs/TextbookSalesTab.tsx',
-  'src/industries/piano/config/eventLabels.ts',
   'src/industries/piano/services/lessonPassConsume.ts',
   'src/industries/piano/services/recitalService.ts',
   'src/industries/piano/services/textbookCoreSaleLink.ts',
