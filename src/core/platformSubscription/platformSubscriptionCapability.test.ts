@@ -159,6 +159,24 @@ function run() {
     assert.doesNotMatch(src, /stripe|tosspayments|iamport|portone/i);
   }
 
+  const sql = readFileSync(
+    join(root, 'supabase/migrations/20260924340000_platform_subscription_entitlement.sql'),
+    'utf8'
+  );
+  assert.match(sql, /CREATE SCHEMA IF NOT EXISTS platform/);
+  assert.match(sql, /CREATE TABLE platform\.plans/);
+  assert.match(sql, /CREATE TABLE platform\.subscriptions/);
+  assert.match(sql, /CREATE TABLE platform\.subscription_items/);
+  assert.match(sql, /CREATE TABLE platform\.feature_entitlements/);
+  assert.match(sql, /billing_status/);
+  assert.match(sql, /organization_id UUID NOT NULL REFERENCES core\.organizations/);
+  assert.match(sql, /platform\.is_feature_enabled/);
+  assert.match(sql, /INSERT INTO platform\.plans/);
+  assert.doesNotMatch(sql, /ALTER TABLE core\.(session_passes|sales|payments|membership)/);
+  assert.doesNotMatch(sql, /CREATE TABLE core\.(session_passes|sales|payments)/);
+  assert.doesNotMatch(sql, /stripe|tosspayments|iamport|portone/i);
+  assert.doesNotMatch(sql, /industry_type/);
+
   console.log('platformSubscriptionCapability.test.ts: ok');
 }
 

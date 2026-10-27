@@ -11,10 +11,10 @@ import type { Json, PaymentMethod as DbPaymentMethod, PaymentStatus } from '../.
 import type { StaffMetadata } from '../../types';
 import type { AcademySettings, Teacher } from '../../../../types';
 import type { Booking, ServiceOffering } from '../../../../core/types/schedule';
-import type { PickupAddress } from '@/types';
+import type { PickupAddress } from '../../../../core/transport/types';
 
 
-// ?€?€?€ Customers (Students / Parents) ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
+// â”€â”€â”€ Customers (Students / Parents) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface CustomerMetadata {
   entityType?: 'student' | 'parent';
@@ -125,7 +125,7 @@ export function customerRowToStudent(
     teacherId: meta.teacherId || '',
     teacherName: meta.teacherName || '',
     classIds: meta.classIds || [],
-    level: meta.level || 'ì´ˆê¸‰',
+    level: meta.level || 'ë°”ì´ì—˜ ìƒ',
     tuitionFee: meta.tuitionFee ?? 180000,
     paymentDay: meta.paymentDay ?? 25,
     billingMode: meta.billingMode === 'session_pass' ? 'session_pass' : 'monthly',

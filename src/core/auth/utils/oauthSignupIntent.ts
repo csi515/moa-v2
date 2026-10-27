@@ -1,37 +1,36 @@
+import { peekPendingGuardianLink } from '@/core/parent/services/guardianLinkService';
+import { peekPendingOrgPublicCode } from '@/core/parent/services/pendingOrgConnect';
 import {
   getSessionItem,
   removeSessionItem,
   setSessionItem,
-} from '@/core/platform/sessionStorageSafe';
+} from '@/core/parent/services/sessionStorageSafe';
 
-const OAUTH_INTENT_KEY = 'ep_oauth_signup_intent';
-const LEGACY_OAUTH_INTENT_KEY = 'moa_oauth_signup_intent';
+const OAUTH_INTENT_KEY = 'moa_oauth_signup_intent';
 
 export type OAuthSignupIntent = {
   mode: 'login' | 'signup';
   fullName?: string;
+  /** OAuth 리다이렉트 중 유실 방지용 가디언 연결 코드 */
+  pendingGuardianLink?: string;
+  /** 공개 사업장 코드 → 학원 연결 요청 */
+  pendingOrgPublicCode?: string;
 };
 
-function readIntentRaw(): string | null {
-  const current = getSessionItem(OAUTH_INTENT_KEY);
-  if (current != null) return current;
-  const legacy = getSessionItem(LEGACY_OAUTH_INTENT_KEY);
-  if (legacy != null) {
-    setSessionItem(OAUTH_INTENT_KEY, legacy);
-    removeSessionItem(LEGACY_OAUTH_INTENT_KEY);
-    return legacy;
-  }
-  return null;
-}
-
-/** OAuth 리다이렉트 전 가입 의도 저장 */
+/** OAuth 리다이렉트 전 가입 의도 저장 (pending 학원 연결 토큰·코드 병행 보존) */
 export function saveOAuthSignupIntent(intent: OAuthSignupIntent): void {
-  setSessionItem(OAUTH_INTENT_KEY, JSON.stringify(intent));
-  removeSessionItem(LEGACY_OAUTH_INTENT_KEY);
+  const withPending: OAuthSignupIntent = {
+    ...intent,
+    pendingGuardianLink:
+      intent.pendingGuardianLink ?? peekPendingGuardianLink() ?? undefined,
+    pendingOrgPublicCode:
+      intent.pendingOrgPublicCode ?? peekPendingOrgPublicCode() ?? undefined,
+  };
+  setSessionItem(OAUTH_INTENT_KEY, JSON.stringify(withPending));
 }
 
 export function peekOAuthSignupIntent(): OAuthSignupIntent | null {
-  const raw = readIntentRaw();
+  const raw = getSessionItem(OAUTH_INTENT_KEY);
   if (!raw) return null;
   try {
     return JSON.parse(raw) as OAuthSignupIntent;
@@ -42,7 +41,6 @@ export function peekOAuthSignupIntent(): OAuthSignupIntent | null {
 
 export function clearOAuthSignupIntent(): void {
   removeSessionItem(OAUTH_INTENT_KEY);
-  removeSessionItem(LEGACY_OAUTH_INTENT_KEY);
 }
 
 export function consumeOAuthSignupIntent(): OAuthSignupIntent | null {

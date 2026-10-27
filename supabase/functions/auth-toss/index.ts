@@ -181,8 +181,8 @@ Deno.serve(async (req: Request) => {
         );
       }
 
-      const tossClientId = Deno.env.get("TOSS_CLIENT_ID") || "ep_toss_client_id";
-      const tossClientSecret = Deno.env.get("TOSS_CLIENT_SECRET") || "ep_toss_secret";
+      const tossClientId = Deno.env.get("TOSS_CLIENT_ID") || "moa_toss_client_id";
+      const tossClientSecret = Deno.env.get("TOSS_CLIENT_SECRET") || "moa_toss_secret";
 
       // 1) 토스 API 연동
       const { profile } = await exchangeCodeWithToss(
@@ -195,7 +195,7 @@ Deno.serve(async (req: Request) => {
       const rawPhone = profile.phone || profile.phoneNumber || "";
       const normalizedPhone = digitsOnly(rawPhone);
       const userName = profile.name || "토스 사용자";
-      const userEmail = profile.email || `toss_${userKey}@ep.local`;
+      const userEmail = profile.email || `toss_${userKey}@moa.app`;
 
       // 2) Supabase Auth 유저 조회 또는 생성
       let authUserId: string | null = null;

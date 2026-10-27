@@ -14,6 +14,8 @@ import {
 import { QRCodeSVG } from 'qrcode.react';
 import { appBrand } from '@/core/brand';
 import { getIndustryLabel } from '@/core/industry/types';
+import { storePendingOrgPublicCode } from '@/core/parent/services/pendingOrgConnect';
+import { setParentPortalModeActive } from '@/core/parent/services/appModeService';
 import { usePublicOrganization } from './usePublicOrganization';
 import { ConsultationForm } from './ConsultationForm';
 import { PublicBookingSection } from './PublicBookingSection';
@@ -46,13 +48,16 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
   };
 
   const handleParentConnect = () => {
-    // EP_apps: 학부모 포털 연결 비활성 — 공개 상담/가입만 안내
     if (!org) return;
-    navigate('/signup/customer', {
+    storePendingOrgPublicCode(org.public_code);
+    setParentPortalModeActive(true);
+    if (isAuthenticated) {
+      navigate('/', { state: { openParentPortal: true } });
+      return;
+    }
+    navigate('/', {
       state: {
-        selectedOrgId: org.id,
-        publicCode: org.public_code,
-        orgName: org.name,
+        openParentPortal: true,
       },
     });
   };
@@ -226,7 +231,7 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
                       성인 수강생 · 회원 가입
                     </button>
                     <p className="text-xs text-slate-500 text-center">
-                      본인 {appBrand.shortName} 계정으로 {placeLabel} 회원 가입을 신청합니다 (자녀 연결 아님)
+                      본인 MOA 계정으로 {placeLabel} 회원 가입을 신청합니다 (자녀 연결 아님)
                     </p>
                   </div>
                 );

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { lazy, Suspense, useMemo } from "react";
 import { Refine, Authenticated } from "@refinedev/core";
 import routerBindings, {
@@ -8,6 +7,7 @@ import routerBindings, {
 } from "@refinedev/react-router";
 import { BrowserRouter, Route, Routes, Outlet, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Ticket, Lock } from "lucide-react";
 
 import { InPlaceReAuthModal } from "@/components/auth/InPlaceReAuthModal";
 import { installAuthInterceptor } from "@/providers/authInterceptor";
@@ -34,7 +34,7 @@ import { liveProvider } from "./providers/liveProvider";
 import { ToastContainer, ConfirmDialog, AppErrorBoundary } from "@/shared/components";
 import { LoadingScreen } from "@/shared/components/LoadingScreen";
 
-import { DynamicRoleSettingsPage } from "@/pages/settings/DynamicRoleSettingsPage";
+import { DynamicRoleSettingsPage, FinanceRouteGate } from "@/pages/settings/DynamicRoleSettingsPage";
 import { ConsentSignatureModal } from "@/capabilities/safety_consent/ui/ConsentSignatureModal";
 import { Header } from "./components/layout/Header";
 import { Layout } from "./components/layout/Layout";
@@ -42,13 +42,26 @@ import { LoginPage } from "./pages/auth/LoginPage";
 import { AuthPage } from "./core/auth/AuthPage";
 import { SuperAdminGuard } from "./pages/admin/SuperAdminGuard";
 import { ImpersonationFloatingBanner } from "./components/layout/ImpersonationFloatingBanner";
+// E2E 전용 /e2e/shuttle-commute 라우트가 즉시 렌더링을 가정하므로 eager import 유지
+import { VehicleShuttleCommuteView } from "@/capabilities/vehicle_shuttle/ui/VehicleShuttleCommuteView";
 
+// 라우트 단위 코드 스플리팅: 초기 번들에서 부가 화면을 분리한다.
+const VehicleShuttleManagementView = lazy(() => import("@/capabilities/vehicle_shuttle/components/VehicleShuttleManagementView").then((m) => ({ default: m.VehicleShuttleManagementView })));
 const MemberList = lazy(() => import("@/pages/members/MemberList").then((m) => ({ default: m.MemberList })));
+const AttendanceKioskPage = lazy(() => import("@/capabilities/attendance/ui/AttendanceKioskPage").then((m) => ({ default: m.AttendanceKioskPage })));
 const ScheduleCalendarPage = lazy(() => import("@/capabilities/booking/pages/ScheduleCalendarPage").then((m) => ({ default: m.ScheduleCalendarPage })));
 const MemberBookingView = lazy(() => import("@/capabilities/booking/pages/MemberBookingView").then((m) => ({ default: m.MemberBookingView })));
+const DashboardPage = lazy(() => import("./pages/dashboard").then((m) => ({ default: m.DashboardPage })));
+const StudentListPage = lazy(() => import("./pages/students").then((m) => ({ default: m.StudentListPage })));
+const StudentCreatePage = lazy(() => import("./pages/students").then((m) => ({ default: m.StudentCreatePage })));
+const StudentShowPage = lazy(() => import("./pages/students").then((m) => ({ default: m.StudentShowPage })));
+const StudentEditPage = lazy(() => import("./pages/students").then((m) => ({ default: m.StudentEditPage })));
+const ClaimTokenPage = lazy(() => import("./pages/customer/ClaimTokenPage").then((m) => ({ default: m.ClaimTokenPage })));
 const CustomerSignUpFlow = lazy(() => import("@/core/customer/CustomerSignUpFlow").then((m) => ({ default: m.CustomerSignUpFlow })));
+const MyPassView = lazy(() => import("./pages/customer/MyPassView").then((m) => ({ default: m.MyPassView })));
 const RolesPage = lazy(() => import("./pages/settings/RolesPage").then((m) => ({ default: m.RolesPage })));
 const AcceptStaffInvitePage = lazy(() => import("./pages/invite/AcceptStaffInvitePage").then((m) => ({ default: m.AcceptStaffInvitePage })));
+const QuickSetupPage = lazy(() => import("./pages/onboarding/QuickSetupPage").then((m) => ({ default: m.QuickSetupPage })));
 const OrganizationTreePage = lazy(() => import("./pages/organization/OrganizationTreePage").then((m) => ({ default: m.OrganizationTreePage })));
 const WorkspaceResourcesPage = lazy(() => import("./pages/workspace/WorkspaceResourcesPage").then((m) => ({ default: m.WorkspaceResourcesPage })));
 const WorkspaceFeedbacksPage = lazy(() => import("./pages/workspace/WorkspaceFeedbacksPage").then((m) => ({ default: m.WorkspaceFeedbacksPage })));
@@ -74,11 +87,11 @@ const WorkspaceHazardousSubstancesPage = lazy(() => import("./pages/workspace/Wo
 const WorkspaceVehicleMileagePage = lazy(() => import("./pages/workspace/WorkspaceVehicleMileagePage").then((m) => ({ default: m.WorkspaceVehicleMileagePage })));
 const EpZeroSetupWizard = lazy(() => import("./pages/onboarding/EpZeroSetupWizard").then((m) => ({ default: m.EpZeroSetupWizard })));
 const WorkspaceSafetyPermitsPage = lazy(() => import("./pages/workspace/WorkspaceSafetyPermitsPage").then((m) => ({ default: m.WorkspaceSafetyPermitsPage })));
-const WeeklyTimetableView = lazy(() =>
-  import("@/capabilities/scheduling/components/timetable/WeeklyTimetableView").then((m) => ({
-    default: m.WeeklyTimetableView,
-  }))
-);
+const PassesListPage = lazy(() => import("./pages/passes/list").then((m) => ({ default: m.PassesListPage })));
+const LockersGridPage = lazy(() => import("./pages/lockers/grid").then((m) => ({ default: m.LockersGridPage })));
+const PublicStoreLandingPage = lazy(() => import("./pages/public/PublicStoreLandingPage").then((m) => ({ default: m.PublicStoreLandingPage })));
+const WeeklyTimetableView = lazy(() => import("@/capabilities/scheduling").then((m) => ({ default: m.WeeklyTimetableView })));
+const TuitionManagementView = lazy(() => import("@/capabilities/billing").then((m) => ({ default: m.TuitionManagementView })));
 const SuperAdminTenantsPage = lazy(() => import("./pages/admin/SuperAdminTenantsPage").then((m) => ({ default: m.SuperAdminTenantsPage })));
 const LegalPageView = lazy(() => import("@/core/legal").then((m) => ({ default: m.LegalPageView })));
 
@@ -99,6 +112,7 @@ registerQueryClientClear(() => {
 });
 
 const CAPABILITY_ROUTE_PATHS = [
+  // 범주 5대 기본 & A~AV 전체 Capability 엔드포인트
   "attendance",
   "bookings",
   "seat-rooms",
@@ -133,21 +147,52 @@ const CAPABILITY_ROUTE_PATHS = [
   "daily-care-report",
   "substitute-dispatch",
   "entry-pass-ticket",
-  "event-contest",
+  "event-contest-hub",
+  "facility-incident-report",
   "facility-incidents",
-  "nps-survey",
+  "nps-survey-collector",
+  "nps-surveys",
+  "achievement-quest-badge",
   "achievement-quests",
   "parking-validator",
-  "emergency-alerts",
+  "parking-registrations",
+  "emergency-broadcast",
+  "emergency-broadcasts",
   "digital-guestbook",
-  "mbo",
-  "mbo-objectives",
-  "mbo-projects",
-  "approvals",
-  "approval-workflow",
-  "quality-inspections",
-  "change-requests",
+  "curriculum",
+  "commission-payroll",
+  "deposit-escrow",
+  "diet-body-log",
+  "contracts",
+  "equipment-lifecycle",
+  "grade-analytics",
+  "hygiene-log",
+  "staff-call",
+  "lost-found",
+  "loyalty-stamps",
+  "family-tree",
+  "package-billing",
+  "pickup-orders",
+  "recipe-bom",
+  "retention",
+  "seat-timers",
+  "sop-risk",
+  "kds",
+  "portfolio",
+  "shuttle",
+  "vendor-ap",
+  "turn-queue",
+  "work-payroll",
+  "work-orders",
+  "dispatch",
+  "promotions",
+  "promotional-deals",
+  "turnaround",
+  "waitlist",
+  "leads",
+  // capability 번들 list 경로 (GenericIndustryShell CAPABILITY_LIST_VIEWS로 렌더)
   "patents",
+  "patent-inventors",
   "research-projects",
   "research-project-gates",
   "research-project-deliverables",
@@ -212,12 +257,35 @@ const RefineApp: React.FC = () => {
   }, [industryType]);
 
   const resources = useMemo(() => {
-    return provisionIndustryResources({
+    const base = provisionIndustryResources({
       industry: industryType,
       i18n: currentI18nProvider,
       activeCapabilities,
       hiddenCapabilities,
     });
+    const existingNames = new Set(base.map((r) => r.name));
+    const extra: typeof base = [];
+    if (!existingNames.has("passes")) {
+      extra.push({
+        name: "passes",
+        list: "/passes",
+        meta: {
+          label: "이용권/회원권",
+          icon: React.createElement(Ticket, { className: "h-4 w-4" }),
+        },
+      });
+    }
+    if (!existingNames.has("lockers")) {
+      extra.push({
+        name: "lockers",
+        list: "/lockers",
+        meta: {
+          label: "사물함/락커",
+          icon: React.createElement(Lock, { className: "h-4 w-4" }),
+        },
+      });
+    }
+    return [...base, ...extra];
   }, [industryType, currentI18nProvider, activeCapabilities, hiddenCapabilities]);
 
   return (
@@ -250,6 +318,11 @@ const RefineApp: React.FC = () => {
             </Authenticated>
           }
         >
+          <Route path="/kiosk/attendance" element={<AttendanceKioskPage />} />
+          {/* 사업장 업종 메인 워크스페이스 화면 */}
+          
+
+          {/* 최고 관리자(개발자) 전용 테넌트 종합 관제 콘솔 */}
           <Route
             path="/admin/tenants"
             element={
@@ -259,6 +332,7 @@ const RefineApp: React.FC = () => {
             }
           />
 
+          {/* Refine 관리 리소스 레이아웃 */}
           <Route
             element={
               <AppErrorBoundary>
@@ -306,29 +380,38 @@ const RefineApp: React.FC = () => {
             <Route path="/workspace/safety-permits" element={<WorkspaceSafetyPermitsPage />} />
             <Route path="/workspace/setup-wizard" element={<EpZeroSetupWizard />} />
             <Route path="/onboarding/ep-setup" element={<EpZeroSetupWizard />} />
-            <Route path="/onboarding/quick" element={<Navigate to="/onboarding/ep-setup" replace />} />
             <Route path="/rnd" element={<RndPortalPage />} />
             <Route path="/rnd_workspace" element={<Navigate to="/rnd" replace />} />
             <Route path="/workspace" element={<IndustryAppRouter />} />
             <Route path="/workspace/:tab" element={<IndustryAppRouter />} />
             <Route path="/dashboard" element={<Navigate to="/workspace" replace />} />
-            <Route path="/students" element={<Navigate to="/workspace" replace />} />
-            <Route path="/students/*" element={<Navigate to="/workspace" replace />} />
-            <Route path="/customers" element={<Navigate to="/workspace" replace />} />
-            <Route path="/customers/*" element={<Navigate to="/workspace" replace />} />
-            <Route path="/roster" element={<Navigate to="/workspace" replace />} />
-            <Route path="/roster/*" element={<Navigate to="/workspace" replace />} />
-            <Route path="/passes" element={<Navigate to="/workspace" replace />} />
-            <Route path="/lockers" element={<Navigate to="/workspace" replace />} />
-            <Route path="/billing" element={<Navigate to="/workspace" replace />} />
-            <Route path="/kiosk/attendance" element={<Navigate to="/workspace" replace />} />
+            {/* Roster / Customers 범용 중립 경로 및 하위 호환 /students 경로 */}
+            <Route path="/students" element={<StudentListPage />} />
+            <Route path="/students/create" element={<StudentCreatePage />} />
+            <Route path="/students/:id" element={<StudentShowPage />} />
+            <Route path="/students/:id/edit" element={<StudentEditPage />} />
+            <Route path="/customers" element={<StudentListPage />} />
+            <Route path="/customers/create" element={<StudentCreatePage />} />
+            <Route path="/customers/:id" element={<StudentShowPage />} />
+            <Route path="/customers/:id/edit" element={<StudentEditPage />} />
+            <Route path="/roster" element={<StudentListPage />} />
+            <Route path="/roster/create" element={<StudentCreatePage />} />
+            <Route path="/roster/:id" element={<StudentShowPage />} />
+            <Route path="/roster/:id/edit" element={<StudentEditPage />} />
 
             <Route path="/schedules" element={<WeeklyTimetableView />} />
             <Route path="/booking/week" element={<ScheduleCalendarPage />} />
-            <Route path="/customer/booking" element={<><MemberBookingView /><ConsentSignatureModal /></>} />
+            <Route path="/billing" element={<FinanceRouteGate><TuitionManagementView /></FinanceRouteGate>} />
+            <Route path="/customer/pass" element={<><MyPassView /><ConsentSignatureModal /></>} />
+            <Route path="/customer/booking" element={<MemberBookingView />} />
+            <Route path="/passes" element={<PassesListPage />} />
+            <Route path="/lockers" element={<LockersGridPage />} />
             <Route path="/settings/roles" element={<RolesPage />} />
+            <Route path="/onboarding/quick" element={<QuickSetupPage />} />
+            <Route path="/workspace" element={<IndustryAppRouter />} />
             <Route path="/workspace/*" element={<IndustryAppRouter />} />
 
+            {/* Capability 동적 리소스 경로 선언적 라우트 매핑 (Refine 사이드바 연동) */}
             {CAPABILITY_ROUTE_PATHS.map((path) => (
               <React.Fragment key={path}>
                 <Route path={`/${path}`} element={<IndustryAppRouter />} />
@@ -338,6 +421,14 @@ const RefineApp: React.FC = () => {
           </Route>
         </Route>
 
+        {import.meta.env.VITE_E2E === "1" ? (
+          <>
+            <Route path="/e2e/shuttle" element={<VehicleShuttleManagementView />} />
+            <Route path="/e2e/shuttle-commute" element={<VehicleShuttleCommuteView />} />
+          </>
+        ) : null}
+        <Route path="/p/:slug" element={<PublicStoreLandingPage />} />
+        <Route path="/claim/:token" element={<ClaimTokenPage />} />
         <Route path="/invite/staff/:token" element={<AcceptStaffInvitePage />} />
         <Route path="/signup/customer" element={<CustomerSignUpFlow />} />
         <Route path="/terms" element={<LegalPageView page="terms" />} />

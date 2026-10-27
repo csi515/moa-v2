@@ -157,6 +157,8 @@ export function recommendIndustryPreset(inputQuery: string): RecommendationResul
 
   // 1. 44개 프리셋별 키워드 매칭 스코어링
   Object.entries(PRESET_KEYWORD_MAP).forEach(([presetId, keywords]) => {
+    const presetDef = INDUSTRY_PRESETS[presetId];
+    if (presetDef?.hiddenInMoa) return;
     let matchCount = 0;
     const matched: string[] = [];
 

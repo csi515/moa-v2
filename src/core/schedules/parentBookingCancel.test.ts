@@ -90,6 +90,26 @@ function run() {
     assert.equal(refunds, 1);
   }
 
+  const sql = readFileSync(
+    join(root, 'supabase/migrations/20260924160000_cancel_booking_as_parent.sql'),
+    'utf8'
+  );
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.cancel_booking_as_parent/);
+  assert.match(sql, /SECURITY DEFINER/);
+  assert.match(sql, /FOR UPDATE/);
+  assert.match(sql, /parent_owns_customer/);
+  assert.match(sql, /Organization mismatch/);
+  assert.match(sql, /Cancellation window expired/);
+  assert.match(sql, /Not a customer-requested booking/);
+  assert.match(sql, /action', 'idempotent'/);
+  assert.doesNotMatch(sql, /is_org_staff_actor/);
+  const staffSql = readFileSync(
+    join(root, 'supabase/migrations/20260924110000_harden_session_pass_lock_and_refund.sql'),
+    'utf8'
+  );
+  assert.match(staffSql, /IF NOT core\.is_org_staff_actor/);
+  assert.doesNotMatch(staffSql, /parent_owns_customer/);
+
   const view = readFileSync(
     join(here, '../../modules/parent/views/PilatesParentBookingsView.tsx'),
     'utf8'

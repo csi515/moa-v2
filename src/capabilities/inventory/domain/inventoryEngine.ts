@@ -1,7 +1,6 @@
 /**
  * 재고·자재 입출고, 안전재고 관리 및 자동 발주(Auto-PO) 엔진 (Pure Function Domain)
  */
-import { getPublicAppBaseUrl } from '@/core/platform/appBaseUrl';
 
 export type StockMovementType = 'IN' | 'OUT' | 'ADJUST' | 'DISCARD';
 
@@ -519,12 +518,10 @@ export function generatePrintLabelItems(params: {
   customPrice?: number;
   baseUrl?: string;
 }): PrintableBarcodeLabel[] {
-  const { item, quantity, customPrice, baseUrl } = params;
-  const root = getPublicAppBaseUrl().replace(/\/+$/, '');
-  const resolvedBaseUrl = baseUrl ?? (root ? `${root}/i` : '/i');
+  const { item, quantity, customPrice, baseUrl = 'https://moa.app/i' } = params;
   const count = Math.max(1, Math.min(quantity, 500)); // 최대 500장 안전 한도
   const effectiveBarcode = item.barcode || item.sku;
-  const effectiveQr = item.qrCodeUrl || `${resolvedBaseUrl}/${encodeURIComponent(effectiveBarcode)}`;
+  const effectiveQr = item.qrCodeUrl || `${baseUrl}/${encodeURIComponent(effectiveBarcode)}`;
   const effectivePrice = customPrice !== undefined ? customPrice : item.unitPrice;
 
   const result: PrintableBarcodeLabel[] = [];

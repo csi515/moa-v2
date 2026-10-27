@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { X, RefreshCw, Share2, CheckCircle2, Clock, Copy } from 'lucide-react';
 import { supabase, getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
-import { appBrand } from '@/core/brand';
 import { shareLink } from '@/core/utils/shareLink';
 
 export interface StoreClaimModalProps {
@@ -146,7 +145,7 @@ export const StoreClaimModal: React.FC<StoreClaimModalProps> = ({
   const handleShare = async () => {
     if (!claimUrl) return;
     await shareLink({
-      title: `${appBrand.shortName} 멤버십 연결`,
+      title: 'MOA 스마트 멤버십 연결',
       text: `${customerName || '고객'}님의 멤버십 등록/수강권 연결 링크입니다 (5분간 유효).`,
       url: claimUrl,
       onFeedback: (msg) => showToast(msg),

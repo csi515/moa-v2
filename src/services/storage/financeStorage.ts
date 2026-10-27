@@ -1,5 +1,4 @@
-// @ts-nocheck
-import type { IncomeEntry, FinanceSummary } from '@/capabilities/billing/finance/types';
+import type { IncomeEntry, FinanceSummary } from '../../core/finance/types';
 import type {
   Expense,
   TuitionInvoice,
@@ -12,7 +11,7 @@ import { STORAGE_KEYS } from '../adapters';
 import { generateEntityId, getItem, setItem, type StorageApi } from './helpers';
 import {
   getTuitionPayments as readTuitionPayments,
-} from '@/capabilities/billing/finance/billingIncomeLink';
+} from '../../core/finance/billingIncomeLink';
 
 /**
  * 수강료·지출·수입 local persistence + 읽기 집계.

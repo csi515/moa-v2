@@ -50,11 +50,11 @@ function resolveSafeOrgId(): string | null {
 }
 
 /**
- * Supabase Realtime 기반 EP_apps LiveProvider 생성 팩토리.
+ * Supabase Realtime 기반 Moa LiveProvider 생성 팩토리.
  * 테넌트 격리(organization_id / tenant_id 자동 필터링) 및 리소스 변경 이벤트를 실시간 중계합니다.
  * 'onboarding_tokens', 'customers', 'attendance_sessions' 등의 이벤트 발생 시 Refine 캐시를 자동 무효화합니다.
  */
-export function createEpLiveProvider(
+export function createMoaLiveProvider(
   client: SupabaseClient<any, any, any> | null,
   options: LiveProviderOptions = {}
 ): LiveProvider {
@@ -177,5 +177,5 @@ export function createEpLiveProvider(
  * 기본 싱글톤 liveProvider 인스턴스 (core 스키마 및 테넌트 격리 지원).
  * Supabase가 설정되어 있지 않으면 no-op 안전 모드로 자동 동작합니다.
  */
-export const liveProvider: LiveProvider = createEpLiveProvider(supabase);
+export const liveProvider: LiveProvider = createMoaLiveProvider(supabase);
 

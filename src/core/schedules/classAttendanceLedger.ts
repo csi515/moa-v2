@@ -1,10 +1,2 @@
-// @ts-nocheck
-/** EP_apps: 출결 capability 제거 — 빈 레저 */
-
-export const CLASS_ATTENDANCE_LEDGER = {
-  present: '출석',
-  absent: '결석',
-  late: '지각',
-  early_leave: '조퇴',
-  make_up: '보강',
-} as const;
+/** @deprecated 신규 코드는 `@/capabilities/attendance`를 사용한다. */
+export { CLASS_ATTENDANCE_LEDGER } from '@/capabilities/attendance/domain/classAttendanceLedger';

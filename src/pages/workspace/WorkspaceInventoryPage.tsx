@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { LoadingScreen } from '@/shared/components/LoadingScreen';
 
-const InventoryManagementView = lazy(() =>
-  import('@/capabilities/inventory/components/InventoryManagementView').then((m) => ({
-    default: m.InventoryManagementView,
+const InventoryListView = lazy(() =>
+  import('@/industries/retail/components/inventory/InventoryListView').then((m) => ({
+    default: m.InventoryListView,
   }))
 );
 
@@ -23,7 +23,7 @@ export const WorkspaceInventoryPage: React.FC = () => {
         </Link>
       </div>
       <Suspense fallback={<LoadingScreen message="현장 자재 로딩…" />}>
-        <InventoryManagementView title="현장 자재·재고" />
+        <InventoryListView />
       </Suspense>
     </div>
   );

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState, type FC, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
@@ -17,7 +16,7 @@ import {
   isAttendanceModuleEnabled,
   PIN_ATTENDANCE_DIRECTOR_COPY,
   withAttendanceModuleEnabled,
-} from '@/core/organizations/attendanceSettingsStub';
+} from '@/core/attendance';
 import { IndustryFeatureGuidePanel } from '@/core/help';
 import { LegalLinks } from '@/core/legal';
 import {

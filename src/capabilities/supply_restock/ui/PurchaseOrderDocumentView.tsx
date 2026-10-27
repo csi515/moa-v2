@@ -36,7 +36,7 @@ export const PurchaseOrderDocumentView: React.FC<PurchaseOrderDocumentViewProps>
   const handleCopyText = async () => {
     const textLines = [
       `[공식 발주서 (PO)] ${po.poNumber}`,
-      `발주처: 사업장 (구매관리팀)`,
+      `발주처: 모아 사업장 (구매관리팀)`,
       `수신처(공급사): ${po.vendorName}`,
       `발주일자: ${po.orderDate} / 납기희망일: ${po.deliveryDueDate}`,
       `계약방식: ${po.contractType === 'sole_source' ? '수의계약' : '경쟁입찰'}`,
@@ -144,7 +144,7 @@ export const PurchaseOrderDocumentView: React.FC<PurchaseOrderDocumentViewProps>
               <span className="text-[11px] font-bold text-slate-400 tracking-wider">
                 [발주처 (Buyer)]
               </span>
-              <p className="font-bold text-sm text-slate-900">사업장 구매관리팀</p>
+              <p className="font-bold text-sm text-slate-900">모아 사업장 구매관리팀</p>
               <p className="text-slate-600">요청 부서: {po.requesterDepartments.join(', ')}</p>
               <p className="text-slate-500">결재 완료: 전결 규정에 따른 전자서명 완료</p>
             </div>

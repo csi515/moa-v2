@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { Bus, LogOut, RefreshCw } from 'lucide-react';
 import {

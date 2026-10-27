@@ -188,6 +188,39 @@ function run() {
   assert.equal(mapOpsRpcError({ message: 'Staff not found in organization' }).code, 'staff');
   assert.equal(mapOpsRpcError({ message: 'Required checklist items incomplete' }).code, 'checks');
 
+  const sql = readFileSync(join(root, 'supabase/migrations/20260924260000_operations_capability.sql'), 'utf8');
+  assert.match(sql, /CREATE TABLE core\.checklist_templates/);
+  assert.match(sql, /CREATE TABLE core\.checklist_items/);
+  assert.match(sql, /CREATE TABLE core\.ops_tasks/);
+  assert.match(sql, /CREATE TABLE core\.ops_task_checks/);
+  assert.match(sql, /CREATE TABLE core\.maintenance_issues/);
+  assert.match(sql, /upsert_checklist_template/);
+  assert.match(sql, /create_ops_task/);
+  assert.match(sql, /assign_ops_task/);
+  assert.match(sql, /set_ops_task_status/);
+  assert.match(sql, /report_maintenance_issue/);
+  assert.match(sql, /set_maintenance_issue_status/);
+  assert.match(sql, /FOR UPDATE/);
+  assert.match(sql, /pg_advisory_xact_lock/);
+  assert.match(sql, /is_org_staff_actor/);
+  assert.match(sql, /organization_id/);
+  assert.match(sql, /REFERENCES core\.staff/);
+  assert.match(sql, /notification_id/);
+  assert.match(sql, /Organization mismatch/);
+  assert.match(sql, /Staff not found in organization/);
+  assert.doesNotMatch(sql, /CREATE TABLE bath\./);
+  assert.doesNotMatch(sql, /sauna_jjimjilbang/);
+  assert.doesNotMatch(sql, /bath_room|massage_room|scrub_station/);
+  assert.doesNotMatch(sql, /INSERT INTO core\.notifications/);
+
+  const src = walkTs(join(root, 'src/core/operations'))
+    .map((file) => readFileSync(file, 'utf8'))
+    .join('\n');
+  assert.doesNotMatch(src, /sauna_jjimjilbang/);
+  assert.doesNotMatch(src, /from '@\/modules\//);
+  assert.doesNotMatch(src, /pilates|piano|beauty|retail|sauna/i);
+  assert.doesNotMatch(src, /bath\./);
+
   const repo = readFileSync(join(here, 'repositories.ts'), 'utf8');
   assert.match(repo, /eq\('organization_id', organizationId\)/);
   assert.match(repo, /checklist_templates/);

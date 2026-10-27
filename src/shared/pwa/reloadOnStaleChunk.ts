@@ -1,21 +1,4 @@
-const RELOAD_FLAG = 'ep.staleChunkReload';
-const LEGACY_RELOAD_FLAG = 'moa.staleChunkReload';
-
-function readReloadFlag(): string | null {
-  try {
-    const current = sessionStorage.getItem(RELOAD_FLAG);
-    if (current != null) return current;
-    const legacy = sessionStorage.getItem(LEGACY_RELOAD_FLAG);
-    if (legacy != null) {
-      sessionStorage.setItem(RELOAD_FLAG, legacy);
-      sessionStorage.removeItem(LEGACY_RELOAD_FLAG);
-      return legacy;
-    }
-  } catch {
-    /* private mode */
-  }
-  return null;
-}
+const RELOAD_FLAG = 'moa.staleChunkReload';
 
 export function isStaleChunkError(error: unknown): boolean {
   const text = error instanceof Error ? error.message : String(error ?? '');
@@ -28,7 +11,7 @@ export function isStaleChunkError(error: unknown): boolean {
 export function reloadOnceForStaleAssets(): void {
   if (typeof window === 'undefined') return;
   try {
-    if (readReloadFlag() === '1') return;
+    if (sessionStorage.getItem(RELOAD_FLAG) === '1') return;
     sessionStorage.setItem(RELOAD_FLAG, '1');
   } catch {
     /* private mode */
@@ -49,7 +32,6 @@ export function reloadOnceForStaleAssets(): void {
 export function clearStaleChunkReloadFlag(): void {
   try {
     sessionStorage.removeItem(RELOAD_FLAG);
-    sessionStorage.removeItem(LEGACY_RELOAD_FLAG);
   } catch {
     /* ignore */
   }

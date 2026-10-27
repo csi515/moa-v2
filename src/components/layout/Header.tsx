@@ -17,7 +17,6 @@ import { useOrganization } from "@/core/organizations/OrganizationProvider";
 import { getIndustryLabel } from "@/core/industry/types";
 import { getIndustryPreset } from "@/app/presets/presetRegistry";
 import { cn } from "@/shared/lib/utils";
-import { appBrand } from "@/core/brand";
 
 const THEME_BADGE_STYLES: Record<string, string> = {
   emerald: "text-emerald-700 bg-emerald-50 border-emerald-200/80",
@@ -112,10 +111,10 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-3">
           <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white shadow-sm">
-              E
+              M
             </div>
             <span className="text-lg font-semibold tracking-tight text-slate-900">
-              {appBrand.shortName}
+              MOA <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">v2</span>
             </span>
           </Link>
           {currentOrganization && (

@@ -120,17 +120,34 @@ function run() {
   assert.equal(mapped.bookingId, undefined);
   assert.equal(rpcPayloadToWaitlistResult(row).action, 'created');
 
-  const sql = readFileSync(join(here, '../../../../db/postgres/003_ep_apps.sql'), 'utf8');
+  const sql = readFileSync(join(here, '../../../../supabase/migrations/20260924250000_waitlist_capability.sql'), 'utf8');
   assert.match(sql, /CREATE TABLE core\.waitlist_entries/);
   assert.match(sql, /uq_waitlist_open_position/);
   assert.match(sql, /uq_waitlist_open_customer/);
+  assert.match(sql, /pg_advisory_xact_lock/);
+  assert.match(sql, /FOR UPDATE/);
+  assert.match(sql, /resequence_waitlist/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.join_waitlist/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.cancel_waitlist/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.expire_waitlist/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.notify_waitlist/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.claim_waitlist_vacancy/);
+  assert.match(sql, /INSERT INTO core\.notifications/);
+  assert.match(sql, /type, title, message/);
+  assert.match(sql, /'waitlist'/);
+  assert.match(sql, /'pending'/);
   assert.match(sql, /booking_id/);
   assert.match(sql, /reservation_id/);
+  assert.match(sql, /notification_id/);
   assert.match(sql, /schedule_id/);
   assert.match(sql, /requested_time/);
-  assert.doesNotMatch(sql, /auth\.uid\(/);
+  assert.match(sql, /is_org_staff_actor/);
+  assert.match(sql, /is_my_customer/);
   assert.doesNotMatch(sql, /CREATE TABLE bath\./);
+  assert.doesNotMatch(sql, /bath\.waitlist/);
   assert.doesNotMatch(sql, /sauna_jjimjilbang/);
+  assert.doesNotMatch(sql, /twilio|ncp|aligo|solapi/i);
+  assert.doesNotMatch(sql, /channel.*sms|'sms'/);
 
   const service = readFileSync(join(here, 'waitlistService.ts'), 'utf8');
   assert.match(service, /join_waitlist/);

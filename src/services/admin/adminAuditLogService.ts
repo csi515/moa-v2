@@ -18,24 +18,7 @@ export interface AdminAuditEntry {
   timestamp: string;
 }
 
-const AUDIT_STORAGE_KEY = 'ep_admin_audit_logs';
-const LEGACY_AUDIT_STORAGE_KEY = 'moa_admin_audit_logs';
-
-function readAuditLogsRaw(): string | null {
-  try {
-    const current = localStorage.getItem(AUDIT_STORAGE_KEY);
-    if (current != null) return current;
-    const legacy = localStorage.getItem(LEGACY_AUDIT_STORAGE_KEY);
-    if (legacy != null) {
-      localStorage.setItem(AUDIT_STORAGE_KEY, legacy);
-      localStorage.removeItem(LEGACY_AUDIT_STORAGE_KEY);
-      return legacy;
-    }
-  } catch {
-    /* ignore */
-  }
-  return null;
-}
+const AUDIT_STORAGE_KEY = 'moa_admin_audit_logs';
 
 /**
  * 슈퍼 관리자의 주요 행위(상태 변경, 결제 승인, 대리 로그인 등)를 감사 로그로 기록합니다.
@@ -63,12 +46,11 @@ export async function logAdminAuditAction(params: {
   // 2. 로컬 영속 로그 저장 (최신 500건 링버퍼)
   if (typeof window !== 'undefined') {
     try {
-      const raw = readAuditLogsRaw();
+      const raw = localStorage.getItem(AUDIT_STORAGE_KEY);
       const list: AdminAuditEntry[] = raw ? JSON.parse(raw) : [];
       list.unshift(entry);
       if (list.length > 500) list.length = 500;
       localStorage.setItem(AUDIT_STORAGE_KEY, JSON.stringify(list));
-      localStorage.removeItem(LEGACY_AUDIT_STORAGE_KEY);
     } catch (e) {
       console.warn('Failed to save admin audit entry to localStorage:', e);
     }
@@ -98,7 +80,7 @@ export async function logAdminAuditAction(params: {
 export function getLocalAdminAuditLogs(): AdminAuditEntry[] {
   if (typeof window === 'undefined') return [];
   try {
-    const raw = readAuditLogsRaw();
+    const raw = localStorage.getItem(AUDIT_STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];

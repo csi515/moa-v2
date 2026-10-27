@@ -236,7 +236,7 @@ function run() {
   // outbox v1 StorageKey[] 호환 + 오래된 mutation enqueue 거부
   {
     setOrganizationId('org-outbox');
-    writeLocalRaw('ep:sync-outbox:org-outbox', JSON.stringify([STORAGE_KEYS.SCHEDULES]));
+    writeLocalRaw('moa:sync-outbox:org-outbox', JSON.stringify([STORAGE_KEYS.SCHEDULES]));
     assert.deepEqual(peekSyncOutbox(), [STORAGE_KEYS.SCHEDULES]);
     enqueueSyncOutbox(STORAGE_KEYS.SESSION_PASSES);
     enqueueSyncOutboxMutation({
@@ -308,6 +308,10 @@ function run() {
   const hydrate = readFileSync(join(here, 'sync/coreEntityHydrate.ts'), 'utf8');
   assert.match(hydrate, /applyDirtyListMerge\(STORAGE_KEYS\.SCHEDULES/);
   assert.match(hydrate, /applyDirtyListMerge\(STORAGE_KEYS\.SESSION_PASSES/);
+
+  const pianoHydrate = readFileSync(join(here, 'sync/pianoEntitySync.ts'), 'utf8');
+  assert.match(pianoHydrate, /applyDirtyListMerge\(/);
+  assert.match(pianoHydrate, /STORAGE_KEYS\.ATTENDANCE/);
 
   setOrganizationId(null);
   console.log('pendingMutations.test.ts: ok');

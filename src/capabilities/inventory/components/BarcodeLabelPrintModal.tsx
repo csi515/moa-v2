@@ -22,7 +22,7 @@ export const BarcodeLabelPrintModal: React.FC<BarcodeLabelPrintModalProps> = ({
   isOpen,
   onClose,
   item,
-  organizationName = '사업장',
+  organizationName = '모아 비즈니스',
 }) => {
   const [quantity, setQuantity] = useState<number>(24);
   const [layout, setLayout] = useState<LabelSheetLayoutType>('A4_24_FORMTEC');

@@ -1,0 +1,783 @@
+import React, { useState, useMemo } from 'react';
+import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
+import { usePermissions } from '@/core/auth/usePermissions';
+import { getIndustryPlugin } from '@/core/industry/registry';
+import {
+  getRosterListPresentation,
+  rosterFilterEmptyDescription,
+  rosterSearchPlaceholder,
+} from '@/core/industry/industryUi';
+import { useModuleLabels } from '@/core/labels';
+import { useTerminology } from '@/core/terminology';
+import { useTenantTerms } from '@/core/i18n';
+import { studentUsesShuttleService } from '@/capabilities/transport';
+import { useStaffScope, useStorageRefresh } from '@/hooks';
+import { STORAGE_REFRESH_DOMAINS } from '@/hooks/useStorageRefresh';
+import { getPrimaryGuardian, studentMatchesGuardianQuery } from '@/core/parent/guardianHelpers';
+import { StorageService } from '@/services/storage';
+import { StudentService } from '@/core/students';
+import { ScheduleService } from '@/core/services/scheduleService';
+import type { DayOfWeek, Student } from '@/types';
+import { todayIsoLocal } from '@/shared/utils/localDate';
+import { enrollmentModeLabel } from './form/enrollmentFormCopy';
+import { StudentFormModal } from './StudentFormModal';
+import { StudentDetailModal } from './StudentDetailModal';
+import { getStudentStatusBadge } from '@/utils/formatters';
+import { FilterBar, SearchField, EmptyState } from '@/shared/components';
+import { ExportProtectionModal } from '@/components/security/ExportProtectionModal';
+import { DENSITY } from '@/shared/styles/density';
+import {
+  Users,
+  UserPlus,
+  ArrowUpDown,
+  ChevronRight,
+  Bus,
+  SlidersHorizontal,
+  FileSpreadsheet,
+  Download,
+} from 'lucide-react';
+import { showToast } from '@/shared/feedback/uiFeedback';
+import { getOrganizationId } from '@/services/adapters';
+import { interceptExportWithAudit } from '@/core/audit/auditExportInterceptor';
+import { StudentBulkImportModal } from './StudentBulkImportModal';
+import {
+  WEEKDAY_FILTER_OPTIONS,
+  buildAttendanceByStudentToday,
+  buildBillingByStudent,
+  getClassLabel,
+  getCurrentYearMonth,
+  getMonthBillingSignal,
+  getPianoBillingModeLabel,
+  getPianoSessionPassColumnLabel,
+  getTodayAttendanceSignal,
+  studentHasWeekday,
+} from './studentListHelpers';
+
+const signalClass = (tone: 'ok' | 'warn' | 'muted') => {
+  if (tone === 'ok') return 'text-emerald-700';
+  if (tone === 'warn') return 'text-rose-600';
+  return 'text-slate-400';
+};
+
+export const StudentListView: React.FC = () => {
+  const {
+    selectedStudentId,
+    setSelectedStudentId,
+    selectedStudentDetailTab,
+    setSelectedStudentDetailTab,
+  } = useApp();
+  const refreshKey = useStorageRefresh([
+    ...STORAGE_REFRESH_DOMAINS.students,
+    ...STORAGE_REFRESH_DOMAINS.attendance,
+    ...STORAGE_REFRESH_DOMAINS.finance,
+    ...STORAGE_REFRESH_DOMAINS.sessionPasses,
+    ...STORAGE_REFRESH_DOMAINS.classes,
+  ]);
+  const { industry } = usePermissions();
+  const showPickupFields = getIndustryPlugin(industry).showPickupFields;
+  const rosterList = getRosterListPresentation(industry);
+  const showSessionColumns = rosterList.showSessionColumns;
+  const labels = useModuleLabels();
+  const { t } = useTerminology();
+  const { t: termT } = useTenantTerms();
+  const activeStatusLabel = t('customer.statusActive', '재원');
+  const leaveStatusLabel = t('customer.statusPaused', '휴원');
+  const endedLabel = t('customer.statusWithdrawn', rosterList.withdrawnLabel);
+  const staffFilterName = rosterList.staffFilterLabel ?? labels.staff.singular;
+  const controlMinClass = rosterList.controlMinHeight === 44 ? 'min-h-[44px]' : 'min-h-[36px]';
+  const { isScoped, staffId, scopeStudents } = useStaffScope();
+  const [exportOpen, setExportOpen] = useState(false);
+
+  const students = useMemo(
+    () => scopeStudents(StudentService.getStudents()),
+    [scopeStudents, refreshKey]
+  );
+  const teachers = StorageService.getTeachers();
+  const classes = useMemo(
+    () =>
+      isScoped && staffId
+        ? StorageService.getClasses().filter((c) => c.teacherId === staffId)
+        : StorageService.getClasses(),
+    [isScoped, staffId, refreshKey]
+  );
+  const classNameById = useMemo(() => {
+    const map = new Map<string, string>();
+    classes.forEach((c) => map.set(c.id, c.name));
+    return map;
+  }, [classes]);
+  const classById = useMemo(() => {
+    const map = new Map<string, any>(classes.map((c) => [c.id, c]));
+    return map;
+  }, [classes]);
+
+  const today = todayIsoLocal();
+  const yearMonth = getCurrentYearMonth();
+
+  const todayAttendanceByStudent = useMemo(
+    () => buildAttendanceByStudentToday(StorageService.getAttendance(), today),
+    [today, refreshKey]
+  );
+  const billingByStudent = useMemo(
+    () => buildBillingByStudent(StorageService.getAllStudentsBillingSummary(yearMonth)),
+    [yearMonth, refreshKey]
+  );
+  const sessionPasses = useMemo(
+    () => (showSessionColumns ? ScheduleService.getSessionPasses() : []),
+    [showSessionColumns, refreshKey]
+  );
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [teacherFilterDraft, setTeacherFilterDraft] = useState('ALL');
+  const [classFilter, setClassFilter] = useState('ALL');
+  const [weekdayFilter, setWeekdayFilter] = useState<DayOfWeek | 'ALL'>('ALL');
+  const [statusFilter, setStatusFilter] = useState<string>('active');
+  const [shuttleFilter, setShuttleFilter] = useState<'ALL' | 'SHUTTLE'>('ALL');
+  const [sortBy, setSortBy] = useState<'joinDateDesc' | 'joinDateAsc' | 'name' | 'paymentDay'>(
+    'joinDateDesc'
+  );
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
+  const [editingStudent, setEditingStudent] = useState<Student | null>(null);
+
+  /** 스코프 강사는 담당만 — draft와 중복 저장하지 않음 */
+  const teacherFilter = isScoped && staffId ? staffId : teacherFilterDraft;
+  const setTeacherFilter = setTeacherFilterDraft;
+
+  /** 상세 모달 대상은 selectedStudentId + students 파생 (동기화 effect 없음) */
+  const detailStudent = useMemo(() => {
+    if (!selectedStudentId) return null;
+    return students.find((s) => s.id === selectedStudentId) || null;
+  }, [selectedStudentId, students]);
+
+  const filteredStudents = useMemo(() => {
+    return students
+      .filter((s) => {
+        if (teacherFilter !== 'ALL' && s.teacherId !== teacherFilter) return false;
+        if (classFilter !== 'ALL' && !(s.classIds || []).includes(classFilter)) return false;
+        if (statusFilter !== 'ALL' && s.status !== statusFilter) return false;
+        if (shuttleFilter === 'SHUTTLE' && !studentUsesShuttleService(s)) return false;
+        if (weekdayFilter !== 'ALL' && !studentHasWeekday(s, weekdayFilter, classById)) return false;
+
+        if (searchQuery.trim()) {
+          const q = searchQuery.toLowerCase();
+          const matchName = (s.name || '').toLowerCase().includes(q);
+          const matchGuardian = studentMatchesGuardianQuery(s.id, searchQuery);
+          const matchLegacyParent =
+            (s.parentName || '').toLowerCase().includes(q) ||
+            (s.parentPhone || '').includes(searchQuery.trim());
+          if (!matchName && !matchGuardian && !matchLegacyParent) return false;
+        }
+
+        return true;
+      })
+      .sort((a, b) => {
+        if (sortBy === 'joinDateDesc') return (b.joinDate || '').localeCompare(a.joinDate || '');
+        if (sortBy === 'joinDateAsc') return (a.joinDate || '').localeCompare(b.joinDate || '');
+        if (sortBy === 'name') return (a.name || '').localeCompare(b.name || '', 'ko-KR');
+        if (sortBy === 'paymentDay') return (a.paymentDay || 0) - (b.paymentDay || 0);
+        return 0;
+      });
+  }, [
+    students,
+    searchQuery,
+    teacherFilter,
+    classFilter,
+    statusFilter,
+    shuttleFilter,
+    weekdayFilter,
+    sortBy,
+    classById,
+  ]);
+
+  const activeCount = students.filter((s) => s.status === 'active').length;
+  const leaveCount = students.filter((s) => s.status === 'leave').length;
+  const withdrawnCount = students.filter((s) => s.status === 'withdrawn').length;
+  const shuttleCount = students.filter((s) => studentUsesShuttleService(s)).length;
+
+  const hasSearchOrExtraFilters =
+    Boolean(searchQuery.trim()) ||
+    teacherFilter !== 'ALL' ||
+    classFilter !== 'ALL' ||
+    weekdayFilter !== 'ALL' ||
+    statusFilter !== 'active' ||
+    shuttleFilter !== 'ALL';
+
+  const advancedFilterCount = [
+    !isScoped && teacherFilter !== 'ALL',
+    classFilter !== 'ALL',
+    weekdayFilter !== 'ALL',
+    shuttleFilter !== 'ALL',
+    sortBy !== 'joinDateDesc',
+  ].filter(Boolean).length;
+
+  const resetFilters = () => {
+    setSearchQuery('');
+    setTeacherFilterDraft(isScoped && staffId ? staffId : 'ALL');
+    setClassFilter('ALL');
+    setWeekdayFilter('ALL');
+    setStatusFilter('active');
+    setShuttleFilter('ALL');
+    setSortBy('joinDateDesc');
+  };
+
+  const handleOpenDetail = (student: Student) => setSelectedStudentId(student.id);
+
+  const handleCloseDetail = () => {
+    setSelectedStudentId(null);
+  };
+
+  const handleOpenEdit = (student: Student) => {
+    setEditingStudent(student);
+    setIsFormModalOpen(true);
+    setSelectedStudentId(null);
+  };
+
+  const searchPlaceholder = rosterSearchPlaceholder(rosterList, labels.contact.singular);
+
+  const advancedFilterColumns = [
+    !isScoped,
+    true, // 반
+    true, // 요일
+    showPickupFields, // 셔틀 — plugin(showPickupFields) 기준
+    true, // 정렬
+  ].filter(Boolean).length;
+
+  const statusChips: Array<{ value: string; label: string; count: number }> = [
+    { value: 'active', label: activeStatusLabel, count: activeCount },
+    { value: 'leave', label: leaveStatusLabel, count: leaveCount },
+    { value: 'withdrawn', label: endedLabel, count: withdrawnCount },
+    { value: 'ALL', label: '전체', count: students.length },
+  ];
+
+  const handleExportAudited = async (reason: string) => {
+    const orgId = getOrganizationId() || 'local-org';
+    try {
+      await interceptExportWithAudit(
+        {
+          organizationId: orgId,
+          entityType: 'customer',
+          action: 'customer_roster_excel_export',
+          metadata: { reason },
+        },
+        () => {
+          const headers = ['이름', '연락처', '상태', '등록일자'];
+          const rows = filteredStudents.map((s) => [
+            `"${s.name}"`,
+            `"${s.phone || ''}"`,
+            `"${s.status || ''}"`,
+            `"${s.createdAt || ''}"`,
+          ]);
+          const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `회원명부_${new Date().toISOString().slice(0, 10)}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('보안 감사 로그가 기록되었으며 회원 명부가 다운로드되었습니다.', 'success');
+        }
+      );
+    } catch (err: unknown) {
+      showToast(err instanceof Error ? err.message : '엑셀 내보내기에 실패했습니다.', 'error');
+    }
+  };
+
+  const isTrulyEmpty = students.length === 0;
+  const isFilterEmpty = !isTrulyEmpty && filteredStudents.length === 0;
+
+  return (
+    <div className={DENSITY.pageStack}>
+      <ExportProtectionModal
+        open={exportOpen}
+        onClose={() => setExportOpen(false)}
+        onConfirm={(_pin, reason) => {
+          setExportOpen(false);
+          void handleExportAudited(reason);
+        }}
+      />
+      {!isScoped && (
+        <div className="flex justify-end gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={() => setExportOpen(true)}
+            className="px-4 py-2.5 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition-all border border-slate-200 flex items-center justify-center gap-2 cursor-pointer"
+            title="대량 개인정보 반출 시 불변 감사 로그(Audit Log)가 자동 기록됩니다."
+          >
+            <Download className="w-4 h-4 text-slate-500" />
+            명부 다운로드 (감사 기록)
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsBulkImportOpen(true)}
+            className="px-4 py-2.5 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition-all border border-slate-200 flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+            엑셀/CSV 가져오기
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setEditingStudent(null);
+              setIsFormModalOpen(true);
+            }}
+            className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <UserPlus className="w-4 h-4" />
+            {labels.customer.add}
+          </button>
+        </div>
+      )}
+
+      <FilterBar className="flex-col items-stretch gap-3">
+        {/* 기본: 이름 검색 + 재원/휴원/퇴원(전체)만 노출 */}
+        <SearchField
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder={searchPlaceholder}
+          className="w-full"
+        />
+
+        <div className="flex flex-wrap items-center gap-2">
+          {statusChips.map((chip) => {
+            const isActive = statusFilter === chip.value;
+            return (
+              <button
+                key={chip.value}
+                type="button"
+                onClick={() => setStatusFilter(chip.value)}
+                className={`${controlMinClass} px-3 rounded-lg text-xs font-bold transition-colors ${
+                  isActive
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                {chip.label} {chip.count}
+              </button>
+            );
+          })}
+          <button
+            type="button"
+            onClick={() => setShowAdvancedFilters((prev) => !prev)}
+            className={`${controlMinClass} ml-auto px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors ${
+              showAdvancedFilters || advancedFilterCount > 0
+                ? 'bg-slate-800 text-white'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+            aria-expanded={showAdvancedFilters}
+            aria-label={rosterList.filterButtonAriaLabel}
+          >
+            <SlidersHorizontal className="w-3.5 h-3.5" />
+            필터
+            {advancedFilterCount > 0 && (
+              <span className="bg-white/20 px-1.5 rounded-md">{advancedFilterCount}</span>
+            )}
+          </button>
+        </div>
+
+        {showAdvancedFilters && (
+          <div
+            className={`grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 border-t border-slate-100 ${
+              rosterList.fitAdvancedFilterGrid
+                ? advancedFilterColumns >= 5
+                  ? 'lg:grid-cols-5'
+                  : advancedFilterColumns === 4
+                    ? 'lg:grid-cols-4'
+                    : 'lg:grid-cols-3'
+                : 'lg:grid-cols-5'
+            }`}
+          >
+            {!isScoped && (
+              <label className="block min-w-0 space-y-1">
+                {rosterList.showFilterFieldLabels ? (
+                  <span className="text-[10px] font-bold text-slate-500 px-0.5">{staffFilterName}</span>
+                ) : null}
+                <select
+                  value={teacherFilter}
+                  onChange={(e) => setTeacherFilter(e.target.value)}
+                  className="w-full px-3 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
+                  aria-label={staffFilterName}
+                >
+                  <option value="ALL">{staffFilterName} 전체</option>
+                  {teachers.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+
+            <label className="block min-w-0 space-y-1">
+              {rosterList.showFilterFieldLabels ? (
+                <span className="text-[10px] font-bold text-slate-500 px-0.5">{labels.service.singular}</span>
+              ) : null}
+              <select
+                value={classFilter}
+                onChange={(e) => setClassFilter(e.target.value)}
+                className="w-full px-3 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
+                aria-label={labels.service.singular}
+              >
+                <option value="ALL">반 전체</option>
+                {classes.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="block min-w-0 space-y-1">
+              {rosterList.showFilterFieldLabels ? (
+                <span className="text-[10px] font-bold text-slate-500 px-0.5">요일</span>
+              ) : null}
+              <select
+                value={weekdayFilter}
+                onChange={(e) => setWeekdayFilter(e.target.value as DayOfWeek | 'ALL')}
+                className="w-full px-3 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
+                aria-label="요일"
+              >
+                <option value="ALL">요일 전체</option>
+                {WEEKDAY_FILTER_OPTIONS.map((d) => (
+                  <option key={d} value={d}>
+                    {d}요일
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            {showPickupFields && (
+              <label className="block min-w-0 space-y-1">
+                <select
+                  value={shuttleFilter}
+                  onChange={(e) => setShuttleFilter(e.target.value as 'ALL' | 'SHUTTLE')}
+                  className="w-full px-3 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none font-semibold"
+                  aria-label="셔틀"
+                >
+                  <option value="ALL">셔틀 전체</option>
+                  <option value="SHUTTLE">셔틀 이용 ({shuttleCount})</option>
+                </select>
+              </label>
+            )}
+
+            <label className="block min-w-0 space-y-1">
+              {rosterList.showFilterFieldLabels ? (
+                <span className="text-[10px] font-bold text-slate-500 px-0.5">정렬</span>
+              ) : null}
+              <div className="flex items-center gap-1.5 px-3 min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600">
+                <ArrowUpDown className="w-3.5 h-3.5 shrink-0" />
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                  className="bg-transparent w-full font-semibold focus:outline-none cursor-pointer"
+                  aria-label="정렬"
+                >
+                  <option value="joinDateDesc">등록일 최신순</option>
+                  <option value="joinDateAsc">등록일 과거순</option>
+                  <option value="name">이름 가나다순</option>
+                  <option value="paymentDay">수납일순</option>
+                </select>
+              </div>
+            </label>
+          </div>
+        )}
+
+        <div className="flex items-center justify-between text-xs text-slate-500 w-full">
+          <span>
+            표시 중:{' '}
+            <strong className="text-slate-800">{filteredStudents.length}명</strong>
+            {statusFilter === 'active' && !hasSearchOrExtraFilters ? ` (${activeStatusLabel})` : ''}
+          </span>
+          {hasSearchOrExtraFilters && (
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="font-bold text-indigo-600 hover:text-indigo-700 min-h-[44px]"
+            >
+              초기화
+            </button>
+          )}
+        </div>
+      </FilterBar>
+
+      {isTrulyEmpty ? (
+        <EmptyState
+          variant="hero"
+          icon={<Users className="w-8 h-8" />}
+          title={`아직 등록된 ${labels.customer.singular}이 없습니다`}
+          description={`첫 ${labels.customer.singular}을 등록하고 ${termT('lesson', '수업')} 배정, 출결, ${termT('pass', '이용권')} 관리를 시작해보세요.`}
+          action={
+            !isScoped ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingStudent(null);
+                  setIsFormModalOpen(true);
+                }}
+                className="px-5 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-colors"
+              >
+                + 첫 {labels.customer.singular} 등록하기
+              </button>
+            ) : undefined
+          }
+          guide={{
+            badge: '💡 30초 시작 가이드',
+            title: `첫 ${labels.customer.singular} 등록 추천 순서`,
+            steps: [
+              {
+                title: '기본 인적사항 입력',
+                detail: '이름과 연락처만 먼저 입력해도 바로 등록됩니다.',
+              },
+              {
+                title: '맞춤 특이사항 및 수강 목적 메모',
+                detail: '상담 내용이나 희망 사항, 주의사항을 메모해두면 응대에 큰 도움이 됩니다.',
+              },
+              {
+                title: '이용권 또는 수강반 연결',
+                detail: '등록 후 이용권 탭이나 수강반 탭에서 즉시 연결할 수 있습니다.',
+              },
+            ],
+            tip: `엑셀 파일로 많은 ${labels.customer.plural}을 한 번에 등록하시려면 상단의 '일괄 등록' 버튼을 활용하세요.`,
+          }}
+        />
+      ) : isFilterEmpty ? (
+        <EmptyState
+          icon={<Users className="w-12 h-12" />}
+          title={`조건에 맞는 ${labels.customer.singular}이 없습니다`}
+          description={rosterFilterEmptyDescription(rosterList, labels.customer.singular)}
+          action={
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="px-4 py-2.5 min-h-[44px] bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold rounded-xl"
+            >
+              필터 초기화
+            </button>
+          }
+        />
+      ) : (
+        <>
+          {/* Desktop: compact columns */}
+          <div className="hidden md:block bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
+                  <tr>
+                    <th className="py-2.5 px-3">{labels.customer.singular}</th>
+                    <th className="py-2.5 px-3">{labels.service.singular}</th>
+                    <th className="py-2.5 px-3">담당</th>
+                    {showSessionColumns && <th className="py-2.5 px-3">{enrollmentModeLabel(industry)}</th>}
+                    {showSessionColumns && <th className="py-2.5 px-3">회차권</th>}
+                    <th className="py-2.5 px-3">오늘 출결</th>
+                    <th className="py-2.5 px-3">이번 달 수납</th>
+                    <th className="py-2.5 px-3 text-right"> </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {filteredStudents.map((st) => {
+                    const badge = getStudentStatusBadge(st.status);
+                    const att = getTodayAttendanceSignal(st.id, todayAttendanceByStudent);
+                    const bill = getMonthBillingSignal(billingByStudent.get(st.id));
+                    const billingModeLabel = showSessionColumns ? getPianoBillingModeLabel(st) : '';
+                    const passLabel = showSessionColumns
+                      ? getPianoSessionPassColumnLabel(st.id, sessionPasses)
+                      : '';
+                    return (
+                      <tr
+                        key={st.id}
+                        onClick={() => handleOpenDetail(st)}
+                        className="hover:bg-indigo-50/40 transition-colors cursor-pointer group"
+                      >
+                        <td className="py-2.5 px-3">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <div
+                              className="w-7 h-7 rounded-lg text-white font-bold text-xs flex items-center justify-center shrink-0"
+                              style={{ backgroundColor: st.avatarColor || '#4f46e5' }}
+                            >
+                              {(st.name || '?').slice(0, 1)}
+                            </div>
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="font-bold text-slate-900 group-hover:text-indigo-600">
+                                  {st.name}
+                                </span>
+                                {st.status !== 'active' && (
+                                  <span
+                                    className={`px-1.5 py-0.5 rounded-md font-bold text-[10px] ${badge.bg}`}
+                                  >
+                                    {st.status === 'withdrawn' && endedLabel !== badge.label ? endedLabel : badge.label}
+                                  </span>
+                                )}
+                                {showPickupFields && studentUsesShuttleService(st) && (
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-sky-100 text-sky-800 font-bold inline-flex items-center gap-0.5">
+                                    <Bus className="w-3 h-3" />
+                                    셔틀
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-2.5 px-3 text-slate-700 font-medium truncate max-w-[10rem]">
+                          {getClassLabel(st, classNameById)}
+                        </td>
+                        <td className="py-2.5 px-3 text-slate-600 font-medium">
+                          {st.teacherName || '-'}
+                        </td>
+                        {showSessionColumns && (
+                          <td className="py-2.5 px-3">
+                            <span
+                              className={`inline-flex px-1.5 py-0.5 rounded-md text-[10px] font-bold ${
+                                billingModeLabel === '회차권'
+                                  ? 'bg-violet-50 text-violet-700'
+                                  : 'bg-slate-100 text-slate-600'
+                              }`}
+                            >
+                              {billingModeLabel}
+                            </span>
+                          </td>
+                        )}
+                        {showSessionColumns && (
+                          <td
+                            className={`py-2.5 px-3 font-bold ${
+                              passLabel === '해당 없음' ? 'text-slate-400' : 'text-indigo-700'
+                            }`}
+                          >
+                            {passLabel}
+                          </td>
+                        )}
+                        <td className={`py-2.5 px-3 font-bold ${signalClass(att.tone)}`}>
+                          {att.label}
+                        </td>
+                        <td className={`py-2.5 px-3 font-bold ${signalClass(bill.tone)}`}>
+                          {bill.label}
+                        </td>
+                        <td className="py-2.5 px-3 text-right">
+                          <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 inline-block" />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Mobile: compact cards */}
+          <div className="md:hidden space-y-2">
+            {filteredStudents.map((st) => {
+              const badge = getStudentStatusBadge(st.status);
+              const att = getTodayAttendanceSignal(st.id, todayAttendanceByStudent);
+              const bill = getMonthBillingSignal(billingByStudent.get(st.id));
+              const guardian = getPrimaryGuardian(st.id);
+              const billingModeLabel = showSessionColumns ? getPianoBillingModeLabel(st) : '';
+              const passLabel = showSessionColumns
+                ? getPianoSessionPassColumnLabel(st.id, sessionPasses)
+                : '';
+              return (
+                <button
+                  key={st.id}
+                  type="button"
+                  onClick={() => handleOpenDetail(st)}
+                  className="w-full text-left bg-white p-3 rounded-2xl border border-slate-200/80 shadow-xs active:bg-slate-50 transition-all space-y-2 min-h-[44px]"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div
+                        className="w-9 h-9 rounded-xl text-white font-extrabold text-sm flex items-center justify-center shrink-0"
+                        style={{ backgroundColor: st.avatarColor || '#4f46e5' }}
+                      >
+                        {(st.name || '?').slice(0, 1)}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <h4 className="font-bold text-sm text-slate-900">{st.name}</h4>
+                          {st.status !== 'active' && (
+                            <span
+                              className={`px-1.5 py-0.5 rounded-md font-bold text-[10px] ${badge.bg}`}
+                            >
+                              {st.status === 'withdrawn' && endedLabel !== badge.label ? endedLabel : badge.label}
+                            </span>
+                          )}
+                          {showSessionColumns && (
+                            <span
+                              className={`px-1.5 py-0.5 rounded-md font-bold text-[10px] ${
+                                billingModeLabel === '회차권'
+                                  ? 'bg-violet-50 text-violet-700'
+                                  : 'bg-slate-100 text-slate-600'
+                              }`}
+                            >
+                              {billingModeLabel}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-slate-500 truncate">
+                          {getClassLabel(st, classNameById)}
+                          {st.teacherName ? ` · ${st.teacherName}` : ''}
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 text-[11px] font-bold">
+                    <span className={signalClass(att.tone)}>출결 {att.label}</span>
+                    {showSessionColumns && (
+                      <span
+                        className={
+                          passLabel === '해당 없음' ? 'text-slate-400' : 'text-indigo-700'
+                        }
+                      >
+                        {passLabel}
+                      </span>
+                    )}
+                    <span className={signalClass(bill.tone)}>{bill.label}</span>
+                  </div>
+                  {guardian?.parentName && (
+                    <p className="text-[10px] text-slate-400 truncate">
+                      {labels.contact.singular} {guardian.parentName}
+                    </p>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      <StudentFormModal
+        student={editingStudent}
+        isOpen={isFormModalOpen}
+        onClose={() => {
+          setIsFormModalOpen(false);
+          setEditingStudent(null);
+        }}
+        onSaved={(saved, options) => {
+          setSelectedStudentId(saved.id);
+          if (options?.openTab) {
+            setSelectedStudentDetailTab(options.openTab);
+          }
+        }}
+      />
+
+      <StudentDetailModal
+        student={detailStudent}
+        isOpen={Boolean(detailStudent)}
+        onClose={handleCloseDetail}
+        onEdit={handleOpenEdit}
+        initialTab={selectedStudentDetailTab || undefined}
+        onInitialTabApplied={() => setSelectedStudentDetailTab(null)}
+      />
+
+      <StudentBulkImportModal
+        isOpen={isBulkImportOpen}
+        onClose={() => setIsBulkImportOpen(false)}
+        onCompleted={() => setIsBulkImportOpen(false)}
+      />
+    </div>
+  );
+};

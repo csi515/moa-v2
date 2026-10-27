@@ -10,10 +10,8 @@ import {
 import { PWA_INSTALL_COPY } from './pwa/pwaInstallCopy';
 import { PwaInstallGuide } from './pwa/PwaInstallGuide';
 
-const STORAGE_DISMISS_UNTIL = 'ep.pwa.dismissUntil';
-const STORAGE_INSTALLED = 'ep.pwa.installed';
-const LEGACY_STORAGE_DISMISS_UNTIL = 'moa.pwa.dismissUntil';
-const LEGACY_STORAGE_INSTALLED = 'moa.pwa.installed';
+const STORAGE_DISMISS_UNTIL = 'moa.pwa.dismissUntil';
+const STORAGE_INSTALLED = 'moa.pwa.installed';
 /** beforeinstallprompt / iOS 진입 후 안내까지 대기 (ms) */
 const PROMPT_DELAY_MS = 8_000;
 /** 「나중에」 선택 시 재표시 억제 기간 */
@@ -24,26 +22,10 @@ type BeforeInstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 };
 
-function readPwaFlag(key: string, legacyKey: string): string | null {
-  try {
-    const current = localStorage.getItem(key);
-    if (current != null) return current;
-    const legacy = localStorage.getItem(legacyKey);
-    if (legacy != null) {
-      localStorage.setItem(key, legacy);
-      localStorage.removeItem(legacyKey);
-      return legacy;
-    }
-  } catch {
-    /* ignore */
-  }
-  return null;
-}
-
 function isDismissed(): boolean {
   try {
-    if (readPwaFlag(STORAGE_INSTALLED, LEGACY_STORAGE_INSTALLED) === '1') return true;
-    const until = readPwaFlag(STORAGE_DISMISS_UNTIL, LEGACY_STORAGE_DISMISS_UNTIL);
+    if (localStorage.getItem(STORAGE_INSTALLED) === '1') return true;
+    const until = localStorage.getItem(STORAGE_DISMISS_UNTIL);
     if (!until) return false;
     return Date.now() < Number(until);
   } catch {
@@ -55,7 +37,6 @@ function markDismissed(): void {
   try {
     const until = Date.now() + DISMISS_DAYS * 24 * 60 * 60 * 1000;
     localStorage.setItem(STORAGE_DISMISS_UNTIL, String(until));
-    localStorage.removeItem(LEGACY_STORAGE_DISMISS_UNTIL);
   } catch {
     /* ignore */
   }
@@ -65,8 +46,6 @@ function markInstalled(): void {
   try {
     localStorage.setItem(STORAGE_INSTALLED, '1');
     localStorage.removeItem(STORAGE_DISMISS_UNTIL);
-    localStorage.removeItem(LEGACY_STORAGE_INSTALLED);
-    localStorage.removeItem(LEGACY_STORAGE_DISMISS_UNTIL);
   } catch {
     /* ignore */
   }

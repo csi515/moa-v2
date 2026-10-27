@@ -29,12 +29,13 @@ export function listIndustryPlugins(): IndustryPluginManifest[] {
 }
 
 function unknownIndustryPlugin(): IndustryPluginManifest {
-  return buildGenericPluginManifest(INDUSTRY_DEFINITIONS.personal_plant_ops);
+  return buildGenericPluginManifest(INDUSTRY_DEFINITIONS.academy);
 }
 
 /**
  * 설치된 전용 플러그인 → 카탈로그 Generic → unknown Generic.
- * 빈 값·미등록 업종은 personal_plant_ops Generic으로 폴백한다.
+ * 빈 값은 레거시 미설정으로 piano 플러그인을 쓴다.
+ * 카탈로그에 없는 업종은 piano로 위장하지 않는다.
  */
 export function getIndustryPlugin(
   industry: string | null | undefined

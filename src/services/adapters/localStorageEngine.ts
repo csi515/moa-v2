@@ -10,26 +10,11 @@
  * 이 모듈은 브라우저 측 캐시·스냅샷 I/O만 담당한다.
  */
 import { resolveStorageKey } from './storageContext';
-import { LEGACY_STORAGE_KEY_ALIASES, type StorageKey } from './storageKeys';
+import type { StorageKey } from './storageKeys';
 
 export function readLocal<T>(key: StorageKey, defaultValue: T): T {
   try {
-    const resolved = resolveStorageKey(key);
-    let raw = localStorage.getItem(resolved);
-    if (!raw) {
-      const legacyBase = LEGACY_STORAGE_KEY_ALIASES[key];
-      if (legacyBase) {
-        const legacyResolved = resolveStorageKey(legacyBase);
-        raw = localStorage.getItem(legacyResolved);
-        if (raw) {
-          try {
-            localStorage.setItem(resolved, raw);
-          } catch {
-            /* quota / private mode — still return migrated value */
-          }
-        }
-      }
-    }
+    const raw = localStorage.getItem(resolveStorageKey(key));
     if (!raw) return defaultValue;
     return JSON.parse(raw) as T;
   } catch (e) {

@@ -1,7 +1,6 @@
 import { useState, type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, UserPlus } from 'lucide-react';
-import { appBrand } from '@/core/brand';
 import { CustomerMyOrgsView } from './CustomerMyOrgsView';
 import { CUSTOMER_MY_ORGS_COPY as COPY } from './customerMyOrgsCopy';
 import type { MyLinkedCustomerOrg } from './services/myLinkedCustomerOrgsService';
@@ -34,7 +33,7 @@ export const CustomerLinkedOrgsShell: FC<Props> = ({
     <div className="min-h-screen bg-[#F8FAFC] text-slate-800 flex flex-col pb-safe">
       <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 py-3">
         <div className="max-w-3xl mx-auto">
-          <p className="text-[11px] font-bold text-indigo-600">{appBrand.shortName}</p>
+          <p className="text-[11px] font-bold text-indigo-600">MOA</p>
           <h1 className="text-base font-black text-slate-900">
             {pointsActive ? '포인트' : COPY.title}
           </h1>

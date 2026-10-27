@@ -14,7 +14,6 @@ import {
   UserRound,
   Compass,
 } from 'lucide-react';
-import { appBrand } from '@/core/brand';
 import { useOrganization } from './OrganizationProvider';
 import { getRoleLabel } from './services/organizationService';
 import { getIndustryLabel, type IndustryType } from '../industry/types';
@@ -125,7 +124,7 @@ export const OrganizationSelector: React.FC = () => {
             {isNewUser ? <Compass className="w-7 h-7" /> : <Building2 className="w-7 h-7" />}
           </div>
           <h1 className="text-2xl font-bold text-slate-900">
-            {isNewUser ? `${appBrand.shortName}에 오신 것을 환영합니다!` : '사업장 및 포털 선택'}
+            {isNewUser ? '모아에 오신 것을 환영합니다!' : '사업장 및 포털 선택'}
           </h1>
           {organizationsStatus === 'error' ? (
             <div className="mt-3 text-left rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3">

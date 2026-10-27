@@ -102,6 +102,31 @@ function run() {
   assert.equal(mapped.entityType, 'membership');
   assert.equal(mapped.locationId, null);
 
+  const sql = readFileSync(
+    join(root, 'supabase/migrations/20260924300000_tenant_audit_log.sql'),
+    'utf8'
+  );
+  assert.match(sql, /CREATE TABLE core\.audit_logs/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.append_audit_log/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.append_audit_log_internal/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.sanitize_audit_payload/);
+  assert.match(sql, /audit_organization_members_update/);
+  assert.match(sql, /AFTER UPDATE ON core\.organization_members/);
+  assert.match(sql, /audit_authorization_grants_write/);
+  assert.match(sql, /AFTER INSERT OR UPDATE OR DELETE ON core\.authorization_grants/);
+  assert.match(sql, /REVOKE INSERT, UPDATE, DELETE ON core\.audit_logs/);
+  assert.doesNotMatch(sql, /CREATE POLICY audit_logs_.*DELETE/);
+  assert.doesNotMatch(sql, /ALTER TABLE core\.(customers|staff|sales|schedules|inventory)/);
+  assert.doesNotMatch(sql, /CREATE OR REPLACE FUNCTION core\.(create_sale|create_organization|upsert_location)/);
+  for (const entity of AUDIT_ENTITY_TYPES) {
+    assert.match(sql, new RegExp(`'${entity}'`));
+  }
+  for (const [entity, fields] of Object.entries(AUDIT_FIELD_ALLOWLIST)) {
+    for (const field of fields) {
+      assert.match(sql, new RegExp(`WHEN '${entity}'[\\s\\S]*'${field}'`));
+    }
+  }
+
   const writer = readFileSync(join(here, 'auditWriter.ts'), 'utf8');
   assert.match(writer, /append_audit_log/);
   assert.match(writer, /buildAuditWriteArgs/);

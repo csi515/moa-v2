@@ -9,7 +9,6 @@ import {
   Building2,
   UserCheck,
 } from "lucide-react";
-import { appBrand } from "@/core/brand";
 import { getCoreClient, isSupabaseConfigured } from "@/lib/supabase";
 import { useAuth } from "@/core/auth/AuthProvider";
 import { useOrganization } from "@/core/organizations/OrganizationProvider";
@@ -106,7 +105,7 @@ export const AcceptStaffInvitePage: React.FC = () => {
         </div>
 
         <h1 className="text-xl font-bold text-slate-900 mb-2">
-          {appBrand.shortName} 매장 직원 합류 초대
+          MOA 매장 직원 합류 초대
         </h1>
 
         {authLoading || loading ? (

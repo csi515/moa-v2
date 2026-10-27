@@ -33,7 +33,9 @@ import { useTenant } from '@/core/auth/context/TenantContext';
 import { applyDomainErrorToForm } from '@/core/utils/formErrorAdapter';
 import {
   listIndustryPresets,
+  listMoaVisiblePresets,
   getIndustryPreset,
+  isPresetVisibleInMoa,
 } from '@/app/presets/presetRegistry';
 import {
   recommendIndustryPreset,
@@ -232,7 +234,7 @@ export const QuickSetupPage: React.FC = () => {
   const navigate = useNavigate();
   const { switchTenant } = useTenant();
 
-  const [selectedIndustry, setSelectedIndustry] = useState<string>('personal_plant_ops');
+  const [selectedIndustry, setSelectedIndustry] = useState<string>('piano');
   const [setupDepartments, setSetupDepartments] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [generalError, setGeneralError] = useState<string | null>(null);
@@ -242,7 +244,7 @@ export const QuickSetupPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchKeyword, setSearchKeyword] = useState('');
 
-  const allPresets = useMemo(() => listIndustryPresets(), []);
+  const allPresets = useMemo(() => listMoaVisiblePresets(), []);
 
   const filteredPresets = useMemo(() => {
     return allPresets.filter((p) => {
@@ -388,12 +390,16 @@ export const QuickSetupPage: React.FC = () => {
   } = useForm<QuickSetupFormData>({
     defaultValues: {
       name: '',
-      industry: 'personal_plant_ops',
+      industry: 'piano',
     },
   });
 
   // 업종 선택 시 추천값 자동 주입 (Pre-fill)
   const applyIndustryDefaults = (industry: string) => {
+    if (industry !== 'custom' && (!isPresetVisibleInMoa(industry) || industry === 'personal_plant_ops')) {
+      setGeneralError('해당 프리셋은 moa 앱에서 선택할 수 없습니다.');
+      return;
+    }
     setSelectedIndustry(industry);
     setValue('industry', industry);
     setGeneralError(null);
@@ -429,6 +435,16 @@ export const QuickSetupPage: React.FC = () => {
     setIsAiPanelOpen(true);
     setTimeout(() => {
       const result = recommendIndustryPreset(aiQuery);
+      if (
+        result.topRecommendation &&
+        (!isPresetVisibleInMoa(result.topRecommendation.presetId) ||
+          result.topRecommendation.presetId === 'personal_plant_ops')
+      ) {
+        result.topRecommendation = null;
+      }
+      result.alternativeRecommendations = result.alternativeRecommendations.filter(
+        (alt) => isPresetVisibleInMoa(alt.presetId) && alt.presetId !== 'personal_plant_ops'
+      );
       setAiResult(result);
       setIsAiAnalyzing(false);
 
@@ -527,6 +543,14 @@ export const QuickSetupPage: React.FC = () => {
 
     if (roles.length === 0) {
       setGeneralError('사업장 운영을 위해 최소 1개 이상의 직급(예: 대표, 원장, 사장 등)이 필요합니다.');
+      return;
+    }
+
+    if (
+      selectedIndustry !== 'custom' &&
+      (!isPresetVisibleInMoa(selectedIndustry) || selectedIndustry === 'personal_plant_ops')
+    ) {
+      setGeneralError('해당 프리셋은 moa 앱에서 선택할 수 없습니다.');
       return;
     }
 
@@ -818,7 +842,7 @@ export const QuickSetupPage: React.FC = () => {
                     validate: (v) =>
                       v.trim().length >= 2 || '상호명은 공백을 제외하고 2자 이상 입력해 주세요.',
                   })}
-                  placeholder="예: EP_apps, 청담 사우나, 바른 필라테스"
+                  placeholder="예: 모아 피아노 스튜디오, 청담 사우나, 바른 필라테스"
                   className="w-full h-12 px-4 rounded-xl border border-slate-200 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition"
                 />
               </div>

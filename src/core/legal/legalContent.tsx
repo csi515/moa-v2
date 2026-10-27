@@ -167,7 +167,7 @@ export function TermsContent() {
   return (
     <div className="space-y-4">
       <div className="rounded-xl bg-slate-100 p-4 mb-4">
-        <p className="text-xs font-bold text-slate-800">{serviceName} 서비스 이용약관</p>
+        <p className="text-xs font-bold text-slate-800">MOA 서비스 이용약관</p>
         <p className="text-xs text-slate-600 mt-0.5">
           본 약관은 {termsEffectiveDate}부터 효력이 발생합니다.
         </p>
@@ -304,7 +304,7 @@ export function SupportContent() {
       <h2 className={legalHeadingClass}>3. 운영 주체 정보</h2>
       <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs space-y-1.5 text-slate-700 mt-3">
         <p><strong>상호명:</strong> {legalEntityName}</p>
-        <p><strong>서비스명:</strong> {serviceName}</p>
+        <p><strong>서비스명:</strong> {serviceName} (모아 SaaS)</p>
         <p><strong>대표 이메일:</strong> {contactEmail}</p>
         <p><strong>운영시간:</strong> 평일 10:00 ~ 18:00 (점심시간 12:30 ~ 13:30, 주말·공휴일 휴무)</p>
       </div>

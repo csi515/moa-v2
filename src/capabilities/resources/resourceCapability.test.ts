@@ -106,6 +106,20 @@ function run() {
   assert.match(service, /eq\('organization_id', organizationId\)/);
   assert.doesNotMatch(service, /sauna_jjimjilbang|bath_room|massage_room|scrub_station/);
 
+  const sql = readSrc('supabase/migrations/20260924220000_set_bookable_resource_active.sql');
+  assert.match(sql, /set_bookable_resource_active/);
+  assert.match(sql, /is_org_staff_actor/);
+  assert.match(sql, /organization_id = p_org_id/);
+  assert.match(sql, /practice_rooms/);
+  assert.doesNotMatch(sql, /CREATE TABLE/);
+  assert.doesNotMatch(sql, /bath_room|massage_room|scrub_station|sauna_jjimjilbang/);
+
+  const guarded = readSrc('supabase/migrations/20260924180000_bookable_resources.sql');
+  assert.match(guarded, /AND is_active/);
+  assert.match(guarded, /organization_id = p_org_id/);
+  assert.match(guarded, /EXCLUDE|exclusion_violation/);
+  assert.doesNotMatch(guarded, /CREATE TABLE core\.bath_/);
+
   const pianoFacade = readSrc('src/core/customer/services/practiceRoomReservationService.ts');
   assert.match(pianoFacade, /resourceReservationCapability/);
   assert.match(pianoFacade, /PRACTICE_ROOM_RESOURCE_KIND/);

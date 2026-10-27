@@ -252,6 +252,29 @@ function run() {
     assert.equal(payReceiptMismatch.result.outcome, 'mismatch');
   }
 
+  const sql = readFileSync(
+    join(root, 'supabase/migrations/20260924310000_idempotency_infrastructure.sql'),
+    'utf8'
+  );
+  assert.match(sql, /CREATE TABLE core\.idempotency_keys/);
+  assert.match(sql, /UNIQUE \(organization_id, key\)/);
+  assert.match(sql, /pg_advisory_xact_lock/);
+  assert.match(sql, /FOR UPDATE/);
+  assert.match(sql, /Idempotency payload mismatch/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.begin_idempotency/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.complete_idempotency/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.fail_idempotency/);
+  assert.match(sql, /update_booking_status_with_pass_idempotent/);
+  assert.match(sql, /record_tuition_payment_idempotent/);
+  assert.match(sql, /tuition_payment_idempotency_canonical/);
+  assert.match(sql, /p_memo/);
+  assert.match(sql, /p_cash_receipt_issued/);
+  assert.match(sql, /RETURN core\.update_booking_status_with_pass\(/);
+  assert.match(sql, /RETURN core\.record_tuition_payment\(/);
+  assert.doesNotMatch(sql, /CREATE OR REPLACE FUNCTION core\.update_booking_status_with_pass\(/);
+  assert.doesNotMatch(sql, /CREATE OR REPLACE FUNCTION core\.record_tuition_payment\(/);
+  assert.doesNotMatch(sql, /ALTER TABLE core\.(schedules|payments|session_passes)/);
+
   const bookingClient = readFileSync(
     join(root, 'src/core/schedules/bookingPassAtomic.ts'),
     'utf8'

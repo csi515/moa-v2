@@ -3,6 +3,7 @@ import {
   syncAuthProvidersOnLogin,
   syncOAuthIdentitiesFromSession,
 } from '../auth/services/authProviderService';
+import { connectParentOnLogin } from '../parent/services/parentAccountService';
 import { connectStaffOnLogin } from '../staff/services/staffAccountService';
 import { getCoreClient } from '@/lib/supabase';
 
@@ -31,5 +32,11 @@ export async function runLoginAccountSync(user?: User | null): Promise<void> {
       '[loginBootstrap] OAuth identity sync soft-fail',
       err instanceof Error ? err.message : err
     );
+  }
+
+  try {
+    await connectParentOnLogin();
+  } catch (err) {
+    console.warn('[loginBootstrap] connectParentOnLogin soft-fail:', err);
   }
 }

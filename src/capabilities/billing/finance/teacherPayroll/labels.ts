@@ -10,7 +10,7 @@ export function payTypeLabel(payType: TeacherPayType): string {
     case 'hourly':
       return '수업 실적';
     case 'attendance':
-      return '출석 횟수';
+      return '출근 횟수';
     case 'work_hours':
       return '근무 시간';
     case 'monthly':
@@ -25,7 +25,7 @@ export function payTypeRateUnitLabel(payType: TeacherPayType): string {
     case 'hourly':
       return '원 / 회';
     case 'attendance':
-      return '원 / 출석';
+      return '원 / 출근';
     case 'work_hours':
       return '원 / 시간';
     case 'monthly':

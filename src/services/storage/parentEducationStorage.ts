@@ -7,7 +7,7 @@ import type {
   WeeklyAssignment,
 } from '../../types/education';
 import type { Parent, Student } from '../../types';
-import type { GuardianRelationship, ParentStudentLink } from '../adapters/sync/parentLinkEntityMappers';
+import type { GuardianRelationship, ParentStudentLink } from '../../core/parent/types';
 import { STORAGE_KEYS } from '../adapters';
 import { generateEntityId, getItem, setItem, type StorageApi } from './helpers';
 import { weekStartIsoLocal } from '@/shared/utils/localDate';

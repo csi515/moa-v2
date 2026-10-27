@@ -1,0 +1,1255 @@
+{
+  "\"piano\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "schedule:일정:CalendarDays",
+      "attendance:출결:SquareCheckBig",
+      "tuition:수납:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "assignments",
+      "progress",
+      "stamps",
+      "reports",
+      "events",
+      "more"
+    ],
+    "parentFeeTitle": "수강료",
+    "loyaltyStampTemplate": "ACADEMY_PRAISE"
+  },
+  "\"pilates\"": {
+    "parentBookingVariant": "pilates",
+    "parentNav": [
+      "home:홈:House",
+      "bookings:예약:CalendarClock",
+      "tuition:수강료:CreditCard",
+      "attendance:출입:SquareCheckBig",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "수강료",
+    "loyaltyStampTemplate": "FITNESS_BEAUTY"
+  },
+  "\"gym\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "schedule:수업:CalendarDays",
+      "shuttle:차량:Bus",
+      "attendance:출결:SquareCheckBig",
+      "tuition:수강료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "events",
+      "more"
+    ],
+    "parentFeeTitle": "수강료",
+    "loyaltyStampTemplate": "FITNESS_BEAUTY"
+  },
+  "\"taekwondo\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "schedule:수업:CalendarDays",
+      "shuttle:차량:Bus",
+      "attendance:출결:SquareCheckBig",
+      "tuition:수강료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "events",
+      "more"
+    ],
+    "parentFeeTitle": "수강료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"gym_fitness\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "schedule:수업:CalendarDays",
+      "shuttle:차량:Bus",
+      "attendance:출결:SquareCheckBig",
+      "tuition:수강료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "events",
+      "more"
+    ],
+    "parentFeeTitle": "수강료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"daycare\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "journals:알림장:BookOpen",
+      "medications:투약:Pill",
+      "attendance:등하원:SquareCheckBig",
+      "tuition:보육료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "보호자 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "incidents",
+      "pickups",
+      "more"
+    ],
+    "parentFeeTitle": "보호자 결제/보육료",
+    "loyaltyStampTemplate": "ACADEMY_PRAISE"
+  },
+  "\"skin_clinic\"": {
+    "parentBookingVariant": "skin",
+    "parentNav": [
+      "home:홈:House",
+      "bookings:예약:CalendarClock",
+      "tuition:이용권:CreditCard",
+      "attendance:출입:SquareCheckBig",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "고객 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "FITNESS_BEAUTY"
+  },
+  "\"retail\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "stamps:포인트:Coins",
+      "reports:구매내역:History",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "고객 멤버십",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"sauna_jjimjilbang\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"sauna_jjimjbang\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"academy\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"art_academy\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"music_academy\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"dance_academy\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"language_academy\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"taekwondo_academy\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"sports_academy\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"driver_license_school\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"yoga_studio\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"crossfit\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"climbing_gym\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"swim_school\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"golf_lesson\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"personal_training\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"hair_salon\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"nail_salon\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"makeup_studio\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"barber_shop\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"lash_brow\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"massage_spa\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"thai_massage\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"foot_reflexology\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"kids_cafe\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"after_school_care\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"playgroup\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"life_coaching\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"career_consulting\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"business_consulting\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"psychological_counseling\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"dental_clinic\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"oriental_medicine\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"physical_therapy\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"veterinary_clinic\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"private_tutoring\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"instrument_lesson\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"voice_lesson\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"cooking_class\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"photo_studio\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"craft_workshop\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"recording_studio\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"rehearsal_room\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"pet_grooming\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"pet_hotel\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"dog_training\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"auto_repair\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"car_wash\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"driving_school\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"real_estate\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"interior_design\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"cleaning_service\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"tax_accounting\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"law_office\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"it_agency\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"design_agency\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"wedding_planner\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"party_event\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"funeral_service\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"hotel_pension\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"travel_agency\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"restaurant\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"cafe\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"bakery\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"general_service\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"   \"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "\"unknown_industry_xyz\"": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  },
+  "<null>": {
+    "parentBookingVariant": "standard",
+    "parentNav": [
+      "home:홈:House",
+      "attendance:출결:SquareCheckBig",
+      "tuition:이용료:CreditCard",
+      "more:더보기:Menu"
+    ],
+    "parentRoleLabel": "학부모 포털",
+    "parentSecondaryTabs": [
+      "notices",
+      "more"
+    ],
+    "parentFeeTitle": "이용료",
+    "loyaltyStampTemplate": "RETAIL_CAFE"
+  }
+}

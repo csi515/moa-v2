@@ -8,8 +8,6 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: 1,
-  // EP_apps 포크에서 스펙이 비어 있어도 build-e2e 게이트가 막히지 않게 한다.
-  passWithNoTests: true,
   reporter: 'list',
   use: {
     baseURL: 'http://localhost:3000',

@@ -174,6 +174,34 @@ function run() {
   assert.equal(resourceSnap.available, 1);
   assert.equal(canAccept(resourceSnap), true);
 
+  const sql = readSrc('supabase/migrations/20260924240000_capacity_capability.sql');
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.normalize_capacity/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.capacity_available/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.capacity_snapshot/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.assert_not_overbooked/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.count_schedule_holding/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.count_resource_occupancy/);
+  assert.match(sql, /FOR UPDATE OF s/);
+  assert.match(sql, /assert_not_overbooked/);
+  assert.match(sql, /Schedule is fully booked/);
+  assert.match(sql, /max_capacity/);
+  assert.match(sql, /status IN \('requested', 'confirmed'\)|status = 'confirmed'/);
+  assert.doesNotMatch(sql, /sauna_jjimjilbang/);
+  assert.doesNotMatch(sql, /CREATE TABLE/);
+  assert.doesNotMatch(sql, /EXCLUDE USING gist/);
+
+  const requestSql = [readSrc('supabase/migrations/20260910073000_phase1_security_customer_separation.sql'), sql].join(
+    '\n'
+  );
+  assert.match(requestSql, /FOR UPDATE OF s/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.request_reservation/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.confirm_reservation/);
+  assert.match(sql, /count_schedule_holding/);
+
+  const cancelSql = readSrc('supabase/migrations/20260904150000_core_schedule_reservation_system.sql');
+  assert.match(cancelSql, /CREATE OR REPLACE FUNCTION core\.cancel_reservation/);
+  assert.match(cancelSql, /status = 'cancelled'/);
+
   const bookingCap = readSrc('src/capabilities/scheduling/capacity/bookingCapacity.ts');
   assert.match(bookingCap, /computeCapacitySnapshot/);
   assert.match(bookingCap, /maxCapacity/);
@@ -200,6 +228,9 @@ function run() {
 
   const resourceCap = readSrc('src/core/resources/resourceCapability.ts');
   assert.match(resourceCap, /capacitySnapshot/);
+
+  const excludeSql = readSrc('supabase/migrations/20260907130000_practice_room_reservations.sql');
+  assert.match(excludeSql, /EXCLUDE USING gist/);
 
   console.log('capacityCapability.test.ts: ok');
 }

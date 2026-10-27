@@ -105,7 +105,7 @@ export const BarcodeSvg: React.FC<{
 
 /**
  * 경량 순수 SVG QR 코드 렌더러
- * EP_apps 상품 URL 또는 딥링크를 순수 SVG 매트릭스로 표현
+ * 모아앱 상품 URL 또는 딥링크를 순수 SVG 매트릭스로 표현
  */
 export const QrCodeSvg: React.FC<{
   value: string;

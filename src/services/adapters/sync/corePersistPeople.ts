@@ -13,7 +13,7 @@ import {
   studentToCustomerRow,
   teacherToStaffRow,
 } from './entityMappers';
-import type { ParentStudentLink } from './parentLinkEntityMappers';
+import type { ParentStudentLink } from '../../../core/parent/types';
 import { linkToRow } from './parentLinkEntityMappers';
 import type { PersistAbortGuard, SyncCache } from './syncTypes';
 import { requireCacheList, runRowUpserts, upsertThenDiffDeleteByKeys } from './persistHelpers';

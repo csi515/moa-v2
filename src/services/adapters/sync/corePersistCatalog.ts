@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type {
   AppNotification,
   ClassItem,
@@ -15,7 +14,7 @@ import {
 } from './entityMappers';
 import type { Booking, ServiceOffering, SessionPass } from '../../../core/types/schedule';
 import { sessionToCoreRow } from './attendanceEntityMappers';
-import type { AttendanceSession } from './attendanceEntityMappers';
+import type { AttendanceSession } from '../../../core/attendance/types';
 import type { PersistAbortGuard, SyncCache } from './syncTypes';
 import { requireCacheList, runRowUpserts } from './persistHelpers';
 import type { CoreClient } from './corePersistSyncTable';

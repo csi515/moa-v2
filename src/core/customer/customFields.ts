@@ -34,7 +34,7 @@ export interface CustomFieldDefinition {
 /** 업종별 기본 커스텀 필드 프리셋 */
 export const INDUSTRY_CUSTOM_FIELDS: Record<string, readonly CustomFieldDefinition[]> = {
   piano: [
-    { key: 'schoolName', label: '학교/유치원', type: 'text', placeholder: '예: EP_apps' },
+    { key: 'schoolName', label: '학교/유치원', type: 'text', placeholder: '예: 모아초등학교' },
     { key: 'grade', label: '학년', type: 'text', placeholder: '예: 2학년' },
     { key: 'pianoLevel', label: '진도/과정', type: 'select', options: ['바이엘 상', '바이엘 하', '체르니 100', '체르니 30', '체르니 40', '작품집/성인'] },
   ],

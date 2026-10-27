@@ -14,7 +14,7 @@ export function AuthLayout({ mode, children }: AuthLayoutProps) {
     mode === 'login'
       ? appBrand.tagline
       : mode === 'signup'
-        ? `${appBrand.shortName} 계정을 만들고, 사업장 개설·초대·연결로 시작하세요`
+        ? 'MOA 계정을 만들고, 사업장 개설·초대·연결로 시작하세요'
         : '가입하신 이메일로 비밀번호 재설정 링크를 보내드립니다';
 
   return (
@@ -27,7 +27,7 @@ export function AuthLayout({ mode, children }: AuthLayoutProps) {
           <div className="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl text-white shadow-lg mb-4">
             <Layers className="w-7 h-7" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">{appBrand.shortName}</h1>
+          <h1 className="text-2xl font-bold text-slate-900">모아</h1>
           <p className="text-sm text-slate-500 mt-2">{subtitle}</p>
           <p className="text-xs text-slate-400 mt-1">{appBrand.description}</p>
         </div>

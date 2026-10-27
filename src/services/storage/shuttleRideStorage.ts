@@ -1,31 +1,6 @@
-// @ts-nocheck
+import type { ShuttleRideRequest } from '@/capabilities/transport/types';
 import { STORAGE_KEYS } from '../adapters';
 import { deleteById, generateEntityId, getItem, setItem } from './helpers';
-
-export type ShuttleDirection = 'pickup' | 'dropoff' | 'both';
-export type ShuttleRideStatus = 'requested' | 'confirmed' | 'completed' | 'cancelled';
-
-/** 차량 운행(셔틀) 신청 — 레거시 transport 타입 인라인 */
-export interface ShuttleRideRequest {
-  id: string;
-  studentId: string;
-  studentName: string;
-  rideDate: string;
-  direction: ShuttleDirection;
-  addressLabel: string;
-  address: string;
-  addressDetail?: string;
-  pickupAddressId?: string;
-  guardianName?: string;
-  note?: string;
-  status: ShuttleRideStatus;
-  confirmedAt?: string;
-  confirmedBy?: string;
-  completedAt?: string;
-  completedBy?: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 /** 차량 운행 신청 CRUD (로컬) */
 export function createShuttleRideStorage() {
@@ -52,29 +27,32 @@ export function createShuttleRideStorage() {
           list[idx] = saved;
         } else {
           saved = {
-            ...input,
+            ...(input as ShuttleRideRequest),
             id: input.id,
             createdAt: input.createdAt || now,
             updatedAt: now,
-          } as ShuttleRideRequest;
-          list.push(saved);
+          };
+          list.unshift(saved);
         }
       } else {
         saved = {
-          ...input,
-          id: generateEntityId('shuttle'),
+          ...(input as ShuttleRideRequest),
+          id: generateEntityId('ride'),
           createdAt: now,
           updatedAt: now,
-        } as ShuttleRideRequest;
-        list.push(saved);
+        };
+        list.unshift(saved);
       }
 
       setItem(STORAGE_KEYS.SHUTTLE_RIDE_REQUESTS, list);
       return saved;
     },
 
-    deleteShuttleRideRequest(id: string): void {
-      deleteById(STORAGE_KEYS.SHUTTLE_RIDE_REQUESTS, id);
+    deleteShuttleRideRequest(id: string): boolean {
+      const list = this.getShuttleRideRequests();
+      if (!deleteById(list, id)) return false;
+      setItem(STORAGE_KEYS.SHUTTLE_RIDE_REQUESTS, list);
+      return true;
     },
   };
 }

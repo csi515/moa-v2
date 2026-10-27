@@ -28,7 +28,7 @@ export interface GenericEntityRecord<T = Record<string, any>> {
  * 인메모리 / 로컬 폴백 저장소 키 생성
  */
 function getStorageKey(organizationId: string, entityType: string): string {
-  return getTenantStorageKey(`ep_generic_${entityType}_${organizationId}`);
+  return getTenantStorageKey(`moa_generic_${entityType}_${organizationId}`);
 }
 
 /**

@@ -14,8 +14,7 @@ interface HolidayApiResponse {
 }
 
 const memoryCache = new Map<number, PublicHolidayItem[]>();
-const STORAGE_PREFIX = 'ep:public-holidays:';
-const LEGACY_STORAGE_PREFIX = 'moa:public-holidays:';
+const STORAGE_PREFIX = 'moa:public-holidays:';
 
 function locdateToIso(locdate: string): string | null {
   const raw = locdate.replace(/\D/g, '');
@@ -39,16 +38,7 @@ function normalizeApiHolidays(items: ApiHoliday[]): PublicHolidayItem[] {
 
 function readStored(year: number): PublicHolidayItem[] | null {
   try {
-    const key = `${STORAGE_PREFIX}${year}`;
-    let raw = localStorage.getItem(key);
-    if (!raw) {
-      const legacyKey = `${LEGACY_STORAGE_PREFIX}${year}`;
-      raw = localStorage.getItem(legacyKey);
-      if (raw) {
-        localStorage.setItem(key, raw);
-        localStorage.removeItem(legacyKey);
-      }
-    }
+    const raw = localStorage.getItem(`${STORAGE_PREFIX}${year}`);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as PublicHolidayItem[];
     if (!Array.isArray(parsed) || parsed.length === 0) return null;
@@ -61,7 +51,6 @@ function readStored(year: number): PublicHolidayItem[] | null {
 function writeStored(year: number, holidays: PublicHolidayItem[]) {
   try {
     localStorage.setItem(`${STORAGE_PREFIX}${year}`, JSON.stringify(holidays));
-    localStorage.removeItem(`${LEGACY_STORAGE_PREFIX}${year}`);
   } catch {
     // ignore quota
   }

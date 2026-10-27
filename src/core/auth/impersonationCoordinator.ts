@@ -2,10 +2,10 @@
  * 최고 관리자 테넌트 대리 접속(Impersonation / Ghost Login) 코디네이터
  */
 
-const IMPERSONATION_KEY = 'ep_impersonation_active';
-const IMPERSONATION_ORG_NAME_KEY = 'ep_impersonation_org_name';
-const IMPERSONATION_ORG_ID_KEY = 'ep_impersonation_org_id';
-const IMPERSONATION_ADMIN_EMAIL_KEY = 'ep_impersonation_admin_email';
+const IMPERSONATION_KEY = 'moa_impersonation_active';
+const IMPERSONATION_ORG_NAME_KEY = 'moa_impersonation_org_name';
+const IMPERSONATION_ORG_ID_KEY = 'moa_impersonation_org_id';
+const IMPERSONATION_ADMIN_EMAIL_KEY = 'moa_impersonation_admin_email';
 
 export interface ImpersonationState {
   isActive: boolean;
@@ -48,8 +48,7 @@ export function startImpersonation(
     session.setItem(IMPERSONATION_ORG_NAME_KEY, targetOrgName);
     session.setItem(IMPERSONATION_ADMIN_EMAIL_KEY, adminEmail);
     // 현재 접속 사업장 ID 동기화
-    local?.setItem('ep_current_organization_id', targetOrgId);
-    local?.removeItem('moa_current_organization_id');
+    local?.setItem('moa_current_organization_id', targetOrgId);
   } catch (err) {
     console.error('Failed to start impersonation:', err);
   }

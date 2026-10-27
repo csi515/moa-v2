@@ -20,16 +20,16 @@ function run() {
   assert.equal(resolveCreateBusinessPhone('  010-1111-2222  '), '010-1111-2222');
 
   const prepared = prepareCreateOrganizationInput({
-    name: 'EP_apps',
+    name: '모아피아노',
     representativeName: '김원장',
     businessAddress: '서울시 강남구 테헤란로 1',
     industryCategory: 'education',
   });
   assert.equal(prepared.businessPhone, null);
-  assert.equal(prepared.name, 'EP_apps');
+  assert.equal(prepared.name, '모아피아노');
 
   const preparedWithPhone = prepareCreateOrganizationInput({
-    name: 'EP_apps',
+    name: '모아피아노',
     representativeName: '김원장',
     businessPhone: '010-0000-0000',
     businessAddress: '서울시 강남구 테헤란로 1',
@@ -40,7 +40,7 @@ function run() {
   assert.throws(
     () =>
       prepareCreateOrganizationInput({
-        name: 'EP_apps',
+        name: '모아피아노',
         representativeName: '김원장',
         businessAddress: '',
         industryCategory: 'education',
@@ -50,7 +50,7 @@ function run() {
   assert.throws(
     () =>
       prepareCreateOrganizationInput({
-        name: 'EP_apps',
+        name: '모아피아노',
         representativeName: '',
         businessAddress: '서울시 강남구',
         industryCategory: 'education',
@@ -59,7 +59,7 @@ function run() {
   );
   assert.doesNotThrow(() =>
     prepareCreateOrganizationInput({
-      name: 'EP_apps',
+      name: '모아피아노',
       representativeName: '김원장',
       businessPhone: '',
       businessAddress: '서울시 강남구',
@@ -71,7 +71,7 @@ function run() {
   const sql = readFileSync(
     join(
       here,
-      '../../../../db/postgres/002_tenant.sql'
+      '../../../../supabase/migrations/20260925120000_create_organization_optional_phone.sql'
     ),
     'utf8'
   );
@@ -100,7 +100,7 @@ function run() {
     else if (ch === ')') depth -= 1;
     else if (ch === ',' && depth === 0) valueCount += 1;
   }
-  assert.equal(columns.length, 13);
+  assert.equal(columns.length, 16);
   assert.equal(valueCount, columns.length, 'INSERT 컬럼 수와 VALUES 수가 같아야 한다');
   assert.match(insert[2], /p_sigungu/);
   assert.equal(sql.includes("RAISE EXCEPTION '사업장 전화번호를 입력해 주세요.'"), false);

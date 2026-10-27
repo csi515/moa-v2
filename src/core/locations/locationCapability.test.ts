@@ -86,6 +86,26 @@ function run() {
   assert.equal(mapLocationRpcError({ message: 'Location code already exists' }).code, 'code');
   assert.equal(mapLocationRpcError({ message: 'Permission denied' }).code, 'permission');
 
+  const sql = readFileSync(join(root, 'supabase/migrations/20260924270000_organization_locations.sql'), 'utf8');
+  assert.match(sql, /CREATE TABLE core\.locations/);
+  assert.match(sql, /REFERENCES core\.organizations\(id\) ON DELETE CASCADE/);
+  assert.match(sql, /uq_locations_org_code/);
+  assert.match(sql, /uq_locations_org_slug/);
+  assert.match(sql, /UNIQUE \(organization_id, code\)/);
+  assert.match(sql, /is_org_member/);
+  assert.match(sql, /is_org_staff_actor/);
+  assert.match(sql, /is_org_owner_or_admin/);
+  assert.match(sql, /Organization mismatch/);
+  assert.match(sql, /ensure_default_organization_location/);
+  assert.match(sql, /organizations_default_location/);
+  assert.match(sql, /AFTER INSERT ON core\.organizations/);
+  assert.match(sql, /upsert_location/);
+  assert.match(sql, /set_location_active/);
+  assert.match(sql, /hours/);
+  assert.match(sql, /availability/);
+  assert.doesNotMatch(sql, /ALTER TABLE core\.(customers|staff|schedules|reservations|bookable_resources) .*location_id/);
+  assert.doesNotMatch(sql, /CREATE OR REPLACE FUNCTION core\.create_organization/);
+
   const repo = readFileSync(join(here, 'locationRepository.ts'), 'utf8');
   assert.match(repo, /eq\('organization_id', organizationId\)/);
   assert.match(repo, /from\('locations'\)/);

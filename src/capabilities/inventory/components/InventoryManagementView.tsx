@@ -38,27 +38,8 @@ import {
   type ExpiryAlertStatus,
 } from '../domain/inventoryEngine';
 
-const STORAGE_KEY_ITEMS = 'ep_inventory_items';
-const STORAGE_KEY_LOTS = 'ep_inventory_lots';
-const LEGACY_STORAGE_KEY_ITEMS = 'moa_inventory_items';
-const LEGACY_STORAGE_KEY_LOTS = 'moa_inventory_lots';
-
-function readLocalInventoryJson(key: string, legacyKey: string): string | null {
-  try {
-    const scoped = getTenantStorageKey(key);
-    const saved = localStorage.getItem(scoped);
-    if (saved) return saved;
-    const legacyScoped = getTenantStorageKey(legacyKey);
-    const legacy = localStorage.getItem(legacyScoped);
-    if (legacy) {
-      localStorage.setItem(scoped, legacy);
-      return legacy;
-    }
-  } catch {
-    /* ignore */
-  }
-  return null;
-}
+const STORAGE_KEY_ITEMS = 'moa_inventory_items';
+const STORAGE_KEY_LOTS = 'moa_inventory_lots';
 
 export interface InventoryManagementViewProps {
   title?: string;
@@ -79,7 +60,7 @@ const DEFAULT_INVENTORY_ITEMS: (InventoryItem & { location?: WarehouseLocation }
     currentStock: 45,
     safetyStock: 15,
     unitPrice: 25000,
-    vendorName: 'EP_apps',
+    vendorName: '(주)모아커피로스터스',
     location: { zoneId: 'ZONE-A (상온)', rackNo: 'RACK-01', binNo: 'BIN-03' },
   },
   {
@@ -203,7 +184,7 @@ export const InventoryManagementView: React.FC<InventoryManagementViewProps> = (
   // 로컬 폴백 상태
   const [localItems, setLocalItems] = useState<(InventoryItem & { location?: WarehouseLocation })[]>(() => {
     try {
-      const saved = readLocalInventoryJson(STORAGE_KEY_ITEMS, LEGACY_STORAGE_KEY_ITEMS);
+      const saved = localStorage.getItem(storageKeyItems);
       if (saved) return JSON.parse(saved);
     } catch {}
     return DEFAULT_INVENTORY_ITEMS;
@@ -211,7 +192,7 @@ export const InventoryManagementView: React.FC<InventoryManagementViewProps> = (
 
   const [lots, setLots] = useState<(StockLotItem & { location?: WarehouseLocation })[]>(() => {
     try {
-      const saved = readLocalInventoryJson(STORAGE_KEY_LOTS, LEGACY_STORAGE_KEY_LOTS);
+      const saved = localStorage.getItem(storageKeyLots);
       if (saved) return JSON.parse(saved);
     } catch {}
     return DEFAULT_LOTS;

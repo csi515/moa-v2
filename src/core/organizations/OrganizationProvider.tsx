@@ -20,12 +20,13 @@ import { getCoreClient } from '../../lib/supabase';
 import { StorageService } from '../../services/storage';
 import { runLoginAccountSync } from '../accounts/loginBootstrapService';
 import { applyOAuthSignupIntentIfAny } from '../auth/services/oauthSignupService';
+import { ensureGlobalParentProfile, fetchParentPortalTree } from '../parent/services/parentPortalService';
 import {
   isCustomerPortalModeActive,
   isParentPortalModeActive,
   setCustomerPortalModeActive,
   setParentPortalModeActive,
-} from './appPortalMode';
+} from '../parent/services/appModeService';
 import * as orgService from './services/organizationService';
 import { useGuardianDeepLinkPortalSync } from './hooks/useGuardianDeepLinkPortalSync';
 import {
@@ -238,9 +239,24 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
         console.warn('[org] runLoginAccountSync soft-fail:', err);
       }
 
-      // EP_apps: 학부모 포털 트리/프로필 조회 제거
-      const portalChildren = 0;
-      const parentId: string | null = null;
+      let portalChildren = 0;
+      let parentId: string | null = null;
+      try {
+        const tree = await fetchParentPortalTree();
+        portalChildren = tree.children.length;
+        parentId = tree.parent?.id ?? null;
+      } catch {
+        /* offline — parent 단정하지 않음 */
+      }
+
+      if (parentId === null) {
+        try {
+          parentId = await ensureGlobalParentProfile();
+        } catch {
+          /* offline */
+        }
+      }
+
       setGlobalParentId(parentId);
       setPortalChildCount(portalChildren);
 

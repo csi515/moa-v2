@@ -11,10 +11,10 @@ import type { Json, PaymentMethod as DbPaymentMethod, PaymentStatus } from '../.
 import type { StaffMetadata } from '../../types';
 import type { AcademySettings, Teacher } from '../../../../types';
 import type { Booking, ServiceOffering } from '../../../../core/types/schedule';
-import type { PickupAddress } from '@/types';
+import type { PickupAddress } from '../../../../core/transport/types';
 
 
-// ?€?€?€ Consultations ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
+// â”€â”€â”€ Consultations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function consultationToRow(cst: Consultation, organizationId: string) {
   return {

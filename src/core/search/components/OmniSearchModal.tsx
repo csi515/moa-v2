@@ -11,7 +11,6 @@ import {
   Clock,
   Trash2,
 } from 'lucide-react';
-import { appBrand } from '@/core/brand';
 import { useOptionalOrganization } from '../../organizations/OrganizationProvider';
 import { getCoreClient } from '../../../lib/supabase';
 import {
@@ -50,7 +49,7 @@ export const OmniSearchModal: React.FC<OmniSearchModalProps> = ({
   const organizationId = orgContext?.currentOrganization?.id || 'default_org';
   const supabaseClient = getCoreClient();
 
-  // 글로벌 단축키 (Ctrl+K or Cmd+K) 및 ep:command-palette 커스텀 이벤트 감지
+  // 글로벌 단축키 (Ctrl+K or Cmd+K) 및 moa:command-palette 커스텀 이벤트 감지
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // 텍스트 입력창이 아닐 때 '/' 키로 열기 지원 또는 Ctrl/Cmd+K
@@ -73,10 +72,10 @@ export const OmniSearchModal: React.FC<OmniSearchModalProps> = ({
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('ep:command-palette', handleCustomEvent);
+    window.addEventListener('moa:command-palette', handleCustomEvent);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('ep:command-palette', handleCustomEvent);
+      window.removeEventListener('moa:command-palette', handleCustomEvent);
     };
   }, [isOpen]);
 
@@ -290,7 +289,7 @@ export const OmniSearchModal: React.FC<OmniSearchModalProps> = ({
             <span><kbd className="font-semibold text-slate-600">↑↓</kbd> 이동</span>
             <span><kbd className="font-semibold text-slate-600">Enter</kbd> 선택</span>
           </div>
-          <span>{appBrand.shortName}</span>
+          <span>Moa-v2 OmniSearch Engine</span>
         </div>
       </div>
     </div>

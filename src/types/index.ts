@@ -1,5 +1,6 @@
-// @ts-nocheck
+import type { PickupAddress } from '@/capabilities/transport/types';
 import type { StaffGrants } from '@/core/staff/staffGrants';
+import type { StudentBillingMode } from '@/core/students/billingMode';
 import type { TeacherPayType } from '@/capabilities/billing/finance/billingLedgerTypes';
 
 /**
@@ -13,56 +14,14 @@ export type { User, UserRole } from '@/core/auth/types/sessionUser';
 
 export type StudentStatus = 'active' | 'leave' | 'withdrawn';
 
-/** 수강 상태 — 월회비 청구 vs 회차권 차감 */
-export type StudentBillingMode = 'monthly' | 'session_pass';
-
-export const STUDENT_BILLING_MODE_LABEL: Record<StudentBillingMode, string> = {
-  monthly: '월회비',
-  session_pass: '회차권',
-};
-
-export function normalizeBillingMode(
-  mode?: StudentBillingMode | string | null
-): StudentBillingMode {
-  return mode === 'session_pass' ? 'session_pass' : 'monthly';
-}
-
-export function isMonthlyBillingStudent(student: {
-  billingMode?: StudentBillingMode | string | null;
-}): boolean {
-  return normalizeBillingMode(student.billingMode) === 'monthly';
-}
-
-export function isSessionPassBillingStudent(student: {
-  billingMode?: StudentBillingMode | string | null;
-}): boolean {
-  return normalizeBillingMode(student.billingMode) === 'session_pass';
-}
-
-export function resolveDefaultBillingMode(
-  settingsMode?: StudentBillingMode | string | null
-): StudentBillingMode {
-  return normalizeBillingMode(settingsMode);
-}
-
-/** 차량 운행·학원 방향 */
-export type ShuttleDirection = 'pickup' | 'dropoff' | 'both';
-
-/** 학생별 승하차 주소 */
-export interface PickupAddress {
-  id: string;
-  label: string;
-  address: string;
-  detail?: string;
-  contactName?: string;
-  contactPhone?: string;
-  directions?: string;
-  shuttleDirection: ShuttleDirection;
-  isDefault?: boolean;
-}
+/** @deprecated 신규 코드는 `@/core/students/billingMode` */
+export type { StudentBillingMode } from '@/core/students/billingMode';
+/** @deprecated 신규 코드는 `@/core/students/billingMode` */
+export { STUDENT_BILLING_MODE_LABEL, normalizeBillingMode } from '@/core/students/billingMode';
 
 /**
  * @deprecated 전역 union 아님. 저장은 string. 값 검증은 Industry
+ * (`PianoStudentLevel`, `DaycareAgeClass`, `GymClassLevel`).
  */
 export type StudentLevel = string;
 
@@ -159,60 +118,14 @@ export interface ClassItem {
   color?: string;
 }
 
-/** 수업 출석 상태 (레거시 호환 인라인) */
-export type AttendanceStatus = 'present' | 'absent' | 'late' | 'early_leave' | 'make_up';
-
-export interface AttendanceRecord {
-  id: string;
-  date: string;
-  studentId: string;
-  studentName: string;
-  classId: string;
-  className: string;
-  status: AttendanceStatus;
-  absentReason?: string;
-  makeUpRequired?: boolean;
-  makeUpDate?: string;
-  makeUpStartTime?: string;
-  makeUpEndTime?: string;
-  makeUpRoom?: string;
-  makeUpTeacherId?: string;
-  makeUpTeacherName?: string;
-  memo?: string;
-  createdBy: string;
-  createdAt?: string;
-  sessionPassId?: string;
-}
-
-export type MakeupStatus = 'pending' | 'scheduled' | 'completed';
-
-export interface MakeupItem {
-  attendanceId: string;
-  studentId: string;
-  studentName: string;
-  parentPhone: string;
-  classId: string;
-  className: string;
-  originalDate: string;
-  absentReason?: string;
-  makeUpDate?: string;
-  makeUpStartTime?: string;
-  makeUpEndTime?: string;
-  makeUpRoom?: string;
-  makeUpTeacherId?: string;
-  makeUpTeacherName?: string;
-  status: MakeupStatus;
-  memo?: string;
-}
-
-export interface MakeupScheduleInput {
-  date: string;
-  startTime?: string;
-  endTime?: string;
-  room?: string;
-  teacherId?: string;
-  teacherName?: string;
-}
+/** @deprecated 신규 코드는 `@/capabilities/attendance` */
+export type {
+  AttendanceRecord,
+  AttendanceStatus,
+  MakeupItem,
+  MakeupScheduleInput,
+  MakeupStatus,
+} from '@/capabilities/attendance/domain/types';
 
 /** @deprecated 신규 코드는 `@/capabilities/billing/finance/billingLedgerTypes` */
 export type {
@@ -237,78 +150,14 @@ export type { PracticeRoomBooking, PracticeRoomBookingStatus } from '@/capabilit
 /** @deprecated 신규 코드는 `@/capabilities/consultation` */
 export type { Consultation, ConsultationType } from '@/capabilities/consultation/types';
 
-export interface PracticeRecord {
-  id: string;
-  studentId: string;
-  studentName: string;
-  date: string;
-  minutes: number;
-  songTitle: string;
-  textbook?: string;
-  page?: string;
-  homework?: string;
-  teacherEvaluation?: string;
-  difficultyPart?: string;
-  nextAssignment?: string;
-  source?: 'staff' | 'parent';
-  staffReviewed?: boolean;
-  staffReviewedAt?: string;
-  staffReviewNote?: string;
-  createdAt?: string;
-}
-
-export interface LessonRecord {
-  id: string;
-  studentId: string;
-  studentName: string;
-  date: string;
-  classId?: string;
-  className?: string;
-  songTitle: string;
-  progress: string;
-  lessonContent: string;
-  strengths?: string;
-  weaknesses?: string;
-  homework?: string;
-  nextPlan?: string;
-  teacherNotes?: string;
-  memo?: string;
-  teacherId: string;
-  teacherName: string;
-  createdAt?: string;
-}
-
-export type PerformanceVideoType = 'recital' | 'competition' | 'lesson' | 'practice' | 'other';
-
-export interface PerformanceVideo {
-  id: string;
-  studentId: string;
-  studentName: string;
-  title: string;
-  youtubeUrl: string;
-  recordedDate?: string;
-  eventType: PerformanceVideoType;
-  songTitle?: string;
-  memo?: string;
-  eventId?: string;
-  eventTitle?: string;
-  createdAt?: string;
-}
-
-export interface Song {
-  id: string;
-  title: string;
-  composer: string;
-  difficulty: string;
-  genre: string;
-  relatedTextbook?: string;
-  memo?: string;
-  publisher?: string;
-  level?: string;
-  resourceType?: 'textbook' | 'repertoire' | 'competition' | 'theory';
-  description?: string;
-  difficultyStars?: number;
-}
+/** @deprecated 신규 코드는 `@/core/lessons/types` */
+export type {
+  LessonRecord,
+  PerformanceVideo,
+  PerformanceVideoType,
+  PracticeRecord,
+  Song,
+} from '@/core/lessons/types';
 
 /** @deprecated 신규 코드는 `@/capabilities/commerce/textbookTypes` */
 export type {

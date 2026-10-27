@@ -26,7 +26,7 @@ export interface ActivityItem {
 }
 
 function getLocalActivityKey(orgId: string, targetType: string, targetId: string): string {
-  return getTenantStorageKey(`ep_activities_${orgId}_${targetType}_${targetId}`);
+  return getTenantStorageKey(`moa_activities_${orgId}_${targetType}_${targetId}`);
 }
 
 /**

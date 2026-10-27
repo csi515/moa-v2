@@ -32,6 +32,50 @@ export function countLessonsForTeacher(
   ).length;
 }
 
+export function countBookingsForStaff(
+  bookings: Array<{ staffId?: string; startsAt: string; status: string }>,
+  staffId: string,
+  yearMonth: string
+): number {
+  return bookings.filter(
+    (b) =>
+      b.staffId === staffId &&
+      b.startsAt.startsWith(yearMonth) &&
+      (b.status === 'completed' || b.status === 'confirmed')
+  ).length;
+}
+
+export interface StaffPerformanceMetrics {
+  lessonCount: number;
+  bookingCount: number;
+  workHours: number;
+  totalServiceUnits: number;
+}
+
+export function computeStaffPerformanceMetrics(params: {
+  staffId: string;
+  yearMonth: string;
+  lessons?: LessonRecord[];
+  bookings?: Array<{ staffId?: string; startsAt: string; status: string }>;
+  workHours?: number;
+}): StaffPerformanceMetrics {
+  const lessonCount = params.lessons
+    ? countLessonsForTeacher(params.lessons, params.staffId, params.yearMonth)
+    : 0;
+  const bookingCount = params.bookings
+    ? countBookingsForStaff(params.bookings, params.staffId, params.yearMonth)
+    : 0;
+  const workHours = params.workHours || 0;
+  const totalServiceUnits = lessonCount + bookingCount;
+
+  return {
+    lessonCount,
+    bookingCount,
+    workHours,
+    totalServiceUnits,
+  };
+}
+
 export function computePayrollAmount(params: {
   payType: TeacherPayType;
   quantity: number;
@@ -57,7 +101,7 @@ export function resolveDraftCalculated(
   return Math.max(0, Math.round(row.rate * draftQuantity));
 }
 
-/** 확정 시 실적 수량 결정 */
+/** 확정 전 실적 수량 결정 */
 export function resolveEditableQuantity(
   row: TeacherPayrollRow,
   quantityOverride?: number
@@ -97,7 +141,7 @@ export function formatPerformanceSummary(totals: TeacherPayrollTotals): {
 } {
   const parts = [
     totals.lessonTotal > 0 ? `수업 ${totals.lessonTotal}` : null,
-    totals.attendanceTotal > 0 ? `출석 ${totals.attendanceTotal}` : null,
+    totals.attendanceTotal > 0 ? `출근 ${totals.attendanceTotal}` : null,
     totals.workHoursTotal > 0 ? `근무 ${totals.workHoursTotal}h` : null,
   ].filter(Boolean) as string[];
 
@@ -105,7 +149,7 @@ export function formatPerformanceSummary(totals: TeacherPayrollTotals): {
     totals.lessonTotal > 0
       ? `수업 ${totals.lessonTotal}회`
       : totals.attendanceTotal > 0
-        ? `출석 ${totals.attendanceTotal}회`
+        ? `출근 ${totals.attendanceTotal}회`
         : totals.workHoursTotal > 0
           ? `${totals.workHoursTotal}시간`
           : '-';

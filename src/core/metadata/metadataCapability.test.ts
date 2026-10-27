@@ -110,6 +110,23 @@ function run() {
   assert.equal(fromMetaOnly.sessionPassId, 'p-meta');
   assert.equal(fromMetaOnly.roomName, '메타실');
 
+  const sql = readFileSync(
+    join(root, 'supabase/migrations/20260924330000_schedule_metadata_promotion.sql'),
+    'utf8'
+  );
+  assert.match(sql, /ADD COLUMN IF NOT EXISTS session_pass_id/);
+  assert.match(sql, /ADD COLUMN IF NOT EXISTS room TEXT/);
+  assert.match(sql, /ADD COLUMN IF NOT EXISTS room_id TEXT/);
+  assert.match(sql, /core\.schedule_session_pass_id/);
+  assert.match(sql, /core\.schedule_teacher_ref/);
+  assert.match(sql, /metadata->>'sessionPassId'/);
+  assert.match(sql, /metadata->>'teacherId'/);
+  assert.match(sql, /metadata->>'room'/);
+  assert.match(sql, /session_pass_id = v_pass_id/);
+  assert.match(sql, /jsonb_set\(v_meta, '\{sessionPassId\}'/);
+  assert.doesNotMatch(sql, /ALTER TABLE core\.(customers|services|payments)/);
+  assert.doesNotMatch(sql, /DROP COLUMN metadata/);
+
   console.log('metadataCapability.test.ts: ok');
 }
 

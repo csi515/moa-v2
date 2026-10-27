@@ -1,7 +1,7 @@
 import type { Parent, Student } from '../../types';
 import { STORAGE_KEYS } from '../adapters';
 import { deleteById, generateEntityId, getItem, setItem, type StorageApi } from './helpers';
-import { isMonthlyBillingStudent } from '@/types';
+import { isMonthlyBillingStudent } from '@/core/students/billingMode';
 
 /** 원생·학부모 CRUD */
 export function createCustomerStorage(api: StorageApi) {

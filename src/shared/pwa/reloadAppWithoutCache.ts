@@ -1,6 +1,5 @@
 export async function reloadAppWithoutCache(): Promise<void> {
   try {
-    window.sessionStorage.removeItem('ep.vitePreloadRecovery');
     window.sessionStorage.removeItem('moa.vitePreloadRecovery');
     if ('caches' in window) {
       const keys = await caches.keys();

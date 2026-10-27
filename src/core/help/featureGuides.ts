@@ -1,8 +1,7 @@
-// @ts-nocheck
 import {
   PIN_ATTENDANCE_DIRECTOR_COPY,
   PIN_ATTENDANCE_PARENT_COPY,
-} from '@/core/organizations/attendanceSettingsStub';
+} from '@/core/attendance/attendanceNotifyCopy';
 import { showsAdultPracticeGuide, showsStaffPracticeGuide } from '@/core/industry/industryUi';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
 import {
@@ -187,7 +186,7 @@ const PIANO_GUIDE: FeatureGuideSection[] = [
     tuitionTitle: '수강료 및 수납',
     tuitionSummary:
       '월회비 학생의 청구서를 만들고 입금을 기록합니다. 설정에서 교재·연주회비를 월 청구에 합산할 수 있습니다. 회차권 학생은 월 청구에서 제외됩니다.',
-    unpaidSummary: '미납 학생을 한 목록에서 보고 연락·수납을 이어갑니다.',
+    unpaidSummary: '미납 학생을 모아 보고 연락·수납을 이어갑니다.',
   }),
   buildGuideSection({
     id: 'passes',
@@ -370,7 +369,7 @@ const GYM_GUIDE: FeatureGuideSection[] = [
     description: '수강료 청구·미납을 관리합니다.',
     tuitionTitle: '수강료 및 수납',
     tuitionSummary: '월 수강료 청구서를 만들고 입금을 기록합니다.',
-    unpaidSummary: '미납 회원을 한 목록에서 보고 연락·수납을 이어갑니다.',
+    unpaidSummary: '미납 회원을 모아 보고 연락·수납을 이어갑니다.',
   }),
   buildStaffSection({
     title: '지도진',
@@ -474,7 +473,7 @@ const DAYCARE_GUIDE: FeatureGuideSection[] = [
     description: '보육료 청구·미납을 관리합니다.',
     tuitionTitle: '보육료 및 수납',
     tuitionSummary: '월 보육료 청구서를 만들고 입금을 기록합니다.',
-    unpaidSummary: '미납 원아를 한 목록에서 보고 연락·수납을 이어갑니다.',
+    unpaidSummary: '미납 원아를 모아 보고 연락·수납을 이어갑니다.',
   }),
   buildStaffSection({
     title: '보육 인력',
@@ -605,7 +604,7 @@ const ADULT_STUDENT_PORTAL_SECTIONS: FeatureGuideSection[] = [
       {
         id: 'adult-schedule',
         title: '일정',
-        summary: '오늘·이번 주 수업과 연습실 예약을 한 화면에서 봅니다.',
+        summary: '오늘·이번 주 수업과 연습실 예약을 모아서 봅니다.',
       },
       {
         id: 'adult-attendance',

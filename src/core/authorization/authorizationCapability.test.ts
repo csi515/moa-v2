@@ -173,6 +173,51 @@ function run() {
   assert.equal(defaultPermissionsForRole('admin').length, PERMISSION_KEYS.length);
   assert.equal(STAFF_DEFAULT_PERMISSIONS.includes('staff.manage'), false);
 
+  const sql = [
+    readFileSync(
+      join(root, 'supabase/migrations/20260924280000_authorization_permission_scope.sql'),
+      'utf8'
+    ),
+    readFileSync(
+      join(root, 'supabase/migrations/20260924380000_locations_read_permission.sql'),
+      'utf8'
+    ),
+  ].join('\n');
+  assert.match(sql, /CREATE TABLE core\.permission_catalog/);
+  assert.match(sql, /CREATE TABLE core\.authorization_grants/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.has_permission/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.is_known_permission/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.role_has_default_permission/);
+  assert.match(sql, /is_org_admin\(p_organization_id\)/);
+  assert.match(sql, /is_org_staff_actor\(p_organization_id\)/);
+  assert.doesNotMatch(sql, /DROP FUNCTION core\.is_org_admin/);
+  assert.doesNotMatch(sql, /DROP FUNCTION core\.is_org_staff_actor/);
+  assert.doesNotMatch(sql, /DROP FUNCTION core\.rls_staff_or_admin/);
+  assert.doesNotMatch(sql, /DROP POLICY IF EXISTS/);
+  for (const row of PERMISSION_DEFINITIONS) {
+    assert.match(sql, new RegExp(`'${row.key}'`));
+  }
+  for (const permission of STAFF_DEFAULT_PERMISSIONS) {
+    assert.match(sql, new RegExp(`'${permission}'`));
+  }
+
+  const helpers = readFileSync(
+    join(root, 'supabase/migrations/20260921170000_multi_role_permission_helpers.sql'),
+    'utf8'
+  );
+  assert.match(helpers, /CREATE OR REPLACE FUNCTION core\.is_org_admin/);
+  assert.match(helpers, /ARRAY\['owner', 'admin', 'manager'\]/);
+
+  const actor = readFileSync(
+    join(root, 'supabase/migrations/20260922180000_retail_staff_sale_permissions.sql'),
+    'utf8'
+  );
+  assert.match(actor, /CREATE OR REPLACE FUNCTION core\.is_org_staff_actor/);
+
+  assert.equal(resolveRoleAccessKind('owner'), 'admin');
+  assert.equal(resolveRoleAccessKind('staff'), 'staff');
+  assert.equal(resolveRoleAccessKind('customer'), 'none');
+
   console.log('authorizationCapability.test.ts: ok');
 }
 

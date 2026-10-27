@@ -6,6 +6,7 @@ import { usePermissions } from '@/core/auth/usePermissions';
 import { getCustomerListTab, getPlaceLabel } from '@/core/industry/industryUi';
 import { useModuleLabels } from '@/core/labels';
 import { PageHeader, SegmentedControl } from '@/shared/components';
+import { ParentManagementView } from '@/core/parent/components/ParentManagementView';
 import { CustomerJoinRequestsPanel } from '@/core/customer/CustomerJoinRequestsPanel';
 
 type CustomerSegment = 'list' | 'parents' | 'enrollment';
@@ -60,11 +61,7 @@ export const CustomerHubView: FC<{
 
   let body = <ListView />;
   if (segment === 'parents') {
-    body = (
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 text-xs text-slate-500">
-        보호자 관리 기능은 이 앱에서 제공하지 않습니다.
-      </div>
-    );
+    body = <ParentManagementView />;
   } else if (segment === 'enrollment') {
     body = GuardianView ? (
       <GuardianView />

@@ -160,7 +160,7 @@ export const LoginPage: React.FC = () => {
               <span className="text-xs font-semibold tracking-wider text-indigo-400 uppercase">
                 {appBrand.acronym}
               </span>
-              <h2 className="text-xl font-extrabold tracking-tight">{appBrand.shortName}</h2>
+              <h2 className="text-xl font-extrabold tracking-tight">모아</h2>
             </div>
           </div>
 
@@ -227,7 +227,7 @@ export const LoginPage: React.FC = () => {
             <div className="inline-flex items-center justify-center w-13 h-13 bg-indigo-600 rounded-2xl text-white shadow-lg shadow-indigo-100 mb-3">
               <Layers className="w-7 h-7" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900">{appBrand.shortName}</h1>
+            <h1 className="text-2xl font-bold text-slate-900">모아</h1>
             <p className="text-xs text-slate-500 mt-1">
               {appBrand.description}
             </p>

@@ -458,7 +458,7 @@ const SafetyConsentSigningModal: React.FC<SigningModalProps> = ({ templates, onC
       signerPhone: signerPhone.trim(),
       agreedClauseIds: agreedList,
       signatureDataUrl: dataUrl,
-      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'EP_apps Client',
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Moa-v2 Client',
     });
 
     if (!result.success || !result.auditRecord) {

@@ -1,21 +1,5 @@
-// @ts-nocheck
-import type { Json } from '@/lib/supabase/database.types';
-
-export type CheckInMethod = 'pin' | 'qr' | 'nfc' | 'kiosk' | 'manual';
-
-export interface AttendanceSession {
-  id: string;
-  customerId: string;
-  customerName: string;
-  sessionDate: string;
-  checkInAt?: string;
-  checkOutAt?: string;
-  checkInMethod?: CheckInMethod;
-  checkOutMethod?: CheckInMethod;
-  memo?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
+﻿import type { Json } from '@/lib/supabase/database.types';
+import type { AttendanceSession, CheckInMethod } from '@/capabilities/attendance/types';
 
 type DbCheckInMethod = 'pin' | 'qr' | 'nfc' | 'kiosk' | 'manual';
 
@@ -55,19 +39,21 @@ export function coreRowToSession(row: {
     sessionDate: row.session_date,
     checkInAt: row.check_in_at || undefined,
     checkOutAt: row.check_out_at || undefined,
-    checkInMethod: row.check_in_method || undefined,
-    checkOutMethod: row.check_out_method || undefined,
+    checkInMethod: (row.check_in_method as CheckInMethod) || undefined,
+    checkOutMethod: (row.check_out_method as CheckInMethod) || undefined,
     memo: row.memo || undefined,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
 }
 
-/** 고객 PIN 해시 → 로컬 미러 행 (학원 출결 잔여 호환) */
-export function pinRowsFromCustomers(
-  customers: Array<{ id: string; check_in_pin_hash?: string | null }>
-): Array<{ customerId: string; pinHash: string }> {
-  return customers
-    .filter((c) => Boolean(c.check_in_pin_hash))
-    .map((c) => ({ customerId: c.id, pinHash: String(c.check_in_pin_hash) }));
+export interface CustomerPinRow {
+  id: string;
+  check_in_pin_hash: string | null;
+}
+
+export function pinRowsFromCustomers(rows: CustomerPinRow[]): { customerId: string; pinHash: string }[] {
+  return rows
+    .filter((r) => r.check_in_pin_hash)
+    .map((r) => ({ customerId: r.id, pinHash: r.check_in_pin_hash! }));
 }

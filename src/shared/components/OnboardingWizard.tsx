@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { StorageService } from '@/services/storage';

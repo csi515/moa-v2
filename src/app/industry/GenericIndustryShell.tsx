@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { type FC, type ReactNode, useMemo, useState, useEffect, lazy, Suspense } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { CAPABILITY_LIST_VIEWS } from './capabilityListViews';
@@ -47,13 +46,9 @@ const WorkplaceSettingsView = lazy(() =>
 const WorkspaceIntranetHubPage = lazy(() =>
   import('@/pages/workspace/WorkspaceIntranetHubPage').then((m) => ({ default: m.WorkspaceIntranetHubPage }))
 );
-const AttendanceView = lazy(async () => ({
-  default: () => (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500">
-      출결 모듈은 이 앱에서 제공하지 않습니다.
-    </div>
-  ),
-}));
+const AttendanceView = lazy(() =>
+  import('@/capabilities/attendance').then((m) => ({ default: m.AttendanceManagementView }))
+);
 const BookingView = lazy(() =>
   import('@/capabilities/booking/ui/BookingCalendarView').then((m) => ({ default: m.BookingCalendarView }))
 );
@@ -66,17 +61,11 @@ const PassesView = lazy(() =>
 const LockersView = lazy(() =>
   import('@/pages/lockers/grid').then((m) => ({ default: m.LockersGridPage }))
 );
-const ConsultationView = lazy(async () => ({
-  default: () => (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500">
-      상담 모듈은 이 앱에서 제공하지 않습니다.
-    </div>
-  ),
-}));
+const ConsultationView = lazy(() =>
+  import('@/capabilities/consultation').then((m) => ({ default: m.ConsultationRecordsView }))
+);
 const InventoryView = lazy(() =>
-  import('@/capabilities/inventory/components/InventoryManagementView').then((m) => ({
-    default: m.InventoryManagementView,
-  }))
+  import('@/industries/retail/components/inventory/InventoryListView').then((m) => ({ default: m.InventoryListView }))
 );
 const SafetyConsentView = lazy(() =>
   import('@/capabilities/safety_consent').then((m) => ({ default: m.SafetyConsentManagementView }))

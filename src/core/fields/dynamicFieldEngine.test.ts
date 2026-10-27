@@ -44,12 +44,12 @@ describe('Universal Dynamic Entity Custom Fields Engine (DECFE)', () => {
       _schema_version: 1,
       _preset_id: 'piano',
       custom_fields: {
-        school_name: 'EP_apps',
+        school_name: '모아초등학교',
       },
     };
 
     const extractedFromUms = extractEntityCustomValues(umsMetadata, fields);
-    assert.equal(extractedFromUms.school_name, 'EP_apps');
+    assert.equal(extractedFromUms.school_name, '모아초등학교');
     assert.equal(extractedFromUms.grade, 1); // 기본값 폴백
 
     // 레거시 Flat 구조

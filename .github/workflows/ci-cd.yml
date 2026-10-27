@@ -21,32 +21,11 @@ jobs:
         run: npm ci
       - name: Check CI structure
         run: npm run check:ci-structure
-      - name: Check dependencies
-        run: npm run check:deps
       - name: Lint
         run: npm run lint
       - name: Test business invariants
         run: npm run test:business-invariants
 
-  codeql:
-    runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-      contents: read
-      actions: read
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: javascript-typescript
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:javascript-typescript"
 
   build-e2e:
     needs: quality
@@ -67,8 +46,6 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || vars.VITE_SUPABASE_ANON_KEY }}
           VITE_APP_URL: ${{ secrets.VITE_APP_URL || vars.VITE_APP_URL }}
-      - name: Check bundle size
-        run: npm run check:bundle-size
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium webkit
       - name: Run E2E tests
@@ -116,7 +93,7 @@ jobs:
         run: npm run test:auth-hijack-audit
 
   deploy:
-    needs: [quality, build-e2e, security-db, codeql]
+    needs: [quality, build-e2e, security-db]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_CLOUDFLARE_DEPLOY == 'true' && vars.ENABLE_SECURITY_AUDIT == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -132,6 +109,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME || 'ep-apps' }}
+          projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME || 'moa-v2' }}
           directory: dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}

@@ -365,6 +365,7 @@ export interface IndustryPresetDefinition {
   roles?: readonly PresetRoleTemplate[];
   onboardingSteps?: readonly string[];
   readinessLevel?: PresetReadinessLevel;
+  hiddenInMoa?: boolean;
 }
 
 export interface AssembledPresetResult {
@@ -386,7 +387,7 @@ export interface CapabilityModuleBundle {
 // Legacy Plugin Facade Contracts (레거시 업종 플러그인 호환 어댑터 계약)
 //
 // [아키텍처 원칙]
-// EP_apps의 최종 아키텍처는 Core – Capability – Preset 3계층으로 단일화되며,
+// Moa-v2의 최종 아키텍처는 Core – Capability – Preset 3계층으로 단일화되며,
 // 별도의 Domain Capability 계층은 존재하지 않습니다.
 //
 // 아래의 *CapabilityConfig 및 PresetManifest 타입은 기존 레거시 업종 모듈(피아노,

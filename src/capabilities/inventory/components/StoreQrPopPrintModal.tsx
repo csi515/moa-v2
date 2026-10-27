@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Printer, Smartphone, CheckCircle, Sparkles, Building2, QrCode } from 'lucide-react';
-import { appBrand } from '@/core/brand';
-import { getPublicAppBaseUrl } from '@/core/platform/appBaseUrl';
 import { Modal } from '@/shared/components';
 import { QrCodeSvg } from './BarcodeQrSvg';
 
@@ -16,8 +14,8 @@ export interface StoreQrPopPrintModalProps {
 export const StoreQrPopPrintModal: React.FC<StoreQrPopPrintModalProps> = ({
   isOpen,
   onClose,
-  organizationName = '사업장',
-  organizationCode = 'EP-STORE-01',
+  organizationName = '모아 비즈니스 스토어',
+  organizationCode = 'MOA-STORE-01',
   industryLabel = '스마트 매장',
 }) => {
   const [popPaperSize, setPopPaperSize] = useState<'A4' | 'A5'>('A4');
@@ -25,8 +23,7 @@ export const StoreQrPopPrintModal: React.FC<StoreQrPopPrintModalProps> = ({
     '스마트폰 카메라로 QR 코드를 비추시면 간편 출결 체크인 및 상품 스마트 주문을 바로 이용하실 수 있습니다.'
   );
 
-  const appBase = getPublicAppBaseUrl().replace(/\/+$/, '');
-  const qrTargetUrl = `${appBase}/store/${encodeURIComponent(organizationCode)}`;
+  const qrTargetUrl = `https://moa.app/store/${encodeURIComponent(organizationCode)}`;
 
   const handlePrint = () => {
     window.print();
@@ -185,7 +182,7 @@ export const StoreQrPopPrintModal: React.FC<StoreQrPopPrintModalProps> = ({
 
             {/* 풋터 */}
             <div className="pt-6 text-center text-[11px] text-slate-400 font-medium">
-              Powered by {appBrand.shortName}
+              Powered by Moa Platform · 사업장 스마트 운영 솔루션
             </div>
           </div>
         </div>

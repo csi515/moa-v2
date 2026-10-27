@@ -6,7 +6,7 @@ import { shouldRefreshSession } from './mobileLifecyclePolicy';
 export { shouldRefreshSession } from './mobileLifecyclePolicy';
 
 /** foreground 복귀 — Org soft refresh / offline hydrate 재시도 등 */
-export const MOBILE_FOREGROUND_EVENT = 'ep:mobile-foreground';
+export const MOBILE_FOREGROUND_EVENT = 'moa:mobile-foreground';
 
 export function notifyMobileForeground(): void {
   if (typeof window === 'undefined') return;

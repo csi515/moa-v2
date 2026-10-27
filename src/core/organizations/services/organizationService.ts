@@ -29,8 +29,7 @@ export {
   resolveCreateBusinessRegistrationNumber,
 } from './createOrganizationInput';
 
-const ORG_STORAGE_KEY = 'ep_current_organization_id';
-const LEGACY_ORG_STORAGE_KEY = 'moa_current_organization_id';
+const ORG_STORAGE_KEY = 'moa_current_organization_id';
 
 /** 사업장은 만들어졌지만 기본 지점 준비가 실패한 경우 */
 export class OrganizationLocationSetupError extends Error {
@@ -119,37 +118,15 @@ export interface OrganizationMembership {
 }
 
 export function getStoredOrganizationId(): string | null {
-  try {
-    const current = localStorage.getItem(ORG_STORAGE_KEY);
-    if (current) return current;
-    const legacy = localStorage.getItem(LEGACY_ORG_STORAGE_KEY);
-    if (legacy) {
-      localStorage.setItem(ORG_STORAGE_KEY, legacy);
-      localStorage.removeItem(LEGACY_ORG_STORAGE_KEY);
-      return legacy;
-    }
-  } catch {
-    return null;
-  }
-  return null;
+  return localStorage.getItem(ORG_STORAGE_KEY);
 }
 
 export function storeOrganizationId(organizationId: string): void {
   localStorage.setItem(ORG_STORAGE_KEY, organizationId);
-  try {
-    localStorage.removeItem(LEGACY_ORG_STORAGE_KEY);
-  } catch {
-    /* ignore */
-  }
 }
 
 export function clearStoredOrganizationId(): void {
   localStorage.removeItem(ORG_STORAGE_KEY);
-  try {
-    localStorage.removeItem(LEGACY_ORG_STORAGE_KEY);
-  } catch {
-    /* ignore */
-  }
 }
 
 export async function fetchUserOrganizations(userId: string): Promise<OrganizationMembership[]> {

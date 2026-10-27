@@ -11,7 +11,7 @@ function run(): void {
   console.log('[TEST] settingsStorage: mergeOrganizationSettings & Partition Preservation');
 
   const baseSettings: AcademySettings = {
-    name: 'EP_apps',
+    name: '모아 통합 사업장',
     address: '서울시 강남구 테헤란로 123',
     phone: '02-1234-5678',
     directorName: '김대표',

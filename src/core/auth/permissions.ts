@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { NavTab } from '@/shared/navigation/navigationTypes';
 import type { IndustryType } from '@/core/industry/types';
 import { getOwnerLabel } from '@/core/industry/industryUi';
@@ -6,15 +5,8 @@ import { getIndustryPlugin } from '@/core/industry/registry';
 import { withOwnerFinanceTabs } from '@/core/industry/pluginTypes';
 import { filterIndustryNavTabs } from '@/core/industry/catalog';
 import type { UserRole } from '@/types';
+import { isAttendanceModuleEnabled } from '@/core/attendance/features';
 import type { AcademySettings } from '@/types';
-
-/** EP_apps: 출결 모듈 제거 — 설정 플래그가 명시적으로 true일 때만 허용 */
-function isAttendanceModuleEnabled(
-  settings?: AcademySettings | null,
-  _industry?: unknown
-): boolean {
-  return settings?.features?.attendance?.enabled === true;
-}
 import {
   isOrgOwner,
   resolveRoleAccessKind,

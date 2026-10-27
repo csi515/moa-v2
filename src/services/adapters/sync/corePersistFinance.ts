@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { TuitionInvoice, TuitionPayment } from '../../../types';
 import { writeLocal } from '../localStorageEngine';
 import { STORAGE_KEYS } from '../storageKeys';
@@ -9,8 +8,8 @@ import {
   settlementToCoreRow,
   tuitionPaymentToTransactionRow,
 } from './financeEntityMappers';
-import type { FinanceExpense, IncomeEntry } from '@/capabilities/billing/finance/types';
-import type { TeacherPayrollSettlement } from '@/capabilities/billing/finance/teacherPayroll/settlements';
+import type { FinanceExpense, IncomeEntry } from '../../../core/finance/types';
+import type { TeacherPayrollSettlement } from '../../../core/finance/teacherPayroll/settlements';
 import type { PersistAbortGuard, SyncCache } from './syncTypes';
 import { requireCacheList, runRowUpserts } from './persistHelpers';
 import type { CoreClient } from './corePersistSyncTable';

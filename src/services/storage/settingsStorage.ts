@@ -1,26 +1,8 @@
-// @ts-nocheck
 import type { AcademySettings, User } from '../../types';
 import { STORAGE_KEYS } from '../adapters';
 import { getIndustryType } from '../adapters/storageContext';
 import { isAppointmentIndustry } from '@/core/industry/industryUi';
-function resolveAttendanceEnabledForBackfill(input: {
-  settings: AcademySettings;
-  hasPinOrSessionData: boolean;
-}): { changed: boolean; settings: AcademySettings } {
-  const current = input.settings.features?.attendance?.enabled;
-  if (current !== undefined) return { changed: false, settings: input.settings };
-  const enabled = input.hasPinOrSessionData;
-  return {
-    changed: true,
-    settings: {
-      ...input.settings,
-      features: {
-        ...(input.settings.features ?? {}),
-        attendance: { enabled },
-      },
-    },
-  };
-}
+import { resolveAttendanceEnabledForBackfill } from '../../core/attendance/features';
 import { DEFAULT_SETTINGS, getItem, setItem, type StorageApi } from './helpers';
 import { storageApi } from './storageApi';
 

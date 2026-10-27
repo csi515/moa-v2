@@ -55,7 +55,7 @@ export default defineConfig({
             if (id.includes("/zod/")) {
               return "zod-vendor";
             }
-            if (id.includes("/exceljs/") || id.includes("/xlsx/")) {
+            if (id.includes("/xlsx/")) {
               return "xlsx-vendor";
             }
             if (id.includes("recharts")) {

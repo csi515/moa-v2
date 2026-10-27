@@ -1,8 +1,8 @@
 /** PWA 홈 화면 추가 안내 문구 */
 export const PWA_INSTALL_COPY = {
-  title: (shortName: string) => `홈 화면에 ${shortName} 추가`,
+  title: (shortName: string) => `${shortName}를 홈 화면에 추가`,
   body: (shortName: string) =>
-    `${shortName} 앱을 홈 화면에 추가하면 수업 및 등하원 알림을 무료로 받아보실 수 있습니다.`,
+    `${shortName}(Moa)를 홈 화면에 추가하면 수업 및 등하원 알림을 무료로 받아보실 수 있습니다.`,
   installCta: '홈 화면에 추가',
   laterCta: '나중에',
   gotItCta: '확인했어요',

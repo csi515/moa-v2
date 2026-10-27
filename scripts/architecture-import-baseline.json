@@ -1,0 +1,917 @@
+[
+  {
+    "file": "src/core/attendance/attendanceClassKey.ts",
+    "spec": "@/capabilities/attendance/domain/attendanceClassKey",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/attendance/attendanceIndustryCopy.ts",
+    "spec": "@/capabilities/attendance/attendanceIndustryCopy",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/attendance/attendanceNotifyCopy.ts",
+    "spec": "@/capabilities/attendance/domain/attendanceNotifyCopy",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/attendance/dayAttendance.ts",
+    "spec": "@/capabilities/attendance/dayAttendance",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/attendance/features.ts",
+    "spec": "@/capabilities/attendance/domain/features",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/attendance/index.ts",
+    "spec": "@/capabilities/attendance",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/attendance/pinCheckInSideEffects.ts",
+    "spec": "@/capabilities/attendance/pinCheckInSideEffects",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/attendance/services/attendanceService.ts",
+    "spec": "@/capabilities/attendance/application/attendanceService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/attendance/types.ts",
+    "spec": "@/capabilities/attendance/domain/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/calendar/fallbackHolidays.ts",
+    "spec": "@/capabilities/scheduling/calendar/fallbackHolidays",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/calendar/index.ts",
+    "spec": "@/capabilities/scheduling/calendar/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/calendar/services/publicHolidayService.ts",
+    "spec": "@/capabilities/scheduling/calendar/services/publicHolidayService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/calendar/types.ts",
+    "spec": "@/capabilities/scheduling/calendar/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/calendar/usePublicHolidays.ts",
+    "spec": "@/capabilities/scheduling/calendar/usePublicHolidays",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/capabilities/capabilityDependency.test.ts",
+    "spec": "@/capabilities/_shared/capabilityTypes",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/capabilities/capabilityDependency.ts",
+    "spec": "../presets/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/index.ts",
+    "spec": "@/capabilities/commerce",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/inventory/index.ts",
+    "spec": "@/capabilities/commerce/facade/inventory/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/payment/index.ts",
+    "spec": "@/capabilities/commerce/facade/payment/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/product/index.ts",
+    "spec": "@/capabilities/commerce/facade/product/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/return/index.ts",
+    "spec": "@/capabilities/commerce/facade/return/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/sale/customerPurchaseService.ts",
+    "spec": "@/capabilities/commerce/facade/sale/customerPurchaseService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/sale/index.ts",
+    "spec": "@/capabilities/commerce/facade/sale/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/sale/revenueAggregate.ts",
+    "spec": "@/capabilities/commerce/facade/sale/revenueAggregate",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/sale/revenueService.ts",
+    "spec": "@/capabilities/commerce/facade/sale/revenueService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/sale/revenueTypes.ts",
+    "spec": "@/capabilities/commerce/facade/sale/revenueTypes",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/sale/saleHistoryService.ts",
+    "spec": "@/capabilities/commerce/facade/sale/saleHistoryService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/sale/saleQuery.ts",
+    "spec": "@/capabilities/commerce/facade/sale/saleQuery",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/commerce/storeCapability.ts",
+    "spec": "@/capabilities/commerce/facade/storeCapability",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/finance/billingIncomeLink.ts",
+    "spec": "@/capabilities/billing/finance/billingIncomeLink",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/finance/index.ts",
+    "spec": "@/capabilities/billing",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/finance/paymentMethodLabels.ts",
+    "spec": "@/capabilities/billing/finance/paymentMethodLabels",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/finance/teacherPayroll/index.ts",
+    "spec": "@/capabilities/billing/finance/teacherPayroll/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/finance/teacherPayroll/settlements.ts",
+    "spec": "@/capabilities/billing/finance/teacherPayroll/settlements",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/finance/types.ts",
+    "spec": "@/capabilities/billing/finance/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/finance/types.ts",
+    "spec": "@/capabilities/billing/finance/billingLedgerTypes",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/industry/IndustryAdapter.ts",
+    "spec": "@/core/presets/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/invariants/capabilityPacksAndFinanceIsolation.invariant.test.ts",
+    "spec": "@/capabilities/billing/finance/teacherPayroll/calc",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/invariants/pointBalance.invariant.test.ts",
+    "spec": "@/capabilities/commerce/loyalty/earnPolicy",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/invariants/pointBalance.invariant.test.ts",
+    "spec": "@/capabilities/commerce/loyalty/saleReturnPointPlan",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/inventory/index.ts",
+    "spec": "@/capabilities/commerce/stock/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/inventory/inventoryService.ts",
+    "spec": "@/capabilities/commerce/stock/inventoryService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/inventory/mapStockMovementRpcError.ts",
+    "spec": "@/capabilities/commerce/stock/mapStockMovementRpcError",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/inventory/saleStockAggregate.ts",
+    "spec": "@/capabilities/commerce/stock/saleStockAggregate",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/inventory/stockSaleOps.ts",
+    "spec": "@/capabilities/commerce/stock/stockSaleOps",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/inventory/types.ts",
+    "spec": "@/capabilities/commerce/stock/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/loyalty/earnPolicy.ts",
+    "spec": "@/capabilities/commerce/loyalty/earnPolicy",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/loyalty/index.ts",
+    "spec": "@/capabilities/commerce/loyalty/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/loyalty/pointEarnService.ts",
+    "spec": "@/capabilities/commerce/loyalty/pointEarnService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/loyalty/pointQueryService.ts",
+    "spec": "@/capabilities/commerce/loyalty/pointQueryService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/loyalty/pointRedeemService.ts",
+    "spec": "@/capabilities/commerce/loyalty/pointRedeemService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/loyalty/pointReturnService.ts",
+    "spec": "@/capabilities/commerce/loyalty/pointReturnService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/loyalty/saleReturnPointPlan.ts",
+    "spec": "@/capabilities/commerce/loyalty/saleReturnPointPlan",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/loyalty/types.ts",
+    "spec": "@/capabilities/commerce/loyalty/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/presets/operationBundles.test.ts",
+    "spec": "@/capabilities/_shared/capabilityTypes",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/presets/operationBundles.ts",
+    "spec": "../capabilities/capabilityDependency",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/presets/presetAssembler.test.ts",
+    "spec": "../../app/presets/presetAssembler.test",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/product/index.ts",
+    "spec": "@/capabilities/commerce/catalog/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/product/productService.ts",
+    "spec": "@/capabilities/commerce/catalog/productService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/product/types.ts",
+    "spec": "@/capabilities/commerce/catalog/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/resources/index.ts",
+    "spec": "@/capabilities/resources",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/sales/index.ts",
+    "spec": "@/capabilities/commerce/saleLedger/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/sales/mapCreateSaleRpcError.ts",
+    "spec": "@/capabilities/commerce/saleLedger/mapCreateSaleRpcError",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/sales/saleReturnPlan.ts",
+    "spec": "@/capabilities/commerce/saleLedger/saleReturnPlan",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/sales/saleReturnService.ts",
+    "spec": "@/capabilities/commerce/saleLedger/saleReturnService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/sales/saleService.ts",
+    "spec": "@/capabilities/commerce/saleLedger/saleService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/sales/types.ts",
+    "spec": "@/capabilities/commerce/saleLedger/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/classAttendanceLedger.ts",
+    "spec": "@/capabilities/attendance/domain/classAttendanceLedger",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/makeupScheduleAtomic.test.ts",
+    "spec": "@/capabilities/scheduling/utils/scheduleConflicts",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/transport/index.ts",
+    "spec": "@/capabilities/transport",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/waitlist/index.ts",
+    "spec": "@/capabilities/booking/waitlist/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/waitlist/transitions.ts",
+    "spec": "@/capabilities/booking/waitlist/transitions",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/waitlist/types.ts",
+    "spec": "@/capabilities/booking/waitlist/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/waitlist/waitlistCapability.ts",
+    "spec": "@/capabilities/booking/waitlist/waitlistCapability",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/waitlist/waitlistErrors.ts",
+    "spec": "@/capabilities/booking/waitlist/waitlistErrors",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/waitlist/waitlistMappers.ts",
+    "spec": "@/capabilities/booking/waitlist/waitlistMappers",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/waitlist/waitlistRepository.ts",
+    "spec": "@/capabilities/booking/waitlist/waitlistRepository",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/waitlist/waitlistService.ts",
+    "spec": "@/capabilities/booking/waitlist/waitlistService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/capabilities/attendance/ui/AttendanceManagementView.tsx",
+    "spec": "@/capabilities/roster/infrastructure/rosterStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/billingLedgerTypes.ts",
+    "spec": "@/capabilities/commerce/textbookTypes",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/billingLinkageValidation.ts",
+    "spec": "@/capabilities/commerce/infrastructure/commerceStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/combinedPaymentAtomic.ts",
+    "spec": "@/capabilities/commerce/infrastructure/commerceStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/combinedPaymentLocal.ts",
+    "spec": "@/capabilities/commerce/infrastructure/commerceStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/components/useTeacherPayroll.ts",
+    "spec": "@/capabilities/roster/infrastructure/rosterStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/services/tuitionService.ts",
+    "spec": "@/capabilities/commerce/infrastructure/commerceStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/services/tuitionService.ts",
+    "spec": "@/capabilities/parent/infrastructure/parentStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/services/tuitionService.ts",
+    "spec": "@/capabilities/roster/infrastructure/rosterStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/tuitionPaymentAtomic.ts",
+    "spec": "@/capabilities/commerce/infrastructure/commerceStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/utils/invoiceExtras.ts",
+    "spec": "@/capabilities/commerce/textbookTypes",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/booking/domain/rescheduleBooking.ts",
+    "spec": "@/capabilities/scheduling/availability/windows",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/booking/domain/rescheduleBooking.ts",
+    "spec": "@/capabilities/scheduling/capacity",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/booking/notifications/bookingNotification.ts",
+    "spec": "@/capabilities/resources/types",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/booking/ui/BookingCalendarView.tsx",
+    "spec": "@/capabilities/scheduling/capacity",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/booking/ui/BookingCalendarView.tsx",
+    "spec": "@/capabilities/scheduling/availability/windows",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/booking/ui/BookingCalendarView.tsx",
+    "spec": "@/capabilities/scheduling/domain/calendarConstraintEngine",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/booking/ui/BookingFormModal.tsx",
+    "spec": "@/capabilities/scheduling/capacity",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/booking/ui/CapacitySlotList.tsx",
+    "spec": "@/capabilities/scheduling/capacity",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/booking/ui/validateBookingCreate.ts",
+    "spec": "@/capabilities/scheduling/capacity",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/booking/ui/validateBookingCreate.ts",
+    "spec": "@/capabilities/scheduling/availability/windows",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/commerce/textbookTypes.ts",
+    "spec": "@/capabilities/billing/finance/paymentMethod",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/commission_payroll/ui/InstructorContractModal.tsx",
+    "spec": "@/capabilities/digital_contract/domain/digitalContractEngine",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/application/combinedPaymentSelection.ts",
+    "spec": "@/capabilities/billing/finance/application/combinedPaymentSelection",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/application/combinedPaymentSubmit.ts",
+    "spec": "@/capabilities/billing/finance/application/combinedPaymentSubmit",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/application/recordCombinedPayment.ts",
+    "spec": "@/capabilities/billing/finance/application/recordCombinedPayment",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/application/submitTuitionInvoicePayment.ts",
+    "spec": "@/capabilities/billing/finance/application/submitTuitionInvoicePayment",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/application/useCombinedPaymentSubmit.ts",
+    "spec": "@/capabilities/billing/finance/application/useCombinedPaymentSubmit",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/application/useTuitionInvoicePayment.ts",
+    "spec": "@/capabilities/billing/finance/application/useTuitionInvoicePayment",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/billingIncomeLink.ts",
+    "spec": "@/capabilities/billing/finance/billingIncomeLink",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/billingLinkageValidation.ts",
+    "spec": "@/capabilities/billing/finance/billingLinkageValidation",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/categories.ts",
+    "spec": "@/capabilities/billing/finance/categories",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/combinedPaymentAtomic.ts",
+    "spec": "@/capabilities/billing/finance/combinedPaymentAtomic",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/combinedPaymentCommand.ts",
+    "spec": "@/capabilities/billing/finance/combinedPaymentCommand",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/combinedPaymentLocal.ts",
+    "spec": "@/capabilities/billing/finance/combinedPaymentLocal",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/components/ExpenseManagementView.tsx",
+    "spec": "@/capabilities/billing/finance/components/ExpenseManagementView",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/components/FinanceHubView.tsx",
+    "spec": "@/capabilities/billing/finance/components/FinanceHubView",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/components/FinanceOverviewView.tsx",
+    "spec": "@/capabilities/billing/finance/components/FinanceOverviewView",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/components/IncomeManagementView.tsx",
+    "spec": "@/capabilities/billing/finance/components/IncomeManagementView",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/components/TeacherPayrollDetailModal.tsx",
+    "spec": "@/capabilities/billing/finance/components/TeacherPayrollDetailModal",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/components/TeacherPayrollList.tsx",
+    "spec": "@/capabilities/billing/finance/components/TeacherPayrollList",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/components/TeacherPayrollStatusBadge.tsx",
+    "spec": "@/capabilities/billing/finance/components/TeacherPayrollStatusBadge",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/components/TeacherPayrollSummaryCards.tsx",
+    "spec": "@/capabilities/billing/finance/components/TeacherPayrollSummaryCards",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/components/TeacherPayrollView.tsx",
+    "spec": "@/capabilities/billing/finance/components/TeacherPayrollView",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/components/useTeacherPayroll.ts",
+    "spec": "@/capabilities/billing/finance/components/useTeacherPayroll",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/financePaymentMirror.ts",
+    "spec": "@/capabilities/billing/finance/financePaymentMirror",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/financePaymentMirrorAdapter.ts",
+    "spec": "@/capabilities/billing/finance/financePaymentMirrorAdapter",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/financePaymentOutcome.ts",
+    "spec": "@/capabilities/billing/finance/financePaymentOutcome",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/index.ts",
+    "spec": "@/capabilities/billing",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/invoiceDedupe.ts",
+    "spec": "@/capabilities/billing/finance/invoiceDedupe",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/invoiceModel.ts",
+    "spec": "@/capabilities/billing/finance/invoiceModel",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/invoiceTextbookLink.ts",
+    "spec": "@/capabilities/billing/finance/invoiceTextbookLink",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/latestTuitionPayment.ts",
+    "spec": "@/capabilities/billing/finance/latestTuitionPayment",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/linkedTextbookSettle.ts",
+    "spec": "@/capabilities/billing/finance/linkedTextbookSettle",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/monthlyTuitionEligibility.ts",
+    "spec": "@/capabilities/billing/finance/monthlyTuitionEligibility",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/monthlyTuitionEnsure.ts",
+    "spec": "@/capabilities/billing/finance/monthlyTuitionEnsure",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/monthlyTuitionStatus.ts",
+    "spec": "@/capabilities/billing/finance/monthlyTuitionStatus",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/paymentMethodLabels.ts",
+    "spec": "@/capabilities/billing/finance/paymentMethodLabels",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/services/invoicePaymentService.ts",
+    "spec": "@/capabilities/billing/finance/services/invoicePaymentService",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/services/tuitionService.ts",
+    "spec": "@/capabilities/billing/finance/services/tuitionService",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/teacherPayroll/buildRows.ts",
+    "spec": "@/capabilities/billing/finance/teacherPayroll/buildRows",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/teacherPayroll/calc.ts",
+    "spec": "@/capabilities/billing/finance/teacherPayroll/calc",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/teacherPayroll/expenseDraft.ts",
+    "spec": "@/capabilities/billing/finance/teacherPayroll/expenseDraft",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/teacherPayroll/index.ts",
+    "spec": "@/capabilities/billing/finance/teacherPayroll/index",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/teacherPayroll/labels.ts",
+    "spec": "@/capabilities/billing/finance/teacherPayroll/labels",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/teacherPayroll/settlements.ts",
+    "spec": "@/capabilities/billing/finance/teacherPayroll/settlements",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/teacherPayroll/types.ts",
+    "spec": "@/capabilities/billing/finance/teacherPayroll/types",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/teacherPayrollSettlements.ts",
+    "spec": "@/capabilities/billing/finance/teacherPayrollSettlements",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/tuitionPaymentAtomic.ts",
+    "spec": "@/capabilities/billing/finance/tuitionPaymentAtomic",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/tuitionPaymentPlan.ts",
+    "spec": "@/capabilities/billing/finance/tuitionPaymentPlan",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/tuitionPaymentRpcResult.ts",
+    "spec": "@/capabilities/billing/finance/tuitionPaymentRpcResult",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/finance/types.ts",
+    "spec": "@/capabilities/billing/finance/types",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/mbo/ui/MboPlanApprovalModal.tsx",
+    "spec": "@/capabilities/approval_workflow/services/approvalWorkflowService",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/research_project/hooks/useResearchProjectWorkspace.ts",
+    "spec": "@/capabilities/approval_workflow/services/approvalWorkflowService",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/research_project/ui/ResearchProjectDetailPanel.tsx",
+    "spec": "@/capabilities/approval_workflow/services/approvalWorkflowService",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/resources/index.ts",
+    "spec": "@/capabilities/scheduling/capacity",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/resources/resourceCapability.ts",
+    "spec": "@/capabilities/scheduling/availability/windows",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/resources/resourceCapability.ts",
+    "spec": "@/capabilities/scheduling/capacity",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/resources/resourcePolicy.ts",
+    "spec": "@/capabilities/scheduling/availability/windows",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/resources/ui/ResourceReservationRequestModal.tsx",
+    "spec": "@/capabilities/approval_workflow/services/approvalWorkflowService",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/resources/ui/UniversalResourceCalendarView.tsx",
+    "spec": "@/capabilities/approval_workflow/services/approvalWorkflowService",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/detail/StudentDetailInfoTab.tsx",
+    "spec": "@/capabilities/attendance",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/detail/StudentDetailInfoTab.tsx",
+    "spec": "@/capabilities/transport",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/detail/StudentDetailTuitionTab.tsx",
+    "spec": "@/capabilities/finance/paymentMethodLabels",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/detail/StudentDetailTuitionTab.tsx",
+    "spec": "@/capabilities/finance/invoiceModel",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/detail/StudentDetailTuitionTab.tsx",
+    "spec": "@/capabilities/finance/latestTuitionPayment",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/detail/StudentDetailTuitionTab.tsx",
+    "spec": "@/capabilities/finance",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/detail/studentManualAttendanceClass.test.ts",
+    "spec": "@/capabilities/attendance/dayAttendance",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/detail/studentManualAttendanceClass.ts",
+    "spec": "@/capabilities/attendance/dayAttendance",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/form/studentFormTypes.ts",
+    "spec": "@/capabilities/transport/types",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/form/studentFormValidation.ts",
+    "spec": "@/capabilities/transport/types",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/form/StudentPickupSection.tsx",
+    "spec": "@/capabilities/transport/types",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/form/StudentPickupSection.tsx",
+    "spec": "@/capabilities/transport/types",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/StudentFormModal.tsx",
+    "spec": "@/capabilities/attendance/features",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/StudentFormModal.tsx",
+    "spec": "@/capabilities/transport",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/StudentListView.tsx",
+    "spec": "@/capabilities/transport",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/useStudentDetailModal.ts",
+    "spec": "@/capabilities/finance",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/useStudentDetailModal.ts",
+    "spec": "@/capabilities/attendance",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/scheduling/capacity/resourceOccupancy.ts",
+    "spec": "@/capabilities/resources/overlap",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/scheduling/capacity/resourceOccupancy.ts",
+    "spec": "@/capabilities/resources/types",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/scheduling/notifications/makeupNotification.ts",
+    "spec": "@/capabilities/attendance/domain/types",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/supply_restock/ui/SupplyRestockView.tsx",
+    "spec": "@/capabilities/approval_workflow/services/approvalWorkflowService",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/transport/ShuttleRideRequestView.tsx",
+    "spec": "@/capabilities/roster/infrastructure/rosterStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/work_attendance_payroll/domain/humanCapitalKpiEngine.ts",
+    "spec": "@/capabilities/mbo/domain/mboEngine",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/work_order_kanban/components/WorkOrderKanbanView.tsx",
+    "spec": "@/capabilities/task_pipeline/ui/TaskPipelineKanbanView",
+    "kind": "capability-cross"
+  }
+]

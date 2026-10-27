@@ -3,7 +3,7 @@ import { Download, Printer } from 'lucide-react';
 import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { getPlaceLabel } from '@/core/industry/industryUi';
-import { getPublicAppBaseUrl as getAppBaseUrl } from '@/core/platform/appBaseUrl';
+import { getAppBaseUrl } from '@/core/parent/services/parentInviteService';
 import { Modal } from '@/shared/components/ui/Modal';
 
 interface ConsultationQrModalProps {

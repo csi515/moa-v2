@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
-import { createEpLiveProvider } from "./liveProvider";
+import { createMoaLiveProvider } from "./liveProvider";
 
 console.log("[TEST] liveProvider pure logic running...");
 
 // 1. Unconfigured client returns safe no-op provider
 {
-  const noopProvider = createEpLiveProvider(null);
+  const noopProvider = createMoaLiveProvider(null);
   assert.equal(typeof noopProvider.subscribe, "function");
   assert.equal(typeof noopProvider.unsubscribe, "function");
   assert.equal(typeof noopProvider.publish, "function");
@@ -40,7 +40,7 @@ console.log("[TEST] liveProvider pure logic running...");
     },
   };
 
-  const provider = createEpLiveProvider(mockClient, {
+  const provider = createMoaLiveProvider(mockClient, {
     resolveOrgId: () => "org-1234",
     defaultSchema: "core",
   });
@@ -85,7 +85,7 @@ console.log("[TEST] liveProvider pure logic running...");
     channel: () => mockChannel,
   };
 
-  const provider = createEpLiveProvider(mockClient, {
+  const provider = createMoaLiveProvider(mockClient, {
     resolveOrgId: () => "org-test",
   });
 
@@ -139,7 +139,7 @@ console.log("[TEST] liveProvider pure logic running...");
     },
   };
 
-  const provider = createEpLiveProvider(mockClient, {
+  const provider = createMoaLiveProvider(mockClient, {
     resolveOrgId: () => null,
   });
 

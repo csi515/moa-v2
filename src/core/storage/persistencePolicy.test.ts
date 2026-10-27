@@ -16,20 +16,20 @@ import {
 } from './persistencePolicy';
 
 function run() {
-  assert.equal(persistencePolicyFor('ep_app_tuition_payments'), 'server-authoritative');
+  assert.equal(persistencePolicyFor('piano_app_tuition_payments'), 'server-authoritative');
   assert.equal(persistencePolicyFor('core_session_passes'), 'server-authoritative');
-  assert.equal(persistencePolicyFor('ep_app_students'), 'server-with-local-cache');
-  assert.equal(persistencePolicyFor('ep_app_active_user'), 'local-only');
+  assert.equal(persistencePolicyFor('piano_app_students'), 'server-with-local-cache');
+  assert.equal(persistencePolicyFor('piano_app_active_user'), 'local-only');
   assert.equal(persistencePolicyFor('core_slot_recruitments'), 'local-only');
-  assert.equal(persistencePolicyFor('ep_app_parents'), 'server-with-local-cache');
+  assert.equal(persistencePolicyFor('piano_app_parents'), 'server-with-local-cache');
   assert.equal(OFFLINE_COMMAND_STORE_POLICIES.pendingMutations, 'offline-command');
   assert.equal(OFFLINE_COMMAND_STORE_POLICIES.syncOutbox, 'offline-command');
 
-  assert.equal(localWriteConfirmsPersist('ep_app_tuition_payments'), false);
-  assert.equal(localWriteConfirmsPersist('ep_app_students'), false);
-  assert.equal(localWriteConfirmsPersist('ep_app_active_user'), true);
+  assert.equal(localWriteConfirmsPersist('piano_app_tuition_payments'), false);
+  assert.equal(localWriteConfirmsPersist('piano_app_students'), false);
+  assert.equal(localWriteConfirmsPersist('piano_app_active_user'), true);
   assert.equal(persistenceRuleFor('core_schedules').sourceOfTruth, 'server');
-  assert.equal(DECLARED_STORAGE_KEY_POLICIES.ep_app_invoices, 'server-authoritative');
+  assert.equal(DECLARED_STORAGE_KEY_POLICIES.piano_app_invoices, 'server-authoritative');
 
   const allKeys = Object.values(STORAGE_KEYS);
   const uncovered = uncoveredStorageKeys(allKeys);

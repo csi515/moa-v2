@@ -1,44 +1,25 @@
 import { parseStaffLinkCode } from './deepLinkParser';
 
-const PENDING_STAFF_LINK_KEY = 'ep_pending_staff_link';
-const LEGACY_PENDING_STAFF_LINK_KEY = 'moa_pending_staff_link';
-
-function readPendingStaffLinkRaw(): string | null {
-  try {
-    const current = sessionStorage.getItem(PENDING_STAFF_LINK_KEY);
-    if (current != null) return current;
-    const legacy = sessionStorage.getItem(LEGACY_PENDING_STAFF_LINK_KEY);
-    if (legacy != null) {
-      sessionStorage.setItem(PENDING_STAFF_LINK_KEY, legacy);
-      sessionStorage.removeItem(LEGACY_PENDING_STAFF_LINK_KEY);
-      return legacy;
-    }
-  } catch {
-    return null;
-  }
-  return null;
-}
+const PENDING_STAFF_LINK_KEY = 'moa_pending_staff_link';
 
 export function storePendingStaffLink(token: string): void {
   sessionStorage.setItem(PENDING_STAFF_LINK_KEY, token.trim().toUpperCase());
-  try {
-    sessionStorage.removeItem(LEGACY_PENDING_STAFF_LINK_KEY);
-  } catch {
-    /* ignore */
-  }
 }
 
 /** 로그인 세션 중 staff_link 딥링크 수신 시 수락 모달을 띄우기 위한 이벤트 */
-export const STAFF_LINK_PENDING_EVENT = 'ep:staff-link-pending';
+export const STAFF_LINK_PENDING_EVENT = 'moa:staff-link-pending';
 
 export function peekPendingStaffLink(): string | null {
-  return readPendingStaffLinkRaw();
+  try {
+    return sessionStorage.getItem(PENDING_STAFF_LINK_KEY);
+  } catch {
+    return null;
+  }
 }
 
 export function clearPendingStaffLink(): void {
   try {
     sessionStorage.removeItem(PENDING_STAFF_LINK_KEY);
-    sessionStorage.removeItem(LEGACY_PENDING_STAFF_LINK_KEY);
   } catch {
     // ignore
   }
@@ -51,8 +32,8 @@ export function notifyStaffLinkPending(): void {
 }
 
 export function consumePendingStaffLink(): string | null {
-  const token = readPendingStaffLinkRaw();
-  if (token) clearPendingStaffLink();
+  const token = sessionStorage.getItem(PENDING_STAFF_LINK_KEY);
+  if (token) sessionStorage.removeItem(PENDING_STAFF_LINK_KEY);
   return token;
 }
 

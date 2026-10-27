@@ -68,7 +68,7 @@ console.log('✓ 2. 공급처별 품목 묶음 통과');
 // 3. 발주서 조립 및 공유 텍스트 생성
 {
   const needed = detectRestockNeeded(mockItems);
-  const po = assemblePurchaseOrder('대한오피스', needed, 'EP_apps', 1);
+  const po = assemblePurchaseOrder('대한오피스', needed, '모아 아카데미', 1);
 
   assert.equal(po.vendorName, '대한오피스');
   assert.equal(po.orderItems.length, 2);
@@ -77,7 +77,7 @@ console.log('✓ 2. 공급처별 품목 묶음 통과');
   // 총액 = 270,000원
   assert.equal(po.totalAmount, 270000);
   assert.ok(po.poNumber.startsWith('PO-'));
-  assert.ok(po.orderSummaryText.includes('[발주서] EP_apps ➔ 대한오피스'));
+  assert.ok(po.orderSummaryText.includes('[발주서] 모아 아카데미 ➔ 대한오피스'));
   assert.ok(po.orderSummaryText.includes('270,000원'));
 }
 console.log('✓ 3. 발주서 자동 조립 및 메시지 텍스트 생성 통과');

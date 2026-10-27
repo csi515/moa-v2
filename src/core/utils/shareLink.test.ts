@@ -21,7 +21,7 @@ console.log('[TEST] shareLink running...');
   await (async () => {
     const result = await shareLink({
       title: '테스트 초대',
-      url: 'https://example.com/join/123',
+      url: 'https://moa.app/join/123',
       onFeedback: (msg) => {
         feedbackMessage = msg;
       },
@@ -29,7 +29,7 @@ console.log('[TEST] shareLink running...');
 
     assert.equal(result.shared, true);
     assert.equal(result.method, 'native');
-    assert.equal(sharedPayload.url, 'https://example.com/join/123');
+    assert.equal(sharedPayload.url, 'https://moa.app/join/123');
     assert.equal(feedbackMessage, '공유되었습니다.');
   })();
 }
@@ -55,7 +55,7 @@ console.log('[TEST] shareLink running...');
 
   await (async () => {
     const result = await shareLink({
-      url: 'https://example.com/join/456',
+      url: 'https://moa.app/join/456',
       onFeedback: (msg) => {
         feedbackMessage = msg;
       },
@@ -63,7 +63,7 @@ console.log('[TEST] shareLink running...');
 
     assert.equal(result.shared, true);
     assert.equal(result.method, 'clipboard');
-    assert.equal(clipboardText, 'https://example.com/join/456');
+    assert.equal(clipboardText, 'https://moa.app/join/456');
     assert.equal(feedbackMessage, '링크가 클립보드에 복사되었습니다.');
   })();
 }
@@ -84,7 +84,7 @@ console.log('[TEST] shareLink running...');
 
   await (async () => {
     const result = await shareLink({
-      url: 'https://example.com/join/abort',
+      url: 'https://moa.app/join/abort',
     });
 
     assert.equal(result.shared, false);

@@ -1,6 +1,6 @@
-// @ts-nocheck
-import { useMemo } from 'react';
+﻿import { useMemo } from 'react';
 import type { IndustryType } from '@/core/industry/types';
+import { isAttendanceModuleEnabled } from '@/core/attendance/features';
 import { applyStaffGrantTabs, normalizeStaffGrants } from '@/core/staff/staffGrants';
 import { useStorageRefresh } from '@/hooks/useStorageRefresh';
 import { StorageService } from '@/services/storage';
@@ -13,14 +13,6 @@ import {
   isParentRole,
   isStaffRole,
 } from './permissions';
-
-/** EP_apps: 출결 모듈 제거 — 설정 플래그가 명시적으로 true일 때만 허용 */
-function isAttendanceModuleEnabled(
-  settings?: AcademySettings | null,
-  _industry?: unknown
-): boolean {
-  return settings?.features?.attendance?.enabled === true;
-}
 
 export type NavigationPermissionState = {
   settings: AcademySettings;

@@ -7,11 +7,7 @@
  * 스냅샷 flush는 유지한다. 같은 entity의 낮은 revision은 적용하지 않는다.
  */
 import { OFFLINE_COMMAND_STORE_POLICIES } from '@/core/storage/persistencePolicy';
-import {
-  LEGACY_SYNC_OUTBOX_PREFIX,
-  SYNC_OUTBOX_PREFIX,
-  type StorageKey,
-} from './storageKeys';
+import type { StorageKey } from './storageKeys';
 
 export const SYNC_OUTBOX_POLICY = OFFLINE_COMMAND_STORE_POLICIES.syncOutbox;
 import { getOrganizationId } from './storageContext';
@@ -39,12 +35,10 @@ type OutboxStoreV2 = {
   mutations: SyncOutboxMutation[];
 };
 
-function outboxKey(orgId: string): string {
-  return `${SYNC_OUTBOX_PREFIX}${orgId}`;
-}
+const OUTBOX_PREFIX = 'moa:sync-outbox:';
 
-function legacyOutboxKey(orgId: string): string {
-  return `${LEGACY_SYNC_OUTBOX_PREFIX}${orgId}`;
+function outboxKey(orgId: string): string {
+  return `${OUTBOX_PREFIX}${orgId}`;
 }
 
 function emptyStore(): OutboxStoreV2 {
@@ -74,13 +68,7 @@ function migrateOutbox(raw: unknown): OutboxStoreV2 {
 
 function readStore(orgId: string): OutboxStoreV2 {
   try {
-    let raw = readLocalRaw(outboxKey(orgId));
-    if (!raw) {
-      raw = readLocalRaw(legacyOutboxKey(orgId));
-      if (raw) {
-        writeLocalRaw(outboxKey(orgId), raw);
-      }
-    }
+    const raw = readLocalRaw(outboxKey(orgId));
     if (!raw) return emptyStore();
     return migrateOutbox(JSON.parse(raw));
   } catch {

@@ -1,7 +1,6 @@
 import type { SupportedStorage } from '@supabase/supabase-js';
 
-export const AUTH_STORAGE_KEY_PREFERENCE = 'ep:auth:remember_me';
-export const LEGACY_AUTH_STORAGE_KEY_PREFERENCE = 'moa:auth:remember_me';
+export const AUTH_STORAGE_KEY_PREFERENCE = 'moa:auth:remember_me';
 
 // SSR / 테스트 환경용 인메모리 저장소
 const memoryStore = new Map<string, string>();
@@ -15,18 +14,6 @@ function isBrowser(): boolean {
  * - 기본값: true (기존 데스크톱/모바일 앱 사용자 경험 유지)
  * - 공용 태블릿/패드/키오스크 모드 시 false로 설정되어 브라우저 종료 시 세션 즉시 소멸
  */
-function readPreferenceFrom(store: Storage): string | null {
-  const current = store.getItem(AUTH_STORAGE_KEY_PREFERENCE);
-  if (current !== null) return current;
-  const legacy = store.getItem(LEGACY_AUTH_STORAGE_KEY_PREFERENCE);
-  if (legacy !== null) {
-    store.setItem(AUTH_STORAGE_KEY_PREFERENCE, legacy);
-    store.removeItem(LEGACY_AUTH_STORAGE_KEY_PREFERENCE);
-    return legacy;
-  }
-  return null;
-}
-
 export function getAuthStoragePreference(): boolean {
   if (!isBrowser()) {
     const val = memoryStore.get(AUTH_STORAGE_KEY_PREFERENCE);
@@ -34,11 +21,11 @@ export function getAuthStoragePreference(): boolean {
   }
 
   try {
-    const sessionPref = readPreferenceFrom(window.sessionStorage);
+    const sessionPref = window.sessionStorage.getItem(AUTH_STORAGE_KEY_PREFERENCE);
     if (sessionPref !== null) {
       return sessionPref === 'true';
     }
-    const localPref = readPreferenceFrom(window.localStorage);
+    const localPref = window.localStorage.getItem(AUTH_STORAGE_KEY_PREFERENCE);
     if (localPref !== null) {
       return localPref === 'true';
     }
@@ -69,8 +56,6 @@ export function setAuthStoragePreference(remember: boolean): void {
       window.sessionStorage.setItem(AUTH_STORAGE_KEY_PREFERENCE, 'false');
       window.localStorage.removeItem(AUTH_STORAGE_KEY_PREFERENCE);
     }
-    window.localStorage.removeItem(LEGACY_AUTH_STORAGE_KEY_PREFERENCE);
-    window.sessionStorage.removeItem(LEGACY_AUTH_STORAGE_KEY_PREFERENCE);
   } catch {
     // 스토리지 접근 오류 방어
   }

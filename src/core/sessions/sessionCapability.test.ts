@@ -64,6 +64,27 @@ function run() {
   assert.equal(session.bookingId, undefined);
   assert.equal(rpcPayloadToSessionResult(row).action, 'created');
 
+  const sql = readFileSync(join(here, '../../../supabase/migrations/20260924230000_customer_sessions.sql'), 'utf8');
+  assert.match(sql, /CREATE TABLE core\.customer_sessions/);
+  assert.match(sql, /uq_customer_sessions_active_customer/);
+  assert.match(sql, /pg_advisory_xact_lock/);
+  assert.match(sql, /FOR UPDATE/);
+  assert.match(sql, /is_org_staff_actor/);
+  assert.match(sql, /is_my_customer/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.start_customer_session/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.finish_customer_session/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.cancel_customer_session/);
+  assert.match(sql, /booking_id/);
+  assert.match(sql, /pass_id/);
+  assert.match(sql, /payment_id/);
+  assert.match(sql, /resource_id/);
+  assert.match(sql, /walk_in/);
+  assert.doesNotMatch(sql, /CREATE TABLE bath\./);
+  assert.doesNotMatch(sql, /bath\.visits/);
+  assert.doesNotMatch(sql, /sauna_jjimjilbang/);
+  assert.doesNotMatch(sql, /create_sale/);
+  assert.doesNotMatch(sql, /update_booking_status_with_pass/);
+
   const service = readFileSync(join(here, 'sessionService.ts'), 'utf8');
   assert.match(service, /start_customer_session/);
   assert.match(service, /finish_customer_session/);

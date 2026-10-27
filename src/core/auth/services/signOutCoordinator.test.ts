@@ -104,10 +104,10 @@ async function runTests() {
     {
       store.clear();
       setOrganizationId('org-test-2');
-      store.set('ep_current_organization_id', 'org-test-2');
+      store.set('moa_current_organization_id', 'org-test-2');
       store.set(`${STORAGE_KEYS.STUDENTS}_org-test-2`, '[{"id":"stu-2"}]');
       store.set(`${STORAGE_KEYS.INVOICES}_org-test-2`, '[{"id":"inv-2"}]');
-      store.set('ep.pwa.installed', '1'); // device-only 키
+      store.set('moa.pwa.installed', '1'); // device-only 키
 
       assert.equal(orgService.getStoredOrganizationId(), 'org-test-2');
 
@@ -119,7 +119,7 @@ async function runTests() {
       assert.equal(store.has(`${STORAGE_KEYS.INVOICES}_org-test-2`), false);
       assert.equal(orgService.getStoredOrganizationId(), null);
       // device-only 키는 보존되어야 함
-      assert.equal(store.get('ep.pwa.installed'), '1');
+      assert.equal(store.get('moa.pwa.installed'), '1');
       console.log('✓ 시나리오 2 통과: context 정상 정리 (조직, 캐시 정리 및 device-only 보존)');
     }
 
@@ -269,7 +269,7 @@ async function runTests() {
     {
       store.clear();
       setOrganizationId('org-user-A');
-      store.set('ep_current_organization_id', 'org-user-A');
+      store.set('moa_current_organization_id', 'org-user-A');
       store.set(`${STORAGE_KEYS.STUDENTS}_org-user-A`, '[{"id":"stu-A"}]');
       store.set(STORAGE_KEYS.ACTIVE_USER, JSON.stringify({ id: 'user-A', name: 'User A' }));
 
@@ -281,7 +281,7 @@ async function runTests() {
 
       // 이제 새로운 사용자 B가 로그인하는 시뮬레이션
       setOrganizationId('org-user-B');
-      store.set('ep_current_organization_id', 'org-user-B');
+      store.set('moa_current_organization_id', 'org-user-B');
       assert.equal(orgService.getStoredOrganizationId(), 'org-user-B');
       assert.equal(store.has(`${STORAGE_KEYS.STUDENTS}_org-user-A`), false, '이전 유저 A의 캐시가 침범하지 않음');
       console.log('✓ 시나리오 8 통과: logout 후 다시 login → 이전 컨텍스트 누수 없음');

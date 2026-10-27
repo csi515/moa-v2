@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * capability 번들 list 경로(URL 첫 세그먼트) → 기존 capability 화면.
  * App.tsx CAPABILITY_ROUTE_PATHS → IndustryAppRouter → GenericIndustryShell 탭으로 연결된다.

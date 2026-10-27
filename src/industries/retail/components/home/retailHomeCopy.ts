@@ -1,0 +1,22 @@
+/** Retail 홈(매장 운영 요약) 문구 */
+export const RETAIL_HOME_COPY = {
+  title: '홈',
+  description: '오늘 매장 운영에 필요한 요약입니다',
+  noOrg: '사업장을 선택해 주세요',
+  loadError: '홈 정보를 불러오지 못했습니다',
+  loading: '불러오는 중…',
+  todayRevenue: '오늘 매출',
+  todaySaleCount: '오늘 판매 건수',
+  lowStockCount: '재고 부족 상품',
+  saleCountUnit: '건',
+  stockCountUnit: '개',
+  recentSales: '최근 판매',
+  recentSalesEmpty: '오늘 판매 내역이 없습니다',
+  lowStockList: '재고 부족 상품',
+  lowStockEmpty: '재고 부족 상품이 없습니다',
+  guestName: '비회원',
+  qtyUnit: '개',
+  goSalesHistory: '판매내역으로',
+  goInventory: '재고로',
+  moreSales: (n: number) => `외 ${n}건`,
+} as const;

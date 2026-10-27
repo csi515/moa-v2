@@ -3,7 +3,7 @@
  * 실행: npm run test:domain-roles
  */
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SCHEDULE_HOLDING_STATUSES } from '@/core/capacity/types';
@@ -62,6 +62,38 @@ function run() {
   assert.ok(SESSION_LEDGER.doesNotOwn.includes('booking_status'));
   assert.ok(ATTENDANCE_CHECK_IN_LEDGER.doesNotOwn.includes('class_attendance'));
   assert.ok(CORE_DOMAIN_LEDGERS.every((ledger) => ledger.table.startsWith('core.')));
+
+  for (const rel of [
+    'supabase/migrations/20260904150000_core_schedule_reservation_system.sql',
+    'supabase/migrations/20260924240000_capacity_capability.sql',
+    'supabase/migrations/20260924320000_transactional_outbox.sql',
+  ]) {
+    const confirmSql = readRel(rel);
+    const start = confirmSql.indexOf('CREATE OR REPLACE FUNCTION core.confirm_reservation');
+    assert.ok(start >= 0, rel);
+    const confirmBody = confirmSql.slice(start, start + 2500);
+    assert.match(confirmBody, /UPDATE core\.reservations/);
+    assert.doesNotMatch(confirmBody, /UPDATE core\.schedules/);
+    assert.doesNotMatch(confirmBody, /INSERT INTO core\.attendance_sessions/);
+    assert.doesNotMatch(confirmBody, /INSERT INTO core\.customer_sessions/);
+  }
+
+  const roleSql = readRel(
+    'supabase/migrations/20260924360000_schedule_reservation_session_attendance_roles.sql'
+  );
+  assert.match(roleSql, /COMMENT ON TABLE core\.schedules/);
+  assert.match(roleSql, /COMMENT ON TABLE core\.reservations/);
+  assert.match(roleSql, /COMMENT ON TABLE core\.attendance_sessions/);
+  assert.match(roleSql, /COMMENT ON TABLE core\.customer_sessions/);
+  assert.doesNotMatch(roleSql, /CREATE TABLE/i);
+  assert.doesNotMatch(roleSql, /DROP TABLE/i);
+  assert.doesNotMatch(roleSql, /ALTER TABLE/i);
+
+  const migrations = readdirSync(join(root, 'supabase/migrations'));
+  const newBookingOrSession = migrations.filter((name) =>
+    /create_.+(booking|session)s?\.sql$/i.test(name)
+  );
+  assert.deepEqual(newBookingOrSession, []);
 
   const reservationService = readRel('src/core/schedules/services/reservationService.ts');
   assert.match(reservationService, /core\.reservations/);

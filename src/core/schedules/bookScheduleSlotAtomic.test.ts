@@ -2,9 +2,51 @@
  * 동시성 예약 행 잠금(FOR UPDATE) 원자 RPC 계약 및 에러 매핑 단위 테스트
  */
 import assert from 'node:assert/strict';
-import { parseBookingRpcError } from './bookScheduleSlotAtomic';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import {
+  parseBookingRpcError,
+  type BookScheduleSlotParams,
+} from './bookScheduleSlotAtomic';
 
 console.log('Running bookScheduleSlotAtomic tests...');
+
+const here = dirname(fileURLToPath(import.meta.url));
+const sqlPath = join(
+  here,
+  '../../../supabase/migrations/20261012130000_atomic_schedule_booking.sql'
+);
+const sql = readFileSync(sqlPath, 'utf8');
+
+// 1. Migration SQL Contract Verification
+{
+  assert.match(
+    sql,
+    /CREATE OR REPLACE FUNCTION core\.book_schedule_slot/i,
+    'core.book_schedule_slot RPC must be defined in migration'
+  );
+  assert.match(
+    sql,
+    /FOR UPDATE OF s/i,
+    'Schedule slot must be locked with FOR UPDATE OF s to serialize concurrent bookings'
+  );
+  assert.match(
+    sql,
+    /v_schedule\.max_capacity/i,
+    'Max capacity check must exist in RPC'
+  );
+  assert.match(
+    sql,
+    /CAPACITY_EXCEEDED/i,
+    'CAPACITY_EXCEEDED exception must be raised when full'
+  );
+  assert.match(
+    sql,
+    /GRANT EXECUTE ON FUNCTION core\.book_schedule_slot/i,
+    'RPC must grant execute permission'
+  );
+}
 
 // 2. Error Parsing Contract Tests
 {

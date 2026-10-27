@@ -110,7 +110,7 @@ export async function searchOmni(
  */
 export function filterMockOmniResults(q: string): SearchResultItem[] {
   const mockDatabase: SearchResultItem[] = [
-    { id: 'c-1', category: 'customer', title: 'EP_apps', subtitle: '연락처: 010-1234-5678', route: '/customers/show/c-1' },
+    { id: 'c-1', category: 'customer', title: '김모아', subtitle: '연락처: 010-1234-5678', route: '/customers/show/c-1' },
     { id: 'c-2', category: 'customer', title: '이지은', subtitle: '연락처: 010-9876-5432', route: '/customers/show/c-2' },
     { id: 'p-1', category: 'product', title: '스페셜티 에스프레소 원두 1kg', subtitle: 'SKU: BEV-001 | 가격: 25,000원', route: '/products/show/p-1' },
     { id: 'p-2', category: 'product', title: '피아노 바이엘 상권', subtitle: 'SKU: BOK-001 | 가격: 8,000원', route: '/products/show/p-2' },

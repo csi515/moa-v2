@@ -119,6 +119,50 @@ function run() {
   });
   assert.equal(handleReservationConfirmed(missing, new Set()), 'retry');
 
+  const sql = readFileSync(
+    join(root, 'supabase/migrations/20260924320000_transactional_outbox.sql'),
+    'utf8'
+  );
+  assert.match(sql, /CREATE TABLE core\.outbox_events/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.enqueue_outbox_event/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.claim_outbox_events/);
+  assert.match(sql, /FOR UPDATE SKIP LOCKED/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.complete_outbox_event/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.fail_outbox_event/);
+  assert.match(sql, /organizationId/);
+  assert.match(sql, /locationId/);
+  assert.match(sql, /reservation\.confirmed/);
+  assert.match(sql, /PERFORM core\.enqueue_outbox_event/);
+  assert.match(sql, /dedupe_key/);
+  assert.match(sql, /uq_outbox_events_org_dedupe/);
+  assert.match(sql, /UNIQUE \(organization_id, dedupe_key\)/);
+  assert.match(sql, /ON CONFLICT ON CONSTRAINT uq_outbox_events_org_dedupe DO NOTHING/);
+  assert.match(sql, /core\.outbox_dedupe_key/);
+  assert.match(sql, /RETURN true/);
+  assert.match(sql, /assert_not_overbooked/);
+  assert.match(sql, /FOR UPDATE OF s/);
+  assert.match(sql, /SECURITY INVOKER/);
+  assert.match(sql, /require_outbox_worker/);
+  assert.match(sql, /GRANT EXECUTE ON FUNCTION core\.claim_outbox_events\(UUID, INT\) TO service_role/);
+  assert.match(sql, /GRANT EXECUTE ON FUNCTION core\.complete_outbox_event\(UUID\) TO service_role/);
+  assert.match(sql, /GRANT EXECUTE ON FUNCTION core\.fail_outbox_event\(UUID, TEXT\) TO service_role/);
+  assert.match(sql, /REVOKE ALL ON FUNCTION core\.enqueue_outbox_event\(UUID, TEXT, TEXT, TEXT, JSONB, UUID\) FROM anon, authenticated/);
+  assert.match(sql, /REVOKE ALL ON FUNCTION core\.claim_outbox_events\(UUID, INT\) FROM anon, authenticated/);
+  assert.match(sql, /REVOKE ALL ON FUNCTION core\.complete_outbox_event\(UUID\) FROM anon, authenticated/);
+  assert.match(sql, /REVOKE ALL ON FUNCTION core\.fail_outbox_event\(UUID, TEXT\) FROM anon, authenticated/);
+  assert.doesNotMatch(
+    sql,
+    /GRANT EXECUTE ON FUNCTION core\.(enqueue_outbox_event|claim_outbox_events|complete_outbox_event|fail_outbox_event).*TO authenticated/
+  );
+  assert.doesNotMatch(sql, /twilio|ncp|aligo|solapi|fetch\(/i);
+  assert.doesNotMatch(sql, /ALTER TABLE core\.(reservations|schedules|notifications)/);
+
+  const capacitySql = readFileSync(
+    join(root, 'supabase/migrations/20260924240000_capacity_capability.sql'),
+    'utf8'
+  );
+  assert.match(capacitySql, /CREATE OR REPLACE FUNCTION core\.confirm_reservation/);
+
   console.log('outboxCapability.test.ts: ok');
 }
 

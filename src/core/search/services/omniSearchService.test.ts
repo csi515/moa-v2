@@ -16,10 +16,10 @@ describe('OmniSearch Engine Service (Phase 5)', () => {
 
   it('오프라인/폴백 환경에서 고객, 상품, 사규를 다형성 통합 검색한다', async () => {
     // 1. 고객명 검색
-    const customerHit = filterMockOmniResults('EP_apps');
+    const customerHit = filterMockOmniResults('모아');
     assert.ok(customerHit.length >= 1);
     assert.equal(customerHit[0].category, 'customer');
-    assert.equal(customerHit[0].title, 'EP_apps');
+    assert.equal(customerHit[0].title, '김모아');
 
     // 2. 상품명 검색
     const productHit = filterMockOmniResults('원두');

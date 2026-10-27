@@ -1,6 +1,5 @@
 import React from 'react';
 import { Bell, X, Check, Clock, Sparkles, Inbox } from 'lucide-react';
-import { appBrand } from '@/core/brand';
 import { useCustomerNotifications, type CustomerNotificationItem } from '../useCustomerNotifications';
 
 export interface NotificationDrawerProps {
@@ -121,7 +120,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
           {/* Footer */}
           <div className="p-4 border-t border-slate-100 bg-slate-50 text-center">
             <p className="text-[11px] text-slate-400">
-              {appBrand.shortName} · 비용 0원 통신망
+              MOA Push Notification Engine · 비용 0원 통신망
             </p>
           </div>
         </div>
