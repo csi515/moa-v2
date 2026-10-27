@@ -3924,163 +3924,6 @@ export const INDUSTRY_PRESETS: Record<string, IndustryPresetDefinition> = {
     readinessLevel: 'basic_ui',
   },
 
-  personal_plant_ops: {
-    id: 'personal_plant_ops',
-    theme: {
-        "accentColor": "emerald",
-        "badgeEmoji": "🏭"
-    },
-    starterPassTemplates: [
-        {
-            "name": "현장 안전교육 이수 패스",
-            "passType": "COUNT_BASED",
-            "totalCount": 4,
-            "validityDays": 365,
-            "recommendedPrice": 0,
-            "badge": "사내"
-        },
-        {
-            "name": "공용 장비 사용 허가권",
-            "passType": "COUNT_BASED",
-            "totalCount": 10,
-            "validityDays": 90,
-            "recommendedPrice": 0,
-            "badge": "추천"
-        }
-    ],
-    terms: {
-      "customer": "운영자",
-      "instructor": "작업자",
-      "space": "운영베이",
-      "pass": "작업티켓",
-      "fee": "비용"
-    },
-    operatingHours: {
-      "day_type": "WEEKDAY",
-      "start_time": "09:00",
-      "end_time": "18:00",
-      "slot_minutes": 60
-    },
-    facilities: {
-      hasDepartments: true,
-    },
-
-    name: 'EP_apps',
-    hiddenInMoa: true,
-    description:
-      '소규모 현장용: 결재·안전·자재·공용자원·노경 건의·조직도·MBO·연구과제·연구소 포털. 급여·휴가·전사 장부는 포함하지 않습니다.',
-    category: 'manufacturing',
-    capabilities: [
-      'approval_workflow',
-      'sop_risk_assessment',
-      'facility_incident_report',
-      'safety_consent',
-      'maintenance_checklist',
-      'inventory',
-      'recipe_bom',
-      'supply_restock',
-      'booking',
-      'seat_room',
-      'rental_equipment',
-      'whistleblower_grievance',
-      'task_pipeline',
-      'mbo',
-      'research_project',
-      'patent_ip_asset',
-      'equipment_lifecycle',
-      'volunteer_activity',
-      'meal_survey',
-      'office_supply_request',
-      'shuttle_dispatch',
-      'hazardous_substance_msds',
-    ] as const,
-    requiredCapabilities: [
-      'approval_workflow',
-      'inventory',
-      'booking',
-      'whistleblower_grievance',
-      'mbo',
-      'research_project',
-      'sop_risk_assessment',
-      'facility_incident_report',
-      'supply_restock',
-    ] as const,
-    optionalCapabilities: [
-      'safety_consent',
-      'maintenance_checklist',
-      'recipe_bom',
-      'rental_equipment',
-      'seat_room',
-      'task_pipeline',
-      'patent_ip_asset',
-      'equipment_lifecycle',
-      'volunteer_activity',
-      'meal_survey',
-      'office_supply_request',
-      'shuttle_dispatch',
-      'hazardous_substance_msds',
-    ] as const,
-    roles: [
-      {
-        name: '대표이사 / 공장장',
-        rank_order: 100,
-        permissions: ['*'],
-        description: '전사 총괄 및 최종 결재 권한',
-      },
-      {
-        name: '본부장 / 실장',
-        rank_order: 200,
-        permissions: ['approval_workflow:*', 'mbo:*', 'task_pipeline:*', 'research_project:*', 'resources:*'],
-        description: '본부/실 단위 총괄 관리자 (하위 그룹/팀 전체 통할)',
-      },
-      {
-        name: '그룹장 / 센터장',
-        rank_order: 300,
-        permissions: ['approval_workflow:*', 'mbo:*', 'task_pipeline:*', 'research_project:update'],
-        description: '중간 조직 관리자 (관할 팀 및 파트 통할)',
-      },
-      {
-        name: '팀장 / 리더',
-        rank_order: 400,
-        permissions: ['approval_workflow:submit', 'approval_workflow:view', 'mbo:update', 'task_pipeline:*'],
-        description: '부서/팀 관리자 (팀원 MBO 열람 및 부서 업무 관리)',
-      },
-      {
-        name: '파트장 / 셀리더',
-        rank_order: 500,
-        permissions: ['task_pipeline:update', 'mbo:view', 'approval_workflow:submit'],
-        description: '소규모 세부 파트 리더',
-      },
-      {
-        name: '팀원 / 사원',
-        rank_order: 900,
-        permissions: ['booking:book', 'whistleblower_grievance:create', 'mbo:view', 'research_project:view'],
-        description: '일반 실무자 (직무 기능 권한은 개인별로 부여)',
-      },
-    ],
-    resourceTypes: [
-      { name: '1호 업무용 차량', type: 'vehicle', capacity: 1 },
-      { name: '회의실', type: 'room', capacity: 8 },
-      { name: '시험·계측 장비', type: 'equipment', capacity: 1 },
-    ],
-    defaultSettings: {
-      fleet_catalog_kind: 'vehicle',
-      grievances_named_default: true,
-      org_chart_enabled: true,
-      resource_types_require_approval_default: true,
-      hidden_capabilities: [
-        'recipe_bom',
-        'rental_equipment',
-        'safety_consent',
-      ],
-    },
-    businessRules: {
-      exclude_payroll: true,
-      incident_capa_linkage: true,
-    },
-    readinessLevel: 'isolated',
-  },
-
   manufacturing_light: {
     id: 'manufacturing_light',
     theme: {
@@ -4594,10 +4437,6 @@ export const PRESET_ALIASES: Record<string, string> = {
   general_affairs: 'general_enterprise',
   rnd_lab: 'rnd_lab_management',
   rnd: 'rnd_lab_management',
-  personal_plant: 'personal_plant_ops',
-  plant_ops: 'personal_plant_ops',
-  ep_apps: 'personal_plant_ops',
-  EP_apps: 'personal_plant_ops',
   gym: 'gym_fitness',
   academy: 'general_academy',
   private_tutoring: 'exam_tutoring',
@@ -4628,7 +4467,7 @@ export function listIndustryPresets(): IndustryPresetDefinition[] {
 
 /**
  * moa 앱(일반 매장·사업장 온보딩 및 카탈로그)에서 표시 및 선택 가능한 프리셋 목록 조회.
- * hiddenInMoa 플래그가 설정된 프리셋(예: 기업 전용 EP_apps 등)은 제외됩니다.
+ * hiddenInMoa 플래그가 설정된 프리셋은 제외됩니다.
  */
 export function listMoaVisiblePresets(): IndustryPresetDefinition[] {
   return Object.values(INDUSTRY_PRESETS).filter((p) => !p.hiddenInMoa);

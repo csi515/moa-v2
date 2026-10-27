@@ -7,6 +7,8 @@ export interface MockE2EContext {
   orgId: string;
   orgName: string;
   orgCreated: boolean;
+  role?: string;
+  passes?: any[];
 }
 
 export const DEFAULT_MOCK_CONTEXT: MockE2EContext = {
@@ -16,10 +18,15 @@ export const DEFAULT_MOCK_CONTEXT: MockE2EContext = {
   orgId: '99999999-8888-7777-6666-555555555555',
   orgName: '모아 아카데미 대치점',
   orgCreated: false,
+  passes: [],
 };
 
 export async function setupE2EMocks(page: Page, context: Partial<MockE2EContext> = {}) {
-  const ctx: MockE2EContext = { ...DEFAULT_MOCK_CONTEXT, ...context };
+  const ctx: MockE2EContext = {
+    ...DEFAULT_MOCK_CONTEXT,
+    ...context,
+    passes: context.passes ? [...context.passes] : [...(DEFAULT_MOCK_CONTEXT.passes || [])],
+  };
 
   // 1. Supabase REST/RPC Fallback Catch-all Mocking (LIFO 등록에 의해 최하위 우선순위)
   await page.route('**/rest/v1/**', async (route) => {
@@ -47,7 +54,37 @@ export async function setupE2EMocks(page: Page, context: Partial<MockE2EContext>
     });
   });
 
-  // 2. Supabase Auth Mocking
+  // 2. Supabase Auth Mocking (Token, User, Signup)
+  await page.route('**/auth/v1/signup*', async (route) => {
+    const postData = JSON.parse(route.request().postData() || '{}');
+    ctx.userEmail = postData.email || ctx.userEmail;
+    ctx.userName = postData.data?.full_name || ctx.userName;
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        access_token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock_signup_access_token.mock_signature',
+        token_type: 'bearer',
+        expires_in: 3600,
+        refresh_token: 'mock-jwt-refresh-token',
+        user: {
+          id: ctx.userId,
+          aud: 'authenticated',
+          role: 'authenticated',
+          email: ctx.userEmail,
+          email_confirmed_at: '2026-10-12T00:00:00Z',
+          user_metadata: {
+            full_name: ctx.userName,
+          },
+          app_metadata: {
+            provider: 'email',
+          },
+        },
+      }),
+    });
+  });
+
   await page.route('**/auth/v1/token*', async (route) => {
     await route.fulfill({
       status: 200,
@@ -138,7 +175,7 @@ export async function setupE2EMocks(page: Page, context: Partial<MockE2EContext>
 
   // 5. 멤버십 목록 조회 RPC Mocking
   await page.route('**/rest/v1/rpc/get_user_memberships*', async (route) => {
-    if (!ctx.orgCreated) {
+    if (!ctx.orgCreated && !ctx.role) {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -152,7 +189,7 @@ export async function setupE2EMocks(page: Page, context: Partial<MockE2EContext>
           {
             membership_id: 'mem-1001',
             organization_id: ctx.orgId,
-            role: 'owner',
+            role: ctx.role || 'owner',
             organization_name: ctx.orgName,
             organization_industry_type: 'piano',
             organization_is_active: true,
@@ -163,7 +200,66 @@ export async function setupE2EMocks(page: Page, context: Partial<MockE2EContext>
     }
   });
 
-  // 6. 커머스/재고 RPC Mocking (재고 입고, 포인트 수동 조정 등)
+  // 6. 고객(Customers) 및 이용권(Passes) REST Mocking
+  await page.route('**/rest/v1/customers*', async (route) => {
+    const method = route.request().method();
+    if (method === 'POST') {
+      const payload = JSON.parse(route.request().postData() || '{}');
+      await route.fulfill({
+        status: 201,
+        contentType: 'application/json',
+        body: JSON.stringify([{ id: 'cust-1001', name: payload.name, phone: payload.phone }]),
+      });
+      return;
+    }
+    // GET
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify([]),
+    });
+  });
+
+  await page.route('**/rest/v1/passes*', async (route) => {
+    const method = route.request().method();
+    if (method === 'POST') {
+      const payload = JSON.parse(route.request().postData() || '{}');
+      const newPass = {
+        id: `pass-${Date.now()}`,
+        tenant_id: payload.tenant_id || ctx.orgId,
+        customer_id: payload.customer_id || 'cust-1001',
+        pass_name: payload.pass_name,
+        pass_type: payload.pass_type || 'COUNT_BASED',
+        total_count: payload.total_count || 10,
+        remaining_count: payload.remaining_count ?? payload.total_count ?? 10,
+        status: payload.status || 'ACTIVE',
+        is_active: true,
+        start_date: payload.start_date || '2026-10-01',
+        expires_at: payload.expires_at || '2026-12-31',
+        created_at: new Date().toISOString(),
+        customer: {
+          name: '이수강',
+          phone: '010-1234-5678',
+        },
+      };
+      ctx.passes = ctx.passes || [];
+      ctx.passes.unshift(newPass);
+      await route.fulfill({
+        status: 201,
+        contentType: 'application/json',
+        body: JSON.stringify([newPass]),
+      });
+      return;
+    }
+    // GET
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(ctx.passes || []),
+    });
+  });
+
+  // 7. 커머스/재고 RPC Mocking (재고 입고, 포인트 수동 조정 등)
   await page.route('**/rest/v1/rpc/apply_stock_movement*', async (route) => {
     await route.fulfill({
       status: 200,
@@ -191,7 +287,7 @@ export async function setupE2EMocks(page: Page, context: Partial<MockE2EContext>
     });
   });
 
-  // 7. 기타 보조 RPC 및 REST Mocking
+  // 8. 기타 보조 RPC 및 REST Mocking
   await page.route('**/rest/v1/rpc/set_active_membership*', async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: 'true' });
   });

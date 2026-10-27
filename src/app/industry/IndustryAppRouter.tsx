@@ -40,7 +40,20 @@ function resolveIndustryApp(industryType?: string | null): ComponentType {
 
 /** organization.industry_type 및 사용자 역할(Role)에 따라 적절한 셸 렌더링 */
 export const IndustryAppRouter: React.FC = () => {
-  const { currentOrganization, currentRole } = useOrganization();
+  const {
+    currentOrganization,
+    currentRole,
+    isParentOnly,
+    isCustomerOnly,
+    parentPortalActive,
+    customerPortalActive,
+    loading,
+  } = useOrganization();
+
+  // 조직 및 세션 로딩 중에는 로딩 화면 유지 (비동기 Role/Organization 확정 대기)
+  if (loading) {
+    return <LoadingScreen message="사업장 환경을 구성하는 중..." />;
+  }
 
   // 1. SaaS 최고 운영자(super_admin)는 테넌트 관제 콘솔로 리다이렉트
   if (isSuperAdmin(currentRole as string)) {
@@ -66,12 +79,17 @@ export const IndustryAppRouter: React.FC = () => {
   }
 
   // 4. 학부모(parent) 전용 포털
-  if (currentRole === 'parent') {
+  if (currentRole === 'parent' || isParentOnly || parentPortalActive) {
     return (
       <Suspense fallback={<LoadingScreen />}>
         <ParentShell />
       </Suspense>
     );
+  }
+
+  // 5. 일반 고객/수강생(customer) 전용 모바일 이용권 지갑 포털
+  if (currentRole === 'customer' || isCustomerOnly || customerPortalActive) {
+    return <Navigate to="/customer/pass" replace />;
   }
 
   const IndustryApp = resolveIndustryApp(currentOrganization?.industry_type);

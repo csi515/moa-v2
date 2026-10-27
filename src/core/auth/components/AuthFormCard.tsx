@@ -76,7 +76,7 @@ export function AuthFormCard({
         <div className="flex rounded-xl bg-slate-100 p-1 mb-6">
           <button
             type="button"
-            onClick={() => onSwitchMode('login')}
+            data-testid="tab-login" onClick={() => onSwitchMode('login')}
             className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-colors min-h-[44px] ${
               mode === 'login'
                 ? 'bg-white text-indigo-700 shadow-sm'
@@ -87,7 +87,7 @@ export function AuthFormCard({
           </button>
           <button
             type="button"
-            onClick={() => onSwitchMode('signup')}
+            data-testid="tab-signup" onClick={() => onSwitchMode('signup')}
             className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-colors min-h-[44px] ${
               mode === 'signup'
                 ? 'bg-white text-indigo-700 shadow-sm'
@@ -126,7 +126,7 @@ export function AuthFormCard({
                 required
                 value={fullName}
                 onChange={(e) => onFullNameChange(e.target.value)}
-                placeholder="홍길동"
+                data-testid="signup-name-input" placeholder="홍길동"
                 className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
               />
             </div>
@@ -142,7 +142,7 @@ export function AuthFormCard({
               required
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
-              placeholder="director@example.com"
+              data-testid="signup-email-input" placeholder="director@example.com"
               className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
             />
           </div>
@@ -171,6 +171,7 @@ export function AuthFormCard({
                 required
                 value={password}
                 onChange={(e) => onPasswordChange(e.target.value)}
+                data-testid="signup-password-input"
                 placeholder={mode === 'signup' ? '6자 이상 입력' : '••••••••'}
                 minLength={6}
                 className="w-full pl-10 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
@@ -193,7 +194,7 @@ export function AuthFormCard({
               <input
                 type="checkbox"
                 checked={agreedToTerms}
-                onChange={(e) => onAgreedToTermsChange(e.target.checked)}
+                data-testid="signup-terms-checkbox" onChange={(e) => onAgreedToTermsChange(e.target.checked)}
                 className="mt-1 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
               />
               <span className="text-xs text-slate-600 leading-relaxed">{termsLabel}</span>
@@ -217,7 +218,7 @@ export function AuthFormCard({
         )}
 
         <button
-          type="submit"
+          type="submit" data-testid="signup-submit-btn"
           disabled={loading}
           className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 min-h-[44px]"
         >

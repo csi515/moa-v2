@@ -155,6 +155,9 @@ export const BUSINESS_INVARIANT_TESTS = [
   { script: 'test:approval-line', group: 'capability', kind: 'unit', ci: 'always', order: 84 },
   { script: 'test:mbo-plan-approval', group: 'capability', kind: 'unit', ci: 'always', order: 85 },
   { script: 'test:ep-role-seed', group: 'organization', kind: 'unit', ci: 'always', order: 86 },
+  { script: 'test:business-predicates', group: 'platform', kind: 'unit', ci: 'always', order: 87 },
+  { script: 'test:db-sandbox-rls-invariants', group: 'authorization', kind: 'invariant', ci: 'always', order: 88 },
+  { script: 'test:feature-flags', group: 'platform', kind: 'unit', ci: 'always', order: 89 },
 ];
 
 /** 메타/그룹 러너 — inventory 후보가 아님 */
@@ -173,6 +176,7 @@ export const INVENTORY_META_SCRIPTS = new Set([
  */
 export const INVENTORY_OUT_OF_SCOPE = {
   'test:e2e': 'Playwright E2E',
+  'test:visual': 'Playwright visual regression',
   'test:modal-focus': 'UI focus',
   'test:user-facing-error': 'shared UI error copy',
   'test:parent-home-copy': 'parent home industry copy',
@@ -288,6 +292,7 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:mbo-engine': 'mbo objectives hierarchy approval workflow and evaluation domain engine unit',
   'test:mbo-plan-approval': 'mbo plan require_plan_approval gate and approval_workflow content unit',
   'test:ep-role-seed': 'EP zero-setup preset permission tokens to RolePermissionMap unit',
+  'test:business-predicates': 'pure domain business predicates, edge-case unit & calculation invariants',
   'test:approval-engine': 'approval workflow sequential multi-step approval state machine unit',
   'test:approval-line': 'approval workflow chosen reviewer/approver line unit',
   'test:quality-inspection': 'quality inspection tolerance judgment and statistical process capability unit',

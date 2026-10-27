@@ -127,7 +127,7 @@ export const OrganizationSelector: React.FC = () => {
             {isNewUser ? '모아에 오신 것을 환영합니다!' : '사업장 및 포털 선택'}
           </h1>
           {organizationsStatus === 'error' ? (
-            <div className="mt-3 text-left rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3">
+            <div className="mt-3 text-left rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3" data-testid="organization-gate-error">
               <p className="text-sm font-bold text-rose-800">사업장 정보를 불러오지 못했습니다</p>
               <p className="text-xs text-rose-700 mt-1">
                 {organizationsError || '잠시 후 다시 시도해 주세요.'}

@@ -19,9 +19,6 @@ export const PRESET_MODULE_BINDINGS = SHARED_MODULE_BY_INDUSTRY;
 
 /** GenericIndustryShell + ModuleAppShell (Refine 독 숨김) */
 export const CORPORATE_CHROME_PRESETS: ReadonlySet<string> = new Set([
-  'personal_plant_ops',
-  'personal_plant',
-  'plant_ops',
   'general_enterprise',
   'corporate_general_affairs',
   'rnd_lab_management',

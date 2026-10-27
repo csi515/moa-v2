@@ -325,7 +325,6 @@ function GenericDashboardView({ onNavigate, enabledCaps = [] }: GenericDashboard
     return (
       it === 'general_enterprise' ||
       it === 'rnd_lab_management' ||
-      it === 'personal_plant_ops' ||
       it === 'corporate_general_affairs' ||
       (enabledCaps.includes('mbo') && enabledCaps.includes('research_project'))
     );
@@ -750,7 +749,7 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
   const location = useLocation();
   const navigate = useNavigate();
 
-  /** EP_apps 등 기업 크롬: 런처 전용 경로와 셸 탭 이중 진입을 합친다 */
+  /** 기업 크롬: 런처 전용 경로와 셸 탭 이중 진입을 합친다 */
   const CORPORATE_DEDICATED_TAB_ROUTES: Record<string, string> = {
     'approval-workflow': '/workspace/approvals',
     'sop-risk': '/workspace/sop-risk',

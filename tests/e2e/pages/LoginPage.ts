@@ -29,10 +29,9 @@ export class LoginPage {
 
   async expectVisible() {
     await expect(this.container).toBeVisible();
-    await expect(this.googleBtn).toBeVisible();
-    await expect(this.appleBtn).toBeVisible();
-    await expect(this.kakaoBtn).toBeVisible();
-    await expect(this.naverBtn).toBeVisible();
+    await expect(this.emailInput).toBeVisible();
+    await expect(this.passwordInput).toBeVisible();
+    await expect(this.submitBtn).toBeVisible();
   }
 
   async loginWithEmail(email: string, pass: string) {

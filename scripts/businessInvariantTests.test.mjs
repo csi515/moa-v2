@@ -104,6 +104,9 @@ const P20_1_BUSINESS_INVARIANT_CHAIN = [
   'test:approval-line',
   'test:mbo-plan-approval',
   'test:ep-role-seed',
+  'test:business-predicates',
+  'test:db-sandbox-rls-invariants',
+  'test:feature-flags',
 ];
 
 const scripts = loadPackageScripts();

@@ -408,13 +408,6 @@ export const PRESET_DEFAULT_TERMS: Record<string, Partial<Record<StandardTermKey
       "term.instructor": "담당자/팀원",
       "term.lesson": "업무"
     },
-    "personal_plant_ops": {
-      "term.customer": "운영자",
-      "term.space": "운영베이",
-      "term.pass": "작업티켓",
-      "term.instructor": "작업자",
-      "term.lesson": "공정"
-    },
     "manufacturing_light": {
       "term.customer": "발주처/고객사",
       "term.space": "가공/조립라인",

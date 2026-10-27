@@ -31,28 +31,26 @@ assert.equal(isEnterpriseOrManufacturingPreset('study_cafe', 'studio'), false, '
 assert.equal(isEnterpriseOrManufacturingPreset('nail_salon', 'beauty'), false, '네일샵은 부서 스킵');
 
 // 기업/제조업 프리셋: 부서 설정 카드 활성화 (true)
-assert.equal(isEnterpriseOrManufacturingPreset('personal_plant_ops', 'manufacturing'), true, '개인 공장/제조는 부서 설정 노출');
 assert.equal(isEnterpriseOrManufacturingPreset('manufacturing_light', 'manufacturing'), true, '경공업 제조는 부서 설정 노출');
 assert.equal(isEnterpriseOrManufacturingPreset('general_enterprise', 'enterprise'), true, '일반 기업은 부서 설정 노출');
 assert.equal(isEnterpriseOrManufacturingPreset('iso_ims_enterprise', 'enterprise'), true, 'ISO 인증 기업은 부서 설정 노출');
 assert.equal(isEnterpriseOrManufacturingPreset('rnd_lab_management', 'enterprise'), true, 'R&D 연구소는 부서 설정 노출');
 
-// 3. personal_plant_ops 프리셋 EP_apps 명칭 및 moa 앱 비노출/선택 불가 검증
+// 3. EP_apps / personal_plant_ops 프리셋 완전 제거 검증
 import {
   getIndustryPreset,
   listMoaVisiblePresets,
   isPresetVisibleInMoa,
 } from '@/app/presets/presetRegistry';
 
-const plantPreset = getIndustryPreset('personal_plant_ops');
-assert.ok(plantPreset, 'personal_plant_ops 프리셋이 존재해야 합니다.');
-assert.equal(plantPreset.name, 'EP_apps', 'personal_plant_ops 프리셋의 이름은 EP_apps 여야 합니다.');
-assert.equal(plantPreset.hiddenInMoa, true, 'personal_plant_ops는 moa 앱에서 숨김 처리되어야 합니다.');
+assert.equal(getIndustryPreset('personal_plant_ops'), undefined, 'personal_plant_ops 프리셋은 완전히 제거되어야 합니다.');
+assert.equal(getIndustryPreset('ep_apps'), undefined, 'ep_apps 별칭은 완전히 제거되어야 합니다.');
+assert.equal(getIndustryPreset('EP_apps'), undefined, 'EP_apps 별칭은 완전히 제거되어야 합니다.');
 
 assert.equal(
   isPresetVisibleInMoa('personal_plant_ops'),
   false,
-  'personal_plant_ops는 moa 앱에서 표시 및 선택 불가능해야 합니다.'
+  '제거된 personal_plant_ops는 moa 앱에서 표시 및 선택 불가능해야 합니다.'
 );
 assert.equal(
   isPresetVisibleInMoa('piano'),

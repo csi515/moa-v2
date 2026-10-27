@@ -25,7 +25,7 @@ const allPresets = listIndustryPresets();
 const allPresetIds = Object.keys(INDUSTRY_PRESETS);
 
 // 51개 프리셋 전수 정의 확인
-assert.equal(allPresetIds.length, 53, '전체 프리셋 수는 정확히 53개여야 합니다.');
+assert.equal(allPresetIds.length, 52, '전체 프리셋 수는 정확히 52개여야 합니다.');
 
 const EXPECTED_VERTICAL_GROUPS = {
   education: [
@@ -86,7 +86,6 @@ const EXPECTED_VERTICAL_GROUPS = {
   care_bath: ['daycare', 'sauna_jjimjilbang'],
   manufacturing_enterprise: [
     'manufacturing_light',
-    'personal_plant_ops',
     'iso_ims_enterprise',
     'iso_human_capital',
     'procurement_distribution',
@@ -106,8 +105,8 @@ for (const [groupName, ids] of Object.entries(EXPECTED_VERTICAL_GROUPS)) {
     );
   }
 }
-assert.equal(totalGroupCount, 52, '8대 그룹의 총 업종 수는 52개여야 합니다.');
-console.log('✓ [PASS] 52개 전 업종 프리셋 ID 및 8개 그룹 정합성 검증 완료 (52/52)');
+assert.equal(totalGroupCount, 51, '8대 그룹의 총 업종 수는 51개여야 합니다.');
+console.log('✓ [PASS] 51개 전 업종 프리셋 ID 및 8개 그룹 정합성 검증 완료 (51/51)');
 
 // 2. 52개 프리셋 전수 assemblePreset 및 Onboarding 검증
 let assembledCount = 0;
@@ -221,29 +220,7 @@ console.log('✓ [PASS] 44개 업종별 Capability-탭 권한 허용성(isTabAll
   assert.ok(hasSpaceCap(ims.capabilities), 'iso_ims_enterprise에 공간/자원 계열 포함되어야 함');
   assert.ok(ims.capabilities.includes('leave_management'), 'iso_ims_enterprise에 leave_management 포함되어야 함');
 
-  const plant = INDUSTRY_PRESETS.personal_plant_ops;
-  assert.ok(plant, 'personal_plant_ops 프리셋이 등록되어야 함');
-  assert.ok(plant.capabilities.includes('booking'), 'personal_plant_ops에 booking 포함');
-  assert.ok(plant.capabilities.includes('whistleblower_grievance'), 'personal_plant_ops에 whistleblower_grievance 포함');
-  assert.ok(plant.capabilities.includes('inventory'), 'personal_plant_ops에 inventory 포함');
-  assert.ok(plant.capabilities.includes('mbo'), 'personal_plant_ops에 mbo 포함');
-  assert.ok(plant.capabilities.includes('research_project'), 'personal_plant_ops에 research_project 포함');
-  assert.ok(!plant.capabilities.includes('leave_management'), 'personal_plant_ops는 휴가·급여 계열 제외');
-  assert.ok(!plant.capabilities.includes('quality_inspection'), 'personal_plant_ops는 quality_inspection 제외');
-  assert.ok(!plant.capabilities.includes('vehicle_shuttle'), 'personal_plant_ops는 학원형 vehicle_shuttle 미포함');
-  assert.ok(plant.capabilities.includes('shuttle_dispatch'), 'personal_plant_ops는 통근 shuttle_dispatch 포함');
-  assert.ok(!plant.capabilities.includes('feedbacks'), 'personal_plant_ops는 feedbacks 미포함');
-  assert.ok(plant.requiredCapabilities?.includes('sop_risk_assessment'), 'SOP required');
-  assert.ok(plant.requiredCapabilities?.includes('facility_incident_report'), 'incident required');
-  assert.ok(plant.requiredCapabilities?.includes('supply_restock'), 'supply_restock required');
-  assert.ok(plant.optionalCapabilities?.includes('hazardous_substance_msds'), 'MSDS optional 계약');
-  assert.equal((plant.facilities as { hasDepartments?: boolean } | undefined)?.hasDepartments, true);
-  assert.equal(plant.theme?.badgeEmoji, '🏭');
-  assert.ok(
-    !plant.starterPassTemplates?.some((t) => t.name.includes('식물') || t.name.includes('분갈이')),
-    '식물 케어 스타터 패스 잔재 없음'
-  );
-  assert.equal(plant.readinessLevel, 'isolated', 'plant ops readiness isolated');
+  assert.equal(INDUSTRY_PRESETS.personal_plant_ops, undefined, 'personal_plant_ops 프리셋은 제거되어야 함');
 
   // corporate_general_affairs 별칭 해석 검증
   const cga = getIndustryPreset('corporate_general_affairs');

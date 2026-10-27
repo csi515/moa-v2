@@ -168,7 +168,7 @@ export const EpZeroSetupWizard: React.FC = () => {
 
     try {
       const preset = getIndustryPreset(
-        currentOrganization.industry_type ?? 'personal_plant_ops'
+        currentOrganization.industry_type ?? 'general_enterprise'
       );
       const result = await seedEpOrganizationRoles({
         organizationId: currentOrganization.id,
@@ -197,7 +197,7 @@ export const EpZeroSetupWizard: React.FC = () => {
       <div className="mb-8 text-center">
         <div className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">
           <Sparkles className="h-3.5 w-3.5" />
-          <span>EP_apps 10분 즉시 가동 Zero-Setup 마법사</span>
+          <span>10분 즉시 가동 Zero-Setup 마법사</span>
         </div>
         <h1 className="mt-3 text-3xl font-black text-slate-900">
           스마트 플랜트 사내 포털 초기 구성

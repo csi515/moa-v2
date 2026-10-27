@@ -171,7 +171,8 @@ export async function fetchUserOrganizations(userId: string): Promise<Organizati
         .eq('user_id', userId)
         .eq('is_active', true);
 
-      if (memError || !members || members.length === 0) {
+      if (memError) throw memError;
+      if (!members || members.length === 0) {
         return [];
       }
 
@@ -214,7 +215,7 @@ export async function fetchUserOrganizations(userId: string): Promise<Organizati
       }));
   } catch (err) {
     console.warn('[org] fetchUserOrganizations exception:', err);
-    return [];
+    throw err;
   }
 }
 
@@ -223,6 +224,9 @@ export async function fetchUserOrganizations(userId: string): Promise<Organizati
  * RPC 실패 시 organization_members 직접 조회로 폴백하며, 모든 예외 상황 시 안전하게 빈 목록 반환
  */
 export async function fetchUserMembershipsWithContext(): Promise<OrganizationMembership[]> {
+  let rpcFailed = false;
+  let lastError: any = null;
+
   try {
     const { data, error } = await getCoreClient().rpc('get_user_memberships' as never);
 
@@ -248,22 +252,36 @@ export async function fetchUserMembershipsWithContext(): Promise<OrganizationMem
       }));
     }
 
+    rpcFailed = true;
+    lastError = error;
     console.warn(
       '[org] get_user_memberships failed, falling back to direct query',
       error?.message
     );
   } catch (rpcErr) {
+    rpcFailed = true;
+    lastError = rpcErr;
     console.warn('[org] get_user_memberships RPC exception, falling back:', rpcErr);
   }
 
   try {
     const {
       data: { user },
+      error: userErr,
     } = await getCoreClient().auth.getUser();
-    if (!user?.id) return [];
+    if (userErr) throw userErr;
+    if (!user?.id) {
+      if (rpcFailed && lastError) {
+        throw new Error(String(lastError?.message || '사업장 정보를 불러오지 못했습니다.'));
+      }
+      return [];
+    }
     return await fetchUserOrganizations(user.id);
   } catch (directErr) {
     console.warn('[org] fetchUserOrganizations fallback failed:', directErr);
+    if (rpcFailed) {
+      throw (directErr instanceof Error ? directErr : new Error(String(lastError?.message || directErr || '사업장 정보를 불러오지 못했습니다.')));
+    }
     return [];
   }
 }

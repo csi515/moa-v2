@@ -59,7 +59,6 @@ export function planOwnershipTransfer(callerIsOwner: boolean, targetIsSelf: bool
 /** 제조·기업 프리셋만 조직도 질문을 노출한다. */
 const ORG_CHART_PRESET_IDS = new Set([
   'manufacturing_light',
-  'personal_plant_ops',
   'general_enterprise',
   'corporate_general_affairs',
   'CORP',

@@ -169,7 +169,7 @@ function IssuePassModal({
               required
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
-              placeholder="예: 홍길동"
+              data-testid="input-pass-customer-name" placeholder="예: 홍길동"
               className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
             />
           </div>
@@ -180,7 +180,7 @@ function IssuePassModal({
               type="tel"
               value={customerPhone}
               onChange={(e) => setCustomerPhone(e.target.value)}
-              placeholder="010-0000-0000"
+              data-testid="input-pass-customer-phone" placeholder="010-0000-0000"
               className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
             />
           </div>
@@ -192,7 +192,7 @@ function IssuePassModal({
               required
               value={passName}
               onChange={(e) => setPassName(e.target.value)}
-              placeholder={`예: 10회권, 1개월 자유권`}
+              data-testid="input-pass-name" placeholder={`예: 10회권, 1개월 자유권`}
               className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
             />
           </div>
@@ -232,6 +232,7 @@ function IssuePassModal({
             <button
               type="submit"
               disabled={isSubmitting}
+              data-testid="btn-submit-issue-pass"
               className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-indigo-600 px-5 text-sm font-bold text-white shadow-xs hover:bg-indigo-700 disabled:opacity-50 min-w-[90px] transition-all"
             >
               {isSubmitting ? '발급 중...' : '발급 완료'}
@@ -439,6 +440,7 @@ export const PassesManagementView: React.FC = () => {
 
         <button
           onClick={() => setIsIssueModalOpen(true)}
+          data-testid="btn-open-issue-pass-modal"
           className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 text-xs font-bold text-white shadow-md shadow-indigo-100 transition hover:bg-indigo-700 active:scale-95 min-w-[120px]"
         >
           <Plus className="h-4 w-4 shrink-0" />

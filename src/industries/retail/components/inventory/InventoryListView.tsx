@@ -70,9 +70,6 @@ export const InventoryListView: FC = () => {
   const orgId = currentOrganization?.id;
   const industryType = currentOrganization?.industry_type ?? '';
   const isPlantOpsContext =
-    industryType === 'personal_plant_ops' ||
-    industryType === 'personal_plant' ||
-    industryType === 'plant_ops' ||
     industryType === 'manufacturing_light';
   /** Owner/Admin/Manager만 입고·조정 — Staff는 조회만 */
   const canMutate = isAdmin;

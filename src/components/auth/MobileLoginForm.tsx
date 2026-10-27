@@ -227,11 +227,16 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-2.5 px-3">
-          <div className="flex items-center gap-2 text-xs text-emerald-800 font-medium">
+        <div className="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-2.5 px-3 space-y-1">
+          <div className="flex items-center gap-2 text-xs text-emerald-800 font-semibold">
             <UserRound className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>{isEn ? "Member Pass & Booking Portal" : "회원권·출결·예약 전용 로그인"}</span>
+            <span>{isEn ? "Member Passes & Parent Portal" : "수강생 이용권 · 학부모 자녀 포털"}</span>
           </div>
+          <p className="text-[11px] text-emerald-700/80 pl-6 leading-tight">
+            {isEn
+              ? "Check member passes, session attendance, and parent child updates."
+              : "수강생 본인 이용권/출결 및 학부모 자녀 등·하원 알림을 조회합니다."}
+          </p>
         </div>
       )}
 

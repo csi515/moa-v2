@@ -396,7 +396,7 @@ export const QuickSetupPage: React.FC = () => {
 
   // 업종 선택 시 추천값 자동 주입 (Pre-fill)
   const applyIndustryDefaults = (industry: string) => {
-    if (industry !== 'custom' && (!isPresetVisibleInMoa(industry) || industry === 'personal_plant_ops')) {
+    if (industry !== 'custom' && !isPresetVisibleInMoa(industry)) {
       setGeneralError('해당 프리셋은 moa 앱에서 선택할 수 없습니다.');
       return;
     }
@@ -437,13 +437,12 @@ export const QuickSetupPage: React.FC = () => {
       const result = recommendIndustryPreset(aiQuery);
       if (
         result.topRecommendation &&
-        (!isPresetVisibleInMoa(result.topRecommendation.presetId) ||
-          result.topRecommendation.presetId === 'personal_plant_ops')
+        (!isPresetVisibleInMoa(result.topRecommendation.presetId))
       ) {
         result.topRecommendation = null;
       }
       result.alternativeRecommendations = result.alternativeRecommendations.filter(
-        (alt) => isPresetVisibleInMoa(alt.presetId) && alt.presetId !== 'personal_plant_ops'
+        (alt) => isPresetVisibleInMoa(alt.presetId)
       );
       setAiResult(result);
       setIsAiAnalyzing(false);
@@ -548,7 +547,7 @@ export const QuickSetupPage: React.FC = () => {
 
     if (
       selectedIndustry !== 'custom' &&
-      (!isPresetVisibleInMoa(selectedIndustry) || selectedIndustry === 'personal_plant_ops')
+      !isPresetVisibleInMoa(selectedIndustry)
     ) {
       setGeneralError('해당 프리셋은 moa 앱에서 선택할 수 없습니다.');
       return;

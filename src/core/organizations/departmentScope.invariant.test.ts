@@ -100,6 +100,6 @@ assert.deepEqual(
   ['hq-only', 'line-only', 'shared'].sort(),
 );
 
-assert.equal(shouldAskDepartmentSetup('personal_plant_ops', 'manufacturing'), true);
+assert.equal(shouldAskDepartmentSetup('manufacturing_light', 'manufacturing'), true);
 
 console.log('departmentScope.invariant.test.ts: ok');
