@@ -74,8 +74,7 @@ export const SongProgressStaffView: FC = () => {
       <PageHeader
         icon={<Music2 className="w-6 h-6" />}
         title="완곡 스탬프"
-        description="수업 중 즉시 수여하거나, 학생 신청을 승인합니다."
-      />
+        />
 
       {!supabaseReady && (
         <p className="text-sm text-amber-800 bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5">
@@ -85,10 +84,6 @@ export const SongProgressStaffView: FC = () => {
 
       <section className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3">
         <h3 className="text-sm font-black text-slate-900">{SONG_PROGRESS_COPY.grantCta}</h3>
-        <p className="text-xs text-slate-500 leading-relaxed">
-          스마트폰이 없는 초등 학생도 수업 직후 스탬프를 받을 수 있습니다. 학부모 PWA에 실시간
-          반영됩니다.
-        </p>
         <label className="block text-xs font-bold text-slate-600">
           학생 검색
           <input
@@ -137,14 +132,6 @@ export const SongProgressStaffView: FC = () => {
         <Stamp className="w-5 h-5" />
         승인 대기 {pendingCount}건 보기
       </button>
-
-      <div className="rounded-2xl border border-amber-100 bg-amber-50/60 p-4 text-sm text-amber-950">
-        <p className="font-bold">운영 팁</p>
-        <p className="text-xs mt-1 leading-relaxed text-amber-900/80">
-          수여 직후 Web Share로 학부모 카톡에 성취 카드를 보낼 수 있습니다. FCM 없이도 화면·공유로
-          보상이 전달됩니다.
-        </p>
-      </div>
 
       <DirectorApprovalModal
         isOpen={approvalOpen}

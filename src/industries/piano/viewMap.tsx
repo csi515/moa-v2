@@ -82,7 +82,6 @@ function PianoSettingsHub() {
 const consultationAvailabilitySettings = () => (
   <AvailabilitySettingsView
     title="상담 가능시간"
-    description="상담 예약을 받을 수 있는 요일·시간대를 설정합니다."
     defaultSlotTitle="상담"
     defaultSlotMinutes={30}
   />

@@ -274,8 +274,7 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
     <PageHeader
       icon={<Piano className="w-6 h-6" />}
       title="오늘 수업"
-      description="출석 · 수업 노트 · 과제 · 다음곡을 한 화면에서 저장합니다."
-    />
+      />
   );
 
   return (

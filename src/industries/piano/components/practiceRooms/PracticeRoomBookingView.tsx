@@ -282,17 +282,7 @@ export const PracticeRoomBookingView: FC = () => {
 
   return (
     <div className="space-y-4 pb-4">
-      {/* 피아노 자율 연습실 운영 모드 안내 */}
-      <div className="flex items-center gap-3 p-3.5 bg-indigo-50/70 border border-indigo-100 rounded-2xl text-xs text-indigo-900 shadow-2xs">
-        <span className="text-base shrink-0">🎵</span>
-        <div className="flex-1">
-          <p className="font-bold text-indigo-950">피아노 학원 자율 연습실 운영</p>
-          <p className="text-[11px] text-indigo-700/80 mt-0.5">
-            원생들은 빈 연습실을 자유롭게 이용할 수 있으며, 레슨 전후 집중 연습이나 특별 관리가 필요한 경우에만 사전 지정을 등록합니다.
-          </p>
-        </div>
-      </div>
-      {pendingRequests.length > 0 && (
+            {pendingRequests.length > 0 && (
         <section className="rounded-2xl border border-amber-200 bg-amber-50/60 p-3.5 space-y-2">
           <h3 className="text-xs font-black text-amber-900">학생 예약 승인 대기</h3>
           {pendingRequests.map((r) => (

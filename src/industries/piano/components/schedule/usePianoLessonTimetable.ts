@@ -362,6 +362,7 @@ export function usePianoLessonTimetable() {
     setPickerQuery,
     pickerExcludeIds,
     pendingStudentId,
+    setPendingStudentId,
     isScoped,
     teachers,
     students,

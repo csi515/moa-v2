@@ -23,11 +23,16 @@ export class CreateOrganizationWizardPage {
     this.addressRoadInput = page.getByTestId('input-address-road');
     this.addressDetailInput = page.getByTestId('input-address-detail');
     this.nextBtn = page.getByTestId('btn-wizard-next');
-    this.submitBtn = page.getByTestId('btn-wizard-submit');
+    this.submitBtn = page.getByTestId('btn-wizard-submit').or(page.getByTestId('btn-wizard-next'));
     this.enterBtn = page.getByTestId('btn-wizard-enter');
   }
 
   async expectWizardVisible() {
+    const isNextBtnVisible = await this.nextBtn.isVisible().catch(() => false);
+    const isNameInputVisible = await this.orgNameInput.isVisible().catch(() => false);
+    if (isNextBtnVisible && !isNameInputVisible) {
+      await this.nextBtn.click();
+    }
     await expect(this.orgNameInput).toBeVisible();
   }
 

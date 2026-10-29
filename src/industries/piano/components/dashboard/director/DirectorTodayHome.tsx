@@ -128,7 +128,7 @@ export const DirectorTodayHome: FC = () => {
         </h2>
         <p className="text-xs text-indigo-100/90 mt-1 leading-snug">
           {isEmpty
-            ? '먼저 학생을 등록한 뒤, 일정에 배치하고 출결·수납을 관리하세요.'
+            ? '신규 학생을 등록하고 수업을 시작해보세요.'
             : [
                 todayClasses.length > 0
                   ? `오늘 수업 ${todayClasses.length}`

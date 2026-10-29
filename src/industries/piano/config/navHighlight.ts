@@ -30,6 +30,8 @@ export function resolvePianoNavHighlightTab(tab: NavTab): NavTab {
   if (isTabInHub(tab, PIANO_CUSTOMER_HUB_TABS)) return 'students';
   if (isTabInHub(tab, PIANO_ATTENDANCE_HUB_TABS)) return 'attendance';
   if (isTabInHub(tab, PIANO_SCHEDULE_HUB_TABS)) return 'timetable';
+  // 수납(tuition, unpaid)과 재무 관리(income, expenses, payroll, overview) 분리
+  if (tab === 'tuition' || tab === 'unpaid') return 'tuition';
   if (isTabInHub(tab, PIANO_FINANCE_HUB_TABS)) return 'finance';
   if (isTabInHub(tab, PIANO_SETTINGS_HUB_TABS)) return 'settings';
   if (PIANO_SETTINGS_EXTRA_TABS.has(tab)) return 'settings';

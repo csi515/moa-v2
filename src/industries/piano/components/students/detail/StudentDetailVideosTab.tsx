@@ -59,8 +59,7 @@ export const StudentDetailVideosTab: React.FC<StudentDetailVideosTabProps> = ({
     <div className="flex items-center justify-between">
       <div>
         <h4 className="text-sm font-bold text-slate-900">연주 영상 아카이브</h4>
-        <p className="text-xs text-slate-500">YouTube 링크로 연주회·콩쿠르·수업 영상을 관리합니다</p>
-      </div>
+        </div>
       <button
         onClick={() => setIsAddVideoOpen(true)}
         className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"

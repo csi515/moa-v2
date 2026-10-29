@@ -90,7 +90,6 @@ export const PianoAttendanceView: FC = () => {
         density="compact"
         icon={<CheckSquare className="w-6 h-6" />}
         title="출결"
-        description="오늘 예정 학생이 실제로 왔는지 기록합니다."
         actions={
           pinEnabled ? (
             <button

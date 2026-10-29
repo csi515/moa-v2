@@ -174,7 +174,6 @@ export const LessonRecordsView: React.FC = () => {
       <PageHeader
         icon={<Piano className="w-6 h-6" />}
         title="수업 일지 및 진도 관리"
-        description="학생별 피아노 수업 진도, 강점 및 보완점, 과제 기록"
         actions={
           <button
             onClick={handleOpenCreate}

@@ -66,8 +66,7 @@ function EducationSectionView({ section }: { section: EduSection }) {
       <PageHeader
         icon={sectionIcons[section]}
         title={titles[section]}
-        description="학부모 포털에 연동되는 교육 품질 데이터를 관리합니다."
-      />
+        />
 
       {students.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center">

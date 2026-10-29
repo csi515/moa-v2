@@ -6,8 +6,15 @@ import {
   Sparkles,
   CheckCircle2,
   Loader2,
+  ArrowRight,
+  ArrowLeft,
 } from 'lucide-react';
-import { type IndustryType, getIndustryCategoryForType } from '../industry/types';
+import {
+  type IndustryType,
+  getIndustryCategoryForType,
+  getIndustryCategoryLabel,
+  getIndustryLabel,
+} from '../industry/types';
 import { IndustryPicker } from '../industry/IndustryPicker';
 import {
   getPlaceLabel,
@@ -113,7 +120,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
         setCreatedOrgId(orgId);
       }
 
-      setStep(1);
+      setStep(2);
     } catch (err) {
       submittingRef.current = false;
       if (err instanceof OrganizationLocationSetupError) {
@@ -143,9 +150,15 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
   };
 
   const steps = [
+    { icon: Sparkles, label: '업종 선택' },
     { icon: Building2, label: '사업장 정보' },
     { icon: CheckCircle2, label: '완료' },
   ];
+
+  const selectedCategoryLabel = getIndustryCategoryLabel(
+    getIndustryCategoryForType(formData.industryType)
+  );
+  const selectedIndustryLabel = getIndustryLabel(formData.industryType);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
@@ -155,7 +168,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
             <Sparkles className="w-5 h-5 text-indigo-600" />
             <h2 className="font-bold text-slate-900">새 사업장 등록</h2>
           </div>
-          {step < 1 && (
+          {step < 2 && (
             <button
               onClick={onCancel}
               className="text-slate-400 hover:text-slate-600 p-1 min-w-[44px] min-h-[44px] flex items-center justify-center"
@@ -195,24 +208,86 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
           </div>
         </div>
 
+        {/* Step 0: 업종 선택 단계 (업종 선택 강제, 이름/주소 입력은 차단) */}
         {step === 0 && (
-          <form onSubmit={handleStepInfo} className="p-6 space-y-4">
+          <div className="p-6 space-y-5">
             {/* 업종 선택 및 맞춤 기능 안내 배너 */}
             <div className="p-3.5 rounded-2xl bg-indigo-50/80 border border-indigo-100/90 flex items-center gap-2.5 shadow-2xs">
               <Sparkles className="w-4 h-4 text-indigo-600 shrink-0" />
               <p className="text-xs text-indigo-900 font-medium">
-                운영하시는 업종을 선택하시면 업종 맞춤형 기능({guideFeatureText})이 자동으로 세팅됩니다.
+                운영하시는 업종을 먼저 선택해 주세요. 선택하신 업종에 맞춰 필수 도구와 명칭({guideFeatureText})이 자동으로 최적화됩니다.
               </p>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                업종 <span className="text-rose-500">*</span>
+              <label className="block text-xs font-semibold text-slate-700 mb-2">
+                운영 업종 분류 및 선택 <span className="text-rose-500">*</span>
               </label>
               <IndustryPicker
                 value={formData.industryType}
-                onChange={(industryType) => setFormData({ ...formData, industryType })}
+                onChange={(industryType) => {
+                  setFormData((prev) => ({ ...prev, industryType }));
+                  setError(null);
+                }}
               />
+            </div>
+
+            {error && (
+              <div className="p-3 rounded-xl bg-rose-50 border border-rose-100 text-sm text-rose-700">
+                {error}
+              </div>
+            )}
+
+            <div className="flex justify-between items-center pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={onCancel}
+                className="text-xs text-slate-400 hover:text-slate-600 min-h-[44px] px-3"
+              >
+                취소
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (!formData.industryType) {
+                    setError('업종을 선택해 주세요.');
+                    return;
+                  }
+                  setError(null);
+                  setStep(1);
+                }}
+                data-testid="btn-wizard-next"
+                className="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl min-h-[44px] inline-flex items-center gap-1.5 shadow-xs transition"
+              >
+                <span>다음: {getPlaceLabel(formData.industryType)} 정보 입력</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 1: 사업장 정보 입력 단계 (업종 선택 후 진행) */}
+        {step === 1 && (
+          <form onSubmit={handleStepInfo} className="p-6 space-y-4">
+            {/* 선택된 업종 확인 및 재선택 배너 */}
+            <div className="p-3.5 rounded-2xl bg-indigo-50/80 border border-indigo-100 flex items-center justify-between gap-3 shadow-2xs">
+              <div className="flex items-center gap-2 min-w-0">
+                <Sparkles className="w-4 h-4 text-indigo-600 shrink-0" />
+                <div className="text-xs text-slate-600 truncate">
+                  선택된 업종:{' '}
+                  <span className="font-bold text-indigo-900">
+                    [{selectedCategoryLabel}] {selectedIndustryLabel}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setStep(0)}
+                className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 underline shrink-0 min-h-[36px] px-2 flex items-center gap-1"
+              >
+                <ArrowLeft className="w-3 h-3" />
+                <span>업종 변경</span>
+              </button>
             </div>
 
             <div>
@@ -246,11 +321,12 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
             <div className="flex justify-between items-center pt-2">
               <button
                 type="button"
-                onClick={onCancel}
+                onClick={() => setStep(0)}
                 disabled={isSaving}
-                className="text-xs text-slate-400 hover:text-slate-600 min-h-[44px] px-3"
+                className="text-xs text-slate-500 hover:text-slate-700 min-h-[44px] px-3 inline-flex items-center gap-1"
               >
-                취소
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>이전 (업종 선택)</span>
               </button>
               <button
                 type="submit"
@@ -274,7 +350,8 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
           </form>
         )}
 
-        {step === 1 && (
+        {/* Step 2: 완료 단계 */}
+        {step === 2 && (
           <div className="p-6 space-y-5 text-center">
             <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-8 h-8 text-emerald-600" />

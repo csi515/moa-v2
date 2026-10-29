@@ -41,6 +41,7 @@ export const PianoLessonTimetableView: FC = () => {
     setPickerQuery,
     pickerExcludeIds,
     pendingStudentId,
+    setPendingStudentId,
     isScoped,
     teachers,
     students,
@@ -176,20 +177,21 @@ export const PianoLessonTimetableView: FC = () => {
 
   return (
     <div className="space-y-4 pb-2">
-      <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 px-3 py-2.5 flex items-start gap-2">
-        <Clock className="w-4 h-4 text-indigo-600 mt-0.5 shrink-0" />
-        <p className="text-xs text-indigo-900 leading-relaxed">
-          시간표는 <strong className="font-bold">누가 언제 오는지</strong>를 정합니다. 실제로
-          왔는지는 <strong className="font-bold">출결</strong>에서 따로 기록합니다. 그리드는{' '}
-          <strong className="font-bold">30분 단위</strong>(15:00, 15:30…)이며, 여러 요일에 걸친 반은
-          표시만 되고 편집은 「반 관리」에서 하세요.
-          {pendingStudentId
-            ? ' 선택한 학생을 시간대에 놓으면 그 시각의 반에 배정됩니다(새 시각이면 확인 후 반이 만들어질 수 있습니다).'
-            : useDragGrid
-              ? ' PC에서는 학생을 드래그해 시간대에 놓거나 칸 안에서 이동하세요.'
-              : ' 「학생 추가」또는 학생을 탭한 뒤 시간대를 선택하세요.'}
-        </p>
-      </div>
+      {pendingStudentId && (
+        <div className="rounded-2xl border border-indigo-200 bg-indigo-50/90 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-indigo-950 font-bold shadow-xs">
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
+            <span>배치할 시간대를 시간표에서 클릭하세요.</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setPendingStudentId(null)}
+            className="px-2.5 py-1 rounded-lg bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-50 font-semibold"
+          >
+            배치 취소
+          </button>
+        </div>
+      )}
 
       <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-slate-200/80 shadow-xs flex flex-wrap items-center gap-2">
         <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500">

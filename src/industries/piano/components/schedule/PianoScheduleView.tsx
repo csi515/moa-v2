@@ -1,32 +1,22 @@
-import { useEffect, useMemo, type FC, type ReactNode } from 'react';
-import { Calendar, Clock, DoorOpen, Sparkles, type LucideIcon } from 'lucide-react';
+import { useEffect, useMemo, useState, type FC } from 'react';
+import { Calendar, Clock, DoorOpen, Sparkles, Plus, X } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { getPlaceLabel } from '@/core/industry/industryUi';
 import { useStaffGrants, useStaffScope } from '@/hooks';
 import { AcademyCalendarView } from '../calendar/AcademyCalendarView';
-import { SegmentedControl } from '@/shared/components';
+import { SegmentedControl, Modal } from '@/shared/components';
 import { MakeupManagementView } from '../makeup/MakeupManagementView';
 import { PracticeRoomBookingView } from '../practiceRooms/PracticeRoomBookingView';
 import { PianoLessonTimetableView } from './PianoLessonTimetableView';
 
-type CoreScheduleSegment = 'classes' | 'makeups';
-type AuxScheduleSegment = 'events' | 'rooms';
-type ScheduleSegment = CoreScheduleSegment | AuxScheduleSegment;
+type ScheduleSegment = 'timetable' | 'calendar' | 'rooms';
 
-const CORE_SEGMENT_OPTIONS: { value: CoreScheduleSegment; label: string }[] = [
-  { value: 'classes', label: '시간표' },
-  { value: 'makeups', label: '보강' },
-];
-
-function tabToSegment(tab: string): ScheduleSegment {
-  if (tab === 'calendar') return 'events';
-  if (tab === 'makeups') return 'makeups';
-  if (tab === 'practice-rooms') return 'rooms';
-  return 'classes';
-}
-
-/** 피아노 일정 — 핵심은 시간표·보강. 캘린더·연습실은 별도 화면(딥링크 유지) */
+/**
+ * 피아노 일정 뷰
+ * - 시간표(주간 그리드)와 월별 달력(학원 캘린더)을 상단 탭으로 즉시 전환
+ * - 보강은 독립 탭 대신 시간표 상단 액션(+ 보강 레슨 추가)으로 직관적 연계
+ */
 export const PianoScheduleView: FC = () => {
   const { activeTab, setActiveTab } = useApp();
   const { industry } = usePermissions();
@@ -35,54 +25,59 @@ export const PianoScheduleView: FC = () => {
   const { allow } = useStaffGrants();
   const canRooms = !isScoped || allow('practiceRooms');
 
+  const [showMakeupModal, setShowMakeupModal] = useState(false);
+
+  // makeups 딥링크로 진입한 경우 시간표로 전환하면서 보강 모달 자동 오픈
   useEffect(() => {
-    if (!canRooms && activeTab === 'practice-rooms') setActiveTab('timetable');
+    if (activeTab === 'makeups') {
+      setShowMakeupModal(true);
+      setActiveTab('timetable');
+    }
+  }, [activeTab, setActiveTab]);
+
+  useEffect(() => {
+    if (!canRooms && activeTab === 'practice-rooms') {
+      setActiveTab('timetable');
+    }
   }, [canRooms, activeTab, setActiveTab]);
 
-  const segment = useMemo(() => {
-    const next = tabToSegment(activeTab);
-    if (!canRooms && next === 'rooms') return 'classes';
-    return next;
+  const segment: ScheduleSegment = useMemo(() => {
+    if (activeTab === 'calendar') return 'calendar';
+    if (activeTab === 'practice-rooms' && canRooms) return 'rooms';
+    return 'timetable';
   }, [activeTab, canRooms]);
 
-  const handleCoreChange = (next: CoreScheduleSegment) => {
-    if (next === 'makeups') setActiveTab('makeups');
+  const segmentOptions = useMemo(() => {
+    const opts: { value: ScheduleSegment; label: string }[] = [
+      { value: 'timetable', label: '시간표' },
+      { value: 'calendar', label: '월별 달력' },
+    ];
+    if (canRooms) {
+      opts.push({ value: 'rooms', label: '연습실' });
+    }
+    return opts;
+  }, [canRooms]);
+
+  const handleSegmentChange = (next: ScheduleSegment) => {
+    if (next === 'calendar') setActiveTab('calendar');
+    else if (next === 'rooms') setActiveTab('practice-rooms');
     else setActiveTab('timetable');
   };
 
-  if (segment === 'events') {
-    return (
-      <AuxScheduleScreen
-        eyebrow="일정"
-        title={`${placeLabel} 캘린더`}
-        icon={Calendar}
-        onBack={() => setActiveTab('timetable')}
-      >
-        <AcademyCalendarView embedded />
-      </AuxScheduleScreen>
-    );
-  }
+  const title =
+    segment === 'calendar'
+      ? `${placeLabel} 월별 달력`
+      : segment === 'rooms'
+      ? '연습실 예약'
+      : '수업 시간표';
 
-  if (segment === 'rooms' && canRooms) {
-    return (
-      <AuxScheduleScreen
-        eyebrow="일정"
-        title="연습실 예약"
-        icon={DoorOpen}
-        onBack={() => setActiveTab('timetable')}
-      >
-        <PracticeRoomBookingView />
-      </AuxScheduleScreen>
-    );
-  }
-
-  const title = segment === 'makeups' ? '보강' : '시간표';
-  const TitleIcon = segment === 'makeups' ? Sparkles : Clock;
+  const TitleIcon =
+    segment === 'calendar' ? Calendar : segment === 'rooms' ? DoorOpen : Clock;
 
   return (
     <div className="space-y-4 pb-4">
       <div className="sticky top-0 z-10 -mx-1 px-1 py-1 bg-slate-50/90 backdrop-blur-sm space-y-3">
-        <div className="flex items-end justify-between gap-3 px-0.5">
+        <div className="flex items-center justify-between gap-3 px-0.5">
           <div>
             <p className="text-[11px] font-semibold text-indigo-600">일정</p>
             <h2 className="text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
@@ -90,78 +85,48 @@ export const PianoScheduleView: FC = () => {
               {title}
             </h2>
           </div>
+
+          {/* 시간표 모드일 때 보강 레슨 직접 추가 버튼 */}
+          {segment === 'timetable' && (
+            <button
+              type="button"
+              onClick={() => setShowMakeupModal(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-bold transition shadow-2xs min-h-[36px]"
+              title="결석 학생의 보강 레슨을 일정표에 추가합니다"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+              <span>+ 보강 레슨 추가</span>
+            </button>
+          )}
         </div>
+
         <SegmentedControl
-          value={segment === 'makeups' ? 'makeups' : 'classes'}
-          options={CORE_SEGMENT_OPTIONS}
-          onChange={handleCoreChange}
+          value={segment}
+          options={segmentOptions}
+          onChange={handleSegmentChange}
           aria-label="일정 보기 전환"
           fullWidth
           className="w-full shadow-xs"
         />
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-0.5 text-[11px] text-slate-500">
-          <button
-            type="button"
-            onClick={() => setActiveTab('calendar')}
-            className="font-semibold text-slate-600 hover:text-indigo-600 min-h-[44px] sm:min-h-0 py-1"
-          >
-            캘린더
-          </button>
-          {canRooms && (
-            <>
-              <span aria-hidden className="text-slate-300">
-                ·
-              </span>
-              <button
-                type="button"
-                onClick={() => setActiveTab('practice-rooms')}
-                className="font-semibold text-slate-600 hover:text-indigo-600 min-h-[44px] sm:min-h-0 py-1"
-              >
-                연습실
-              </button>
-            </>
-          )}
-        </div>
       </div>
 
-      {segment === 'classes' && <PianoLessonTimetableView />}
-      {segment === 'makeups' && <MakeupManagementView />}
+      {segment === 'timetable' && <PianoLessonTimetableView />}
+      {segment === 'calendar' && <AcademyCalendarView embedded />}
+      {segment === 'rooms' && canRooms && <PracticeRoomBookingView />}
+
+      {/* 보강 레슨 추가 및 관리 모달 */}
+      {showMakeupModal && (
+        <Modal
+          isOpen={showMakeupModal}
+          onClose={() => setShowMakeupModal(false)}
+          title="보강 레슨 일정 추가 및 관리"
+          maxWidth="4xl"
+        >
+          <div className="p-1">
+            <MakeupManagementView />
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
-
-function AuxScheduleScreen({
-  eyebrow,
-  title,
-  icon: Icon,
-  onBack,
-  children,
-}: {
-  eyebrow: string;
-  title: string;
-  icon: LucideIcon;
-  onBack: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <div className="space-y-4 pb-4">
-      <div className="sticky top-0 z-10 -mx-1 px-1 py-1 bg-slate-50/90 backdrop-blur-sm space-y-2">
-        <button
-          type="button"
-          onClick={onBack}
-          className="text-[11px] font-bold text-indigo-600 hover:text-indigo-700 min-h-[44px] sm:min-h-0"
-        >
-          ← 시간표로
-        </button>
-        <div className="px-0.5">
-          <p className="text-[11px] font-semibold text-indigo-600">{eyebrow}</p>
-          <h2 className="text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-            <Icon className="w-5 h-5 text-indigo-600 shrink-0" />
-            {title}
-          </h2>
-        </div>
-      </div>
-      {children}
-    </div>
-  );
-}

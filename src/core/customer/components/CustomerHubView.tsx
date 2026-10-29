@@ -63,11 +63,12 @@ export const CustomerHubView: FC<{
   if (segment === 'parents') {
     body = <ParentManagementView />;
   } else if (segment === 'enrollment') {
-    body = GuardianView ? (
-      <GuardianView />
-    ) : (
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 text-xs text-slate-500">
-        등록 요청 기능이 연결되어 있지 않습니다.
+    body = (
+      <div className="space-y-4">
+        <CustomerJoinRequestsPanel />
+        {GuardianView ? (
+          <GuardianView />
+        ) : null}
       </div>
     );
   }
@@ -78,7 +79,6 @@ export const CustomerHubView: FC<{
         density="compact"
         icon={<Users className="w-6 h-6 text-indigo-600" />}
         title={`${customerLabel} 관리`}
-        description={`${placeLabel} ${customerLabel} 및 ${contactLabel} 명단 · 등록 요청`}
         actions={
           <SegmentedControl
             value={segment}
@@ -90,7 +90,6 @@ export const CustomerHubView: FC<{
           />
         }
       />
-      <CustomerJoinRequestsPanel />
       {body}
     </div>
   );

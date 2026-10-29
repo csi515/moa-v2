@@ -11,7 +11,7 @@ import type { PaymentMethod } from '@/capabilities/billing/finance/paymentMethod
 import type { Student } from '@/types';
 import { useStorageRefresh } from '@/hooks';
 import { buildYearMonthOptions } from '@/capabilities/billing/finance/categories';
-import { CreditCard, AlertCircle } from 'lucide-react';
+import { CreditCard } from 'lucide-react';
 import { PageHeader } from '@/shared/components';
 import { CombinedPaymentModal } from './CombinedPaymentModal';
 import { todayIsoLocal } from '@/shared/utils/localDate';
@@ -139,30 +139,6 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
           />
           <TuitionSummaryCards selectedMonth={formatYearMonthLabel(selectedMonth)} stats={stats} />
         </>
-      )}
-
-      {/* 이번 달 총 미수금 합계 강조 배너 */}
-      {stats.totalUnpaid > 0 && (
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-rose-50/90 border border-rose-200 rounded-2xl text-rose-900 shadow-2xs animate-in fade-in">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center shrink-0 text-rose-600">
-              <AlertCircle className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-extrabold text-rose-950">
-                  이번 달 총 미수금: {stats.totalUnpaid.toLocaleString()}원
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-rose-200 text-rose-800 text-[11px] font-bold">
-                  {stats.unpaidCount}명 미납
-                </span>
-              </div>
-              <p className="text-xs text-rose-700/80 mt-0.5">
-                수납 지연 회원에게 정기 수납 알림을 발송하거나 하단 필터에서 미납 내역을 확인할 수 있습니다.
-              </p>
-            </div>
-          </div>
-        </div>
       )}
 
       <TuitionFilterBar

@@ -1,40 +1,27 @@
 import { useState, type FC } from 'react';
 import { CalendarPlus, MessageSquareText, QrCode } from 'lucide-react';
-import { PageHeader, SegmentedControl } from '@/shared/components';
 import { ConsultationRecordsView } from '@/capabilities/consultation';
 import { ReservationInboxView } from '@/core/schedules/components/ReservationInboxView';
 import { ConsultationQrModal } from '@/core/schedules/components/ConsultationQrModal';
 import { CreateConsultationScheduleModal } from '@/core/schedules/components/CreateConsultationScheduleModal';
 import { CustomerJoinRequestsPanel } from '@/core/customer/CustomerJoinRequestsPanel';
+import { PageHeader, SegmentedControl } from '@/shared/components';
 import { ConsultationTodaySection } from './ConsultationTodaySection';
-import {
-  isConsultationWorkSegment,
-  usePianoConsultationHub,
-  type ConsultationSegment,
-} from './usePianoConsultationHub';
+
+import { isConsultationWorkSegment, usePianoConsultationHub, type ConsultationSegment } from './usePianoConsultationHub';
 
 function workDescription(
   segment: ConsultationSegment,
   pendingInquiryCount: number,
   pendingToday: number
-): string {
-  if (segment === 'inquiries') {
-    return pendingInquiryCount > 0
-      ? `대기 문의 ${pendingInquiryCount}건`
-      : 'QR·공개 페이지에서 온 상담 문의를 확인합니다';
+): string | undefined {
+  if (segment === 'inquiries' && pendingInquiryCount > 0) {
+    return `대기 문의 ${pendingInquiryCount}건`;
   }
-  if (segment === 'reservations') {
-    return '상담 예약 요청을 확인하고 확정합니다';
+  if (segment === 'home' && pendingToday > 0) {
+    return `오늘 대기 예약 ${pendingToday}건`;
   }
-  if (segment === 'records') {
-    return '상담 내용을 기록하고 이전 기록을 봅니다';
-  }
-  if (segment === 'home') {
-    return pendingToday > 0
-      ? `오늘 대기 예약 ${pendingToday}건`
-      : '오늘 예정된 상담 일정을 봅니다';
-  }
-  return '상담 문의·예약·기록을 처리합니다';
+  return undefined;
 }
 
 /**
@@ -91,11 +78,6 @@ export const PianoConsultationHubView: FC = () => {
           embedded
           requestType="consultation"
           title="상담 문의"
-          description={
-            isScoped
-              ? '담당 학생이거나 본인에게 온 상담 문의입니다.'
-              : 'QR·공개 페이지에서 보낸 자유 양식 상담 문의입니다.'
-          }
           includeRequest={isScoped ? keepInquiry : undefined}
           emptyHint={isScoped ? '담당 상담 문의가 없습니다.' : undefined}
         />

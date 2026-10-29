@@ -194,8 +194,7 @@ export const MakeupManagementView: React.FC = () => {
         icon={<Sparkles className="w-6 h-6" />}
         iconClassName="text-purple-600"
         title="보강 일정"
-        description="결석 후 보강 가능 시간을 정해 일정을 등록합니다"
-      />
+        />
 
       <div className="grid grid-cols-3 gap-3">
         <SummaryMetricCard label="미보강" value={`${counts.pending}건`} variant="rose" />

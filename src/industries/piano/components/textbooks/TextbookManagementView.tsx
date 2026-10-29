@@ -207,7 +207,6 @@ export const TextbookManagementView: React.FC = () => {
       <PageHeader
         icon={<BookOpen className="w-6 h-6" />}
         title="교재 관리"
-        description="학원별 교재 마스터·재고·판매/수납을 관리합니다. 설정에서 「월 청구에 교재·연주회비 합산」을 켜면 미납 교재를 월회비 청구서에 함께 넣을 수 있습니다."
         actions={
           <div className="flex flex-wrap items-center gap-2">
             <button

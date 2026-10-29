@@ -201,7 +201,6 @@ export const PracticeRecordsView: React.FC = () => {
     <div className="space-y-6">
       <PageHeader
         title="연습 기록"
-        description="학생들의 그랜드피아노 연습실 사용 및 연습 곡목 기록을 관리합니다."
         actions={
           <button onClick={handleOpenCreate} className="btn-primary flex items-center space-x-2">
             <Plus className="w-4 h-4" />

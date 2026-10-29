@@ -175,7 +175,6 @@ export const RecitalManagementView: React.FC = () => {
         icon={<Award className="w-6 h-6" />}
         iconClassName="text-purple-600"
         title="연주회·콩쿠르 관리"
-        description="행사 일정, 참가 학생 명단, 연주 영상 등록 현황을 한곳에서 관리합니다"
         actions={
           canManageRecitals ? (
           <button
@@ -278,7 +277,6 @@ export const RecitalManagementView: React.FC = () => {
             <EmptyState
               icon={<Award className="w-12 h-12" />}
               title="왼쪽에서 행사를 선택하세요"
-              description="참가 학생 명단과 영상 등록 현황을 확인할 수 있습니다"
               className="h-full flex flex-col items-center justify-center min-h-[320px]"
             />
           ) : (
