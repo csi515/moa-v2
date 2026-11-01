@@ -261,8 +261,10 @@ export const PracticeRecordsView: React.FC = () => {
             조회된 연습 기록이 없습니다.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
+          <>
+            {/* 데스크톱 테이블 */}
+            <div className="hidden md:block overflow-x-auto">
+<table className="w-full text-sm text-left">
               <thead className="text-xs text-slate-600 bg-slate-50 uppercase border-b border-slate-200">
                 <tr>
                   <th className="px-4 py-3 font-medium">일자/시간</th>
@@ -315,7 +317,81 @@ export const PracticeRecordsView: React.FC = () => {
                 ))}
               </tbody>
             </table>
-          </div>
+            </div>
+
+            {/* 360px 이하 소형 모바일 최적화 카드 뷰 */}
+            <div className="md:hidden space-y-3 p-3">
+              {filteredPractice.map((p) => (
+                <div
+                  key={p.id}
+                  className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs p-3.5 space-y-2.5"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-bold text-slate-900 text-sm">
+                          {p.studentName}
+                        </span>
+                        <span className="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
+                          {p.minutes}분 연습
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-400 mt-0.5 font-mono">
+                        {p.date}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {p.source === 'parent' ? (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-100 text-purple-800">
+                          앱 제출
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-800">
+                          원내
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(p)}
+                        className="p-2 min-h-[36px] min-w-[36px] flex items-center justify-center text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        title="삭제"
+                        aria-label="연습 기록 삭제"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-100 text-xs space-y-1">
+                    <p className="font-semibold text-slate-800 flex items-center gap-1.5 truncate">
+                      <span className="text-slate-400 font-normal shrink-0">곡명:</span>
+                      <span className="truncate">{p.songTitle}</span>
+                    </p>
+                    {p.difficultyPart && (
+                      <p className="text-slate-600 text-[11px] bg-slate-50 p-1.5 rounded-lg line-clamp-2">
+                        <span className="text-slate-400 font-medium">강조: </span>
+                        {p.difficultyPart}
+                      </p>
+                    )}
+                    {p.homework && (
+                      <p className="text-slate-600 text-[11px]">
+                        <span className="text-slate-400 font-medium">과제: </span>
+                        {p.homework}
+                      </p>
+                    )}
+                  </div>
+
+                  {p.teacherEvaluation && (
+                    <div className="pt-1.5 flex items-center justify-between text-xs text-amber-500 font-medium border-t border-slate-50">
+                      <span className="text-[11px] text-slate-400">선생님 평가</span>
+                      <span>{p.teacherEvaluation}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 

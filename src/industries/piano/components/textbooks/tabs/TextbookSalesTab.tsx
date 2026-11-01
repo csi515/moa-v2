@@ -237,14 +237,14 @@ export const TextbookSalesTab: React.FC<TextbookSalesTabProps> = ({
                   <p className="font-semibold text-slate-800 text-sm">{sale.textbookTitle}</p>
                   <p className="text-xs text-slate-500 mt-0.5">{sale.quantity}권 · ₩{sale.totalAmount.toLocaleString()}</p>
                 </div>
-                <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
                   <div>
                     <p className="text-[11px] text-slate-500">미납 잔액</p>
                     <p className={`text-base font-black ${sale.unpaidAmount > 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
                       ₩{sale.unpaidAmount.toLocaleString()}
                     </p>
                   </div>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 shrink-0">
                     {sale.unpaidAmount > 0 && !sale.billingInvoiceId ? (
                       <button
                         onClick={() => onOpenPaymentModal(sale)}

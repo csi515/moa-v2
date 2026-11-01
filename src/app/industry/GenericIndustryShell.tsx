@@ -1231,6 +1231,15 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
 
   const viewMap = externalViewMap || defaultViewMap;
 
+  const industryKey = currentOrganization?.industry_type || industry;
+  const moduleId = resolveModuleIndustryId(industryKey);
+  const moduleChrome = externalViewMap && moduleId ? getModuleChrome(moduleId) : null;
+  const ChromeSidebar = moduleChrome?.Sidebar;
+  const ChromeBottomNav = moduleChrome?.BottomNav;
+  const useCorporateChrome = !externalViewMap && isCorporateChromePreset(industryKey);
+
+
+
   useEffect(() => {
     let candidateTab = urlTab;
     if (!candidateTab) {
@@ -1242,9 +1251,15 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
       }
     }
     if (candidateTab) {
-      setActiveTab(candidateTab);
+      const canonicalTab = moduleChrome?.resolveCanonicalTab?.(candidateTab) || candidateTab;
+      if (canonicalTab !== candidateTab) {
+        navigate(`/workspace/${canonicalTab}${location.search}`, { replace: true });
+        setActiveTab(canonicalTab);
+      } else {
+        setActiveTab(candidateTab);
+      }
     }
-  }, [urlTab, location.pathname, setActiveTab]);
+  }, [urlTab, location.pathname, location.search, setActiveTab, navigate, moduleChrome]);
 
   const isCurrentTabAllowed = isTabAllowedForCapabilities(activeTab, enabledCaps);
 
@@ -1358,12 +1373,6 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
     return viewRenderer();
   };
 
-  const industryKey = currentOrganization?.industry_type || industry;
-  const moduleId = resolveModuleIndustryId(industryKey);
-  const moduleChrome = externalViewMap && moduleId ? getModuleChrome(moduleId) : null;
-  const ChromeSidebar = moduleChrome?.Sidebar;
-  const ChromeBottomNav = moduleChrome?.BottomNav;
-  const useCorporateChrome = !externalViewMap && isCorporateChromePreset(industryKey);
 
   const corporateMainTabs = useMemo(() => {
     // 런처가 홈; 하단은 홈·사내 업무만 두고 결재/자재 등은 런처 딥링크로

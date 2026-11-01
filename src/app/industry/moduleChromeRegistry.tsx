@@ -1,5 +1,5 @@
 /**
- * 전용 모듈 업종 → Sidebar / BottomNav / theme.
+ * 전용 모듈 업종 → Sidebar / BottomNav / theme / resolveCanonicalTab.
  * GenericIndustryShell(external viewMap)에서 ModuleAppShell에 연결한다.
  */
 import type { ComponentType } from 'react';
@@ -7,6 +7,7 @@ import type { ModuleIndustryId } from '@/core/industry/types';
 import type { ModuleTheme } from '@/shared/components/layout/moduleTheme';
 import { PianoSidebar } from '@/industries/piano/layout/PianoSidebar';
 import { PianoBottomNav } from '@/industries/piano/layout/PianoBottomNav';
+import { resolvePianoCanonicalTab } from '@/industries/piano/config/canonicalTabs';
 import { RetailSidebar } from '@/industries/retail/layout/RetailSidebar';
 import { RetailBottomNav } from '@/industries/retail/layout/RetailBottomNav';
 import { PilatesSidebar } from '@/industries/pilates/layout/PilatesSidebar';
@@ -24,10 +25,16 @@ export type ModuleChrome = {
   theme: ModuleTheme;
   Sidebar: ComponentType;
   BottomNav: ComponentType;
+  resolveCanonicalTab?: (tab: string) => string | null;
 };
 
 const MODULE_CHROME: Record<ModuleIndustryId, ModuleChrome> = {
-  piano: { theme: 'indigo', Sidebar: PianoSidebar, BottomNav: PianoBottomNav },
+  piano: {
+    theme: 'indigo',
+    Sidebar: PianoSidebar,
+    BottomNav: PianoBottomNav,
+    resolveCanonicalTab: resolvePianoCanonicalTab,
+  },
   pilates: { theme: 'teal', Sidebar: PilatesSidebar, BottomNav: PilatesBottomNav },
   gym: { theme: 'orange', Sidebar: GymSidebar, BottomNav: GymBottomNav },
   daycare: { theme: 'sky', Sidebar: DaycareSidebar, BottomNav: DaycareBottomNav },

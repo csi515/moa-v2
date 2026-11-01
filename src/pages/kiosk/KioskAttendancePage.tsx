@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock } from 'lucide-react';
+import { Lock, Maximize2, Minimize2 } from 'lucide-react';
 import { KioskPinExitModal } from '@/components/kiosk/KioskPinExitModal';
 import { QuickNumberInput } from '@/components/ui/quick-number-input';
 import { CounterSearchPanel } from '@/components/counter/CounterSearchPanel';
@@ -18,6 +18,7 @@ export function KioskAttendancePage() {
   const [logoTaps, setLogoTaps] = useState(0);
   const [pinOpen, setPinOpen] = useState(false);
   const [present, setPresent] = useState<Record<string, boolean>>({});
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     return watchAttendanceOnline(() => {
@@ -26,6 +27,22 @@ export function KioskAttendancePage() {
       });
     });
   }, []);
+
+  useEffect(() => {
+    function onFullscreenChange() {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    }
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
+  }, []);
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.().then(() => setIsFullscreen(true)).catch(() => undefined);
+    } else {
+      document.exitFullscreen?.().then(() => setIsFullscreen(false)).catch(() => undefined);
+    }
+  }
 
   async function acceptPin(pin: string) {
     setBuffer(pin);
@@ -79,9 +96,19 @@ export function KioskAttendancePage() {
         <button type="button" className="min-h-11 min-w-11 text-left text-sm font-bold" onClick={tapLogo}>
           {currentOrganization?.name ?? '사업장'}
         </button>
-        <button type="button" aria-label="잠금 해제" className="flex min-h-11 min-w-11 items-center justify-center" onClick={() => setPinOpen(true)}>
-          <Lock className="h-5 w-5" />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            aria-label={isFullscreen ? '전체 화면 해제' : '전체 화면'}
+            className="flex min-h-11 min-w-11 items-center justify-center text-slate-400 hover:text-white"
+            onClick={toggleFullscreen}
+          >
+            {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+          </button>
+          <button type="button" aria-label="잠금 해제" className="flex min-h-11 min-w-11 items-center justify-center" onClick={() => setPinOpen(true)}>
+            <Lock className="h-5 w-5" />
+          </button>
+        </div>
       </header>
       <section className="flex flex-1 flex-col items-center justify-center gap-6 px-6">
         <p className="text-sm text-slate-300">출결 번호</p>

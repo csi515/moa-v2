@@ -56,7 +56,7 @@ export function ModuleAppShell({
         <main
           data-work-scroll-root
           data-testid="app-work-main"
-          className="main-with-bottom-nav max-w-full flex-1 overflow-x-hidden overflow-y-auto p-3 sm:p-4 lg:p-5"
+          className="main-with-bottom-nav max-w-full flex-1 overflow-x-hidden overflow-y-auto p-3 pb-[calc(4.5rem+env(safe-area-inset-bottom))] sm:p-4 sm:pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:p-5 md:pb-5"
         >
           {children}
         </main>

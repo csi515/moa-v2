@@ -263,16 +263,17 @@ export const UnpaidManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                     {s.parentName} · {formatPhone(s.parentPhone)}
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-right">
-                    <p className="text-lg font-black text-rose-600">{formatCurrency(s.totalUnpaid)}</p>
-                    <p className="text-[11px] text-slate-400">
+                <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2.5 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                  <div className="text-left sm:text-right min-w-[140px]">
+                    <p className="text-base sm:text-lg font-black text-rose-600 tabular-nums">{formatCurrency(s.totalUnpaid)}</p>
+                    <p className="text-[10px] sm:text-[11px] text-slate-400">
                       수강료 {formatCurrency(s.tuitionUnpaid)} + 교재 {formatCurrency(s.textbookUnpaid)}
                     </p>
                   </div>
                   <button
+                    type="button"
                     onClick={() => openPayment(s.studentId)}
-                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl"
+                    className="px-3.5 py-2.5 min-h-[44px] bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors shrink-0"
                   >
                     통합 수납
                   </button>
