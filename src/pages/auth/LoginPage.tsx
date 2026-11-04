@@ -14,7 +14,13 @@ import { useAuth } from "@/core/auth/AuthProvider";
 import { isAppsInToss } from "@/core/auth/domain/platformDetector";
 import { loginWithToss } from "@/core/auth/services/tossAuthService";
 import { mapLoginErrorMessage } from "@/core/auth/utils/mapLoginErrorMessage";
+import {
+  readLoginReturnPath,
+  resolvePostLoginPath,
+  shouldEnterCustomerPortal,
+} from "@/core/auth/utils/postLoginNavigation";
 import { appBrand } from "@/core/brand";
+import { useOrganization } from "@/core/organizations/OrganizationProvider";
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -28,13 +34,23 @@ export const LoginPage: React.FC = () => {
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const rawReturnUrl = searchParams.get("returnUrl");
-  const returnUrl =
-    rawReturnUrl && rawReturnUrl.startsWith("/") && !rawReturnUrl.startsWith("//")
-      ? rawReturnUrl
-      : null;
+  const returnUrl = readLoginReturnPath(searchParams);
   const { mutate: login, isPending: isLoading } = useLogin();
   const { signInWithGoogle, signInWithApple, signInWithKakao, signInWithNaver } = useAuth();
+  const { enterCustomerPortal } = useOrganization();
+  const isEn = language === "en";
+
+  const goAfterLogin = (redirectTo: string | null | undefined, group: LoginTargetGroup) => {
+    const path = resolvePostLoginPath({
+      returnPath: returnUrl,
+      loginTargetGroup: group,
+      redirectTo,
+    });
+    if (shouldEnterCustomerPortal(path, group)) {
+      enterCustomerPortal();
+    }
+    navigate(path);
+  };
 
   const handleGoogleLogin = async () => {
     try {
@@ -82,13 +98,9 @@ export const LoginPage: React.FC = () => {
     try {
       const result = await loginWithToss();
       if (result.success) {
-        // 고객/수강생 역할은 이용권 지갑으로, 사업주/직원 및 통합 권한은 워크스페이스 대시보드로 이동
-        if (returnUrl) {
-          navigate(returnUrl);
-          return;
-        }
-        const targetPath = result.role === "customer" ? "/customer/pass" : "/workspace";
-        navigate(targetPath);
+        const group: LoginTargetGroup =
+          loginTargetGroup === "customer" || result.role === "customer" ? "customer" : "workplace";
+        goAfterLogin(null, group);
       } else {
         setErrorMessage(
           result.error || "토스 로그인 연동에 실패했습니다. 다시 시도해 주세요."
@@ -123,12 +135,7 @@ export const LoginPage: React.FC = () => {
             setErrorMessage(mapLoginErrorMessage(data?.error?.message));
             return;
           }
-          if (returnUrl) {
-            navigate(returnUrl);
-            return;
-          }
-          const defaultTarget = loginTargetGroup === 'customer' ? '/customer/pass' : '/workspace';
-          navigate(data?.redirectTo || defaultTarget);
+          goAfterLogin(data?.redirectTo, loginTargetGroup);
         },
         onError: (error: any) => {
           setErrorMessage(mapLoginErrorMessage(error?.message));
@@ -171,13 +178,27 @@ export const LoginPage: React.FC = () => {
 
           {/* 서비스 가치 메인 카피 */}
           <h1 className="text-3xl xl:text-4xl font-extrabold leading-tight tracking-tight mb-4">
-            출결, 회원권, 매장 운영을<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-indigo-200 to-blue-200">
-              종이 장부 없이 한 손으로
-            </span>
+            {isEn ? (
+              <>
+                Attendance, passes, and the shop
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-indigo-200 to-blue-200">
+                  in one hand
+                </span>
+              </>
+            ) : (
+              <>
+                출결, 회원권, 매장 운영을<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-indigo-200 to-blue-200">
+                  종이 장부 없이 한 손으로
+                </span>
+              </>
+            )}
           </h1>
           <p className="text-sm xl:text-base text-slate-400 leading-relaxed max-w-lg">
-            {appBrand.description}. 출결·회원권·수납을 사업주 화면에서 바로 이어갑니다.
+            {isEn
+              ? `${appBrand.description}. Attendance, passes, and payments stay on the owner screen.`
+              : `${appBrand.description}. 출결·회원권·수납을 사업주 화면에서 바로 이어갑니다.`}
           </p>
         </div>
 
@@ -187,9 +208,13 @@ export const LoginPage: React.FC = () => {
             <div className="w-8 h-8 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-300 mb-2.5">
               <QrCode className="w-4 h-4" />
             </div>
-            <h4 className="text-xs font-bold text-slate-200 mb-1">0원 비용 원칙</h4>
+            <h4 className="text-xs font-bold text-slate-200 mb-1">
+              {isEn ? "No messaging fees" : "0원 비용 원칙"}
+            </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              SMS·카카오 알림톡 비용 0원. 2-Way 1회용 W3C QR 프로토콜.
+              {isEn
+                ? "No SMS or Kakao fees. One-time W3C QR."
+                : "SMS·카카오 알림톡 비용 0원. 2-Way 1회용 W3C QR 프로토콜."}
             </p>
           </div>
 
@@ -197,9 +222,13 @@ export const LoginPage: React.FC = () => {
             <div className="w-8 h-8 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-300 mb-2.5">
               <Zap className="w-4 h-4" />
             </div>
-            <h4 className="text-xs font-bold text-slate-200 mb-1">초고속 Realtime 동기화</h4>
+            <h4 className="text-xs font-bold text-slate-200 mb-1">
+              {isEn ? "Live sync" : "초고속 Realtime 동기화"}
+            </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              카운터-고객 스마트폰 간 실시간 변경 감지 및 자동 캐시 무효화.
+              {isEn
+                ? "Counter and member phones stay in sync."
+                : "카운터-고객 스마트폰 간 실시간 변경 감지 및 자동 캐시 무효화."}
             </p>
           </div>
         </div>
@@ -208,11 +237,11 @@ export const LoginPage: React.FC = () => {
         <div className="relative z-10 pt-6 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
           <div className="flex items-center space-x-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>Row Level Security (RLS) 테넌트 격리</span>
+            <span>{isEn ? "Tenant isolation with row-level security" : "Row Level Security (RLS) 테넌트 격리"}</span>
           </div>
           <div className="flex items-center space-x-1">
             <CheckCircle2 className="w-4 h-4 text-indigo-400" />
-            <span>계정 탈취 방어 내장</span>
+            <span>{isEn ? "Account takeover defenses" : "계정 탈취 방어 내장"}</span>
           </div>
         </div>
       </div>
@@ -236,12 +265,22 @@ export const LoginPage: React.FC = () => {
           {/* 데스크톱 우측 타이틀 */}
           <div className="hidden lg:block mb-8">
             <h2 className="text-2xl font-bold text-slate-900">
-              {isAppsInToss() ? "앱스인토스 로그인" : "시스템 로그인"}
+              {isAppsInToss()
+                ? isEn
+                  ? "Apps in Toss sign-in"
+                  : "앱스인토스 로그인"
+                : isEn
+                  ? "Sign in"
+                  : "시스템 로그인"}
             </h2>
             <p className="text-xs text-slate-500 mt-1.5">
               {isAppsInToss()
-                ? "토스 앱 계정으로 자동 인증하여 접속합니다."
-                : "등록된 사업주/직원 계정 또는 고객 계정으로 접속하세요."}
+                ? isEn
+                  ? "Continue with your Toss account."
+                  : "토스 앱 계정으로 자동 인증하여 접속합니다."
+                : isEn
+                  ? "Use an owner, staff, or member account."
+                  : "등록된 사업주/직원 계정 또는 고객 계정으로 접속하세요."}
             </p>
           </div>
 
@@ -265,6 +304,10 @@ export const LoginPage: React.FC = () => {
             rememberMe={rememberMe}
             onRememberMeChange={setRememberMe}
             returnUrl={returnUrl ?? undefined}
+            loginTargetGroup={loginTargetGroup}
+            onLoginTargetGroupChange={setLoginTargetGroup}
+            workplaceRole={workplaceRole}
+            onWorkplaceRoleChange={setWorkplaceRole}
           />
         </div>
       </div>

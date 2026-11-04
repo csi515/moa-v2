@@ -12,6 +12,7 @@ import type {
   TextbookSale,
 } from '../../../types';
 import { getPianoClient } from '../../../lib/supabase/pianoClient';
+import { getCoreClient } from '../../../lib/supabase';
 import { readLocal, writeLocal } from '../localStorageEngine';
 import { applyDirtyListMerge } from '../pendingMutations';
 import { PIANO_SYNC_KEYS, STORAGE_KEYS, type StorageKey } from '../storageKeys';
@@ -53,6 +54,7 @@ export async function hydratePianoEntities(
   cache: SyncCache
 ): Promise<void> {
   const client = getPianoClient();
+  const coreClient = getCoreClient();
 
   const [
     pianoCustomersResult,
@@ -78,7 +80,7 @@ export async function hydratePianoEntities(
     client.from('textbook_payments').select('*').eq('organization_id', organizationId),
     client.from('textbook_inventory_transactions').select('*').eq('organization_id', organizationId),
     client.from('songs').select('*').eq('organization_id', organizationId),
-    client.from('events').select('*').eq('organization_id', organizationId),
+    coreClient.from('events').select('*').eq('organization_id', organizationId),
     client.from('performance_videos').select('*').eq('organization_id', organizationId),
   ]);
 

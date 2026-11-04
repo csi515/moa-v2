@@ -34,15 +34,12 @@ import {
   todayIsoDate,
   type PracticeRoomCalendarMode,
 } from './practiceRoomCalendarUtils';
+import {
+  addMinutesToClock,
+  PIANO_DEFAULT_LESSON_MINUTES,
+  resolvePianoLessonMinutes,
+} from '../../config/pianoLessonMinutes';
 import type { PracticeRoomBooking } from '@/types';
-
-function addMinutes(hhmm: string, minutes: number): string {
-  const [h, m] = hhmm.split(':').map((n) => parseInt(n, 10) || 0);
-  const total = h * 60 + m + minutes;
-  const nh = Math.floor(total / 60) % 24;
-  const nm = total % 60;
-  return `${String(nh).padStart(2, '0')}:${String(nm).padStart(2, '0')}`;
-}
 
 function toConflictBookings(rows: RoomReservationRow[]): PracticeRoomBooking[] {
   return rows.map((row) => ({
@@ -80,7 +77,9 @@ export const PracticeRoomBookingView: FC = () => {
   const [studentId, setStudentId] = useState('');
   const [roomId, setRoomId] = useState('');
   const [startTime, setStartTime] = useState('16:00');
-  const [endTime, setEndTime] = useState('16:50');
+  const [endTime, setEndTime] = useState(() =>
+    addMinutesToClock('16:00', PIANO_DEFAULT_LESSON_MINUTES)
+  );
   const [memo, setMemo] = useState('');
   const [rooms, setRooms] = useState<PracticeRoomRow[]>([]);
   const [bookings, setBookings] = useState<RoomReservationRow[]>([]);
@@ -143,12 +142,12 @@ export const PracticeRoomBookingView: FC = () => {
     startTime?: string;
     endTime?: string;
   }) => {
-    const lessonMinutes = settings.defaultLessonMinutes || 50;
+    const lessonMinutes = resolvePianoLessonMinutes(settings.defaultLessonMinutes);
     const start = preset?.startTime || '16:00';
     setStudentId(students[0]?.id || '');
     setRoomId(preset?.roomId || rooms[0]?.id || '');
     setStartTime(start);
-    setEndTime(preset?.endTime || addMinutes(start, lessonMinutes));
+    setEndTime(preset?.endTime || addMinutesToClock(start, lessonMinutes));
     setMemo('');
     setModalOpen(true);
   };
@@ -510,7 +509,12 @@ export const PracticeRoomBookingView: FC = () => {
                 value={startTime}
                 onChange={(e) => {
                   setStartTime(e.target.value);
-                  setEndTime(addMinutes(e.target.value, settings.defaultLessonMinutes || 50));
+                  setEndTime(
+                    addMinutesToClock(
+                      e.target.value,
+                      resolvePianoLessonMinutes(settings.defaultLessonMinutes)
+                    )
+                  );
                 }}
                 required
               />

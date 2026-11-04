@@ -72,7 +72,7 @@ export const PianoLessonTimetableView: FC = () => {
               subtitle: p.classItem.teacherName || p.classItem.name,
               dayOfWeek: day,
               startTime: slot,
-              endTime: slotEndTime(slot),
+              endTime: p.classItem.endTime || slotEndTime(slot),
               colorTheme: 'indigo',
               isDraggable: p.editable,
               raw: p,

@@ -107,6 +107,14 @@ const P20_1_BUSINESS_INVARIANT_CHAIN = [
   'test:business-predicates',
   'test:db-sandbox-rls-invariants',
   'test:feature-flags',
+  'test:piano-academy',
+  'test:timetable-placement',
+  'test:piano-expected-attendance',
+  'test:consultation-today',
+  'test:lesson-homework-sync',
+  'test:today-lesson-teacher',
+  'test:piano-student-level',
+  'test:post-login-navigation',
 ];
 
 const scripts = loadPackageScripts();

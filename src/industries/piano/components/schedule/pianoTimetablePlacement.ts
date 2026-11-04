@@ -5,6 +5,10 @@ import {
   formatConflictSummary,
   type ClassSlotCandidate,
 } from '@/capabilities/scheduling';
+import {
+  addMinutesToClock,
+  resolvePianoLessonMinutes,
+} from '../../config/pianoLessonMinutes';
 
 export const TIMETABLE_DAYS: DayOfWeek[] = ['월', '화', '수', '목', '금', '토', '일'];
 
@@ -71,11 +75,11 @@ export function timeToMinutes(time: string): number {
   return h * 60 + m;
 }
 
-export function slotEndTime(startTime: string): string {
-  const total = timeToMinutes(startTime) + 50;
-  const eh = Math.floor(total / 60);
-  const em = total % 60;
-  return `${String(eh).padStart(2, '0')}:${String(em).padStart(2, '0')}`;
+export function slotEndTime(
+  startTime: string,
+  durationMinutes = resolvePianoLessonMinutes()
+): string {
+  return addMinutesToClock(startTime, resolvePianoLessonMinutes(durationMinutes));
 }
 
 export function slotHour(time: string): number {
@@ -179,6 +183,10 @@ function defaultRoom(): string {
   return room || '연습실';
 }
 
+function lessonMinutesFromSettings(): number {
+  return resolvePianoLessonMinutes(StorageService.getSettings().defaultLessonMinutes);
+}
+
 /** 시간표에서 새로 만들 반 후보 (반 관리 생성과 동일 필드) */
 function buildNewSlotClassCandidate(
   day: DayOfWeek,
@@ -192,7 +200,7 @@ function buildNewSlotClassCandidate(
     room: defaultRoom(),
     daysOfWeek: [day],
     startTime,
-    endTime: slotEndTime(startTime),
+    endTime: slotEndTime(startTime, lessonMinutesFromSettings()),
   };
 }
 
@@ -239,7 +247,7 @@ export function ensureEditableSlotClass(params: {
     teacherName: teacher.name,
     daysOfWeek: [params.day],
     startTime: params.startTime,
-    endTime: slotEndTime(params.startTime),
+    endTime: slotEndTime(params.startTime, lessonMinutesFromSettings()),
     capacity: minCapacity,
     room: defaultRoom(),
     color: '#4f46e5',

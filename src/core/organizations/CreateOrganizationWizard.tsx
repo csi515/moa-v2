@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useOrganization } from './OrganizationProvider';
 import {
   Building2,
@@ -19,6 +19,7 @@ import { IndustryPicker } from '../industry/IndustryPicker';
 import {
   getPlaceLabel,
   getPlaceNamePlaceholder,
+  isRetailIndustry,
 } from '../industry/industryUi';
 import { StorageService } from '@/services/storage';
 import { userFacingErrorMessage } from '@/shared/errors/userFacingError';
@@ -51,6 +52,12 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
   const [isEntering, setIsEntering] = useState(false);
   const [createdOrgId, setCreatedOrgId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const errorRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!error) return;
+    errorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, [error]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -64,7 +71,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
 
   const guideFeatureText = useMemo(() => {
     const cat = getIndustryCategoryForType(formData.industryType);
-    if (formData.industryType === 'retail') {
+    if (isRetailIndustry(formData.industryType)) {
       return '재고·판매·정산 관리 등';
     }
     switch (cat) {
@@ -313,7 +320,12 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
             />
 
             {error && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-100 text-sm text-rose-700">
+              <div
+                ref={errorRef}
+                role="alert"
+                data-testid="create-org-error"
+                className="p-3 rounded-xl bg-rose-50 border border-rose-100 text-sm text-rose-700"
+              >
                 {error}
               </div>
             )}

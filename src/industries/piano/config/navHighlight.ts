@@ -9,12 +9,12 @@ import {
   PIANO_SETTINGS_HUB_TABS,
   isTabInHub,
 } from './hubRoutes';
+import { PIANO_ROOM_ENTRY_TABS } from './pianoScheduleRoutes';
 
 /**
- * 설정「부가」탭 중 다른 허브(일정 등)에 속한 것 — 설정으로 하이라이트하지 않음.
- * practice-rooms는 일정 허브 alias.
+ * 설정「부가」탭 중 일정 허브(연습실)에 속한 것 — 설정으로 하이라이트하지 않음.
  */
-const SETTINGS_EXTRAS_DEFER_TO_OTHER_HUB = new Set<NavTab>(['practice-rooms']);
+const SETTINGS_EXTRAS_DEFER_TO_OTHER_HUB = new Set<NavTab>(PIANO_ROOM_ENTRY_TABS);
 
 const PIANO_SETTINGS_EXTRA_TABS = new Set(
   PIANO_SETTINGS_EXTRAS.map((item) => item.tab).filter(

@@ -16,6 +16,7 @@ import type { TuitionInvoice } from '@/types';
 import { CustomerNoticesView } from './CustomerNoticesView';
 import type { getMyPassSummary } from './services/studentPortalService';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
+import { getIndustryCategoryForType } from '@/core/industry/types';
 import { StorageService } from '@/services/storage';
 import { showToast, showErrorToast } from '@/shared/feedback/uiFeedback';
 
@@ -58,7 +59,9 @@ export function CustomerHomeView({
 
   const isAcademy = useMemo(() => {
     const ind = currentOrganization?.industry_type || '';
-    return !ind || ind === 'piano' || ind === 'academy' || ind.includes('academy');
+    if (!ind) return true;
+    const cat = getIndustryCategoryForType(ind);
+    return cat === 'education' || cat === 'lesson';
   }, [currentOrganization]);
 
   const feeLabel = isAcademy ? '수강료' : '이용료/청구서';

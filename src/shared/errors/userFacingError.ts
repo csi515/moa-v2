@@ -46,8 +46,11 @@ export function classifyUserFacingError(error: unknown): UserFacingErrorKind {
   ) {
     return 'permission';
   }
-  if (/duplicate key|unique constraint|23505|already exists|conflict/.test(text)) {
+  if (/duplicate key|unique constraint|23505|already exists|conflict|42p10/.test(text)) {
     return 'conflict';
+  }
+  if (/사업장.*생성|create_organization|organization_members/.test(text)) {
+    return 'temporary';
   }
   if (/hydrate|불러오지|not found|pgrst116|42p01/.test(text)) {
     return 'load_failed';
@@ -69,7 +72,11 @@ function localizedDomainMessage(raw: string): string | null {
 }
 
 export function userFacingErrorMessage(error: unknown): string {
-  const localized = localizedDomainMessage(rawErrorText(error));
+  const raw = rawErrorText(error);
+  const localized = localizedDomainMessage(raw);
   if (localized) return localized;
+  if (/42p10|on conflict specification|organization_members_org_user_role_unique/.test(raw.toLowerCase())) {
+    return '사업장 개설 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요. 문제가 계속되면 고객 지원에 문의해 주세요.';
+  }
   return USER_FACING_ERROR_MESSAGES[classifyUserFacingError(error)];
 }

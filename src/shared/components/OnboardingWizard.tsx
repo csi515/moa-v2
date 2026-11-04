@@ -15,6 +15,8 @@ import {
   withAttendanceModuleEnabled,
 } from '@/capabilities/attendance';
 import { getIndustryType } from '@/services/adapters/storageContext';
+import { getBusinessRule } from '@/app/presets/presetBusinessRules';
+import { getIndustryPreset } from '@/app/presets/presetRegistry';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { formatNumberWithCommas } from '@/utils/formatters';
 import {
@@ -39,6 +41,8 @@ import {
   LESSON_DURATION_PRESETS,
   ONBOARDING_STEP_LABELS,
   formatOperatingHours,
+  initialLessonDurationMinutes,
+  operatingDaysFromPreset,
   type LessonDurationPreset,
   type OperatingDayDraft,
 } from './onboarding/onboardingHelpers';
@@ -96,11 +100,21 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     initialAddressParts(saved.address || '')
   );
 
-  const [operatingDays, setOperatingDays] = useState<OperatingDayDraft[]>(DEFAULT_OPERATING_DAYS);
-  const [lessonMinutes, setLessonMinutes] = useState<LessonDurationPreset>(
-    (LESSON_DURATION_PRESETS.includes(saved.defaultLessonMinutes as LessonDurationPreset)
-      ? saved.defaultLessonMinutes
-      : 50) as LessonDurationPreset
+  const industryType = org?.currentOrganization?.industry_type ?? getIndustryType();
+  const industryPreset = getIndustryPreset(industryType);
+  const [operatingDays, setOperatingDays] = useState<OperatingDayDraft[]>(() =>
+    operatingDaysFromPreset(
+      DEFAULT_OPERATING_DAYS,
+      industryPreset?.operatingHours,
+      progress.status
+    )
+  );
+  const [lessonMinutes, setLessonMinutes] = useState<LessonDurationPreset>(() =>
+    initialLessonDurationMinutes({
+      savedMinutes: saved.defaultLessonMinutes,
+      onboardingStatus: progress.status,
+      presetMinutes: getBusinessRule(industryType, 'lessonDurationMinutes', undefined),
+    })
   );
 
   const [billingForm, setBillingForm] = useState({

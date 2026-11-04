@@ -1,5 +1,6 @@
 import type { NavTab } from '@/context/AppContext';
 import { customerHubTabs, settingsHubTabs } from '@/core/industry/commonViewEntries';
+import { PIANO_ROOM_ENTRY_TABS } from './pianoScheduleRoutes';
 
 /**
  * 피아노 허브 딥링크 — VIEW_MAP alias와 네비 하이라이트가 동일 목록을 사용한다.
@@ -17,7 +18,7 @@ export const PIANO_SCHEDULE_HUB_TABS = [
   'timetable',
   'calendar',
   'makeups',
-  'practice-rooms',
+  ...PIANO_ROOM_ENTRY_TABS,
 ] as const satisfies readonly NavTab[];
 
 /** 설정 허브 (SettingsHubView) */

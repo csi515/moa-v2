@@ -156,6 +156,16 @@ async function runTests() {
     /login\(\s*\{\s*email,\s*password,\s*rememberMe\s*\}/,
     'LoginPage.tsx must pass rememberMe in login payload'
   );
+  assert.match(
+    loginPageCode,
+    /onLoginTargetGroupChange=\{setLoginTargetGroup\}/,
+    'LoginPage must bind the workplace/customer choice used after login'
+  );
+  assert.match(
+    loginPageCode,
+    /readLoginReturnPath/,
+    'LoginPage must accept both returnUrl and Refine to query params'
+  );
 
   // 6. authService support for Google and Apple OAuth & rememberMe session partitioning
   const authServicePath = join(root, 'src/core/auth/services/authService.ts');

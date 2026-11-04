@@ -158,6 +158,14 @@ export const BUSINESS_INVARIANT_TESTS = [
   { script: 'test:business-predicates', group: 'platform', kind: 'unit', ci: 'always', order: 87 },
   { script: 'test:db-sandbox-rls-invariants', group: 'authorization', kind: 'invariant', ci: 'always', order: 88 },
   { script: 'test:feature-flags', group: 'platform', kind: 'unit', ci: 'always', order: 89 },
+  { script: 'test:piano-academy', group: 'industry', kind: 'contract', ci: 'always', order: 90 },
+  { script: 'test:timetable-placement', group: 'industry', kind: 'unit', ci: 'always', order: 91 },
+  { script: 'test:piano-expected-attendance', group: 'industry', kind: 'unit', ci: 'always', order: 92 },
+  { script: 'test:consultation-today', group: 'industry', kind: 'unit', ci: 'always', order: 93 },
+  { script: 'test:lesson-homework-sync', group: 'industry', kind: 'unit', ci: 'always', order: 94 },
+  { script: 'test:today-lesson-teacher', group: 'industry', kind: 'unit', ci: 'always', order: 95 },
+  { script: 'test:piano-student-level', group: 'industry', kind: 'unit', ci: 'always', order: 96 },
+  { script: 'test:post-login-navigation', group: 'authorization', kind: 'unit', ci: 'always', order: 97 },
 ];
 
 /** 메타/그룹 러너 — inventory 후보가 아님 */
@@ -217,11 +225,6 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:rls-audit': '별도 security CI',
   'test:rls-membership-escalation': '별도 security CI',
   'test:auth-hijack-audit': '별도 security CI',
-  'test:timetable-placement': 'piano UI',
-  'test:today-lesson-teacher': 'piano UI',
-  'test:consultation-today': 'piano UI',
-  'test:piano-expected-attendance': 'piano UI',
-  'test:lesson-homework-sync': 'piano UI',
   'test:manual-attendance-class': 'academy UI',
   'test:skin-retail-migrate': 'skin industry migrate',
   'test:textbook-core-sale-link': 'piano commerce 연결',

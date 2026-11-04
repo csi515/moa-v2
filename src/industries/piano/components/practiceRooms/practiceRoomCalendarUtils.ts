@@ -62,7 +62,11 @@ export function shiftCalendarPeriod(
   } else if (mode === 'week') {
     d.setDate(d.getDate() + delta * 7);
   } else {
+    const day = d.getDate();
+    d.setDate(1);
     d.setMonth(d.getMonth() + delta);
+    const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+    d.setDate(Math.min(day, last));
   }
   return formatIsoDate(d);
 }

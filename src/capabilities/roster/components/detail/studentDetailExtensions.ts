@@ -1,6 +1,7 @@
 import React, { type ReactNode } from 'react';
 import { FileText } from 'lucide-react';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
+import { isPianoIndustry } from '@/core/industry/industryUi';
 import type {
   Student,
   AttendanceRecord,
@@ -113,11 +114,11 @@ export function resolveStudentDetailTabs(
       const passTerm = preset.terms?.pass || '이용권';
       const lessonTerm = preset.terms?.lesson || (caps.has('booking') ? '예약' : '수업');
       const attendanceTerm = '출결';
-      const isPianoIndustry = industryId === 'piano' || industryId.includes('piano');
+      const isPianoTabs = isPianoIndustry(industryId);
 
       // 1. 피아노 고유 탭 및 비활성 기능 탭 필터링 (Zero-Pollution)
       let filtered = tabs.filter((tab) => {
-        if (!isPianoIndustry && (tab.id === 'practice' || tab.id === 'videos' || tab.id === 'textbooks')) {
+        if (!isPianoTabs && (tab.id === 'practice' || tab.id === 'videos' || tab.id === 'textbooks')) {
           return false;
         }
         if (!caps.has('attendance') && tab.id === 'attendance') {

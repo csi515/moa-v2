@@ -4,6 +4,7 @@ import type {
   TextbookPayment,
 } from '../../../types';
 import { getPianoClient } from '../../../lib/supabase/pianoClient';
+import { getCoreClient } from '../../../lib/supabase';
 import { writeLocal } from '../localStorageEngine';
 import { STORAGE_KEYS, type StorageKey } from '../storageKeys';
 import type { PersistAbortGuard, SyncCache } from './syncTypes';
@@ -175,14 +176,25 @@ export async function persistPianoTable<T extends { id: string }>(
   const items = requireCacheList<unknown>(cache, storageKey, `piano.${table}`);
   if (!items) return false;
 
-  const client = getPianoClient();
   const rows = toRows(items);
+  const upsertRow = (row: T) => {
+    if (table === 'events') {
+      return getCoreClient().from('events').upsert(row as never);
+    }
+    return getPianoClient().from(table).upsert(row as never);
+  };
+  const deleteRows = async (ids: string[]) => {
+    if (table === 'events') {
+      return getCoreClient().from('events').delete().eq('organization_id', orgId).in('id', ids);
+    }
+    return getPianoClient().from(table).delete().eq('organization_id', orgId).in('id', ids);
+  };
 
   if (options?.allowDiffDelete === false) {
     const upsertOk = await runRowUpserts(
       rows,
       isAborted,
-      (row) => client.from(table).upsert(row as never),
+      upsertRow,
       (error) => console.error(`Failed to upsert piano.${table}:`, error)
     );
     if (isAborted()) return false;
@@ -199,12 +211,12 @@ export async function persistPianoTable<T extends { id: string }>(
       runRowUpserts(
         rows,
         isAborted,
-        (row) => client.from(table).upsert(row as never),
+        upsertRow,
         (error) => console.error(`Failed to upsert piano.${table}:`, error)
       ),
     tombstoneIds: pendingDeleteIds(storageKey, orgId),
     deleteIds: async (ids) => {
-      const { error } = await client.from(table).delete().eq('organization_id', orgId).in('id', ids);
+      const { error } = await deleteRows(ids);
       return { error };
     },
   });

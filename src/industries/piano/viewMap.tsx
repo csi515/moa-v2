@@ -33,7 +33,6 @@ import {
 import { AvailabilitySettingsView } from '@/capabilities/scheduling/availability';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
-import { PracticeRoomBookingView } from './components/practiceRooms/PracticeRoomBookingView';
 
 const RetentionMarketingView = lazy(() =>
   import('@/capabilities/retention_marketing').then((m) => ({
@@ -106,7 +105,7 @@ const lazyCap = (node: ReactNode, label: string) => (
 /**
  * 탭 → 화면. 허브 딥링크 목록은 config/hubRoutes.ts 단일 출처.
  * lessons → 출결: 레거시 딥링크 유지 (기능·URL 탭명 삭제 없음).
- * seat-rooms → practice-rooms: 프리셋 seat_room 과 UX 단일화.
+ * practice-rooms · seat-rooms · spaces 는 일정 허브의 연습실 세그먼트 하나.
  */
 const PIANO_VIEW_MAP: Record<string, () => ReactNode> = {
   dashboard: () => <DashboardView />,
@@ -119,10 +118,6 @@ const PIANO_VIEW_MAP: Record<string, () => ReactNode> = {
   consultations: () => <PianoConsultationHubView />,
   bookings: consultationAvailabilitySettings,
   practice: () => <PracticeRecordsView />,
-  'practice-rooms': () => <PracticeRoomBookingView />,
-  /** Refine /seat-rooms · 프리셋 seat_room → 연습실 UX로 통일 */
-  'seat-rooms': () => <PracticeRoomBookingView />,
-  spaces: () => <PracticeRoomBookingView />,
   resources: () => <ResourceManagementView />,
   textbooks: () => <TextbookManagementView />,
   passes: () => <PassManagementView config={pianoPassConfig} />,

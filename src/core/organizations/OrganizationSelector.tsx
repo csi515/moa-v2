@@ -22,6 +22,7 @@ import { useAuth } from '../auth/AuthProvider';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { switchErrorMessage } from './roleContextHelpers';
 import { StaffInviteAcceptModal } from '../staff/components/StaffInviteAcceptModal';
+import { ownerOperationBlockMessage } from '../auth/services/ownerBusinessGate';
 
 export const OrganizationSelector: React.FC = () => {
   const {
@@ -110,7 +111,7 @@ export const OrganizationSelector: React.FC = () => {
           <button
             type="button"
             onClick={handleSignOut}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-rose-600 px-2.5 py-1.5 rounded-xl hover:bg-rose-50/70 transition-colors shrink-0"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-rose-600 min-h-[44px] px-3 rounded-xl hover:bg-rose-50/70 transition-colors shrink-0"
             aria-label="로그아웃"
           >
             <LogOut className="w-3.5 h-3.5" />
@@ -199,7 +200,7 @@ export const OrganizationSelector: React.FC = () => {
                       type="button"
                       data-testid="btn-open-create-org-wizard"
                       onClick={() => setShowWizard(true)}
-                      className="mt-3 w-full inline-flex items-center justify-center gap-1 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-xs font-bold rounded-lg shadow-2xs transition-all min-h-[38px]"
+                      className="mt-3 w-full inline-flex items-center justify-center gap-1 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-xs font-bold rounded-lg shadow-2xs transition-all min-h-[44px]"
                     >
                       <span>새 매장 개설하기</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -221,7 +222,7 @@ export const OrganizationSelector: React.FC = () => {
                       type="button"
                       data-testid="btn-staff-invite-code"
                       onClick={() => setShowStaffInviteAccept(true)}
-                      className="mt-3 w-full inline-flex items-center justify-center gap-1 px-3 py-2 bg-slate-800 hover:bg-slate-900 active:bg-black text-white text-xs font-bold rounded-lg shadow-2xs transition-all min-h-[38px]"
+                      className="mt-3 w-full inline-flex items-center justify-center gap-1 px-3 py-2 bg-slate-800 hover:bg-slate-900 active:bg-black text-white text-xs font-bold rounded-lg shadow-2xs transition-all min-h-[44px]"
                     >
                       <KeyRound className="w-3 h-3 text-slate-300" />
                       <span>초대 코드로 합류</span>
@@ -326,14 +327,23 @@ export const OrganizationSelector: React.FC = () => {
                     <span className="text-[11px] font-normal text-slate-400">클릭하여 즉시 접속</span>
                   </p>
                   <div className="space-y-2">
-                    {organizations.map((membership) => (
+                    {organizations.map((membership) => {
+                      const operationStopped =
+                        membership.role === 'owner' &&
+                        blockedOwnerOrgIds.includes(membership.organizationId);
+                      return (
                       <button
                         key={membership.id}
                         type="button"
-                        disabled={Boolean(selectingId)}
+                        disabled={Boolean(selectingId) || operationStopped}
+                        aria-disabled={operationStopped || undefined}
                         data-testid="organization-option"
                         onClick={() => void handleSelectOrganization(membership.organizationId)}
-                        className="w-full flex items-center justify-between p-4 rounded-2xl border border-slate-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/40 transition-all text-left min-h-[44px] disabled:opacity-60 shadow-2xs hover:shadow-xs"
+                        className={`w-full flex items-center justify-between p-4 rounded-2xl border text-left min-h-[44px] disabled:opacity-60 shadow-2xs ${
+                          operationStopped
+                            ? 'border-amber-200 bg-amber-50/70 cursor-not-allowed'
+                            : 'border-slate-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/40 hover:shadow-xs'
+                        }`}
                       >
                         <div className="flex items-center gap-3 min-w-0">
                           <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold">
@@ -351,10 +361,7 @@ export const OrganizationSelector: React.FC = () => {
                                   membership.organization.industry_type as IndustryType
                                 )}
                               </span>
-                              {membership.role === 'owner' &&
-                              blockedOwnerOrgIds.includes(membership.organizationId)
-                                ? ' · 운영 중지'
-                                : ''}
+                              {operationStopped ? ` · ${ownerOperationBlockMessage()}` : ''}
                             </p>
                           </div>
                         </div>
@@ -364,7 +371,8 @@ export const OrganizationSelector: React.FC = () => {
                           <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
                         )}
                       </button>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -374,7 +382,7 @@ export const OrganizationSelector: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowMoreActions((prev) => !prev)}
-                  className="w-full flex items-center justify-between py-2.5 px-3 text-xs font-bold text-slate-600 hover:text-indigo-600 rounded-xl hover:bg-slate-50 transition-colors"
+                  className="w-full min-h-[44px] flex items-center justify-between py-2.5 px-3 text-xs font-bold text-slate-600 hover:text-indigo-600 rounded-xl hover:bg-slate-50 transition-colors"
                 >
                   <span className="flex items-center gap-1.5">
                     <Plus className="w-4 h-4 text-slate-400" />
@@ -411,20 +419,20 @@ export const OrganizationSelector: React.FC = () => {
                         type="button"
                         data-testid="btn-customer-signup"
                         onClick={() => navigate('/signup/customer')}
-                        className="p-2.5 border border-slate-200 rounded-xl text-left hover:bg-slate-50 transition-colors"
+                        className="min-h-[44px] p-2.5 border border-slate-200 rounded-xl text-left hover:bg-slate-50 transition-colors"
                       >
                         <p className="text-xs font-bold text-slate-800">이용자 신청</p>
-                        <p className="text-[10px] text-slate-400 mt-0.5">다른 매장 회원 등록</p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">다른 매장 회원 등록</p>
                       </button>
 
                       <button
                         type="button"
                         data-testid="btn-staff-invite-code"
                         onClick={() => setShowStaffInviteAccept(true)}
-                        className="p-2.5 border border-slate-200 rounded-xl text-left hover:bg-slate-50 transition-colors"
+                        className="min-h-[44px] p-2.5 border border-slate-200 rounded-xl text-left hover:bg-slate-50 transition-colors"
                       >
                         <p className="text-xs font-bold text-slate-800">직원 초대 코드</p>
-                        <p className="text-[10px] text-slate-400 mt-0.5">초대 코드로 합류</p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">초대 코드로 합류</p>
                       </button>
                     </div>
                   </div>

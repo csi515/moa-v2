@@ -39,18 +39,27 @@ export const SupabaseRoleSync: React.FC = () => {
       portalMode,
     });
 
+    const identityPatch = {
+      id: auth.user.id,
+      name: fullName,
+      email: auth.user.email || '',
+    };
+
     if (role == null) {
+      const previous = StorageService.getActiveUser();
+      StorageService.setActiveUser({
+        ...previous,
+        ...identityPatch,
+      });
       bindAccessControlContextResolver(null);
       return;
     }
 
     const activeUser = {
-      id: auth.user.id,
-      name: fullName,
+      ...identityPatch,
       role,
       staffId: org?.currentStaffId ?? null,
       parentCustomerId: org?.currentParentCustomerId ?? null,
-      email: auth.user.email || '',
     };
 
     StorageService.setActiveUser(activeUser);

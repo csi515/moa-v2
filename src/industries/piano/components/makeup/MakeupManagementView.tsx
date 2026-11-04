@@ -30,6 +30,10 @@ import {
   Clock,
   Phone,
 } from 'lucide-react';
+import {
+  addMinutesToClock,
+  resolvePianoLessonMinutes,
+} from '../../config/pianoLessonMinutes';
 
 const STATUS_TABS: FilterTabItem<MakeupStatus | 'all'>[] = [
   { id: 'pending', label: '미보강' },
@@ -37,14 +41,6 @@ const STATUS_TABS: FilterTabItem<MakeupStatus | 'all'>[] = [
   { id: 'completed', label: '완료' },
   { id: 'all', label: '전체' },
 ];
-
-function addMinutes(hhmm: string, minutes: number): string {
-  const [h, m] = hhmm.split(':').map((n) => parseInt(n, 10) || 0);
-  const total = h * 60 + m + minutes;
-  const nh = Math.floor(total / 60) % 24;
-  const nm = total % 60;
-  return `${String(nh).padStart(2, '0')}:${String(nm).padStart(2, '0')}`;
-}
 
 export const MakeupManagementView: React.FC = () => {
   const { showToast } = useApp();
@@ -56,7 +52,7 @@ export const MakeupManagementView: React.FC = () => {
   const [scheduleTarget, setScheduleTarget] = useState<MakeupItem | null>(null);
   const [scheduleDate, setScheduleDate] = useState(todayIsoLocal);
   const [startTime, setStartTime] = useState('16:00');
-  const [endTime, setEndTime] = useState('16:50');
+  const [endTime, setEndTime] = useState('16:30');
   const [room, setRoom] = useState('');
   const [teacherId, setTeacherId] = useState('');
 
@@ -97,12 +93,14 @@ export const MakeupManagementView: React.FC = () => {
 
   const openSchedule = (item: MakeupItem) => {
     const origin = classes.find((c) => c.id === item.classId);
-    const lessonMinutes = StorageService.getSettings().defaultLessonMinutes || 50;
+    const lessonMinutes = resolvePianoLessonMinutes(
+      StorageService.getSettings().defaultLessonMinutes
+    );
     const start = item.makeUpStartTime || origin?.startTime || '16:00';
     setScheduleTarget(item);
     setScheduleDate(item.makeUpDate || todayIsoLocal());
     setStartTime(start);
-    setEndTime(item.makeUpEndTime || origin?.endTime || addMinutes(start, lessonMinutes));
+    setEndTime(item.makeUpEndTime || origin?.endTime || addMinutesToClock(start, lessonMinutes));
     setRoom(item.makeUpRoom || origin?.room || rooms[0] || '');
     setTeacherId(item.makeUpTeacherId || origin?.teacherId || teachers[0]?.id || '');
   };
@@ -322,8 +320,10 @@ export const MakeupManagementView: React.FC = () => {
                 value={startTime}
                 onChange={(e) => {
                   setStartTime(e.target.value);
-                  const mins = StorageService.getSettings().defaultLessonMinutes || 50;
-                  setEndTime(addMinutes(e.target.value, mins));
+                  const mins = resolvePianoLessonMinutes(
+                    StorageService.getSettings().defaultLessonMinutes
+                  );
+                  setEndTime(addMinutesToClock(e.target.value, mins));
                 }}
                 className={FORM_CONTROL_CLASS}
               />

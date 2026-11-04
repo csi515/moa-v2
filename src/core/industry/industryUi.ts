@@ -56,6 +56,11 @@ export function isPianoIndustry(industry: IndustryType | string | null | undefin
   return getIndustryPlugin(industry).id === 'piano';
 }
 
+export function isRetailIndustry(industry: IndustryType | string | null | undefined): boolean {
+  if (!industry) return false;
+  return getIndustryPlugin(industry).id === 'retail';
+}
+
 export function isPilatesIndustry(industry: IndustryType | string | null | undefined): boolean {
   if (!industry) return false;
   return getIndustryPlugin(industry).id === 'pilates';

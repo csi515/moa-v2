@@ -6,7 +6,7 @@ import { StorageService } from '@/services/storage';
 
 /** 원장 온보딩 자동 오픈·이어하기·건너뛰기 UI 상태 */
 export function usePianoOnboardingUi() {
-  const { openConfirmDialog, showToast } = useApp();
+  const { showToast } = useApp();
   const { isAdmin } = usePermissions();
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showResumeCard, setShowResumeCard] = useState(false);
@@ -44,19 +44,10 @@ export function usePianoOnboardingUi() {
   };
 
   const handleResumeSkip = () => {
-    openConfirmDialog({
-      title: '초기 설정을 건너뛸까요?',
-      message:
-        '나중에 설정 메뉴에서 학원 정보·수납·출결·상담을 변경할 수 있습니다. 앱은 바로 사용할 수 있습니다.',
-      confirmText: '건너뛰기',
-      cancelText: '취소',
-      onConfirm: () => {
-        StorageService.markOnboardingSkipped();
-        setShowResumeCard(false);
-        setShowOnboarding(false);
-        showToast('초기 설정을 건너뛰었습니다.', 'info');
-      },
-    });
+    StorageService.markOnboardingSkipped();
+    setShowResumeCard(false);
+    setShowOnboarding(false);
+    showToast('초기 설정을 건너뛰었습니다.', 'info');
   };
 
   return {

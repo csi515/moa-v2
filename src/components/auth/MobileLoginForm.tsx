@@ -162,7 +162,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
         <button
           type="button"
           onClick={() => setTargetGroup('workplace')}
-          className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all ${
+          className={`flex items-center justify-center gap-2 min-h-[44px] py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all ${
             targetGroup === 'workplace'
               ? 'bg-white text-indigo-700 shadow-sm'
               : 'text-slate-500 hover:text-slate-800'
@@ -175,7 +175,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
         <button
           type="button"
           onClick={() => setTargetGroup('customer')}
-          className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all ${
+          className={`flex items-center justify-center gap-2 min-h-[44px] py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all ${
             targetGroup === 'customer'
               ? 'bg-white text-emerald-700 shadow-sm'
               : 'text-slate-500 hover:text-slate-800'
@@ -202,7 +202,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
             <button
               type="button"
               onClick={() => setCurrentRole('owner')}
-              className={`flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg text-xs font-bold transition-all ${
+              className={`flex items-center justify-center gap-1.5 min-h-[44px] py-2 px-2.5 rounded-lg text-xs font-bold transition-all ${
                 currentRole === 'owner'
                   ? 'bg-indigo-600 text-white shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
@@ -215,7 +215,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
             <button
               type="button"
               onClick={() => setCurrentRole('staff')}
-              className={`flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg text-xs font-bold transition-all ${
+              className={`flex items-center justify-center gap-1.5 min-h-[44px] py-2 px-2.5 rounded-lg text-xs font-bold transition-all ${
                 currentRole === 'staff'
                   ? 'bg-indigo-600 text-white shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
@@ -225,6 +225,11 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
               <span>{isEn ? "Staff" : "직원 · 강사"}</span>
             </button>
           </div>
+          <p className="mt-2 text-[11px] text-slate-500 leading-relaxed">
+            {isEn
+              ? "Owner and staff use the same sign-in. Staff join a shop with an invite code."
+              : "사업주와 직원은 같은 계정으로 로그인합니다. 직원 합류는 초대 코드로 합니다."}
+          </p>
         </div>
       ) : (
         <div className="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-2.5 px-3 space-y-1">
@@ -296,19 +301,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
               </button>
             </div>
           </div>
-        ) : (
-          <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-2 text-center mb-1">
-            <div className="flex items-center justify-center gap-1.5 text-slate-400 mb-0.5">
-              <div className="w-4 h-4 rounded-full bg-white flex items-center justify-center border border-slate-200 text-[8px] font-bold text-slate-600">G</div>
-              <div className="w-4 h-4 rounded-full bg-black text-white flex items-center justify-center text-[8px]">🍎</div>
-              <div className="w-4 h-4 rounded-full bg-[#FEE500] text-[#191919] flex items-center justify-center text-[8px] font-bold">K</div>
-              <div className="w-4 h-4 rounded-full bg-[#03C75A] text-white flex items-center justify-center text-[8px] font-extrabold">N</div>
-            </div>
-            <p className="text-xs text-slate-400" data-testid="sns-login-disabled-hint">
-              {isEn ? "Social login is coming soon" : "간편 로그인은 준비 중입니다"}
-            </p>
-          </div>
-        )}
+        ) : null}
       </div>
 
       {/* 4. 메인 이메일 / 비밀번호 폼 */}
@@ -459,6 +452,12 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
         )}
       </div>
 
+      {!SNS_LOGIN_ENABLED && (
+        <p className="text-center text-xs text-slate-400" data-testid="sns-login-disabled-hint">
+          {isEn ? "Social login is coming soon" : "간편 로그인은 준비 중입니다"}
+        </p>
+      )}
+
       {/* 6. 하단 회원가입 및 언어 전환 바 */}
       <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-3">
         <Link
@@ -470,7 +469,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
             }
           }}
           data-testid="link-signup"
-          className="text-xs text-slate-600 hover:text-indigo-600 font-bold inline-flex items-center gap-1 min-h-[36px]"
+          className="text-xs text-slate-600 hover:text-indigo-600 font-bold inline-flex items-center gap-1 min-h-[44px]"
         >
           <span>{isEn ? "Need an account? Sign Up" : "계정이 없으신가요? 회원가입"}</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -482,7 +481,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
             <button
               type="button"
               onClick={() => onLanguageChange('ko')}
-              className={`px-2 py-1 rounded-md transition-all ${
+              className={`min-h-[44px] min-w-[44px] px-2 rounded-md transition-all ${
                 !isEn ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
               }`}
             >
@@ -491,7 +490,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
             <button
               type="button"
               onClick={() => onLanguageChange('en')}
-              className={`px-2 py-1 rounded-md transition-all ${
+              className={`min-h-[44px] min-w-[44px] px-2 rounded-md transition-all ${
                 isEn ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
               }`}
             >

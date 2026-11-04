@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useList } from '@refinedev/core';
 import { useApp } from '@/context/AppContext';
 import { weekdayFromDate } from '@/shared/utils/weekdayKo';
 import { consumePlaceStudentOnTimetable, peekPlaceStudentOnTimetable } from '@/core/customer/studentJoinInbox';
-import { useMediaQuery, useStaffScope } from '@/hooks';
-import { useOrganization } from '@/core/organizations/OrganizationProvider';
+import { StudentService } from '@/core/students';
+import { useMediaQuery, useStaffScope, useStorageRefresh } from '@/hooks';
+import { STORAGE_REFRESH_DOMAINS } from '@/hooks/useStorageRefresh';
+import { StorageService } from '@/services/storage';
 import type { DayOfWeek, Student } from '@/types';
 import type { DragPlacementPayload } from './PianoTimetablePanels';
 import {
@@ -26,9 +27,12 @@ export type TimetableLayoutMode = 'week' | 'byTeacher';
  */
 export function usePianoLessonTimetable() {
   const { showToast, openConfirmDialog, triggerRefresh } = useApp();
-  const { currentOrganization } = useOrganization();
   const { isScoped, staffId, scopeClasses, scopeStudents } = useStaffScope();
   const useDragGrid = useMediaQuery('(min-width: 1024px) and (hover: hover) and (pointer: fine)');
+  const refreshKey = useStorageRefresh([
+    ...STORAGE_REFRESH_DOMAINS.students,
+    ...STORAGE_REFRESH_DOMAINS.classes,
+  ]);
 
   const todayDay = weekdayFromDate();
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(todayDay);
@@ -43,39 +47,19 @@ export function usePianoLessonTimetable() {
   const [pendingStudentId, setPendingStudentId] = useState<string | null>(null);
   const [pendingTeacherId, setPendingTeacherId] = useState<string | undefined>(undefined);
 
-  // Refine으로 classes 조회
-  const classesList = useList<any>({
-    resource: 'classes',
-    queryOptions: { enabled: !!currentOrganization?.id },
-  });
-  const rawClasses = (classesList as any).data?.data || (classesList as any).query?.data?.data || [];
-  // classes는 내부 ClassItem 타입으로 사용 — metadata에 legacy 필드가 있다고 가정
-  const classes = useMemo(
-    () => scopeClasses(rawClasses),
-    [scopeClasses, rawClasses]
-  );
+  const rawClasses = useMemo(() => StorageService.getClasses(), [refreshKey]);
+  const classes = useMemo(() => scopeClasses(rawClasses), [scopeClasses, rawClasses]);
 
-  // Refine으로 staff 조회
-  const staffList = useList<any>({
-    resource: 'staff',
-    queryOptions: { enabled: !!currentOrganization?.id },
-  });
-  const rawStaff = (staffList as any).data?.data || (staffList as any).query?.data?.data || [];
   const teachers = useMemo(() => {
-    const active = rawStaff.filter((t: any) => t.status === 'active');
+    const rawStaff = StorageService.getTeachers();
+    const active = rawStaff.filter((t) => t.status === 'active');
     return active.length > 0 ? active : rawStaff;
-  }, [rawStaff]);
+  }, [refreshKey]);
 
-  // Refine으로 customers 조회
-  const customersList = useList<any>({
-    resource: 'customers',
-    filters: [{ field: 'status', operator: 'eq', value: 'active' }],
-    queryOptions: { enabled: !!currentOrganization?.id },
-  });
-  const rawCustomers = (customersList as any).data?.data || (customersList as any).query?.data?.data || [];
   const students = useMemo(
-    () => scopeStudents(rawCustomers).filter((s: any) => s.status === 'active'),
-    [scopeStudents, rawCustomers]
+    () =>
+      scopeStudents(StudentService.getStudents()).filter((s) => s.status === 'active'),
+    [scopeStudents, refreshKey]
   );
 
 

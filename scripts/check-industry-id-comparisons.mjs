@@ -23,14 +23,14 @@ export const BASELINE = {
   'src/capabilities/billing/finance/billingIncomeLink.ts': 1, // sourceType 'retail' (업종 아님)
   'src/capabilities/billing/finance/components/IncomeManagementView.tsx': 2, // sourceType 'retail' (업종 아님)
   'src/core/industry/genericPlugin.ts': 2, // 카탈로그 정의 → generic 매니페스트 생성(정의 측 값)
-  'src/core/industry/industryUi.ts': 5, // isPianoIndustry 등 업종 판별 헬퍼 정의
+  'src/core/industry/industryUi.ts': 6, // isPianoIndustry·isRetailIndustry 등 업종 판별 헬퍼 정의
 };
 
 /**
  * 전체 상한. 개수는 줄(line)이 아니라 비교 연산 '발생 수'로 센다
  * (한 줄에 비교가 둘이면 2개 — 예전 35(줄 수) vs 36(발생 수) 차이의 원인).
  */
-export const TOTAL_CAP = 11;
+export const TOTAL_CAP = 12;
 
 function isTestFile(rel) {
   return /\.test\.[cm]?[jt]sx?$/.test(rel) || rel.split('/').includes('__tests__') || rel.split('/').includes('__fixtures__');
