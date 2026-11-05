@@ -79,7 +79,8 @@ for (const tab of PIANO_ROOM_ENTRY_TABS) {
 assert.equal(resolvePianoScheduleSegment('makeups'), 'makeups');
 assert.equal(resolvePianoScheduleSegment('calendar'), 'events');
 assert.equal(resolvePianoNavHighlightTab('lessons'), 'attendance');
-assert.equal(resolvePianoNavHighlightTab('tuition'), 'finance');
+assert.equal(resolvePianoNavHighlightTab('tuition'), 'tuition');
+assert.equal(resolvePianoNavHighlightTab('income'), 'finance');
 assert.equal(resolvePianoNavHighlightTab('passes'), 'settings');
 
 const hubTabs = [
@@ -160,5 +161,22 @@ const november = monthGridDates('2026-11-01');
 assert.equal(november.length % 7, 0);
 assert.equal(november[0], '2026-11-01');
 assert.ok(november.includes('2026-11-30'));
+
+/** 브라우저 E2E wave-1 스모크: 수납·상담·설정·일정(시간표/보강/캘린더/연습실) */
+const PIANO_WAVE1_SMOKE_TABS = [
+  'tuition',
+  'consultations',
+  'settings',
+  'teachers',
+  'notices',
+  'account',
+  'timetable',
+  'calendar',
+  'makeups',
+  'practice-rooms',
+] as const;
+for (const tab of PIANO_WAVE1_SMOKE_TABS) {
+  assert.equal(typeof viewMap[tab], 'function', `wave1 smoke route ${tab}`);
+}
 
 console.log('piano academy completeness: ok');

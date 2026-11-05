@@ -65,9 +65,9 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
       studentId: students[0]?.id || '',
       type: 'parent',
       date: new Date().toISOString().slice(0, 10),
-      content: '체르니 30번 진입 시 연습량 증가 및 콩쿠르 참가 의향 상담',
-      result: '10월 전국 피아노 콩쿠르 출전 목표로 자유곡 선정하기로 합의',
-      nextDate: '2025-09-15'
+      content: '',
+      result: '',
+      nextDate: '',
     });
     setIsModalOpen(true);
   };
