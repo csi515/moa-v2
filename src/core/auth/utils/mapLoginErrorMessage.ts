@@ -6,7 +6,10 @@ export function mapLoginErrorMessage(raw?: string | null): string {
     '이메일 또는 비밀번호가 올바르지 않습니다. 계정이 없다면 회원가입을 진행해 주세요.';
   if (!raw?.trim()) return fallback;
 
-  if (/invalid login credentials|invalid_credentials|email not confirmed/i.test(raw)) {
+  if (/email not confirmed|email_not_confirmed/i.test(raw)) {
+    return '이메일 인증이 완료되지 않았습니다. 받은편지함의 확인 링크를 눌러 주세요.';
+  }
+  if (/invalid login credentials|invalid_credentials/i.test(raw)) {
     return fallback;
   }
   if (/user not found|no user found/i.test(raw)) {
@@ -17,4 +20,11 @@ export function mapLoginErrorMessage(raw?: string | null): string {
   }
 
   return raw;
+}
+
+/** 미확인 이메일 오류인지 (재발송 CTA 표시용) */
+export function isEmailNotConfirmedError(raw?: string | null): boolean {
+  return /email not confirmed|email_not_confirmed|이메일 인증이 완료되지 않았습니다/i.test(
+    raw ?? ''
+  );
 }

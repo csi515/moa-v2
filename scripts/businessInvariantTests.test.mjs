@@ -115,6 +115,8 @@ const P20_1_BUSINESS_INVARIANT_CHAIN = [
   'test:today-lesson-teacher',
   'test:piano-student-level',
   'test:post-login-navigation',
+  'test:journey-states',
+  'test:map-login-error',
 ];
 
 const scripts = loadPackageScripts();

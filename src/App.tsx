@@ -61,6 +61,8 @@ const CustomerSignUpFlow = lazy(() => import("@/core/customer/CustomerSignUpFlow
 const MyPassView = lazy(() => import("./pages/customer/MyPassView").then((m) => ({ default: m.MyPassView })));
 const RolesPage = lazy(() => import("./pages/settings/RolesPage").then((m) => ({ default: m.RolesPage })));
 const AcceptStaffInvitePage = lazy(() => import("./pages/invite/AcceptStaffInvitePage").then((m) => ({ default: m.AcceptStaffInvitePage })));
+const AcceptInviteLandingPage = lazy(() => import("./pages/invite/AcceptInviteLandingPage").then((m) => ({ default: m.AcceptInviteLandingPage })));
+const RecoveryPasswordPage = lazy(() => import("./pages/auth/RecoveryPasswordPage").then((m) => ({ default: m.RecoveryPasswordPage })));
 const QuickSetupPage = lazy(() => import("./pages/onboarding/QuickSetupPage").then((m) => ({ default: m.QuickSetupPage })));
 const OrganizationTreePage = lazy(() => import("./pages/organization/OrganizationTreePage").then((m) => ({ default: m.OrganizationTreePage })));
 const WorkspaceResourcesPage = lazy(() => import("./pages/workspace/WorkspaceResourcesPage").then((m) => ({ default: m.WorkspaceResourcesPage })));
@@ -408,6 +410,8 @@ const RefineApp: React.FC = () => {
             <Route path="/lockers" element={<LockersGridPage />} />
             <Route path="/settings/roles" element={<RolesPage />} />
             <Route path="/onboarding/quick" element={<QuickSetupPage />} />
+            {/* 사업장 미선택 시 게이트가 Selector 표시. org 확정 후 /workspace 로 보냄 */}
+            <Route path="/onboarding/org" element={<Navigate to="/workspace" replace />} />
             <Route path="/workspace" element={<IndustryAppRouter />} />
             <Route path="/workspace/*" element={<IndustryAppRouter />} />
 
@@ -429,8 +433,10 @@ const RefineApp: React.FC = () => {
         ) : null}
         <Route path="/p/:slug" element={<PublicStoreLandingPage />} />
         <Route path="/claim/:token" element={<ClaimTokenPage />} />
+        <Route path="/invite/accept" element={<AcceptInviteLandingPage />} />
         <Route path="/invite/staff/:token" element={<AcceptStaffInvitePage />} />
         <Route path="/signup/customer" element={<CustomerSignUpFlow />} />
+        <Route path="/auth/recovery" element={<RecoveryPasswordPage />} />
         <Route path="/terms" element={<LegalPageView page="terms" />} />
         <Route path="/privacy" element={<LegalPageView page="privacy" />} />
         <Route path="/support" element={<LegalPageView page="support" />} />
@@ -458,6 +464,10 @@ const RefineApp: React.FC = () => {
 export const App: React.FC = () => {
   React.useEffect(() => {
     installAuthInterceptor();
+    // OAuth 콜백 오류를 URL에서 치우고 sessionStorage에 남겨 login/signup 이 소비한다
+    void import("@/core/auth/oauthCallbackError").then((m) => {
+      m.stashOAuthCallbackErrorFromLocation();
+    });
   }, []);
   return (
     <QueryClientProvider client={queryClient}>

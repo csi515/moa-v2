@@ -160,7 +160,21 @@ export const UnpaidManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
       </FilterBar>
 
       {filtered.length === 0 ? (
-        <EmptyState icon={<span className="text-3xl">🎉</span>} title="미납 내역이 없습니다!" />
+        <EmptyState
+          icon={<span className="text-3xl">🎉</span>}
+          title="미납 내역이 없습니다!"
+          description="청구서를 발행하고 입금을 처리하면 미납이 여기 표시됩니다."
+          guide={{
+            badge: '30초 시작 가이드',
+            title: '수납·미납 흐름',
+            tip: '미납이 비어 있으면 정상입니다. 청구 후 미수금이 생기면 이 목록에 나타납니다.',
+            steps: [
+              { stepNumber: 1, title: '수납 메뉴에서 청구', detail: '월회비·교재비 청구서를 만듭니다.' },
+              { stepNumber: 2, title: '입금 확인', detail: '입금이 오면 수납 완료로 처리합니다.' },
+              { stepNumber: 3, title: '미납 추적', detail: '미수금이 있으면 이 화면에서 연락·수납합니다.' },
+            ],
+          }}
+        />
       ) : (
         <>
           {/* 데스크톱 테이블 */}

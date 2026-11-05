@@ -50,6 +50,8 @@ export const AuthPage: React.FC = () => {
         loading={form.loading}
         error={form.error}
         info={form.info}
+        emailPending={form.emailPending}
+        resendLoading={form.resendLoading}
         onEmailChange={form.setEmail}
         onPasswordChange={form.setPassword}
         onFullNameChange={form.setFullName}
@@ -57,6 +59,7 @@ export const AuthPage: React.FC = () => {
         onAgreedToTermsChange={form.setAgreedToTerms}
         onSwitchMode={handleSwitchMode}
         onSubmit={form.handleSubmit}
+        onResendConfirmation={() => void form.handleResendConfirmation()}
       />
     </AuthLayout>
   );

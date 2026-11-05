@@ -166,6 +166,8 @@ export const BUSINESS_INVARIANT_TESTS = [
   { script: 'test:today-lesson-teacher', group: 'industry', kind: 'unit', ci: 'always', order: 95 },
   { script: 'test:piano-student-level', group: 'industry', kind: 'unit', ci: 'always', order: 96 },
   { script: 'test:post-login-navigation', group: 'authorization', kind: 'unit', ci: 'always', order: 97 },
+  { script: 'test:journey-states', group: 'authorization', kind: 'unit', ci: 'always', order: 98 },
+  { script: 'test:map-login-error', group: 'authorization', kind: 'unit', ci: 'always', order: 99 },
 ];
 
 /** 메타/그룹 러너 — inventory 후보가 아님 */

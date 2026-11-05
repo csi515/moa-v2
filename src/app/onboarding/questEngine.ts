@@ -113,7 +113,7 @@ const VERTICAL_QUEST_PRESETS: Record<string, Omit<QuestItem, 'stepNumber'>[]> = 
     },
   ],
 
-  // 피아노 & 음악학원
+  // 피아노 & 음악학원 — wave-1 E2E 딥링크: 학생 → 시간표 → 출결 → 수납
   piano: [
     {
       id: 'register_first_student',
@@ -126,29 +126,29 @@ const VERTICAL_QUEST_PRESETS: Record<string, Omit<QuestItem, 'stepNumber'>[]> = 
     },
     {
       id: 'create_regular_class',
-      title: '정규 수강반 및 레슨 시간표 개설',
-      description: '바이엘·체르니·작품반 등 과정별 수강반과 요일/시간을 지정합니다.',
-      targetTab: 'classes',
+      title: '레슨 시간표에 원생 배치',
+      description: '정규 레슨 요일·시간을 지정하고 원생을 시간표 칸에 배치합니다.',
+      targetTab: 'timetable',
       icon: 'calendar',
-      actionText: '수강반 편성 바로가기',
+      actionText: '시간표 바로가기',
       helpTip: '1:1 개인 레슨 시간표와 그룹 이론 수업 시간을 구분하여 편성할 수 있습니다.',
     },
     {
-      id: 'setup_practice_room',
-      title: '피아노 연습실 세팅',
-      description: '업라이트·그랜드 피아노 연습실의 사용 가능 시간과 예약 규칙을 점검합니다.',
-      targetTab: 'practice-rooms',
-      icon: 'building',
-      actionText: '연습실 현황 바로가기',
-      helpTip: '원생별 자율 연습 예약 및 보강 연습 시간을 겹치지 않게 배정합니다.',
+      id: 'check_first_attendance',
+      title: '오늘 출결 확인하기',
+      description: '시간표에 배치된 원생의 등원·결석을 처리합니다.',
+      targetTab: 'attendance',
+      icon: 'clock',
+      actionText: '출결 바로가기',
+      helpTip: '등원 처리 시 학부모 알림을 보낼 수 있습니다.',
     },
     {
       id: 'issue_first_invoice',
-      title: '첫 수강료 청구서 발행',
-      description: '이번 달 교습비 청구서를 생성하고 수납 상태를 관리합니다.',
-      targetTab: 'billing',
+      title: '첫 수강료 수납 처리',
+      description: '이번 달 교습비 청구서를 확인하고 입금·납부완료를 처리합니다.',
+      targetTab: 'tuition',
       icon: 'ticket',
-      actionText: '청구·수납 바로가기',
+      actionText: '수납 바로가기',
       helpTip: '청구서 생성 시 교재비나 콩쿠르 참가비 항목을 함께 추가할 수 있습니다.',
     },
   ],

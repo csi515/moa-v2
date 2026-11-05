@@ -14,6 +14,8 @@ import {
   Clock,
   FileText,
   RotateCcw,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 import {
   getPresetQuests,
@@ -22,7 +24,13 @@ import {
   type QuestItem,
   type QuestIconType,
 } from './questEngine';
-import { StorageService } from '@/services/storage';
+import {
+  detectCompletedQuestIds,
+  isQuestWidgetDismissed,
+  mergeQuestCompletion,
+  setQuestWidgetDismissed,
+} from './questCompletion';
+import { EDUCATION_ROLE_BLURB } from '@/core/help/educationCopy';
 
 interface GettingStartedQuestWidgetProps {
   onNavigate: (tab: string) => void;
@@ -31,6 +39,8 @@ interface GettingStartedQuestWidgetProps {
   customerWord?: string;
   placeWord?: string;
   onOpenCustomerModal?: () => void;
+  /** true면 미완료일 때만 강조(홈 밀도 완화). 기본 false */
+  compactWhenComplete?: boolean;
 }
 
 const ICON_MAP: Record<QuestIconType, React.ReactNode> = {
@@ -51,6 +61,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
   customerWord = '고객',
   placeWord = '사업장',
   onOpenCustomerModal,
+  compactWhenComplete = true,
 }) => {
   const quests = useMemo(
     () => getPresetQuests(industryType, customerWord, placeWord),
@@ -59,57 +70,78 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
 
   const storageKey = useMemo(() => getQuestStorageKey(organizationId), [organizationId]);
 
-  const [completedIds, setCompletedIds] = useState<string[]>(() => {
+  const [manualIds, setManualIds] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem(storageKey);
-      if (saved) {
-        return JSON.parse(saved);
-      }
+      if (saved) return JSON.parse(saved) as string[];
     } catch {
       // fallback
     }
     return [];
   });
 
+  const [detectedIds, setDetectedIds] = useState<string[]>([]);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [dismissed, setDismissed] = useState(() => isQuestWidgetDismissed(organizationId));
+  const [userExpandedAfterComplete, setUserExpandedAfterComplete] = useState(false);
 
-  // 실 데이터 기반 자동 감지 (원생/고객이 1명 이상 등록된 경우 첫 단계 자동 체크)
+  const completedIds = useMemo(
+    () => mergeQuestCompletion(manualIds, detectedIds),
+    [manualIds, detectedIds]
+  );
+
+  // 실데이터 자동 완료 감지
   useEffect(() => {
     try {
-      const students = StorageService.getStudents();
-      if (students.length > 0 && quests.length > 0) {
-        const firstQuest = quests[0];
-        if (!completedIds.includes(firstQuest.id)) {
-          const updated = [...completedIds, firstQuest.id];
-          setCompletedIds(updated);
-          localStorage.setItem(storageKey, JSON.stringify(updated));
+      const detected = detectCompletedQuestIds(quests);
+      setDetectedIds(detected);
+      if (detected.length === 0) return;
+      setManualIds((prev) => {
+        const merged = mergeQuestCompletion(prev, detected);
+        if (merged.length === prev.length && merged.every((id, i) => id === prev[i])) return prev;
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(merged));
+        } catch {
+          // noop
         }
-      }
+        return merged;
+      });
     } catch {
       // noop
     }
-  }, [quests, completedIds, storageKey]);
+  }, [quests, storageKey]);
 
   const progress = useMemo(
     () => calculateQuestProgress(quests, completedIds),
     [quests, completedIds]
   );
 
+  // 100% 완료 시 기본 접힘
+  useEffect(() => {
+    if (progress.isAllCompleted && compactWhenComplete && !userExpandedAfterComplete) {
+      setIsCollapsed(true);
+    }
+  }, [progress.isAllCompleted, compactWhenComplete, userExpandedAfterComplete]);
+
+  const persistManual = (next: string[]) => {
+    setManualIds(next);
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(next));
+    } catch {
+      // noop
+    }
+  };
+
   const toggleQuest = (id: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    setCompletedIds((prev) => {
-      const next = prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id];
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(next));
-      } catch {
-        // noop
-      }
-      return next;
-    });
+    persistManual(
+      completedIds.includes(id)
+        ? completedIds.filter((item) => item !== id)
+        : [...completedIds, id]
+    );
   };
 
   const handleAction = (quest: QuestItem) => {
-    // 첫 회원 등록 퀘스트이고 모달 오프너가 제공된 경우 모달 오픈
     if (
       (quest.id.includes('first') || quest.id.includes('member') || quest.id.includes('entity')) &&
       quest.targetTab === 'students' &&
@@ -123,7 +155,12 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
 
   const handleReset = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCompletedIds([]);
+    persistManual([]);
+    setDetectedIds([]);
+    setQuestWidgetDismissed(organizationId, false);
+    setDismissed(false);
+    setUserExpandedAfterComplete(true);
+    setIsCollapsed(false);
     try {
       localStorage.removeItem(storageKey);
     } catch {
@@ -131,12 +168,52 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
     }
   };
 
+  const handleDismiss = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setQuestWidgetDismissed(organizationId, true);
+    setDismissed(true);
+  };
+
+  const handleShowAgain = () => {
+    setQuestWidgetDismissed(organizationId, false);
+    setDismissed(false);
+    setUserExpandedAfterComplete(true);
+    setIsCollapsed(false);
+  };
+
+  const handleToggleCollapse = () => {
+    if (isCollapsed && progress.isAllCompleted) {
+      setUserExpandedAfterComplete(true);
+    }
+    setIsCollapsed((v) => !v);
+  };
+
+  if (quests.length === 0) return null;
+
+  if (dismissed) {
+    return (
+      <div
+        className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3"
+        data-testid="getting-started-quest-widget-dismissed"
+      >
+        <p className="text-xs text-slate-500">첫걸음 가이드를 숨겼습니다.</p>
+        <button
+          type="button"
+          onClick={handleShowAgain}
+          className="inline-flex items-center gap-1.5 min-h-[44px] px-3 rounded-xl text-xs font-bold text-indigo-700 hover:bg-indigo-50"
+        >
+          <Eye className="w-3.5 h-3.5" />
+          다시 보기
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div
       className="bg-gradient-to-br from-white via-indigo-50/20 to-slate-50/80 rounded-3xl border border-indigo-100/80 p-5 sm:p-7 shadow-xs relative overflow-hidden transition-all duration-300"
       data-testid="getting-started-quest-widget"
     >
-      {/* 위젯 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-indigo-50">
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-xs font-bold">
@@ -144,15 +221,12 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
             <span>사업장 맞춤형 첫걸음 퀘스트</span>
           </div>
           <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-            🚀 대표님을 위한 {placeWord} 첫 세팅 가이드
+            대표님을 위한 {placeWord} 첫 세팅 가이드
           </h2>
-          <p className="text-xs text-slate-500">
-            핵심 기능 3~4가지를 완료하여 {customerWord}을 맞이할 준비를 마쳐보세요.
-          </p>
+          <p className="text-xs text-slate-500">{EDUCATION_ROLE_BLURB.quest}</p>
         </div>
 
-        {/* 진행률 & 컨트롤 */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <div className="bg-white px-3.5 py-2 rounded-2xl border border-slate-200/80 shadow-2xs min-w-[140px]">
             <div className="flex justify-between items-center text-xs font-black mb-1.5">
               <span className="text-slate-600">진척도</span>
@@ -170,10 +244,22 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
             </div>
           </div>
 
+          {progress.isAllCompleted && (
+            <button
+              type="button"
+              onClick={handleDismiss}
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+              title="가이드 숨기기"
+              data-testid="quest-widget-dismiss"
+            >
+              <EyeOff className="w-5 h-5" />
+            </button>
+          )}
+
           <button
             type="button"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            onClick={handleToggleCollapse}
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             title={isCollapsed ? '펼치기' : '접기'}
           >
             {isCollapsed ? <ChevronDown className="w-5 h-5" /> : <ChevronUp className="w-5 h-5" />}
@@ -181,7 +267,6 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
         </div>
       </div>
 
-      {/* 완료 축하 배너 */}
       {progress.isAllCompleted && !isCollapsed && (
         <div className="mt-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white flex items-center justify-between shadow-xs animate-in fade-in duration-300">
           <div className="flex items-center gap-3">
@@ -190,10 +275,10 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
             </div>
             <div>
               <p className="font-extrabold text-sm sm:text-base">
-                🎉 축하합니다! 모든 첫걸음 퀘스트를 완수하셨습니다!
+                축하합니다! 모든 첫걸음 퀘스트를 완수하셨습니다!
               </p>
               <p className="text-xs text-emerald-100 mt-0.5">
-                이제 {placeWord} 운영이 완벽히 준비되었습니다. 본격적으로 {customerWord}을 맞이해보세요.
+                이제 {placeWord} 운영이 준비되었습니다. 본격적으로 {customerWord}을 맞이해보세요.
               </p>
             </div>
           </div>
@@ -209,7 +294,6 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
         </div>
       )}
 
-      {/* 퀘스트 카드 목록 */}
       {!isCollapsed && (
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
           {quests.map((quest) => {
@@ -225,7 +309,6 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
                 }`}
               >
                 <div>
-                  {/* 카드 상단: 단계 뱃지 & 완료 토글 */}
                   <div className="flex items-center justify-between gap-2 mb-2.5">
                     <span
                       className={`text-[11px] font-black px-2 py-0.5 rounded-md ${
@@ -250,7 +333,6 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
                     </button>
                   </div>
 
-                  {/* 아이콘 및 제목 */}
                   <div className="flex items-start gap-2.5 mb-2">
                     <div
                       className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
@@ -273,15 +355,13 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
                     </div>
                   </div>
 
-                  {/* 도움말 팁 */}
                   {quest.helpTip && !isDone && (
                     <div className="mt-2.5 p-2 bg-indigo-50/60 rounded-xl text-[11px] text-indigo-800 leading-relaxed border border-indigo-100/50">
-                      💡 <strong>팁:</strong> {quest.helpTip}
+                      팁: {quest.helpTip}
                     </div>
                   )}
                 </div>
 
-                {/* 바로가기 버튼 */}
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
                   <button
                     type="button"

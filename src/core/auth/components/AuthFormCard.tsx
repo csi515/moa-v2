@@ -13,6 +13,8 @@ interface AuthFormCardProps {
   loading: boolean;
   error: string | null;
   info: string | null;
+  emailPending?: boolean;
+  resendLoading?: boolean;
   onEmailChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
   onFullNameChange: (value: string) => void;
@@ -20,6 +22,7 @@ interface AuthFormCardProps {
   onAgreedToTermsChange: (value: boolean) => void;
   onSwitchMode: (mode: AuthMode) => void;
   onSubmit: (event: FormEvent) => void;
+  onResendConfirmation?: () => void;
 }
 
 export function AuthFormCard({
@@ -32,6 +35,8 @@ export function AuthFormCard({
   loading,
   error,
   info,
+  emailPending = false,
+  resendLoading = false,
   onEmailChange,
   onPasswordChange,
   onFullNameChange,
@@ -39,6 +44,7 @@ export function AuthFormCard({
   onAgreedToTermsChange,
   onSwitchMode,
   onSubmit,
+  onResendConfirmation,
 }: AuthFormCardProps) {
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [modalTab, setModalTab] = useState<'terms' | 'privacy'>('terms');
@@ -212,21 +218,60 @@ export function AuthFormCard({
         )}
 
         {info && (
-          <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100 text-sm text-emerald-800">
+          <div
+            className="p-3 rounded-xl bg-emerald-50 border border-emerald-100 text-sm text-emerald-800"
+            data-testid="auth-info-banner"
+          >
             {info}
           </div>
         )}
 
-        <button
-          type="submit" data-testid="signup-submit-btn"
-          disabled={loading}
-          className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 min-h-[44px]"
-        >
-          {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-          {mode === 'login' && '이메일로 로그인'}
-          {mode === 'signup' && '이메일로 가입하기'}
-          {mode === 'forgot' && '재설정 링크 보내기'}
-        </button>
+        {emailPending && onResendConfirmation && (
+          <div
+            className="p-3 rounded-xl bg-indigo-50 border border-indigo-100 text-sm text-indigo-900 space-y-2"
+            data-testid="email-pending-panel"
+          >
+            <p className="font-semibold">이메일 확인이 필요합니다</p>
+            <p className="text-xs text-indigo-800/80">
+              메일이 보이지 않으면 스팸함을 확인하거나 아래 버튼으로 다시 받아 주세요.
+            </p>
+            <button
+              type="button"
+              onClick={onResendConfirmation}
+              disabled={resendLoading}
+              data-testid="resend-confirmation-btn"
+              className="w-full py-2.5 rounded-xl bg-white border border-indigo-200 text-indigo-700 text-xs font-bold min-h-[44px] disabled:opacity-50"
+            >
+              {resendLoading ? (
+                <span className="inline-flex items-center gap-2">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" /> 재발송 중...
+                </span>
+              ) : (
+                '확인 메일 다시 받기'
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => onSwitchMode('login')}
+              className="w-full text-xs font-bold text-indigo-600 hover:underline min-h-[44px]"
+            >
+              로그인 화면으로 이동
+            </button>
+          </div>
+        )}
+
+        {!emailPending && (
+          <button
+            type="submit" data-testid="signup-submit-btn"
+            disabled={loading}
+            className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 min-h-[44px]"
+          >
+            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+            {mode === 'login' && '이메일로 로그인'}
+            {mode === 'signup' && '이메일로 가입하기'}
+            {mode === 'forgot' && '재설정 링크 보내기'}
+          </button>
+        )}
       </form>
 
       {/* 약관 및 개인정보처리방침 팝업 모달 */}

@@ -256,19 +256,42 @@ export const AttendanceManagementView: React.FC = () => {
                     : `${memberLabel}을 등록하면 출입 현황을 확인할 수 있습니다.`
                 }
                 action={
-                  !searchQuery.trim() && !isScoped ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedStudentId(null);
-                        setActiveTab(customerTab);
-                      }}
-                      className={`inline-flex items-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl text-white text-xs font-bold ${accent.btn} ${accent.btnHover}`}
-                    >
-                      <UserPlus className="w-4 h-4" />
-                      {labels.customer.add}
-                    </button>
-                  ) : undefined
+                  !searchQuery.trim() && !isScoped
+                    ? {
+                        label: labels.customer.add,
+                        onClick: () => {
+                          setSelectedStudentId(null);
+                          setActiveTab(customerTab);
+                        },
+                        icon: <UserPlus className="w-4 h-4" />,
+                      }
+                    : undefined
+                }
+                guide={
+                  !searchQuery.trim() && !isScoped
+                    ? {
+                        badge: '30초 시작 가이드',
+                        title: '출결을 시작하려면',
+                        tip: 'PIN 출결을 쓰려면 설정에서 출입 관리를 켠 뒤, 회원에게 PIN을 부여하세요.',
+                        steps: [
+                          {
+                            stepNumber: 1,
+                            title: `${memberLabel} 등록`,
+                            detail: '명부에 연락처를 등록합니다.',
+                          },
+                          {
+                            stepNumber: 2,
+                            title: '출결 화면 열기',
+                            detail: '오늘 출석 대상이 보이면 등원·결석을 처리합니다.',
+                          },
+                          {
+                            stepNumber: 3,
+                            title: '알림 확인(선택)',
+                            detail: '보호자 알림이 필요하면 출결 처리 시 함께 보냅니다.',
+                          },
+                        ],
+                      }
+                    : undefined
                 }
                 className="border-0 shadow-none rounded-none"
               />

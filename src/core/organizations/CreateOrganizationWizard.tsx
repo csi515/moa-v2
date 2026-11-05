@@ -33,6 +33,7 @@ import {
   formatOrganizationAddress,
   type OrganizationAddressValue,
 } from '@/core/address';
+import { getPostCreateNextSteps } from '@/core/help/educationCopy';
 
 interface CreateOrganizationWizardProps {
   initialIndustryType?: IndustryType;
@@ -68,6 +69,11 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
   );
 
   const placeLabel = getPlaceLabel(formData.industryType);
+  const customerWord = isRetailIndustry(formData.industryType) ? '고객' : '회원';
+  const nextSteps = useMemo(
+    () => getPostCreateNextSteps(formData.industryType, customerWord),
+    [formData.industryType, customerWord]
+  );
 
   const guideFeatureText = useMemo(() => {
     const cat = getIndustryCategoryForType(formData.industryType);
@@ -141,17 +147,21 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
     }
   };
 
-  const handleEnterOrganization = async () => {
+  const handleEnterOrganization = async (opts?: { refreshFirst?: boolean }) => {
     if (!createdOrgId || isEntering) return;
     setIsEntering(true);
     setError(null);
     try {
-      // refresh 먼저 하면 단일 사업장을 자동 선택하며 선택기가 언마운트된다.
+      if (opts?.refreshFirst) {
+        await org.refreshOrganizations();
+      }
       // 생성 직후 목록에 없으므로 selectOrganization이 최신 membership을 다시 조회한다.
       await org.selectOrganization(createdOrgId);
       onComplete();
     } catch (err) {
-      setError(userFacingErrorMessage(err));
+      setError(
+        `${userFacingErrorMessage(err)} 목록을 새로고침한 뒤 다시 시도할 수 있습니다.`
+      );
       setIsEntering(false);
     }
   };
@@ -374,13 +384,44 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
                 <span className="font-semibold text-slate-800">{formData.name}</span>
                 <br />
                 <span className="text-xs text-slate-400 mt-1 block">
-                  출결 방식·회원권 등 세부 운영 설정은 사업장 개설 후 언제든 설정 메뉴에서 구성할 수 있습니다.
+                  들어가신 뒤 홈의 첫걸음 가이드를 따라가면 바로 업무를 시작할 수 있습니다.
                 </span>
               </p>
             </div>
+            <div
+              className="text-left rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4 space-y-2"
+              data-testid="create-org-next-steps"
+            >
+              <p className="text-xs font-bold text-indigo-800">들어가신 뒤 다음에 할 일</p>
+              <ol className="space-y-2">
+                {nextSteps.map((stepItem, idx) => (
+                  <li key={stepItem.id} className="flex items-start gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                      {idx + 1}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold text-slate-900">{stepItem.title}</p>
+                      <p className="text-[11px] text-slate-500 mt-0.5">{stepItem.detail}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
             {error && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-100 text-sm text-rose-700 text-left">
-                {error}
+              <div
+                className="p-3 rounded-xl bg-rose-50 border border-rose-100 text-sm text-rose-700 text-left space-y-2"
+                data-testid="create-org-enter-error"
+              >
+                <p>{error}</p>
+                <button
+                  type="button"
+                  disabled={isEntering || !createdOrgId}
+                  data-testid="btn-wizard-retry-enter"
+                  onClick={() => void handleEnterOrganization({ refreshFirst: true })}
+                  className="w-full px-3 py-2.5 text-xs font-bold text-indigo-700 bg-white border border-indigo-200 rounded-xl min-h-[44px]"
+                >
+                  목록 새로고침 후 다시 들어가기
+                </button>
               </div>
             )}
             <button

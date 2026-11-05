@@ -11,12 +11,17 @@ import {
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog';
 import type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
 
+export interface SignUpResult {
+  /** 세션이 없어 이메일 확인이 필요한 경우 */
+  emailPending: boolean;
+}
+
 interface AuthContextType {
   session: Session | null;
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, fullName: string) => Promise<void>;
+  signUp: (email: string, password: string, fullName: string) => Promise<SignUpResult>;
   signInWithGoogle: () => Promise<void>;
   signInWithApple: () => Promise<void>;
   signInWithKakao: () => Promise<void>;
@@ -55,7 +60,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setSession(newSession);
   };
 
-  const signUp = async (email: string, password: string, fullName: string) => {
+  const signUp = async (
+    email: string,
+    password: string,
+    fullName: string
+  ): Promise<SignUpResult> => {
     const { session: newSession } = await authService.signUp({
       email,
       password,
@@ -63,10 +72,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
     if (newSession) {
       setSession(newSession);
-      return;
+      return { emailPending: false };
     }
-    const nextSession = await authService.signIn({ email, password });
-    setSession(nextSession);
+    // 이메일 확인이 켜진 환경: 자동 signIn 없이 pending UI로 안내
+    return { emailPending: true };
   };
 
   const signInWithGoogle = async () => {

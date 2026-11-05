@@ -12,7 +12,6 @@ import {
   Zap,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { OnboardingQuestCard } from "@/components/dashboard/OnboardingQuestCard";
 import { ActionableEmptyState } from "@/components/common/ActionableEmptyState";
 import { useOptionalOrganization } from "@/core/organizations/OrganizationProvider";
 import { getIndustryPreset } from "@/app/presets/presetRegistry";
@@ -275,10 +274,9 @@ export const DashboardPage: React.FC = () => {
         </div>
       </div>
 
-      {/* ── 2. 온보딩 퀘스트 카드 (신규 테넌트 안내) ────────────────── */}
-      <OnboardingQuestCard memberCount={0} />
+      {/* 온보딩 체크리스트는 /workspace GettingStartedQuestWidget 사용 (/dashboard → /workspace) */}
 
-      {/* ── 3. 오늘의 빠른 업무 (Quick Actions) ────────────────────────── */}
+      {/* ── 오늘의 빠른 업무 (Quick Actions) ────────────────────────── */}
       <div>
         <div className="flex items-center gap-1.5 mb-3">
           <Zap className="h-4 w-4 text-amber-500 fill-amber-500" />

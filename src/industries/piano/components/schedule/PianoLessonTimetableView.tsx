@@ -171,6 +171,16 @@ export const PianoLessonTimetableView: FC = () => {
         icon={<Users className="w-10 h-10" />}
         title="등록된 학생이 없습니다"
         description="학생을 등록한 뒤 시간표에 일정을 배치할 수 있습니다."
+        guide={{
+          badge: '30초 시작 가이드',
+          title: '레슨 시간표 배치',
+          tip: '학생을 등록한 뒤 이 화면에서 요일·시간 칸을 탭하면 배치됩니다.',
+          steps: [
+            { stepNumber: 1, title: '학생 등록', detail: '원생 명부에서 첫 학생을 등록합니다.' },
+            { stepNumber: 2, title: '시간대 선택', detail: '원하는 요일·시작 시간을 탭합니다.' },
+            { stepNumber: 3, title: '학생 배치', detail: '미배치 학생을 골라 칸에 넣습니다.' },
+          ],
+        }}
       />
     );
   }

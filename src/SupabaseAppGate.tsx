@@ -1,5 +1,6 @@
-import React, { Suspense, lazy, useCallback, type FC, type ReactNode } from 'react';
+import React, { Suspense, lazy, type FC, type ReactNode } from 'react';
 import { useAuth } from '@/core/auth/AuthProvider';
+import { JOURNEY_LOADING_MESSAGES } from '@/core/auth/journeyStates';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { StorageHydrator } from '@/StorageHydrator';
 import { LoadingScreen } from '@/shared/components/LoadingScreen';
@@ -52,24 +53,17 @@ export const SupabaseAppGate: FC<SupabaseAppGateProps> = ({ children }) => {
   const {
     loading: orgLoading,
     organizationsStatus,
-    organizationsError,
-    refreshOrganizations,
     currentOrganization,
     selectedMembership,
-    organizations,
     parentPortalActive,
     customerPortalActive,
     portalMode,
     blockedOwnerOrgIds,
   } = useOrganization();
 
-  const handleRetry = useCallback(() => {
-    void refreshOrganizations();
-  }, [refreshOrganizations]);
-
   // 1. 인증 확인 중
   if (authLoading) {
-    return <LoadingScreen message="로그인 세션을 확인하는 중..." />;
+    return <LoadingScreen message={JOURNEY_LOADING_MESSAGES.checkingSession} />;
   }
 
   // 2. 비인증 상태 (Refine Authenticated fallback 처리 대상)
@@ -79,29 +73,11 @@ export const SupabaseAppGate: FC<SupabaseAppGateProps> = ({ children }) => {
 
   // 3. 사업장 / 멤버십 로딩 중
   if (orgLoading || organizationsStatus === 'loading') {
-    return <LoadingScreen message="사업장 정보를 불러오는 중..." />;
+    return <LoadingScreen message={JOURNEY_LOADING_MESSAGES.loadingOrganizations} />;
   }
 
-  // 4. 사업장 목록 조회 에러 (기존 memberships가 없는 경우)
-  if (organizationsStatus === 'error' && (!organizations || organizations.length === 0)) {
-    return (
-      <div
-        className="min-h-screen flex flex-col items-center justify-center bg-slate-50 gap-4 p-4 text-center"
-        data-testid="organization-gate-error"
-      >
-        <p className="text-sm text-rose-600 font-medium max-w-sm">
-          {organizationsError || '사업장 목록을 불러오지 못했습니다.'}
-        </p>
-        <button
-          type="button"
-          onClick={handleRetry}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px] hover:bg-indigo-700 transition-colors"
-        >
-          다시 시도
-        </button>
-      </div>
-    );
-  }
+  // 4. 멤버십 fetch 실패(0건)도 OrganizationSelector 로 보냄 — 재시도·학원 개설 UX
+  //    (Selector 가 organizationsStatus === 'error' 배너를 표시)
 
   // 5. 학부모 포털 활성 상태
   if (parentPortalActive || portalMode === 'parent') {

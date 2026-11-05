@@ -60,6 +60,8 @@
     "test:jwt-revocation": "tsx scripts/jwt-revocation-rls.test.ts",
     "test:login-form": "tsx src/components/auth/MobileLoginForm.test.ts",
     "test:post-login-navigation": "tsx src/core/auth/utils/postLoginNavigation.test.ts",
+    "test:journey-states": "tsx src/core/auth/journeyStates.test.ts",
+    "test:map-login-error": "tsx src/core/auth/utils/mapLoginErrorMessage.test.ts",
     "test:auth-storage": "tsx src/core/auth/services/authStorage.test.ts",
     "test:policy-engine": "tsx src/capabilities/workplace_policy/domain/policyEngine.test.ts",
     "test:operation-bundles": "tsx src/core/presets/operationBundles.test.ts",

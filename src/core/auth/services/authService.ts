@@ -123,11 +123,20 @@ export async function signOut(): Promise<void> {
   if (error) throw error;
 }
 
-/** 비밀번호 재설정 이메일 발송 */
+/** 비밀번호 재설정 이메일 발송 — 랜딩은 /auth/recovery */
 export async function resetPassword(email: string): Promise<void> {
-  const redirectTo = `${getAuthRedirectTo()}/`;
+  const redirectTo = `${getAuthRedirectTo()}/auth/recovery`;
   const { error } = await getCoreClient().auth.resetPasswordForEmail(email.trim(), {
     redirectTo,
+  });
+  if (error) throw error;
+}
+
+/** 가입 확인 메일 재발송 (세션 없는 emailPending 상태) */
+export async function resendSignupConfirmation(email: string): Promise<void> {
+  const { error } = await getCoreClient().auth.resend({
+    type: 'signup',
+    email: email.trim(),
   });
   if (error) throw error;
 }

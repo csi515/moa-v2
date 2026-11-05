@@ -13,12 +13,17 @@ import { MobileLoginForm, type LoginTargetGroup, type WorkplaceRole } from "@/co
 import { useAuth } from "@/core/auth/AuthProvider";
 import { isAppsInToss } from "@/core/auth/domain/platformDetector";
 import { loginWithToss } from "@/core/auth/services/tossAuthService";
-import { mapLoginErrorMessage } from "@/core/auth/utils/mapLoginErrorMessage";
+import {
+  isEmailNotConfirmedError,
+  mapLoginErrorMessage,
+} from "@/core/auth/utils/mapLoginErrorMessage";
 import {
   readLoginReturnPath,
   resolvePostLoginPath,
   shouldEnterCustomerPortal,
 } from "@/core/auth/utils/postLoginNavigation";
+import { consumeOAuthCallbackError } from "@/core/auth/oauthCallbackError";
+import * as authService from "@/core/auth/services/authService";
 import { appBrand } from "@/core/brand";
 import { useOrganization } from "@/core/organizations/OrganizationProvider";
 
@@ -26,6 +31,8 @@ export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
+  const [resendLoading, setResendLoading] = useState(false);
   const [isTossLoading, setIsTossLoading] = useState(false);
   const [language, setLanguage] = useState<'ko' | 'en'>('ko');
   const [rememberMe, setRememberMe] = useState(true);
@@ -115,12 +122,31 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  // 앱스인토스 환경 감지 시: 진입 즉시 토스 원클릭 자동 로그인 프로세스 진행
+  // OAuth 콜백 오류 + 앱스인토스 자동 로그인
   useEffect(() => {
+    const oauthError = consumeOAuthCallbackError();
+    if (oauthError) setErrorMessage(oauthError);
     if (isAppsInToss()) {
       void handleTossLogin();
     }
   }, []);
+
+  const handleResendConfirmation = async () => {
+    if (!email.trim()) {
+      setErrorMessage("이메일을 입력한 뒤 확인 메일을 다시 받아 주세요.");
+      return;
+    }
+    setResendLoading(true);
+    setInfoMessage(null);
+    try {
+      await authService.resendSignupConfirmation(email.trim());
+      setInfoMessage("확인 메일을 다시 보냈습니다. 받은편지함을 확인해 주세요.");
+    } catch (err: any) {
+      setErrorMessage(err?.message || "확인 메일 재발송에 실패했습니다.");
+    } finally {
+      setResendLoading(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -285,6 +311,26 @@ export const LoginPage: React.FC = () => {
           </div>
 
           {/* 모바일 최적화 로그인 폼 컴포넌트 */}
+          {infoMessage && (
+            <div
+              className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-100 text-sm text-emerald-800"
+              data-testid="login-info-banner"
+            >
+              {infoMessage}
+            </div>
+          )}
+          {isEmailNotConfirmedError(errorMessage) && (
+            <div className="mb-4" data-testid="login-email-pending-cta">
+              <button
+                type="button"
+                onClick={() => void handleResendConfirmation()}
+                disabled={resendLoading}
+                className="w-full py-2.5 rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700 text-xs font-bold min-h-[44px] disabled:opacity-50"
+              >
+                {resendLoading ? "재발송 중..." : "확인 메일 다시 받기"}
+              </button>
+            </div>
+          )}
           <MobileLoginForm
             email={email}
             setEmail={setEmail}

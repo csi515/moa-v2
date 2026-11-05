@@ -410,6 +410,25 @@ export const InventoryListView: FC = () => {
           description={
             rows.length === 0 ? COPY.emptyDescription : COPY.emptyFilterDescription
           }
+          guide={
+            rows.length === 0
+              ? {
+                  badge: '30초 시작 가이드',
+                  title: '재고를 시작하려면',
+                  tip: '상품을 등록한 뒤 입고로 수량을 맞추면 안전재고 알림을 쓸 수 있습니다.',
+                  steps: [
+                    { stepNumber: 1, title: '상품 등록', detail: '이름·판매가·바코드를 등록합니다.' },
+                    { stepNumber: 2, title: '초기 입고', detail: '매장에 있는 실수량을 입력합니다.' },
+                    { stepNumber: 3, title: '안전재고 설정', detail: '부족 임박 시 알림을 받도록 둡니다.' },
+                  ],
+                }
+              : undefined
+          }
+          action={
+            rows.length === 0 && canMutate
+              ? { label: COPY.inbound, onClick: () => setInboundOpen(true) }
+              : undefined
+          }
         />
       ) : (
         <>

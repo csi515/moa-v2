@@ -38,6 +38,15 @@ assert.equal(retailQuests[1].title, '초기 재고 입고 확인');
 assert.equal(retailQuests[2].title, 'POS 계산대 열기');
 console.log('✓ [PASS] Retail quest sequence verified');
 
+// 3b. Piano wave-1 deeplink quests
+const pianoQuests = getPresetQuests('piano', '원생', '학원');
+assert.equal(pianoQuests.length, 4);
+assert.equal(pianoQuests[0].targetTab, 'students');
+assert.equal(pianoQuests[1].targetTab, 'timetable');
+assert.equal(pianoQuests[2].targetTab, 'attendance');
+assert.equal(pianoQuests[3].targetTab, 'tuition');
+console.log('✓ [PASS] Piano wave-1 quest deeplinks verified');
+
 // 4. Dynamic Generic Preset Fallback
 const taekwondoQuests = getPresetQuests('taekwondo', '수련생', '도장');
 assert.ok(taekwondoQuests.length >= 3, 'Taekwondo should have 3 or more dynamic quests');

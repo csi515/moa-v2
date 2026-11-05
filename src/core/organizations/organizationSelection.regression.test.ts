@@ -132,10 +132,17 @@ function run() {
   assert.match(providerSrc, /fetchUserMembershipsWithContext/);
   const wizardSrc = readFileSync(join(here, 'CreateOrganizationWizard.tsx'), 'utf8');
   assert.match(wizardSrc, /selectOrganization\(createdOrgId\)/);
-  assert.equal(
-    /refreshOrganizations[\s\S]*selectOrganization\(createdOrgId\)/.test(wizardSrc),
-    false,
-    '생성 직후 refresh→select 순서는 stale membership으로 실패한다'
+  // 기본 「사업장으로 들어가기」는 refresh 없이 select (stale 방지)
+  assert.match(
+    wizardSrc,
+    /data-testid="btn-wizard-enter"[\s\S]*?handleEnterOrganization\(\)/,
+    '기본 진입 버튼은 refreshFirst 없이 select만 호출해야 한다'
+  );
+  // 실패 복구 CTA만 refreshFirst 허용
+  assert.match(
+    wizardSrc,
+    /data-testid="btn-wizard-retry-enter"[\s\S]*?refreshFirst:\s*true/,
+    '진입 실패 시 목록 새로고침 복구 CTA가 있어야 한다'
   );
 
   // 1. 피아노만 — 로그인 자동 진입

@@ -13,6 +13,10 @@ import { DirectorTodayScheduleSection } from './DirectorTodayScheduleSection';
 import { DirectorTodayTasksSection, type DirectorTodayTaskItem } from './DirectorTodayTasksSection';
 import { DirectorTodayUnpaidSection } from './DirectorTodayUnpaidSection';
 import { useApp } from '@/context/AppContext';
+import { useOrganization } from '@/core/organizations/OrganizationProvider';
+import { GettingStartedQuestWidget } from '@/app/onboarding/GettingStartedQuestWidget';
+import { usePermissions } from '@/core/auth/usePermissions';
+import type { NavTab } from '@/context/AppContext';
 
 /** 홈 업무 항목 → 기존 처리 화면 탭 + (필요 시) 딥링크 플래그 */
 function openDirectorTodayTask(
@@ -38,11 +42,20 @@ function openDirectorTodayTask(
   navigate(item.tab);
 }
 
-/** 원장 홈 — 오늘 일정 → 출결 → 처리할 업무 → 미납 */
+/** 원장 홈 — Getting Started → 오늘 일정 → 출결 → 처리할 업무 → 미납 */
 export const DirectorTodayHome: FC = () => {
   const { currentUser } = useApp();
+  const { currentOrganization } = useOrganization();
+  const { isAdmin } = usePermissions();
   const navigate = usePianoNavigate();
   const data = useDirectorTodayDashboard();
+
+  const handleQuestNavigate = useCallback(
+    (tab: string) => {
+      navigate(tab as NavTab);
+    },
+    [navigate]
+  );
 
   const {
     stats,
@@ -151,6 +164,17 @@ export const DirectorTodayHome: FC = () => {
           </button>
         )}
       </section>
+
+      {isAdmin && (
+        <GettingStartedQuestWidget
+          onNavigate={handleQuestNavigate}
+          organizationId={currentOrganization?.id}
+          industryType={currentOrganization?.industry_type || 'piano'}
+          customerWord="원생"
+          placeWord="학원"
+          compactWhenComplete
+        />
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <DirectorTodayScheduleSection

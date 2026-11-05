@@ -37,7 +37,7 @@ assert.equal(
     loginTargetGroup: 'workplace',
     redirectTo: '/',
   }),
-  '/workspace'
+  '/onboarding/org'
 );
 assert.equal(
   resolvePostLoginPath({

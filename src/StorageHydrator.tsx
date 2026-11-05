@@ -5,6 +5,7 @@ import { LoadingScreen } from './shared/components/LoadingScreen';
 import { isNativeApp } from './core/platform/capacitorPlatform';
 import { registerForegroundStep } from './core/platform/foregroundCoordinator';
 import { userFacingErrorMessage } from './shared/errors/userFacingError';
+import { JOURNEY_LOADING_MESSAGES } from './core/auth/journeyStates';
 
 interface StorageHydratorProps {
   organizationId: string;
@@ -106,7 +107,7 @@ export const StorageHydrator: React.FC<StorageHydratorProps> = ({
   }
 
   if (!ready) {
-    return <LoadingScreen message="데이터를 불러오는 중..." />;
+    return <LoadingScreen message={JOURNEY_LOADING_MESSAGES.hydrating} />;
   }
 
   return (

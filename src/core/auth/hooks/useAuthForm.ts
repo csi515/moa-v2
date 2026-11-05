@@ -31,6 +31,8 @@ export function useAuthForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
+  const [emailPending, setEmailPending] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
 
   useEffect(() => {
     setMode(resolveInitialMode(location.pathname, location.search));
@@ -46,7 +48,26 @@ export function useAuthForm() {
     setMode(next);
     setError(null);
     setInfo(null);
+    setEmailPending(false);
   }, []);
+
+  const handleResendConfirmation = async () => {
+    if (!email.trim()) {
+      setError('이메일을 입력해 주세요.');
+      return;
+    }
+    setError(null);
+    setInfo(null);
+    setResendLoading(true);
+    try {
+      await authService.resendSignupConfirmation(email.trim());
+      setInfo('확인 메일을 다시 보냈습니다. 받은편지함을 확인해 주세요.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '확인 메일 재발송에 실패했습니다.');
+    } finally {
+      setResendLoading(false);
+    }
+  };
 
   const handleNaver = async () => {
     setError(null);
@@ -74,7 +95,6 @@ export function useAuthForm() {
         err instanceof Error ? err.message : '네이버 로그인 중 오류가 발생했습니다.';
       setError(message);
     } finally {
-      // OAuth 리다이렉트가 실패·차단되면 버튼을 다시 활성화
       setLoading(false);
     }
   };
@@ -107,8 +127,13 @@ export function useAuthForm() {
         throw new Error('이용약관 및 개인정보처리방침에 동의해 주세요.');
       }
 
-      // 역할·사업장은 가입 후 OrganizationSelector / 초대·연결에서 결정
-      await signUp(email.trim(), password, fullName.trim());
+      const result = await signUp(email.trim(), password, fullName.trim());
+      if (result.emailPending) {
+        setEmailPending(true);
+        setInfo(
+          '가입 확인 메일을 보냈습니다. 메일함의 링크를 누른 뒤 로그인해 주세요.'
+        );
+      }
     } catch (err) {
       const raw =
         err instanceof Error ? err.message : '인증 처리 중 오류가 발생했습니다.';
@@ -138,8 +163,11 @@ export function useAuthForm() {
     loading,
     error,
     info,
+    emailPending,
+    resendLoading,
     switchMode,
     handleSubmit,
     handleNaver,
+    handleResendConfirmation,
   };
 }

@@ -12,6 +12,7 @@ import {
 import { getCoreClient, isSupabaseConfigured } from "@/lib/supabase";
 import { useAuth } from "@/core/auth/AuthProvider";
 import { useOrganization } from "@/core/organizations/OrganizationProvider";
+import { STAFF_INVITE_AFTERCARE } from "@/core/help/educationCopy";
 
 export const AcceptStaffInvitePage: React.FC = () => {
   const { token } = useParams<{ token: string }>();
@@ -147,6 +148,22 @@ export const AcceptStaffInvitePage: React.FC = () => {
                   직급: {roleName}
                 </div>
               )}
+            </div>
+            <div
+              className="text-left rounded-2xl border border-indigo-100 bg-indigo-50/60 p-3 space-y-2"
+              data-testid="staff-invite-aftercare"
+            >
+              <p className="text-xs font-bold text-indigo-800">{STAFF_INVITE_AFTERCARE.title}</p>
+              <ol className="space-y-1.5">
+                {STAFF_INVITE_AFTERCARE.steps.map((step, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-[11px] text-slate-600">
+                    <span className="w-4 h-4 rounded-full bg-indigo-600 text-white text-[9px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                      {idx + 1}
+                    </span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
             </div>
             <p className="text-xs text-slate-500 leading-relaxed">
               매장 워크스페이스로 이동합니다. 잠시 후 자동 전환됩니다.

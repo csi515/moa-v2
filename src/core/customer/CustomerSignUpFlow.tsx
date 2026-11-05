@@ -59,6 +59,7 @@ export function CustomerSignUpFlow() {
     message: '',
   });
   const [submitting, setSubmitting] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   // 랜딩에서 넘어온 사업장 자동 선택
   useEffect(() => {
@@ -134,11 +135,12 @@ export function CustomerSignUpFlow() {
 
     try {
       setSearching(true);
+      setActionError(null);
       const results = await publicOrgService.searchOrganizations(searchQuery);
       setSearchResults(results);
       setHasSearched(true);
     } catch (err) {
-      alert(err instanceof Error ? err.message : '검색에 실패했습니다');
+      setActionError(err instanceof Error ? err.message : '검색에 실패했습니다');
     } finally {
       setSearching(false);
     }
@@ -151,12 +153,13 @@ export function CustomerSignUpFlow() {
 
   const openStudentPortal = async () => {
     setOpeningPortal(true);
+    setActionError(null);
     try {
       await refreshOrganizations();
       enterCustomerPortal();
       navigate('/', { replace: true, state: { openCustomerPortal: true } });
     } catch (err) {
-      alert(err instanceof Error ? err.message : '수강생 포털을 열지 못했습니다');
+      setActionError(err instanceof Error ? err.message : '수강생 포털을 열지 못했습니다');
       setOpeningPortal(false);
     }
   };
@@ -167,6 +170,7 @@ export function CustomerSignUpFlow() {
 
     try {
       setSubmitting(true);
+      setActionError(null);
       await customerJoinService.submitJoinRequest({
         orgId: selectedOrg.id,
         applicantName: form.applicantName,
@@ -178,7 +182,7 @@ export function CustomerSignUpFlow() {
       setStep('pending');
       await loadMyRequests();
     } catch (err) {
-      alert(err instanceof Error ? err.message : '가입 신청에 실패했습니다');
+      setActionError(err instanceof Error ? err.message : '가입 신청에 실패했습니다');
     } finally {
       setSubmitting(false);
     }
@@ -240,6 +244,15 @@ export function CustomerSignUpFlow() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-8">
+        {actionError && (
+          <div
+            className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-100 text-sm text-rose-700"
+            data-testid="customer-signup-error"
+            role="alert"
+          >
+            {actionError}
+          </div>
+        )}
         {preloading && (
           <p className="text-center text-sm text-slate-500 mb-4">사업장 정보를 불러오는 중...</p>
         )}
@@ -491,10 +504,13 @@ export function CustomerSignUpFlow() {
                               onClick={async () => {
                                 if (!confirm('이 가입 신청을 취소할까요?')) return;
                                 try {
+                                  setActionError(null);
                                   await customerJoinService.cancelMyJoinRequest(request.id);
                                   await loadMyRequests();
                                 } catch (err) {
-                                  alert(err instanceof Error ? err.message : '취소에 실패했습니다');
+                                  setActionError(
+                                    err instanceof Error ? err.message : '취소에 실패했습니다'
+                                  );
                                 }
                               }}
                               className="w-full py-2.5 border border-slate-200 text-slate-700 rounded-xl text-sm font-bold min-h-[44px]"
