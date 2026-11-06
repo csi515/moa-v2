@@ -65,8 +65,29 @@ const capabilityView: Record<string, string> = {
   vehicle_shuttle: 'shuttle',
   membership_referral_tree: 'family-tree',
 };
+// Soft launch: 기본 capabilities는 wave-1만. opt-in cap도 viewMap에는 등록되어 있어야 한다.
+const softLaunchDefaultCaps = [
+  'seat_room',
+  'attendance',
+  'passes',
+  'billing_invoicing',
+  'consultation_crm',
+] as const;
+for (const cap of softLaunchDefaultCaps) {
+  assert.ok(preset.capabilities.includes(cap as never), `default cap ${cap}`);
+}
+for (const opt of ['curriculum_progress', 'retention_marketing', 'vehicle_shuttle', 'membership_referral_tree'] as const) {
+  assert.equal(
+    preset.capabilities.includes(opt as never),
+    false,
+    `${opt} must be opt-in (not default ON)`
+  );
+  assert.ok(
+    (preset.optionalCapabilities ?? []).includes(opt as never),
+    `${opt} listed in optionalCapabilities`
+  );
+}
 for (const [cap, tab] of Object.entries(capabilityView)) {
-  assert.ok(preset.capabilities.includes(cap as never), cap);
   assert.equal(typeof viewMap[tab], 'function', `${cap} view ${tab}`);
 }
 

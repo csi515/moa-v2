@@ -1,8 +1,9 @@
 import { useMemo, type FC } from 'react';
-import { Clock, Filter, Users, X } from 'lucide-react';
+import { Clock, Filter, UserPlus, Users, X } from 'lucide-react';
 import { EmptyState, UnifiedScheduleCalendar, type CalendarEventItem } from '@/shared/components';
 import { FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import type { ClassItem } from '@/types';
+import { usePianoNavigate } from '@/industries/piano/layout/usePianoNavigate';
 import {
   PianoTimetableStudentPool,
   DND_STUDENT_MIME,
@@ -26,6 +27,7 @@ import { usePianoLessonTimetable } from './usePianoLessonTimetable';
  * 여러 요일 반은 표시만 되며 반 관리에서 수정.
  */
 export const PianoLessonTimetableView: FC = () => {
+  const navigate = usePianoNavigate();
   const {
     useDragGrid,
     todayDay,
@@ -171,6 +173,11 @@ export const PianoLessonTimetableView: FC = () => {
         icon={<Users className="w-10 h-10" />}
         title="등록된 학생이 없습니다"
         description="학생을 등록한 뒤 시간표에 일정을 배치할 수 있습니다."
+        action={{
+          label: '학생 등록하기',
+          onClick: () => navigate('students'),
+          icon: <UserPlus className="w-4 h-4" />,
+        }}
         guide={{
           badge: '30초 시작 가이드',
           title: '레슨 시간표 배치',

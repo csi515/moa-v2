@@ -113,6 +113,13 @@ export async function fetchPasses(
   signal?: AbortSignal
 ): Promise<PassRecord[]> {
   if (!isSupabaseConfigured()) {
+    // 프로덕션에서 silent demo 폴백 금지
+    const isProd =
+      typeof import.meta !== 'undefined' &&
+      Boolean((import.meta as ImportMeta & { env?: { PROD?: boolean } }).env?.PROD);
+    if (isProd) {
+      throw new Error('이용권 조회를 위해 Supabase 설정이 필요합니다.');
+    }
     return DEMO_PASSES;
   }
 

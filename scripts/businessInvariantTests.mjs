@@ -186,6 +186,7 @@ export const INVENTORY_META_SCRIPTS = new Set([
  */
 export const INVENTORY_OUT_OF_SCOPE = {
   'test:e2e': 'Playwright E2E',
+  'test:e2e:piano': 'Playwright piano Soft launch smoke subset',
   'test:visual': 'Playwright visual regression',
   'test:modal-focus': 'UI focus',
   'test:user-facing-error': 'shared UI error copy',

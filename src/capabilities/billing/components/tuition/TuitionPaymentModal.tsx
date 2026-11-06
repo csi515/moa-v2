@@ -71,6 +71,11 @@ export const TuitionPaymentModal: React.FC<TuitionPaymentModalProps> = ({
         <p className="text-[11px] text-slate-500 mt-1">
           남은 미납금: {formatCurrency(invoice.unpaidAmount)}
         </p>
+        {payAmount <= 0 && (
+          <p className="text-[11px] text-rose-600 font-semibold mt-1" data-testid="pay-amount-invalid">
+            0원 이하는 수납할 수 없습니다. 금액을 입력해 주세요.
+          </p>
+        )}
       </div>
 
       <div>
@@ -121,8 +126,13 @@ export const TuitionPaymentModal: React.FC<TuitionPaymentModalProps> = ({
           checked={cashReceiptIssued}
           onChange={(e) => onCashReceiptIssuedChange(e.target.checked)}
         />
-        <span className="text-xs font-semibold text-slate-700">현금영수증 발행 완료</span>
+        <span className="text-xs font-semibold text-slate-700">
+          현장에서 현금영수증을 발행함 (기록용)
+        </span>
       </label>
+      <p className="text-[10px] text-slate-400 -mt-2">
+        국세청·PG 자동 발행이 아닙니다. 학원에서 직접 발행한 경우만 체크하세요.
+      </p>
 
       <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
         <button
@@ -134,7 +144,7 @@ export const TuitionPaymentModal: React.FC<TuitionPaymentModalProps> = ({
         </button>
         <button
           type="submit"
-          disabled={submitting}
+          disabled={submitting || payAmount <= 0}
           className="px-5 py-2.5 min-h-[44px] text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md disabled:opacity-50"
         >
           확인

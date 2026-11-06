@@ -3,7 +3,7 @@ import { commerceStorage } from '@/capabilities/commerce/infrastructure/commerce
 import { parentStorage } from '@/capabilities/parent/infrastructure/parentStorage';
 import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
 import { settingsStorage } from '@/services/storage/settingsStorage';
-import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
+import { isSupabaseConfigured } from '@/lib/supabase';
 import type {
   AcademyEvent,
   AcademySettings,
@@ -134,6 +134,8 @@ export const TuitionService = {
       }
       return remote || local;
     } catch (err) {
+      // RPC 실패 시 로컬 orphan 청구서 제거
+      billingStorage.deleteInvoice(local.id);
       console.error('[createInvoiceForStudent] ensure monthly invoice', err);
       throw err;
     }
@@ -175,26 +177,12 @@ export const TuitionService = {
   },
 
   /**
-   * 현금영수증 발행 요청.
-   * 로컬 캐시를 갱신하고, 클라우드 설정 시 request_payment_cash_receipt RPC를 호출한다.
+   * 현금영수증 발행 요청 메모.
+   * 국세청/PG 자동 발행이 아니라, 학원이 현장 발행할 수 있도록 청구서에 요청 플래그만 남긴다.
+   * (request_payment_cash_receipt RPC는 payment_id를 요구하므로 invoiceId로 호출하지 않는다.)
    */
   async requestCashReceipt(invoiceId: string): Promise<TuitionInvoice | null> {
-    const updated = billingStorage.requestCashReceipt(invoiceId);
-    if (!updated) return null;
-
-    if (isSupabaseConfigured()) {
-      try {
-        const { error } = await getCoreClient().rpc('request_payment_cash_receipt' as never, {
-          p_payment_id: invoiceId,
-        } as never);
-        if (error) {
-          console.warn('request_payment_cash_receipt RPC failed:', error.message);
-        }
-      } catch (err) {
-        console.warn('request_payment_cash_receipt unavailable:', err);
-      }
-    }
-    return updated;
+    return billingStorage.requestCashReceipt(invoiceId);
   },
 
   async recordPayment(

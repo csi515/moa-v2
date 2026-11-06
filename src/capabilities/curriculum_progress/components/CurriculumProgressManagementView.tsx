@@ -226,7 +226,13 @@ export function CurriculumProgressManagementView() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-900">학습 진도 & 성장 리포트 관리</h1>
-            <p className="text-sm text-slate-500">
+            <p
+              className="mt-1 inline-flex items-center px-2 py-0.5 rounded-md bg-amber-50 border border-amber-200 text-[10px] font-bold text-amber-800"
+              data-testid="curriculum-local-beta-badge"
+            >
+              기기 로컬 베타 · 재설치 시 데이터가 사라질 수 있습니다
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
               교재·단원별 진도율 체크, 승급 심사 판정 및 학부모 전송용 월간 성장 리포트를 관리합니다.
             </p>
           </div>

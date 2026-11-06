@@ -23,5 +23,9 @@ export const LegalLinks: React.FC<LegalLinksProps> = ({
     <a href={legalPageHref('support')} className={linkClassName}>
       고객 지원
     </a>
+    <span aria-hidden="true">·</span>
+    <a href={legalPageHref('pricing')} className={linkClassName}>
+      요금제
+    </a>
   </nav>
 );

@@ -440,6 +440,7 @@ const RefineApp: React.FC = () => {
         <Route path="/terms" element={<LegalPageView page="terms" />} />
         <Route path="/privacy" element={<LegalPageView page="privacy" />} />
         <Route path="/support" element={<LegalPageView page="support" />} />
+        <Route path="/pricing" element={<LegalPageView page="pricing" />} />
 
         <Route
           element={

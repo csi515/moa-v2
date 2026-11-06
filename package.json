@@ -12,6 +12,7 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test:e2e": "playwright test",
+    "test:e2e:piano": "playwright test tests/e2e/piano-wave1-ops-smoke.spec.ts tests/e2e/director-signup-journey.spec.ts",
     "test:visual": "playwright test tests/e2e/visual-regression.spec.ts",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",

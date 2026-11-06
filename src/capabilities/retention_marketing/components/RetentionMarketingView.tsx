@@ -134,30 +134,20 @@ export function RetentionMarketingView() {
     localStorage.setItem(getTenantStorageKey(STORAGE_KEY_HISTORY), JSON.stringify(history));
   }, [history]);
 
-  // 개별 메시지 발송 핸들러
-  const handleSendSingle = (item: MarketingDispatchItem) => {
-    setQueue((prev) => prev.filter((q) => q.id !== item.id));
-    const newHistoryItem: DispatchHistoryItem = {
-      customerId: item.customerId,
-      triggerType: item.triggerType,
-      sentAt: new Date().toISOString(),
-    };
-    setHistory((prev) => [newHistoryItem, ...prev]);
-    showToast(`${item.customerName}님께 알림톡/문자가 발송되었습니다.`, 'success');
+  // 개별/일괄 발송 — 실제 알림톡·SMS 채널 미연동. 미리보기만 허용.
+  const handleSendSingle = (_item: MarketingDispatchItem) => {
+    showToast(
+      '알림톡·SMS 발송은 아직 준비 중입니다. 지금은 대기 목록 미리보기만 가능합니다.',
+      'info'
+    );
   };
 
-  // 전체 일괄 발송 핸들러
   const handleSendAll = () => {
     if (queue.length === 0) return;
-    const nowIso = new Date().toISOString();
-    const newItems: DispatchHistoryItem[] = queue.map((q) => ({
-      customerId: q.customerId,
-      triggerType: q.triggerType,
-      sentAt: nowIso,
-    }));
-    setHistory((prev) => [...newItems, ...prev]);
-    setQueue([]);
-    showToast(`총 ${queue.length}건의 리텐션 알림톡이 일괄 발송되었습니다.`, 'success');
+    showToast(
+      '알림톡·SMS 일괄 발송은 아직 준비 중입니다. 앱 푸시/인앱 알림만 사용하세요.',
+      'info'
+    );
   };
 
   return (
@@ -171,7 +161,13 @@ export function RetentionMarketingView() {
           <div>
             <h1 className="text-xl font-bold text-slate-900">자동화 리텐션 & 이탈 방지 마케팅</h1>
             <p className="text-sm text-slate-500">
-              수강권 만료 D-Day 알림 및 시술 주기 맞춤 예약 알림톡을 자동 발송하여 재등록률을 극대화합니다.
+              만료·이탈 위험 고객 목록을 미리 정리합니다. 카카오 알림톡·SMS 자동 발송은 준비 중입니다.
+            </p>
+            <p
+              className="mt-2 inline-flex items-center px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-[11px] font-bold text-amber-800"
+              data-testid="retention-preview-badge"
+            >
+              미리보기 · 실제 외부 발송 없음
             </p>
           </div>
         </div>
@@ -210,27 +206,19 @@ export function RetentionMarketingView() {
         </div>
       </div>
 
-      {/* 핵심 리텐션 지표 카드 */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      {/* 미리보기 지표 — 실제 채널 연동 전 허위 KPI 비표시 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
-          <p className="text-xs font-bold text-slate-400 uppercase">오늘 발송 대기</p>
+          <p className="text-xs font-bold text-slate-400 uppercase">오늘 발송 대기 (미리보기)</p>
           <p className="text-2xl font-black text-rose-600 mt-1">{queue.length}건</p>
-          <p className="text-xs text-slate-500 mt-1">D-Day 임박 및 주기 도래</p>
+          <p className="text-xs text-slate-500 mt-1">D-Day 임박 및 주기 도래 후보</p>
         </div>
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
-          <p className="text-xs font-bold text-slate-400 uppercase">이번 달 발송 성공</p>
-          <p className="text-2xl font-black text-slate-900 mt-1">{history.length}건</p>
-          <p className="text-xs text-emerald-600 mt-1">도달률 99.4%</p>
-        </div>
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
-          <p className="text-xs font-bold text-slate-400 uppercase">재등록 전환율</p>
-          <p className="text-2xl font-black text-indigo-600 mt-1">42.8%</p>
-          <p className="text-xs text-slate-500 mt-1">알림톡 수신 후 7일 이내</p>
-        </div>
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
-          <p className="text-xs font-bold text-slate-400 uppercase">이탈 방지 예상 매출</p>
-          <p className="text-2xl font-black text-emerald-600 mt-1">+380만원</p>
-          <p className="text-xs text-slate-500 mt-1">월 환산 가치</p>
+        <div className="bg-white rounded-2xl border border-amber-200 bg-amber-50/40 p-5 shadow-xs">
+          <p className="text-xs font-bold text-amber-700 uppercase">외부 발송 채널</p>
+          <p className="text-lg font-black text-amber-900 mt-1">준비 중</p>
+          <p className="text-xs text-amber-800 mt-1">
+            알림톡·SMS는 추후 연동. 지금은 앱 푸시/인앱 알림만 사용하세요.
+          </p>
         </div>
       </div>
 
@@ -246,11 +234,15 @@ export function RetentionMarketingView() {
             </div>
             {queue.length > 0 && (
               <button
+                type="button"
                 onClick={handleSendAll}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-all"
+                disabled
+                title="알림톡·SMS 발송은 준비 중입니다"
+                data-testid="retention-send-all-preview"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-200 text-slate-500 rounded-xl text-xs font-semibold cursor-not-allowed"
               >
                 <Send className="w-3.5 h-3.5" />
-                <span>{queue.length}건 일괄 발송하기</span>
+                <span>일괄 발송 (준비 중)</span>
               </button>
             )}
           </div>
@@ -284,11 +276,14 @@ export function RetentionMarketingView() {
                         <span className="text-xs text-slate-400">({item.customerPhone})</span>
                       </div>
                       <button
+                        type="button"
                         onClick={() => handleSendSingle(item)}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-slate-200 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 rounded-lg text-xs font-semibold text-slate-700 shadow-xs transition-all"
+                        disabled
+                        title="알림톡·SMS 발송은 준비 중입니다"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-100 border border-slate-200 text-slate-400 rounded-lg text-xs font-semibold cursor-not-allowed"
                       >
                         <Send className="w-3 h-3" />
-                        <span>개별 발송</span>
+                        <span>발송 준비 중</span>
                       </button>
                     </div>
 

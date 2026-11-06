@@ -65,7 +65,7 @@ export function createFinanceStorage(api: StorageApi) {
       return saved;
     },
 
-    /** 학부모 현금영수증 발행 요청 (로컬 플래그만) */
+    /** 학부모 현금영수증 발행 요청 메모 (현장 발행용 플래그 — 국세청 자동 발행 아님) */
     requestCashReceipt(invoiceId: string): TuitionInvoice | null {
       const list = (api.getInvoices as () => TuitionInvoice[])();
       const idx = list.findIndex((i) => i.id === invoiceId);

@@ -25,7 +25,15 @@ export async function commitLocalThenRemote<T>(params: {
 /**
  * Core 연동 가능(운영) vs 불가(demo/onboarding) 경계.
  * isCoreAvailable=true 이면 local-only 재고/마스터 성공 경로를 쓰지 않는다.
+ * 프로덕션에서 Core 없으면 silent local_demo 성공을 막는다.
  */
 export function resolveTextbookCatalogMode(isCoreAvailable: boolean): 'core' | 'local_demo' {
-  return isCoreAvailable ? 'core' : 'local_demo';
+  if (isCoreAvailable) return 'core';
+  const isProd =
+    typeof import.meta !== 'undefined' &&
+    Boolean((import.meta as ImportMeta & { env?: { PROD?: boolean } }).env?.PROD);
+  if (isProd) {
+    throw new Error('교재 카탈로그 Core 연동이 필요합니다. 프로덕션 local_demo 폴백은 비활성입니다.');
+  }
+  return 'local_demo';
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, FileText, ShieldCheck, HelpCircle } from 'lucide-react';
+import { ArrowLeft, FileText, ShieldCheck, HelpCircle, CreditCard } from 'lucide-react';
 import type { LegalPageId } from './legalPaths';
-import { PrivacyContent, SupportContent, TermsContent } from './legalContent';
+import { PricingContent, PrivacyContent, SupportContent, TermsContent } from './legalContent';
 import { useLegalNavigation } from './useLegalNavigation';
 
 interface LegalPageViewProps {
@@ -13,6 +13,7 @@ const PAGE_TITLES: Record<LegalPageId, string> = {
   terms: '서비스 이용약관',
   privacy: '개인정보처리방침',
   support: '고객 지원 센터',
+  pricing: '요금제 안내',
 };
 
 export const LegalPageView: React.FC<LegalPageViewProps> = ({ page }) => {
@@ -77,6 +78,17 @@ export const LegalPageView: React.FC<LegalPageViewProps> = ({ page }) => {
               <HelpCircle className="w-3.5 h-3.5" />
               고객 지원
             </Link>
+            <Link
+              to="/pricing"
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${
+                page === 'pricing'
+                  ? 'bg-indigo-600 text-white shadow-xs'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              <CreditCard className="w-3.5 h-3.5" />
+              요금제
+            </Link>
           </div>
         </div>
       </header>
@@ -86,6 +98,7 @@ export const LegalPageView: React.FC<LegalPageViewProps> = ({ page }) => {
           {page === 'privacy' && <PrivacyContent />}
           {page === 'terms' && <TermsContent />}
           {page === 'support' && <SupportContent />}
+          {page === 'pricing' && <PricingContent />}
         </div>
       </main>
     </div>

@@ -1,11 +1,13 @@
 import { type FC } from 'react';
 import {
+  Calendar,
   CheckSquare,
   ChevronLeft,
   ChevronRight,
   Fingerprint,
   Users,
 } from 'lucide-react';
+import { useApp } from '@/context/AppContext';
 import {
   EmptyState,
   FilterBar,
@@ -29,6 +31,7 @@ type StatChip = {
  * 하원 없음. 시간표 변경은 classIds만 바꾸고 DAY_ATTENDANCE 기록은 건드리지 않음.
  */
 export const PianoAttendanceView: FC = () => {
+  const { setActiveTab } = useApp();
   const {
     pinEnabled,
     selectedDate,
@@ -191,6 +194,15 @@ export const PianoAttendanceView: FC = () => {
                 : statusFilter !== 'ALL'
                   ? '다른 상태 칩을 눌러 보세요.'
                   : '검색어를 바꿔 보세요.'
+            }
+            action={
+              expectedCount === 0 && rosterCount === 0
+                ? {
+                    label: '시간표로 이동',
+                    onClick: () => setActiveTab('timetable'),
+                    icon: <Calendar className="w-4 h-4" />,
+                  }
+                : undefined
             }
             className="border-0 shadow-none rounded-none"
           />

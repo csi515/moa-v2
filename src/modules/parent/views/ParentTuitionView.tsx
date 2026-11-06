@@ -129,8 +129,8 @@ function ParentInvoiceDetailModal({
               className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-bold text-slate-800 disabled:opacity-60"
             >
               {invoice.cashReceiptRequested
-                ? '현금영수증 발행을 요청했습니다'
-                : '현금영수증 발행 요청'}
+                ? '현금영수증 발행을 학원에 요청했습니다 (현장 발행)'
+                : '현금영수증 발행을 학원에 요청'}
             </button>
           )}
         </div>

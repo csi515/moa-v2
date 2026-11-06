@@ -11,9 +11,10 @@ import {
   AlertCircle,
   Shield,
 } from "lucide-react";
-import { supabase, getCoreClient, isSupabaseConfigured } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { useOrganization } from "@/core/organizations/OrganizationProvider";
 import { shareLink } from "@/core/utils/shareLink";
+import { issueStaffInviteToken } from "@/core/staff/services/issueStaffInviteToken";
 import type { TenantRoleRecord } from "@/pages/settings/RolesPage";
 
 export interface StaffInviteQrModalProps {
@@ -82,32 +83,19 @@ export const StaffInviteQrModal: React.FC<StaffInviteQrModalProps> = ({
       setLoading(true);
       setErrorMsg(null);
 
-      const rawToken =
-        "STF-" + crypto.randomUUID().replace(/-/g, "").slice(0, 10).toUpperCase();
-      const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+      const issued = await issueStaffInviteToken({
+        organizationId: currentOrganization.id,
+        organizationName: currentOrganization.name,
+        roleId: targetRole.id,
+        roleName: targetRole.name,
+        ttlSeconds: 5 * 60,
+      });
 
-      const { data, error } = await getCoreClient()
-        .from("onboarding_tokens")
-        .insert({
-          tenant_id: currentOrganization.id,
-          issuer_type: "STORE_STAFF_INVITE",
-          claim_token: rawToken,
-          payload: {
-            role_id: targetRole.id,
-            role_name: targetRole.name,
-            organization_name: currentOrganization.name,
-          } as any,
-          expires_at: expiresAt,
-          is_used: false,
-        })
-        .select("id, claim_token, expires_at")
-        .single();
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      setTokenRecord(data);
+      setTokenRecord({
+        id: issued.id,
+        claim_token: issued.claimToken,
+        expires_at: issued.expiresAt,
+      });
       setRemainingSeconds(300);
       setIsUsed(false);
     } catch (err: unknown) {

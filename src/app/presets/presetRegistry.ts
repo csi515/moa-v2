@@ -1037,7 +1037,8 @@ export const INDUSTRY_PRESETS: Record<string, IndustryPresetDefinition> = {
     name: '피아노·음악학원',
     description: '원생 출결, 1:1 레슨 피아노 연습실 배정, 교습비 정기 청구, 교재 및 진도 관리',
     category: 'education',
-    capabilities: ['seat_room', 'attendance', 'passes', 'billing_invoicing', 'consultation_crm', 'curriculum_progress', 'retention_marketing', 'vehicle_shuttle', 'membership_referral_tree'] as const,
+    // Soft launch 기본: wave-1 핵심만 ON. 리텐션·셔틀·추천은 opt-in(optional)
+    capabilities: ['seat_room', 'attendance', 'passes', 'billing_invoicing', 'consultation_crm'] as const,
     requiredCapabilities: ['attendance', 'passes', 'billing_invoicing'] as const,
     optionalCapabilities: ['seat_room', 'consultation_crm', 'inventory', 'curriculum_progress', 'retention_marketing', 'vehicle_shuttle', 'membership_referral_tree'] as const,
     businessRules: {

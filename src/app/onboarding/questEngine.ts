@@ -122,7 +122,7 @@ const VERTICAL_QUEST_PRESETS: Record<string, Omit<QuestItem, 'stepNumber'>[]> = 
       targetTab: 'students',
       icon: 'user',
       actionText: '원생 등록 바로가기',
-      helpTip: '보호자 연락처를 등록하면 학부모 안심 등하원 알림 및 청구서 발송이 가능합니다.',
+      helpTip: '보호자 연락처를 등록하면 앱 푸시·인앱 알림으로 등하원 안내를 보낼 수 있습니다. (카카오·SMS는 추후)',
     },
     {
       id: 'create_regular_class',
@@ -140,7 +140,7 @@ const VERTICAL_QUEST_PRESETS: Record<string, Omit<QuestItem, 'stepNumber'>[]> = 
       targetTab: 'attendance',
       icon: 'clock',
       actionText: '출결 바로가기',
-      helpTip: '등원 처리 시 학부모 알림을 보낼 수 있습니다.',
+      helpTip: '등원·결석 처리 시 보호자에게 앱 푸시/인앱 알림을 보낼 수 있습니다. (문자·알림톡 아님)',
     },
     {
       id: 'issue_first_invoice',

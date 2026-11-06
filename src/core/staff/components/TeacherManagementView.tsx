@@ -13,6 +13,8 @@ import {
   type StaffAccountStatus,
   type StaffAccountStatusItem,
 } from '@/core/staff/services/staffAccountService';
+import { issueStaffInviteToken } from '@/core/staff/services/issueStaffInviteToken';
+import { isSupabaseConfigured } from '@/lib/supabase';
 import { AccountStatusBadge } from '@/core/accounts/AccountStatusBadge';
 import { StaffInviteResultModal } from '@/core/staff/components/StaffInviteResultModal';
 import { JoinRequestsPanel } from '@/core/organizations/components/JoinRequestsPanel';
@@ -64,6 +66,23 @@ export const TeacherManagementView: React.FC = () => {
   });
   const customersData = (customersList as any).data || customersList.query?.data;
   const isCustomersLoading = (customersList as any).isLoading ?? customersList.query?.isLoading;
+  const rolesList = useList<{ id: string; name: string }>({
+    resource: 'tenant_roles',
+    meta: { select: 'id,name' },
+    pagination: { mode: 'off' },
+  });
+  const tenantRoles = useMemo(() => {
+    const raw = (rolesList as any).data?.data || rolesList.query?.data?.data || [];
+    return Array.isArray(raw) ? (raw as { id: string; name: string }[]) : [];
+  }, [rolesList]);
+  const [inviteRoleId, setInviteRoleId] = useState('');
+  useEffect(() => {
+    if (!inviteRoleId && tenantRoles.length > 0) {
+      const preferred =
+        tenantRoles.find((r) => /전임|강사|instructor/i.test(r.name)) || tenantRoles[0];
+      setInviteRoleId(preferred.id);
+    }
+  }, [tenantRoles, inviteRoleId]);
 
   const { mutate: createStaff } = useCreate<any>();
   const { mutate: updateStaff } = useUpdate<any>();
@@ -285,11 +304,32 @@ export const TeacherManagementView: React.FC = () => {
 
     setInvitingStaffId(teacher.id);
     try {
+      const selectedRole =
+        tenantRoles.find((r) => r.id === inviteRoleId) || tenantRoles[0] || null;
+
+      // 직급(tenant_roles)이 있으면 role_id 페이로드로 초대 — claim 시 custom_role 연결
+      if (isSupabaseConfigured() && selectedRole) {
+        const issued = await issueStaffInviteToken({
+          organizationId: currentOrganization.id,
+          organizationName: currentOrganization.name,
+          roleId: selectedRole.id,
+          roleName: selectedRole.name,
+          ttlSeconds: 60 * 60 * 24 * 7,
+        });
+        setInviteResult({
+          staffName: `${teacher.name} (${selectedRole.name})`,
+          token: issued.claimToken,
+          expiresAt: issued.expiresAt,
+          organizationName: currentOrganization.name,
+        });
+        await loadAccountStatuses();
+        return;
+      }
+
       const result = await inviteStaffMember(currentOrganization.id, teacher.id, email);
       if (result.status === 'connected') {
         showToast(`${teacher.name} ${labels.staff.singular} 계정은 이미 연결되어 있습니다.`, 'info');
       } else if (result.token) {
-        // 2026-09-28 hotfix: 이메일 일치 자동 연결 없음 — 1회용 초대 코드를 전달해 직접 수락
         setInviteResult({
           staffName: teacher.name,
           token: result.token,
@@ -353,6 +393,32 @@ export const TeacherManagementView: React.FC = () => {
       />
 
       {canManageAccounts && <JoinRequestsPanel />}
+
+      {canManageAccounts && tenantRoles.length > 0 && (
+        <div
+          className="flex flex-col sm:flex-row sm:items-center gap-2 rounded-2xl border border-indigo-100 bg-indigo-50/50 px-4 py-3"
+          data-testid="staff-invite-role-picker"
+        >
+          <label className="text-xs font-bold text-indigo-900 shrink-0" htmlFor="invite-role-select">
+            초대 시 부여 직급
+          </label>
+          <select
+            id="invite-role-select"
+            value={inviteRoleId}
+            onChange={(e) => setInviteRoleId(e.target.value)}
+            className="min-h-[44px] flex-1 rounded-xl border border-indigo-200 bg-white px-3 text-sm font-semibold text-slate-800"
+          >
+            {tenantRoles.map((role) => (
+              <option key={role.id} value={role.id}>
+                {role.name}
+              </option>
+            ))}
+          </select>
+          <p className="text-[11px] text-indigo-700 sm:max-w-[220px]">
+            전임/파트 등 직급을 고른 뒤 초대를 보내면 권한이 함께 연결됩니다.
+          </p>
+        </div>
+      )}
 
       {/* Teachers Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

@@ -241,7 +241,13 @@ export function TermsContent() {
 
       <h2 className={legalHeadingClass}>제9조 (유료 서비스, 이용 요금 및 환불)</h2>
       <ul className={legalListClass}>
-        <li>회사가 제공하는 유료 SaaS 요금제의 결제 방식, 결제 주기, 이용 요금은 서비스 내 요금제 안내 페이지에 따릅니다.</li>
+        <li>
+          회사가 제공하는 유료 SaaS 요금제의 결제 방식, 결제 주기, 이용 요금은{' '}
+          <a href="/pricing" className="text-indigo-600 font-bold underline">
+            요금제 안내 페이지(/pricing)
+          </a>
+          및 고객 지원 안내에 따릅니다.
+        </li>
         <li>회원은 유료 서비스 이용 중 언제든지 구독 해지를 신청할 수 있으며, 해지 신청 시 다음 결제 주기부터 자동 결제가 중단됩니다.</li>
         <li>회사의 귀책 사유로 인하여 서비스를 이용하지 못한 경우, 회사는 서비스 이용 중단 시간에 상응하는 기간을 연장하거나 환불 규정에 따라 잔여 금액을 환불합니다.</li>
       </ul>
@@ -269,6 +275,55 @@ export function TermsContent() {
 }
 
 /**
+ * 요금제 안내 (Soft launch — 공개 단가 확정 전 문의 유도)
+ */
+export function PricingContent() {
+  const { serviceName, contactEmail } = legalConfig;
+
+  return (
+    <div className="space-y-4" data-testid="pricing-content">
+      <div className="rounded-xl bg-indigo-50 border border-indigo-100 p-4 mb-4">
+        <p className="text-xs font-bold text-indigo-900">{serviceName} 요금제 안내</p>
+        <p className="text-xs text-indigo-800 mt-1 leading-relaxed">
+          피아노·학원 Soft launch 기간에는 초대제 파일럿 요금으로 운영합니다. 공개 단가·결제 주기는
+          확정 후 이 페이지에 게시합니다.
+        </p>
+      </div>
+
+      <h2 className={legalHeadingClass}>1. Soft launch (초대제)</h2>
+      <ul className={legalListClass}>
+        <li>초대받은 사업장은 파일럿 조건으로 핵심 기능(원생·시간표·출결·수납)을 이용합니다.</li>
+        <li>카카오 알림톡·SMS·국세청 현금영수증 자동 발행 등 미연동 기능은 요금에 포함되지 않습니다.</li>
+        <li>파일럿 종료 전 요금·약관 변경이 있으면 지원 메일로 사전 안내합니다.</li>
+      </ul>
+
+      <h2 className={legalHeadingClass}>2. 정식 요금 문의</h2>
+      <p className={legalParagraphClass}>
+        사업장 규모·강사 수에 맞춘 견적은{' '}
+        <a href={`mailto:${contactEmail}?subject=${encodeURIComponent('요금제 문의')}`} className="text-indigo-600 font-bold underline">
+          {contactEmail}
+        </a>
+        로 문의해 주세요. 영업일 기준 24시간 내 회신을 목표로 합니다.
+      </p>
+
+      <h2 className={legalHeadingClass}>3. 관련 문서</h2>
+      <ul className={legalListClass}>
+        <li>
+          <a href="/terms" className="text-indigo-600 font-bold underline">
+            서비스 이용약관
+          </a>
+        </li>
+        <li>
+          <a href="/support" className="text-indigo-600 font-bold underline">
+            고객 지원
+          </a>
+        </li>
+      </ul>
+    </div>
+  );
+}
+
+/**
  * 고객 지원 및 고객센터 안내
  */
 export function SupportContent() {
@@ -282,6 +337,13 @@ export function SupportContent() {
           서비스 이용 중 궁금하신 점이나 불편한 점을 언제든 알려주세요.
         </p>
       </div>
+      <p className="text-xs text-slate-600">
+        요금·파일럿 조건은{' '}
+        <a href="/pricing" className="text-indigo-600 font-bold underline">
+          요금제 안내
+        </a>
+        를 참고해 주세요.
+      </p>
 
       <h2 className={legalHeadingClass}>1. 온라인 고객센터 접수</h2>
       <p className={legalParagraphClass}>
