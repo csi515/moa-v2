@@ -4,7 +4,6 @@
     "parentNav": [
       "home:홈:House",
       "schedule:일정:CalendarDays",
-      "attendance:출결:SquareCheckBig",
       "tuition:수납:CreditCard",
       "more:더보기:Menu"
     ],

@@ -28,7 +28,7 @@ export const ONBOARDING_STEP_LABELS = [
   '수업 기본',
   '수납 기본',
   '교재',
-  '출결',
+
   '상담',
   '완료',
 ] as const;

@@ -101,7 +101,7 @@ export const DirectorDashboardStats: React.FC<DirectorDashboardStatsProps> = ({
         subtitle={`지각/조퇴 ${stats.todayLate}명`}
         icon={<CheckCircle2 className="w-5 h-5 text-emerald-600" />}
         iconBg="bg-emerald-50"
-        onClick={() => setActiveTab('attendance')}
+        onClick={() => setActiveTab('timetable')}
       />
       <StatCard
         title="오늘 결석"

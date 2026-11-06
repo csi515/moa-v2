@@ -211,8 +211,8 @@ export const PianoTimetableStudentPool: FC<StudentPoolProps> = ({
       </div>
       <p className="text-[10px] text-slate-400">
         {highlightStudentId
-          ? '강조된 학생을 드래그하여 시간표 칸에 놓으세요'
-          : '드래그하여 시간표 칸에 놓으세요'}
+          ? '강조된 학생을 시간표 칸을 클릭하여 배치하세요'
+          : '시간표 칸을 클릭하여 학생을 배치할 수 있습니다'}
       </p>
       <div className="flex flex-wrap gap-1.5 max-h-[140px] overflow-y-auto">
         {ordered.length === 0 ? (

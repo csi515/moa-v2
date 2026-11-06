@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { OrganizationTreePage } from '../organization/OrganizationTreePage';
 import { StorageService } from '@/services/storage';
@@ -25,6 +25,7 @@ import {
   listEnabledPermissionLabels,
 } from '@/domain/permissionCatalog';
 import { resolveActiveCapabilityIds } from '@/domain/permissionVisibility';
+import { getPlaceLabel } from '@/core/industry/industryUi';
 import { RolePermissionMatrix } from './RolePermissionMatrix';
 import { OwnershipTransferCard } from './OwnershipTransferCard';
 
@@ -63,9 +64,15 @@ export function FinanceRouteGate({ children }: { children: ReactNode }) {
 }
 
 export function DynamicRoleSettingsPage() {
+  const navigate = useNavigate();
   const { currentOrganization, activeCapabilities, hiddenCapabilities } = useOrganization();
   const { role } = useAuthorization();
   const orgId = currentOrganization?.id ?? '';
+  const placeLabel = getPlaceLabel(currentOrganization?.industry_type);
+  const isCorporate =
+    currentOrganization?.industry_type === 'corporate' ||
+    currentOrganization?.industry_type === 'enterprise';
+
   const [roles, setRoles] = useState<RoleRow[]>([]);
   const [members, setMembers] = useState<MemberRow[]>([]);
   const [open, setOpen] = useState(false);
@@ -73,7 +80,9 @@ export function DynamicRoleSettingsPage() {
   const [permissions, setPermissions] = useState<RolePermissionMap>(EMPTY_ROLE_PERMISSIONS);
   const [error, setError] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [settingTab, setSettingTab] = useState<'org' | 'roles'>('org');
+  const [settingTab, setSettingTab] = useState<'org' | 'roles'>(() =>
+    isCorporate ? 'org' : 'roles'
+  );
   const [dictOpen, setDictOpen] = useState(true);
 
   const isOwner = role === 'owner';
@@ -138,42 +147,51 @@ export function DynamicRoleSettingsPage() {
     }
   }
 
+  const handleGoBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/workspace');
+    }
+  };
+
   if (!canManage) return <AccessDeniedBanner />;
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 p-4">
       <div>
-        <Link
-          to="/workspace/intranet"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+        <button
+          type="button"
+          onClick={handleGoBack}
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors cursor-pointer"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
-          <span>사내 앱 런처로 돌아가기</span>
-        </Link>
+          <span>{placeLabel ? `${placeLabel} 설정으로 돌아가기` : '설정으로 돌아가기'}</span>
+        </button>
       </div>
 
       <div className="flex gap-2 border-b border-slate-200 pb-3">
         <button
           type="button"
-          onClick={() => setSettingTab('org')}
-          className={`min-h-11 rounded-xl px-4 text-sm font-bold transition-all ${
-            settingTab === 'org'
-              ? 'bg-indigo-600 text-white shadow-xs'
-              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-          }`}
-        >
-          조직도·부서 관리
-        </button>
-        <button
-          type="button"
           onClick={() => setSettingTab('roles')}
-          className={`min-h-11 rounded-xl px-4 text-sm font-bold transition-all ${
+          className={`min-h-11 rounded-xl px-4 text-sm font-bold transition-all cursor-pointer ${
             settingTab === 'roles'
               ? 'bg-indigo-600 text-white shadow-xs'
               : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
         >
           직급 및 권한 매트릭스
+        </button>
+        <button
+          type="button"
+          onClick={() => setSettingTab('org')}
+          className={`min-h-11 rounded-xl px-4 text-sm font-bold transition-all cursor-pointer ${
+            settingTab === 'org'
+              ? 'bg-indigo-600 text-white shadow-xs'
+              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          }`}
+        >
+          조직도·부서 관리
         </button>
       </div>
 
@@ -193,7 +211,7 @@ export function DynamicRoleSettingsPage() {
             {isOwner ? (
               <button
                 type="button"
-                className="min-h-11 rounded-xl bg-slate-900 px-4 text-sm font-bold text-white"
+                className="min-h-11 rounded-xl bg-slate-900 px-4 text-sm font-bold text-white cursor-pointer"
                 onClick={() => {
                   setEditingId(null);
                   setName('');
@@ -213,7 +231,7 @@ export function DynamicRoleSettingsPage() {
           >
             <button
               type="button"
-              className="flex w-full items-center justify-between text-left"
+              className="flex w-full items-center justify-between text-left cursor-pointer"
               onClick={() => setDictOpen((v) => !v)}
             >
               <div>
@@ -268,7 +286,7 @@ export function DynamicRoleSettingsPage() {
                       <div className="flex gap-2">
                         <button
                           type="button"
-                          className="min-h-11 px-3 text-sm"
+                          className="min-h-11 px-3 text-sm cursor-pointer"
                           onClick={() => {
                             setEditingId(roleRow.id);
                             setName(roleRow.name);
@@ -280,7 +298,7 @@ export function DynamicRoleSettingsPage() {
                         </button>
                         <button
                           type="button"
-                          className="min-h-11 px-3 text-sm text-rose-600"
+                          className="min-h-11 px-3 text-sm text-rose-600 cursor-pointer"
                           disabled={roleRow.is_system}
                           onClick={() => void removeRole(roleRow)}
                         >
@@ -383,12 +401,12 @@ export function DynamicRoleSettingsPage() {
               />
             </div>
             <div className="mt-4 flex justify-end gap-2">
-              <button type="button" className="min-h-11 px-4" onClick={() => setOpen(false)}>
+              <button type="button" className="min-h-11 px-4 cursor-pointer" onClick={() => setOpen(false)}>
                 닫기
               </button>
               <button
                 type="button"
-                className="min-h-11 rounded-xl bg-slate-900 px-4 text-white"
+                className="min-h-11 rounded-xl bg-slate-900 px-4 text-white cursor-pointer"
                 onClick={() => void saveRole()}
               >
                 저장

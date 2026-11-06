@@ -27,6 +27,7 @@ const PIANO_SETTINGS_EXTRA_TABS = new Set(
  * Core resolveNavHighlightTab을 확장 (passes→members 등 타업종 규칙을 피아노에서 덮어씀).
  */
 export function resolvePianoNavHighlightTab(tab: NavTab): NavTab {
+  if (tab === 'teachers' || tab === 'instructors' || tab === 'staff') return 'teachers';
   if (isTabInHub(tab, PIANO_CUSTOMER_HUB_TABS)) return 'students';
   if (isTabInHub(tab, PIANO_ATTENDANCE_HUB_TABS)) return 'attendance';
   if (isTabInHub(tab, PIANO_SCHEDULE_HUB_TABS)) return 'timetable';

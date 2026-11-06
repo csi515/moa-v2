@@ -18,68 +18,71 @@ export const DirectorDashboardWelcome: React.FC<DirectorDashboardWelcomeProps> =
   const isEmptyState = stats.activeStudents === 0 && stats.todayClassesCount === 0;
 
   return (
-    <div className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
-      <div className="absolute right-0 top-0 translate-x-8 -translate-y-8 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+    <div className="bg-white border border-slate-200/80 rounded-2xl py-3 px-3.5 sm:p-5 shadow-2xs relative">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-1 bg-white/10 text-indigo-200 text-xs font-semibold rounded-full backdrop-blur-xs flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          <div className="flex items-center gap-2 mb-1">
+            <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[11px] font-semibold rounded-full flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               오늘의 학원 브리핑
             </span>
-            <span className="text-xs text-indigo-300 font-medium">
+            <span className="text-xs text-slate-400 font-medium">
               {formatKoreanDate(new Date().toISOString())}
             </span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-            안녕하세요, {currentUserName}! 🎹
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight mt-0.5">
+            안녕하세요, {currentUserName}님! 🎹
           </h2>
           {isEmptyState ? (
-            <p className="text-sm text-indigo-200 mt-2 max-w-2xl leading-relaxed">
-              학원을 시작할 준비가 되었습니다! <strong className="text-white">첫 학생을 등록</strong>하고{' '}
-              <strong className="text-white">수업 클래스를 개설</strong>해보세요.
+            <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-snug max-w-2xl">
+              학원을 시작할 준비가 되었습니다! <strong className="text-slate-900 font-semibold">첫 학생을 등록</strong>하고{' '}
+              <strong className="text-slate-900 font-semibold">수업 클래스를 개설</strong>해보세요.
             </p>
           ) : (
-            <p className="text-sm text-indigo-200 mt-2 max-w-2xl leading-relaxed">
-              오늘 예정된 수업은 <strong className="text-white underline">{stats.todayClassesCount}개 반</strong>이며,
-              재학생 <strong className="text-white">{stats.activeStudents}명</strong>이 즐겁게 피아노를 배우고 있습니다.
+            <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-snug max-w-2xl">
+              오늘 예정된 수업은 <strong className="text-indigo-600 font-semibold">{stats.todayClassesCount}개 반</strong>이며,
+              재학생 <strong className="text-slate-900 font-semibold">{stats.activeStudents}명</strong>이 함께하고 있습니다.
             </p>
           )}
         </div>
 
         {/* Quick Action Buttons */}
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2 mt-1 sm:mt-0">
           {isEmptyState ? (
             <>
               <button
+                type="button"
                 onClick={() => setActiveTab('students')}
-                className="px-4 py-2.5 bg-white text-indigo-900 font-bold text-xs sm:text-sm rounded-xl hover:bg-indigo-50 transition-all shadow-md flex items-center gap-2 cursor-pointer"
+                className="px-3 sm:px-3.5 py-1.5 min-h-[38px] bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
               >
-                <UserPlus className="w-4 h-4 text-indigo-600" />
+                <UserPlus className="w-4 h-4" />
                 첫 학생 등록하기
               </button>
               <button
+                type="button"
                 onClick={() => setActiveTab('classes')}
-                className="px-4 py-2.5 bg-indigo-600/60 hover:bg-indigo-600 text-white font-semibold text-xs sm:text-sm rounded-xl border border-indigo-400/30 transition-all flex items-center gap-2 cursor-pointer"
+                className="px-3 sm:px-3.5 py-1.5 min-h-[38px] bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-all flex items-center gap-1.5 cursor-pointer"
               >
-                <CalendarCheck className="w-4 h-4" />
+                <CalendarCheck className="w-4 h-4 text-slate-500" />
                 수업 클래스 개설
               </button>
             </>
           ) : (
             <>
               <button
+                type="button"
                 onClick={() => setActiveTab('attendance')}
-                className="px-4 py-2.5 bg-white text-indigo-900 font-bold text-xs sm:text-sm rounded-xl hover:bg-indigo-50 transition-all shadow-md flex items-center gap-2 cursor-pointer"
+                className="px-3 sm:px-3.5 py-1.5 min-h-[38px] bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
               >
-                <CalendarCheck className="w-4 h-4 text-indigo-600" />
+                <CalendarCheck className="w-4 h-4" />
                 오늘 출결 체크
               </button>
               <button
+                type="button"
                 onClick={() => setActiveTab('students')}
-                className="px-4 py-2.5 bg-indigo-600/60 hover:bg-indigo-600 text-white font-semibold text-xs sm:text-sm rounded-xl border border-indigo-400/30 transition-all flex items-center gap-2 cursor-pointer"
+                className="px-3 sm:px-3.5 py-1.5 min-h-[38px] bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-all flex items-center gap-1.5 cursor-pointer"
               >
-                <UserPlus className="w-4 h-4" />
+                <UserPlus className="w-4 h-4 text-slate-500" />
                 신규 학생 등록
               </button>
             </>

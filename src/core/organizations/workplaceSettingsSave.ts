@@ -59,6 +59,7 @@ export function buildWorkplaceSettingsSavePayload(
     defaultPaymentDay: settings.defaultPaymentDay,
     defaultBillingMode: settings.defaultBillingMode,
     includeExtrasInMonthlyInvoice: settings.includeExtrasInMonthlyInvoice,
+    sessionPassPackages: settings.sessionPassPackages,
     bankAccount: settings.bankAccount,
     depositEnabled: settings.depositEnabled,
     depositAmount: settings.depositAmount,

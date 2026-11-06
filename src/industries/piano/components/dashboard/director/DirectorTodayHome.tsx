@@ -8,7 +8,6 @@ import {
 } from '@/core/customer/studentJoinInbox';
 import { usePianoNavigate } from '@/industries/piano/layout/usePianoNavigate';
 import { useDirectorTodayDashboard } from './useDirectorTodayDashboard';
-import { DirectorTodayAttendanceSection } from './DirectorTodayAttendanceSection';
 import { DirectorTodayScheduleSection } from './DirectorTodayScheduleSection';
 import { DirectorTodayTasksSection, type DirectorTodayTaskItem } from './DirectorTodayTasksSection';
 import { DirectorTodayUnpaidSection } from './DirectorTodayUnpaidSection';
@@ -42,7 +41,7 @@ function openDirectorTodayTask(
   navigate(item.tab);
 }
 
-/** 원장 홈 — Getting Started → 오늘 일정 → 출결 → 처리할 업무 → 미납 */
+/** 원장 홈 — Getting Started → 오늘 일정 → 처리할 업무 → 미납 */
 export const DirectorTodayHome: FC = () => {
   const { currentUser } = useApp();
   const { currentOrganization } = useOrganization();
@@ -131,20 +130,20 @@ export const DirectorTodayHome: FC = () => {
   const pendingTaskTotal = taskItems.reduce((sum, item) => sum + item.count, 0);
 
   return (
-    <div className="space-y-4 pb-4 max-w-5xl mx-auto w-full" data-testid="director-home">
-      <section className="bg-gradient-to-br from-indigo-800 via-indigo-900 to-slate-900 rounded-2xl px-4 py-3.5 text-white">
-        <p className="text-[11px] text-indigo-200 font-semibold">
+    <div className="space-y-3 sm:space-y-4 pb-4 max-w-5xl mx-auto w-full" data-testid="director-home">
+      <section className="bg-white border border-slate-200/80 rounded-2xl py-3 px-3.5 sm:p-5 shadow-2xs">
+        <p className="text-xs text-slate-400 font-medium">
           {formatKoreanDate(new Date().toISOString())}
         </p>
-        <h2 className="text-lg sm:text-xl font-bold tracking-tight truncate mt-0.5">
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight truncate mt-0.5">
           안녕하세요, {currentUser.name}님
         </h2>
-        <p className="text-xs text-indigo-100/90 mt-1 leading-snug">
+        <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-snug">
           {isEmpty
             ? '신규 학생을 등록하고 수업을 시작해보세요.'
             : [
                 todayClasses.length > 0
-                  ? `오늘 수업 ${todayClasses.length}`
+                  ? `오늘 수업 ${todayClasses.length}개 반`
                   : '오늘 수업 없음',
                 pendingTaskTotal > 0 ? `처리할 업무 ${pendingTaskTotal}건` : null,
                 unpaidStudentCount > 0
@@ -158,7 +157,7 @@ export const DirectorTodayHome: FC = () => {
           <button
             type="button"
             onClick={() => navigate('students')}
-            className="mt-3 min-h-[44px] px-4 rounded-xl bg-white text-indigo-900 text-sm font-bold"
+            className="mt-3 min-h-[38px] px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors cursor-pointer"
           >
             학생 등록하기
           </button>
@@ -176,17 +175,14 @@ export const DirectorTodayHome: FC = () => {
         />
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <DirectorTodayScheduleSection
-          todayClasses={todayClasses}
-          students={students}
-          onOpenSchedule={() => navigate('timetable')}
-        />
-        <DirectorTodayAttendanceSection
-          today={today}
-          expectedDay={expectedDay}
-          onOpenAttendance={() => navigate('attendance')}
-        />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+        <div className="lg:col-span-2">
+          <DirectorTodayScheduleSection
+            todayClasses={todayClasses}
+            students={students}
+            onOpenSchedule={() => navigate('timetable')}
+          />
+        </div>
         <DirectorTodayTasksSection items={taskItems} onOpen={handleOpenTask} />
         <DirectorTodayUnpaidSection
           invoices={unpaidInvoices}

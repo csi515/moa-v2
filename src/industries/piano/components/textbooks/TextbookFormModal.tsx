@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useApp } from '@/context/AppContext';
 import { Textbook } from '@/types';
 import { X, BookOpen, AlertCircle, Save, Check } from 'lucide-react';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
@@ -17,7 +18,9 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
   onSave,
   onClose
 }) => {
+  const { showToast } = useApp();
   const isEditing = !!textbook;
+  const titleInputRef = useRef<HTMLInputElement>(null);
 
   const [title, setTitle] = useState(textbook?.title || '');
   const [publisher, setPublisher] = useState(textbook?.publisher || '세광음악출판사');
@@ -26,7 +29,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
   const [isbn, setIsbn] = useState(textbook?.isbn || '');
   const [level, setLevel] = useState(textbook?.level || '기초/유치부');
   const [salePrice, setSalePrice] = useState<number>(textbook?.salePrice || textbook?.price || 15000);
-  const [costPrice, setCostPrice] = useState<number>(textbook?.costPrice || 9000);
+  const [costPrice, setCostPrice] = useState<number>(textbook?.costPrice !== undefined ? textbook.costPrice : 0);
   const [stock, setStock] = useState<number>(textbook?.stock !== undefined ? textbook.stock : 10);
   const [minStock, setMinStock] = useState<number>(textbook?.minStock !== undefined ? textbook.minStock : 5);
   const [isForSale, setIsForSale] = useState<boolean>(textbook?.isForSale !== undefined ? textbook.isForSale : true);
@@ -38,6 +41,10 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
     const err: Record<string, string> = {};
     if (!title.trim()) {
       err.title = '교재명을 입력해주세요.';
+      titleInputRef.current?.focus();
+      showToast('교재명을 입력해주세요.', 'warning');
+      setErrors(err);
+      return false;
     }
     if (salePrice < 0) {
       err.salePrice = '판매가격은 0원 이상이어야 합니다.';
@@ -59,7 +66,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
     e.preventDefault();
     if (!validate()) return;
 
-    const finalPublisher = publisher === '직접입력' ? customPublisher.trim() || '기타' : publisher;
+    const finalPublisher = publisher === '직접입력' ? customPublisher.trim() || '기타출판' : publisher;
 
     onSave({
       id: textbook?.id,
@@ -92,7 +99,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
                 {isEditing ? '교재 정보 수정' : '신규 교재 등록'}
               </h3>
               <p className="text-xs text-slate-500">
-                {isEditing ? '교재 정보 및 재고 기준을 수정합니다.' : '학원에서 판매할 새 교재와 초기 재고를 등록합니다.'}
+                {isEditing ? '교재 정보 및 재고 기준을 수정합니다.' : '학원에서 원생에게 지급할 새 교재와 초기 재고를 등록합니다.'}
               </p>
             </div>
           </div>
@@ -112,6 +119,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
               교재명 <span className="text-rose-500">*</span>
             </label>
             <input
+              ref={titleInputRef}
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -142,16 +150,17 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
               {publisher === '직접입력' && (
                 <input
                   type="text"
+                  autoFocus
                   value={customPublisher}
                   onChange={(e) => setCustomPublisher(e.target.value)}
-                  placeholder="출판사명 입력"
-                  className="w-full mt-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs"
+                  placeholder="출판사명 직접 입력 (미입력 시 '기타출판')"
+                  className="w-full mt-1.5 px-3 py-1.5 rounded-lg border border-indigo-200 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 text-xs bg-indigo-50/20"
                 />
               )}
             </div>
 
             <div>
-              <label className="block text-slate-700 font-semibold mb-1">저자 / 편저</label>
+              <label className="block text-slate-700 font-semibold mb-1">저자</label>
               <input
                 type="text"
                 value={author}
@@ -165,7 +174,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
           {/* ISBN & 단계/레벨 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-700 font-semibold mb-1">ISBN (선택)</label>
+              <label className="block text-slate-700 font-semibold mb-1">ISBN</label>
               <input
                 type="text"
                 value={isbn}
@@ -176,7 +185,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-700 font-semibold mb-1">단계 / 레벨</label>
+              <label className="block text-slate-700 font-semibold mb-1">수준</label>
               <select
                 value={level}
                 onChange={(e) => setLevel(e.target.value)}
@@ -195,7 +204,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
             <div>
               <label className="block text-slate-700 font-semibold mb-1">
-                판매가격 (₩) <span className="text-rose-500">*</span>
+                교재비 <span className="text-rose-500">*</span>
               </label>
               <CurrencyInput
                 value={salePrice}
@@ -206,15 +215,16 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
 
             <div>
               <label className="block text-slate-700 font-semibold mb-1">
-                매입가격 (원가 ₩)
+                입고가 (선택)
               </label>
               <CurrencyInput
                 value={costPrice}
                 onChange={setCostPrice}
               />
               <p className="text-[10px] text-slate-400 mt-1">
-                마진: ₩{(salePrice - costPrice).toLocaleString()} (
-                {salePrice > 0 ? Math.round(((salePrice - costPrice) / salePrice) * 100) : 0}%)
+                {costPrice > 0
+                  ? `마진: ₩${(salePrice - costPrice).toLocaleString()} (${salePrice > 0 ? Math.round(((salePrice - costPrice) / salePrice) * 100) : 0}%)`
+                  : '입고가를 입력하면 권당 마진이 자동 계산됩니다.'}
               </p>
             </div>
           </div>
@@ -223,7 +233,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
             <div>
               <label className="block text-slate-700 font-semibold mb-1">
-                {isEditing ? '현재 재고 (권)' : '초기 입고 재고 (권)'}
+                {isEditing ? '현재 재고' : '입고 수량'}
               </label>
               <input
                 type="number"
@@ -236,7 +246,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
 
             <div>
               <label className="block text-slate-700 font-semibold mb-1">
-                최소 유지 재고 (권)
+                부족 알림 기준
               </label>
               <input
                 type="number"
@@ -260,7 +270,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
                   />
                   <div className="w-11 h-6 bg-slate-200 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                   <span className="ml-2 text-xs font-medium text-slate-700">
-                    {isForSale ? '판매 중' : '판매 중단'}
+                    {isForSale ? '지급 가능' : '지급 중단'}
                   </span>
                 </label>
               </div>

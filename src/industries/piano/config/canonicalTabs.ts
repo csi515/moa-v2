@@ -28,6 +28,10 @@ export const PIANO_CANONICAL_TAB_MAP: Record<string, string> = {
 
   // 상담 별칭 -> 캐노니컬 'consultations'
   consultation: 'consultations',
+
+  // 선생님 관리 별칭 -> 캐노니컬 'teachers'
+  instructors: 'teachers',
+  staff: 'teachers',
 };
 
 /**

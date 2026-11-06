@@ -44,7 +44,6 @@ export const pianoPluginManifest: IndustryPluginManifest = {
   parentPortalNav: [
     { id: 'home', label: '홈', icon: 'home' },
     { id: 'schedule', label: '일정', icon: 'calendar' },
-    { id: 'attendance', label: '출결', icon: 'check' },
     { id: 'tuition', label: '수납', icon: 'card' },
     { id: 'more', label: '더보기', icon: 'menu' },
   ],

@@ -83,7 +83,9 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
         {showSchool && (
           <>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">학교</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                학교 <span className="text-slate-400 font-normal">(선택)</span>
+              </label>
               <input
                 type="text"
                 placeholder="예: ○○초등학교"
@@ -93,7 +95,9 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">학년</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                학년 <span className="text-slate-400 font-normal">(선택)</span>
+              </label>
               <input
                 type="text"
                 placeholder="예: 3학년"

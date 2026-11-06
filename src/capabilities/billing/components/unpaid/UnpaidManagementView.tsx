@@ -23,7 +23,6 @@ import {
   AlertCircle,
   CreditCard,
   BookOpen,
-  Download,
   Phone,
 } from 'lucide-react';
 
@@ -67,24 +66,6 @@ export const UnpaidManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
     });
   }, [summaries, filterMode, searchQuery, refreshKey]);
 
-  const handleExportCsv = () => {
-    const header = `${customerLabel}명,학부모,연락처,수강료미납,교재비미납,합계,연체건수\n`;
-    const rows = filtered
-      .map(
-        (s) =>
-          `${s.studentName},${s.parentName},${s.parentPhone},${s.tuitionUnpaid},${s.textbookUnpaid},${s.totalUnpaid},${s.overdueCount}`
-      )
-      .join('\n');
-    const blob = new Blob(['\uFEFF' + header + rows], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `미납명단_${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('미납 명단 CSV가 다운로드되었습니다.', 'success');
-  };
-
   const openPayment = (studentId: string) => {
     const st = StudentService.getStudentById(studentId);
     if (st) setPayStudent(st);
@@ -112,15 +93,6 @@ export const UnpaidManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
               variant="amber"
             />
           </div>
-          <div className="flex justify-end">
-            <button
-              onClick={handleExportCsv}
-              className="px-4 py-2.5 min-h-[44px] bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold rounded-xl flex items-center gap-2 self-start"
-            >
-              <Download className="w-4 h-4" />
-              CSV 내보내기
-            </button>
-          </div>
         </>
       ) : (
         <PageHeader
@@ -128,15 +100,6 @@ export const UnpaidManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
           iconClassName="text-rose-600"
           title="미납 통합 관리"
           description={`수강료·교재비 미납을 ${customerLabel}별로 한눈에 확인하고 수납 처리합니다`}
-          actions={
-            <button
-              onClick={handleExportCsv}
-              className="px-4 py-2.5 min-h-[44px] bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold rounded-xl flex items-center gap-2 self-start"
-            >
-              <Download className="w-4 h-4" />
-              CSV 내보내기
-            </button>
-          }
         />
       )}
 

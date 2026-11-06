@@ -4,9 +4,7 @@
 import type { NavTab } from '@/context/AppContext';
 
 export const PIANO_CORE_SETTINGS_EXTRAS: { tab: NavTab; label: string }[] = [
-  { tab: 'bookings', label: '상담 가능시간' },
   { tab: 'classes', label: '반 관리' },
-  { tab: 'check-in', label: 'PIN 출석' },
   { tab: 'assignments', label: '주간 과제' },
   { tab: 'practice', label: '연습 기록' },
   /** 사용자 진입 SSOT — Refine /seat-rooms 가 아닌 연습실 UX */

@@ -87,7 +87,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
       return;
     }
     if (quantity <= 0) {
-      showToast('판매 수량은 1권 이상이어야 합니다.', 'warning');
+      showToast('지급 수량은 1권 이상이어야 합니다.', 'warning');
       return;
     }
 
@@ -104,13 +104,10 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
         memo: memo.trim()
       });
 
-      showToast(
-        `교재 판매가 완료되었습니다! (재고 ${selectedTextbook?.stock}권 ➔ ${res.transaction.currentStock}권 차감)`,
-        'success'
-      );
+      showToast(`${selectedStudent?.name || '학생'} 학생에게 교재가 지급되었습니다. (재고 차감 완료)`, 'success');
       onSuccess(res.sale.id);
     } catch (err: any) {
-      showToast(err.message || '교재 판매 등록 중 오류가 발생했습니다.', 'error');
+      showToast(err.message || '교재 지급 등록 중 오류가 발생했습니다.', 'error');
     }
   };
 
@@ -138,9 +135,9 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
               <ShoppingBag className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-slate-900 text-base">학생 교재 판매 등록</h3>
+              <h3 className="font-bold text-slate-900 text-base">학생 교재 지급 / 배부</h3>
               <p className="text-xs text-slate-500">
-                학생에게 교재를 지급/판매하며, 교재 재고가 자동으로 차감됩니다.
+                학생에게 교재를 배부하며, 학원 재고 차감 및 교재비 수납(현장 결제 / 나중에 수납)을 등록합니다.
               </p>
             </div>
           </div>
@@ -192,7 +189,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
 
             <div>
               <label className="block text-slate-700 font-semibold mb-1">
-                판매일자 <span className="text-rose-500">*</span>
+                지급일 <span className="text-rose-500">*</span>
               </label>
               <input
                 type="date"
@@ -211,7 +208,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
                 <div>
                   <p className="text-sm font-bold text-slate-800">등록된 교재가 없습니다</p>
                   <p className="text-xs text-slate-500 mt-1">
-                    교재 마스터를 먼저 등록한 뒤 학생에게 일회성으로 판매할 수 있습니다.
+                    교재를 먼저 등록한 뒤 원생에게 지급할 수 있습니다.
                   </p>
                 </div>
                 <button
@@ -231,7 +228,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
             <div>
               <div className="flex items-center justify-between mb-1">
                 <label className="block text-slate-800 font-semibold">
-                  판매할 교재 선택 <span className="text-rose-500">*</span>
+                  지급할 교재 선택 <span className="text-rose-500">*</span>
                 </label>
                 {textbooks.length > 5 && (
                   <input
@@ -250,7 +247,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
               >
                 {filteredTextbooks.map((t) => (
                   <option key={t.id} value={t.id}>
-                    {t.title} - {t.publisher} (정가 ₩{(t.salePrice || t.price).toLocaleString()} | 재고 {t.stock}권)
+                    {t.title} - {t.publisher} (교재비 ₩{(t.salePrice || t.price).toLocaleString()} | 재고 {t.stock}권)
                   </option>
                 ))}
               </select>
@@ -262,7 +259,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
                   <span className="px-2 py-0.5 rounded-md bg-white border border-indigo-100 text-indigo-700 font-medium">
                     {selectedTextbook.level}
                   </span>
-                  <span className="text-slate-500">현재 보유 재고:</span>
+                  <span className="text-slate-500">보유 재고:</span>
                   <span className={`font-bold ${selectedTextbook.stock <= selectedTextbook.minStock ? 'text-amber-600' : 'text-slate-800'}`}>
                     {selectedTextbook.stock}권
                   </span>
@@ -270,7 +267,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
                 {isStockLow && (
                   <div className="flex items-center gap-1 text-rose-600 font-semibold text-[11px]">
                     <AlertTriangle className="w-3.5 h-3.5" />
-                    현재 재고({selectedTextbook.stock}권)가 판매 수량보다 부족합니다.
+                    보유 재고({selectedTextbook.stock}권)가 지급 수량보다 부족합니다.
                   </div>
                 )}
               </div>
@@ -282,7 +279,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
           {/* 3. 수량, 단가, 할인, 최종금액 */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
             <div>
-              <label className="block text-slate-700 font-semibold mb-1">수량 (권)</label>
+              <label className="block text-slate-700 font-semibold mb-1">수량</label>
               <input
                 type="number"
                 min="1"
@@ -293,7 +290,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-700 font-semibold mb-1">판매단가 (₩)</label>
+              <label className="block text-slate-700 font-semibold mb-1">교재비</label>
               <CurrencyInput
                 value={unitPrice}
                 onChange={setUnitPrice}
@@ -309,7 +306,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-700 font-semibold mb-1">최종 판매금액</label>
+              <label className="block text-slate-700 font-semibold mb-1">청구 금액</label>
               <div className="w-full px-3 py-2 rounded-xl bg-indigo-50/80 border border-indigo-100 text-indigo-700 font-black text-sm flex items-center h-[42px]">
                 ₩{calculatedTotal.toLocaleString()}
               </div>
@@ -318,7 +315,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
 
           {/* 4. 현장 수납 및 결제 방식 */}
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-3">
-            <label className="block text-slate-800 font-bold">현장 수납 및 납부 상태</label>
+            <label className="block text-slate-800 font-bold">수납 방식</label>
             
             <div className="grid grid-cols-3 gap-2">
               <button
@@ -331,7 +328,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
                 }`}
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                현장 전액 완납
+                오늘 즉시 수납
               </button>
 
               <button
@@ -347,7 +344,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
                 }`}
               >
                 <Calculator className="w-3.5 h-3.5" />
-                일부 부분 납부
+                일부만 수납
               </button>
 
               <button
@@ -360,7 +357,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
                 }`}
               >
                 <AlertTriangle className="w-3.5 h-3.5" />
-                나중에 수납 (미납)
+                다음 청구서에 합산
               </button>
             </div>
 
@@ -368,9 +365,9 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
             {initialPaymentType === 'partial' && (
               <div className="p-3 bg-white rounded-xl border border-amber-200 space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-slate-700 font-semibold">이번 납부할 금액 (₩)</label>
+                  <label className="text-slate-700 font-semibold">이번에 받을 금액</label>
                   <span className="text-xs font-bold text-rose-600">
-                    미납 잔액: ₩{(calculatedTotal - customPaidAmount).toLocaleString()}
+                    남은 금액: ₩{(calculatedTotal - customPaidAmount).toLocaleString()}
                   </span>
                 </div>
                 <CurrencyInput
@@ -408,7 +405,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
 
           {/* 5. 메모 */}
           <div>
-            <label className="block text-slate-700 font-semibold mb-1">판매 메모 / 비고</label>
+            <label className="block text-slate-700 font-semibold mb-1">지급 메모 / 비고</label>
             <input
               type="text"
               value={memo}
@@ -421,14 +418,14 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
           {/* Real-time Summary Card */}
           <div className="p-3.5 bg-slate-900 text-white rounded-xl flex items-center justify-between text-xs">
             <div>
-              <p className="text-slate-400">판매 요약: {selectedStudent?.name} - {selectedTextbook?.title} ({quantity}권)</p>
+              <p className="text-slate-400">지급 요약: {selectedStudent?.name} - {selectedTextbook?.title} ({quantity}권)</p>
               <p className="font-semibold text-slate-200">
                 수납: ₩{paidAmount.toLocaleString()} / 미납 잔액: ₩{unpaidAmount.toLocaleString()} (
                 {status === 'paid' ? '완납' : status === 'partial' ? '일부납부' : '미납'})
               </p>
             </div>
             <div className="text-right">
-              <p className="text-slate-400">판매 후 재고</p>
+              <p className="text-slate-400">지급 후 재고</p>
               <p className="text-base font-bold text-amber-400">
                 {selectedTextbook ? selectedTextbook.stock - quantity : 0}권
               </p>
@@ -450,7 +447,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
               className="inline-flex items-center gap-1.5 px-5 py-2.5 min-h-[44px] text-xs font-semibold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs disabled:opacity-50 disabled:pointer-events-none"
             >
               <ShoppingBag className="w-4 h-4" />
-              교재 판매 등록 (재고 자동 차감)
+              교재 지급 및 수납 처리
             </button>
           </div>
         </form>

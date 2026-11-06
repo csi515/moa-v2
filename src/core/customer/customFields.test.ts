@@ -15,10 +15,8 @@ import {
 function run() {
   // 1. 업종별 필드 조회
   const pianoFields = getCustomFieldsForIndustry('piano');
-  assert.equal(pianoFields.length, 3);
-  assert.equal(pianoFields[0].key, 'schoolName');
-  assert.equal(pianoFields[1].key, 'grade');
-  assert.equal(pianoFields[2].key, 'pianoLevel');
+  assert.equal(pianoFields.length, 1);
+  assert.equal(pianoFields[0].key, 'pianoLevel');
 
   const pilatesFields = getCustomFieldsForIndustry('pilates');
   assert.equal(pilatesFields.length, 3);
@@ -32,20 +30,18 @@ function run() {
 
   // 2. 카테고리 기반 자동 상속
   const artAcademyFields = getCustomFieldsForIndustry('art_academy');
-  assert.equal(artAcademyFields.some((f) => f.key === 'schoolName'), true);
+  assert.equal(artAcademyFields.some((f) => f.key === 'pianoLevel'), true);
 
   const crossfitFields = getCustomFieldsForIndustry('crossfit');
   assert.equal(crossfitFields.some((f) => f.key === 'workoutGoal'), true);
 
   // 3. 필드 값 추출
   const testMetadata = {
-    schoolName: '서울초등학교',
-    grade: '3학년',
+    pianoLevel: '체르니 100',
     unrelatedInternalData: 'secret-123',
   };
   const extracted = extractCustomFieldValues(testMetadata, pianoFields);
-  assert.equal(extracted.schoolName, '서울초등학교');
-  assert.equal(extracted.grade, '3학년');
+  assert.equal(extracted.pianoLevel, '체르니 100');
   assert.equal(extracted.unrelatedInternalData, undefined);
 
   // 4. 유효성 검사 (Validation)

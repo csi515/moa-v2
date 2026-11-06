@@ -1,5 +1,5 @@
 import type { NavTab } from '@/context/AppContext';
-import { customerHubTabs, settingsHubTabs } from '@/core/industry/commonViewEntries';
+import { customerHubTabs } from '@/core/industry/commonViewEntries';
 import { PIANO_ROOM_ENTRY_TABS } from './pianoScheduleRoutes';
 
 /**
@@ -22,7 +22,11 @@ export const PIANO_SCHEDULE_HUB_TABS = [
 ] as const satisfies readonly NavTab[];
 
 /** 설정 허브 (SettingsHubView) */
-export const PIANO_SETTINGS_HUB_TABS = settingsHubTabs;
+export const PIANO_SETTINGS_HUB_TABS = [
+  'settings',
+  'notices',
+  'account',
+] as const satisfies readonly NavTab[];
 
 /** 재무 허브 (FinanceHubView) */
 export const PIANO_FINANCE_HUB_TABS = [

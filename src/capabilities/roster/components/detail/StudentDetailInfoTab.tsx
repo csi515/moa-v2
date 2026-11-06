@@ -1,6 +1,5 @@
 import React from 'react';
 import { Student } from '@/types';
-import { CustomerPinPanel } from '@/capabilities/attendance';
 import { formatGuardianRelationship } from '@/core/parent';
 import type { GuardianInfo } from '@/core/parent/types';
 import { ScheduleService } from '@/core/services/scheduleService';
@@ -75,6 +74,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
               {contactLabel} ({guardians.length}명)
             </span>
             <div className="flex items-center gap-2">
+              {/* 학부모 앱 연결 안내 버튼 임시 숨김
               {isAdmin && isSupabaseConfigured && (
                 <button
                   type="button"
@@ -85,6 +85,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
                   {contactLabel}에게 MOA 연결 안내
                 </button>
               )}
+              */}
               {canEditStudent && (
               <button
                 type="button"
@@ -269,12 +270,6 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
         </div>
       </div>
     </div>
-
-    {attendanceEnabled && (
-      <div className="md:col-span-2">
-        <CustomerPinPanel student={student} />
-      </div>
-    )}
 
     {notes && (
       <div className="md:col-span-2 p-4 rounded-2xl bg-amber-50/80 border border-amber-200">

@@ -63,6 +63,11 @@ export const Modal: React.FC<ModalProps> = ({
     onClose();
   }, [confirmClose, dirty, intent, onClose]);
 
+  const requestCloseRef = useRef(requestClose);
+  useEffect(() => {
+    requestCloseRef.current = requestClose;
+  });
+
   useEffect(() => {
     if (!isOpen) return;
     openModalLayer += 1;
@@ -79,7 +84,7 @@ export const Modal: React.FC<ModalProps> = ({
       if (event.defaultPrevented) return;
       if (event.key === 'Escape') {
         event.preventDefault();
-        requestClose();
+        requestCloseRef.current();
         return;
       }
       if (root) trapTabKey(event, root);
@@ -90,7 +95,7 @@ export const Modal: React.FC<ModalProps> = ({
       openModalLayer = Math.max(0, openModalLayer - 1);
       triggerRef.current?.focus?.();
     };
-  }, [isOpen, requestClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

@@ -8,7 +8,6 @@
 
 import React from 'react';
 import { MenuVisibilitySettingsView } from './MenuVisibilitySettingsView';
-import { CustomTermsSettingCard } from './CustomTermsSettingCard';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { OPERATION_TOOL_SETS } from '@/core/presets/operationBundles';
 import { resolveCapabilityDependencies } from '@/core/capabilities/capabilityDependency';
@@ -60,7 +59,6 @@ export const CapabilitySwitchboardPage: React.FC = () => {
           );
         })}
       </div>
-      <CustomTermsSettingCard />
       <MenuVisibilitySettingsView />
     </div>
   );

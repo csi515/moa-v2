@@ -112,6 +112,7 @@ export const OrganizationProfileFields: FC<OrganizationProfileFieldsProps> = ({
         label={`${placeLabel} 소재지 주소`}
       />
 
+      {/* 학부모 자가 연결 미사용 단계: 연결코드 배너 UI 임시 숨김
       {publicCode && (
         <div className="rounded-xl border border-indigo-100 bg-indigo-50/60 p-4 space-y-2">
           <p className="text-xs font-bold text-indigo-900">{contactLabel} {placeLabel} 연결코드</p>
@@ -132,6 +133,7 @@ export const OrganizationProfileFields: FC<OrganizationProfileFieldsProps> = ({
           </a>
         </div>
       )}
+      */}
     </>
   );
 };
@@ -445,3 +447,5 @@ export const OrganizationDangerZoneCard: FC<OrganizationDangerZoneCardProps> = (
     </>
   );
 };
+
+export { DataExportCenterCard, type DataExportCenterCardProps } from './DataExportCenterCard';

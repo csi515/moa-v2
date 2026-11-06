@@ -31,6 +31,27 @@ export function trapTabKey(event: KeyboardEvent, root: HTMLElement): void {
 
 export function focusInitialElement(root: HTMLElement): void {
   const items = getFocusableElements(root);
+  if (items.length === 0) {
+    root.focus();
+    return;
+  }
+  const autoFocusEl = items.find((el) => el.hasAttribute('autofocus') || (el as any).autofocus);
+  if (autoFocusEl) {
+    autoFocusEl.focus();
+    return;
+  }
+  const firstInput = items.find((el) => {
+    const tag = el.tagName ? el.tagName.toLowerCase() : '';
+    if (tag === 'input') {
+      const type = (el as HTMLInputElement).type?.toLowerCase();
+      return type !== 'hidden' && type !== 'button' && type !== 'submit' && type !== 'reset';
+    }
+    return tag === 'select' || tag === 'textarea';
+  });
+  if (firstInput) {
+    firstInput.focus();
+    return;
+  }
   (items[0] ?? root).focus();
 }
 

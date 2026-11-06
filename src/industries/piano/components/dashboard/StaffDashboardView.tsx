@@ -7,7 +7,6 @@ import {
   BookOpen,
   ChevronRight,
   Stamp,
-  CheckSquare,
   CalendarDays,
 } from 'lucide-react';
 import { requestOpenPendingPractice } from '@/core/customer/studentJoinInbox';
@@ -18,7 +17,7 @@ import {
 } from '../attendance/pianoAttendanceHelpers';
 import { useStaffDashboardData } from './useStaffDashboardData';
 
-/** 강사 홈 — 오늘 일정·출결 중심 (구 수업 업무면 제거) */
+/** 강사 홈 — 오늘 수업 일정 중심 */
 export const StaffDashboardView: React.FC = () => {
   const { setActiveTab, setSelectedStudentId, currentUser } = useApp();
   const {
@@ -46,7 +45,7 @@ export const StaffDashboardView: React.FC = () => {
           {[
             { label: '학생', value: String(activeStudents.length), tab: 'students' as const },
             { label: '예정', value: String(expected.length), tab: 'timetable' as const },
-            { label: '미등원', value: String(uncheckedCount), tab: 'attendance' as const },
+            { label: '미등원', value: String(uncheckedCount), tab: 'timetable' as const },
             { label: '미보강', value: String(pendingMakeups), tab: 'makeups' as const },
             { label: '연습', value: String(pendingPracticeCount), tab: 'practice' as const },
           ].map(({ label, value, tab }) => (
@@ -112,24 +111,15 @@ export const StaffDashboardView: React.FC = () => {
         )}
       </section>
 
-      <div className="grid grid-cols-2 gap-2">
-        <button
-          type="button"
-          onClick={() => setActiveTab('attendance')}
-          className="min-h-[48px] px-2.5 py-2 rounded-xl border bg-indigo-600 border-indigo-600 text-white text-sm font-bold flex items-center justify-center gap-1.5 hover:bg-indigo-700"
-        >
-          <CheckSquare className="w-4 h-4" />
-          출결 처리
-          <ChevronRight className="w-3.5 h-3.5 text-white/70" />
-        </button>
+      <div>
         <button
           type="button"
           onClick={() => setActiveTab('timetable')}
-          className="min-h-[48px] px-2.5 py-2 rounded-xl border bg-white border-slate-200 text-slate-800 text-sm font-bold flex items-center justify-center gap-1.5 hover:border-indigo-300"
+          className="w-full min-h-[48px] px-4 py-2.5 rounded-xl border bg-indigo-600 border-indigo-600 text-white text-sm font-bold flex items-center justify-center gap-2 hover:bg-indigo-700 shadow-2xs"
         >
-          <CalendarDays className="w-4 h-4 text-indigo-600" />
-          일정
-          <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
+          <CalendarDays className="w-4 h-4" />
+          오늘 수업 시간표 확인
+          <ChevronRight className="w-3.5 h-3.5 text-white/70" />
         </button>
       </div>
 

@@ -45,30 +45,31 @@ export const Header: React.FC = () => {
   const locationLoading = supabaseOrg?.locationsStatus === 'loading';
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 sm:px-6 py-3 transition-all">
-      <div className="max-w-[1600px] mx-auto flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3 min-w-0 flex-1">
+    <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-3.5 sm:px-6 h-14 flex items-center transition-all">
+      <div className="max-w-[1600px] mx-auto w-full flex items-center justify-between gap-2 sm:gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
           <button
             type="button"
             onClick={() => setActiveTab('dashboard')}
-            className="flex items-center gap-2.5 min-w-0 text-left rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+            className="flex items-center gap-2 sm:gap-2.5 min-w-0 text-left rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
             aria-label="홈으로 이동"
           >
-            <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-xs shrink-0">
-              <Layers className="w-5 h-5" />
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-xs shrink-0">
+              <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <p className="hidden sm:block text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 사업장
               </p>
-              <h1 className="font-bold text-base sm:text-lg text-indigo-950 tracking-tight truncate hover:text-indigo-700 transition-colors leading-tight">
+              <h1 className="font-bold text-sm sm:text-base md:text-lg text-indigo-950 tracking-tight truncate hover:text-indigo-700 transition-colors leading-tight max-w-[150px] xs:max-w-[200px] sm:max-w-none">
                 {displayName}
               </h1>
               <p className="text-[11px] text-slate-400 font-normal hidden md:block">{todayStr}</p>
             </div>
           </button>
 
-          <div className="min-w-0 flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3 border-l border-slate-200 pl-2.5 sm:pl-3">
+          {/* 데스크톱 전용 지점 및 역할 정보 */}
+          <div className="hidden sm:flex min-w-0 items-center gap-1.5 sm:gap-3 border-l border-slate-200 pl-2.5 sm:pl-3">
             {supabaseOrg?.currentOrganization && (
               <div className="min-w-0">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
@@ -96,14 +97,14 @@ export const Header: React.FC = () => {
               </div>
             )}
             {portalLabel && (
-              <span className="self-start sm:self-center text-[10px] font-bold px-2 py-1 rounded-lg bg-violet-50 text-violet-700 border border-violet-200">
+              <span className="self-center text-[10px] font-bold px-2 py-1 rounded-lg bg-violet-50 text-violet-700 border border-violet-200">
                 {portalLabel}
               </span>
             )}
           </div>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {canEnterParentPortal && (
             <button
               type="button"

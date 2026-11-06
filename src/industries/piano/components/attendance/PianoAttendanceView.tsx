@@ -4,7 +4,6 @@ import {
   CheckSquare,
   ChevronLeft,
   ChevronRight,
-  Fingerprint,
   Users,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
@@ -33,7 +32,6 @@ type StatChip = {
 export const PianoAttendanceView: FC = () => {
   const { setActiveTab } = useApp();
   const {
-    pinEnabled,
     selectedDate,
     setSelectedDate,
     searchQuery,
@@ -51,7 +49,6 @@ export const PianoAttendanceView: FC = () => {
     handleSetStatus,
     handleAbsentConfirm,
     openStudent,
-    goPinCheckIn,
   } = usePianoAttendanceView();
 
   const statChips: StatChip[] = [
@@ -93,22 +90,10 @@ export const PianoAttendanceView: FC = () => {
         density="compact"
         icon={<CheckSquare className="w-6 h-6" />}
         title="출결"
-        actions={
-          pinEnabled ? (
-            <button
-              type="button"
-              onClick={goPinCheckIn}
-              className="inline-flex items-center gap-2 px-3 py-2 min-h-[44px] rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50"
-            >
-              <Fingerprint className="w-4 h-4 text-indigo-600" />
-              PIN 출석
-            </button>
-          ) : undefined
-        }
       />
 
-      {/* 요약 = 필터 (한 줄로 상태 확인·전환) */}
-      <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
+      {/* 요약 = 필터 (모바일 스와이프 칩 / 태블릿 이상 5열 그리드) */}
+      <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar sm:grid sm:grid-cols-5 pb-0.5">
         {statChips.map((chip) => {
           const active = statusFilter === chip.value;
           return (
@@ -116,14 +101,14 @@ export const PianoAttendanceView: FC = () => {
               key={chip.value}
               type="button"
               onClick={() => setStatusFilter(chip.value)}
-              className={`min-h-[56px] sm:min-h-[52px] rounded-xl border px-1 py-2 text-center transition-colors ${
+              className={`min-w-[68px] sm:min-w-0 flex-1 min-h-[52px] rounded-xl border px-2 sm:px-1 py-1.5 sm:py-2 text-center transition-colors shrink-0 ${
                 active
                   ? chip.activeClass
                   : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
               }`}
             >
               <span
-                className={`block text-[10px] sm:text-[11px] font-bold ${
+                className={`block text-[11px] font-bold whitespace-nowrap ${
                   active ? 'text-white/90' : 'text-slate-500'
                 }`}
               >
@@ -138,12 +123,12 @@ export const PianoAttendanceView: FC = () => {
       </div>
 
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-        <FilterBar className="border-0 shadow-none rounded-none border-b border-slate-100 gap-2">
+        <FilterBar className="border-0 shadow-none rounded-none border-b border-slate-100 flex-col sm:flex-row gap-2 sm:gap-3">
           <div className="flex items-center gap-1.5 w-full sm:w-auto">
             <button
               type="button"
               onClick={() => setSelectedDate((d) => shiftDateIso(d, -1))}
-              className="p-2 min-h-[44px] min-w-[44px] rounded-xl border border-slate-200 hover:bg-slate-50"
+              className="p-2 min-h-[44px] min-w-[44px] rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-center shrink-0"
               aria-label="이전 날짜"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -157,7 +142,7 @@ export const PianoAttendanceView: FC = () => {
             <button
               type="button"
               onClick={() => setSelectedDate((d) => shiftDateIso(d, 1))}
-              className="p-2 min-h-[44px] min-w-[44px] rounded-xl border border-slate-200 hover:bg-slate-50"
+              className="p-2 min-h-[44px] min-w-[44px] rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-center shrink-0"
               aria-label="다음 날짜"
             >
               <ChevronRight className="w-4 h-4" />

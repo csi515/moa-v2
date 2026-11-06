@@ -19,6 +19,7 @@ import { AccountStatusBadge } from '@/core/accounts/AccountStatusBadge';
 import { StaffInviteResultModal } from '@/core/staff/components/StaffInviteResultModal';
 import { JoinRequestsPanel } from '@/core/organizations/components/JoinRequestsPanel';
 import { PageHeader } from '@/shared/components';
+import { Modal } from '@/shared/components/ui/Modal';
 import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { Teacher, type TeacherPayType } from '@/types';
@@ -601,22 +602,31 @@ export const TeacherManagementView: React.FC = () => {
       )}
 
       {/* Teacher Form Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden">
-            <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
-              <h3 className="font-bold text-slate-900 text-base">
-                {editingTeacher ? `${labels.staff.singular} 정보 수정` : `신규 ${labels.staff.singular} 등록`}
-              </h3>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={editingTeacher ? `${labels.staff.singular} 정보 수정` : `신규 ${labels.staff.singular} 등록`}
+        maxWidth="md"
+        footer={
+          <div className="flex justify-end gap-2 w-full">
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              className="px-4 py-2.5 min-h-[44px] text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition cursor-pointer"
+            >
+              취소
+            </button>
+            <button
+              type="submit"
+              form="teacher-form"
+              className="px-5 py-2.5 min-h-[44px] text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md transition cursor-pointer"
+            >
+              저장
+            </button>
+          </div>
+        }
+      >
+        <form id="teacher-form" onSubmit={handleSubmit} className="p-5 sm:p-6 space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   선생님 성명 <span className="text-rose-500">*</span>
@@ -754,25 +764,8 @@ export const TeacherManagementView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 rounded-xl"
-                >
-                  취소
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md"
-                >
-                  저장
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+        </form>
+      </Modal>
     </div>
   );
 };

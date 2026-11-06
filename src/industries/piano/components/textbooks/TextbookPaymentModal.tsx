@@ -53,7 +53,7 @@ export const TextbookPaymentModal: React.FC<TextbookPaymentModalProps> = ({
       );
       onSuccess(res.payment.id);
     } catch (err: any) {
-      alert(err.message || '교재비 납부 처리 중 오류가 발생했습니다.');
+      alert(err.message || '교재비 결제 처리 중 오류가 발생했습니다.');
     }
   };
 
@@ -67,8 +67,8 @@ export const TextbookPaymentModal: React.FC<TextbookPaymentModalProps> = ({
               <CreditCard className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-slate-900 text-base">교재비 수납 (분할/완납)</h3>
-              <p className="text-xs text-slate-500">학생 교재비 미납 잔액에 대한 수납을 처리합니다.</p>
+              <h3 className="font-bold text-slate-900 text-base">교재비 결제</h3>
+              <p className="text-xs text-slate-500">원생의 교재비 미납 금액을 수납합니다.</p>
             </div>
           </div>
           <button
@@ -84,7 +84,7 @@ export const TextbookPaymentModal: React.FC<TextbookPaymentModalProps> = ({
           {/* Summary Banner */}
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
             <div className="flex justify-between items-center text-xs">
-              <span className="text-slate-500">학생명:</span>
+              <span className="text-slate-500">원생 이름:</span>
               <span className="font-bold text-slate-900 text-sm">{sale.studentName}</span>
             </div>
             <div className="flex justify-between items-center text-xs">
@@ -92,11 +92,11 @@ export const TextbookPaymentModal: React.FC<TextbookPaymentModalProps> = ({
               <span className="font-medium text-slate-800">{sale.textbookTitle} ({sale.quantity}권)</span>
             </div>
             <div className="flex justify-between items-center text-xs">
-              <span className="text-slate-500">판매일 / 판매금액:</span>
+              <span className="text-slate-500">지급일 / 교재비:</span>
               <span className="text-slate-700">{sale.saleDate} / ₩{sale.totalAmount.toLocaleString()}</span>
             </div>
             <div className="pt-2 border-t border-slate-200 flex justify-between items-center">
-              <span className="font-semibold text-slate-600">현재 미납 잔액:</span>
+              <span className="font-semibold text-slate-600">남은 미납액:</span>
               <span className="font-black text-rose-600 text-base">₩{sale.unpaidAmount.toLocaleString()}</span>
             </div>
           </div>

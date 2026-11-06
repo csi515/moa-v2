@@ -8,8 +8,8 @@ import { buildNavSection } from '@/core/auth/navBuilders';
 import {
   BarChart3,
   CalendarDays,
-  CheckSquare,
   CreditCard,
+  GraduationCap,
   LayoutDashboard,
   MessageSquareText,
   Settings,
@@ -20,7 +20,7 @@ const icon = (node: ReactNode) => node;
 
 /** 모바일 하단 고정 탭 (더보기 제외). 일일 핵심: 학생·일정·출결 */
 export const PIANO_MOBILE_MAIN = defineMobileMainNav({
-  tabs: ['dashboard', 'students', 'timetable', 'attendance'],
+  tabs: ['dashboard', 'students', 'timetable', 'tuition'],
 });
 
 export const PIANO_MOBILE_MAIN_TABS: readonly NavTab[] = PIANO_MOBILE_MAIN.tabs;
@@ -28,7 +28,7 @@ export const PIANO_MOBILE_MAIN_TABS: readonly NavTab[] = PIANO_MOBILE_MAIN.tabs;
 /** 모바일 더보기 — 하단 미노출 핵심 + 설정 (수납과 재무 관리 분리) */
 export const PIANO_MOBILE_MORE_TABS: readonly NavTab[] = [
   'consultations',
-  'tuition',
+  'teachers',
   'finance',
   'settings',
 ] as const;
@@ -39,7 +39,7 @@ export {
   getPianoSettingsExtras,
 } from './pianoSettingsExtras';
 
-/** 사이드바·하단 공통 — 홈/학생/일정/출결/상담/수납/재무 관리 */
+/** 사이드바·하단 공통 — 홈/학생/일정/상담/선생님/수납/재무 관리 */
 function getPianoCoreNavItems(labels: ModuleLabels, size: 'sm' | 'md'): NavMenuItem[] {
   const cls = size === 'md' ? 'w-5 h-5' : 'w-4 h-4';
   return [
@@ -54,11 +54,15 @@ function getPianoCoreNavItems(labels: ModuleLabels, size: 'sm' | 'md'): NavMenuI
       label: '일정',
       icon: icon(<CalendarDays className={cls} />),
     },
-    { tab: 'attendance', label: '출결', icon: icon(<CheckSquare className={cls} />) },
     {
       tab: 'consultations',
       label: '상담',
       icon: icon(<MessageSquareText className={cls} />),
+    },
+    {
+      tab: 'teachers',
+      label: labels.staff?.management || '선생님 관리',
+      icon: icon(<GraduationCap className={cls} />),
     },
     { tab: 'tuition', label: '수납', icon: icon(<CreditCard className={cls} />) },
     { tab: 'finance', label: '재무 관리', icon: icon(<BarChart3 className={cls} />) },
@@ -72,7 +76,7 @@ function settingsNavItem(size: 'sm' | 'md'): NavMenuItem {
 
 /**
  * 데스크탑 사이드바 — 사업주 핵심
- * 홈 / 학생 / 일정 / 출결 / 상담 / 수납 / 재무 관리 · 설정
+ * 홈 / 학생 / 일정 / 상담 / 선생님 관리 / 수납 / 재무 관리 · 설정
  */
 export function getPianoSidebarSections(labels: ModuleLabels): NavMenuSection[] {
   return [
@@ -81,7 +85,7 @@ export function getPianoSidebarSections(labels: ModuleLabels): NavMenuSection[] 
   ];
 }
 
-/** 모바일 하단 — 홈 · 학생 · 일정 · 출결 (+ 더보기) */
+/** 모바일 하단 — 홈 · 학생 · 일정 · 수납 (+ 더보기) */
 export function getPianoMainTabs(labels: ModuleLabels): NavMenuItem[] {
   const byTab = new Map(getPianoCoreNavItems(labels, 'md').map((item) => [item.tab, item]));
   return PIANO_MOBILE_MAIN_TABS.map((tab) => byTab.get(tab)!).filter(Boolean);

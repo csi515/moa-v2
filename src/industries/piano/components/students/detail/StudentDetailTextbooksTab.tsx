@@ -21,7 +21,7 @@ export const StudentDetailTextbooksTab: React.FC<StudentDetailTextbooksTabProps>
   <div className="space-y-4">
     <div className="flex items-center justify-between">
       <div>
-        <h4 className="text-sm font-bold text-slate-900">교재 구매 이력</h4>
+        <h4 className="text-sm font-bold text-slate-900">교재 지급 및 수납 이력</h4>
         <p className="text-xs text-slate-500">
           일회성 구매만 기록됩니다. 마스터 가격이 바뀌어도 과거 거래 금액은 유지됩니다. (총{' '}
           {studentSales.length}건)
@@ -31,13 +31,13 @@ export const StudentDetailTextbooksTab: React.FC<StudentDetailTextbooksTabProps>
         onClick={onOpenSaleModal}
         className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer shadow-xs"
       >
-        <Plus className="w-3.5 h-3.5" /> 새 교재 판매 등록
+        <Plus className="w-3.5 h-3.5" /> + 교재 지급/배부
       </button>
     </div>
 
     <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
       <div>
-        <span className="text-slate-400 block">교재 총 구매액</span>
+        <span className="text-slate-400 block">총 교재비</span>
         <span className="font-bold text-slate-900 text-sm">
           {formatCurrency(billingSummary.textbookBilled || 0)}
         </span>
@@ -65,12 +65,12 @@ export const StudentDetailTextbooksTab: React.FC<StudentDetailTextbooksTabProps>
     {studentSales.length === 0 ? (
       <div className="text-xs text-slate-500 p-8 text-center bg-slate-50 rounded-2xl border border-slate-200">
         <BookOpen className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-        <p className="font-medium">구매한 교재 내역이 없습니다.</p>
+        <p className="font-medium">지급한 교재가 없습니다.</p>
         <button
           onClick={onOpenSaleModal}
           className="mt-2 text-indigo-600 font-bold hover:underline inline-block"
         >
-          + 첫 교재 지급/판매 등록하기
+          + 첫 교재 지급/배부하기
         </button>
       </div>
     ) : (
@@ -97,7 +97,7 @@ export const StudentDetailTextbooksTab: React.FC<StudentDetailTextbooksTabProps>
                 </span>
               </div>
               <p className="text-slate-500">
-                판매일: {sale.saleDate} | 판매금액: <strong>{formatCurrency(sale.totalAmount)}</strong>
+                지급일: {sale.saleDate} | 교재비: <strong>{formatCurrency(sale.totalAmount)}</strong>
                 {sale.paidAmount > 0 && (
                   <span className="text-emerald-600 ml-1">
                     (수납 완료: {formatCurrency(sale.paidAmount)})

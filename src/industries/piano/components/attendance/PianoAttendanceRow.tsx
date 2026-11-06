@@ -32,8 +32,7 @@ export const PianoAttendanceRow: FC<PianoAttendanceRowProps> = ({
   onOpenStudent,
   onSetStatus,
 }) => {
-  const statusLabel =
-    !hasDayRecord && pinCheckedIn ? 'PIN 체크인' : STATUS_META[status].label;
+  const statusLabel = STATUS_META[status].label;
   const isPending = status === 'unchecked';
 
   return (
@@ -57,9 +56,6 @@ export const PianoAttendanceRow: FC<PianoAttendanceRowProps> = ({
             >
               {statusLabel}
             </span>
-            {pinCheckedIn && hasDayRecord && (
-              <span className="text-[10px] font-semibold text-indigo-500">PIN</span>
-            )}
           </div>
 
           <div className="mt-1 flex items-center gap-2 min-w-0">

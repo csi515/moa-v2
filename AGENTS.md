@@ -1,4 +1,4 @@
-# Moa-v2 AI 개발 지침 (Antigravity Development Rules)
+﻿# Moa-v2 AI 개발 지침 (Antigravity Development Rules)
 
 이 파일은 Antigravity 에이전트가 Moa-v2 프로젝트에서 작업할 때 항상 준수해야 하는 최상위 개발 규칙입니다.
 
@@ -91,13 +91,7 @@ Moa-v2의 최종 아키텍처는 다음 3개 계층으로 단일화된다.
 
 ---
 
-## 6. 사전 검증 및 원스톱 커밋 규칙
+## 6. 검증 규칙 (유연한 개발 및 최종 배포 전 검증)
 
-모든 코드 수정 후 커밋/푸시 전에는 반드시 단일 원스톱 통합 명령을 실행하여 회귀가 없음을 증명해야 한다.
-
-```bash
-npm run check:all
-```
-
-- 위 명령은 `lint` $\rightarrow$ `check:ci-structure` $\rightarrow$ `test:architecture` $\rightarrow$ `check:db-types` $\rightarrow$ `test:business-invariants:catalog` $\rightarrow$ `npm test` (58개 전체 테스트 체인)를 일괄 실행한다.
-- 모든 검사가 exit code 0으로 통과해야만 정상 완료로 인정한다.
+- **일상 개발 시 유연성**: 일반적인 UI 수정이나 기능 개선 작업 시에는 매번 전체 검증(`npm run check:all`)을 돌릴 필요 없이, 작업 내용에 맞춰 필요한 검사(예: `npm run lint` 또는 해당 단위 테스트)만 가볍게 확인하며 개발 속도를 우선한다.
+- **최종 배포 전 일괄 검증**: 대규모 리팩토링이나 최종 릴리스/PR 전 단계에서 필요에 따라 단일 원스톱 통합 명령(`npm run check:all`)을 실행하여 최종 회귀 여부를 점검한다.

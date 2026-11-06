@@ -18,6 +18,21 @@ export interface SettingsRetailCatalogItem {
   stock: number;
 }
 
+/** 회차권(이용권) 패키지 상품 규격 */
+export interface SessionPassPackage {
+  id: string;
+  name: string;        // 예: "1:1 레슨 4회권"
+  sessions: number;    // 예: 4
+  price: number;       // 예: 180000
+}
+
+/** 기본 제공 회차권 패키지 템플릿 */
+export const DEFAULT_SESSION_PASS_PACKAGES: SessionPassPackage[] = [
+  { id: 'pkg-4', name: '4회 이용권', sessions: 4, price: 180000 },
+  { id: 'pkg-8', name: '8회 이용권', sessions: 8, price: 320000 },
+  { id: 'pkg-10', name: '10회 이용권', sessions: 10, price: 400000 },
+];
+
 /** 1. 모든 업종 공통 기본 사업장 정보 */
 export interface CommonWorkplaceSettings {
   name: string;
@@ -65,6 +80,7 @@ export interface IndustryPartitionedSettings {
     defaultLessonMinutes?: number;
     attendanceAlertEnabled?: boolean;
     tuitionReminderDaysBefore?: number;
+    sessionPassPackages?: SessionPassPackage[];
   };
   /** 예약/서비스형 (필라테스, 피부 등) */
   booking?: {
@@ -101,6 +117,7 @@ export interface AcademySettings extends UnifiedOrganizationSettings {
   consultationSlotMinutes?: number;
   attendanceAlertEnabled?: boolean;
   tuitionReminderDaysBefore?: number;
+  sessionPassPackages?: SessionPassPackage[];
   retailCatalog?: SettingsRetailCatalogItem[];
   skinRetailCoreMigratedAt?: string | null;
   skinRetailCoreMigratedAtByOrg?: Record<string, string>;

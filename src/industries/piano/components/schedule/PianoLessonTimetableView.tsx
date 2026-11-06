@@ -1,14 +1,11 @@
-import { useMemo, type FC } from 'react';
-import { Clock, Filter, UserPlus, Users, X } from 'lucide-react';
+import { useState, useMemo, type FC } from 'react';
+import { Filter, UserPlus, Users, X } from 'lucide-react';
 import { EmptyState, UnifiedScheduleCalendar, type CalendarEventItem } from '@/shared/components';
+import type { CalendarViewMode } from '@/shared/components/calendar';
 import { FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import type { ClassItem } from '@/types';
 import { usePianoNavigate } from '@/industries/piano/layout/usePianoNavigate';
-import {
-  PianoTimetableStudentPool,
-  DND_STUDENT_MIME,
-  type DragPlacementPayload,
-} from './PianoTimetablePanels';
+import type { DragPlacementPayload } from './PianoTimetablePanels';
 import {
   TIMETABLE_DAYS,
   resolveTimetableSlots,
@@ -21,13 +18,14 @@ import { PianoTimetableStudentPicker } from './PianoTimetableStudentPicker';
 import { usePianoLessonTimetable } from './usePianoLessonTimetable';
 
 /**
- * 피아노 수업 시간표 — 요일·시간대에 「누가 오는지」배치·이동.
+ * 피아노 수업 시간표 — 요일·시간대에 「누가 오는지」 배치·이동.
  * ClassItem + student.classIds 재사용. 출결(DAY_ATTENDANCE)은 절대 변경하지 않음.
- * 30분 단위 기본 그리드(09:00~20:30) + 등록된 반의 시작시각(예: 21:00)을 행으로 확장.
- * 여러 요일 반은 표시만 되며 반 관리에서 수정.
+ * 상단 드래그 풀 제거, 클릭 기반 학생 검색 배치 및 정기 반복 등록 지원.
  */
 export const PianoLessonTimetableView: FC = () => {
   const navigate = usePianoNavigate();
+  const [calendarView, setCalendarView] = useState<CalendarViewMode>('week');
+
   const {
     useDragGrid,
     todayDay,
@@ -51,6 +49,7 @@ export const PianoLessonTimetableView: FC = () => {
     teacherSections,
     placedIds,
     placeStudent,
+    placeStudentWithRecurrence,
     movePlacement,
     handleDropStudent,
     handleRemove,
@@ -86,7 +85,9 @@ export const PianoLessonTimetableView: FC = () => {
       return (
         <UnifiedScheduleCalendar<SlotPlacement>
           mode="recurring_timetable"
-          availableViews={['week', 'day']}
+          availableViews={['month', 'week', 'day']}
+          currentView={calendarView}
+          onViewChange={setCalendarView}
           events={sectionEvents}
           onEventMove={async (event, target) => {
             if (!target.dayOfWeek) return false;
@@ -98,15 +99,6 @@ export const PianoLessonTimetableView: FC = () => {
             };
             movePlacement(payload, target.dayOfWeek, target.startTime, sectionTeacherId);
             return true;
-          }}
-          onExternalDrop={(e, target) => {
-            if (!target.dayOfWeek) return;
-            const studentId =
-              e.dataTransfer.getData(DND_STUDENT_MIME) || e.dataTransfer.getData('text/plain');
-            if (studentId) {
-              const student = students.find((s) => s.id === studentId);
-              if (student) placeStudent(student, target.dayOfWeek, target.startTime, sectionTeacherId);
-            }
           }}
           renderEventCard={(event) => {
             const p = event.raw;
@@ -193,7 +185,7 @@ export const PianoLessonTimetableView: FC = () => {
   }
 
   return (
-    <div className="space-y-4 pb-2">
+    <div className="space-y-3 pb-2">
       {pendingStudentId && (
         <div className="rounded-2xl border border-indigo-200 bg-indigo-50/90 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-indigo-950 font-bold shadow-xs">
           <div className="flex items-center gap-2">
@@ -210,12 +202,14 @@ export const PianoLessonTimetableView: FC = () => {
         </div>
       )}
 
+      {/* 필터 및 뷰 전환 툴바 */}
       <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-slate-200/80 shadow-xs flex flex-wrap items-center gap-2">
         <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500">
           <Filter className="w-4 h-4 text-indigo-600" />
-          <span>보기</span>
+          <span>필터</span>
         </div>
 
+        {/* [전체 | 선생님별] 그룹 모드 스위처 */}
         <div className="flex p-1 bg-slate-100 rounded-xl text-xs font-bold text-slate-500">
           <button
             type="button"
@@ -239,6 +233,7 @@ export const PianoLessonTimetableView: FC = () => {
           </button>
         </div>
 
+        {/* 선생님 선택 드롭다운 (원장 모드 시) */}
         {!isScoped && (
           <select
             value={teacherFilter}
@@ -255,20 +250,50 @@ export const PianoLessonTimetableView: FC = () => {
           </select>
         )}
 
+        {/* [ 월 | 주 | 일 ] 달력 뷰 스위처 */}
+        <div className="flex p-1 bg-slate-100 rounded-xl text-xs font-bold text-slate-500 sm:ml-2">
+          <button
+            type="button"
+            onClick={() => setCalendarView('month')}
+            className={`px-2.5 py-1.5 min-h-[40px] rounded-lg transition-all ${
+              calendarView === 'month' ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
+            }`}
+          >
+            월
+          </button>
+          <button
+            type="button"
+            onClick={() => setCalendarView('week')}
+            className={`px-2.5 py-1.5 min-h-[40px] rounded-lg transition-all ${
+              calendarView === 'week' ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
+            }`}
+          >
+            주
+          </button>
+          <button
+            type="button"
+            onClick={() => setCalendarView('day')}
+            className={`px-2.5 py-1.5 min-h-[40px] rounded-lg transition-all ${
+              calendarView === 'day' ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
+            }`}
+          >
+            일
+          </button>
+        </div>
+
         <span className="text-xs text-slate-500 font-semibold tabular-nums ml-auto">
           반 {visibleClasses.length}
           {layoutMode === 'byTeacher' ? ` · 선생님 ${teacherSections.length}` : ''}
         </span>
       </div>
 
-      {useDragGrid && (
-        <PianoTimetableStudentPool
-          students={students}
-          placedIds={placedIds}
-          highlightStudentId={pendingStudentId}
-        />
-      )}
+      {/* 클릭 배치 안내 문구 */}
+      <div className="flex items-center gap-2 text-xs text-slate-600 bg-indigo-50/60 border border-indigo-100/80 rounded-xl px-3.5 py-2">
+        <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 shrink-0" />
+        <span>원하는 요일·시간 칸을 클릭하여 학생을 배치하세요.</span>
+      </div>
 
+      {/* 시간표 렌더링 (선생님별 또는 전체) */}
       {layoutMode === 'byTeacher' ? (
         <div className="space-y-5">
           {teacherSections.length === 0 ? (
@@ -291,17 +316,29 @@ export const PianoLessonTimetableView: FC = () => {
         renderTimetable(visibleClasses)
       )}
 
+      {/* 클릭 시 오픈되는 학생 검색 및 정기 반복 배치 모달 */}
       <PianoTimetableStudentPicker
         isOpen={!!pickerSlot}
-        title="학생 선택"
+        title="학생 시간표 배치"
         subtitle={
-          pickerSlot ? `${pickerSlot.day}요일 ${pickerSlot.startTime}에 배치` : undefined
+          pickerSlot ? `${pickerSlot.day}요일 ${pickerSlot.startTime} 배치` : undefined
         }
         students={students}
         searchQuery={pickerQuery}
         onSearchChange={setPickerQuery}
         excludeIds={pickerExcludeIds}
+        initialDay={pickerSlot?.day}
+        startTime={pickerSlot?.startTime}
         onClose={() => setPickerSlot(null)}
+        onConfirmRecurrence={(student, days, startTime) => {
+          if (!pickerSlot) return;
+          placeStudentWithRecurrence(
+            student,
+            days,
+            startTime,
+            pickerSlot.preferredTeacherId
+          );
+        }}
         onSelect={(student) => {
           if (!pickerSlot) return;
           placeStudent(

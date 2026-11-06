@@ -23,8 +23,7 @@ import { enrollmentModeLabel } from './form/enrollmentFormCopy';
 import { StudentFormModal } from './StudentFormModal';
 import { StudentDetailModal } from './StudentDetailModal';
 import { getStudentStatusBadge } from '@/utils/formatters';
-import { FilterBar, SearchField, EmptyState } from '@/shared/components';
-import { ExportProtectionModal } from '@/components/security/ExportProtectionModal';
+import { FilterBar, SearchField, EmptyState, PaginationBar } from '@/shared/components';
 import { DENSITY } from '@/shared/styles/density';
 import {
   Users,
@@ -34,11 +33,8 @@ import {
   Bus,
   SlidersHorizontal,
   FileSpreadsheet,
-  Download,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
-import { getOrganizationId } from '@/services/adapters';
-import { interceptExportWithAudit } from '@/core/audit/auditExportInterceptor';
 import { StudentBulkImportModal } from './StudentBulkImportModal';
 import {
   WEEKDAY_FILTER_OPTIONS,
@@ -86,7 +82,6 @@ export const StudentListView: React.FC = () => {
   const staffFilterName = rosterList.staffFilterLabel ?? labels.staff.singular;
   const controlMinClass = rosterList.controlMinHeight === 44 ? 'min-h-[44px]' : 'min-h-[36px]';
   const { isScoped, staffId, scopeStudents } = useStaffScope();
-  const [exportOpen, setExportOpen] = useState(false);
 
   const students = useMemo(
     () => scopeStudents(StudentService.getStudents()),
@@ -220,6 +215,7 @@ export const StudentListView: React.FC = () => {
     setStatusFilter('active');
     setShuttleFilter('ALL');
     setSortBy('joinDateDesc');
+    setCurrentPage(1);
   };
 
   const handleOpenDetail = (student: Student) => setSelectedStudentId(student.id);
@@ -251,66 +247,25 @@ export const StudentListView: React.FC = () => {
     { value: 'ALL', label: '전체', count: students.length },
   ];
 
-  const handleExportAudited = async (reason: string) => {
-    const orgId = getOrganizationId() || 'local-org';
-    try {
-      await interceptExportWithAudit(
-        {
-          organizationId: orgId,
-          entityType: 'customer',
-          action: 'customer_roster_excel_export',
-          metadata: { reason },
-        },
-        () => {
-          const headers = ['이름', '연락처', '상태', '등록일자'];
-          const rows = filteredStudents.map((s) => [
-            `"${s.name}"`,
-            `"${s.phone || ''}"`,
-            `"${s.status || ''}"`,
-            `"${s.createdAt || ''}"`,
-          ]);
-          const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
-          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `회원명부_${new Date().toISOString().slice(0, 10)}.csv`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-          showToast('보안 감사 로그가 기록되었으며 회원 명부가 다운로드되었습니다.', 'success');
-        }
-      );
-    } catch (err: unknown) {
-      showToast(err instanceof Error ? err.message : '엑셀 내보내기에 실패했습니다.', 'error');
-    }
-  };
-
   const isTrulyEmpty = students.length === 0;
   const isFilterEmpty = !isTrulyEmpty && filteredStudents.length === 0;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, teacherFilter, classFilter, weekdayFilter, statusFilter, shuttleFilter, sortBy]);
+
+  const paginatedStudents = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredStudents.slice(start, start + pageSize);
+  }, [filteredStudents, currentPage, pageSize]);
+
 
   return (
     <div className={DENSITY.pageStack}>
-      <ExportProtectionModal
-        open={exportOpen}
-        onClose={() => setExportOpen(false)}
-        onConfirm={(_pin, reason) => {
-          setExportOpen(false);
-          void handleExportAudited(reason);
-        }}
-      />
       {!isScoped && (
         <div className="flex justify-end gap-2 flex-wrap">
-          <button
-            type="button"
-            onClick={() => setExportOpen(true)}
-            className="px-4 py-2.5 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition-all border border-slate-200 flex items-center justify-center gap-2 cursor-pointer"
-            title="대량 개인정보 반출 시 불변 감사 로그(Audit Log)가 자동 기록됩니다."
-          >
-            <Download className="w-4 h-4 text-slate-500" />
-            명부 다운로드 (감사 기록)
-          </button>
           <button
             type="button"
             onClick={() => setIsBulkImportOpen(true)}
@@ -342,7 +297,7 @@ export const StudentListView: React.FC = () => {
           className="w-full"
         />
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 w-full">
           {statusChips.map((chip) => {
             const isActive = statusFilter === chip.value;
             return (
@@ -350,7 +305,7 @@ export const StudentListView: React.FC = () => {
                 key={chip.value}
                 type="button"
                 onClick={() => setStatusFilter(chip.value)}
-                className={`${controlMinClass} px-3 rounded-lg text-xs font-bold transition-colors ${
+                className={`${controlMinClass} px-3 rounded-lg text-xs font-bold transition-colors whitespace-nowrap shrink-0 ${
                   isActive
                     ? 'bg-indigo-600 text-white'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -363,7 +318,7 @@ export const StudentListView: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowAdvancedFilters((prev) => !prev)}
-            className={`${controlMinClass} ml-auto px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors ${
+            className={`${controlMinClass} ml-auto px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 ${
               showAdvancedFilters || advancedFilterCount > 0
                 ? 'bg-slate-800 text-white'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -578,7 +533,7 @@ export const StudentListView: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {filteredStudents.map((st) => {
+                  {paginatedStudents.map((st) => {
                     const badge = getStudentStatusBadge(st.status);
                     const att = getTodayAttendanceSignal(st.id, todayAttendanceByStudent);
                     const bill = getMonthBillingSignal(billingByStudent.get(st.id));
@@ -669,7 +624,7 @@ export const StudentListView: React.FC = () => {
 
           {/* Mobile: compact cards */}
           <div className="md:hidden space-y-2">
-            {filteredStudents.map((st) => {
+            {paginatedStudents.map((st) => {
               const badge = getStudentStatusBadge(st.status);
               const att = getTodayAttendanceSignal(st.id, todayAttendanceByStudent);
               const bill = getMonthBillingSignal(billingByStudent.get(st.id));
@@ -746,6 +701,18 @@ export const StudentListView: React.FC = () => {
               );
             })}
           </div>
+
+          <PaginationBar
+            currentPage={currentPage}
+            totalItems={filteredStudents.length}
+            pageSize={pageSize}
+            pageSizeOptions={[15, 30, 50]}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setCurrentPage(1);
+            }}
+          />
         </>
       )}
 

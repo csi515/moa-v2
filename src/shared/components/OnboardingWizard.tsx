@@ -1,3 +1,4 @@
+// Note: PIN 키오스크 출결 단계는 숨김/비활성화 처리됨 (향후 복구 시 isAttendanceModuleEnabled 참조)
 import React, { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { StorageService } from '@/services/storage';
@@ -9,11 +10,6 @@ import {
   formatOrganizationAddress,
   type OrganizationAddressValue,
 } from '@/core/address';
-import {
-  isAttendanceModuleEnabled,
-  OnboardingAttendanceChoice,
-  withAttendanceModuleEnabled,
-} from '@/capabilities/attendance';
 import { getIndustryType } from '@/services/adapters/storageContext';
 import { getBusinessRule } from '@/app/presets/presetBusinessRules';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
@@ -25,7 +21,6 @@ import {
   GraduationCap,
   Wallet,
   BookOpen,
-  KeyRound,
   MessageSquareText,
   UserPlus,
   Sparkles,
@@ -68,7 +63,6 @@ const STEP_ICONS = [
   GraduationCap,
   Wallet,
   BookOpen,
-  KeyRound,
   MessageSquareText,
   UserPlus,
 ] as const;
@@ -125,13 +119,6 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
 
   const [textbooks, setTextbooks] = useState<DraftTextbook[]>([]);
   const [draftTextbook, setDraftTextbook] = useState({ title: '', price: '15000' });
-
-  const [pinAttendanceEnabled, setPinAttendanceEnabled] = useState(() =>
-    isAttendanceModuleEnabled(
-      saved,
-      org?.currentOrganization?.industry_type ?? getIndustryType()
-    )
-  );
 
   useEffect(() => {
     StorageService.setOnboardingProgress({ status: 'in_progress', step });
@@ -318,24 +305,6 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       showToast(`${savedCount}권의 교재가 등록되었습니다.`, 'success');
     }
     goNext();
-  };
-
-  const handleAttendanceNext = async () => {
-    setIsSaving(true);
-    try {
-      const next = withAttendanceModuleEnabled(StorageService.getSettings(), pinAttendanceEnabled);
-      StorageService.saveSettings(next);
-      if (org?.currentOrganization) {
-        await orgService.updateOrganization(org.currentOrganization.id, {
-          settings: { features: next.features },
-        });
-      }
-      goNext();
-    } catch (err) {
-      showToast(err instanceof Error ? err.message : '출결 설정 저장 중 오류가 발생했습니다.', 'error');
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   const openConsultationSettings = () => {
@@ -760,19 +729,9 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             </div>
           )}
 
-          {step === 5 && (
-            <div className="p-6 space-y-4">
-              <OnboardingAttendanceChoice
-                enabled={pinAttendanceEnabled}
-                onChange={setPinAttendanceEnabled}
-              />
-              {footerNav({
-                onNext: () => void handleAttendanceNext(),
-              })}
-            </div>
-          )}
 
-          {step === 6 && (
+
+          {step === 5 && (
             <div className="p-6 space-y-4">
               <p className="text-sm text-slate-500">
                 상담 예약 가능 시간은 설정에서 관리합니다. QR·예약 화면은 그대로 사용하며, 이
@@ -796,7 +755,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             </div>
           )}
 
-          {step === 7 && (
+          {step === 6 && (
             <div className="p-6 space-y-5 text-center">
               <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto">
                 <UserPlus className="w-8 h-8 text-emerald-600" />

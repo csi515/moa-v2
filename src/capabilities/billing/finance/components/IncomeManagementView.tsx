@@ -14,6 +14,23 @@ import { TrendingUp, Plus, Trash2, Edit, X, Save, ShieldAlert } from 'lucide-rea
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import type { IncomeEntry } from '@/capabilities/billing/finance/types';
 
+
+function getLinkedSourceBadge(sourceType?: string): string | null {
+  if (sourceType === 'tuition') return '수강료 연동';
+  if (sourceType === 'textbook') return '교재 연동';
+  if (sourceType === 'session_pass') return '회차권 연동';
+  if (sourceType === 'retail') return '상품 판매';
+  return null;
+}
+
+function getLinkedSourceShort(sourceType?: string): string | null {
+  if (sourceType === 'tuition') return '수강료';
+  if (sourceType === 'textbook') return '교재';
+  if (sourceType === 'session_pass') return '회차권';
+  if (sourceType === 'retail') return '상품';
+  return null;
+}
+
 export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const { industry, isOwner, isAdmin, canPermission } = usePermissions();
   const hasFinanceAccess = isOwner || isAdmin || canPermission('finance.read');
@@ -255,9 +272,9 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                       <td className="py-3.5 px-4 font-semibold text-slate-900">
                         <span className="inline-flex flex-wrap items-center gap-1.5">
                           {entry.description}
-                          {(entry.sourceType === 'tuition' || entry.sourceType === 'textbook' || entry.sourceType === 'retail') && (
+                          {getLinkedSourceBadge(entry.sourceType) && (
                             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">
-                              {entry.sourceType === 'tuition' ? '수강료 연동' : entry.sourceType === 'textbook' ? '교재 연동' : '상품 판매'}
+                              {getLinkedSourceBadge(entry.sourceType)}
                             </span>
                           )}
                         </span>
@@ -308,9 +325,9 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                   <div>
                     <p className="font-bold text-slate-900 text-sm">
                       {entry.description}
-                      {(entry.sourceType === 'tuition' || entry.sourceType === 'textbook' || entry.sourceType === 'retail') && (
+                      {getLinkedSourceShort(entry.sourceType) && (
                         <span className="ml-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">
-                          {entry.sourceType === 'tuition' ? '수강료' : entry.sourceType === 'textbook' ? '교재' : '상품'}
+                          {getLinkedSourceShort(entry.sourceType)}
                         </span>
                       )}
                     </p>

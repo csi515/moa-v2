@@ -1,5 +1,4 @@
-import React, { useMemo, useState } from 'react';
-import { showToast, triggerRefresh } from '@/shared/feedback/uiFeedback';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useAppNavigation } from '@/shared/navigation/useAppNavigation';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useStorageRefresh } from '@/hooks';
@@ -31,6 +30,11 @@ export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded
   const hasFinanceAccess = isOwner || isAdmin || canPermission('finance.read');
   const refreshKey = useStorageRefresh('finance');
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
+
+  useEffect(() => {
+    // 사용자 화면에 토스트나 팝업을 띄우지 않고 조용히 누락 건 자동 점검 및 보정
+    billingStorage.backfillBillingLinkedIncome();
+  }, []);
 
   const summary = useMemo(
     () => billingStorage.getFinanceSummary(industry),
@@ -186,28 +190,6 @@ export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded
         )}
       </div>
 
-      {showLinkedBillingIncome && (
-        <div className="bg-indigo-50/60 rounded-2xl p-3.5 border border-indigo-100 space-y-3">
-          <p className="text-xs text-indigo-800 leading-relaxed">
-            수강료·교재 납부는 납부일 기준으로 수입 원장에 연동됩니다. 수입 관리에서는 일반 수입(대관
-            등)을 직접 등록할 수 있습니다.
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              const result = billingStorage.backfillBillingLinkedIncome();
-              triggerRefresh();
-              showToast(
-                `수납 수입 동기화 완료 (월회비 ${result.tuitionCreated}건 · 교재 ${result.textbookCreated}건)`,
-                'success'
-              );
-            }}
-            className="w-full sm:w-auto min-h-[44px] px-4 text-xs font-bold rounded-xl bg-white border border-indigo-200 text-indigo-800 hover:bg-indigo-50"
-          >
-            과거 수납 → 수입 원장 동기화
-          </button>
-        </div>
-      )}
     </div>
   );
 };

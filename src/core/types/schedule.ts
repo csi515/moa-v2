@@ -71,6 +71,8 @@ export interface SessionPass {
   purchasedAt: string;
   expiresAt?: string;
   memo?: string;
+  /** 판매/결제 금액 */
+  price?: number;
 }
 
 /** 시간대 모집 수동 마감 (수업 + 강사 + 시작시각) */

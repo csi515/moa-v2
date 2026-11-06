@@ -4,41 +4,51 @@ import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import type { NavTab } from '@/shared/navigation/navigationTypes';
 import { PageHeader, SegmentedControl } from '@/shared/components';
 import { WorkplaceSettingsView } from './WorkplaceSettingsView';
-import { TeacherManagementView } from '@/core/staff/components/TeacherManagementView';
-import { ParentNoticeView } from '@/core/notices';
-import { MyAccountView } from '@/core/account';
+import { BillingSettingsView } from './BillingSettingsView';
+import { LessonToolsSettingsView } from './LessonToolsSettingsView';
 
-export type SettingsHubSegment = 'workplace' | 'staff' | 'notices' | 'account' | 'extras';
+export type SettingsHubSegment = 'workplace' | 'billing' | 'lessons';
 
-const SEGMENT_TO_TAB: Record<Exclude<SettingsHubSegment, 'extras'>, NavTab> = {
-  workplace: 'settings',
-  staff: 'teachers',
-  notices: 'notices',
-  account: 'account',
-};
-
-function tabToSegment(tab: string): Exclude<SettingsHubSegment, 'extras'> {
-  if (tab === 'teachers' || tab === 'instructors') return 'staff';
-  if (tab === 'notices') return 'notices';
-  if (tab === 'account') return 'account';
-  return 'workplace';
-}
-
-/** 설정 허브 — 사업장·직원·안내·계정 (+ 부가 링크) */
-export const SettingsHubView: FC<{
+export interface SettingsHubViewProps {
   staffView?: FC;
   staffTab?: NavTab;
   extras?: { tab: NavTab; label: string }[];
   workplaceLabel?: string;
   staffLabel?: string;
-}> = ({
-  staffView: StaffView = TeacherManagementView,
-  staffTab = 'teachers',
+  feeLabel?: string;
+}
+
+function tabToSegment(tab: string): SettingsHubSegment {
+  if (tab === 'billing' || tab === 'tuition' || tab === 'unpaid') return 'billing';
+  if (
+    tab === 'practice-rooms' ||
+    tab === 'practice' ||
+    tab === 'assignments' ||
+    tab === 'classes' ||
+    tab === 'textbooks' ||
+    tab === 'curriculum' ||
+    tab === 'resources' ||
+    tab === 'song-stamps' ||
+    tab === 'recitals' ||
+    tab === 'achievements' ||
+    tab === 'reports' ||
+    tab === 'bookings'
+  ) {
+    return 'lessons';
+  }
+  return 'workplace';
+}
+
+/**
+ * 3대 핵심 카테고리화 설정 허브:
+ * [학원 기본·시설] - [수강료·수납] - [수업·레슨 도구]
+ */
+export const SettingsHubView: FC<SettingsHubViewProps> = ({
   extras = [],
-  workplaceLabel = '사업장',
-  staffLabel = '직원',
+  workplaceLabel = '학원',
+  feeLabel = '수강료',
 }) => {
-  const { activeTab, setActiveTab } = useApp();
+  const { activeTab } = useApp();
   const tabSegment = useMemo(() => tabToSegment(activeTab), [activeTab]);
   const [uiSegment, setUiSegment] = useState<SettingsHubSegment>(tabSegment);
 
@@ -46,66 +56,43 @@ export const SettingsHubView: FC<{
     setUiSegment(tabSegment);
   }, [tabSegment]);
 
-  const options = useMemo(() => {
-    const base: { value: SettingsHubSegment; label: string }[] = [
-      { value: 'workplace', label: workplaceLabel },
-      { value: 'staff', label: staffLabel },
-      { value: 'notices', label: '안내' },
-      { value: 'account', label: '계정' },
-    ];
-    if (extras.length > 0) base.push({ value: 'extras', label: '부가' });
-    return base;
-  }, [extras.length, staffLabel, workplaceLabel]);
-
-  const handleChange = (next: SettingsHubSegment) => {
-    if (next === 'extras') {
-      setUiSegment('extras');
-      return;
-    }
-    setUiSegment(next);
-    if (next === 'staff') setActiveTab(staffTab);
-    else setActiveTab(SEGMENT_TO_TAB[next]);
-  };
+  const options = useMemo(() => [
+    { value: 'workplace' as const, label: `${workplaceLabel} 기본·시설` },
+    { value: 'billing' as const, label: `${feeLabel}·수납` },
+    { value: 'lessons' as const, label: '수업·레슨 도구' },
+  ], [workplaceLabel, feeLabel]);
 
   let body: ReactNode = null;
-  if (uiSegment === 'extras') {
-    body = (
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {extras.map((item) => (
-          <button
-            key={item.tab}
-            type="button"
-            onClick={() => setActiveTab(item.tab)}
-            className="text-left px-4 py-3.5 min-h-[44px] rounded-2xl border border-slate-200 bg-white hover:border-indigo-200 hover:bg-indigo-50/40 transition-colors"
-          >
-            <span className="text-sm font-bold text-slate-900">{item.label}</span>
-          </button>
-        ))}
-      </div>
-    );
-  } else if (uiSegment === 'workplace') body = <WorkplaceSettingsView />;
-  else if (uiSegment === 'staff') body = <StaffView />;
-  else if (uiSegment === 'notices') body = <ParentNoticeView />;
-  else body = <MyAccountView />;
+  if (uiSegment === 'workplace') {
+    body = <WorkplaceSettingsView />;
+  } else if (uiSegment === 'billing') {
+    body = <BillingSettingsView />;
+  } else {
+    body = <LessonToolsSettingsView extras={extras} />;
+  }
 
   return (
     <div className="space-y-4 pb-4">
       <PageHeader
         density="compact"
         icon={<Settings className="w-6 h-6" />}
-        title="설정"
+        title={`${workplaceLabel} 운영 설정`}
         actions={
-          <SegmentedControl
-            value={uiSegment}
-            options={options}
-            onChange={handleChange}
-            aria-label="설정 메뉴"
-            fullWidth
-            className="w-full sm:w-auto min-w-[280px]"
-          />
+          <div className="w-full sm:w-auto overflow-x-auto no-scrollbar -mx-1 px-1 py-0.5">
+            <SegmentedControl
+              value={uiSegment}
+              options={options}
+              onChange={(next) => setUiSegment(next as SettingsHubSegment)}
+              aria-label="설정 카테고리 메뉴"
+              fullWidth
+              className="w-full sm:w-auto min-w-[320px]"
+            />
+          </div>
         }
       />
       {body}
     </div>
   );
 };
+
+export default SettingsHubView;

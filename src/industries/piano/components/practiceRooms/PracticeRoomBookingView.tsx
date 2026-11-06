@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect, useCallback, type FC, type FormEvent } from 'react';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { ChevronLeft, ChevronRight, Plus, DoorOpen, Calendar as CalendarIcon } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { StudentService } from '@/core/students';
@@ -26,7 +27,6 @@ import {
 } from '@/core/customer/services/practiceRoomReservationService';
 import { removeById, upsertById } from '@/shared/utils/listUpdate';
 import { PracticeRoomCalendarPanel } from './PracticeRoomCalendarPanel';
-import { PracticeRoomStatusGrid } from '@/core/customer/components/PracticeRoomStatusGrid';
 import {
   calendarPeriodLabel,
   rangeForMode,
@@ -58,32 +58,65 @@ function toConflictBookings(rows: RoomReservationRow[]): PracticeRoomBooking[] {
 }
 
 const VIEW_OPTIONS: Array<{ value: PracticeRoomCalendarMode; label: string }> = [
-  { value: 'day', label: '일' },
-  { value: 'week', label: '주' },
-  { value: 'month', label: '월' },
+  { value: 'month', label: '월간 (Month)' },
+  { value: 'week', label: '주간 (Week)' },
+  { value: 'day', label: '일간 (Day)' },
 ];
 
 /**
- * 스태프 연습실 — canonical `room_reservations` + 일/주/월 캘린더.
+ * 연습실 예약 뷰어 — 공간 점유 현황 중심의 월/주/일 타임라인 캘린더.
+ * 불필요한 인원별 체크/명단 관리를 제거하고 슬롯 기반 예약에 집중.
  */
 export const PracticeRoomBookingView: FC = () => {
   const { showToast, openConfirmDialog } = useApp();
   const { currentOrganization } = useOrganization();
   const orgId = currentOrganization?.id;
 
-  const [viewMode, setViewMode] = useState<PracticeRoomCalendarMode>('week');
-  const [selectedDate, setSelectedDate] = useState(todayIsoDate());
+  // 1. 상태와 URL 동기화 (?view=week&date=YYYY-MM-DD)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewParam = searchParams.get('view') as PracticeRoomCalendarMode | null;
+  const viewMode: PracticeRoomCalendarMode =
+    viewParam === 'month' || viewParam === 'week' || viewParam === 'day'
+      ? viewParam
+      : 'week';
+
+  const dateParam = searchParams.get('date');
+  const selectedDate = dateParam || todayIsoDate();
+
+  const updateUrlParams = useCallback(
+    (patch: { view?: PracticeRoomCalendarMode; date?: string }) => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          if (patch.view) next.set('view', patch.view);
+          if (patch.date) next.set('date', patch.date);
+          return next;
+        },
+        { replace: true }
+      );
+    },
+    [setSearchParams]
+  );
+
+  const handleViewChange = (mode: PracticeRoomCalendarMode) => {
+    updateUrlParams({ view: mode });
+  };
+
+  const handleSelectDate = (date: string) => {
+    updateUrlParams({ date });
+  };
+
+  // 2. 예약 데이터 및 룸 목록 상태
   const [modalOpen, setModalOpen] = useState(false);
   const [studentId, setStudentId] = useState('');
   const [roomId, setRoomId] = useState('');
-  const [startTime, setStartTime] = useState('16:00');
+  const [startTime, setStartTime] = useState('14:00');
   const [endTime, setEndTime] = useState(() =>
-    addMinutesToClock('16:00', PIANO_DEFAULT_LESSON_MINUTES)
+    addMinutesToClock('14:00', PIANO_DEFAULT_LESSON_MINUTES)
   );
   const [memo, setMemo] = useState('');
   const [rooms, setRooms] = useState<PracticeRoomRow[]>([]);
   const [bookings, setBookings] = useState<RoomReservationRow[]>([]);
-  const [pendingRequests, setPendingRequests] = useState<RoomReservationRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -115,14 +148,12 @@ export const PracticeRoomBookingView: FC = () => {
           name,
         });
       }
-      const [roomList, rangeList, pending] = await Promise.all([
+      const [roomList, rangeList] = await Promise.all([
         practiceRoomReservationService.listRooms(orgId),
         practiceRoomReservationService.listByRange(orgId, period.start, period.end),
-        practiceRoomReservationService.listPending(orgId),
       ]);
       setRooms(roomList.filter((r) => r.is_active));
       setBookings(rangeList);
-      setPendingRequests(pending);
     } catch (err) {
       showToast(
         err instanceof Error ? err.message : '연습실 데이터를 불러오지 못했습니다.',
@@ -137,13 +168,18 @@ export const PracticeRoomBookingView: FC = () => {
     void reload();
   }, [reload]);
 
-  const openCreate = (preset?: {
+  // 빈 타임 슬롯 클릭 시 호출되는 간이 예약 모달 오픈
+  const openCreateModal = (preset?: {
     roomId?: string;
+    date?: string;
     startTime?: string;
     endTime?: string;
   }) => {
     const lessonMinutes = resolvePianoLessonMinutes(settings.defaultLessonMinutes);
-    const start = preset?.startTime || '16:00';
+    const start = preset?.startTime || '14:00';
+    if (preset?.date) {
+      handleSelectDate(preset.date);
+    }
     setStudentId(students[0]?.id || '');
     setRoomId(preset?.roomId || rooms[0]?.id || '');
     setStartTime(start);
@@ -154,10 +190,9 @@ export const PracticeRoomBookingView: FC = () => {
 
   const persistBooking = async () => {
     if (!orgId) return;
-    const student = students.find((s) => s.id === studentId);
     const room = rooms.find((r) => r.id === roomId);
-    if (!student || !room) {
-      showToast('학생과 연습실을 선택해 주세요.', 'warning');
+    if (!room) {
+      showToast('연습실을 선택해 주세요.', 'warning');
       return;
     }
     if (endTime <= startTime) {
@@ -165,48 +200,58 @@ export const PracticeRoomBookingView: FC = () => {
       return;
     }
 
+    const student = students.find((s) => s.id === studentId);
+
     setSaving(true);
     try {
       const reservationId = await practiceRoomReservationService.createStaff({
         organizationId: orgId,
         roomId: room.id,
-        customerId: student.id,
+        customerId: student?.id,
         startsAt: toSeoulIso(selectedDate, startTime),
         endsAt: toSeoulIso(selectedDate, endTime),
         memo: memo.trim() || undefined,
       });
+
       const created: RoomReservationRow = {
         id: reservationId,
         organization_id: orgId,
         room_id: room.id,
-        customer_id: student.id,
+        customer_id: student?.id || '',
         requested_by: '',
         starts_at: toSeoulIso(selectedDate, startTime),
         ends_at: toSeoulIso(selectedDate, endTime),
         status: 'approved',
         memo: memo.trim() || undefined,
         practice_rooms: { name: room.name },
-        customers: { name: student.name },
+        customers: student ? { name: student.name } : null,
       };
+
       if (selectedDate >= period.start && selectedDate <= period.end) {
         setBookings((prev) => upsertById(prev, created));
       }
-      notifyParentPracticeRoomBooked(
-        {
-          studentId: student.id,
-          studentName: student.name,
-          room: room.name,
-          date: selectedDate,
-          startTime,
-          endTime,
-        },
-        student.parentPhone
+
+      if (student) {
+        notifyParentPracticeRoomBooked(
+          {
+            studentId: student.id,
+            studentName: student.name,
+            room: room.name,
+            date: selectedDate,
+            startTime,
+            endTime,
+          },
+          student.parentPhone
+        );
+      }
+
+      showToast(
+        `${room.name} (${startTime}~${endTime}) 연습실 예약이 완료되었습니다.`,
+        'success'
       );
-      showToast(`${student.name} 학생 연습실이 예약되었습니다.`, 'success');
       setModalOpen(false);
-      setViewMode('day');
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '예약 실패', 'error');
+      showToast(err instanceof Error ? err.message : '예약 저장 실패', 'error');
     } finally {
       setSaving(false);
     }
@@ -229,9 +274,11 @@ export const PracticeRoomBookingView: FC = () => {
 
     if (conflicts.length > 0) {
       openConfirmDialog({
-        title: '일정 충돌',
-        message: `반·보강·다른 연습실 예약과 시간이 겹칩니다. 그래도 예약할까요?\n\n${formatConflictSummary(conflicts)}`,
-        confirmText: '그래도 예약',
+        title: '일정 충돌 경고',
+        message: `다른 수업 또는 예약과 시간이 겹칩니다. 그래도 예약하시겠습니까?\n\n${formatConflictSummary(
+          conflicts
+        )}`,
+        confirmText: '그래도 예약 진행',
         cancelText: '취소',
         onConfirm: () => {
           void persistBooking();
@@ -242,36 +289,28 @@ export const PracticeRoomBookingView: FC = () => {
     void persistBooking();
   };
 
-  const handleCancel = (row: RoomReservationRow) => {
-    const name = row.customers?.name || '학생';
+  const handleCancelBooking = (row: RoomReservationRow) => {
     const roomName = row.practice_rooms?.name || '연습실';
+    const userName = row.customers?.name || row.memo || '예약';
     openConfirmDialog({
-      title: '예약 취소',
-      message: `${name} · ${roomName} ${seoulTimeFromIso(row.starts_at)}–${seoulTimeFromIso(row.ends_at)} 예약을 취소할까요?`,
-      confirmText: '취소하기',
+      title: '연습실 예약 취소',
+      message: `${roomName} (${seoulTimeFromIso(row.starts_at)} ~ ${seoulTimeFromIso(
+        row.ends_at
+      )})\n[${userName}] 예약을 취소하시겠습니까?`,
+      confirmText: '예약 취소',
       cancelText: '닫기',
       isDestructive: true,
       onConfirm: () => {
         void practiceRoomReservationService
           .cancel(row.id)
           .then(() => {
-            showToast('연습실 예약을 취소했습니다.', 'success');
+            showToast('연습실 예약이 취소되었습니다.', 'success');
             setBookings((prev) => removeById(prev, row.id));
-            setPendingRequests((prev) => removeById(prev, row.id));
           })
           .catch((err: Error) => showToast(err.message, 'error'));
       },
     });
   };
-
-  const handleSelectDate = (date: string) => {
-    setSelectedDate(date);
-  };
-
-  const selectedDayBookings = useMemo(
-    () => bookings.filter((b) => seoulDateFromIso(b.starts_at) === selectedDate),
-    [bookings, selectedDate]
-  );
 
   if (!orgId) {
     return (
@@ -280,220 +319,111 @@ export const PracticeRoomBookingView: FC = () => {
   }
 
   return (
-    <div className="space-y-4 pb-4">
-            {pendingRequests.length > 0 && (
-        <section className="rounded-2xl border border-amber-200 bg-amber-50/60 p-3.5 space-y-2">
-          <h3 className="text-xs font-black text-amber-900">학생 예약 승인 대기</h3>
-          {pendingRequests.map((r) => (
-            <div
-              key={r.id}
-              className="flex flex-wrap items-center justify-between gap-2 bg-white rounded-xl border border-amber-100 px-3 py-2"
-            >
-              <div className="text-xs min-w-0">
-                <p className="font-bold text-slate-900">
-                  {r.customers?.name || '학생'} · {r.practice_rooms?.name || '연습실'}
-                </p>
-                <p className="text-slate-500 mt-0.5 font-mono">
-                  {seoulDateFromIso(r.starts_at)}{' '}
-                  {seoulTimeFromIso(r.starts_at)}–{seoulTimeFromIso(r.ends_at)}
-                </p>
-                {r.memo && <p className="text-slate-500 mt-0.5">{r.memo}</p>}
-              </div>
-              <div className="flex gap-1.5">
-                <button
-                  type="button"
-                  className="min-h-[44px] px-3 rounded-xl text-xs font-bold bg-emerald-600 text-white"
-                  onClick={() => {
-                    void practiceRoomReservationService
-                      .review(r.id, true)
-                      .then(() => {
-                        showToast('예약을 승인했습니다.', 'success');
-                        const approved = { ...r, status: 'approved' as const };
-                        setPendingRequests((prev) => removeById(prev, r.id));
-                        const date = seoulDateFromIso(r.starts_at);
-                        if (date >= period.start && date <= period.end) {
-                          setBookings((prev) => upsertById(prev, approved));
-                        }
-                      })
-                      .catch((err: Error) => showToast(err.message, 'error'));
-                  }}
-                >
-                  승인
-                </button>
-                <button
-                  type="button"
-                  className="min-h-[44px] px-3 rounded-xl text-xs font-bold border border-rose-200 text-rose-600"
-                  onClick={() => {
-                    void practiceRoomReservationService
-                      .review(r.id, false)
-                      .then(() => {
-                        showToast('예약을 거절했습니다.', 'info');
-                        setPendingRequests((prev) => removeById(prev, r.id));
-                      })
-                      .catch((err: Error) => showToast(err.message, 'error'));
-                  }}
-                >
-                  거절
-                </button>
-              </div>
-            </div>
-          ))}
-        </section>
-      )}
+    <div className="space-y-4 pb-6">
+      {/* 상단 컨트롤 바: 월/주/일 뷰 전환 + 신규 예약 버튼 */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
+            <DoorOpen className="w-5 h-5" />
+          </span>
+          <div>
+            <h2 className="text-base font-black text-slate-900 tracking-tight">
+              연습실 공간 예약 캘린더
+            </h2>
+            <p className="text-xs text-slate-500">
+              월/주/일 타임라인으로 공간 점유 및 공실 현황을 한눈에 파악합니다.
+            </p>
+          </div>
+        </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
-        <SegmentedControl
-          value={viewMode}
-          options={VIEW_OPTIONS}
-          onChange={setViewMode}
-          aria-label="연습실 캘린더 보기"
-          fullWidth
-          className="sm:w-auto sm:min-w-[220px]"
-        />
-        <button
-          type="button"
-          onClick={() => openCreate()}
-          disabled={rooms.length === 0}
-          className="inline-flex items-center justify-center gap-1.5 min-h-[44px] px-3 rounded-xl bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 shrink-0 disabled:opacity-50"
-        >
-          <Plus className="w-4 h-4" />
-          예약
-        </button>
+        <div className="flex items-center gap-2.5">
+          <SegmentedControl
+            value={viewMode}
+            options={VIEW_OPTIONS}
+            onChange={handleViewChange}
+            aria-label="연습실 캘린더 뷰 전환"
+            className="shadow-2xs"
+          />
+
+          <button
+            type="button"
+            onClick={() => openCreateModal()}
+            disabled={rooms.length === 0}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-xs cursor-pointer min-h-[40px] disabled:opacity-50"
+          >
+            <Plus className="w-4 h-4" />
+            <span>예약 등록</span>
+          </button>
+        </div>
       </div>
 
-      <div className="flex items-center justify-between gap-2 rounded-2xl border border-slate-200 bg-white px-2 py-1.5">
+      {/* 날짜 네비게이션 헤더 */}
+      <div className="flex items-center justify-between gap-2 rounded-2xl border border-slate-200/90 bg-white px-3 py-2 shadow-xs">
         <button
           type="button"
-          onClick={() => setSelectedDate((d) => shiftCalendarPeriod(viewMode, d, -1))}
-          className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-600 hover:bg-slate-100"
-          aria-label="이전"
+          onClick={() =>
+            handleSelectDate(shiftCalendarPeriod(viewMode, selectedDate, -1))
+          }
+          className="min-h-[40px] min-w-[40px] flex items-center justify-center rounded-xl text-slate-600 hover:bg-slate-100 transition-colors"
+          aria-label="이전 기간"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
-        <div className="text-center min-w-0">
-          <p className="text-sm font-black text-slate-900 truncate">
+
+        <div className="text-center min-w-0 flex items-center gap-3">
+          <p className="text-sm sm:text-base font-black text-slate-900 truncate">
             {calendarPeriodLabel(viewMode, selectedDate)}
           </p>
           <button
             type="button"
-            onClick={() => setSelectedDate(todayIsoDate())}
-            className="text-[11px] font-bold text-indigo-600 min-h-[32px]"
+            onClick={() => handleSelectDate(todayIsoDate())}
+            className="px-2.5 py-1 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-all"
           >
             오늘
           </button>
         </div>
+
         <button
           type="button"
-          onClick={() => setSelectedDate((d) => shiftCalendarPeriod(viewMode, d, 1))}
-          className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-600 hover:bg-slate-100"
-          aria-label="다음"
+          onClick={() =>
+            handleSelectDate(shiftCalendarPeriod(viewMode, selectedDate, 1))
+          }
+          className="min-h-[40px] min-w-[40px] flex items-center justify-center rounded-xl text-slate-600 hover:bg-slate-100 transition-colors"
+          aria-label="다음 기간"
         >
           <ChevronRight className="w-5 h-5" />
         </button>
       </div>
 
+      {/* 월간 / 주간 / 일간 멀티 뷰 캘린더 본문 */}
       <PracticeRoomCalendarPanel
         mode={viewMode}
         selectedDate={selectedDate}
+        rooms={rooms}
         bookings={bookings}
         loading={loading}
         onSelectDate={handleSelectDate}
-        onCreate={() => openCreate()}
-        onCancel={handleCancel}
+        onSelectSlot={openCreateModal}
+        onCancelBooking={handleCancelBooking}
         canCreate={rooms.length > 0}
       />
 
-      {!loading && (
-        <PracticeRoomStatusGrid
-          date={selectedDate}
-          rooms={rooms}
-          bookings={selectedDayBookings}
-          onPickFreeSlot={(pick) => {
-            setViewMode('day');
-            openCreate({
-              roomId: pick.roomId,
-              startTime: pick.startTime,
-              endTime: pick.endTime,
-            });
-          }}
-          onPickBusySlot={handleCancel}
-        />
-      )}
-
-      {viewMode !== 'day' && !loading && (
-        <section className="rounded-2xl border border-slate-200 bg-white p-3.5 space-y-2">
-          <div className="flex items-center justify-between gap-2">
-            <h4 className="text-xs font-black text-slate-800">
-              선택일 · {calendarPeriodLabel('day', selectedDate)}
-            </h4>
-            <button
-              type="button"
-              onClick={() => setViewMode('day')}
-              className="text-[11px] font-bold text-indigo-600 min-h-[44px] px-2"
-            >
-              일별로 보기
-            </button>
-          </div>
-          {selectedDayBookings.length === 0 ? (
-            <p className="text-xs text-slate-400 text-center py-3">이 날 예약이 없습니다.</p>
-          ) : (
-            <ul className="space-y-1.5">
-              {selectedDayBookings.map((b) => (
-                <li
-                  key={b.id}
-                  className="flex items-center justify-between gap-2 rounded-xl border border-slate-100 px-3 py-2"
-                >
-                  <div className="min-w-0 text-xs">
-                    <p className="font-bold text-slate-900 truncate">
-                      {seoulTimeFromIso(b.starts_at)}–{seoulTimeFromIso(b.ends_at)} ·{' '}
-                      {b.practice_rooms?.name || '연습실'}
-                    </p>
-                    <p className="text-slate-500">{b.customers?.name || '학생'}</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleCancel(b)}
-                    className="shrink-0 min-h-[44px] px-2.5 text-[11px] font-bold text-rose-600"
-                  >
-                    취소
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      )}
-
+      {/* 간이 연습실 예약 모달 */}
       <Modal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        title={`연습실 예약 · ${selectedDate}`}
+        title={`연습실 간이 예약 · ${selectedDate}`}
         maxWidth="md"
       >
         <form onSubmit={handleSubmit} className="space-y-4 p-5 pb-6">
-          <FormField label="학생" required>
-            <select
-              className={FORM_CONTROL_CLASS}
-              value={studentId}
-              onChange={(e) => setStudentId(e.target.value)}
-              required
-            >
-              <option value="">선택</option>
-              {students.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-          </FormField>
-          <FormField label="연습실" required>
+          <FormField label="연습실 (공간)" required>
             <select
               className={FORM_CONTROL_CLASS}
               value={roomId}
               onChange={(e) => setRoomId(e.target.value)}
               required
             >
-              <option value="">선택</option>
+              <option value="">연습실 선택</option>
               {rooms.map((r) => (
                 <option key={r.id} value={r.id}>
                   {r.name}
@@ -501,8 +431,9 @@ export const PracticeRoomBookingView: FC = () => {
               ))}
             </select>
           </FormField>
+
           <div className="grid grid-cols-2 gap-3">
-            <FormField label="시작" required>
+            <FormField label="시작 시간" required>
               <input
                 type="time"
                 className={FORM_CONTROL_CLASS}
@@ -519,7 +450,7 @@ export const PracticeRoomBookingView: FC = () => {
                 required
               />
             </FormField>
-            <FormField label="종료" required>
+            <FormField label="종료 시간" required>
               <input
                 type="time"
                 className={FORM_CONTROL_CLASS}
@@ -529,28 +460,47 @@ export const PracticeRoomBookingView: FC = () => {
               />
             </FormField>
           </div>
-          <FormField label="메모">
+
+          <FormField label="예약 내용 / 사용 목적" required>
             <input
+              type="text"
               className={FORM_CONTROL_CLASS}
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
-              placeholder="선택 사항"
+              placeholder="예: 입시생 개인 연습, 반주 연습 등"
+              required
             />
           </FormField>
-          <div className="flex gap-2 pt-1">
+
+          <FormField label="원생 연결 (선택 사항)">
+            <select
+              className={FORM_CONTROL_CLASS}
+              value={studentId}
+              onChange={(e) => setStudentId(e.target.value)}
+            >
+              <option value="">원생 미지정 (공실 점유만 등록)</option>
+              {students.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name} ({s.phone || '연락처 없음'})
+                </option>
+              ))}
+            </select>
+          </FormField>
+
+          <div className="flex gap-2 pt-2">
             <button
               type="button"
               onClick={() => setModalOpen(false)}
-              className="flex-1 min-h-[48px] rounded-xl border border-slate-200 text-sm font-bold text-slate-600"
+              className="flex-1 min-h-[44px] rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
             >
               닫기
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-[1.4] min-h-[48px] rounded-xl bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 disabled:opacity-50"
+              className="flex-[1.4] min-h-[44px] rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs disabled:opacity-50 cursor-pointer"
             >
-              {saving ? '저장 중...' : '예약 저장'}
+              {saving ? '예약 저장 중...' : '예약 등록 완료'}
             </button>
           </div>
         </form>

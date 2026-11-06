@@ -345,7 +345,7 @@ BEGIN
       GREATEST(COALESCE(p_billed_amount, 0), 0),
       0,
       p_due_date,
-      CASE WHEN GREATEST(COALESCE(p_billed_amount, 0), 0) <= 0 THEN 'paid' ELSE 'unpaid' END,
+      (CASE WHEN GREATEST(COALESCE(p_billed_amount, 0), 0) <= 0 THEN 'paid' ELSE 'unpaid' END)::core.payment_status,
       v_meta
     )
     RETURNING * INTO v_row;

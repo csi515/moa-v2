@@ -5,6 +5,7 @@
 import assert from 'node:assert/strict';
 import {
   focusAdjacentMenuItem,
+  focusInitialElement,
   getFocusableElements,
   getMenuItems,
   handleListboxKeydown,
@@ -41,6 +42,23 @@ function run() {
   const items = getFocusableElements(root);
   assert.equal(items.length, 3);
   assert.equal(items[0].id, 'first');
+
+  focused = '';
+  focusInitialElement(empty);
+  assert.equal(focused, 'root');
+
+  focused = '';
+  focusInitialElement(root);
+  assert.equal(focused, 'first');
+
+  const formNodes = [
+    { id: 'close-btn', tagName: 'BUTTON', tabIndex: 0, hasAttribute: () => false, offsetParent: {}, focus() { focused = 'close-btn'; } },
+    { id: 'name-input', tagName: 'INPUT', tabIndex: 0, hasAttribute: () => false, offsetParent: {}, focus() { focused = 'name-input'; } },
+  ];
+  const formRoot = { querySelectorAll: () => formNodes, focus() { focused = 'form-root'; } };
+  focused = '';
+  focusInitialElement(formRoot);
+  assert.equal(focused, 'name-input', 'Form input should be prioritized over close button');
 
   let prevented = false;
   trapTabKey(

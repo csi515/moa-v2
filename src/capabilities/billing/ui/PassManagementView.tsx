@@ -5,8 +5,15 @@ import { useStorageRefresh } from '@/hooks';
 import { ScheduleService } from '@/core/services/scheduleService';
 import { StorageService } from '@/services/storage';
 import type { SessionPass, SessionPassStatus } from '@/core/types/schedule';
+import {
+  type SessionPassPackage,
+  DEFAULT_SESSION_PASS_PACKAGES,
+} from '@/core/organizations/settingsTypes';
+import { upsertLinkedIncome } from '@/capabilities/billing/finance/billingIncomeLink';
 import { getPassRemaining } from '@/core/schedules/sessionPassUtils';
 import { EmptyState, FilterTabs, Modal, PageHeader, type FilterTabItem } from '@/shared/components';
+import { CurrencyInput } from '@/shared/components/CurrencyInput';
+import { formatCurrency } from '@/utils/formatters';
 
 type PassFilter = 'active' | 'all';
 
@@ -81,10 +88,20 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [memberId, setMemberId] = useState('');
+  const [selectedPkgId, setSelectedPkgId] = useState('');
   const [label, setLabel] = useState(cfg.defaultPassLabel);
   const [totalSessions, setTotalSessions] = useState(cfg.defaultTotalSessions);
+  const [price, setPrice] = useState<number>(0);
+  const [linkIncome, setLinkIncome] = useState(true);
   const [expiresAt, setExpiresAt] = useState('');
   const [memo, setMemo] = useState('');
+
+  const packages: SessionPassPackage[] = useMemo(() => {
+    const settings = StorageService.getSettings();
+    return settings.sessionPassPackages && settings.sessionPassPackages.length > 0
+      ? settings.sessionPassPackages
+      : DEFAULT_SESSION_PASS_PACKAGES;
+  }, [isModalOpen]);
 
   const members = useMemo(() => {
     const list = StorageService.getStudents().filter((s) => s.status === 'active');
@@ -105,13 +122,35 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
   }, [passes, filter]);
 
   const openCreate = () => {
-    setLabel(cfg.defaultPassLabel);
-    setTotalSessions(cfg.defaultTotalSessions);
+    const defaultPkg = packages[0];
+    if (defaultPkg) {
+      setSelectedPkgId(defaultPkg.id);
+      setLabel(defaultPkg.name);
+      setTotalSessions(defaultPkg.sessions);
+      setPrice(defaultPkg.price);
+    } else {
+      setSelectedPkgId('');
+      setLabel(cfg.defaultPassLabel);
+      setTotalSessions(cfg.defaultTotalSessions);
+      setPrice(0);
+    }
+    setLinkIncome(true);
     const preferred = members.find((m) => m.billingMode === 'session_pass') || members[0];
     setMemberId(preferred?.id || '');
     setExpiresAt('');
     setMemo('');
     setIsModalOpen(true);
+  };
+
+  const handlePackageChange = (pkgId: string) => {
+    setSelectedPkgId(pkgId);
+    if (!pkgId) return;
+    const target = packages.find((p) => p.id === pkgId);
+    if (target) {
+      setLabel(target.name);
+      setTotalSessions(target.sessions);
+      setPrice(target.price);
+    }
   };
 
   const handleCreate = (e: React.FormEvent) => {
@@ -126,7 +165,7 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
       return;
     }
 
-    ScheduleService.saveSessionPass({
+    const savedPass = ScheduleService.saveSessionPass({
       customerId: member.id,
       customerName: member.name,
       label: label.trim() || cfg.defaultPassLabel,
@@ -136,7 +175,21 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
       purchasedAt: new Date().toISOString(),
       expiresAt: expiresAt ? `${expiresAt}T23:59:59` : undefined,
       memo: memo.trim() || undefined,
+      price: price > 0 ? price : undefined,
     });
+
+    if (linkIncome && price > 0) {
+      upsertLinkedIncome({
+        sourceType: 'session_pass',
+        paymentId: savedPass.id,
+        date: new Date().toISOString().slice(0, 10),
+        amount: price,
+        paymentMethod: 'card',
+        description: `${member.name} - ${savedPass.label} 발급 수납`,
+        payer: member.name,
+        category: 'session',
+      });
+    }
 
     if (member.billingMode !== 'session_pass') {
       StorageService.saveStudent({
@@ -172,7 +225,7 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
           <button
             type="button"
             onClick={openCreate}
-            className={`px-4 py-2.5 ${cfg.accent} ${cfg.accentHover} text-white text-sm font-bold rounded-xl min-h-[44px]`}
+            className={`px-4 py-2.5 ${cfg.accent} ${cfg.accentHover} text-white text-sm font-bold rounded-xl min-h-[44px] cursor-pointer`}
           >
             {cfg.createLabel}
           </button>
@@ -191,7 +244,14 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
               <div key={pass.id} className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <p className="font-bold text-slate-900">{pass.customerName}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-bold text-slate-900">{pass.customerName}</p>
+                      {typeof pass.price === 'number' && pass.price > 0 && (
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700">
+                          {formatCurrency(pass.price)}
+                        </span>
+                      )}
+                    </div>
                     <p className="text-sm text-slate-600 mt-0.5">{pass.label}</p>
                     <p className={`text-xs font-semibold mt-1 ${cfg.accentText}`}>
                       잔여 {remaining}회 / 전체 {pass.totalSessions}회
@@ -207,7 +267,7 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
                       <button
                         type="button"
                         onClick={() => cancelPass(pass)}
-                        className="px-2 py-1 text-xs font-bold bg-rose-100 text-rose-700 rounded-lg min-h-[44px]"
+                        className="px-2 py-1 text-xs font-bold bg-rose-100 text-rose-700 rounded-lg min-h-[44px] cursor-pointer"
                       >
                         취소
                       </button>
@@ -245,6 +305,25 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
               ))}
             </select>
           </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
+              회차권 패키지 퀵 선택
+            </label>
+            <select
+              value={selectedPkgId}
+              onChange={(e) => handlePackageChange(e.target.value)}
+              className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] bg-slate-50 focus:bg-white font-medium"
+            >
+              <option value="">직접 입력 (커스텀)</option>
+              {packages.map((pkg) => (
+                <option key={pkg.id} value={pkg.id}>
+                  {pkg.name} ({pkg.sessions}회 · {formatCurrency(pkg.price)})
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">
               {cfg.passName} 이름
@@ -257,6 +336,7 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
               placeholder={cfg.defaultPassLabel}
             />
           </div>
+
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">총 횟수 *</label>
@@ -279,6 +359,37 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
               />
             </div>
           </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
+              판매 / 결제 금액 (₩)
+            </label>
+            <CurrencyInput
+              value={price}
+              onChange={setPrice}
+              showQuickButtons
+            />
+          </div>
+
+          <div className="rounded-xl border border-indigo-100 bg-indigo-50/60 p-3">
+            <label className="flex items-start gap-2.5 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={linkIncome}
+                onChange={(e) => setLinkIncome(e.target.checked)}
+                className="mt-0.5 w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+              />
+              <span>
+                <span className="block text-xs font-bold text-slate-800">
+                  발급 시 수납 완료 처리 및 재무 수입 연동
+                </span>
+                <span className="block text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                  체크 시 당일 수입 원장에 회차권 판매 금액이 자동으로 등록되어 재무 요약에 반영됩니다.
+                </span>
+              </span>
+            </label>
+          </div>
+
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">메모</label>
             <input
@@ -288,9 +399,10 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
               className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px]"
             />
           </div>
+
           <button
             type="submit"
-            className={`w-full py-3 ${cfg.accent} ${cfg.accentHover} text-white font-bold rounded-xl min-h-[48px]`}
+            className={`w-full py-3 ${cfg.accent} ${cfg.accentHover} text-white font-bold rounded-xl min-h-[48px] cursor-pointer`}
           >
             저장
           </button>

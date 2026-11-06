@@ -11,6 +11,7 @@ import type { DragPlacementPayload } from './PianoTimetablePanels';
 import {
   TIMETABLE_DAYS,
   assignStudentToSlot,
+  assignStudentWithRecurrence,
   getPlacementsForSlot,
   moveStudentToSlot,
   removeStudentFromSlot,
@@ -185,6 +186,69 @@ export function usePianoLessonTimetable() {
     }
   };
 
+  const placeStudentWithRecurrence = (
+    student: Student,
+    days: DayOfWeek[],
+    startTime: TimetableSlot,
+    teacherId?: string
+  ) => {
+    if (days.length === 0) {
+      showToast('배치할 요일을 최소 1개 이상 선택해 주세요.', 'warning');
+      return;
+    }
+    const preferred = teacherId || preferredTeacherId;
+    const result = assignStudentWithRecurrence({
+      student,
+      days,
+      startTime,
+      classes,
+      teachers,
+      preferredTeacherId: preferred,
+      createClassIfMissing: false,
+    });
+    if (result.ok === true) {
+      showToast(result.message, 'success');
+      setPendingStudentId(null);
+      setPendingTeacherId(undefined);
+      setPickerSlot(null);
+      triggerRefresh();
+    } else if (result.needsNewClass === true) {
+      const missingDaysStr = result.missingDays.join('·');
+      openConfirmDialog({
+        title: '새 반을 만들어 일괄 배치',
+        message:
+          `${missingDaysStr}요일 ${startTime}에는 아직 반이 없습니다.\n` +
+          `필요한 반을 새로 만들고 ${student.name} 학생을 ${days.join('·')}요일 ${startTime}에 배치할까요?\n\n` +
+          '확인하면 반 관리 목록에도 새 반이 추가됩니다.',
+        confirmText: '반 만들고 배치',
+        cancelText: '취소',
+        onConfirm: () => {
+          const created = assignStudentWithRecurrence({
+            student,
+            days,
+            startTime,
+            classes: rawClasses,
+            teachers,
+            preferredTeacherId: preferred,
+            createClassIfMissing: true,
+          });
+          if (created.ok === false) {
+            showToast(created.message, 'warning');
+            return;
+          }
+          showToast(created.message, 'success');
+          setPendingStudentId(null);
+          setPendingTeacherId(undefined);
+          setPickerSlot(null);
+          triggerRefresh();
+        },
+      });
+    } else {
+      showToast(result.message, 'warning');
+    }
+  };
+
+
   const movePlacement = (
     payload: DragPlacementPayload,
     day: DayOfWeek,
@@ -354,6 +418,7 @@ export function usePianoLessonTimetable() {
     teacherSections,
     placedIds,
     placeStudent,
+    placeStudentWithRecurrence,
     movePlacement,
     handleDropStudent,
     handleRemove,

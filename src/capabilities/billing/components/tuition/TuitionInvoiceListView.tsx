@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { PaginationBar } from '@/shared/components/ui/PaginationBar';
 import type { TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { formatCurrency, getInvoiceStatusBadge } from '@/utils/formatters';
 import { resolveInvoiceBaseFee } from '@/capabilities/billing/finance/invoiceModel';
@@ -30,6 +31,18 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
   onOpenPayModal,
 }) => {
   const tuitionPayments = TuitionService.getTuitionPayments();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredInvoices.length]);
+
+  const paginatedInvoices = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredInvoices.slice(start, start + pageSize);
+  }, [filteredInvoices, currentPage, pageSize]);
+
   return (
     <div className="space-y-3">
       <div className="hidden md:block bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
@@ -56,7 +69,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                   </td>
                 </tr>
               ) : (
-                filteredInvoices.map((inv) => {
+                paginatedInvoices.map((inv) => {
                   const badge = getInvoiceStatusBadge(inv.status);
                   const lastPaymentText = lastTuitionPaymentSummaryText(
                     getLatestTuitionPaymentForInvoice(tuitionPayments, inv.id)
@@ -147,7 +160,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
             해당 조건의 수납 내역이 없습니다.
           </div>
         ) : (
-          filteredInvoices.map((inv) => {
+          paginatedInvoices.map((inv) => {
             const badge = getInvoiceStatusBadge(inv.status);
             const st = students.find((s) => s.id === inv.studentId);
             const lastPaymentText = lastTuitionPaymentSummaryText(
@@ -224,6 +237,18 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
           })
         )}
       </div>
+
+      <PaginationBar
+        currentPage={currentPage}
+        totalItems={filteredInvoices.length}
+        pageSize={pageSize}
+        pageSizeOptions={[10, 20, 50]}
+        onPageChange={setCurrentPage}
+        onPageSizeChange={(newSize) => {
+          setPageSize(newSize);
+          setCurrentPage(1);
+        }}
+      />
     </div>
   );
 };

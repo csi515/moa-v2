@@ -29,25 +29,25 @@ export const TextbookSubTabNav: React.FC<TextbookSubTabNavProps> = ({
       id: 'inventory',
       icon: <Boxes className="w-4 h-4 shrink-0" />,
       shortLabel: `재고 (${textbooksCount})`,
-      fullLabel: `교재 목록 및 재고 관리 (${textbooksCount})`,
+      fullLabel: `재고 현황 (${textbooksCount})`,
     },
     {
       id: 'sales',
       icon: <ShoppingBag className="w-4 h-4 shrink-0" />,
-      shortLabel: `판매 (${salesCount})`,
-      fullLabel: `교재 판매 내역 (${salesCount})`,
+      shortLabel: `지급/판매 (${salesCount})`,
+      fullLabel: `지급/판매 내역 (${salesCount})`,
     },
     {
       id: 'payments',
       icon: <CreditCard className="w-4 h-4 shrink-0" />,
-      shortLabel: '수납',
-      fullLabel: '교재비 수납 / 분할 납부',
+      shortLabel: '수납 내역',
+      fullLabel: '수납 내역',
     },
     {
       id: 'history',
       icon: <History className="w-4 h-4 shrink-0" />,
-      shortLabel: `이력 (${transactionsCount})`,
-      fullLabel: `입출고 및 재고 변동 이력 (${transactionsCount})`,
+      shortLabel: `입출고 (${transactionsCount})`,
+      fullLabel: `입출고 이력 (${transactionsCount})`,
     },
   ];
 

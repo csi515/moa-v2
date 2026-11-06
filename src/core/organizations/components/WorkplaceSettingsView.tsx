@@ -1,26 +1,15 @@
 import { useEffect, useState, type FC, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { StorageService } from '@/services/storage';
-import { PageHeader } from '@/shared/components';
 import {
-  FormField,
   FORM_CONTROL_CLASS,
   SettingsCard,
 } from '@/shared/components/ui';
 import type { AcademySettings, AcademyRoomKind } from '../settingsTypes';
-import {
-  AttendanceFeatureToggle,
-  isAttendanceModuleEnabled,
-  PIN_ATTENDANCE_DIRECTOR_COPY,
-  withAttendanceModuleEnabled,
-} from '@/core/attendance';
 import { IndustryFeatureGuidePanel } from '@/core/help';
-import { LegalLinks } from '@/core/legal';
 import {
-  Settings,
   Building,
   Save,
   Loader2,
@@ -28,12 +17,16 @@ import {
   DoorOpen,
   Plus,
   BookOpen,
-  SlidersHorizontal,
-  Shield,
 } from 'lucide-react';
-import { CurrencyInput } from '@/shared/components/CurrencyInput';
-import { getIndustryAccent, getCustomerLabel, getOwnerLabel, getPlaceLabel, getFeeLabel, getBankAccountPlaceholder, supportsDeposit as industrySupportsDeposit, showsTextbooksLink as industryShowsTextbooksLink, getRoomConfig } from '@/core/industry/industryUi';
-import { renderStaffHoursFields } from '@/core/staff/staffUi';
+import {
+  getIndustryAccent,
+  getCustomerLabel,
+  getOwnerLabel,
+  getPlaceLabel,
+  getFeeLabel,
+  showsTextbooksLink as industryShowsTextbooksLink,
+  getRoomConfig,
+} from '@/core/industry/industryUi';
 import { useModuleLabels } from '@/core/labels';
 import * as orgService from '@/core/organizations/services/organizationService';
 import {
@@ -48,28 +41,26 @@ import {
 } from '@/core/address';
 import {
   OrganizationProfileFields,
+  DataExportCenterCard,
   OrganizationBackupCard,
   OrganizationDangerZoneCard,
 } from './OrganizationSettingsCards';
-import { CustomTermsSettingCard } from '@/pages/settings/CustomTermsSettingCard';
+import { LegalLinks } from '@/core/legal';
 import { buildWorkplaceSettingsSavePayload } from '../workplaceSettingsSave';
 
 export const WorkplaceSettingsView: FC = () => {
-  const navigate = useNavigate();
   const { showToast, triggerRefresh, setActiveTab } = useApp();
-  const { industry, isAdmin } = usePermissions();
+  const { industry } = usePermissions();
   const labels = useModuleLabels();
   const placeLabel = getPlaceLabel(industry);
   const customerLabel = labels.customer.singular || getCustomerLabel(industry);
   const contactLabel = labels.contact.singular;
+  const staffLabel = labels.staff.singular;
   const ownerLabel = getOwnerLabel(industry);
   const feeLabel = getFeeLabel(industry);
-  const staffLabel = labels.staff.singular;
   const org = useOrganization();
   const roomCfg = getRoomConfig(industry);
-  const depositSupported = industrySupportsDeposit(industry);
   const textbooksLinkVisible = industryShowsTextbooksLink(industry);
-  const bankAccountPlaceholder = getBankAccountPlaceholder(industry);
 
   const accent = getIndustryAccent(industry);
   const accentBtn = `${accent.btn} ${accent.btnHover}`;
@@ -85,9 +76,7 @@ export const WorkplaceSettingsView: FC = () => {
       : EMPTY_ORGANIZATION_ADDRESS;
   });
   const [isSaving, setIsSaving] = useState(false);
-  const attendanceEnabled = isAttendanceModuleEnabled(settings, industry);
   const rooms = getConfiguredRooms(settings);
-  const canEditAttendanceMode = isAdmin;
 
   useEffect(() => {
     const result = StorageService.backfillAttendanceFeatureFlag();
@@ -167,36 +156,6 @@ export const WorkplaceSettingsView: FC = () => {
     });
   };
 
-  /** PIN 출결 토글은 즉시 저장 — 저장 전 키오스크 진입 시 꺼진 것으로 보이는 문제 방지 */
-  const handleAttendanceToggle = async (enabled: boolean) => {
-    if (!canEditAttendanceMode) return;
-    const previous = settings;
-    const next = withAttendanceModuleEnabled(settings, enabled);
-    setSettings(next);
-    try {
-      StorageService.saveSettings(next);
-      if (org.currentOrganization) {
-        await orgService.updateOrganization(org.currentOrganization.id, {
-          settings: { features: next.features },
-        });
-      }
-      triggerRefresh();
-      showToast(
-        enabled
-          ? PIN_ATTENDANCE_DIRECTOR_COPY.settingsEnabledToast
-          : PIN_ATTENDANCE_DIRECTOR_COPY.settingsDisabledToast,
-        'success'
-      );
-    } catch (err) {
-      StorageService.saveSettings(previous);
-      setSettings(previous);
-      showToast(
-        err instanceof Error ? err.message : '출결 설정 저장 중 오류가 발생했습니다.',
-        'error'
-      );
-    }
-  };
-
   const handleSaveSettings = async (e: FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
@@ -208,7 +167,7 @@ export const WorkplaceSettingsView: FC = () => {
         address: displayAddress,
         rooms: getConfiguredRooms(settings),
       };
-      
+
       if (org.currentOrganization) {
         await orgService.updateOrganization(org.currentOrganization.id, {
           name: settings.name,
@@ -222,11 +181,11 @@ export const WorkplaceSettingsView: FC = () => {
         org.patchOrganization(org.currentOrganization.id, { name: settings.name });
         await org.refreshOrganizations();
       }
-      
+
       StorageService.saveSettings(nextSettings);
       setSettings(nextSettings);
       triggerRefresh();
-      showToast('사업장 설정이 저장되었습니다.', 'success');
+      showToast(`${placeLabel} 기본 정보가 저장되었습니다.`, 'success');
     } catch (err) {
       showToast(
         err instanceof Error ? err.message : '설정 저장 중 오류가 발생했습니다.',
@@ -238,387 +197,162 @@ export const WorkplaceSettingsView: FC = () => {
   };
 
   return (
-    <div className="space-y-4 pb-4">
-      <PageHeader
-        icon={<Settings className="w-6 h-6" />}
-        iconClassName={accentIcon}
-        title="사업장 운영 및 환경 설정"
-        description="기본 정보, 출입 관리, 백업, 업종별 기능 설명서"
+    <div className="space-y-6 max-w-4xl">
+      <SettingsCard
+        className="sm:p-8"
+        title={`${placeLabel} 기본 정보 및 시설(연습실) 관리`}
+        icon={<Building className={`w-4 h-4 ${accentIcon}`} />}
+      >
+        <p className="text-xs text-slate-500 mb-6 leading-relaxed">
+          {placeLabel} 상호명, 대표자, 연락처, 주소 및 시설 내 강의실·피아노 연습실(공실)을 등록하고 관리합니다.
+        </p>
+
+        <form onSubmit={handleSaveSettings} className="space-y-6">
+          <OrganizationProfileFields
+            name={settings.name}
+            directorName={settings.directorName || ''}
+            phone={settings.phone}
+            businessNumber={settings.businessNumber || ''}
+            addressParts={addressParts}
+            placeLabel={placeLabel}
+            ownerLabel={ownerLabel}
+            contactLabel={contactLabel}
+            publicCode={org.currentOrganization?.public_code}
+            onProfileChange={(patch) => setSettings((prev) => ({ ...prev, ...patch }))}
+            onAddressChange={(next) => {
+              setAddressParts(next);
+              setSettings((prev) => ({
+                ...prev,
+                address: formatOrganizationAddress(next) || prev.address,
+              }));
+            }}
+          />
+
+          <div className="pt-6 border-t border-slate-100 space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <DoorOpen className={`w-4 h-4 ${accentIcon}`} />
+                <p className="text-sm font-bold text-slate-800">{roomCfg.sectionTitle}</p>
+              </div>
+              <button
+                type="button"
+                onClick={addRoom}
+                className={`inline-flex items-center gap-1 px-3 py-2 min-h-[44px] text-xs font-bold rounded-xl ${accent.hoverBg} ${accentIcon}`}
+              >
+                <Plus className="w-4 h-4" />
+                추가
+              </button>
+            </div>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              {roomCfg.sectionDescription}
+            </p>
+            {rooms.length === 0 ? (
+              <p className="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5">
+                등록된 실이 없습니다. 추가하거나 온보딩에서 설정해 주세요.
+              </p>
+            ) : (
+              <ul className="space-y-2">
+                {rooms.map((room) => (
+                  <li
+                    key={room.id}
+                    className="flex flex-col sm:flex-row gap-2 sm:items-center rounded-xl border border-slate-100 bg-slate-50/80 p-2.5"
+                  >
+                    <input
+                      type="text"
+                      value={room.name}
+                      onChange={(e) => updateRoom(room.id, { name: e.target.value })}
+                      className={`${FORM_CONTROL_CLASS} flex-1 min-h-[44px]`}
+                      placeholder={roomCfg.placeholder}
+                    />
+                    <select
+                      value={room.kind}
+                      onChange={(e) =>
+                        updateRoom(room.id, { kind: e.target.value as AcademyRoomKind })
+                      }
+                      className={`${FORM_CONTROL_CLASS} sm:w-32 min-h-[44px]`}
+                    >
+                      {(roomCfg.allowedKinds as string[]).includes('treatment') && (
+                        <option value="treatment">{ROOM_KIND_LABEL.treatment}</option>
+                      )}
+                      {(roomCfg.allowedKinds as string[]).includes('classroom') && (
+                        <option value="classroom">{ROOM_KIND_LABEL.classroom}</option>
+                      )}
+                      {(roomCfg.allowedKinds as string[]).includes('practice') && (
+                        <option value="practice">{ROOM_KIND_LABEL.practice}</option>
+                      )}
+                    </select>
+                    <button
+                      type="button"
+                      onClick={() => removeRoom(room.id)}
+                      className="p-2.5 min-h-[44px] min-w-[44px] text-rose-500 hover:bg-rose-50 rounded-xl"
+                      aria-label={`${room.name} 삭제`}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {textbooksLinkVisible && (
+              <button
+                type="button"
+                onClick={() => setActiveTab('textbooks')}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 min-h-[44px]"
+              >
+                <BookOpen className="w-4 h-4" />
+                사용 교재는 교재 관리에서 등록
+              </button>
+            )}
+          </div>
+
+          <div className="flex justify-end pt-4 border-t border-slate-100">
+            <button
+              type="submit"
+              disabled={isSaving}
+              className={`px-6 py-2.5 min-h-[44px] ${accentBtn} disabled:opacity-60 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer`}
+            >
+              {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              {isSaving ? '저장 중…' : '설정 정보 저장'}
+            </button>
+          </div>
+        </form>
+      </SettingsCard>
+
+      {/* 2. 원생·출결·수납 엑셀(CSV) 통합 다운로드 센터 */}
+      <DataExportCenterCard
+        placeLabel={placeLabel}
+        customerLabel={customerLabel}
+        feeLabel={feeLabel}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <SettingsCard
-          className="lg:col-span-2 sm:p-8"
-          title={`${placeLabel} 기본 프로필`}
-          icon={<Building className={`w-4 h-4 ${accentIcon}`} />}
-        >
-          <form onSubmit={handleSaveSettings} className="space-y-4">
-            <OrganizationProfileFields
-              name={settings.name}
-              directorName={settings.directorName || ''}
-              phone={settings.phone}
-              businessNumber={settings.businessNumber || ''}
-              addressParts={addressParts}
-              placeLabel={placeLabel}
-              ownerLabel={ownerLabel}
-              contactLabel={contactLabel}
-              publicCode={org.currentOrganization?.public_code}
-              onProfileChange={(patch) => setSettings((prev) => ({ ...prev, ...patch }))}
-              onAddressChange={(next) => {
-                setAddressParts(next);
-                setSettings((prev) => ({
-                  ...prev,
-                  address: formatOrganizationAddress(next) || prev.address,
-                }));
-              }}
-            />
+      {/* 3. 데이터 안전 백업 및 복원 */}
+      <OrganizationBackupCard
+        placeLabel={placeLabel}
+        customerLabel={customerLabel}
+        feeLabel={feeLabel}
+        accentIcon={accentIcon}
+        accentHover={accentHover}
+      />
 
-            <div className="pt-4 border-t border-slate-100 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormField label="기본 수강 형태">
-                  <div className="grid grid-cols-2 gap-2">
-                    {(
-                      [
-                        { value: 'monthly' as const, label: '월회비', hint: '매월 청구' },
-                        { value: 'session_pass' as const, label: '회차권', hint: '출석 시 차감' },
-                      ] as const
-                    ).map((opt) => {
-                      const active =
-                        (settings.defaultBillingMode || 'monthly') === opt.value;
-                      return (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          onClick={() =>
-                            setSettings({ ...settings, defaultBillingMode: opt.value })
-                          }
-                          className={`min-h-[52px] rounded-xl border px-3 py-2 text-left transition-colors ${
-                            active
-                              ? `${accent.btn} text-white border-transparent`
-                              : 'bg-white text-slate-700 border-slate-200 hover:border-indigo-300'
-                          }`}
-                        >
-                          <span className="block text-sm font-bold">{opt.label}</span>
-                          <span
-                            className={`block text-[10px] mt-0.5 ${
-                              active ? 'text-white/80' : 'text-slate-400'
-                            }`}
-                          >
-                            {opt.hint}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </FormField>
+      {/* 4. 업종별 가이드 패널 */}
+      <IndustryFeatureGuidePanel industry={industry} />
 
-                {(settings.defaultBillingMode || 'monthly') === 'monthly' ? (
-                  <FormField label="기본 월 수강료 기준 (₩)">
-                    <CurrencyInput
-                      value={settings.defaultTuitionFee}
-                      onChange={(val) =>
-                        setSettings({ ...settings, defaultTuitionFee: val })
-                      }
-                      showQuickButtons
-                    />
-                  </FormField>
-                ) : (
-                  <div className="rounded-xl border border-amber-100 bg-amber-50/80 px-3.5 py-3 text-xs text-slate-600 leading-relaxed">
-                    신규 {customerLabel}은(는) 회차권 형태로 등록됩니다. 월 수강료·결제일은
-                    사용하지 않으며, 설정 &gt; 회차권 관리에서 이용권을 발급하세요.
-                  </div>
-                )}
-              </div>
+      {/* 5. 학원 데이터 초기화 위험 구역 및 법적 안내 */}
+      <div className="pt-2">
+        <OrganizationDangerZoneCard
+          customerLabel={customerLabel}
+          contactLabel={contactLabel}
+          feeLabel={feeLabel}
+          staffLabel={staffLabel}
+        />
 
-              {(settings.defaultBillingMode || 'monthly') === 'monthly' ? (
-                <>
-                  <FormField label="기본 결제일" className="sm:max-w-xs">
-                    <select
-                      value={settings.defaultPaymentDay}
-                      onChange={(e) =>
-                        setSettings({
-                          ...settings,
-                          defaultPaymentDay: Number(e.target.value),
-                        })
-                      }
-                      className={`${FORM_CONTROL_CLASS} font-bold`}
-                    >
-                      <option value={1}>매월 1일</option>
-                      <option value={5}>매월 5일</option>
-                      <option value={10}>매월 10일</option>
-                      <option value={15}>매월 15일</option>
-                      <option value={20}>매월 20일</option>
-                      <option value={25}>매월 25일</option>
-                    </select>
-                  </FormField>
-
-                  <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-3.5 space-y-2">
-                    <label className="flex items-start gap-3 cursor-pointer min-h-[44px]">
-                      <input
-                        type="checkbox"
-                        className="mt-1 w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                        checked={settings.includeExtrasInMonthlyInvoice === true}
-                        onChange={(e) =>
-                          setSettings({
-                            ...settings,
-                            includeExtrasInMonthlyInvoice: e.target.checked,
-                          })
-                        }
-                      />
-                      <span>
-                        <span className="block text-sm font-bold text-slate-800">
-                          월 청구에 교재·연주회비 합산
-                        </span>
-                        <span className="block text-[11px] text-slate-500 mt-0.5 leading-relaxed">
-                          켜면 월회비 청구서 생성 시 미납 교재비와 해당 월 연주회·콩쿠르
-                          참가비를 함께 청구합니다. 끄면 교재는 기존처럼 별도 판매·수납합니다.
-                        </span>
-                      </span>
-                    </label>
-                  </div>
-                </>
-              ) : (
-                <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-3.5 text-[11px] text-slate-500 leading-relaxed">
-                  회차권 모드에서는 월 청구·결제일·교재 합산 옵션을 쓰지 않습니다. 출석
-                  시 회차권에서 1회가 차감됩니다.
-                </div>
-              )}
-            </div>
-
-            {depositSupported && (
-              <div className="space-y-3 rounded-xl border border-rose-100 bg-rose-50/40 p-3">
-                <label className="flex items-start gap-2">
-                  <input
-                    type="checkbox"
-                    className="mt-1 w-4 h-4"
-                    checked={settings.depositEnabled === true}
-                    onChange={(e) =>
-                      setSettings({ ...settings, depositEnabled: e.target.checked })
-                    }
-                  />
-                  <span>
-                    <span className="block text-sm font-bold text-slate-800">예약금 받기</span>
-                    <span className="block text-[11px] text-slate-500 mt-0.5">
-                      켜면 고객 신청 시 계좌이체와 QR을 보여 줍니다. 끄면 신청만 받습니다.
-                    </span>
-                  </span>
-                </label>
-                {settings.depositEnabled && (
-                  <FormField label="예약금 금액">
-                    <input
-                      type="number"
-                      min={0}
-                      value={settings.depositAmount ?? 0}
-                      onChange={(e) =>
-                        setSettings({ ...settings, depositAmount: Number(e.target.value) || 0 })
-                      }
-                      className={FORM_CONTROL_CLASS}
-                    />
-                  </FormField>
-                )}
-                {renderStaffHoursFields({
-                  teachers: StorageService.getTeachers().filter((t) => t.status === 'active'),
-                  windows: settings.staffHours || [],
-                  onChange: (staffHours) => setSettings({ ...settings, staffHours }),
-                })}
-              </div>
-            )}
-
-            <FormField label="수납용 계좌번호 안내 (영수증 및 청구서에 표기)">
-              <input
-                type="text"
-                placeholder={bankAccountPlaceholder}
-                value={typeof settings.bankAccount === 'string' ? settings.bankAccount : ''}
-                onChange={(e) => setSettings({ ...settings, bankAccount: e.target.value })}
-                className={FORM_CONTROL_CLASS}
-              />
-            </FormField>
-
-            <div className="pt-4 border-t border-slate-100 space-y-3">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <DoorOpen className={`w-4 h-4 ${accentIcon}`} />
-                  <p className="text-sm font-bold text-slate-800">{roomCfg.sectionTitle}</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={addRoom}
-                  className={`inline-flex items-center gap-1 px-3 py-2 min-h-[44px] text-xs font-bold rounded-xl ${accent.hoverBg} ${accentIcon}`}
-                >
-                  <Plus className="w-4 h-4" />
-                  추가
-                </button>
-              </div>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                {roomCfg.sectionDescription}
-              </p>
-              {rooms.length === 0 ? (
-                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5">
-                  등록된 실이 없습니다. 추가하거나 온보딩에서 설정해 주세요.
-                </p>
-              ) : (
-                <ul className="space-y-2">
-                  {rooms.map((room) => (
-                    <li
-                      key={room.id}
-                      className="flex flex-col sm:flex-row gap-2 sm:items-center rounded-xl border border-slate-100 bg-slate-50/80 p-2.5"
-                    >
-                      <input
-                        type="text"
-                        value={room.name}
-                        onChange={(e) => updateRoom(room.id, { name: e.target.value })}
-                        className={`${FORM_CONTROL_CLASS} flex-1 min-h-[44px]`}
-                        placeholder={roomCfg.placeholder}
-                      />
-                      <select
-                        value={room.kind}
-                        onChange={(e) =>
-                          updateRoom(room.id, { kind: e.target.value as AcademyRoomKind })
-                        }
-                        className={`${FORM_CONTROL_CLASS} sm:w-32 min-h-[44px]`}
-                      >
-                        {(roomCfg.allowedKinds as string[]).includes('treatment') && (
-                          <option value="treatment">{ROOM_KIND_LABEL.treatment}</option>
-                        )}
-                        {(roomCfg.allowedKinds as string[]).includes('classroom') && (
-                          <option value="classroom">{ROOM_KIND_LABEL.classroom}</option>
-                        )}
-                        {(roomCfg.allowedKinds as string[]).includes('practice') && (
-                          <option value="practice">{ROOM_KIND_LABEL.practice}</option>
-                        )}
-                      </select>
-                      <button
-                        type="button"
-                        onClick={() => removeRoom(room.id)}
-                        className="p-2.5 min-h-[44px] min-w-[44px] text-rose-500 hover:bg-rose-50 rounded-xl"
-                        aria-label={`${room.name} 삭제`}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {textbooksLinkVisible && (
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('textbooks')}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 min-h-[44px]"
-                >
-                  <BookOpen className="w-4 h-4" />
-                  사용 교재는 교재 관리에서 등록
-                </button>
-              )}
-            </div>
-
-            <div className="pt-4 border-t border-slate-100 space-y-3">
-              <AttendanceFeatureToggle
-                enabled={attendanceEnabled}
-                onChange={(enabled) => {
-                  void handleAttendanceToggle(enabled);
-                }}
-                activeClassName={accent.btn}
-                iconClassName={accentIcon}
-                canEdit={canEditAttendanceMode}
-              />
-              {attendanceEnabled && (
-                <a
-                  href="/attendance-kiosk"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-1.5 text-xs font-bold min-h-[44px] ${accentIcon}`}
-                >
-                  <DoorOpen className="w-4 h-4" />
-                  출석 키오스크 열기
-                </a>
-              )}
-            </div>
-
-            <div className="flex justify-end pt-4">
-              <button
-                type="submit"
-                disabled={isSaving}
-                className={`px-6 py-2.5 min-h-[44px] ${accentBtn} disabled:opacity-60 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer`}
-              >
-                {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                {isSaving ? '저장 중…' : '설정 정보 저장'}
-              </button>
-            </div>
-          </form>
-        </SettingsCard>
-
-        <div className="space-y-6">
-          {/* 사이드바 메뉴 표시 관리 바로가기 카드 */}
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-100/80 shadow-xs space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
-                  <SlidersHorizontal className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">사이드바 메뉴 표시 관리</h3>
-                  <p className="text-[11px] text-slate-500">현재 업종에 맞추어 불필요한 사이드바 메뉴를 숨기거나 표시합니다</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setActiveTab('capabilities')}
-                className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-all shadow-xs"
-              >
-                메뉴 설정 열기
-              </button>
-            </div>
-          </div>
-
-          {/* 직급 및 권한 설정 바로가기 카드 */}
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-100/80 shadow-xs space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
-                  <Shield className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">직급 및 권한 설정</h3>
-                  <p className="text-[11px] text-slate-500">원장, 강사, 매니저 등 직급 신설 및 세부 권한을 제어합니다</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => navigate('/workspace/settings/roles')}
-                className="px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl transition-all shadow-xs"
-              >
-                직급 관리 열기
-              </button>
-            </div>
-          </div>
-
-          <CustomTermsSettingCard />
-
-          <OrganizationBackupCard
-            placeLabel={placeLabel}
-            customerLabel={customerLabel}
-            feeLabel={feeLabel}
-            accentIcon={accentIcon}
-            accentHover={accentHover}
-          />
-
-          <div className="pt-2 pb-4">
-            <p className="text-xs text-slate-500 text-center mb-2">
-              계정 탈퇴는 <strong>내 계정</strong> 메뉴에서 진행할 수 있습니다.
-            </p>
-            <LegalLinks className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs text-slate-500" />
-          </div>
-
-          <OrganizationDangerZoneCard
-            customerLabel={customerLabel}
-            contactLabel={contactLabel}
-            feeLabel={feeLabel}
-            staffLabel={staffLabel}
-          />
+        <div className="pt-4 pb-2">
+          <p className="text-xs text-slate-400 text-center mb-2">
+            계정 탈퇴는 <strong>내 계정</strong> 메뉴에서 진행할 수 있습니다.
+          </p>
+          <LegalLinks className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs text-slate-400" />
         </div>
       </div>
-
-      <IndustryFeatureGuidePanel industry={industry} />
     </div>
   );
 };

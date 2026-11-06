@@ -103,6 +103,7 @@ assert.equal(resolvePianoNavHighlightTab('lessons'), 'attendance');
 assert.equal(resolvePianoNavHighlightTab('tuition'), 'tuition');
 assert.equal(resolvePianoNavHighlightTab('income'), 'finance');
 assert.equal(resolvePianoNavHighlightTab('passes'), 'settings');
+assert.equal(resolvePianoNavHighlightTab('teachers'), 'teachers');
 
 const hubTabs = [
   ...PIANO_CUSTOMER_HUB_TABS,

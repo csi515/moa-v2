@@ -2,7 +2,6 @@ import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useOptionalOrganization } from '@/core/organizations/OrganizationProvider';
-import { isAttendanceModuleEnabled } from '@/capabilities/attendance/features';
 import { renderParentInviteResult } from '@/core/staff/staffUi';
 import type { StudentRegistrationInviteResult } from '@/core/students/services/studentRegistrationService';
 import {
@@ -32,7 +31,6 @@ import { Save, RefreshCw, StickyNote, SlidersHorizontal } from 'lucide-react';
 import { Modal } from '@/shared/components/ui/Modal';
 import { StudentBasicInfoSection } from './form/StudentBasicInfoSection';
 import { GuardianSection } from './form/GuardianSection';
-import { StudentPinSection } from './form/StudentPinSection';
 import { StudentAdvancedSection } from './form/StudentAdvancedSection';
 import { selfAccountEnrollmentNote } from './form/enrollmentFormCopy';
 import { StudentPickupSection } from './form/StudentPickupSection';
@@ -81,11 +79,10 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
   const organizationId = org?.currentOrganization?.id || 'local-org';
   const formRef = useRef<HTMLFormElement>(null);
 
-  const teachers = StorageService.getTeachers();
-  const classes = StorageService.getClasses();
-  const settings = StorageService.getSettings();
-  const attendanceEnabled = isAttendanceModuleEnabled(settings, industry);
-  const defaultLevel = getStudentLevelOptions(industry)[0];
+  const teachers = useMemo(() => (isOpen ? StorageService.getTeachers() : []), [isOpen]);
+  const classes = useMemo(() => (isOpen ? StorageService.getClasses() : []), [isOpen]);
+  const settings = useMemo(() => (isOpen ? StorageService.getSettings() : ({} as any)), [isOpen]);
+  const defaultLevel = useMemo(() => getStudentLevelOptions(industry)[0], [industry]);
   const rosterConfig = useMemo(
     () =>
       getRosterConfigForIndustry(industry, {
@@ -132,8 +129,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
   const [isAdultSelf, setIsAdultSelf] = useState(false);
   const [activeSearchIdx, setActiveSearchIdx] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showAdvanced, setShowAdvanced] = useState(!isEdit);
-  const [revealedPin, setRevealedPin] = useState<string | null>(null);
+  const [showAdvanced, setShowAdvanced] = useState(true);
   const [inviteModal, setInviteModal] = useState<StudentRegistrationInviteResult | null>(null);
   const [postSaveStudent, setPostSaveStudent] = useState<Student | null>(null);
   const [fieldErrors, setFieldErrors] = useState<StudentFormErrors>({});
@@ -216,25 +212,24 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         usesShuttleService: false,
         pickupAddresses: [createPickupAddress({ isDefault: true })],
         checkInPin: '',
-        autoGeneratePin: attendanceEnabled,
+        autoGeneratePin: false,
       };
       nextGuardians = [newGuardianEntry(true)];
       nextCustomFields = extractCustomFieldValues(null, customFieldsDef);
-      setShowAdvanced(false);
+      setShowAdvanced(true);
     }
 
     setFormData(nextForm);
     setGuardians(nextGuardians);
     setCustomFieldValues(nextCustomFields);
     setIsAdultSelf(false);
-    setRevealedPin(null);
     setActiveSearchIdx(null);
     setPostSaveStudent(null);
     setFieldErrors({});
     setBaseline(
       studentFormSnapshot(nextForm, nextGuardians, false) + JSON.stringify(nextCustomFields)
     );
-  }, [student, isOpen, attendanceEnabled, defaultLevel, teachers, classes, settings, customFieldsDef]);
+  }, [student, isOpen, defaultLevel, teachers, classes, settings, customFieldsDef]);
 
   const searchResults = useMemo(() => {
     if (activeSearchIdx === null) return [];
@@ -427,10 +422,8 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         organizationId,
       });
 
-      if (result.generatedPin) setRevealedPin(result.generatedPin);
 
       let message = `${result.student.name} ${customerLabel}이 등록되었습니다.`;
-      if (result.generatedPin) message += ` 출입 PIN: ${result.generatedPin}`;
       if (result.invitesSent > 0) message += ` (${contactLabel} 초대 ${result.invitesSent}건)`;
       showToast(message, 'success');
       result.inviteErrors.forEach((err) => showToast(err, 'warning'));
@@ -451,7 +444,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
 
   if (!isOpen) return null;
 
-  const saveDisabled = isSubmitting || Boolean(revealedPin) || Boolean(postSaveStudent);
+  const saveDisabled = isSubmitting || Boolean(postSaveStudent);
 
   const footer = postSaveStudent ? undefined : (
     <div className="flex justify-end gap-3">
@@ -491,12 +484,6 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         confirmClose={confirmUnsavedClose}
         footer={footer}
       >
-        {revealedPin && (
-          <div className="mx-6 mt-4 p-4 bg-indigo-600 text-white rounded-2xl text-center">
-            <p className="text-xs opacity-90">발급된 출입 PIN</p>
-            <p className="text-3xl font-black tracking-[0.4em] font-mono mt-1">{revealedPin}</p>
-          </div>
-        )}
 
         {postSaveStudent && !inviteModal && (
           <StudentFormPostSave
@@ -622,9 +609,6 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
             />
           </section>
 
-          {attendanceEnabled && !isEdit && (
-            <StudentPinSection formData={formData} onChange={updateFormData} />
-          )}
 
           {showPickupFields && (
             <StudentPickupSection
@@ -661,7 +645,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
             if (postSaveStudent) {
               return;
             }
-            if (!revealedPin) onClose();
+            onClose();
           },
         })}
     </>

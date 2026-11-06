@@ -5,8 +5,8 @@ import { PianoAttendanceView } from './components/attendance/PianoAttendanceView
 import { CustomerHubView } from '@/core/customer';
 import { SettingsHubView } from '@/core/organizations/components/SettingsHubView';
 import { StudentListView } from '@/capabilities/roster';
+import { TeacherManagementView } from '@/core/staff/components/TeacherManagementView';
 import { ClassManagementView } from '@/capabilities/scheduling';
-import { GuardianEnrollmentRequestsView } from '@/capabilities/enrollment';
 import {
   DashboardView,
   RecitalManagementView,
@@ -89,8 +89,8 @@ const consultationAvailabilitySettings = () => (
 const customerHub = () => (
   <CustomerHubView
     listView={StudentListView}
-    enrollmentLabel="등록"
-    guardianEnrollmentView={GuardianEnrollmentRequestsView}
+    showEnrollmentTab={false}
+    showParentsTab={false}
   />
 );
 const scheduleHub = () => <PianoScheduleView />;
@@ -116,6 +116,7 @@ const PIANO_VIEW_MAP: Record<string, () => ReactNode> = {
   ...financeViewEntries,
   classes: () => <ClassManagementView />,
   consultations: () => <PianoConsultationHubView />,
+  teachers: () => <TeacherManagementView />,
   bookings: consultationAvailabilitySettings,
   practice: () => <PracticeRecordsView />,
   resources: () => <ResourceManagementView />,

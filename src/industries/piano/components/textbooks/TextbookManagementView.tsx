@@ -157,21 +157,21 @@ export const TextbookManagementView: React.FC = () => {
 
   const handleCancelSale = (sale: TextbookSale) => {
     openConfirmDialog({
-      title: '교재 판매 취소 / 반품',
-      message: `${sale.studentName} 학생의 "${sale.textbookTitle}" (${sale.quantity}권) 판매를 취소하시겠습니까?\n차감되었던 재고 ${sale.quantity}권이 자동으로 복구됩니다.`,
-      confirmText: '판매 취소 (재고 원복)',
+      title: '교재 지급 취소',
+      message: `${sale.studentName} 원생에게 지급된 "${sale.textbookTitle}" ${sale.quantity}권을 취소할까요?\n차감되었던 학원 재고가 다시 복구됩니다.`,
+      confirmText: '지급 취소',
       isDestructive: true,
       onConfirm: () => {
         void (async () => {
           try {
-            const ok = await StorageService.cancelSale(sale.id, '사용자 판매 취소/반품');
+            const ok = await StorageService.cancelSale(sale.id, '교재 지급 취소');
             if (ok) {
-              showToast(`판매가 취소되고 재고가 복구되었습니다.`, 'success');
+              showToast('교재 지급이 취소되고 재고가 복구되었습니다.', 'success');
               triggerRefresh();
             }
           } catch (err) {
             showToast(
-              err instanceof Error ? err.message : '교재 판매 취소에 실패했습니다.',
+              err instanceof Error ? err.message : '교재 지급 취소에 실패했습니다.',
               'error'
             );
           }
@@ -210,21 +210,21 @@ export const TextbookManagementView: React.FC = () => {
         actions={
           <div className="flex flex-wrap items-center gap-2">
             <button
-              onClick={() => openSaleModal()}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs font-semibold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              교재 판매 등록
-            </button>
-            <button
               onClick={() => {
                 setEditingTextbook(null);
                 setIsFormModalOpen(true);
               }}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs font-semibold rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs font-bold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-md cursor-pointer"
             >
-              <Plus className="w-4 h-4 text-indigo-600" />
-              새 교재 등록
+              <Plus className="w-4 h-4" />
+              <span>+ 새 교재 등록</span>
+            </button>
+            <button
+              onClick={() => openSaleModal()}
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors shadow-xs cursor-pointer"
+            >
+              <ShoppingBag className="w-4 h-4 text-indigo-600" />
+              <span>학생 교재 지급 / 배부</span>
             </button>
           </div>
         }

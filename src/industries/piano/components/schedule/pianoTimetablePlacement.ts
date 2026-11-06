@@ -495,3 +495,134 @@ export function moveStudentToSlot(params: {
   if (!assigned.ok) return assigned;
   return { ok: true, student: assigned.student, createdClass: assigned.createdClass };
 }
+
+
+export interface AssignWithRecurrenceParams {
+  student: Student;
+  days: DayOfWeek[];
+  startTime: string;
+  classes: ClassItem[];
+  teachers: Teacher[];
+  preferredTeacherId?: string;
+  createClassIfMissing?: boolean;
+}
+
+export type AssignWithRecurrenceResult =
+  | {
+      ok: true;
+      student: Student;
+      createdClassCount: number;
+      assignedDays: DayOfWeek[];
+      message: string;
+    }
+  | {
+      ok: false;
+      message: string;
+      needsNewClass?: boolean;
+      missingDays?: DayOfWeek[];
+    };
+
+/**
+ * 다중 요일 정규 반복 수업에 학생을 배치.
+ * 각 요일별 슬롯 반이 존재하면 배정하고, 없으면 확인 후 자동 생성.
+ */
+export function assignStudentWithRecurrence(
+  params: AssignWithRecurrenceParams
+): AssignWithRecurrenceResult {
+  const { student, days, startTime, teachers, preferredTeacherId } = params;
+  const createClassIfMissing = params.createClassIfMissing === true;
+  let currentClasses = [...params.classes];
+
+  if (student.status !== 'active') {
+    return { ok: false, message: '재원 학생만 시간표에 배치할 수 있습니다.' };
+  }
+  if (!days || days.length === 0) {
+    return { ok: false, message: '최소 1개 이상의 요일을 선택해야 합니다.' };
+  }
+
+  // 1단계: 반 존재 여부 확인 (createClassIfMissing이 false일 때)
+  if (!createClassIfMissing) {
+    const missingDays = days.filter(
+      (day) => !findEditableSlotClass(currentClasses, day, startTime, preferredTeacherId)
+    );
+    if (missingDays.length > 0) {
+      return {
+        ok: false,
+        needsNewClass: true,
+        missingDays,
+        message: `${missingDays.join(', ')}요일 ${startTime}에 반이 없습니다. 새 반을 생성하여 배치할까요?`,
+      };
+    }
+  }
+
+  // 2단계: 각 요일별 배치 수행
+  let nextIds = [...(student.classIds || [])];
+  let createdCount = 0;
+  const assignedDays: DayOfWeek[] = [];
+
+  for (const day of days) {
+    // 같은 요일의 다른 단일 슬롯에서 제거 (하루 한 타임 기준)
+    for (const cls of currentClasses) {
+      if (!nextIds.includes(cls.id)) continue;
+      if (cls.daysOfWeek.length !== 1 || cls.daysOfWeek[0] !== day) continue;
+      if (cls.startTime === startTime) continue;
+      nextIds = nextIds.filter((id) => id !== cls.id);
+    }
+
+    const existingSlotClass = findEditableSlotClass(
+      currentClasses,
+      day,
+      startTime,
+      preferredTeacherId
+    );
+
+    if (!existingSlotClass && createClassIfMissing) {
+      const conflicts = findClassConflicts(
+        currentClasses,
+        buildNewSlotClassCandidate(day, startTime, teachers, preferredTeacherId)
+      );
+      if (conflicts.length > 0) {
+        return {
+          ok: false,
+          message: `${day}요일 새 반을 만들 수 없습니다:\n${formatConflictSummary(conflicts)}`,
+        };
+      }
+    }
+
+    const slotClass = ensureEditableSlotClass({
+      classes: currentClasses,
+      day,
+      startTime,
+      teachers,
+      preferredTeacherId,
+      createIfMissing: createClassIfMissing,
+    });
+
+    if (!slotClass) {
+      return {
+        ok: false,
+        message: `${day}요일 ${startTime} 반을 생성하거나 찾을 수 없습니다.`,
+      };
+    }
+
+    if (!existingSlotClass) {
+      createdCount++;
+      currentClasses = StorageService.getClasses();
+    }
+
+    if (!nextIds.includes(slotClass.id)) {
+      nextIds.push(slotClass.id);
+    }
+    assignedDays.push(day);
+  }
+
+  const updatedStudent = saveStudentClassIds(student, nextIds);
+
+  return {
+    ok: true,
+    student: updatedStudent,
+    createdClassCount: createdCount,
+    assignedDays,
+    message: `${student.name} 학생을 ${assignedDays.join('·')}요일 ${startTime}에 배치했습니다.`,
+  };
+}

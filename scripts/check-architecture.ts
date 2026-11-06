@@ -32,6 +32,7 @@ const edges: Edge[] = [];
 const warnings: string[] = [];
 
 for (const file of filesUnder(join(root, 'src', 'core'))) {
+  if (file.includes('.tmp.') || file.endsWith('.tmp.ts')) continue;
   const rel = relative(root, file).replaceAll('\\', '/');
   for (const spec of specifiers(file)) {
     if (spec.includes('/capabilities/') || spec.includes('/presets/')) {
@@ -41,6 +42,7 @@ for (const file of filesUnder(join(root, 'src', 'core'))) {
 }
 
 for (const file of filesUnder(join(root, 'src', 'capabilities'))) {
+  if (file.includes('.tmp.') || file.endsWith('.tmp.ts')) continue;
   const rel = relative(root, file).replaceAll('\\', '/');
   const owner = rel.split('/')[2];
   const text = readFileSync(file, 'utf8');

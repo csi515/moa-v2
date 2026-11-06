@@ -14,7 +14,6 @@ import {
   Clock,
   FileText,
   RotateCcw,
-  Eye,
   EyeOff,
 } from 'lucide-react';
 import {
@@ -174,13 +173,6 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
     setDismissed(true);
   };
 
-  const handleShowAgain = () => {
-    setQuestWidgetDismissed(organizationId, false);
-    setDismissed(false);
-    setUserExpandedAfterComplete(true);
-    setIsCollapsed(false);
-  };
-
   const handleToggleCollapse = () => {
     if (isCollapsed && progress.isAllCompleted) {
       setUserExpandedAfterComplete(true);
@@ -188,25 +180,12 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
     setIsCollapsed((v) => !v);
   };
 
-  if (quests.length === 0) return null;
+  // 퀘스트가 없거나 이미 숨김(dismissed) 처리된 경우 대시보드에서 완전히 은닉(0px)
+  if (quests.length === 0 || dismissed) return null;
 
-  if (dismissed) {
-    return (
-      <div
-        className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3"
-        data-testid="getting-started-quest-widget-dismissed"
-      >
-        <p className="text-xs text-slate-500">첫걸음 가이드를 숨겼습니다.</p>
-        <button
-          type="button"
-          onClick={handleShowAgain}
-          className="inline-flex items-center gap-1.5 min-h-[44px] px-3 rounded-xl text-xs font-bold text-indigo-700 hover:bg-indigo-50"
-        >
-          <Eye className="w-3.5 h-3.5" />
-          다시 보기
-        </button>
-      </div>
-    );
+  // 100% 완료 상태이고 compactWhenComplete가 활성화되어 있으며 명시적으로 다시 펼치지 않은 경우 완전 은닉
+  if (compactWhenComplete && progress.isAllCompleted && !userExpandedAfterComplete) {
+    return null;
   }
 
   return (
@@ -244,22 +223,20 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
             </div>
           </div>
 
-          {progress.isAllCompleted && (
-            <button
-              type="button"
-              onClick={handleDismiss}
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-              title="가이드 숨기기"
-              data-testid="quest-widget-dismiss"
-            >
-              <EyeOff className="w-5 h-5" />
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handleDismiss}
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+            title="가이드 숨기기"
+            data-testid="quest-widget-dismiss"
+          >
+            <EyeOff className="w-5 h-5" />
+          </button>
 
           <button
             type="button"
             onClick={handleToggleCollapse}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
             title={isCollapsed ? '펼치기' : '접기'}
           >
             {isCollapsed ? <ChevronDown className="w-5 h-5" /> : <ChevronUp className="w-5 h-5" />}
@@ -268,7 +245,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
       </div>
 
       {progress.isAllCompleted && !isCollapsed && (
-        <div className="mt-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white flex items-center justify-between shadow-xs animate-in fade-in duration-300">
+        <div className="mt-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs animate-in fade-in duration-300">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0">
               <CheckCircle2 className="w-6 h-6 text-white" />
@@ -282,15 +259,26 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={handleReset}
-            className="text-xs text-white/80 hover:text-white flex items-center gap-1 shrink-0 px-2.5 py-1 rounded-lg bg-black/10 hover:bg-black/20 transition-colors"
-            title="퀘스트 초기화"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>다시하기</span>
-          </button>
+          <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+            <button
+              type="button"
+              onClick={handleDismiss}
+              className="text-xs text-white bg-black/20 hover:bg-black/30 font-bold flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-colors cursor-pointer"
+              title="가이드 숨기기"
+            >
+              <EyeOff className="w-3.5 h-3.5" />
+              <span>가이드 닫기</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleReset}
+              className="text-xs text-white/80 hover:text-white flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-black/10 hover:bg-black/20 transition-colors cursor-pointer"
+              title="퀘스트 초기화"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>다시하기</span>
+            </button>
+          </div>
         </div>
       )}
 
@@ -322,7 +310,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
                     <button
                       type="button"
                       onClick={(e) => toggleQuest(quest.id, e)}
-                      className="p-1 rounded-md text-slate-400 hover:text-emerald-600 transition-colors"
+                      className="p-1 rounded-md text-slate-400 hover:text-emerald-600 transition-colors cursor-pointer"
                       title={isDone ? '완료 취소' : '완료로 표시'}
                     >
                       {isDone ? (
@@ -366,7 +354,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
                   <button
                     type="button"
                     onClick={() => handleAction(quest)}
-                    className={`inline-flex items-center gap-1.5 text-xs font-bold transition-colors ${
+                    className={`inline-flex items-center gap-1.5 text-xs font-bold transition-colors cursor-pointer ${
                       isDone
                         ? 'text-slate-400 hover:text-slate-600'
                         : 'text-indigo-600 hover:text-indigo-800'

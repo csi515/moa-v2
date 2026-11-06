@@ -3,12 +3,12 @@ import type { IncomeEntry } from '@/capabilities/billing/finance/types';
 import { STORAGE_KEYS } from '@/services/adapters/storageKeys';
 import { generateEntityId, getItem, setItem } from '@/services/storage/helpers';
 
-type LinkedIncomeSource = 'tuition' | 'textbook' | 'booking' | 'retail';
+export type LinkedIncomeSource = 'tuition' | 'textbook' | 'booking' | 'retail' | 'session_pass';
 
 function defaultCategory(sourceType: LinkedIncomeSource): string {
   if (sourceType === 'tuition') return 'membership';
   if (sourceType === 'textbook' || sourceType === 'retail') return 'product';
-  if (sourceType === 'booking') return 'session';
+  if (sourceType === 'booking' || sourceType === 'session_pass') return 'session';
   return 'other';
 }
 

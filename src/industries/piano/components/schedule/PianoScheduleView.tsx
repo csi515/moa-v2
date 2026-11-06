@@ -14,7 +14,7 @@ type ScheduleSegment = 'timetable' | 'calendar' | 'rooms';
 
 /**
  * 피아노 일정 뷰
- * - 시간표(주간 그리드)와 월별 달력(학원 캘린더)을 상단 탭으로 즉시 전환
+ * - 시간표(주간 그리드)와 주간 달력(학원 캘린더)을 상단 탭으로 즉시 전환
  * - 보강은 독립 탭 대신 시간표 상단 액션(+ 보강 레슨 추가)으로 직관적 연계
  */
 export const PianoScheduleView: FC = () => {
@@ -50,7 +50,7 @@ export const PianoScheduleView: FC = () => {
   const segmentOptions = useMemo(() => {
     const opts: { value: ScheduleSegment; label: string }[] = [
       { value: 'timetable', label: '시간표' },
-      { value: 'calendar', label: '월별 달력' },
+      { value: 'calendar', label: '주간 달력' },
     ];
     if (canRooms) {
       opts.push({ value: 'rooms', label: '연습실' });
@@ -66,7 +66,7 @@ export const PianoScheduleView: FC = () => {
 
   const title =
     segment === 'calendar'
-      ? `${placeLabel} 월별 달력`
+      ? `${placeLabel} 주간 달력`
       : segment === 'rooms'
       ? '연습실 예약'
       : '수업 시간표';

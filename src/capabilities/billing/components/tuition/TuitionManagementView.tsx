@@ -93,9 +93,24 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
 
   const handleToggleUnpaidFilter = () => {
     if (viewMode === 'invoices') {
-      setStatusFilter((prev) => (prev === 'unpaid' ? 'ALL' : 'unpaid'));
+      const next = statusFilter === 'unpaid' ? 'ALL' : 'unpaid';
+      setStatusFilter(next);
+      setCombinedStatusFilter(next === 'unpaid' ? 'unpaid' : 'all');
     } else {
-      setCombinedStatusFilter((prev) => (prev === 'unpaid' ? 'all' : 'unpaid'));
+      const next = combinedStatusFilter === 'unpaid' ? 'all' : 'unpaid';
+      setCombinedStatusFilter(next);
+      setStatusFilter(next === 'unpaid' ? 'unpaid' : 'ALL');
+    }
+  };
+
+  const handleViewModeChange = (nextMode: ViewMode) => {
+    setViewMode(nextMode);
+    if (isUnpaidActive) {
+      if (nextMode === 'invoices') {
+        setStatusFilter('unpaid');
+      } else {
+        setCombinedStatusFilter('unpaid');
+      }
     }
   };
 
@@ -144,7 +159,7 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
       <TuitionFilterBar
         customerLabel={customerLabel}
         viewMode={viewMode}
-        onViewModeChange={setViewMode}
+        onViewModeChange={handleViewModeChange}
         selectedMonth={selectedMonth}
         onSelectedMonthChange={setSelectedMonth}
         monthOptions={monthOptions}

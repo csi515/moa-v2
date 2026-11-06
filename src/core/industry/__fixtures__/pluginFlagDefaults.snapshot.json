@@ -37,11 +37,6 @@
           "icon": "calendar"
         },
         {
-          "id": "attendance",
-          "label": "출결",
-          "icon": "check"
-        },
-        {
           "id": "tuition",
           "label": "수납",
           "icon": "card"

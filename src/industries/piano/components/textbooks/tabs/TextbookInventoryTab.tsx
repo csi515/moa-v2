@@ -251,12 +251,12 @@ export const TextbookInventoryTab: React.FC<TextbookInventoryTabProps> = ({
 
                   <div className="grid grid-cols-2 gap-2 mt-3.5 p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-xs">
                     <div>
-                      <span className="text-slate-400 text-[10px] block">판매단가</span>
+                      <span className="text-slate-400 text-[10px] block">교재비</span>
                       <span className="font-bold text-slate-900 text-sm">
                         ₩{salePrice.toLocaleString()}
                       </span>
                       <span className="text-[10px] text-slate-400 block mt-0.5">
-                        원가 ₩{costPrice.toLocaleString()}
+                        입고가 ₩{costPrice.toLocaleString()}
                       </span>
                     </div>
 
@@ -321,10 +321,10 @@ export const TextbookInventoryTab: React.FC<TextbookInventoryTabProps> = ({
                       className="px-3 py-1.5 min-h-[44px] text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors flex items-center gap-1 shadow-xs"
                     >
                       <ShoppingBag className="w-3.5 h-3.5" />
-                      판매하기
+                      교재 지급
                     </button>
                   ) : (
-                    <span className="text-[11px] font-semibold text-slate-400 px-2">판매 불가</span>
+                    <span className="text-[11px] font-semibold text-slate-400 px-2">지급 중단</span>
                   )}
                 </div>
               </div>

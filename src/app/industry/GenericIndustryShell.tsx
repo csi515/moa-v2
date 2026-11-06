@@ -37,7 +37,6 @@ import { useTabGuard } from '@/shared/navigation/useTabGuard';
 import { accountViewEntry, financeViewEntries } from '@/core/industry/commonViewEntries';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
 import { GettingStartedQuestWidget } from '@/app/onboarding/GettingStartedQuestWidget';
-import { ContextualFeatureHelp } from '@/core/help/components/ContextualFeatureHelp';
 import { BusinessHealthWidget } from '@/shared/components/diagnostics';
 import { CompanyAppLauncherDashboard } from '@/pages/workspace/CompanyAppLauncherDashboard';
 
@@ -1404,10 +1403,6 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
           <WorkerRepledgeHost />
         </Suspense>
       )}
-      <ContextualFeatureHelp
-        industryType={currentOrganization?.industry_type}
-        activeTab={activeTab}
-      />
       <PluginErrorBoundary pluginName={activeTab}>
         {renderViewContent()}
       </PluginErrorBoundary>

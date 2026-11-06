@@ -127,6 +127,18 @@ export function mergeOrganizationSettings(
     merged.industrySettings.booking.depositEnabled = incoming.depositEnabled;
   }
 
+  if (
+    incoming.industrySettings?.education?.sessionPassPackages !== undefined &&
+    incoming.sessionPassPackages === undefined
+  ) {
+    merged.sessionPassPackages = incoming.industrySettings.education.sessionPassPackages;
+  } else if (
+    incoming.sessionPassPackages !== undefined &&
+    merged.industrySettings?.education
+  ) {
+    merged.industrySettings.education.sessionPassPackages = incoming.sessionPassPackages;
+  }
+
   return merged;
 }
 

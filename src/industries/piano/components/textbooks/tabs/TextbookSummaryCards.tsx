@@ -22,7 +22,7 @@ export const TextbookSummaryCards: React.FC<TextbookSummaryCardsProps> = ({
   return (
     <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
       <SummaryMetricCard
-        label="이번달 교재 판매액"
+        label="이번달 교재 청구액"
         value={formatCurrency(stats.monthlySaleAmount)}
         subtitle={`${currentYM}월 누적`}
       />
@@ -39,10 +39,10 @@ export const TextbookSummaryCards: React.FC<TextbookSummaryCardsProps> = ({
         subtitle={`미납 학생 ${stats.unpaidStudentsCount}명`}
       />
       <SummaryMetricCard
-        label="이번달 판매 권수"
+        label="이번달 전달한 교재"
         value={`${stats.monthlyBooksSold}권`}
         variant="amber"
-        subtitle="학생 출고 완료"
+        subtitle="원생 전달 완료"
       />
       <SummaryMetricCard
         label="재고 부족 교재"

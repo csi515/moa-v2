@@ -82,11 +82,11 @@ export const TextbookSalesTab: React.FC<TextbookSalesTabProps> = ({
           <table className="w-full text-xs text-left">
             <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
               <tr>
-                <th className="py-3 px-4">판매일</th>
+                <th className="py-3 px-4">지급일</th>
                 <th className="py-3 px-4">학생 (학부모)</th>
                 <th className="py-3 px-4">교재명</th>
                 <th className="py-3 px-3 text-center">수량</th>
-                <th className="py-3 px-3 text-right">판매단가</th>
+                <th className="py-3 px-3 text-right">교재비</th>
                 <th className="py-3 px-3 text-right">최종금액</th>
                 <th className="py-3 px-3 text-right">수납액</th>
                 <th className="py-3 px-3 text-right">미납 잔액</th>
@@ -183,7 +183,7 @@ export const TextbookSalesTab: React.FC<TextbookSalesTabProps> = ({
                           <button
                             onClick={() => onCancelSale(sale)}
                             className="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
-                            title="판매 취소 및 재고 원복"
+                            title="지급 취소 (재고 복구)"
                           >
                             <RotateCcw className="w-3.5 h-3.5" />
                           </button>

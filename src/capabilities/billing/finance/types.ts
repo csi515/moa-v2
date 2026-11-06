@@ -52,7 +52,7 @@ export interface IncomeEntry {
   description: string;
   payer?: string;
   memo?: string;
-  sourceType?: 'manual' | 'tuition' | 'textbook' | 'booking' | 'retail';
+  sourceType?: 'manual' | 'tuition' | 'textbook' | 'booking' | 'retail' | 'session_pass';
   sourceId?: string;
 }
 
