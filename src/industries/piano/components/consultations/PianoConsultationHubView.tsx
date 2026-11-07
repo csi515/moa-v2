@@ -24,6 +24,7 @@ import { ConsultationQrModal } from '@/core/schedules/components/ConsultationQrM
 import { CreateConsultationScheduleModal } from '@/core/schedules/components/CreateConsultationScheduleModal';
 import { ConsultationRecordModal } from '@/capabilities/consultation';
 import { StudentFormModal } from '@/capabilities/roster';
+import { mapConsultationToStudentDraft } from '@/capabilities/consultation/utils/consultationStudentMapper';
 import {
   usePianoConsultationHub,
   formatConsultationSchedule,
@@ -635,6 +636,9 @@ export const PianoConsultationHubView: FC = () => {
           onSaved={() => {
             void refreshConsultations();
           }}
+          onPromoteToStudent={(draft) => {
+            setRegisteringRow(draft as any);
+          }}
           initialData={{
             id: recordModalRow.consultationRecord?.id,
             studentId: recordModalRow.registeredStudentId,
@@ -656,16 +660,16 @@ export const PianoConsultationHubView: FC = () => {
           isOpen={Boolean(registeringRow)}
           onClose={handleCloseRegister}
           student={
-            {
-              id: '',
-              name: registeringRow.studentName || registeringRow.applicantName,
-              phone: registeringRow.phone,
-              parentName: registeringRow.applicantName,
-              parentPhone: registeringRow.phone,
-              memo: `[상담 연동]\n• 희망 과정: ${registeringRow.coursePreference}\n• 내용: ${registeringRow.notes || '없음'}`,
-              status: 'active',
-              level: '기초',
-            } as any
+            (registeringRow as any).specialNotes !== undefined
+              ? (registeringRow as any)
+              : (mapConsultationToStudentDraft({
+                  consultationId: registeringRow.id,
+                  studentName: registeringRow.studentName,
+                  parentName: registeringRow.applicantName,
+                  phone: registeringRow.phone,
+                  coursePreference: registeringRow.coursePreference,
+                  notes: registeringRow.notes,
+                }) as any)
           }
           onSaved={() => {
             void refreshConsultations();

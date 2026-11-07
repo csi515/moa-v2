@@ -39,6 +39,7 @@ export interface StudentFormData {
   pickupAddresses: PickupAddress[];
   checkInPin: string;
   autoGeneratePin: boolean;
+  autoCreateInvoice?: boolean;
 }
 
 /** @deprecated 신규는 getStudentLevelOptions(industry) */

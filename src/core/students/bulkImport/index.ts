@@ -17,3 +17,4 @@ export {
 export { runStudentBulkImport } from './runStudentBulkImport';
 export type { BulkImportProgress, BulkImportRunResult } from './runStudentBulkImport';
 
+export { parseStudentClipboardText, inferColumnType } from './parseStudentClipboard';

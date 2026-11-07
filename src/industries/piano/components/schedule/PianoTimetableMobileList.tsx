@@ -1,5 +1,5 @@
 import { useState, useMemo, type FC } from 'react';
-import { Plus, X } from 'lucide-react';
+import { MoveRight, Plus, X } from 'lucide-react';
 import type { ClassItem, DayOfWeek, Student } from '@/types';
 import {
   TIMETABLE_DAYS,
@@ -20,6 +20,7 @@ interface PianoTimetableMobileListProps {
   onPlacePending: (day: DayOfWeek, startTime: TimetableSlot) => void;
   onRemove: (placement: SlotPlacement, day: DayOfWeek, startTime: TimetableSlot) => void;
   onStartPlaceStudent: (student: Student) => void;
+  onOpenMoveModal?: (placement: SlotPlacement) => void;
 }
 
 /** 모바일/태블릿 — 요일 카드 + 탭으로 배치 */
@@ -34,6 +35,7 @@ export const PianoTimetableMobileList: FC<PianoTimetableMobileListProps> = ({
   onPlacePending,
   onRemove,
   onStartPlaceStudent,
+  onOpenMoveModal,
 }) => {
   const pending = students.find((s) => s.id === pendingStudentId);
   const slots = resolveTimetableSlots(classes);
@@ -116,13 +118,30 @@ export const PianoTimetableMobileList: FC<PianoTimetableMobileListProps> = ({
                     >
                       <button
                         type="button"
-                        onClick={() => p.editable && onStartPlaceStudent(p.student)}
-                        className="flex-1 text-left min-w-0"
+                        onClick={() => {
+                          if (!p.editable) return;
+                          if (onOpenMoveModal) {
+                            onOpenMoveModal(p);
+                          } else {
+                            onStartPlaceStudent(p.student);
+                          }
+                        }}
+                        className="flex-1 text-left min-w-0 group"
                       >
-                        <p className="text-sm font-bold text-slate-900 truncate">{p.student.name}</p>
-                        <p className="text-[11px] text-slate-500 truncate">
+                        <div className="flex items-center gap-1.5">
+                          <p className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors truncate">
+                            {p.student.name}
+                          </p>
+                          {p.editable && (
+                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-600 border border-indigo-100">
+                              <MoveRight className="w-2.5 h-2.5" />
+                              이동
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-slate-500 truncate mt-0.5">
                           {p.classItem.teacherName}
-                          {p.editable ? ' · 탭하여 이동' : ' · 반 소속'}
+                          {p.editable ? ' · 탭하여 다른 시간대로 이동' : ' · 반 소속'}
                         </p>
                       </button>
                       {p.editable && (

@@ -15,6 +15,7 @@ import {
 } from './pianoTimetablePlacement';
 import { PianoTimetableMobileList } from './PianoTimetableMobileList';
 import { PianoTimetableStudentPicker } from './PianoTimetableStudentPicker';
+import { StudentTimetableMoveModal } from './StudentTimetableMoveModal';
 import { usePianoLessonTimetable } from './usePianoLessonTimetable';
 
 /**
@@ -26,6 +27,7 @@ export const PianoLessonTimetableView: FC = () => {
   const navigate = usePianoNavigate();
   const [calendarView, setCalendarView] = useState<CalendarViewMode>('week');
   const [selectedDayFilter, setSelectedDayFilter] = useState<'ALL' | DayOfWeek>('ALL');
+  const [moveTargetPlacement, setMoveTargetPlacement] = useState<SlotPlacement | null>(null);
 
   const {
     useDragGrid,
@@ -62,6 +64,24 @@ export const PianoLessonTimetableView: FC = () => {
     startPlaceStudent,
     placePending,
   } = usePianoLessonTimetable();
+
+  const handleConfirmMoveFromModal = async ({
+    placement,
+    targetDay,
+    targetStartTime,
+  }: {
+    placement: SlotPlacement;
+    targetDay: DayOfWeek;
+    targetStartTime: string;
+  }) => {
+    const payload: DragPlacementPayload = {
+      studentId: placement.student.id,
+      day: (placement.classItem.daysOfWeek?.[0] || '월') as DayOfWeek,
+      startTime: placement.classItem.startTime || '14:00',
+      classId: placement.classItem.id,
+    };
+    movePlacement(payload, targetDay, targetStartTime as any);
+  };
 
   const renderTimetable = (sectionClasses: ClassItem[], sectionTeacherId?: string, sectionRoom?: string) => {
     if (useDragGrid && selectedDayFilter === 'ALL') {
@@ -110,12 +130,19 @@ export const PianoLessonTimetableView: FC = () => {
             return (
               <div
                 className={`group rounded-lg px-2 py-1 text-left text-white shadow-2xs ${
-                  p.editable ? 'cursor-grab active:cursor-grabbing' : 'cursor-default opacity-95'
+                  p.editable ? 'cursor-pointer hover:ring-2 hover:ring-white/40' : 'cursor-default opacity-95'
                 }`}
                 style={{ backgroundColor: p.classItem.color || '#4f46e5' }}
+                onClick={(e) => {
+                  if (p.editable) {
+                    e.stopPropagation();
+                    setMoveTargetPlacement(p);
+                  }
+                }}
+                title={p.editable ? `${p.student.name} 학생 탭하여 다른 시간대로 이동 (또는 드래그)` : undefined}
               >
                 <div className="flex items-start justify-between gap-1">
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <p className="text-[11px] font-bold truncate">{p.student.name}</p>
                     <p className="text-[10px] text-white/85 truncate">
                       {p.classItem.teacherName || p.classItem.name}
@@ -163,6 +190,7 @@ export const PianoLessonTimetableView: FC = () => {
         onPlacePending={(day, startTime) => placePending(day, startTime, sectionTeacherId, sectionRoom)}
         onRemove={handleRemove}
         onStartPlaceStudent={(student) => startPlaceStudent(student, sectionTeacherId)}
+        onOpenMoveModal={(placement) => setMoveTargetPlacement(placement)}
       />
     );
   };
@@ -453,6 +481,16 @@ export const PianoLessonTimetableView: FC = () => {
             room || pickerSlot.preferredRoom
           );
         }}
+      />
+
+      {/* 6번 기능: 수업 시간표 1클릭 원터치 학생 이동 모달 */}
+      <StudentTimetableMoveModal
+        isOpen={Boolean(moveTargetPlacement)}
+        placement={moveTargetPlacement}
+        classes={visibleClasses}
+        students={students}
+        onClose={() => setMoveTargetPlacement(null)}
+        onConfirmMove={handleConfirmMoveFromModal}
       />
     </div>
   );

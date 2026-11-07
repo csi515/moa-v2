@@ -10,6 +10,7 @@ import { DirectorTodayScheduleSection } from './DirectorTodayScheduleSection';
 import { DirectorTodayAttendanceSection } from './DirectorTodayAttendanceSection';
 import { DirectorTodayTasksSection, type DirectorTodayTaskItem } from './DirectorTodayTasksSection';
 import { DirectorTodayUnpaidSection } from './DirectorTodayUnpaidSection';
+import { PianoDirector3SecBriefingCard } from './PianoDirector3SecBriefingCard';
 import { useApp } from '@/context/AppContext';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { GettingStartedQuestWidget } from '@/app/onboarding/GettingStartedQuestWidget';
@@ -167,6 +168,15 @@ export const DirectorTodayHome: FC = () => {
 
   return (
     <div className="space-y-3 sm:space-y-4 pb-4 max-w-5xl mx-auto w-full" data-testid="director-home">
+      <PianoDirector3SecBriefingCard
+        students={students}
+        invoices={unpaidInvoices}
+        todayIso={today}
+        attendanceCounts={todayAttendanceCounts}
+        makeupPendingCount={makeupPendingCount}
+        onNavigate={navigate}
+      />
+
       <section className="bg-white border border-slate-200/80 rounded-2xl py-3 px-3.5 sm:p-5 shadow-2xs">
         <p className="text-xs text-slate-400 font-medium">
           {formatKoreanDate(new Date().toISOString())}

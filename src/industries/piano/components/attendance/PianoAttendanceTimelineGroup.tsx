@@ -1,13 +1,15 @@
 import type { FC } from 'react';
 import { Check, CheckCircle2, Clock, Users } from 'lucide-react';
-import type { AttendanceRecord, Student } from '@/types';
 import { PianoAttendanceRow } from './PianoAttendanceRow';
 import type { DayStatus, PianoTimelineGroup } from './pianoAttendanceHelpers';
+import type { AttendanceBillingBadgeInfo } from './pianoAttendanceBillingHelpers';
+
+type TimelineRowStudent = React.ComponentProps<typeof PianoAttendanceRow>['student'];
 
 export interface PianoAttendanceRowItem {
-  student: Student;
+  student: TimelineRowStudent;
   status: DayStatus;
-  record?: AttendanceRecord;
+  record?: { id?: string; status?: string } | null;
   scheduleTime: string;
   scheduleDetail: string;
   scheduleSort: string;
@@ -17,15 +19,19 @@ export interface PianoAttendanceRowItem {
 interface PianoAttendanceTimelineGroupProps {
   group: PianoTimelineGroup<PianoAttendanceRowItem>;
   pinCheckInIds: Set<string>;
+  billingBadgeMap?: Map<string, AttendanceBillingBadgeInfo | null>;
   onOpenStudent: (studentId: string) => void;
-  onSetStatus: (student: Student, status: Exclude<DayStatus, 'unchecked'>) => void;
-  onBatchCheckIn?: (students: Student[]) => void;
+  onOpenPayment?: (student: TimelineRowStudent) => void;
+  onSetStatus: (student: TimelineRowStudent, status: Exclude<DayStatus, 'unchecked'>) => void;
+  onBatchCheckIn?: (students: TimelineRowStudent[]) => void;
 }
 
 export const PianoAttendanceTimelineGroup: FC<PianoAttendanceTimelineGroupProps> = ({
   group,
   pinCheckInIds,
+  billingBadgeMap,
   onOpenStudent,
+  onOpenPayment,
   onSetStatus,
   onBatchCheckIn,
 }) => {
@@ -135,10 +141,12 @@ export const PianoAttendanceTimelineGroup: FC<PianoAttendanceTimelineGroupProps>
             status={status}
             pinCheckedIn={pinCheckInIds.has(student.id)}
             hasDayRecord={Boolean(record)}
+            billingBadge={billingBadgeMap?.get(student.id)}
             scheduleTime={scheduleTime || undefined}
             scheduleDetail={scheduleDetail || undefined}
             inTimelineGroup={!isUnscheduled}
             onOpenStudent={() => onOpenStudent(student.id)}
+            onOpenPayment={onOpenPayment}
             onSetStatus={(next) => onSetStatus(student, next)}
           />
         ))}

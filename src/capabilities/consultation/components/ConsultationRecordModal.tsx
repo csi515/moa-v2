@@ -3,7 +3,8 @@ import { StorageService } from '@/services/storage';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import type { Consultation, ConsultationType } from '../types';
 import { Modal } from '@/shared/components/ui/Modal';
-import { MessageSquareText, Calendar, User, Save, X, Phone, Tag } from 'lucide-react';
+import { MessageSquareText, Calendar, User, Save, X, Phone, Tag, UserPlus } from 'lucide-react';
+import { mapConsultationToStudentDraft } from '../utils/consultationStudentMapper';
 
 export interface ConsultationRecordInitialData {
   id?: string;
@@ -23,6 +24,7 @@ export interface ConsultationRecordModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSaved?: (saved: Consultation) => void;
+  onPromoteToStudent?: (draft: any) => void;
   initialData?: ConsultationRecordInitialData | null;
   readOnly?: boolean;
 }
@@ -46,6 +48,7 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
   isOpen,
   onClose,
   onSaved,
+  onPromoteToStudent,
   initialData,
   readOnly = false,
 }) => {
@@ -226,23 +229,50 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
         </div>
 
         {/* 모달 하단 버튼 */}
-        <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer min-h-[44px]"
-          >
-            {readOnly ? '닫기' : '취소'}
-          </button>
-          {!readOnly && (
+        <div className="flex items-center justify-between gap-2 pt-3 border-t border-slate-100">
+          <div>
+            {onPromoteToStudent && (
+              <button
+                type="button"
+                onClick={() => {
+                  onPromoteToStudent(
+                    mapConsultationToStudentDraft({
+                      consultationId: initialData?.id,
+                      studentName,
+                      parentName,
+                      phone: initialData?.phone,
+                      content,
+                      notes: initialData?.notes,
+                    })
+                  );
+                  onClose();
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors cursor-pointer min-h-[44px]"
+              >
+                <UserPlus className="w-3.5 h-3.5 text-indigo-600" />
+                <span>원생으로 정식 등록하기</span>
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2">
             <button
-              type="submit"
-              className="px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer min-h-[44px]"
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer min-h-[44px]"
             >
-              <Save className="w-4 h-4" />
-              상담 기록 저장
+              {readOnly ? '닫기' : '취소'}
             </button>
-          )}
+            {!readOnly && (
+              <button
+                type="submit"
+                className="px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer min-h-[44px]"
+              >
+                <Save className="w-4 h-4" />
+                상담 기록 저장
+              </button>
+            )}
+          </div>
         </div>
       </form>
     </Modal>

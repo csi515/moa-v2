@@ -44,9 +44,9 @@ const VehicleShuttleView = lazy(() =>
     default: m.VehicleShuttleCommuteView,
   }))
 );
-const MembershipReferralTreeView = lazy(() =>
-  import('@/capabilities/membership_referral_tree').then((m) => ({
-    default: m.MembershipReferralTreeView,
+const PianoFamilyManagementView = lazy(() =>
+  import('./components/family/PianoFamilyManagementView').then((m) => ({
+    default: m.PianoFamilyManagementView,
   }))
 );
 const InventoryListView = lazy(() =>
@@ -130,7 +130,7 @@ const PIANO_VIEW_MAP: Record<string, () => ReactNode> = {
   reports: () => <ReportsManagementView />,
   retention: () => lazyCap(<RetentionMarketingView />, '리텐션'),
   shuttle: () => lazyCap(<VehicleShuttleView />, '셔틀'),
-  'family-tree': () => lazyCap(<MembershipReferralTreeView />, '패밀리'),
+  'family-tree': () => lazyCap(<PianoFamilyManagementView />, '패밀리'),
   supplies: () => lazyCap(<InventoryListView />, '소모품 재고'),
   ...hubViewAliases(() => <PianoSettingsHub />, PIANO_SETTINGS_HUB_TABS),
 };

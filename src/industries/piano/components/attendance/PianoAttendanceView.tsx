@@ -1,9 +1,10 @@
-import { type FC, useMemo } from 'react';
+import { type FC, useMemo, useState } from 'react';
 import {
   Calendar,
   CheckSquare,
   ChevronLeft,
   ChevronRight,
+  CreditCard,
   Users,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
@@ -13,6 +14,8 @@ import {
   PageHeader,
   SearchField,
 } from '@/shared/components';
+import { CombinedPaymentModal } from '@/capabilities/billing/components/tuition/CombinedPaymentModal';
+import { TuitionService } from '@/capabilities/billing/finance';
 import { AbsentReasonModal } from './AbsentReasonModal';
 import { PianoAttendanceTimelineGroup } from './PianoAttendanceTimelineGroup';
 import { usePianoAttendanceView } from './usePianoAttendanceView';
@@ -22,7 +25,12 @@ import {
   todayIsoLocal,
   type StatusFilter,
 } from './pianoAttendanceHelpers';
-import type { Student } from '@/types';
+import {
+  resolveAttendanceBillingBadge,
+  type AttendanceBillingBadgeInfo,
+} from './pianoAttendanceBillingHelpers';
+
+type BatchCheckInStudent = Parameters<ReturnType<typeof usePianoAttendanceView>['handleSetStatus']>[0];
 
 type StatChip = {
   value: StatusFilter;
@@ -32,10 +40,11 @@ type StatChip = {
 };
 
 /**
- * 피아노 출결 — 시간대별(14:00, 15:00 등) 타임라인 그룹화 및 당일 등원·지각·결석 처리
+ * 피아노 출결 — 시간대별(14:00, 15:00 등) 타임라인 그룹화, 당일 출결 처리,
+ * 및 실시간 수강료 결제일/미납 뱃지 & 원클릭 즉시 수납 연동
  */
 export const PianoAttendanceView: FC = () => {
-  const { setActiveTab } = useApp();
+  const { setActiveTab, showToast } = useApp();
   const {
     selectedDate,
     setSelectedDate,
@@ -55,6 +64,10 @@ export const PianoAttendanceView: FC = () => {
     handleAbsentConfirm,
     openStudent,
   } = usePianoAttendanceView();
+
+  // 수납 모달 상태 & 갱신 키
+  const [paymentTargetStudent, setPaymentTargetStudent] = useState<BatchCheckInStudent | null>(null);
+  const [paymentRefreshKey, setPaymentRefreshKey] = useState(0);
 
   const statChips: StatChip[] = [
     {
@@ -89,13 +102,40 @@ export const PianoAttendanceView: FC = () => {
     },
   ];
 
+  // 학생별 수강료 결제일 및 미납 상태 뱃지 매핑
+  const billingBadgeMap = useMemo(() => {
+    const map = new Map<string, AttendanceBillingBadgeInfo | null>();
+    for (const row of rows) {
+      try {
+        const summary = TuitionService.getStudentBillingSummary(row.student.id);
+        const badge = resolveAttendanceBillingBadge(row.student, selectedDate, summary);
+        map.set(row.student.id, badge);
+      } catch {
+        map.set(row.student.id, null);
+      }
+    }
+    return map;
+  }, [rows, selectedDate, paymentRefreshKey]);
+
+  // 당일 수납 요약 집계
+  const billingSummaryStats = useMemo(() => {
+    let overdueCount = 0;
+    let dueTodayCount = 0;
+    for (const badge of billingBadgeMap.values()) {
+      if (!badge) continue;
+      if (badge.type === 'overdue') overdueCount += 1;
+      if (badge.type === 'due_today') dueTodayCount += 1;
+    }
+    return { overdueCount, dueTodayCount };
+  }, [billingBadgeMap]);
+
   // 시간대별 타임라인 그룹화
   const timelineGroups = useMemo(() => {
     return groupAttendanceRowsByTime(rows, { isToday });
   }, [rows, isToday]);
 
   // 시간대 미등원 학생 일괄 등원 처리
-  const handleBatchCheckIn = async (students: Student[]) => {
+  const handleBatchCheckIn = async (students: BatchCheckInStudent[]) => {
     for (const st of students) {
       await handleSetStatus(st, 'present');
     }
@@ -138,6 +178,30 @@ export const PianoAttendanceView: FC = () => {
           );
         })}
       </div>
+
+      {/* 수납 안내 요약 배너 (오늘 결제일 또는 미납 원생 존재 시) */}
+      {(billingSummaryStats.overdueCount > 0 || billingSummaryStats.dueTodayCount > 0) && (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-amber-50/70 border border-amber-200/80 text-xs shadow-2xs">
+          <div className="flex items-center gap-2">
+            <CreditCard className="w-4 h-4 text-amber-600 shrink-0" />
+            <span className="font-bold text-amber-950">
+              오늘 출결 대상 중 수강료 수납 안내 학생이 있습니다. (학생 이름 옆 뱃지 클릭 시 즉시 수납)
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5 font-bold self-end sm:self-auto">
+            {billingSummaryStats.dueTodayCount > 0 && (
+              <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-200/60">
+                오늘 결제 {billingSummaryStats.dueTodayCount}명
+              </span>
+            )}
+            {billingSummaryStats.overdueCount > 0 && (
+              <span className="px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 border border-rose-200/60">
+                미납 {billingSummaryStats.overdueCount}명
+              </span>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* 날짜 네비게이션 및 검색 바 */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
@@ -220,7 +284,9 @@ export const PianoAttendanceView: FC = () => {
               key={group.timeKey}
               group={group}
               pinCheckInIds={pinCheckInIds}
+              billingBadgeMap={billingBadgeMap}
               onOpenStudent={openStudent}
+              onOpenPayment={(student) => setPaymentTargetStudent(student)}
               onSetStatus={handleSetStatus}
               onBatchCheckIn={handleBatchCheckIn}
             />
@@ -235,6 +301,23 @@ export const PianoAttendanceView: FC = () => {
         onClose={() => setAbsentTarget(null)}
         onConfirm={handleAbsentConfirm}
       />
+
+      {/* 출결 화면 직결 1클릭 수강료 수납 모달 */}
+      {paymentTargetStudent && (
+        <CombinedPaymentModal
+          student={{
+            id: paymentTargetStudent.id,
+            name: paymentTargetStudent.name,
+          }}
+          onSuccess={() => {
+            const studentName = paymentTargetStudent.name;
+            setPaymentTargetStudent(null);
+            setPaymentRefreshKey((k) => k + 1);
+            showToast(`${studentName} 학생의 수강료 수납 처리가 완료되었습니다.`, 'success');
+          }}
+          onClose={() => setPaymentTargetStudent(null)}
+        />
+      )}
     </div>
   );
 };

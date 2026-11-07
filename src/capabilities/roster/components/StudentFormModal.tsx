@@ -27,11 +27,13 @@ import {
   mergeCustomFieldValues,
 } from '@/core/customer/customFields';
 import { CustomFieldsForm } from '@/core/customer/components/CustomFieldsForm';
-import { Save, RefreshCw, StickyNote, SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-react';
+import { Save, RefreshCw, StickyNote, SlidersHorizontal, ChevronDown, ChevronUp, Calendar } from 'lucide-react';
 import { Modal } from '@/shared/components/ui/Modal';
 import { StudentBasicInfoSection } from './form/StudentBasicInfoSection';
 import { GuardianSection } from './form/GuardianSection';
 import { StudentAdvancedSection } from './form/StudentAdvancedSection';
+import { StudentTimetableSlotPicker } from './form/StudentTimetableSlotPicker';
+import { shouldAutoCreateTuitionInvoice } from './form/studentTuitionAutoInvoice';
 import { selfAccountEnrollmentNote } from './form/enrollmentFormCopy';
 import { StudentPickupSection } from './form/StudentPickupSection';
 import { StudentFormPostSave } from './form/StudentFormPostSave';
@@ -81,6 +83,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
 
   const teachers = useMemo(() => (isOpen ? StorageService.getTeachers() : []), [isOpen]);
   const classes = useMemo(() => (isOpen ? StorageService.getClasses() : []), [isOpen]);
+  const allStudents = useMemo(() => (isOpen ? StorageService.getStudents() : []), [isOpen]);
   const settings = useMemo(() => (isOpen ? StorageService.getSettings() : ({} as any)), [isOpen]);
   const defaultLevel = useMemo(() => getStudentLevelOptions(industry)[0], [industry]);
   const rosterConfig = useMemo(
@@ -133,6 +136,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
   const [showDetails, setShowDetails] = useState(isEdit);
   const [inviteModal, setInviteModal] = useState<StudentRegistrationInviteResult | null>(null);
   const [postSaveStudent, setPostSaveStudent] = useState<Student | null>(null);
+  const [hasAutoInvoice, setHasAutoInvoice] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<StudentFormErrors>({});
   const [baseline, setBaseline] = useState('');
 
@@ -186,10 +190,16 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
               isPrimary: g.isPrimary,
               invite: false,
             }))
-          : [newGuardianEntry(true)];
+          : [
+              {
+                ...newGuardianEntry(true),
+                name: (student as any).parentName || '',
+                phone: (student as any).parentPhone || '',
+              },
+            ];
       nextCustomFields = extractCustomFieldValues(student.metadata, customFieldsDef);
       setShowAdvanced(true);
-      setShowDetails(true);
+      setShowDetails(isEdit);
     } else {
       nextForm = {
         name: '',
@@ -215,6 +225,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         pickupAddresses: [createPickupAddress({ isDefault: true })],
         checkInPin: '',
         autoGeneratePin: false,
+        autoCreateInvoice: true,
       };
       nextGuardians = [newGuardianEntry(true)];
       nextCustomFields = extractCustomFieldValues(null, customFieldsDef);
@@ -228,6 +239,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
     setIsAdultSelf(false);
     setActiveSearchIdx(null);
     setPostSaveStudent(null);
+    setHasAutoInvoice(false);
     setFieldErrors({});
     setBaseline(
       studentFormSnapshot(nextForm, nextGuardians, false) + JSON.stringify(nextCustomFields)
@@ -440,11 +452,22 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         organizationId,
       });
 
+      // 5번 기능: 신규 원생 등록 시 첫 달 수강료 청구서 자동 생성 안내
+      const autoInvoiceCreated = shouldAutoCreateTuitionInvoice({
+        isEdit,
+        autoCreateInvoice: formData.autoCreateInvoice ?? true,
+        tuitionFee: payload.tuitionFee,
+      });
+
       let message = `${result.student.name} ${customerLabel}이 등록되었습니다.`;
+      if (autoInvoiceCreated) {
+        message += ` (첫 달 수강료 ${payload.tuitionFee.toLocaleString()}원 청구서 자동 생성됨)`;
+      }
       if (result.invitesSent > 0) message += ` (${contactLabel} 초대 ${result.invitesSent}건)`;
       showToast(message, 'success');
       result.inviteErrors.forEach((err) => showToast(err, 'warning'));
       setPostSaveStudent(result.student);
+      setHasAutoInvoice(autoInvoiceCreated);
 
       const invitedWithCodes = result.inviteResults.find(
         (item) => item.result.linkCodes.length > 0
@@ -506,6 +529,11 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
             student={postSaveStudent}
             showTimetablePlacement={showTimetablePlacement}
             hint={rosterPostSaveHint(industry, serviceLabel)}
+            hasAutoInvoice={hasAutoInvoice}
+            onPayNow={() => {
+              onSaved(postSaveStudent, { openTab: 'tuition' });
+              onClose();
+            }}
             onOpenDetail={() => {
               onSaved(postSaveStudent);
               onClose();
@@ -606,6 +634,37 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
             )}
           </div>
 
+          {/* 2.5 신규 등록 시 수업 시간표 바로 배정 (원스톱 연동) */}
+          {!isEdit && classes.length > 0 && !showDetails && (
+            <div className="p-4 rounded-2xl border border-indigo-100 bg-indigo-50/35 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-indigo-600" />
+                  {serviceLabel} 시간표 바로 배정 (선택)
+                </label>
+                <span className="text-[11px] text-indigo-700 font-bold">
+                  {formData.classIds.length > 0
+                    ? `${formData.classIds.length}개 시간대 선택됨`
+                    : '등록과 동시에 시간표 배치'}
+                </span>
+              </div>
+              <StudentTimetableSlotPicker
+                classes={classes}
+                selectedClassIds={formData.classIds}
+                students={allStudents}
+                onChange={(classIds, suggestedTeacherId) => {
+                  const patch: Partial<StudentFormData> = { classIds };
+                  if (suggestedTeacherId && !formData.teacherId) {
+                    patch.teacherId = suggestedTeacherId;
+                  }
+                  updateFormData(patch);
+                }}
+                serviceLabel={serviceLabel}
+                staffLabel={labels.staff.singular}
+              />
+            </div>
+          )}
+
           {/* 3. 신규 등록일 때 점진적 공개(Progressive Disclosure) 접이식 토글 */}
           {!isEdit && (
             <div className="pt-1">
@@ -652,9 +711,12 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
                 formData={formData}
                 teachers={teachers}
                 classes={classes}
+                students={allStudents}
                 showAdvanced={showAdvanced}
+                isEdit={isEdit}
                 onToggle={() => setShowAdvanced((v) => !v)}
                 onChange={updateFormData}
+                currentStudentId={student?.id}
               />
 
               {customFieldsDef.length > 0 && (

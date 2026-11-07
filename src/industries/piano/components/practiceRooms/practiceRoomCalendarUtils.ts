@@ -1,4 +1,4 @@
-export type PracticeRoomCalendarMode = 'day' | 'week' | 'month';
+export type PracticeRoomCalendarMode = 'live' | 'day' | 'week' | 'month';
 
 const WEEKDAY_KO = ['일', '월', '화', '수', '목', '금', '토'] as const;
 
@@ -56,6 +56,9 @@ export function shiftCalendarPeriod(
   iso: string,
   delta: number
 ): string {
+  if (mode === 'live') {
+    return todayIsoDate();
+  }
   const d = parseIsoDate(iso);
   if (mode === 'day') {
     d.setDate(d.getDate() + delta);
@@ -75,6 +78,9 @@ export function calendarPeriodLabel(mode: PracticeRoomCalendarMode, iso: string)
   const d = parseIsoDate(iso);
   const y = d.getFullYear();
   const m = d.getMonth() + 1;
+  if (mode === 'live') {
+    return `실시간 룸 보드 · ${y}년 ${m}월 ${d.getDate()}일 (${WEEKDAY_KO[d.getDay()]})`;
+  }
   if (mode === 'day') {
     return `${y}년 ${m}월 ${d.getDate()}일 (${WEEKDAY_KO[d.getDay()]})`;
   }
@@ -92,7 +98,7 @@ export function rangeForMode(
   mode: PracticeRoomCalendarMode,
   iso: string
 ): { start: string; end: string } {
-  if (mode === 'day') return { start: iso, end: iso };
+  if (mode === 'live' || mode === 'day') return { start: iso, end: iso };
   if (mode === 'week') {
     return { start: startOfWeekSunday(iso), end: endOfWeekSaturday(iso) };
   }

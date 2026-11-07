@@ -23,7 +23,8 @@ import { DirectorApprovalModal } from './DirectorApprovalModal';
 import { TeacherDirectPassModal } from './TeacherDirectPassModal';
 import { StudentStampBoard } from './StudentStampBoard';
 import { Modal } from '@/shared/components/ui/Modal';
-import type { Student } from '@/types';
+
+type ProgressActiveStudent = ReturnType<typeof StudentService.getActiveStudents>[number];
 
 /** 피아노 완곡 스탬프 & 명예의 전당 관리 뷰 */
 export const SongProgressStaffView: FC = () => {
@@ -36,8 +37,8 @@ export const SongProgressStaffView: FC = () => {
 
   const [pendingCount, setPendingCount] = useState(0);
   const [approvalOpen, setApprovalOpen] = useState(false);
-  const [grantTarget, setGrantTarget] = useState<Student | null>(null);
-  const [stampBoardStudent, setStampBoardStudent] = useState<Student | null>(null);
+  const [grantTarget, setGrantTarget] = useState<ProgressActiveStudent | null>(null);
+  const [stampBoardStudent, setStampBoardStudent] = useState<ProgressActiveStudent | null>(null);
   const [studentQuery, setStudentQuery] = useState('');
   const [selectedLevel, setSelectedLevel] = useState<string>('ALL');
 

@@ -13,7 +13,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { createRoom } from './utils/academyRooms';
-import type { AcademyRoom } from '@/types';
+import type { AcademyRoom } from './settingsTypes';
 import {
   type IndustryType,
   getIndustryCategoryForType,

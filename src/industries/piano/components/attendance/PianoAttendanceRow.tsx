@@ -1,13 +1,16 @@
 import type { FC } from 'react';
-import { CheckSquare, Clock, Smartphone, XCircle } from 'lucide-react';
+import { CheckSquare, Clock, CreditCard, Smartphone, XCircle } from 'lucide-react';
 import type { Student } from '@/types';
 import { STATUS_META, type DayStatus } from './pianoAttendanceHelpers';
+import type { AttendanceBillingBadgeInfo } from './pianoAttendanceBillingHelpers';
 
 interface PianoAttendanceRowProps {
   student: Student;
   status: DayStatus;
   pinCheckedIn: boolean;
   hasDayRecord: boolean;
+  /** 수강료 결제일/미납 뱃지 */
+  billingBadge?: AttendanceBillingBadgeInfo | null;
   /** 예정 시각 (예: 14:00) */
   scheduleTime?: string;
   /** 반·일정 보조 표시 */
@@ -15,6 +18,7 @@ interface PianoAttendanceRowProps {
   /** 그룹 헤더에 이미 시간이 크게 나오는지 여부 */
   inTimelineGroup?: boolean;
   onOpenStudent: () => void;
+  onOpenPayment?: (student: Student) => void;
   onSetStatus: (status: Exclude<DayStatus, 'unchecked'>) => void;
 }
 
@@ -28,10 +32,13 @@ export const PianoAttendanceRow: FC<PianoAttendanceRowProps> = ({
   student,
   status,
   pinCheckedIn,
+  hasDayRecord,
+  billingBadge,
   scheduleTime,
   scheduleDetail,
   inTimelineGroup = false,
   onOpenStudent,
+  onOpenPayment,
   onSetStatus,
 }) => {
   const statusLabel = STATUS_META[status].label;
@@ -70,6 +77,21 @@ export const PianoAttendanceRow: FC<PianoAttendanceRowProps> = ({
               <Smartphone className="w-3 h-3 text-indigo-500" />
               PIN
             </span>
+          )}
+
+          {billingBadge && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenPayment?.(student);
+              }}
+              title={`${billingBadge.tooltip}\n(클릭하여 즉시 수강료 수납)`}
+              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold border transition-colors cursor-pointer ${billingBadge.toneClass}`}
+            >
+              <CreditCard className="w-3 h-3 shrink-0" />
+              <span>{billingBadge.label}</span>
+            </button>
           )}
         </div>
 
