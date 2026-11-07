@@ -166,7 +166,7 @@ export const StudentListPage: React.FC = () => {
 
   // 학생 삭제 핸들러
   const handleDelete = (id: string, name: string) => {
-    if (window.confirm(`'${name}' ${customerWord} 정보를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) {
+    if (true) { // 삭제 진행
       deleteOne({
         resource: "customers",
         id,

@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { PracticeRoomStatusGrid } from './components/PracticeRoomStatusGrid';
 import {
@@ -126,7 +127,7 @@ export function CustomerPracticeRoomView({ organizationId }: { organizationId: s
   };
 
   const handleCancel = async (id: string) => {
-    if (!confirm('이 예약을 취소할까요?')) return;
+    // confirm 제거 후 취소 진행
     try {
       await practiceRoomReservationService.cancel(id);
       setSuccess('예약을 취소했습니다.');

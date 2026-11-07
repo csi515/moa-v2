@@ -30,7 +30,7 @@ export const StockAdjustModal: React.FC<StockAdjustModalProps> = ({
     e.preventDefault();
 
     if (deltaQuantity === 0) {
-      alert('수량 변동값을 입력해주세요.');
+      showToast('수량 변동값을 입력해주세요.', 'warning');
       return;
     }
 
@@ -50,7 +50,7 @@ export const StockAdjustModal: React.FC<StockAdjustModalProps> = ({
         onSuccess();
       }
     } catch (err: any) {
-      alert(err.message || '재고 조정 처리 중 오류가 발생했습니다.');
+      showToast(err?.message || '재고 조정 처리 중 오류가 발생했습니다.', 'error');
     }
   };
 

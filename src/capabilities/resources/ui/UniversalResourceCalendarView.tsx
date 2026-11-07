@@ -402,7 +402,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                월간 (Month)
+                월간
               </button>
               <button
                 onClick={() => setViewMode('week')}
@@ -412,7 +412,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                주간 (Week)
+                주간
               </button>
               <button
                 onClick={() => setViewMode('day')}
@@ -422,7 +422,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                일간 (Day)
+                일간
               </button>
             </div>
           </div>

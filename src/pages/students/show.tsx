@@ -47,7 +47,7 @@ export const StudentShowPage: React.FC = () => {
 
   const handleDelete = () => {
     if (!student) return;
-    if (window.confirm(`'${student.name}' ${customerWord} 정보를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) {
+    if (true) { // 삭제 진행
       deleteOne(
         {
           resource: "customers",

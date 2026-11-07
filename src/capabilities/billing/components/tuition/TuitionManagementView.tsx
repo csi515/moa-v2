@@ -15,7 +15,7 @@ import { CreditCard } from 'lucide-react';
 import { PageHeader } from '@/shared/components';
 import { CombinedPaymentModal } from './CombinedPaymentModal';
 import { todayIsoLocal } from '@/shared/utils/localDate';
-import { TuitionSummaryCards } from './TuitionSummaryCards';
+import { TuitionSummaryCards, type TuitionSummaryFilterType } from './TuitionSummaryCards';
 import { TuitionFilterBar } from './TuitionFilterBar';
 import { TuitionCombinedBillingView } from './TuitionCombinedBillingView';
 import { TuitionInvoiceListView } from './TuitionInvoiceListView';
@@ -88,6 +88,31 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
     return { totalBilled, totalPaid, totalUnpaid, collectionRate, unpaidCount, totalCount: monthInvoices.length };
   }, [invoices, selectedMonth]);
 
+  const activeSummaryFilter: TuitionSummaryFilterType = useMemo(() => {
+    if (viewMode === 'invoices') {
+      if (statusFilter === 'unpaid') return 'unpaid';
+      if (statusFilter === 'paid') return 'paid';
+      return 'all';
+    } else {
+      if (combinedStatusFilter === 'unpaid') return 'unpaid';
+      if (combinedStatusFilter === 'paid') return 'paid';
+      return 'all';
+    }
+  }, [viewMode, statusFilter, combinedStatusFilter]);
+
+  const handleSummaryCardFilterChange = (filter: TuitionSummaryFilterType) => {
+    if (filter === 'unpaid') {
+      setStatusFilter('unpaid');
+      setCombinedStatusFilter('unpaid');
+    } else if (filter === 'paid') {
+      setStatusFilter('paid');
+      setCombinedStatusFilter('paid');
+    } else {
+      setStatusFilter('ALL');
+      setCombinedStatusFilter('all');
+    }
+  };
+
   const isUnpaidActive =
     viewMode === 'invoices' ? statusFilter === 'unpaid' : combinedStatusFilter === 'unpaid';
 
@@ -144,7 +169,12 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
   return (
     <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
       {embedded ? (
-        <TuitionSummaryCards selectedMonth={formatYearMonthLabel(selectedMonth)} stats={stats} />
+        <TuitionSummaryCards
+          selectedMonth={formatYearMonthLabel(selectedMonth)}
+          stats={stats}
+          activeFilter={activeSummaryFilter}
+          onFilterChange={handleSummaryCardFilterChange}
+        />
       ) : (
         <>
           <PageHeader
@@ -152,7 +182,12 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
             title="수강료 및 수납 관리"
             description={`${customerLabel}별 월회비 납부 현황 조회와 수납 처리`}
           />
-          <TuitionSummaryCards selectedMonth={formatYearMonthLabel(selectedMonth)} stats={stats} />
+          <TuitionSummaryCards
+          selectedMonth={formatYearMonthLabel(selectedMonth)}
+          stats={stats}
+          activeFilter={activeSummaryFilter}
+          onFilterChange={handleSummaryCardFilterChange}
+        />
         </>
       )}
 

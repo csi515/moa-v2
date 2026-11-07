@@ -30,7 +30,7 @@ export const TextbookPaymentModal: React.FC<TextbookPaymentModalProps> = ({
     e.preventDefault();
 
     if (validAmount <= 0) {
-      alert('납부 금액은 0원보다 커야 합니다.');
+      showToast('납부 금액은 0원보다 커야 합니다.', 'warning');
       return;
     }
     if (sale.billingInvoiceId) {
@@ -53,7 +53,7 @@ export const TextbookPaymentModal: React.FC<TextbookPaymentModalProps> = ({
       );
       onSuccess(res.payment.id);
     } catch (err: any) {
-      alert(err.message || '교재비 결제 처리 중 오류가 발생했습니다.');
+      showToast(err?.message || '교재비 결제 처리 중 오류가 발생했습니다.', 'error');
     }
   };
 

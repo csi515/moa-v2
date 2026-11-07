@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import { useEffect, useState } from 'react';
 import { Calendar, ChevronRight, Clock, Users } from 'lucide-react';
 import type { BookableSchedule } from '@/types';
@@ -80,7 +81,7 @@ export function PublicBookingSection({
 
   const handleOpenBookingForm = (schedule: BookableSchedule) => {
     if (!isAuthenticated) {
-      alert('슬롯 예약은 로그인이 필요합니다. 로그인 없이 아래 상담 문의 양식을 이용할 수 있습니다.');
+      showToast('슬롯 예약은 로그인이 필요합니다. 로그인 없이 아래 상담 문의 양식을 이용할 수 있습니다.', 'warning');
       return;
     }
     setSelectedSchedule(schedule);

@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import { FormEvent, useEffect, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import type { BookableSchedule, ReservationRequest } from '@/types';
@@ -52,7 +53,7 @@ export function ReservationModal({
         err && typeof err === 'object' && 'message' in err && typeof err.message === 'string'
           ? err.message
           : '예약 신청에 실패했습니다';
-      alert(errorMsg);
+      showToast(errorMsg, 'error');
     }
   };
 

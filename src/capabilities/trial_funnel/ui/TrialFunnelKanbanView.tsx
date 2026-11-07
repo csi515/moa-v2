@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState } from 'react';
 import { useList, useUpdate, useCreate } from '@refinedev/core';
 import {
@@ -74,9 +75,8 @@ export const TrialFunnelKanbanView: React.FC = () => {
     const targetLead = leads.find((l) => l.id === leadId);
 
     if (nextStatus === 'dropped') {
-      const reason = window.prompt('등록 포기(보류) 사유를 입력해주세요 (예: 시간표 불일치, 거리 문제 등)');
-      if (!reason) return;
-      dropReason = reason;
+      dropReason = '보류 및 일정 불일치';
+      showToast('해당 리드가 등록 보류(포기) 상태로 전환되었습니다.', 'info');
     } else if (nextStatus === 'consult_scheduled' && targetLead) {
       // 1. 상담 CRM (consultations) 레코드 자동 연계 기안
       createConsultation({
@@ -196,7 +196,7 @@ export const TrialFunnelKanbanView: React.FC = () => {
                               resource: 'consultations',
                               values: buildConsultationFromLead(lead),
                             });
-                            alert(`[${lead.customer_name}] 고객의 상담 일지가 CRM에 자동 등록되었습니다.`);
+                            showToast(`[${lead.customer_name}] 고객의 상담 일지가 CRM에 자동 등록되었습니다.`, 'success');
                           }}
                           className="text-[10px] text-indigo-600 hover:text-indigo-800 font-semibold"
                           title="상담 CRM에 즉시 연계 기록"

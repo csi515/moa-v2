@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { type FC, useMemo } from 'react';
 import {
   Calendar,
   CheckSquare,
@@ -14,9 +14,15 @@ import {
   SearchField,
 } from '@/shared/components';
 import { AbsentReasonModal } from './AbsentReasonModal';
-import { PianoAttendanceRow } from './PianoAttendanceRow';
+import { PianoAttendanceTimelineGroup } from './PianoAttendanceTimelineGroup';
 import { usePianoAttendanceView } from './usePianoAttendanceView';
-import { shiftDateIso, todayIsoLocal, type StatusFilter } from './pianoAttendanceHelpers';
+import {
+  groupAttendanceRowsByTime,
+  shiftDateIso,
+  todayIsoLocal,
+  type StatusFilter,
+} from './pianoAttendanceHelpers';
+import type { Student } from '@/types';
 
 type StatChip = {
   value: StatusFilter;
@@ -26,8 +32,7 @@ type StatChip = {
 };
 
 /**
- * 피아노 출결 — 일정에 배정된 「오늘 예정」학생의 등원·지각·결석만 처리.
- * 하원 없음. 시간표 변경은 classIds만 바꾸고 DAY_ATTENDANCE 기록은 건드리지 않음.
+ * 피아노 출결 — 시간대별(14:00, 15:00 등) 타임라인 그룹화 및 당일 등원·지각·결석 처리
  */
 export const PianoAttendanceView: FC = () => {
   const { setActiveTab } = useApp();
@@ -84,11 +89,23 @@ export const PianoAttendanceView: FC = () => {
     },
   ];
 
+  // 시간대별 타임라인 그룹화
+  const timelineGroups = useMemo(() => {
+    return groupAttendanceRowsByTime(rows, { isToday });
+  }, [rows, isToday]);
+
+  // 시간대 미등원 학생 일괄 등원 처리
+  const handleBatchCheckIn = async (students: Student[]) => {
+    for (const st of students) {
+      await handleSetStatus(st, 'present');
+    }
+  };
+
   return (
-    <div className="space-y-3 sm:space-y-4 pb-4">
+    <div className="space-y-3.5 sm:space-y-4 pb-6">
       <PageHeader
         density="compact"
-        icon={<CheckSquare className="w-6 h-6" />}
+        icon={<CheckSquare className="w-6 h-6 text-indigo-600" />}
         title="출결"
       />
 
@@ -122,36 +139,37 @@ export const PianoAttendanceView: FC = () => {
         })}
       </div>
 
+      {/* 날짜 네비게이션 및 검색 바 */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-        <FilterBar className="border-0 shadow-none rounded-none border-b border-slate-100 flex-col sm:flex-row gap-2 sm:gap-3">
+        <FilterBar className="border-0 shadow-none rounded-none flex-col sm:flex-row gap-2 sm:gap-3 p-3 sm:p-4">
           <div className="flex items-center gap-1.5 w-full sm:w-auto">
             <button
               type="button"
               onClick={() => setSelectedDate((d) => shiftDateIso(d, -1))}
-              className="p-2 min-h-[44px] min-w-[44px] rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-center shrink-0"
+              className="p-2 min-h-[44px] min-w-[44px] rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-center shrink-0 transition-colors"
               aria-label="이전 날짜"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-4 h-4 text-slate-600" />
             </button>
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="flex-1 sm:flex-none min-w-0 px-2.5 py-2 min-h-[44px] text-sm font-bold border border-slate-200 rounded-xl"
+              className="flex-1 sm:flex-none min-w-0 px-3 py-2 min-h-[44px] text-sm font-bold border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20"
             />
             <button
               type="button"
               onClick={() => setSelectedDate((d) => shiftDateIso(d, 1))}
-              className="p-2 min-h-[44px] min-w-[44px] rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-center shrink-0"
+              className="p-2 min-h-[44px] min-w-[44px] rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-center shrink-0 transition-colors"
               aria-label="다음 날짜"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4 text-slate-600" />
             </button>
             {!isToday && (
               <button
                 type="button"
                 onClick={() => setSelectedDate(todayIsoLocal())}
-                className="px-3 py-2 min-h-[44px] rounded-xl text-xs font-bold text-indigo-600 border border-indigo-100 bg-indigo-50 shrink-0"
+                className="px-3 py-2 min-h-[44px] rounded-xl text-xs font-bold text-indigo-600 border border-indigo-100 bg-indigo-50 hover:bg-indigo-100 shrink-0 transition-colors"
               >
                 오늘
               </button>
@@ -160,14 +178,17 @@ export const PianoAttendanceView: FC = () => {
           <SearchField
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="이름 검색"
+            placeholder="학생 이름 검색"
             className="w-full sm:flex-1 sm:max-w-xs"
           />
         </FilterBar>
+      </div>
 
-        {rows.length === 0 ? (
+      {/* 학생 목록 영역 — 시간대별 타임라인 그룹 */}
+      {rows.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
           <EmptyState
-            icon={<Users className="w-10 h-10" />}
+            icon={<Users className="w-10 h-10 text-slate-400" />}
             title={
               expectedCount === 0 && rosterCount === 0
                 ? '이 날 예정된 학생이 없습니다'
@@ -189,27 +210,25 @@ export const PianoAttendanceView: FC = () => {
                   }
                 : undefined
             }
-            className="border-0 shadow-none rounded-none"
+            className="border-0 shadow-none rounded-none py-12"
           />
-        ) : (
-          <ul className="divide-y divide-slate-100">
-            {rows.map(({ student, status, record, scheduleTime, scheduleDetail }) => (
-              <PianoAttendanceRow
-                key={student.id}
-                student={student}
-                status={status}
-                pinCheckedIn={pinCheckInIds.has(student.id)}
-                hasDayRecord={Boolean(record)}
-                scheduleTime={scheduleTime || undefined}
-                scheduleDetail={scheduleDetail || undefined}
-                onOpenStudent={() => openStudent(student.id)}
-                onSetStatus={(next) => handleSetStatus(student, next)}
-              />
-            ))}
-          </ul>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="space-y-3.5">
+          {timelineGroups.map((group) => (
+            <PianoAttendanceTimelineGroup
+              key={group.timeKey}
+              group={group}
+              pinCheckInIds={pinCheckInIds}
+              onOpenStudent={openStudent}
+              onSetStatus={handleSetStatus}
+              onBatchCheckIn={handleBatchCheckIn}
+            />
+          ))}
+        </div>
+      )}
 
+      {/* 결석 사유 모달 */}
       <AbsentReasonModal
         isOpen={!!absentTarget}
         student={absentTarget}

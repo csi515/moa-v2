@@ -226,94 +226,112 @@ export const PianoLessonTimetableView: FC = () => {
         </div>
       )}
 
-      {/* 필터 및 뷰 전환 툴바 */}
-      <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-slate-200/80 shadow-xs flex flex-wrap items-center gap-2">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500">
-          <Filter className="w-4 h-4 text-indigo-600" />
-          <span>필터</span>
+      {/* 1단: 뷰 모드 & 필터 & 도구 툴바 */}
+      <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-2.5">
+        {/* 좌측: [전체 | 선생님별 | 강의실별] 모드 스위처 + 필터 드롭다운들 */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex p-1 bg-slate-100 rounded-xl text-xs font-bold text-slate-500">
+            <button
+              type="button"
+              onClick={() => setLayoutMode('week')}
+              className={`px-3 py-1.5 min-h-[38px] rounded-lg transition-all cursor-pointer ${
+                layoutMode === 'week' ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
+              }`}
+            >
+              전체
+            </button>
+            <button
+              type="button"
+              onClick={() => setLayoutMode('byTeacher')}
+              className={`px-3 py-1.5 min-h-[38px] rounded-lg transition-all cursor-pointer ${
+                layoutMode === 'byTeacher'
+                  ? 'bg-white text-indigo-600 shadow-xs'
+                  : 'hover:text-slate-900'
+              }`}
+            >
+              선생님별
+            </button>
+            <button
+              type="button"
+              onClick={() => setLayoutMode('byRoom')}
+              className={`px-3 py-1.5 min-h-[38px] rounded-lg transition-all cursor-pointer ${
+                layoutMode === 'byRoom'
+                  ? 'bg-white text-indigo-600 shadow-xs'
+                  : 'hover:text-slate-900'
+              }`}
+            >
+              강의실별
+            </button>
+          </div>
+
+          <div className="h-4 w-px bg-slate-200 hidden sm:block mx-0.5" />
+
+          {/* 선생님 필터 (원장 모드 시) */}
+          {!isScoped && (
+            <select
+              value={teacherFilter}
+              onChange={(e) => setTeacherFilter(e.target.value)}
+              className={`${FORM_CONTROL_CLASS} !min-h-[38px] !py-1.5 !text-xs w-auto min-w-[7.5rem]`}
+              aria-label="선생님 필터"
+            >
+              <option value="ALL">전체 선생님</option>
+              {teachers.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {/* 강의실 필터 (학원에 방이 등록되어 있는 경우) */}
+          {rooms.length > 0 && (
+            <select
+              value={roomFilter}
+              onChange={(e) => setRoomFilter(e.target.value)}
+              className={`${FORM_CONTROL_CLASS} !min-h-[38px] !py-1.5 !text-xs w-auto min-w-[7.5rem]`}
+              aria-label="강의실 필터"
+            >
+              <option value="ALL">전체 강의실</option>
+              {rooms.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
 
-        {/* [전체 | 선생님별 | 강의실별] 그룹 모드 스위처 */}
-        <div className="flex p-1 bg-slate-100 rounded-xl text-xs font-bold text-slate-500">
+        {/* 우측: 통계 카운트 & 인쇄 버튼 */}
+        <div className="flex items-center gap-2.5 ml-auto sm:ml-0">
+          <span className="text-xs text-slate-500 font-semibold tabular-nums hidden sm:inline">
+            반 {visibleClasses.length}
+            {layoutMode === 'byTeacher' ? ` · 선생님 ${teacherSections.length}` : ''}
+          </span>
           <button
             type="button"
-            onClick={() => setLayoutMode('week')}
-            className={`px-2.5 sm:px-3 py-1.5 min-h-[40px] rounded-lg transition-all ${
-              layoutMode === 'week' ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
-            }`}
+            onClick={() => window.print()}
+            className="no-print inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition shadow-2xs cursor-pointer"
+            title="A4 가로 시간표 인쇄"
           >
-            전체
-          </button>
-          <button
-            type="button"
-            onClick={() => setLayoutMode('byTeacher')}
-            className={`px-2.5 sm:px-3 py-1.5 min-h-[40px] rounded-lg transition-all ${
-              layoutMode === 'byTeacher'
-                ? 'bg-white text-indigo-600 shadow-xs'
-                : 'hover:text-slate-900'
-            }`}
-          >
-            선생님별
-          </button>
-          <button
-            type="button"
-            onClick={() => setLayoutMode('byRoom')}
-            className={`px-2.5 sm:px-3 py-1.5 min-h-[40px] rounded-lg transition-all ${
-              layoutMode === 'byRoom'
-                ? 'bg-white text-indigo-600 shadow-xs'
-                : 'hover:text-slate-900'
-            }`}
-          >
-            강의실별
+            <Printer className="w-3.5 h-3.5 text-slate-500" />
+            <span>시간표 인쇄</span>
           </button>
         </div>
+      </div>
 
-        {/* 선생님 선택 드롭다운 (원장 모드 시) */}
-        {!isScoped && (
-          <select
-            value={teacherFilter}
-            onChange={(e) => setTeacherFilter(e.target.value)}
-            className={`${FORM_CONTROL_CLASS} !min-h-[40px] !py-2 !text-xs w-auto min-w-[8rem]`}
-            aria-label="선생님 필터"
-          >
-            <option value="ALL">전체 선생님</option>
-            {teachers.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
-            ))}
-          </select>
-        )}
-
-        {/* 강의실 필터 (학원에 방이 등록되어 있는 경우) */}
-        {rooms.length > 0 && (
-          <select
-            value={roomFilter}
-            onChange={(e) => setRoomFilter(e.target.value)}
-            className={`${FORM_CONTROL_CLASS} !min-h-[40px] !py-2 !text-xs w-auto min-w-[8rem]`}
-            aria-label="강의실 필터"
-          >
-            <option value="ALL">전체 강의실</option>
-            {rooms.map((r) => (
-              <option key={r} value={r}>
-                {r}
-              </option>
-            ))}
-          </select>
-        )}
-
-        {/* 요일 빠른 전환 탭 (전체 주간 및 요일별 집중 뷰) */}
-        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar sm:ml-2">
+      {/* 2단: 요일 네비게이션 탭 바 (메인 시간표 바로 위 배치로 직관성 극대화) */}
+      <div className="bg-white p-2 rounded-2xl border border-slate-200/80 shadow-2xs flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none w-full sm:w-auto">
           <button
             type="button"
             onClick={() => {
               setSelectedDayFilter('ALL');
               setCalendarView('week');
             }}
-            className={`px-2.5 py-1.5 min-h-[36px] rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 ${
               selectedDayFilter === 'ALL'
                 ? 'bg-indigo-600 text-white shadow-xs'
-                : 'bg-slate-100 text-slate-600 hover:text-slate-900'
+                : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
             }`}
           >
             주간 전체
@@ -328,16 +346,16 @@ export const PianoLessonTimetableView: FC = () => {
                   setSelectedDayFilter(day);
                   setSelectedDay(day);
                 }}
-                className={`px-2.5 py-1.5 min-h-[36px] rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 ${
                   selected
                     ? 'bg-indigo-600 text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-600 hover:text-slate-900'
+                    : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
                 }`}
               >
-                {day}
+                {day}요일
                 {day === todayDay && (
-                  <span className={`ml-0.5 text-[9px] ${selected ? 'text-indigo-200' : 'text-indigo-600'}`}>
-                    •
+                  <span className={`ml-1 text-[9px] ${selected ? 'text-indigo-200' : 'text-indigo-600 font-extrabold'}`}>
+                    • 오늘
                   </span>
                 )}
               </button>
@@ -345,20 +363,8 @@ export const PianoLessonTimetableView: FC = () => {
           })}
         </div>
 
-        <div className="flex items-center gap-2 ml-auto">
-          <span className="text-xs text-slate-500 font-semibold tabular-nums hidden sm:inline">
-            반 {visibleClasses.length}
-            {layoutMode === 'byTeacher' ? ` · 선생님 ${teacherSections.length}` : ''}
-          </span>
-          <button
-            type="button"
-            onClick={() => window.print()}
-            className="no-print inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition shadow-2xs cursor-pointer"
-            title="A4 가로 시간표 인쇄"
-          >
-            <Printer className="w-3.5 h-3.5 text-slate-500" />
-            <span>시간표 인쇄</span>
-          </button>
+        <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-400 font-medium pr-2">
+          <span>{selectedDayFilter === 'ALL' ? '주간 전체 시간표 보기' : `${selectedDayFilter}요일 집중 뷰`}</span>
         </div>
       </div>
 

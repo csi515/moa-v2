@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState } from 'react';
 import {
   LocationKpiInput,
@@ -127,7 +128,7 @@ export const BranchConsolidationHqView: React.FC = () => {
         t.transferId === transferId ? confirmInterBranchTransferReceipt(t) : t
       )
     );
-    alert('수신 지점에서 재고 수령이 확정되었습니다. (양 지점 재고 실시간 동기화 완료)');
+    showToast('수신 지점에서 재고 수령이 확정되었습니다. (양 지점 재고 실시간 동기화 완료)', 'success');
   };
 
   // 교차 이용권 승인 시뮬레이션 실행

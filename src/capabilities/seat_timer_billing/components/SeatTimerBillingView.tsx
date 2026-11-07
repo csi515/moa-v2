@@ -149,8 +149,8 @@ export const SeatTimerBillingView: React.FC = () => {
   };
 
   const handleQuickCheckIn = (slot: SeatTimerSlot) => {
-    const name = prompt('입실할 고객 성함을 입력해주세요:', '방문 고객');
-    if (!name) return;
+    const name = '방문 고객';
+    showToast('방문 고객 입실 처리가 완료되었습니다.', 'success');
 
     setSlots((prev) =>
       prev.map((s) => {

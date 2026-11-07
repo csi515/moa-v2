@@ -153,6 +153,41 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     return updated;
   };
 
+  const handleQuickStartWithDefaults = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const trimmedName = organizationForm.name.trim();
+    if (!trimmedName) {
+      showToast('학원명을 입력해 주세요.', 'warning');
+      return;
+    }
+    setIsSaving(true);
+    try {
+      const formatted = formatOrganizationAddress(addressParts);
+      await persistLocalAndOrg(
+        {
+          name: trimmedName,
+          directorName: organizationForm.directorName.trim(),
+          phone: organizationForm.phone.trim(),
+          address: formatted,
+        },
+        addressParts
+      );
+      StorageService.markOnboardingCompleted(step);
+      onComplete();
+      showToast(`${trimmedName} 기본 설정이 완료되었습니다! 대시보드로 이동합니다.`, 'success');
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : '학원 정보 저장 중 오류가 발생했습니다.', 'error');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleQuickFinishAnytime = () => {
+    StorageService.markOnboardingCompleted(step);
+    onComplete();
+    showToast('설정된 내용이 적용되었습니다. 언제든 설정 메뉴에서 추가 변경할 수 있습니다.', 'success');
+  };
+
   const requestSkip = () => {
     openConfirmDialog({
       title: '초기 설정을 건너뛸까요?',
@@ -327,7 +362,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     setActiveTab('dashboard');
   };
 
-  const footerNav = (opts: {
+    const footerNav = (opts: {
     onPrev?: () => void;
     onNext?: () => void;
     nextLabel?: string;
@@ -335,21 +370,33 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     secondaryLabel?: string;
     onSecondary?: () => void;
   }) => (
-    <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
-      <button
-        type="button"
-        onClick={opts.onPrev ?? goPrev}
-        disabled={step === 0}
-        className="px-4 py-2 text-xs font-semibold text-slate-600 flex items-center gap-1 min-h-[44px] disabled:opacity-30"
-      >
-        <ChevronLeft className="w-4 h-4" /> 이전
-      </button>
-      <div className="flex flex-wrap gap-2 justify-end">
+    <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-100">
+      <div className="flex items-center gap-1.5">
+        <button
+          type="button"
+          onClick={opts.onPrev ?? goPrev}
+          disabled={step === 0}
+          className="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-700 flex items-center gap-1 min-h-[44px] disabled:opacity-30 rounded-lg hover:bg-slate-100 transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" /> 이전
+        </button>
+        {step > 0 && (
+          <button
+            type="button"
+            onClick={handleQuickFinishAnytime}
+            className="text-xs font-medium text-slate-400 hover:text-indigo-600 px-2 py-1.5 rounded-lg hover:bg-slate-50 transition-colors"
+            title="현재까지의 설정으로 온보딩을 마치고 대시보드로 이동합니다"
+          >
+            여기서 완료하고 시작
+          </button>
+        )}
+      </div>
+      <div className="flex flex-wrap items-center gap-2 justify-end">
         {opts.onSecondary && opts.secondaryLabel && (
           <button
             type="button"
             onClick={opts.onSecondary}
-            className="px-4 py-2.5 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl min-h-[44px]"
+            className="px-3.5 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl min-h-[44px] transition-colors"
           >
             {opts.secondaryLabel}
           </button>
@@ -359,7 +406,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             type="button"
             onClick={opts.onNext}
             disabled={opts.nextDisabled || isSaving}
-            className="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl flex items-center gap-1 min-h-[44px] disabled:opacity-50"
+            className="px-5 py-2.5 text-xs sm:text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl flex items-center gap-1 min-h-[44px] shadow-sm disabled:opacity-50 transition-colors"
           >
             {isSaving ? '저장 중...' : opts.nextLabel || '다음'}{' '}
             <ChevronRight className="w-4 h-4" />
@@ -375,26 +422,44 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       data-testid="onboarding-wizard"
     >
       <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col">
-        <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-indigo-50 to-white flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-2 min-w-0">
-            <Sparkles className="w-5 h-5 text-indigo-600 shrink-0" />
+                <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-indigo-50/70 via-white to-white flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+              <Sparkles className="w-4 h-4" />
+            </div>
             <div className="min-w-0">
-              <h2 className="font-bold text-slate-900 truncate">학원 초기 설정</h2>
-              <p className="text-[11px] text-slate-500">
-                {step + 1}/{TOTAL_STEPS} · {ONBOARDING_STEP_LABELS[step]}
-                {step === 0 ? ' (필수: 학원명)' : step >= 4 && step <= 6 ? ' (선택)' : ''}
+              <div className="flex items-center gap-2">
+                <h2 className="font-bold text-slate-900 text-base truncate">학원 시작 설정</h2>
+                <span className="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">
+                  {step + 1} / {TOTAL_STEPS}
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500 truncate">
+                {ONBOARDING_STEP_LABELS[step]}
+                {step === 0 ? ' (학원명만 입력하고 바로 시작 가능)' : ' (언제든 건너뛰기 가능)'}
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={dismissForLater}
-            className="text-slate-400 hover:text-slate-600 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
-            aria-label="나중에 이어서"
-            data-testid="onboarding-dismiss"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={requestSkip}
+              className="text-xs font-semibold text-slate-500 hover:text-indigo-600 hover:bg-slate-100 px-2.5 py-1.5 rounded-lg transition-colors"
+              title="설정을 건너뛰고 메인 대시보드로 바로 이동합니다"
+            >
+              건너뛰기
+            </button>
+            <button
+              type="button"
+              onClick={dismissForLater}
+              className="text-slate-400 hover:text-slate-600 p-2 min-h-[36px] min-w-[36px] flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
+              aria-label="나중에 이어서"
+              title="나중에 이어서 설정하기 (닫기)"
+              data-testid="onboarding-dismiss"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         <div className="px-6 pt-4 pb-2 shrink-0">
@@ -431,12 +496,17 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
         </div>
 
         <div className="overflow-y-auto flex-1">
-          {step === 0 && (
+                    {step === 0 && (
             <form onSubmit={handleOrganizationNext} className="p-6 space-y-4">
-              <p className="text-sm text-slate-500">
-                학원 기본 정보입니다. <span className="font-semibold text-slate-700">학원명만 필수</span>
-                이며, 나머지는 나중에 설정해도 됩니다.
-              </p>
+              <div className="p-3 bg-indigo-50/70 border border-indigo-100 rounded-xl text-xs text-indigo-900 flex items-start gap-2.5">
+                <Sparkles className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <p className="font-bold text-indigo-950">학원명만 입력하시면 바로 시작할 수 있습니다!</p>
+                  <p className="text-indigo-700/90 text-[11px] leading-relaxed">
+                    운영시간·수강료 등은 표준 기본값으로 자동 구성되며, 언제든 설정 메뉴에서 자유롭게 수정하실 수 있습니다.
+                  </p>
+                </div>
+              </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   학원명 <span className="text-rose-500">*</span>
@@ -480,22 +550,33 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                 />
                 <p className="mt-1 text-[11px] text-slate-400">선택 · 검색 또는 직접 입력</p>
               </div>
-              <div className="flex justify-between pt-2">
+                            <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-2 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={requestSkip}
-                  className="text-xs text-slate-400 hover:text-slate-600 min-h-[44px] px-3"
+                  className="text-xs font-medium text-slate-400 hover:text-slate-600 py-2 px-1 text-center sm:text-left min-h-[44px]"
                   disabled={isSaving}
                 >
-                  건너뛰기
+                  기본값으로 건너뛰기
                 </button>
-                <button
-                  type="submit"
-                  disabled={isSaving}
-                  className="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl flex items-center gap-1 min-h-[44px] disabled:opacity-50"
-                >
-                  {isSaving ? '저장 중...' : '다음'} <ChevronRight className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleQuickStartWithDefaults}
+                    disabled={isSaving || !organizationForm.name.trim()}
+                    className="flex-1 sm:flex-initial px-4 py-2.5 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/80 rounded-xl min-h-[44px] flex items-center justify-center gap-1.5 transition-colors disabled:opacity-40"
+                    title="학원명 저장 후 기본 설정값으로 즉시 대시보드를 시작합니다"
+                  >
+                    <span>바로 시작하기</span>
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSaving || !organizationForm.name.trim()}
+                    className="flex-1 sm:flex-initial px-5 py-2.5 text-xs sm:text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl flex items-center justify-center gap-1 min-h-[44px] shadow-sm disabled:opacity-50 transition-colors"
+                  >
+                    {isSaving ? '저장 중...' : '다음 맞춤 설정'} <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </form>
           )}

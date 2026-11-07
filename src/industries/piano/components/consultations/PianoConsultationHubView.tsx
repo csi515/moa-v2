@@ -324,7 +324,9 @@ export const PianoConsultationHubView: FC = () => {
             )}
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+            {/* 데스크톱 전용 7열 테이블 뷰 */}
+            <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50/70 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
@@ -487,6 +489,129 @@ export const PianoConsultationHubView: FC = () => {
               </tbody>
             </table>
           </div>
+
+          {/* 모바일 전용 반응형 상담 카드 리스트 (가로 스크롤 완전 제거) */}
+          <div className="md:hidden divide-y divide-slate-100">
+            {paginatedRows.map((row) => {
+              const scheduleInfo = formatConsultationSchedule(row.scheduledAt);
+              const statusBadge = getUnifiedStatusBadge(row.status);
+              const isConfirming = isConfirmingId === row.id;
+
+              return (
+                <div key={row.id} className="p-4 space-y-3 bg-white hover:bg-slate-50/60 transition-colors">
+                  {/* 1. 상단: 고객 정보 & 상태 뱃지 */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-700 font-bold text-sm flex items-center justify-center shrink-0">
+                        {row.applicantName.slice(0, 1)}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-bold text-sm text-slate-900 truncate">
+                            {row.applicantName}
+                          </span>
+                          {row.isRegisteredStudent && (
+                            <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-700 font-semibold">
+                              원생
+                            </span>
+                          )}
+                        </div>
+                        {row.studentName && row.studentName !== row.applicantName && (
+                          <p className="text-[11px] text-slate-500 mt-0.5 truncate">
+                            대상: <span className="font-semibold text-slate-700">{row.studentName}</span>
+                            {row.relationship && ` (${row.relationship})`}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold shrink-0 ${statusBadge.badgeClass}`}>
+                      {statusBadge.label}
+                    </span>
+                  </div>
+
+                  {/* 2. 일정 및 세부 내용 */}
+                  <div className="grid grid-cols-1 gap-1.5 text-xs bg-slate-50/70 p-2.5 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-2">
+                      <Calendar className={`w-3.5 h-3.5 shrink-0 ${scheduleInfo.isToday ? 'text-amber-500' : 'text-slate-400'}`} />
+                      <span className={scheduleInfo.isToday ? 'font-black text-amber-700 bg-amber-50 px-1.5 py-0.2 rounded' : 'font-semibold text-slate-700'}>
+                        {scheduleInfo.display}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <GraduationCap className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span className="text-slate-700 font-medium truncate">
+                        {row.coursePreference || '과정 미지정'}
+                      </span>
+                    </div>
+                    {row.phone && (
+                      <div className="flex items-center gap-2">
+                        <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <a href={`tel:${row.phone}`} className="text-indigo-600 font-mono font-medium hover:underline">
+                          {row.phone}
+                        </a>
+                      </div>
+                    )}
+                    {row.notes && (
+                      <p className="text-[11px] text-slate-500 mt-1 pt-1 border-t border-slate-200/60 line-clamp-2">
+                        {row.notes}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* 3. 모바일 하단 액션 버튼 그룹 */}
+                  <div className="flex items-center gap-2 pt-1">
+                    {row.phone && (
+                      <a
+                        href={`tel:${row.phone}`}
+                        className="min-h-[40px] px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs inline-flex items-center justify-center gap-1.5 flex-1 transition-colors shadow-2xs"
+                      >
+                        <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>전화</span>
+                      </a>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleOpenRecord(row)}
+                      className={`min-h-[40px] px-3 rounded-xl border font-bold text-xs inline-flex items-center justify-center gap-1.5 flex-1 transition-colors ${
+                        row.hasRecord
+                          ? 'border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100'
+                          : 'border-slate-200 bg-white text-slate-700 hover:border-indigo-300 shadow-2xs'
+                      }`}
+                    >
+                      {row.hasRecord ? <FileText className="w-3.5 h-3.5 text-indigo-600" /> : <Plus className="w-3.5 h-3.5 text-indigo-600" />}
+                      <span>{row.hasRecord ? '기록 보기' : '+ 일지 기록'}</span>
+                    </button>
+                    {row.status === 'pending' && (
+                      <button
+                        type="button"
+                        disabled={isConfirming}
+                        onClick={() => confirmRow(row)}
+                        className="min-h-[40px] px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs inline-flex items-center justify-center gap-1 flex-1 shadow-xs disabled:opacity-50"
+                      >
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>{isConfirming ? '처리 중' : '확정'}</span>
+                      </button>
+                    )}
+                    {!row.isRegisteredStudent ? (
+                      <button
+                        type="button"
+                        onClick={() => handleOpenRegister(row)}
+                        className="min-h-[40px] px-3 rounded-xl border border-indigo-200 bg-white hover:bg-indigo-50 text-indigo-700 font-bold text-xs inline-flex items-center justify-center gap-1 flex-1 shadow-2xs"
+                      >
+                        <UserPlus className="w-3.5 h-3.5" />
+                        <span>원생 등록</span>
+                      </button>
+                    ) : (
+                      <span className="text-[11px] text-slate-400 font-medium px-2 py-1 text-center flex-1">
+                        등록 완료
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          </>
         )}
       </div>
 

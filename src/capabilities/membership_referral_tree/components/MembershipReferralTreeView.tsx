@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState } from 'react';
 import {
   FamilyGroup,
@@ -114,7 +115,7 @@ export const MembershipReferralTreeView: React.FC = () => {
     if (creditInput <= 0) return;
     const res = deductSharedFamilyCredit(group, creditInput);
     if (!res.success) {
-      alert('가족 공용 크레딧 잔액이 부족합니다.');
+      showToast('가족 공용 크레딧 잔액이 부족합니다.', 'warning');
       return;
     }
     updateGroupInState(res.updatedGroup);

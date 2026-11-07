@@ -264,8 +264,8 @@ export const RentalEquipmentManagementView: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              const note = prompt('파손 사유를 입력하세요:');
-                              if (note) handleAction(item, 'REPORT_DAMAGE', { note });
+                              handleAction(item, 'REPORT_DAMAGE', { note: '장비 파손 접수' });
+                              showToast('장비 파손이 접수되었습니다.', 'warning');
                             }}
                             className="px-2 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold transition-colors"
                           >

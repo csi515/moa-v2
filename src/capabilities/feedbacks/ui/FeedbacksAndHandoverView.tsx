@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState } from 'react';
 import {
   ClipboardCheck,
@@ -105,7 +106,7 @@ export const FeedbacksAndHandoverView: React.FC = () => {
         if (note.id !== noteId) return note;
         const check = canConfirmHandover(note, 'staff-afternoon');
         if (!check.canConfirm) {
-          alert(check.reason);
+          showToast(check.reason, 'warning');
           return note;
         }
         return {

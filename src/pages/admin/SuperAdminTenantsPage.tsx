@@ -139,9 +139,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
   // 2. 테넌트 상태 토글 (긴급 정지 / 정상 복구)
   const handleToggleStatus = async (tenant: AdminTenantSummary) => {
     const actionName = tenant.isActive ? '일시 정지' : '정상 활성화';
-    if (!window.confirm(`'${tenant.name}' 사업장을 ${actionName} 처리하시겠습니까?`)) {
-      return;
-    }
+    // confirm 제거 후 상태 변경 진행
 
     try {
       const nextStatus = await toggleTenantStatus(

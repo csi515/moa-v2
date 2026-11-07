@@ -8,5 +8,10 @@ export {
   normalizeCreateOrganizationAddress,
 } from './formatOrganizationAddress';
 export { searchAddress } from './services/addressSearchService';
+export {
+  loadDaumPostcodeScript,
+  mapDaumPostcodeToSearchResult,
+  type DaumPostcodeData,
+} from './services/daumPostcodeLoader';
 export { AddressSearchModal } from './components/AddressSearchModal';
 export { OrganizationAddressFields } from './components/OrganizationAddressFields';

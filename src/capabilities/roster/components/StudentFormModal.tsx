@@ -27,7 +27,7 @@ import {
   mergeCustomFieldValues,
 } from '@/core/customer/customFields';
 import { CustomFieldsForm } from '@/core/customer/components/CustomFieldsForm';
-import { Save, RefreshCw, StickyNote, SlidersHorizontal } from 'lucide-react';
+import { Save, RefreshCw, StickyNote, SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-react';
 import { Modal } from '@/shared/components/ui/Modal';
 import { StudentBasicInfoSection } from './form/StudentBasicInfoSection';
 import { GuardianSection } from './form/GuardianSection';
@@ -130,6 +130,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
   const [activeSearchIdx, setActiveSearchIdx] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(true);
+  const [showDetails, setShowDetails] = useState(isEdit);
   const [inviteModal, setInviteModal] = useState<StudentRegistrationInviteResult | null>(null);
   const [postSaveStudent, setPostSaveStudent] = useState<Student | null>(null);
   const [fieldErrors, setFieldErrors] = useState<StudentFormErrors>({});
@@ -188,6 +189,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
           : [newGuardianEntry(true)];
       nextCustomFields = extractCustomFieldValues(student.metadata, customFieldsDef);
       setShowAdvanced(true);
+      setShowDetails(true);
     } else {
       nextForm = {
         name: '',
@@ -217,6 +219,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
       nextGuardians = [newGuardianEntry(true)];
       nextCustomFields = extractCustomFieldValues(null, customFieldsDef);
       setShowAdvanced(true);
+      setShowDetails(false);
     }
 
     setFormData(nextForm);
@@ -329,17 +332,27 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
     setActiveSearchIdx(null);
   };
 
-  const buildGuardianInputs = (): GuardianRegistrationInput[] =>
-    guardians.map((g) => ({
-      mode: g.mode,
-      existingParentId: g.mode === 'existing' ? g.existingParentId : undefined,
-      name: g.name,
-      phone: g.phone,
-      email: g.email,
-      relationship: g.relationship,
-      isPrimary: g.isPrimary,
-      invite: g.invite,
-    }));
+  const buildGuardianInputs = (): GuardianRegistrationInput[] => {
+    return guardians.map((g) => {
+      if (g.mode === 'existing' && g.existingParentId) {
+        return {
+          mode: 'existing' as const,
+          existingParentId: g.existingParentId,
+          relationship: g.relationship,
+          isPrimary: g.isPrimary,
+        };
+      }
+      return {
+        mode: 'new' as const,
+        name: g.name.trim(),
+        phone: g.phone.trim(),
+        email: g.email.trim() || undefined,
+        relationship: g.relationship,
+        isPrimary: g.isPrimary,
+        invite: Boolean(g.invite && g.email.trim() && canInviteParent),
+      };
+    });
+  };
 
   const buildStudentPayload = (): Omit<Student, 'id' | 'createdAt' | 'updatedAt'> & {
     id?: string;
@@ -391,6 +404,11 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
 
     if (Object.keys(combinedErrors).length > 0) {
       setFieldErrors(combinedErrors);
+      // 상세 정보 영역의 필드에 에러가 있다면 토글 자동 오픈
+      const detailedKeys = ['pickup', ...customFieldsDef.map((f) => f.key)];
+      if (detailedKeys.some((k) => combinedErrors[k])) {
+        setShowDetails(true);
+      }
       const first = firstErrorField(errors);
       if (first) {
         requestAnimationFrame(() => focusStudentFormField(first, formRef.current));
@@ -422,7 +440,6 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         organizationId,
       });
 
-
       let message = `${result.student.name} ${customerLabel}이 등록되었습니다.`;
       if (result.invitesSent > 0) message += ` (${contactLabel} 초대 ${result.invitesSent}건)`;
       showToast(message, 'success');
@@ -451,7 +468,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
       <button
         type="button"
         onClick={onClose}
-        className="px-4 py-2.5 text-sm font-semibold text-slate-600 bg-slate-100 rounded-xl min-h-[44px]"
+        className="px-4 py-2.5 text-sm font-semibold text-slate-600 bg-slate-100 rounded-xl min-h-[44px] cursor-pointer hover:bg-slate-200 transition-colors"
       >
         취소
       </button>
@@ -459,7 +476,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         type="submit"
         form="student-form"
         disabled={saveDisabled}
-        className="px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 rounded-xl flex items-center gap-2 disabled:opacity-50 min-h-[44px]"
+        className="px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 rounded-xl flex items-center gap-2 disabled:opacity-50 min-h-[44px] cursor-pointer hover:bg-indigo-700 transition-colors shadow-xs"
       >
         {isSubmitting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
         {isSubmitting ? '저장 중…' : isEdit ? '수정 저장' : `${customerLabel} 등록`}
@@ -476,7 +493,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         description={
           isEdit
             ? '필요한 항목만 수정하세요'
-            : rosterCreateFormDescription(industry, contactLabel)
+            : `${customerLabel} 이름과 ${contactLabel} 연락처만 입력하면 즉시 등록됩니다.`
         }
         maxWidth="4xl"
         intent="form"
@@ -484,7 +501,6 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         confirmClose={confirmUnsavedClose}
         footer={footer}
       >
-
         {postSaveStudent && !inviteModal && (
           <StudentFormPostSave
             student={postSaveStudent}
@@ -515,15 +531,18 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
           id="student-form"
           ref={formRef}
           onSubmit={handleSubmit}
-          className={`p-6 space-y-5 ${postSaveStudent ? 'opacity-60 pointer-events-none' : ''}`}
+          className={`p-6 space-y-4 ${postSaveStudent ? 'opacity-60 pointer-events-none' : ''}`}
         >
+          {/* 1. 필수 기본 정보: 원생 이름 */}
           <StudentBasicInfoSection
             formData={formData}
             onChange={updateFormData}
             nameError={fieldErrors.name}
             showSchoolFields={showSchoolFields}
+            mode={isEdit ? 'all' : 'name-only'}
           />
 
+          {/* 2. 보호자 또는 성인 본인 연락처 (필수) */}
           <div className="space-y-3">
             <label className="flex items-center gap-2.5 rounded-xl border border-slate-200/80 bg-slate-50/80 px-3.5 py-2.5 cursor-pointer hover:bg-slate-100/80 transition-colors">
               <input
@@ -543,12 +562,33 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
               />
               <span className="flex-1">
                 <span className="text-xs font-bold text-slate-800">
-                  성인 본인 직접 등록 <span className="font-normal text-slate-500 text-[11px] ml-1.5">{contactLabel} 연결 없이 본인 번호로 알림 수신</span>
+                  성인 본인 직접 등록{' '}
+                  <span className="font-normal text-slate-500 text-[11px] ml-1.5">
+                    {contactLabel} 연결 없이 본인 번호로 알림 수신
+                  </span>
                 </span>
               </span>
             </label>
 
-            {!isAdultSelf && (
+            {isAdultSelf ? (
+              <div className="p-3.5 rounded-xl border border-indigo-100 bg-indigo-50/50 space-y-2">
+                <label className="block text-xs font-bold text-indigo-900">
+                  {customerLabel} 본인 휴대폰 번호 <span className="text-rose-500">*</span>
+                  <span className="text-slate-500 font-normal text-[11px] ml-1.5">
+                    출결 체크 및 안내 알림 수신 번호
+                  </span>
+                </label>
+                <input
+                  type="tel"
+                  inputMode="tel"
+                  value={formData.phone}
+                  onChange={(e) => updateFormData({ phone: e.target.value })}
+                  placeholder="010-0000-0000"
+                  autoComplete="tel"
+                  className="w-full px-3 py-2 text-sm bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+                />
+              </div>
+            ) : (
               <GuardianSection
                 isEdit={isEdit}
                 canInviteParent={canInviteParent}
@@ -566,63 +606,106 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
             )}
           </div>
 
-          <StudentAdvancedSection
-            formData={formData}
-            teachers={teachers}
-            classes={classes}
-            showAdvanced={showAdvanced}
-            onToggle={() => setShowAdvanced((v) => !v)}
-            onChange={updateFormData}
-          />
-
-          {customFieldsDef.length > 0 && (
-            <section className="p-4 bg-slate-50/70 border border-slate-200/80 rounded-2xl space-y-3">
-              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-600" /> {placeLabel} 맞춤 항목
-              </h4>
-              <CustomFieldsForm
-                fields={customFieldsDef}
-                values={customFieldValues}
-                onChange={updateCustomField}
-                errors={fieldErrors}
-              />
-            </section>
+          {/* 3. 신규 등록일 때 점진적 공개(Progressive Disclosure) 접이식 토글 */}
+          {!isEdit && (
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => setShowDetails((v) => !v)}
+                className="w-full py-3 px-4 rounded-2xl border border-dashed border-indigo-200 bg-indigo-50/40 hover:bg-indigo-50/80 hover:border-indigo-300 transition-all flex items-center justify-between text-left group cursor-pointer"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-indigo-100 group-hover:bg-indigo-200 text-indigo-700 flex items-center justify-center shrink-0 transition-colors">
+                    {showDetails ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-indigo-950">
+                      {showDetails ? '상세 정보 접기' : '+ 학교, 수업, 수강료 등 상세 정보 입력하기'}
+                    </p>
+                    {!showDetails && (
+                      <p className="text-[11px] text-indigo-600/80 mt-0.5">
+                        기본 설정 적용: 일반(매월 {formData.paymentDay}일 · {Number(formData.tuitionFee).toLocaleString()}원) · 오늘 등록
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <span className="text-xs font-semibold text-indigo-600 shrink-0 ml-2">
+                  {showDetails ? '접기' : '선택 입력'}
+                </span>
+              </button>
+            </div>
           )}
 
-          <section>
-            <h4 className="text-xs font-bold text-amber-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-              <StickyNote className="w-3.5 h-3.5" /> 추가 정보
-            </h4>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">특이사항</label>
-            <p className="text-[11px] text-slate-500 mb-2">
-              알레르기·주의사항·전달사항 등 수업에 필요한 내용을 남깁니다. (선택)
-            </p>
-            <textarea
-              rows={3}
-              value={formData.specialNotes}
-              onChange={(e) => updateFormData({ specialNotes: e.target.value, memo: '' })}
-              placeholder={rosterNotesPlaceholder(contactLabel)}
-              className="w-full px-3 py-2.5 text-sm bg-amber-50/60 border border-amber-100 rounded-xl resize-none focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[88px]"
-            />
-          </section>
+          {/* 4. 상세 정보 섹션 (수정 모드이거나 토글이 펼쳐졌을 때만 렌더링) */}
+          {(isEdit || showDetails) && (
+            <div className={`space-y-5 ${!isEdit ? 'pt-3 border-t border-slate-100' : ''}`}>
+              {!isEdit && (
+                <StudentBasicInfoSection
+                  formData={formData}
+                  onChange={updateFormData}
+                  showSchoolFields={showSchoolFields}
+                  mode="details-only"
+                />
+              )}
 
+              <StudentAdvancedSection
+                formData={formData}
+                teachers={teachers}
+                classes={classes}
+                showAdvanced={showAdvanced}
+                onToggle={() => setShowAdvanced((v) => !v)}
+                onChange={updateFormData}
+              />
 
-          {showPickupFields && (
-            <StudentPickupSection
-              address={formData.address}
-              usesShuttleService={formData.usesShuttleService}
-              pickupAddresses={formData.pickupAddresses}
-              pickupError={fieldErrors.pickup}
-              onAddressChange={(address) => updateFormData({ address })}
-              onUsesShuttleChange={(usesShuttleService) => {
-                const pickupAddresses =
-                  usesShuttleService && formData.pickupAddresses.length === 0
-                    ? [createPickupAddress({ isDefault: true })]
-                    : formData.pickupAddresses;
-                updateFormData({ usesShuttleService, pickupAddresses });
-              }}
-              onPickupAddressesChange={(pickupAddresses) => updateFormData({ pickupAddresses })}
-            />
+              {customFieldsDef.length > 0 && (
+                <section className="p-4 bg-slate-50/70 border border-slate-200/80 rounded-2xl space-y-3">
+                  <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-600" /> {placeLabel} 맞춤 항목
+                  </h4>
+                  <CustomFieldsForm
+                    fields={customFieldsDef}
+                    values={customFieldValues}
+                    onChange={updateCustomField}
+                    errors={fieldErrors}
+                  />
+                </section>
+              )}
+
+              <section>
+                <h4 className="text-xs font-bold text-amber-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                  <StickyNote className="w-3.5 h-3.5" /> 추가 정보
+                </h4>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">특이사항</label>
+                <p className="text-[11px] text-slate-500 mb-2">
+                  알레르기·주의사항·전달사항 등 수업에 필요한 내용을 남깁니다. (선택)
+                </p>
+                <textarea
+                  rows={3}
+                  value={formData.specialNotes}
+                  onChange={(e) => updateFormData({ specialNotes: e.target.value, memo: '' })}
+                  placeholder={rosterNotesPlaceholder(contactLabel)}
+                  className="w-full px-3 py-2.5 text-sm bg-amber-50/60 border border-amber-100 rounded-xl resize-none focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[88px]"
+                />
+              </section>
+
+              {showPickupFields && (
+                <StudentPickupSection
+                  address={formData.address}
+                  usesShuttleService={formData.usesShuttleService}
+                  pickupAddresses={formData.pickupAddresses}
+                  pickupError={fieldErrors.pickup}
+                  onAddressChange={(address) => updateFormData({ address })}
+                  onUsesShuttleChange={(usesShuttleService) => {
+                    const pickupAddresses =
+                      usesShuttleService && formData.pickupAddresses.length === 0
+                        ? [createPickupAddress({ isDefault: true })]
+                        : formData.pickupAddresses;
+                    updateFormData({ usesShuttleService, pickupAddresses });
+                  }}
+                  onPickupAddressesChange={(pickupAddresses) => updateFormData({ pickupAddresses })}
+                />
+              )}
+            </div>
           )}
         </form>
       </Modal>

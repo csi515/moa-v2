@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import { useState, useEffect, FormEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -502,7 +503,7 @@ export function CustomerSignUpFlow() {
                             <button
                               type="button"
                               onClick={async () => {
-                                if (!confirm('이 가입 신청을 취소할까요?')) return;
+                                // confirm 제거 후 취소 진행
                                 try {
                                   setActionError(null);
                                   await customerJoinService.cancelMyJoinRequest(request.id);

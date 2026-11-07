@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState } from 'react';
 import {
   X,
@@ -112,14 +113,12 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!courseName.trim()) {
-      alert('강좌명을 입력해주세요.');
+      showToast('강좌명을 입력해주세요.', 'warning');
       return;
     }
 
     if (hasConflict) {
-      if (!confirm('⚠️ 동시간대에 강의실 또는 강사 일정이 중복됩니다. 그래도 등록하시겠습니까?')) {
-        return;
-      }
+      showToast('동시간대에 강의실 또는 강사 일정이 중복되어 등록됩니다.', 'warning');
     }
 
     const newCourse: CultureCourseSchedule = {

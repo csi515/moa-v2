@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState } from 'react';
 import { useList, useCreate, useUpdate } from '@refinedev/core';
 import {
@@ -41,7 +42,7 @@ export const DigitalGuestbookView: React.FC = () => {
     e.preventDefault();
     const consentCheck = validateGuestbookConsent(privacyAgreed);
     if (!consentCheck.valid) {
-      alert(consentCheck.message);
+      showToast(consentCheck.message, 'warning');
       return;
     }
     if (!visitorName.trim() || !phone.trim()) return;

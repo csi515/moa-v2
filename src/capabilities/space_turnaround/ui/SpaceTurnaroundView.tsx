@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React from 'react';
 import { useList, useUpdate } from '@refinedev/core';
 import {
@@ -44,7 +45,7 @@ export const SpaceTurnaroundView: React.FC = () => {
     const result = transitionTurnaroundState(row.status, action, checklistForAction);
 
     if (!result.allowed) {
-      alert(result.error);
+      showToast(result.error || '상태를 변경할 수 없습니다.', 'warning');
       return;
     }
 

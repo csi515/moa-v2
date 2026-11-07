@@ -76,6 +76,28 @@ export const WorkplaceSettingsView: FC = () => {
       : EMPTY_ORGANIZATION_ADDRESS;
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [initialSnapshot, setInitialSnapshot] = useState<string>('');
+
+  // 설정 원본 스냅샷 기록 (isDirty 추적용)
+  useEffect(() => {
+    if (!initialSnapshot) {
+      setInitialSnapshot(JSON.stringify({ settings, addressParts }));
+    }
+  }, [settings, addressParts, initialSnapshot]);
+
+  const isDirty = Boolean(initialSnapshot) && JSON.stringify({ settings, addressParts }) !== initialSnapshot;
+
+  const handleResetSettings = () => {
+    if (!initialSnapshot) return;
+    try {
+      const parsed = JSON.parse(initialSnapshot);
+      setSettings(parsed.settings);
+      setAddressParts(parsed.addressParts);
+      showToast('설정 변경 사항을 원래대로 되돌렸습니다.', 'info');
+    } catch {
+      // ignore
+    }
+  };
   const rooms = getConfiguredRooms(settings);
 
   useEffect(() => {
@@ -184,6 +206,7 @@ export const WorkplaceSettingsView: FC = () => {
 
       StorageService.saveSettings(nextSettings);
       setSettings(nextSettings);
+      setInitialSnapshot(JSON.stringify({ settings: nextSettings, addressParts }));
       triggerRefresh();
       showToast(`${placeLabel} 기본 정보가 저장되었습니다.`, 'success');
     } catch (err) {
@@ -203,9 +226,20 @@ export const WorkplaceSettingsView: FC = () => {
         title={`${placeLabel} 기본 정보 및 시설(연습실) 관리`}
         icon={<Building className={`w-4 h-4 ${accentIcon}`} />}
       >
-        <p className="text-xs text-slate-500 mb-6 leading-relaxed">
-          {placeLabel} 상호명, 대표자, 연락처, 주소 및 시설 내 강의실·피아노 연습실(공실)을 등록하고 관리합니다.
-        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+          <p className="text-xs text-slate-500 leading-relaxed max-w-xl">
+            {placeLabel} 상호명, 대표자, 연락처, 주소 및 시설 내 강의실·피아노 연습실(공실)을 등록하고 관리합니다.
+          </p>
+          <button
+            type="button"
+            onClick={(e) => handleSaveSettings(e as any)}
+            disabled={isSaving}
+            className={`px-4 py-2 min-h-[40px] ${accentBtn} disabled:opacity-60 text-white font-bold text-xs rounded-xl transition-all shadow-xs flex items-center justify-center gap-1.5 shrink-0 cursor-pointer`}
+          >
+            {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+            <span>{isSaving ? '저장 중…' : '설정 정보 저장'}</span>
+          </button>
+        </div>
 
         <form onSubmit={handleSaveSettings} className="space-y-6">
           <OrganizationProfileFields
@@ -336,6 +370,42 @@ export const WorkplaceSettingsView: FC = () => {
 
       {/* 4. 업종별 가이드 패널 */}
       <IndustryFeatureGuidePanel industry={industry} />
+
+{/* 변경 사항 감지 시 떠오르는 모던 스티키 플로팅 저장 바 */}
+      {isDirty && (
+        <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-2xl bg-slate-900/95 text-white backdrop-blur-md rounded-2xl shadow-2xl p-3 sm:p-4 border border-slate-700/80 flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-4 duration-200">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm font-bold text-white truncate">
+                저장되지 않은 설정 변경사항이 있습니다
+              </p>
+              <p className="text-[11px] text-slate-400 hidden sm:block">
+                페이지를 이탈하기 전에 설정을 저장해 주세요.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={handleResetSettings}
+              disabled={isSaving}
+              className="px-3 py-1.5 min-h-[38px] text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+            >
+              되돌리기
+            </button>
+            <button
+              type="button"
+              onClick={(e) => handleSaveSettings(e as any)}
+              disabled={isSaving}
+              className={`px-4 sm:px-5 py-2 min-h-[38px] ${accentBtn} text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50`}
+            >
+              {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+              <span>{isSaving ? '저장 중…' : '지금 저장'}</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 5. 학원 데이터 초기화 위험 구역 및 법적 안내 */}
       <div className="pt-2">

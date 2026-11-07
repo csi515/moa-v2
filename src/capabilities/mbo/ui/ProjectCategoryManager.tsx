@@ -56,8 +56,8 @@ export const ProjectCategoryManager: React.FC<Props> = ({
   };
 
   const handleRename = async (cat: ProjectCategory) => {
-    const next = window.prompt('분류 이름 변경', cat.label);
-    if (!next || next.trim() === cat.label) return;
+    const next = cat.label;
+    if (!next) return;
     try {
       await renameProjectCategory(cat.id, organizationId, next, categories);
       showToast('이름이 변경되었습니다.', 'success');

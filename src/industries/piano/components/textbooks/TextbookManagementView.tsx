@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Textbook,
   TextbookSale,
   TextbookPayment,
-  TextbookInventoryTransaction
+  TextbookInventoryTransaction,
 } from '@/types';
 import { StorageService } from '@/services/storage';
 import { useApp } from '@/context/AppContext';
@@ -24,12 +24,11 @@ import { TextbookSummaryCards } from './tabs/TextbookSummaryCards';
 import { TextbookSubTabNav } from './tabs/TextbookSubTabNav';
 import { TextbookInventoryTab } from './tabs/TextbookInventoryTab';
 import { TextbookSalesTab } from './tabs/TextbookSalesTab';
-import { TextbookPaymentsTab } from './tabs/TextbookPaymentsTab';
 import { TextbookHistoryTab } from './tabs/TextbookHistoryTab';
 
 export const TextbookManagementView: React.FC = () => {
   const { openConfirmDialog, showToast, triggerRefresh } = useApp();
-  // 교재 domain만 — 학생/예약 변경으로 loadData 재실행 금지
+  // 교재 domain만 — 학생/예약 변경으로 loadData 재실행 방지
   const refreshKey = useStorageRefresh('textbooks');
 
   const [activeSubTab, setActiveSubTab] = useState<SubTab>('inventory');
@@ -105,6 +104,11 @@ export const TextbookManagementView: React.FC = () => {
 
   const currentYM = yearMonthLocal();
   const stats = StorageService.getTextbookStats(currentYM);
+
+  const unpaidSalesCount = useMemo(
+    () => sales.filter((s) => s.unpaidAmount > 0 && !s.billingInvoiceId).length,
+    [sales]
+  );
 
   const handleDeactivateTextbook = (id: string, title: string) => {
     openConfirmDialog({
@@ -202,48 +206,59 @@ export const TextbookManagementView: React.FC = () => {
     setFocusLowStock(true);
   };
 
+  const handleUnpaidClick = () => {
+    setActiveSubTab('sales');
+  };
+
   return (
-    <div className="space-y-4 pb-4">
+    <div className="space-y-4 pb-6">
       <PageHeader
-        icon={<BookOpen className="w-6 h-6" />}
+        icon={<BookOpen className="w-6 h-6 text-indigo-600" />}
         title="교재 관리"
         actions={
           <div className="flex flex-wrap items-center gap-2">
             <button
+              type="button"
               onClick={() => {
                 setEditingTextbook(null);
                 setIsFormModalOpen(true);
               }}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs font-bold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-md cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs font-bold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs cursor-pointer active:scale-95"
             >
               <Plus className="w-4 h-4" />
               <span>+ 새 교재 등록</span>
             </button>
             <button
+              type="button"
               onClick={() => openSaleModal()}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors shadow-xs cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors shadow-xs cursor-pointer active:scale-95"
             >
               <ShoppingBag className="w-4 h-4 text-indigo-600" />
-              <span>학생 교재 지급 / 배부</span>
+              <span>원생 교재 배부</span>
             </button>
           </div>
         }
       />
 
+      {/* 상단 5대 핵심 지표 요약 카드 */}
       <TextbookSummaryCards
         stats={stats}
         currentYM={currentYM}
         onLowStockClick={handleLowStockClick}
+        onUnpaidClick={handleUnpaidClick}
       />
 
+      {/* 정돈된 3대 서브탭 네비게이션 */}
       <TextbookSubTabNav
         activeSubTab={activeSubTab}
         onSubTabChange={setActiveSubTab}
         textbooksCount={textbooks.length}
         salesCount={sales.length}
         transactionsCount={transactions.length}
+        unpaidSalesCount={unpaidSalesCount}
       />
 
+      {/* 1. 교재 및 재고 현황 */}
       {activeSubTab === 'inventory' && (
         <TextbookInventoryTab
           textbooks={textbooks}
@@ -263,7 +278,8 @@ export const TextbookManagementView: React.FC = () => {
         />
       )}
 
-      {activeSubTab === 'sales' && (
+      {/* 2. 학생 배부 및 수납 관리 (sales & payments 통합 뷰) */}
+      {(activeSubTab === 'sales' || activeSubTab === 'payments') && (
         <TextbookSalesTab
           sales={sales}
           onOpenPaymentModal={openPaymentModal}
@@ -272,19 +288,12 @@ export const TextbookManagementView: React.FC = () => {
         />
       )}
 
-      {activeSubTab === 'payments' && (
-        <TextbookPaymentsTab
-          sales={sales}
-          payments={payments}
-          onOpenPaymentModal={openPaymentModal}
-          onOpenReceiptModal={openReceiptModal}
-        />
-      )}
-
+      {/* 3. 입출고 이력 */}
       {activeSubTab === 'history' && (
         <TextbookHistoryTab transactions={transactions} />
       )}
 
+      {/* 모달 컴포넌트들 */}
       {isFormModalOpen && (
         <TextbookFormModal
           textbook={editingTextbook}

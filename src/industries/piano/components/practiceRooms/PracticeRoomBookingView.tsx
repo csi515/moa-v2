@@ -58,9 +58,9 @@ function toConflictBookings(rows: RoomReservationRow[]): PracticeRoomBooking[] {
 }
 
 const VIEW_OPTIONS: Array<{ value: PracticeRoomCalendarMode; label: string }> = [
-  { value: 'month', label: '월간 (Month)' },
-  { value: 'week', label: '주간 (Week)' },
-  { value: 'day', label: '일간 (Day)' },
+  { value: 'month', label: '월간' },
+  { value: 'week', label: '주간' },
+  { value: 'day', label: '일간' },
 ];
 
 /**

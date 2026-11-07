@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -42,16 +43,14 @@ export const MyReservationsView: React.FC<ParentBookingsViewProps> = () => {
   };
 
   const handleCancelReservation = async (reservation: MyReservation) => {
-    if (!window.confirm(`'${reservation.schedule_title}' 예약을 취소하시겠습니까?`)) {
-      return;
-    }
+    // confirm 제거 후 취소 진행
 
     try {
       await reservationService.cancelReservation(reservation.id);
-      alert('예약이 취소되었습니다.');
+      showToast('예약이 취소되었습니다.', 'success');
       loadReservations();
     } catch (err: any) {
-      alert(err?.message || '예약 취소에 실패했습니다.');
+      showToast(err?.message || '예약 취소에 실패했습니다.', 'error');
     }
   };
 

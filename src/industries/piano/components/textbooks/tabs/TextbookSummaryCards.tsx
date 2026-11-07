@@ -7,12 +7,14 @@ interface TextbookSummaryCardsProps {
   stats: TextbookStats;
   currentYM: string;
   onLowStockClick: () => void;
+  onUnpaidClick?: () => void;
 }
 
 export const TextbookSummaryCards: React.FC<TextbookSummaryCardsProps> = ({
   stats,
   currentYM,
-  onLowStockClick
+  onLowStockClick,
+  onUnpaidClick,
 }) => {
   const collectionRate =
     stats.monthlySaleAmount > 0
@@ -36,7 +38,13 @@ export const TextbookSummaryCards: React.FC<TextbookSummaryCardsProps> = ({
         label="전체 교재비 미납액"
         value={formatCurrency(stats.totalUnpaidAmount)}
         variant="rose"
-        subtitle={`미납 학생 ${stats.unpaidStudentsCount}명`}
+        subtitle={
+          stats.unpaidStudentsCount > 0
+            ? `미납 ${stats.unpaidStudentsCount}명 · 클릭 시 수납`
+            : '전원 완납 완료'
+        }
+        onClick={stats.totalUnpaidAmount > 0 ? onUnpaidClick : undefined}
+        className={stats.totalUnpaidAmount > 0 ? 'cursor-pointer hover:ring-2 hover:ring-rose-200 transition-all' : ''}
       />
       <SummaryMetricCard
         label="이번달 전달한 교재"
@@ -48,9 +56,13 @@ export const TextbookSummaryCards: React.FC<TextbookSummaryCardsProps> = ({
         label="재고 부족 교재"
         value={`${stats.lowStockBooksCount}종`}
         variant={stats.lowStockBooksCount > 0 ? 'amber' : 'default'}
-        subtitle={stats.lowStockBooksCount > 0 ? '클릭하여 발주 대상 확인' : '재고 상태 양호'}
+        subtitle={stats.lowStockBooksCount > 0 ? '클릭 시 발주 대상 확인' : '재고 상태 양호'}
         onClick={onLowStockClick}
-        className={`col-span-2 lg:col-span-1 ${stats.lowStockBooksCount > 0 ? 'ring-1 ring-amber-200' : ''}`}
+        className={`col-span-2 lg:col-span-1 ${
+          stats.lowStockBooksCount > 0
+            ? 'ring-1 ring-amber-200 cursor-pointer hover:ring-2 hover:ring-amber-300 transition-all'
+            : ''
+        }`}
       />
     </div>
   );

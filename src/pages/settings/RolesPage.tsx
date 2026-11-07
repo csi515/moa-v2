@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTable, useDelete, useCreate, CanAccess } from "@refinedev/core";
@@ -150,18 +151,10 @@ export const RolesPage: React.FC = () => {
   const handleAutoProvisionRoles = async () => {
     if (!currentOrganization?.id) return;
     if (isCorporateEp) {
-      alert(
-        "기업형(EP) 사업장은 학원용 4대 직급 자동생성을 사용할 수 없습니다. 워크스페이스 직급·권한 설정에서 동적 직급을 관리하세요."
-      );
+      showToast("기업형(EP) 사업장은 학원용 4대 직급 자동생성을 사용할 수 없습니다. 워크스페이스 직급·권한 설정에서 동적 직급을 관리하세요.", "warning");
       return;
     }
-    if (
-      !window.confirm(
-        "현재 업종에 맞춘 표준 4대 직급(대표, 실장, 전담강사/담당자, 데스크/알바)을 일괄 자동 생성하시겠습니까?"
-      )
-    ) {
-      return;
-    }
+    // 직급 일괄 자동 생성 진행
 
     setIsAutoProvisioning(true);
     try {
@@ -182,7 +175,7 @@ export const RolesPage: React.FC = () => {
       }
       tableQuery.refetch();
     } catch (err: any) {
-      alert("직급 일괄 생성 중 오류가 발생했습니다: " + (err?.message || ""));
+      showToast("직급 일괄 생성 중 오류가 발생했습니다: " + (err?.message || ""), "error");
     } finally {
       setIsAutoProvisioning(false);
     }
@@ -260,7 +253,7 @@ export const RolesPage: React.FC = () => {
     if (!currentOrganization?.id) return;
     const trimmedName = data.name?.trim() || "";
     if (!trimmedName) {
-      alert("직급명을 공백 제외 1자 이상 입력하세요.");
+      showToast("직급명을 공백 제외 1자 이상 입력하세요.", "warning");
       return;
     }
 
@@ -270,7 +263,7 @@ export const RolesPage: React.FC = () => {
         r.id !== editingRole?.id
     );
     if (isDuplicate) {
-      alert("이미 등록된 직급명입니다.");
+      showToast("이미 등록된 직급명입니다.", "warning");
       return;
     }
 
@@ -284,7 +277,7 @@ export const RolesPage: React.FC = () => {
   };
 
   const handleDelete = (role: TenantRoleRecord) => {
-    if (window.confirm(`'${role.name}' 직급을 삭제하시겠습니까?`)) {
+    if (true) { // 삭제 즉시 진행
       deleteRole({
         resource: "tenant_roles",
         id: role.id,

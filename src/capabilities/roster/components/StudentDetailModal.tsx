@@ -121,10 +121,24 @@ const StudentDetailModalContent: React.FC<
               <p className="text-xs text-slate-500 mt-1">
                 {student.school} {student.grade} | {instructorTerm}: <strong>{student.teacherName || '-'}</strong> | 생년월일: {student.birthDate}
               </p>
+
+              {/* 슬림 핵심 요약 칩 바 (다음 수업 · 최근 출결 · 수납 현황 · 보호자) */}
+              <div className="flex items-center gap-1.5 mt-2 flex-wrap text-[11px]">
+                {summaryItems.map((item) => (
+                  <span
+                    key={item.label}
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-white border border-slate-200/80 shadow-2xs font-medium text-slate-700"
+                  >
+                    <span className="text-slate-400 font-normal">{item.label}:</span>
+                    <strong className="text-slate-800 font-semibold truncate max-w-[160px]">{item.value}</strong>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 self-end sm:self-center">
+          <div className="flex items-center gap-1.5 self-end sm:self-center shrink-0">
+            {detailExtension?.renderHeaderActions?.({ student })}
             {canCall && modal.primaryGuardian?.parentPhone && (
               <a
                 href={`tel:${modal.primaryGuardian.parentPhone}`}
@@ -174,65 +188,6 @@ const StudentDetailModalContent: React.FC<
               <X className="w-5 h-5" />
             </button>
           </div>
-        </div>
-
-        {/* 핵심 요약: 다음 수업 / 출결 / 수납 / 보호자 */}
-        <div
-          className="grid grid-cols-2 lg:grid-cols-4 gap-2 px-4 sm:px-6 py-3 border-b border-slate-100 bg-white shrink-0"
-          aria-label={`${customerLabel} 핵심 요약`}
-        >
-          {summaryItems.map((item) => (
-            <div
-              key={item.label}
-              className="min-w-0 rounded-xl bg-slate-50 px-3 py-2 border border-slate-100"
-            >
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">{item.label}</p>
-              <p className="text-xs font-bold text-slate-800 mt-0.5 truncate" title={item.value}>
-                {item.value}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* 빠른 액션 — 기존 모달/탭 재사용 */}
-        <div className="flex flex-wrap gap-2 px-4 sm:px-6 py-2.5 border-b border-slate-100 bg-slate-50/50 shrink-0">
-          <button
-            type="button"
-            onClick={modal.openQuickAttendance}
-            className="min-h-[40px] px-3 rounded-xl text-[11px] font-bold bg-white border border-slate-200 text-slate-700 hover:border-indigo-300 hover:text-indigo-700 inline-flex items-center gap-1.5"
-          >
-            <ClipboardCheck className="w-3.5 h-3.5" />
-            출결 기록
-          </button>
-          {detailExtension?.renderHeaderActions?.({ student })}
-          {canEdit && (
-          <button
-            type="button"
-            onClick={() => onEdit(student)}
-            className="min-h-[40px] px-3 rounded-xl text-[11px] font-bold bg-white border border-slate-200 text-slate-700 hover:border-indigo-300 hover:text-indigo-700 inline-flex items-center gap-1.5"
-          >
-            <Edit className="w-3.5 h-3.5" />
-            수업·정보 변경
-          </button>
-          )}
-          {canTuition && (
-          <button
-            type="button"
-            onClick={modal.openQuickTuition}
-            className="min-h-[40px] px-3 rounded-xl text-[11px] font-bold bg-white border border-slate-200 text-slate-700 hover:border-indigo-300 hover:text-indigo-700 inline-flex items-center gap-1.5"
-          >
-            <CreditCard className="w-3.5 h-3.5" />
-            수납
-          </button>
-          )}
-          <button
-            type="button"
-            onClick={modal.openQuickConsultation}
-            className="min-h-[40px] px-3 rounded-xl text-[11px] font-bold bg-white border border-slate-200 text-slate-700 hover:border-indigo-300 hover:text-indigo-700 inline-flex items-center gap-1.5"
-          >
-            <MessageSquare className="w-3.5 h-3.5" />
-            상담 기록
-          </button>
         </div>
 
         <div className="flex flex-1 min-h-0 overflow-hidden">

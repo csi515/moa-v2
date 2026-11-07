@@ -19,6 +19,12 @@ export {
   type ExpectedStudentOnDate,
 } from './pianoExpectedAttendance';
 
+export {
+  type PianoTimelineGroup,
+  isSlotCurrent,
+  groupAttendanceRowsByTime,
+} from './pianoAttendanceTimeline';
+
 export type DayStatus = 'unchecked' | 'present' | 'absent' | 'late';
 export type StatusFilter = 'ALL' | DayStatus;
 

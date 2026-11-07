@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState } from 'react';
 import {
   StaffEmploymentProfile,
@@ -114,16 +115,16 @@ export const WorkAttendancePayrollView: React.FC = () => {
     });
 
     if (!auth.isAuthenticated) {
-      alert(`⚠️ 출퇴근 인증 실패: 매장 전용 Wi-Fi에 연결되어 있지 않거나 GPS 반경 밖입니다.`);
+      showToast('출퇴근 인증 실패: 매장 전용 Wi-Fi에 연결되어 있지 않거나 GPS 반경 밖입니다.', 'warning');
       return;
     }
 
     if (isClockedIn) {
       setClockedInStaffIds(clockedInStaffIds.filter((id) => id !== staffId));
-      alert(`퇴근 처리가 완료되었습니다. (휴게시간 및 실근로시간 타임카드에 자동 기록)`);
+      showToast('퇴근 처리가 완료되었습니다. (타임카드 자동 기록)', 'success');
     } else {
       setClockedInStaffIds([...clockedInStaffIds, staffId]);
-      alert(`출근 인증이 성공적으로 기록되었습니다. (매장 Wi-Fi 인증 확인)`);
+      showToast('출근 인증이 성공적으로 기록되었습니다. (매장 Wi-Fi 확인)', 'success');
     }
   };
 
@@ -648,7 +649,7 @@ export const WorkAttendancePayrollView: React.FC = () => {
               </button>
               <button
                 onClick={() => {
-                  alert(`[법정 전자 교부 완료] ${selectedStaffForSlip.staffName}님의 카카오 알림톡/이메일로 임금명세서 PDF가 발송되었습니다.`);
+                  showToast(`[법정 전자 교부 완료] ${selectedStaffForSlip.staffName}님의 카카오 알림톡/이메일로 임금명세서 PDF가 발송되었습니다.`, 'success');
                   setSelectedStaffForSlip(null);
                 }}
                 style={{ padding: '8px 16px', borderRadius: '6px', border: 'none', background: '#2563eb', color: '#fff', fontWeight: 600, cursor: 'pointer' }}

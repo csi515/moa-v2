@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState } from 'react';
 import {
   Vendor,
@@ -487,7 +488,7 @@ export const VendorApInvoiceView: React.FC = () => {
               </p>
             </div>
             <button
-              onClick={() => alert('세무사 제출용 매입 세금계산서 합계표(Excel)가 다운로드되었습니다.')}
+              onClick={() => showToast('세무사 제출용 매입 세금계산서 합계표(Excel)가 다운로드되었습니다.', 'success')}
               style={{
                 background: '#059669',
                 color: '#fff',

@@ -34,32 +34,15 @@ async function runTests() {
     'Desktop brand panel test ID must exist'
   );
 
-  // 3. Global social login order verification
-  // 1) Google (top, full width)
-  // 2) Apple (iOS App Store review standard, full width)
-  // 3) Kakao & Naver (2 columns grid)
-  // 4) Email form
-  const googleIndex = code.indexOf('data-testid="btn-google-login"');
-  const appleIndex = code.indexOf('data-testid="btn-apple-login"');
+  // 3. Domestic SNS login: Kakao & Naver (2 columns grid) before email form
   const kakaoIndex = code.indexOf('data-testid="btn-kakao-login"');
   const naverIndex = code.indexOf('data-testid="btn-naver-login"');
   const emailFormIndex = code.indexOf('data-testid="btn-email-submit"');
 
-  assert.ok(googleIndex >= 0, 'Google login button must exist');
-  assert.ok(appleIndex >= 0, 'Apple login button must exist');
   assert.ok(kakaoIndex >= 0, 'Kakao login button must exist');
   assert.ok(naverIndex >= 0, 'Naver login button must exist');
   assert.ok(emailFormIndex >= 0, 'Email submit button must exist');
 
-  // Verify exact order
-  assert.ok(
-    googleIndex < appleIndex,
-    'Google login button must appear BEFORE Apple login button'
-  );
-  assert.ok(
-    appleIndex < kakaoIndex,
-    'Apple login button must appear BEFORE Kakao login button'
-  );
   assert.ok(
     kakaoIndex < emailFormIndex && naverIndex < emailFormIndex,
     'Kakao & Naver buttons must appear BEFORE email form'
@@ -72,28 +55,23 @@ async function runTests() {
     'Kakao and Naver must be arranged in a 2-column grid'
   );
 
-  // 4. SNS login temporarily disabled until OAuth is wired
-  assert.match(
-    code,
-    /SNS_LOGIN_ENABLED\s*=\s*false/,
-    'SNS_LOGIN_ENABLED must be false until social login is ready'
+  // Google & Apple buttons must be removed
+  assert.equal(
+    code.includes('data-testid="btn-google-login"'),
+    false,
+    'Google login button must be removed'
   );
-  assert.match(
-    code,
-    /data-testid=["']sns-login-disabled-hint["']/,
-    'Disabled SNS login must show a coming-soon hint'
+  assert.equal(
+    code.includes('data-testid="btn-apple-login"'),
+    false,
+    'Apple login button must be removed'
   );
 
-  // 4b. Apple guideline compliance check
+  // 4. SNS OAuth login activated
   assert.match(
     code,
-    /Apple로 계속하기|Sign in with Apple/,
-    'Apple button must display standard Apple Sign In text'
-  );
-  assert.match(
-    code,
-    /bg-black/,
-    'Apple button must conform to Apple design guidelines (black background)'
+    /SNS_LOGIN_ENABLED\s*=\s*true/,
+    'SNS_LOGIN_ENABLED must be true now that OAuth is wired'
   );
 
   // 5. Signup / forgot entry points on login form

@@ -155,13 +155,7 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
       offerMakeup(student.name);
       return;
     }
-    openConfirmDialog({
-      title: '수업 노트',
-      message: `${student.name} 학생 출석이 저장되었습니다. 이어서 노트·과제를 작성할까요?`,
-      confirmText: '노트 작성',
-      cancelText: '나중에',
-      onConfirm: () => setTarget({ student, classItem }),
-    });
+    // 원탭 출결: 팝업 없이 즉시 출석 처리 완료. 노트는 학생 행이나 [노트] 버튼으로 자유롭게 열 수 있음.
   };
 
   const sessionHints = useMemo(() => {

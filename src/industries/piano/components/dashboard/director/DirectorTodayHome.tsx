@@ -3,12 +3,11 @@ import { formatCurrency, formatKoreanDate } from '@/utils/formatters';
 import {
   requestOpenConsultationInquiries,
   requestOpenConsultationReservations,
-  requestOpenGuardianEnrollments,
-  requestOpenMembershipJoins,
 } from '@/core/customer/studentJoinInbox';
 import { usePianoNavigate } from '@/industries/piano/layout/usePianoNavigate';
 import { useDirectorTodayDashboard } from './useDirectorTodayDashboard';
 import { DirectorTodayScheduleSection } from './DirectorTodayScheduleSection';
+import { DirectorTodayAttendanceSection } from './DirectorTodayAttendanceSection';
 import { DirectorTodayTasksSection, type DirectorTodayTaskItem } from './DirectorTodayTasksSection';
 import { DirectorTodayUnpaidSection } from './DirectorTodayUnpaidSection';
 import { useApp } from '@/context/AppContext';
@@ -16,6 +15,8 @@ import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { GettingStartedQuestWidget } from '@/app/onboarding/GettingStartedQuestWidget';
 import { usePermissions } from '@/core/auth/usePermissions';
 import type { NavTab } from '@/context/AppContext';
+import { mapExpectedWithDayStatus } from '../../attendance/usePianoExpectedDay';
+import { countDayStatuses } from '../../attendance/pianoAttendanceHelpers';
 
 /** 홈 업무 항목 → 기존 처리 화면 탭 + (필요 시) 딥링크 플래그 */
 function openDirectorTodayTask(
@@ -26,10 +27,6 @@ function openDirectorTodayTask(
     case 'inquiry':
       requestOpenConsultationInquiries();
       break;
-    case 'enrollment':
-      requestOpenGuardianEnrollments();
-      requestOpenMembershipJoins();
-      break;
     case 'reservation':
       requestOpenConsultationReservations();
       break;
@@ -39,7 +36,7 @@ function openDirectorTodayTask(
   navigate(item.tab);
 }
 
-/** 원장 홈 — Getting Started → 오늘 일정 → 처리할 업무 → 미납 */
+/** 원장 홈 — Getting Started → 오늘 일정 → 출결 요약 → 처리할 업무 → 미납 */
 export const DirectorTodayHome: FC = () => {
   const { currentUser } = useApp();
   const { currentOrganization } = useOrganization();
@@ -72,43 +69,91 @@ export const DirectorTodayHome: FC = () => {
 
   const isEmpty = stats.activeStudents === 0;
 
+  const todayAttendanceCounts = useMemo(() => {
+    const { expected, dayRecordMap, pinCheckInIds } = expectedDay;
+    const rows = mapExpectedWithDayStatus(expected, dayRecordMap, pinCheckInIds);
+    return countDayStatuses(rows.map((r) => r.status));
+  }, [expectedDay]);
+
   const taskItems = useMemo((): DirectorTodayTaskItem[] => {
-    return [
-      {
+    const items: DirectorTodayTaskItem[] = [];
+
+    // 1. 오늘 출결 미체크 (당일 등원 확인 우선)
+    if (todayAttendanceCounts.unchecked > 0) {
+      items.push({
+        id: 'attendance',
+        label: '오늘 출결 미체크',
+        count: todayAttendanceCounts.unchecked,
+        tab: 'attendance',
+        tone: 'indigo',
+      });
+    }
+
+    // 2. 미납 원생 수납/독촉 안내
+    if (unpaidStudentCount > 0) {
+      items.push({
+        id: 'unpaid',
+        label: '미납 수납 대상',
+        count: unpaidStudentCount,
+        tab: 'unpaid',
+        tone: 'rose',
+      });
+    }
+
+    // 3. 신규 상담 문의
+    if (pendingInquiryCount > 0) {
+      items.push({
         id: 'inquiry',
-        label: '상담 문의',
+        label: '신규 상담 문의',
         count: pendingInquiryCount,
         tab: 'consultations',
         tone: 'indigo',
-      },
-      {
-        id: 'enrollment',
-        label: '신규 등록 신청',
-        count: pendingEnrollmentCount + pendingJoinCount,
-        tab: 'enrollment-requests',
-        tone: 'amber',
-      },
-      {
+      });
+    }
+
+    // 4. 상담 예약 대기
+    if (pendingReservationCount > 0) {
+      items.push({
+        id: 'reservation',
+        label: '상담 예약 대기',
+        count: pendingReservationCount,
+        tab: 'consultations',
+        tone: 'emerald',
+      });
+    }
+
+    // 5. 보강 대기
+    if (makeupPendingCount > 0) {
+      items.push({
         id: 'makeup',
         label: '보강 대기',
         count: makeupPendingCount,
         tab: 'makeups',
-        tone: 'rose',
-      },
-      {
-        id: 'reservation',
-        label: '상담 예약',
-        count: pendingReservationCount,
-        tab: 'consultations',
-        tone: 'emerald',
-      },
-    ];
+        tone: 'amber',
+      });
+    }
+
+    // 6. 보호자/원생 등록 및 가입 요청 (존재하지 않는 가상 탭 enrollment-requests 대신 실제 students 탭으로 안전하게 이동)
+    const joinTotal = pendingEnrollmentCount + pendingJoinCount;
+    if (joinTotal > 0) {
+      items.push({
+        id: 'enrollment',
+        label: '신규 가입/등록 요청',
+        count: joinTotal,
+        tab: 'students',
+        tone: 'amber',
+      });
+    }
+
+    return items;
   }, [
+    todayAttendanceCounts.unchecked,
+    unpaidStudentCount,
     pendingInquiryCount,
+    pendingReservationCount,
+    makeupPendingCount,
     pendingEnrollmentCount,
     pendingJoinCount,
-    makeupPendingCount,
-    pendingReservationCount,
   ]);
 
   const handleOpenTask = useCallback(
@@ -136,6 +181,9 @@ export const DirectorTodayHome: FC = () => {
                 todayClasses.length > 0
                   ? `오늘 수업 ${todayClasses.length}개 반`
                   : '오늘 수업 없음',
+                todayAttendanceCounts.total > 0
+                  ? `등원 ${todayAttendanceCounts.present}/${todayAttendanceCounts.total}명`
+                  : null,
                 pendingTaskTotal > 0 ? `처리할 업무 ${pendingTaskTotal}건` : null,
                 unpaidStudentCount > 0
                   ? `미납 ${unpaidStudentCount}명(${formatCurrency(unpaidTotal)})`
@@ -174,11 +222,18 @@ export const DirectorTodayHome: FC = () => {
             onOpenSchedule={() => navigate('timetable')}
           />
         </div>
-        <DirectorTodayTasksSection items={taskItems} onOpen={handleOpenTask} />
-        <DirectorTodayUnpaidSection
-          invoices={unpaidInvoices}
-          onOpenUnpaid={() => navigate('unpaid')}
+        <DirectorTodayAttendanceSection
+          today={today}
+          expectedDay={expectedDay}
+          onOpenAttendance={() => navigate('attendance')}
         />
+        <DirectorTodayTasksSection items={taskItems} onOpen={handleOpenTask} />
+        <div className="lg:col-span-2">
+          <DirectorTodayUnpaidSection
+            invoices={unpaidInvoices}
+            onOpenUnpaid={() => navigate('unpaid')}
+          />
+        </div>
       </div>
     </div>
   );

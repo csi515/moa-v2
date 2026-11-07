@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Camera,
@@ -244,7 +245,7 @@ export const InventoryScannerModal: React.FC<InventoryScannerModalProps> = ({
         setIsProcessing(false);
       }
     } else {
-      alert(result.error || '재고 출고에 실패했습니다.');
+      showToast(result.error || '재고 출고에 실패했습니다.', 'error');
       setIsProcessing(false);
     }
   };

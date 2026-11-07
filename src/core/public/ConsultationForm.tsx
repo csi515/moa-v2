@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import { FormEvent, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import type { ConsultationSubmission } from '@/types';
@@ -50,7 +51,7 @@ export function ConsultationForm({
       });
       setStudentName('');
     } catch (err) {
-      alert(err instanceof Error ? err.message : '상담 신청에 실패했습니다');
+      showToast(err instanceof Error ? err.message : '상담 신청에 실패했습니다', 'error');
     }
   };
 

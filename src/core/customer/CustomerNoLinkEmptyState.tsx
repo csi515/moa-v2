@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import type { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserRound } from 'lucide-react';
@@ -60,12 +61,12 @@ export const CustomerNoLinkEmptyState: FC<Props> = ({
                 <button
                   type="button"
                   onClick={async () => {
-                    if (!confirm('이 가입 신청을 취소할까요?')) return;
+                    // confirm 제거 후 취소 진행
                     try {
                       await customerJoinService.cancelMyJoinRequest(r.id);
                       await onReload();
                     } catch (err) {
-                      alert(err instanceof Error ? err.message : '취소에 실패했습니다');
+                      showToast(err instanceof Error ? err.message : '취소에 실패했습니다', 'error');
                     }
                   }}
                   className="mt-2 w-full py-2 text-xs font-bold text-slate-600 border border-slate-200 rounded-xl min-h-[44px]"

@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState } from 'react';
 import {
   Printer,
@@ -401,7 +402,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
             <div className="pt-2">
               <button
                 type="button"
-                onClick={() => alert(`[수강 신청 안내] ${leafletData.footer.contactPhone}으로 전화 연결하거나 안내데스크를 방문해주세요.`)}
+                onClick={() => showToast(`[수강 신청 안내] ${leafletData.footer.contactPhone}으로 전화 연결하거나 안내데스크를 방문해주세요.`, 'info')}
                 className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-md transition-colors flex items-center justify-center gap-1.5"
               >
                 <Phone className="w-4 h-4" />

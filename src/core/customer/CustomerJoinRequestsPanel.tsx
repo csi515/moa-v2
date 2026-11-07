@@ -1,3 +1,4 @@
+import { showToast } from '@/shared/feedback/uiFeedback';
 import { useState, useEffect } from 'react';
 import { 
   Users, 
@@ -50,7 +51,7 @@ function RequestCard({ request, onApprove, onReject }: RequestCardProps) {
   const statusInfo = getStatusLabel(request.status, request.request_type);
 
   const handleApprove = async () => {
-    if (!confirm(`${request.applicant_name}님의 가입을 승인하시겠습니까?`)) return;
+    // confirm 제거 후 즉시 승인 진행
     
     setProcessing(true);
     try {
@@ -62,7 +63,7 @@ function RequestCard({ request, onApprove, onReject }: RequestCardProps) {
 
   const handleReject = async () => {
     if (!rejectReason.trim()) {
-      alert('반려 사유를 입력해주세요');
+      showToast('반려 사유를 입력해주세요.', 'warning');
       return;
     }
 
@@ -277,7 +278,7 @@ export function CustomerJoinRequestsPanel({
       onUpdated?.();
       await loadRequests();
     } catch (err) {
-      alert(err instanceof Error ? err.message : '승인에 실패했습니다');
+      showToast(err instanceof Error ? err.message : '승인에 실패했습니다', 'error');
     }
   };
 
@@ -287,7 +288,7 @@ export function CustomerJoinRequestsPanel({
       onUpdated?.();
       await loadRequests();
     } catch (err) {
-      alert(err instanceof Error ? err.message : '반려에 실패했습니다');
+      showToast(err instanceof Error ? err.message : '반려에 실패했습니다', 'error');
     }
   };
 
