@@ -340,7 +340,7 @@ export const OrganizationDangerZoneCard: FC<OrganizationDangerZoneCardProps> = (
   return (
     <>
       <SettingsCard
-        title="위험 영역"
+        title="사업장 데이터 삭제"
         icon={<AlertTriangle className="w-4 h-4 text-rose-600" />}
       >
         <div className="space-y-3">

@@ -80,6 +80,12 @@ export function getDetailTabConfig(counts: DetailTabCounts): DetailTabConfigItem
       group: 'primary',
     },
     {
+      id: 'textbooks',
+      label: `교재 (${counts.salesCount})`,
+      icon: React.createElement(BookOpen, { className: iconClass }),
+      group: 'primary',
+    },
+    {
       id: 'memo',
       label: '활동',
       icon: React.createElement(FileText, { className: iconClass }),
@@ -95,12 +101,6 @@ export function getDetailTabConfig(counts: DetailTabCounts): DetailTabConfigItem
       id: 'videos',
       label: `연주영상 (${counts.videoCount})`,
       icon: React.createElement(Video, { className: iconClass }),
-      group: 'more',
-    },
-    {
-      id: 'textbooks',
-      label: `교재 (${counts.salesCount})`,
-      icon: React.createElement(BookOpen, { className: iconClass }),
       group: 'more',
     },
   ];

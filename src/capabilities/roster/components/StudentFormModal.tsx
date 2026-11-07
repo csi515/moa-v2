@@ -525,10 +525,10 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
           />
 
           <div className="space-y-3">
-            <label className="flex items-start gap-3 rounded-xl border border-indigo-100 bg-indigo-50/50 p-3 cursor-pointer min-h-[52px]">
+            <label className="flex items-center gap-2.5 rounded-xl border border-slate-200/80 bg-slate-50/80 px-3.5 py-2.5 cursor-pointer hover:bg-slate-100/80 transition-colors">
               <input
                 type="checkbox"
-                className="mt-0.5 w-4 h-4 rounded border-slate-300 text-indigo-600"
+                className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                 checked={isAdultSelf}
                 onChange={(e) => {
                   setIsAdultSelf(e.target.checked);
@@ -541,12 +541,9 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
                   });
                 }}
               />
-              <span>
-                <span className="block text-xs font-bold text-slate-800">
-                  성인 {customerLabel} ({contactLabel} 없음)
-                </span>
-                <span className="block text-[11px] text-slate-500 mt-0.5">
-                  {selfAccountEnrollmentNote(industry, contactLabel)}
+              <span className="flex-1">
+                <span className="text-xs font-bold text-slate-800">
+                  성인 본인 직접 등록 <span className="font-normal text-slate-500 text-[11px] ml-1.5">{contactLabel} 연결 없이 본인 번호로 알림 수신</span>
                 </span>
               </span>
             </label>

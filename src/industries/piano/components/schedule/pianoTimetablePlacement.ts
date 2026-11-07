@@ -278,10 +278,11 @@ export function assignStudentToSlot(params: {
   classes: ClassItem[];
   teachers: Teacher[];
   preferredTeacherId?: string;
+  preferredRoom?: string;
   /** true일 때만 슬롯 반이 없을 때 ClassItem을 생성한다 */
   createClassIfMissing?: boolean;
 }): AssignStudentToSlotResult {
-  const { student, day, startTime, teachers, preferredTeacherId } = params;
+  const { student, day, startTime, teachers, preferredTeacherId, preferredRoom } = params;
   const createClassIfMissing = params.createClassIfMissing === true;
   const classes = [...params.classes];
 
@@ -504,6 +505,7 @@ export interface AssignWithRecurrenceParams {
   classes: ClassItem[];
   teachers: Teacher[];
   preferredTeacherId?: string;
+  preferredRoom?: string;
   createClassIfMissing?: boolean;
 }
 

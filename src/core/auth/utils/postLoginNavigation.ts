@@ -27,7 +27,7 @@ export function readLoginReturnPath(params: { get(name: string): string | null }
  */
 export function resolvePostLoginPath(input: {
   returnPath: string | null;
-  loginTargetGroup: LoginTargetGroup;
+  loginTargetGroup?: LoginTargetGroup | null;
   redirectTo?: string | null;
 }): string {
   if (input.returnPath) return input.returnPath;
@@ -36,7 +36,7 @@ export function resolvePostLoginPath(input: {
   return input.loginTargetGroup === 'customer' ? CUSTOMER_HOME : ORG_HOME;
 }
 
-export function shouldEnterCustomerPortal(path: string, loginTargetGroup: LoginTargetGroup): boolean {
+export function shouldEnterCustomerPortal(path: string, loginTargetGroup?: LoginTargetGroup | null): boolean {
   return loginTargetGroup === 'customer' && path.startsWith('/customer');
 }
 

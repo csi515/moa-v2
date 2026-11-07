@@ -6,6 +6,7 @@ import { StudentService } from '@/core/students';
 import { useMediaQuery, useStaffScope, useStorageRefresh } from '@/hooks';
 import { STORAGE_REFRESH_DOMAINS } from '@/hooks/useStorageRefresh';
 import { StorageService } from '@/services/storage';
+import { getRoomNames } from '@/core/organizations/utils/academyRooms';
 import type { DayOfWeek, Student } from '@/types';
 import type { DragPlacementPayload } from './PianoTimetablePanels';
 import {
@@ -20,7 +21,7 @@ import {
   type TimetableSlot,
 } from './pianoTimetablePlacement';
 
-export type TimetableLayoutMode = 'week' | 'byTeacher';
+export type TimetableLayoutMode = 'week' | 'byTeacher' | 'byRoom';
 
 /**
  * 수업 시간표 — 필터·배치·이동·제거.
@@ -37,12 +38,14 @@ export function usePianoLessonTimetable() {
 
   const todayDay = weekdayFromDate();
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(todayDay);
-  const [teacherFilterDraft, setTeacherFilterDraft] = useState('ALL');
+    const [teacherFilterDraft, setTeacherFilterDraft] = useState('ALL');
+  const [roomFilter, setRoomFilter] = useState('ALL');
   const [layoutMode, setLayoutMode] = useState<TimetableLayoutMode>('week');
   const [pickerSlot, setPickerSlot] = useState<{
     day: DayOfWeek;
     startTime: TimetableSlot;
     preferredTeacherId?: string;
+    preferredRoom?: string;
   } | null>(null);
   const [pickerQuery, setPickerQuery] = useState('');
   const [pendingStudentId, setPendingStudentId] = useState<string | null>(null);
@@ -70,10 +73,27 @@ export function usePianoLessonTimetable() {
 
   const preferredTeacherId = teacherFilter !== 'ALL' ? teacherFilter : undefined;
 
+    const rooms = useMemo(
+    () =>
+      getRoomNames({
+        settings: StorageService.getSettings(),
+        classes: rawClasses,
+      }),
+    [rawClasses, refreshKey]
+  );
+
+  const preferredRoom = roomFilter !== 'ALL' ? roomFilter : undefined;
+
   const visibleClasses = useMemo(() => {
-    if (teacherFilter === 'ALL') return classes;
-    return classes.filter((c) => c.teacherId === teacherFilter);
-  }, [classes, teacherFilter]);
+    let filtered = classes;
+    if (teacherFilter !== 'ALL') {
+      filtered = filtered.filter((c) => c.teacherId === teacherFilter);
+    }
+    if (roomFilter !== 'ALL') {
+      filtered = filtered.filter((c) => (c.room || '미지정') === roomFilter);
+    }
+    return filtered;
+  }, [classes, teacherFilter, roomFilter]);
 
   const teacherSections = useMemo(() => {
     const byId = new Map<string, { id: string; name: string; classes: typeof classes }>();
@@ -92,6 +112,22 @@ export function usePianoLessonTimetable() {
     return Array.from(byId.values()).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
   }, [visibleClasses, teachers, teacherFilter, layoutMode]);
 
+  const roomSections = useMemo(() => {
+    const byRoom = new Map<string, { id: string; name: string; classes: typeof classes }>();
+    for (const cls of visibleClasses) {
+      const roomName = cls.room?.trim() || '미지정';
+      const bucket = byRoom.get(roomName);
+      if (bucket) bucket.classes.push(cls);
+      else byRoom.set(roomName, { id: roomName, name: roomName, classes: [cls] });
+    }
+    if (roomFilter === 'ALL' && layoutMode === 'byRoom') {
+      for (const r of rooms) {
+        if (!byRoom.has(r)) byRoom.set(r, { id: r, name: r, classes: [] });
+      }
+    }
+    return Array.from(byRoom.values()).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+  }, [visibleClasses, rooms, roomFilter, layoutMode]);
+
   const placedIds = useMemo(() => {
     const ids = new Set<string>();
     const slots = resolveTimetableSlots(visibleClasses);
@@ -109,15 +145,16 @@ export function usePianoLessonTimetable() {
     studentName: string,
     day: DayOfWeek,
     startTime: string,
-    teacherId?: string
+    teacherId?: string,
+    room?: string
   ) => {
     const teacher = teacherId ? teachers.find((t) => t.id === teacherId) : undefined;
-    // 실제 생성 시 resolveTeacher와 동일: preferred 없으면 미배정
     const teacherLine = `\n담당 강사: ${teacher?.name || '미배정'}`;
+    const roomLine = room ? `\n강의실: ${room}` : '';
     return (
       `${day}요일 ${startTime}에는 아직 반이 없습니다.\n` +
       `「${day} ${startTime}」 반을 새로 만들고 ${studentName} 학생을 배치할까요?` +
-      teacherLine +
+      teacherLine + roomLine +
       `\n\n확인하면 반 관리 목록에도 이 반이 추가됩니다.`
     );
   };
@@ -144,9 +181,11 @@ export function usePianoLessonTimetable() {
     student: Student,
     day: DayOfWeek,
     startTime: TimetableSlot,
-    teacherId?: string
+    teacherId?: string,
+    room?: string
   ) => {
     const preferred = teacherId || preferredTeacherId;
+    const roomParam = room || preferredRoom;
     const result = assignStudentToSlot({
       student,
       day,
@@ -154,6 +193,7 @@ export function usePianoLessonTimetable() {
       classes,
       teachers,
       preferredTeacherId: preferred,
+      preferredRoom: roomParam,
       createClassIfMissing: false,
     });
     if (result.ok === true) {
@@ -161,7 +201,7 @@ export function usePianoLessonTimetable() {
     } else if (result.needsNewClass === true) {
       openConfirmDialog({
         title: '새 반을 만들어 배치',
-        message: newClassConfirmMessage(student.name, day, startTime, preferred),
+        message: newClassConfirmMessage(student.name, day, startTime, preferred, roomParam),
         confirmText: '반 만들고 배치',
         cancelText: '취소',
         onConfirm: () => {
@@ -172,6 +212,7 @@ export function usePianoLessonTimetable() {
             classes: rawClasses,
             teachers,
             preferredTeacherId: preferred,
+            preferredRoom: roomParam,
             createClassIfMissing: true,
           });
           if (created.ok === false) {
@@ -190,13 +231,15 @@ export function usePianoLessonTimetable() {
     student: Student,
     days: DayOfWeek[],
     startTime: TimetableSlot,
-    teacherId?: string
+    teacherId?: string,
+    room?: string
   ) => {
     if (days.length === 0) {
       showToast('배치할 요일을 최소 1개 이상 선택해 주세요.', 'warning');
       return;
     }
     const preferred = teacherId || preferredTeacherId;
+    const roomParam = room || preferredRoom;
     const result = assignStudentWithRecurrence({
       student,
       days,
@@ -204,6 +247,7 @@ export function usePianoLessonTimetable() {
       classes,
       teachers,
       preferredTeacherId: preferred,
+      preferredRoom: roomParam,
       createClassIfMissing: false,
     });
     if (result.ok === true) {
@@ -230,6 +274,7 @@ export function usePianoLessonTimetable() {
             classes: rawClasses,
             teachers,
             preferredTeacherId: preferred,
+            preferredRoom: roomParam,
             createClassIfMissing: true,
           });
           if (created.ok === false) {
@@ -347,12 +392,18 @@ export function usePianoLessonTimetable() {
   const openPickerForSlot = (
     day: DayOfWeek,
     startTime: TimetableSlot,
-    sectionTeacherId?: string
+    sectionTeacherId?: string,
+    sectionRoom?: string
   ) => {
     setPendingStudentId(null);
     setPendingTeacherId(sectionTeacherId);
     setPickerQuery('');
-    setPickerSlot({ day, startTime, preferredTeacherId: sectionTeacherId });
+    setPickerSlot({
+      day,
+      startTime,
+      preferredTeacherId: sectionTeacherId,
+      preferredRoom: sectionRoom,
+    });
   };
 
   const startPlaceStudent = (student: Student, sectionTeacherId?: string) => {
@@ -378,9 +429,14 @@ export function usePianoLessonTimetable() {
     );
   }, [students, showToast]);
 
-  const placePending = (day: DayOfWeek, startTime: TimetableSlot, sectionTeacherId?: string) => {
+  const placePending = (
+    day: DayOfWeek,
+    startTime: TimetableSlot,
+    sectionTeacherId?: string,
+    sectionRoom?: string
+  ) => {
     const student = students.find((s) => s.id === pendingStudentId);
-    if (student) placeStudent(student, day, startTime, sectionTeacherId || pendingTeacherId);
+    if (student) placeStudent(student, day, startTime, sectionTeacherId || pendingTeacherId, sectionRoom);
   };
 
   const pickerExcludeIds = useMemo(() => {
@@ -415,7 +471,11 @@ export function usePianoLessonTimetable() {
     teachers,
     students,
     visibleClasses,
+    rooms,
+    roomFilter,
+    setRoomFilter,
     teacherSections,
+    roomSections,
     placedIds,
     placeStudent,
     placeStudentWithRecurrence,

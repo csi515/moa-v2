@@ -28,8 +28,6 @@ function openDirectorTodayTask(
       break;
     case 'enrollment':
       requestOpenGuardianEnrollments();
-      break;
-    case 'join':
       requestOpenMembershipJoins();
       break;
     case 'reservation':
@@ -85,15 +83,8 @@ export const DirectorTodayHome: FC = () => {
       },
       {
         id: 'enrollment',
-        label: '자녀 등록',
-        count: pendingEnrollmentCount,
-        tab: 'enrollment-requests',
-        tone: 'amber',
-      },
-      {
-        id: 'join',
-        label: '자가가입',
-        count: pendingJoinCount,
+        label: '신규 등록 신청',
+        count: pendingEnrollmentCount + pendingJoinCount,
         tab: 'enrollment-requests',
         tone: 'amber',
       },
@@ -106,7 +97,7 @@ export const DirectorTodayHome: FC = () => {
       },
       {
         id: 'reservation',
-        label: '예약 요청',
+        label: '상담 예약',
         count: pendingReservationCount,
         tab: 'consultations',
         tone: 'emerald',

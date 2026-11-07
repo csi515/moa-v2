@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { useState, useMemo, type FC } from 'react';
 import { Plus, X } from 'lucide-react';
 import type { ClassItem, DayOfWeek, Student } from '@/types';
 import {

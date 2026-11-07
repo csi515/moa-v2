@@ -70,7 +70,7 @@ export const Header: React.FC = () => {
 
           {/* 데스크톱 전용 지점 및 역할 정보 */}
           <div className="hidden sm:flex min-w-0 items-center gap-1.5 sm:gap-3 border-l border-slate-200 pl-2.5 sm:pl-3">
-            {supabaseOrg?.currentOrganization && (
+            {supabaseOrg?.currentOrganization && (supabaseOrg.locations?.length ?? 0) > 1 && (
               <div className="min-w-0">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                   지점

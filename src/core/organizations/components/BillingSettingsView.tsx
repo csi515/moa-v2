@@ -171,7 +171,7 @@ export const BillingSettingsView: FC = () => {
             </FormField>
 
             {(settings.defaultBillingMode || 'monthly') === 'monthly' ? (
-              <FormField label={`기본 월 ${feeLabel} 기준 (₩)`}>
+              <FormField label={`기본 월 ${feeLabel}`}>
                 <CurrencyInput
                   value={settings.defaultTuitionFee}
                   onChange={(val) =>
@@ -310,7 +310,7 @@ export const BillingSettingsView: FC = () => {
                   </div>
                   <div className="w-full sm:w-48 shrink-0">
                     <label className="block text-[10px] font-semibold text-slate-500 mb-1">
-                      판매 금액 (₩)
+                      판매 금액
                     </label>
                     <CurrencyInput
                       value={pkg.price}

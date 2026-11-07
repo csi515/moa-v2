@@ -70,7 +70,7 @@ export const TuitionFilterBar: React.FC<TuitionFilterBarProps> = ({
           <button
             type="button"
             onClick={() => handleViewModeClick('combined')}
-            title={`${customerLabel} 1명 기준 수강료+교재비 총액 합산 수납`}
+            title={`${customerLabel}별 수강료와 교재비 수납`}
             className={`px-3 sm:px-4 py-2 min-h-[40px] text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
               viewMode === 'combined'
                 ? 'bg-indigo-600 text-white shadow-xs'
@@ -78,12 +78,12 @@ export const TuitionFilterBar: React.FC<TuitionFilterBarProps> = ({
             }`}
           >
             <Users className="w-4 h-4 shrink-0" />
-            <span>{customerLabel}별 합산 ({studentsCount}명)</span>
+            <span>{customerLabel}별 수납</span>
           </button>
           <button
             type="button"
             onClick={() => handleViewModeClick('invoices')}
-            title="청구서 1장당 1줄씩 개별 영수증 내역 표시"
+            title="발행된 청구서별 상세 내역"
             className={`px-3 sm:px-4 py-2 min-h-[40px] text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
               viewMode === 'invoices'
                 ? 'bg-indigo-600 text-white shadow-xs'
@@ -91,7 +91,7 @@ export const TuitionFilterBar: React.FC<TuitionFilterBarProps> = ({
             }`}
           >
             <CreditCard className="w-4 h-4 shrink-0" />
-            <span>청구서별 건별 ({filteredInvoicesCount}건)</span>
+            <span>청구서별 내역</span>
           </button>
         </div>
 
@@ -177,10 +177,10 @@ export const TuitionFilterBar: React.FC<TuitionFilterBarProps> = ({
               className="hidden sm:block px-3.5 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none font-semibold shrink-0"
             >
               <option value="ALL">전체 상태</option>
-              <option value="unpaid">미납 전체 (잔액 있음)</option>
+              <option value="unpaid">미납</option>
               <option value="paid">수납 완료</option>
               <option value="partial">일부 납부</option>
-              <option value="overdue">연체/기한초과</option>
+              <option value="overdue">연체</option>
             </select>
           )}
 

@@ -89,7 +89,7 @@ const consultationAvailabilitySettings = () => (
 const customerHub = () => (
   <CustomerHubView
     listView={StudentListView}
-    showEnrollmentTab={false}
+    showEnrollmentTab={true}
     showParentsTab={false}
   />
 );

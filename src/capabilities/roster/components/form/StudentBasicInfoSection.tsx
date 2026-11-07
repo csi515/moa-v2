@@ -46,9 +46,26 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
             autoComplete="name"
             aria-invalid={Boolean(nameError)}
             aria-describedby={nameError ? `${STUDENT_FORM_FIELD_IDS.name}-error` : undefined}
+            placeholder={`${customerLabel} 이름 입력`}
             className={`${FORM_CONTROL_CLASS} min-h-[44px] ${nameError ? FORM_CONTROL_ERROR_CLASS : ''}`}
           />
         </FormField>
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 mb-1">등록일</label>
+          <input
+            type="date"
+            value={formData.joinDate}
+            onChange={(e) => onChange({ joinDate: e.target.value })}
+            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-slate-700 mb-1">생년월일</label>
+          <BirthDateInput
+            value={formData.birthDate}
+            onChange={(birthDate) => onChange({ birthDate })}
+          />
+        </div>
         <div>
           <label className="block text-xs font-semibold text-slate-700 mb-1">성별</label>
           <select
@@ -61,43 +78,20 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
             <option value="F">여</option>
           </select>
         </div>
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">생년월일</label>
-          <BirthDateInput
-            value={formData.birthDate}
-            onChange={(birthDate) => onChange({ birthDate })}
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">연락처</label>
-          <input
-            type="tel"
-            inputMode="tel"
-            value={formData.phone}
-            onChange={(e) => onChange({ phone: e.target.value })}
-            placeholder="선택"
-            autoComplete="tel"
-            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
-          />
-        </div>
         {showSchool && (
           <>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                학교 <span className="text-slate-400 font-normal">(선택)</span>
-              </label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">학교</label>
               <input
                 type="text"
-                placeholder="예: ○○초등학교"
+                placeholder="예: 서울초등학교"
                 value={formData.school}
                 onChange={(e) => onChange({ school: e.target.value })}
                 className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                학년 <span className="text-slate-400 font-normal">(선택)</span>
-              </label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">학년</label>
               <input
                 type="text"
                 placeholder="예: 3학년"
@@ -109,11 +103,16 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
           </>
         )}
         <div className={showSchool ? 'sm:col-span-2' : undefined}>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">등록일</label>
+          <label className="block text-xs font-semibold text-slate-700 mb-1">
+            원생 본인 연락처 <span className="text-slate-400 font-normal text-[11px]">휴대폰이 있는 경우만 입력</span>
+          </label>
           <input
-            type="date"
-            value={formData.joinDate}
-            onChange={(e) => onChange({ joinDate: e.target.value })}
+            type="tel"
+            inputMode="tel"
+            value={formData.phone}
+            onChange={(e) => onChange({ phone: e.target.value })}
+            placeholder="010-0000-0000"
+            autoComplete="tel"
             className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
           />
         </div>

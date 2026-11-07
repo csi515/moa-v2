@@ -49,8 +49,8 @@ export const PianoScheduleView: FC = () => {
 
   const segmentOptions = useMemo(() => {
     const opts: { value: ScheduleSegment; label: string }[] = [
-      { value: 'timetable', label: '시간표' },
-      { value: 'calendar', label: '주간 달력' },
+      { value: 'timetable', label: '수업 시간표' },
+      { value: 'calendar', label: '학원 일정·행사' },
     ];
     if (canRooms) {
       opts.push({ value: 'rooms', label: '연습실' });
@@ -66,7 +66,7 @@ export const PianoScheduleView: FC = () => {
 
   const title =
     segment === 'calendar'
-      ? `${placeLabel} 주간 달력`
+      ? `${placeLabel} 일정·행사`
       : segment === 'rooms'
       ? '연습실 예약'
       : '수업 시간표';

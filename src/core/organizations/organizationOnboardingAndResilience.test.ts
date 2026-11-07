@@ -173,7 +173,7 @@ console.log('[test:org-onboarding] Starting Organization Onboarding & Resilience
   assert.equal(req.status, 'pending', '신규 가입 신청은 사업주 승인 전까지 항상 pending 이어야 합니다.');
 }
 
-// 6. 교육 학원을 포함한 전 업종 공통: 사업장 개설 시 출결 방식 질의 없이 즉시 개설 불변성 검증
+// 6. 교육 학원을 포함한 전 업종 공통: 사업장 개설 시 출결 방식 질의 없이 강의실 설정(스킵 가능) 후 즉시 개설 불변성 검증
 {
   const wizardSource = readFileSync(
     join(process.cwd(), 'src/core/organizations/CreateOrganizationWizard.tsx'),
@@ -182,8 +182,14 @@ console.log('[test:org-onboarding] Starting Organization Onboarding & Resilience
 
   assert.match(
     wizardSource,
-    /await handleFinish\(\);/,
-    '모든 업종은 정보 입력 후 번거로운 출결 방식 설문 없이 즉시 사업장 개설을 완료해야 합니다.'
+    /handleFinish/,
+    '모든 업종은 정보 입력 후 번거로운 출결 방식 설문 없이 강의실 설정/스킵을 통해 사업장 개설을 완료해야 합니다.'
+  );
+
+  assert.match(
+    wizardSource,
+    /건너뛰기/,
+    '강의실 설정 단계에서 방 구분이 필요 없는 사업주를 위해 건너뛰기 기능이 제공되어야 합니다.'
   );
 
   assert.equal(
@@ -194,8 +200,8 @@ console.log('[test:org-onboarding] Starting Organization Onboarding & Resilience
 
   assert.match(
     wizardSource,
-    /출결 방식·회원권 등 세부 운영 설정은 사업장 개설 후 언제든 설정 메뉴에서 구성할 수 있습니다\./,
-    '개설 완료 시 세부 운영 설정은 사업장 개설 후 설정 메뉴에서 구성함을 명확히 안내해야 합니다.'
+    /홈의 첫걸음 가이드|설정 메뉴에서 구성/,
+    '개설 완료 시 첫걸음 가이드 또는 설정 메뉴에서 운영 환경을 구성함을 안내해야 합니다.'
   );
 }
 

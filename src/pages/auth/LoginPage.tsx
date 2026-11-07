@@ -235,12 +235,12 @@ export const LoginPage: React.FC = () => {
               <QrCode className="w-4 h-4" />
             </div>
             <h4 className="text-xs font-bold text-slate-200 mb-1">
-              {isEn ? "No messaging fees" : "0원 비용 원칙"}
+              {isEn ? "No messaging fees" : "문자·알림 비용 0원"}
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
               {isEn
-                ? "No SMS or Kakao fees. One-time W3C QR."
-                : "SMS·카카오 알림톡 비용 0원. 2-Way 1회용 W3C QR 프로토콜."}
+                ? "Attendance alerts and notices sent free without per-message fees."
+                : "출결 알림과 안내 공지, 건당 비용 걱정 없이 무료로 전송됩니다."}
             </p>
           </div>
 
@@ -249,12 +249,12 @@ export const LoginPage: React.FC = () => {
               <Zap className="w-4 h-4" />
             </div>
             <h4 className="text-xs font-bold text-slate-200 mb-1">
-              {isEn ? "Live sync" : "초고속 Realtime 동기화"}
+              {isEn ? "Live sync" : "모든 기기 실시간 연동"}
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
               {isEn
-                ? "Counter and member phones stay in sync."
-                : "카운터-고객 스마트폰 간 실시간 변경 감지 및 자동 캐시 무효화."}
+                ? "PC, tablet, and smartphone stay instantly connected for attendance and billing."
+                : "원장실 PC, 강사 태블릿, 학부모 스마트폰까지 출결과 수납이 즉시 연결됩니다."}
             </p>
           </div>
         </div>
@@ -263,11 +263,11 @@ export const LoginPage: React.FC = () => {
         <div className="relative z-10 pt-6 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
           <div className="flex items-center space-x-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>{isEn ? "Tenant isolation with row-level security" : "Row Level Security (RLS) 테넌트 격리"}</span>
+            <span>{isEn ? "Safe data isolation & protection" : "안전한 데이터 분리 및 보호"}</span>
           </div>
           <div className="flex items-center space-x-1">
             <CheckCircle2 className="w-4 h-4 text-indigo-400" />
-            <span>{isEn ? "Account takeover defenses" : "계정 탈취 방어 내장"}</span>
+            <span>{isEn ? "Financial-grade security system" : "안심 금융급 보안 체계"}</span>
           </div>
         </div>
       </div>
@@ -297,7 +297,7 @@ export const LoginPage: React.FC = () => {
                   : "앱스인토스 로그인"
                 : isEn
                   ? "Sign in"
-                  : "시스템 로그인"}
+                  : "로그인"}
             </h2>
             <p className="text-xs text-slate-500 mt-1.5">
               {isAppsInToss()
@@ -306,7 +306,7 @@ export const LoginPage: React.FC = () => {
                   : "토스 앱 계정으로 자동 인증하여 접속합니다."
                 : isEn
                   ? "Use an owner, staff, or member account."
-                  : "등록된 사업주/직원 계정 또는 고객 계정으로 접속하세요."}
+                  : "이메일과 비밀번호로 로그인하세요."}
             </p>
           </div>
 

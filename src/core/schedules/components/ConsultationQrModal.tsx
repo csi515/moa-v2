@@ -57,7 +57,7 @@ export const ConsultationQrModal: FC<ConsultationQrModalProps> = ({
   };
 
   return (
-    <Modal isOpen onClose={onClose} title="상담 신청 QR" description={organizationName}>
+    <Modal isOpen onClose={onClose} title="학부모 상담 예약 링크 및 QR" description={organizationName}>
       <div className="p-6 overflow-y-auto printable-area">
         {!code ? (
           <div className="text-center space-y-2 py-8">
@@ -85,7 +85,7 @@ export const ConsultationQrModal: FC<ConsultationQrModalProps> = ({
             <div className="space-y-1">
               <p className="text-base font-bold text-slate-900 print:hidden">{organizationName}</p>
               <p className="text-sm text-slate-600">
-                QR을 스캔하면 상담 신청 페이지로 이동합니다.
+                학부모에게 전송하거나 블로그, 네이버 플레이스, 인스타그램에 공유할 수 있는 상담 예약 링크와 QR 코드입니다.
               </p>
               <p className="text-[11px] text-slate-400 font-mono break-all max-w-[280px] mx-auto">
                 {consultUrl}

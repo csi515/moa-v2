@@ -1,6 +1,11 @@
 import { useState, useMemo, useEffect, type FC } from 'react';
-import { Check, Repeat, Search, UserCheck, UserPlus, X } from 'lucide-react';
-import type { DayOfWeek, Student } from '@/types';
+import { Check, Repeat, Search, Sparkles, UserCheck, UserPlus, X, Calendar } from 'lucide-react';
+import type { DayOfWeek, Student, MakeupItem, Teacher } from '@/types';
+import { StorageService } from '@/services/storage';
+import { scheduleMakeupAtomic } from '@/core/schedules/makeupScheduleAtomic';
+import { useApp } from '@/context/AppContext';
+import { todayIsoLocal } from '@/shared/utils/localDate';
+import { resolvePianoLessonMinutes, addMinutesToClock } from '../../config/pianoLessonMinutes';
 import { TIMETABLE_DAYS } from './pianoTimetablePlacement';
 
 interface PianoTimetableStudentPickerProps {
@@ -8,14 +13,25 @@ interface PianoTimetableStudentPickerProps {
   title: string;
   subtitle?: string;
   students: Student[];
+  teachers?: Teacher[];
+  rooms?: string[];
+  defaultTeacherId?: string;
+  defaultRoom?: string;
   searchQuery: string;
   onSearchChange: (q: string) => void;
-  onSelect: (student: Student) => void;
+  onSelect: (student: Student, teacherId?: string, room?: string) => void;
   onClose: () => void;
   excludeIds?: Set<string>;
   initialDay?: DayOfWeek;
   startTime?: string;
-  onConfirmRecurrence?: (student: Student, days: DayOfWeek[], startTime: string) => void;
+  onConfirmRecurrence?: (
+    student: Student,
+    days: DayOfWeek[],
+    startTime: string,
+    teacherId?: string,
+    room?: string
+  ) => void;
+  onMakeupScheduled?: () => void;
 }
 
 const CHO = [
@@ -51,6 +67,10 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
   title,
   subtitle,
   students,
+  teachers = [],
+  rooms = [],
+  defaultTeacherId,
+  defaultRoom,
   searchQuery,
   onSearchChange,
   onSelect,
@@ -59,12 +79,51 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
   initialDay,
   startTime,
   onConfirmRecurrence,
+  onMakeupScheduled,
 }) => {
+  const { showToast, triggerRefresh } = useApp();
+  const [pickerMode, setPickerMode] = useState<'regular' | 'makeup'>('regular');
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [selectedTeacherId, setSelectedTeacherId] = useState<string>(defaultTeacherId || '');
+  const [selectedRoom, setSelectedRoom] = useState<string>(defaultRoom || '');
   const [isRecurring, setIsRecurring] = useState(true);
   const [selectedDays, setSelectedDays] = useState<DayOfWeek[]>(() =>
     initialDay ? [initialDay] : ['월']
   );
+
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedTeacherId(defaultTeacherId || '');
+      setSelectedRoom(defaultRoom || '');
+    }
+  }, [isOpen, defaultTeacherId, defaultRoom]);
+
+  const pendingMakeups = useMemo(() => {
+    if (!isOpen) return [];
+    return StorageService.getMakeupItems().filter((m) => m.status === 'pending');
+  }, [isOpen]);
+
+  const handleScheduleMakeup = async (item: MakeupItem) => {
+    if (!startTime) return;
+    const duration = resolvePianoLessonMinutes(StorageService.getSettings().defaultLessonMinutes);
+    const endTime = addMinutesToClock(startTime, duration);
+    const result = await scheduleMakeupAtomic({
+      attendanceId: item.attendanceId,
+      makeup: {
+        date: todayIsoLocal(),
+        startTime,
+        endTime,
+      },
+    });
+
+    if (result.ok) {
+      showToast(`${item.studentName} 학생의 보강 레슨이 ${startTime}에 배정되었습니다.`, 'success');
+      triggerRefresh();
+      onClose();
+    } else {
+      showToast(result.warning || '보강 배정에 실패했습니다.', 'warning');
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -112,10 +171,12 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
 
   const handleConfirm = () => {
     if (!selectedStudent) return;
+    const teacherParam = selectedTeacherId || undefined;
+    const roomParam = selectedRoom || undefined;
     if (isRecurring && onConfirmRecurrence && startTime) {
-      onConfirmRecurrence(selectedStudent, selectedDays, startTime);
+      onConfirmRecurrence(selectedStudent, selectedDays, startTime, teacherParam, roomParam);
     } else {
-      onSelect(selectedStudent);
+      onSelect(selectedStudent, teacherParam, roomParam);
     }
   };
 
@@ -140,6 +201,78 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
           </button>
         </div>
 
+        {/* 탭: 정기 배치 vs 결석 보강 배정 */}
+        <div className="flex border-b border-slate-200 bg-slate-50/70 p-1.5 gap-1 shrink-0">
+          <button
+            type="button"
+            onClick={() => setPickerMode('regular')}
+            className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 min-h-[40px] cursor-pointer ${
+              pickerMode === 'regular'
+                ? 'bg-white text-indigo-600 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <UserPlus className="w-3.5 h-3.5" />
+            <span>정기 레슨 배치</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setPickerMode('makeup')}
+            className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 min-h-[40px] cursor-pointer ${
+              pickerMode === 'makeup'
+                ? 'bg-white text-purple-700 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+            <span>결석 보강 배정</span>
+            {pendingMakeups.length > 0 && (
+              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-purple-100 text-purple-700 font-extrabold">
+                {pendingMakeups.length}
+              </span>
+            )}
+          </button>
+        </div>
+
+        {pickerMode === 'makeup' ? (
+          <div className="flex-1 overflow-y-auto p-4 space-y-2.5">
+            {pendingMakeups.length === 0 ? (
+              <div className="py-12 text-center text-slate-400">
+                <Sparkles className="w-8 h-8 mx-auto text-slate-300 mb-2" />
+                <p className="text-sm font-semibold">미보강 대기 원생이 없습니다.</p>
+                <p className="text-xs text-slate-400 mt-1">모든 결석 원생의 보강이 완료되었거나 예약되었습니다.</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <p className="text-xs font-bold text-slate-600 mb-2">보강 대기 중인 원생을 선택하세요:</p>
+                {pendingMakeups.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-purple-50/60 border border-slate-200 hover:border-purple-200 rounded-2xl transition"
+                  >
+                    <div>
+                      <h4 className="font-bold text-sm text-slate-900">{item.studentName}</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        결석일: {item.date} {item.className ? `· ${item.className}` : ''}
+                      </p>
+                      {item.reason && (
+                        <p className="text-[11px] text-purple-700 mt-1 font-medium">사유: {item.reason}</p>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleScheduleMakeup(item)}
+                      className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow-xs transition shrink-0 min-h-[40px]"
+                    >
+                      이 시간에 배정
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <>
         {/* 검색 인풋 */}
         <div className="px-4 py-3 border-b border-slate-100">
           <div className="relative">
@@ -262,6 +395,45 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
             </div>
           )}
 
+          {/* 선생님 & 강의실(선택) 옵션 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-slate-100">
+            <div>
+              <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                담당 선생님
+              </label>
+              <select
+                value={selectedTeacherId}
+                onChange={(e) => setSelectedTeacherId(e.target.value)}
+                className="w-full px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl min-h-[38px] focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+              >
+                <option value="">선생님 미지정</option>
+                {teachers.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-600 mb-1 flex items-center justify-between">
+                <span>강의실 (피아노방)</span>
+                <span className="text-[10px] text-slate-400 font-normal">선택 사항</span>
+              </label>
+              <select
+                value={selectedRoom}
+                onChange={(e) => setSelectedRoom(e.target.value)}
+                className="w-full px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl min-h-[38px] focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+              >
+                <option value="">강의실 미지정 (선택 안 함)</option>
+                {rooms.map((roomName) => (
+                  <option key={roomName} value={roomName}>
+                    {roomName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
           {/* 배치 완료 액션 버튼 */}
           <button
             type="button"
@@ -287,6 +459,8 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
             )}
           </button>
         </div>
+        </>
+        )}
       </div>
     </div>
   );

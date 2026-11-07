@@ -1,9 +1,9 @@
 import { useState, useMemo, type FC } from 'react';
-import { Filter, UserPlus, Users, X } from 'lucide-react';
+import { Filter, Printer, UserPlus, Users, X } from 'lucide-react';
 import { EmptyState, UnifiedScheduleCalendar, type CalendarEventItem } from '@/shared/components';
 import type { CalendarViewMode } from '@/shared/components/calendar';
 import { FORM_CONTROL_CLASS } from '@/shared/components/ui';
-import type { ClassItem } from '@/types';
+import type { ClassItem, DayOfWeek } from '@/types';
 import { usePianoNavigate } from '@/industries/piano/layout/usePianoNavigate';
 import type { DragPlacementPayload } from './PianoTimetablePanels';
 import {
@@ -25,6 +25,7 @@ import { usePianoLessonTimetable } from './usePianoLessonTimetable';
 export const PianoLessonTimetableView: FC = () => {
   const navigate = usePianoNavigate();
   const [calendarView, setCalendarView] = useState<CalendarViewMode>('week');
+  const [selectedDayFilter, setSelectedDayFilter] = useState<'ALL' | DayOfWeek>('ALL');
 
   const {
     useDragGrid,
@@ -46,7 +47,11 @@ export const PianoLessonTimetableView: FC = () => {
     teachers,
     students,
     visibleClasses,
+    rooms,
+    roomFilter,
+    setRoomFilter,
     teacherSections,
+    roomSections,
     placedIds,
     placeStudent,
     placeStudentWithRecurrence,
@@ -58,8 +63,8 @@ export const PianoLessonTimetableView: FC = () => {
     placePending,
   } = usePianoLessonTimetable();
 
-  const renderTimetable = (sectionClasses: ClassItem[], sectionTeacherId?: string) => {
-    if (useDragGrid) {
+  const renderTimetable = (sectionClasses: ClassItem[], sectionTeacherId?: string, sectionRoom?: string) => {
+    if (useDragGrid && selectedDayFilter === 'ALL') {
       const slots = resolveTimetableSlots(sectionClasses);
       const sectionEvents: CalendarEventItem<SlotPlacement>[] = [];
 
@@ -114,6 +119,9 @@ export const PianoLessonTimetableView: FC = () => {
                     <p className="text-[11px] font-bold truncate">{p.student.name}</p>
                     <p className="text-[10px] text-white/85 truncate">
                       {p.classItem.teacherName || p.classItem.name}
+                      {p.classItem.room && p.classItem.room !== '연습실' && p.classItem.room !== '미지정'
+                        ? ` · ${p.classItem.room}`
+                        : ''}
                       {!p.editable ? ' · 반' : ''}
                     </p>
                   </div>
@@ -136,7 +144,7 @@ export const PianoLessonTimetableView: FC = () => {
           }}
           onSlotClick={(slot) => {
             if (slot.dayOfWeek) {
-              openPickerForSlot(slot.dayOfWeek, slot.startTime, sectionTeacherId);
+              openPickerForSlot(slot.dayOfWeek, slot.startTime, sectionTeacherId, sectionRoom);
             }
           }}
         />
@@ -145,14 +153,14 @@ export const PianoLessonTimetableView: FC = () => {
 
     return (
       <PianoTimetableMobileList
-        selectedDay={selectedDay}
+        selectedDay={selectedDayFilter === 'ALL' ? selectedDay : selectedDayFilter}
         todayDay={todayDay}
         classes={sectionClasses}
         students={students}
         pendingStudentId={pendingStudentId}
         onSelectDay={setSelectedDay}
-        onPickSlotForAdd={(day, startTime) => openPickerForSlot(day, startTime, sectionTeacherId)}
-        onPlacePending={(day, startTime) => placePending(day, startTime, sectionTeacherId)}
+        onPickSlotForAdd={(day, startTime) => openPickerForSlot(day, startTime, sectionTeacherId, sectionRoom)}
+        onPlacePending={(day, startTime) => placePending(day, startTime, sectionTeacherId, sectionRoom)}
         onRemove={handleRemove}
         onStartPlaceStudent={(student) => startPlaceStudent(student, sectionTeacherId)}
       />
@@ -186,6 +194,22 @@ export const PianoLessonTimetableView: FC = () => {
 
   return (
     <div className="space-y-3 pb-2">
+      {/* 인쇄 최적화 스타일 */}
+      <style>{`
+        @media print {
+          nav, header, aside, .no-print, [data-testid="bottom-nav"] {
+            display: none !important;
+          }
+          body {
+            background: white !important;
+            padding: 0 !important;
+          }
+          .min-h-screen {
+            min-height: auto !important;
+          }
+        }
+      `}</style>
+
       {pendingStudentId && (
         <div className="rounded-2xl border border-indigo-200 bg-indigo-50/90 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-indigo-950 font-bold shadow-xs">
           <div className="flex items-center gap-2">
@@ -209,12 +233,12 @@ export const PianoLessonTimetableView: FC = () => {
           <span>필터</span>
         </div>
 
-        {/* [전체 | 선생님별] 그룹 모드 스위처 */}
+        {/* [전체 | 선생님별 | 강의실별] 그룹 모드 스위처 */}
         <div className="flex p-1 bg-slate-100 rounded-xl text-xs font-bold text-slate-500">
           <button
             type="button"
             onClick={() => setLayoutMode('week')}
-            className={`px-3 py-1.5 min-h-[40px] rounded-lg transition-all ${
+            className={`px-2.5 sm:px-3 py-1.5 min-h-[40px] rounded-lg transition-all ${
               layoutMode === 'week' ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
             }`}
           >
@@ -223,13 +247,24 @@ export const PianoLessonTimetableView: FC = () => {
           <button
             type="button"
             onClick={() => setLayoutMode('byTeacher')}
-            className={`px-3 py-1.5 min-h-[40px] rounded-lg transition-all ${
+            className={`px-2.5 sm:px-3 py-1.5 min-h-[40px] rounded-lg transition-all ${
               layoutMode === 'byTeacher'
                 ? 'bg-white text-indigo-600 shadow-xs'
                 : 'hover:text-slate-900'
             }`}
           >
             선생님별
+          </button>
+          <button
+            type="button"
+            onClick={() => setLayoutMode('byRoom')}
+            className={`px-2.5 sm:px-3 py-1.5 min-h-[40px] rounded-lg transition-all ${
+              layoutMode === 'byRoom'
+                ? 'bg-white text-indigo-600 shadow-xs'
+                : 'hover:text-slate-900'
+            }`}
+          >
+            강의실별
           </button>
         </div>
 
@@ -238,7 +273,7 @@ export const PianoLessonTimetableView: FC = () => {
           <select
             value={teacherFilter}
             onChange={(e) => setTeacherFilter(e.target.value)}
-            className={`${FORM_CONTROL_CLASS} !min-h-[40px] !py-2 !text-xs w-auto min-w-[9rem]`}
+            className={`${FORM_CONTROL_CLASS} !min-h-[40px] !py-2 !text-xs w-auto min-w-[8rem]`}
             aria-label="선생님 필터"
           >
             <option value="ALL">전체 선생님</option>
@@ -250,41 +285,81 @@ export const PianoLessonTimetableView: FC = () => {
           </select>
         )}
 
-        {/* [ 월 | 주 | 일 ] 달력 뷰 스위처 */}
-        <div className="flex p-1 bg-slate-100 rounded-xl text-xs font-bold text-slate-500 sm:ml-2">
+        {/* 강의실 필터 (학원에 방이 등록되어 있는 경우) */}
+        {rooms.length > 0 && (
+          <select
+            value={roomFilter}
+            onChange={(e) => setRoomFilter(e.target.value)}
+            className={`${FORM_CONTROL_CLASS} !min-h-[40px] !py-2 !text-xs w-auto min-w-[8rem]`}
+            aria-label="강의실 필터"
+          >
+            <option value="ALL">전체 강의실</option>
+            {rooms.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {/* 요일 빠른 전환 탭 (전체 주간 및 요일별 집중 뷰) */}
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar sm:ml-2">
           <button
             type="button"
-            onClick={() => setCalendarView('month')}
-            className={`px-2.5 py-1.5 min-h-[40px] rounded-lg transition-all ${
-              calendarView === 'month' ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
+            onClick={() => {
+              setSelectedDayFilter('ALL');
+              setCalendarView('week');
+            }}
+            className={`px-2.5 py-1.5 min-h-[36px] rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              selectedDayFilter === 'ALL'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'bg-slate-100 text-slate-600 hover:text-slate-900'
             }`}
           >
-            월
+            주간 전체
           </button>
-          <button
-            type="button"
-            onClick={() => setCalendarView('week')}
-            className={`px-2.5 py-1.5 min-h-[40px] rounded-lg transition-all ${
-              calendarView === 'week' ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
-            }`}
-          >
-            주
-          </button>
-          <button
-            type="button"
-            onClick={() => setCalendarView('day')}
-            className={`px-2.5 py-1.5 min-h-[40px] rounded-lg transition-all ${
-              calendarView === 'day' ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
-            }`}
-          >
-            일
-          </button>
+          {TIMETABLE_DAYS.map((day) => {
+            const selected = selectedDayFilter === day;
+            return (
+              <button
+                key={day}
+                type="button"
+                onClick={() => {
+                  setSelectedDayFilter(day);
+                  setSelectedDay(day);
+                }}
+                className={`px-2.5 py-1.5 min-h-[36px] rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  selected
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {day}
+                {day === todayDay && (
+                  <span className={`ml-0.5 text-[9px] ${selected ? 'text-indigo-200' : 'text-indigo-600'}`}>
+                    •
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
-        <span className="text-xs text-slate-500 font-semibold tabular-nums ml-auto">
-          반 {visibleClasses.length}
-          {layoutMode === 'byTeacher' ? ` · 선생님 ${teacherSections.length}` : ''}
-        </span>
+        <div className="flex items-center gap-2 ml-auto">
+          <span className="text-xs text-slate-500 font-semibold tabular-nums hidden sm:inline">
+            반 {visibleClasses.length}
+            {layoutMode === 'byTeacher' ? ` · 선생님 ${teacherSections.length}` : ''}
+          </span>
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="no-print inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition shadow-2xs cursor-pointer"
+            title="A4 가로 시간표 인쇄"
+          >
+            <Printer className="w-3.5 h-3.5 text-slate-500" />
+            <span>시간표 인쇄</span>
+          </button>
+        </div>
       </div>
 
       {/* 클릭 배치 안내 문구 */}
@@ -293,7 +368,7 @@ export const PianoLessonTimetableView: FC = () => {
         <span>원하는 요일·시간 칸을 클릭하여 학생을 배치하세요.</span>
       </div>
 
-      {/* 시간표 렌더링 (선생님별 또는 전체) */}
+      {/* 시간표 렌더링 (선생님별, 강의실별, 또는 전체) */}
       {layoutMode === 'byTeacher' ? (
         <div className="space-y-5">
           {teacherSections.length === 0 ? (
@@ -312,6 +387,24 @@ export const PianoLessonTimetableView: FC = () => {
             ))
           )}
         </div>
+      ) : layoutMode === 'byRoom' ? (
+        <div className="space-y-5">
+          {roomSections.length === 0 ? (
+            <p className="text-sm text-slate-400 text-center py-8">표시할 수업이 없습니다.</p>
+          ) : (
+            roomSections.map((section) => (
+              <section key={section.id} className="space-y-2">
+                <div className="flex items-center gap-2 px-0.5">
+                  <h3 className="text-sm font-black text-slate-900">{section.name}</h3>
+                  <span className="text-[11px] font-bold text-slate-400 tabular-nums">
+                    반 {section.classes.length}
+                  </span>
+                </div>
+                {renderTimetable(section.classes, undefined, section.name)}
+              </section>
+            ))
+          )}
+        </div>
       ) : (
         renderTimetable(visibleClasses)
       )}
@@ -324,28 +417,34 @@ export const PianoLessonTimetableView: FC = () => {
           pickerSlot ? `${pickerSlot.day}요일 ${pickerSlot.startTime} 배치` : undefined
         }
         students={students}
+        teachers={teachers}
+        rooms={rooms}
+        defaultTeacherId={pickerSlot?.preferredTeacherId}
+        defaultRoom={pickerSlot?.preferredRoom}
         searchQuery={pickerQuery}
         onSearchChange={setPickerQuery}
         excludeIds={pickerExcludeIds}
         initialDay={pickerSlot?.day}
         startTime={pickerSlot?.startTime}
         onClose={() => setPickerSlot(null)}
-        onConfirmRecurrence={(student, days, startTime) => {
+        onConfirmRecurrence={(student, days, startTime, teacherId, room) => {
           if (!pickerSlot) return;
           placeStudentWithRecurrence(
             student,
             days,
             startTime,
-            pickerSlot.preferredTeacherId
+            teacherId || pickerSlot.preferredTeacherId,
+            room || pickerSlot.preferredRoom
           );
         }}
-        onSelect={(student) => {
+        onSelect={(student, teacherId, room) => {
           if (!pickerSlot) return;
           placeStudent(
             student,
             pickerSlot.day,
             pickerSlot.startTime,
-            pickerSlot.preferredTeacherId
+            teacherId || pickerSlot.preferredTeacherId,
+            room || pickerSlot.preferredRoom
           );
         }}
       />

@@ -108,21 +108,23 @@ export const PianoConsultationHubView: FC = () => {
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => setShowQr(true)}
+                onClick={() => setShowAvailabilityModal(true)}
                 className="min-h-[44px] px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-bold inline-flex items-center gap-1.5 hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
+                title="학부모가 온라인으로 예약할 수 있는 요일과 시간대를 설정합니다."
               >
-                <QrCode className="w-4 h-4 text-indigo-600" />
-                <span className="hidden sm:inline">상담 접수 QR</span>
-                <span className="sm:hidden">QR</span>
+                <Clock className="w-4 h-4 text-indigo-600" />
+                <span className="hidden sm:inline">예약 가능 시간대</span>
+                <span className="sm:hidden">가능시간</span>
               </button>
               <button
                 type="button"
-                onClick={() => setShowAvailabilityModal(true)}
+                onClick={() => setShowQr(true)}
                 className="min-h-[44px] px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-bold inline-flex items-center gap-1.5 hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
+                title="학부모에게 전송하거나 블로그/인스타에 올리는 예약 링크 및 QR 코드"
               >
-                <Clock className="w-4 h-4 text-indigo-600" />
-                <span className="hidden sm:inline">상담 가능시간 설정</span>
-                <span className="sm:hidden">가능시간</span>
+                <QrCode className="w-4 h-4 text-indigo-600" />
+                <span className="hidden sm:inline">학부모 예약 링크·QR</span>
+                <span className="sm:hidden">예약 링크·QR</span>
               </button>
               <button
                 type="button"
@@ -130,7 +132,7 @@ export const PianoConsultationHubView: FC = () => {
                 className="min-h-[44px] px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
               >
                 <CalendarPlus className="w-4 h-4" />
-                <span>상담 일정 등록</span>
+                <span>+ 직접 상담 등록</span>
               </button>
             </div>
           )
