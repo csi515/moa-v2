@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import type { Student } from '@/types';
 import { renderGuardianInvite } from '@/core/staff/staffUi';
-import { X, Phone, Edit, UserMinus, UserCheck, ClipboardCheck, CreditCard, MessageSquare, ChevronDown } from 'lucide-react';
+import { X, Phone, Edit, UserMinus, UserCheck, CreditCard, ChevronDown } from 'lucide-react';
 import { StudentDetailInfoTab } from './detail/StudentDetailInfoTab';
 import { StudentDetailClassesTab } from './detail/StudentDetailClassesTab';
 import { StudentDetailAttendanceTab } from './detail/StudentDetailAttendanceTab';
@@ -14,6 +14,9 @@ import { getStudentDetailExtension } from './detail/studentDetailExtensions';
 import { useStaffGrants } from '@/hooks';
 import { useModuleLabels } from '@/core/labels';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
+import { getTodayAttendanceStatus, getTuitionSummaryText } from './detail/student360Helpers';
+import { todayIsoLocal } from '@/shared/utils/localDate';
+import { showToast } from '@/shared/feedback/uiFeedback';
 
 export type { DetailTab } from './detail/types';
 
@@ -92,9 +95,62 @@ const StudentDetailModalContent: React.FC<
     modal.setCurrentTab(tabId);
   };
 
+  const todayIso = todayIsoLocal();
+  const todayAtt = useMemo(
+    () => getTodayAttendanceStatus(modal.allAttendance as any, todayIso),
+    [modal.allAttendance, todayIso]
+  );
+  const tuitionStatus = useMemo(
+    () => getTuitionSummaryText(modal.billingSummary as any),
+    [modal.billingSummary]
+  );
+
+  const handleQuickCheckIn = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      modal.attendance.setNewAttDate(todayIso);
+      modal.attendance.setNewAttStatus('present');
+      modal.attendance.onSave({ preventDefault: () => {} } as any);
+      showToast(`🎉 '${student.name}' 원생이 오늘 출석(등원) 처리되었습니다.`, 'success');
+    } catch {
+      showToast('출결 처리 중 오류가 발생했습니다.', 'error');
+    }
+  };
+
+  const handleQuickTuition = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    modal.setCurrentTab('tuition');
+    if (modal.allInvoices.length > 0) {
+      const unpaidInv = modal.allInvoices.find((inv) => inv.unpaidAmount > 0) || modal.allInvoices[0];
+      if (unpaidInv) {
+        modal.tuition.onOpenPayModal(unpaidInv);
+      }
+    }
+  };
+
+  // ESC 키로 모달 닫기 지원 (접근성 향상)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-3 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
-      <div className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 w-full max-w-4xl lg:max-w-6xl overflow-hidden sm:my-4 flex flex-col max-h-[90vh]">
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-3 bg-slate-900/60 backdrop-blur-xs overflow-y-auto"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${student.name} 원생 상세 정보`}
+    >
+      <div
+        className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 w-full max-w-4xl lg:max-w-6xl overflow-hidden sm:my-4 flex flex-col max-h-[90vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="p-4 border-b border-slate-100 bg-slate-50/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-3">
             <div
@@ -134,6 +190,46 @@ const StudentDetailModalContent: React.FC<
                   </span>
                 ))}
               </div>
+
+              {/* 360도 올인원 원터치 퀵 액션 바 */}
+              <div className="flex items-center gap-2 mt-2.5 flex-wrap">
+                {modal.attendanceEnabled && (
+                  todayAtt.isChecked ? (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-bold shadow-2xs">
+                      <span>✅</span>
+                      <span>{todayAtt.label}</span>
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleQuickCheckIn}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+                    >
+                      <span>🟢</span>
+                      <span>오늘 출석 체크</span>
+                    </button>
+                  )
+                )}
+
+                {canTuition && (
+                  tuitionStatus.hasUnpaid ? (
+                    <button
+                      type="button"
+                      onClick={handleQuickTuition}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95 animate-pulse"
+                    >
+                      <CreditCard className="w-3.5 h-3.5" />
+                      <span>{tuitionStatus.badgeLabel} 즉시 수납</span>
+                    </button>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-semibold">
+                      <span>💳</span>
+                      <span>{tuitionStatus.badgeLabel}</span>
+                    </span>
+                  )
+                )}
+              </div>
+
             </div>
           </div>
 

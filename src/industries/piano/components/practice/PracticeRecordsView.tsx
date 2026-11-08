@@ -200,7 +200,9 @@ export const PracticeRecordsView: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
+        icon={<BookOpenCheck className="w-6 h-6 text-indigo-600" />}
         title="연습 기록"
+        description="원생들의 일일 연습 시간과 연습 곡 진도 기록 관리"
         actions={
           <button onClick={handleOpenCreate} className="btn-primary flex items-center space-x-2">
             <Plus className="w-4 h-4" />
@@ -209,7 +211,7 @@ export const PracticeRecordsView: React.FC = () => {
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <SummaryMetricCard
           label="누적 연습 시간"
           value={`${totalMinutes}분`}

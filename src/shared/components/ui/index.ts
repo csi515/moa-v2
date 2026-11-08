@@ -27,3 +27,5 @@ export { SegmentedControl } from './SegmentedControl';
 export { Section, type SectionProps } from './Section';
 export { ResponsiveTable, type ResponsiveColumn, type ResponsiveTableProps } from './ResponsiveTable';
 export { PaginationBar, type PaginationBarProps } from './PaginationBar';
+export { MicroGuideTooltip, type MicroGuideTooltipProps } from './MicroGuideTooltip';
+export { ACADEMY_MICRO_GUIDES, getMicroGuide, type AcademyMicroGuideKey } from './microGuideCatalog';

@@ -1,3 +1,4 @@
+import { EmptyState } from '@/shared/components';
 ﻿import React, { useState, useEffect } from 'react';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
@@ -271,19 +272,21 @@ export const ReservationInboxView: React.FC<{
 
       {/* Reservation List */}
       {reservations.length === 0 ? (
-        <div className="bg-white rounded-2xl border-2 border-dashed border-slate-200 p-12 text-center">
-          <Inbox className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-          <p className="text-slate-500 font-medium">
-            {emptyHint
+        <EmptyState
+          icon={<Inbox className="w-12 h-12 text-slate-300" />}
+          title={
+            emptyHint
               ? emptyHint
-              : statusFilter === 'all'
-                ? '예약 신청이 없습니다'
-                : null}
-            {!emptyHint && statusFilter === 'requested' && '신청 대기 중인 예약이 없습니다'}
-            {!emptyHint && statusFilter === 'confirmed' && '확정된 예약이 없습니다'}
-            {!emptyHint && statusFilter === 'cancelled' && '취소된 예약이 없습니다'}
-          </p>
-        </div>
+              : statusFilter === 'requested'
+                ? '신청 대기 중인 예약이 없습니다'
+                : statusFilter === 'confirmed'
+                  ? '확정된 예약이 없습니다'
+                  : statusFilter === 'cancelled'
+                    ? '취소된 예약이 없습니다'
+                    : '예약 신청이 없습니다'
+          }
+          description="새로운 예약 신청이 접수되면 이곳에 표시됩니다."
+        />
       ) : (
         <div className="grid gap-4">
           {reservations.map((reservation) => (

@@ -86,7 +86,7 @@ export const ParentInviteResultModal: React.FC<ParentInviteResultModalProps> = (
 
         {primary && (
           <div className="mb-4 space-y-3">
-            <p className="text-xs font-bold text-slate-500">빠른 연결 링크</p>
+            <p className="text-xs font-bold text-slate-500">초대 바로가기 링크</p>
             <GuardianLinkQrDisplay url={buildParentInviteUrl(primary.token)} />
             <button
               type="button"

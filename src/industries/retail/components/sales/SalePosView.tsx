@@ -491,7 +491,7 @@ export const SalePosView: FC = () => {
           </button>
         </div>
 
-        {/* [바코드 없는 제품 전용] 무바코드 빠른 터치 매대 (Quick Touch Goods Bar) */}
+        {/* [바코드 없는 제품 전용] 무바코드 간편 터치 매대 (Quick Touch Goods Bar) */}
         {noBarcodeItems.length > 0 && (
           <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-2.5 space-y-1.5 shadow-2xs">
             <div className="flex items-center justify-between px-1">

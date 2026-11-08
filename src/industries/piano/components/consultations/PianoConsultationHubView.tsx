@@ -133,7 +133,7 @@ export const PianoConsultationHubView: FC = () => {
                 className="min-h-[44px] px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
               >
                 <CalendarPlus className="w-4 h-4" />
-                <span>+ 직접 상담 등록</span>
+                <span>직접 상담 등록</span>
               </button>
             </div>
           )
@@ -447,7 +447,7 @@ export const PianoConsultationHubView: FC = () => {
                             className="min-h-[36px] px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 hover:text-indigo-600 text-slate-600 font-bold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
                           >
                             <Plus className="w-3.5 h-3.5 text-indigo-600" />
-                            <span>+ 기록 작성</span>
+                            <span>기록 작성</span>
                           </button>
                         )}
                       </td>

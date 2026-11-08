@@ -226,19 +226,10 @@ export const WorkplaceSettingsView: FC = () => {
         title={`${placeLabel} 기본 정보 및 시설(연습실) 관리`}
         icon={<Building className={`w-4 h-4 ${accentIcon}`} />}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
-          <p className="text-xs text-slate-500 leading-relaxed max-w-xl">
+        <div className="mb-6 pb-4 border-b border-slate-100">
+          <p className="text-xs text-slate-500 leading-relaxed">
             {placeLabel} 상호명, 대표자, 연락처, 주소 및 시설 내 강의실·피아노 연습실(공실)을 등록하고 관리합니다.
           </p>
-          <button
-            type="button"
-            onClick={(e) => handleSaveSettings(e as any)}
-            disabled={isSaving}
-            className={`px-4 py-2 min-h-[40px] ${accentBtn} disabled:opacity-60 text-white font-bold text-xs rounded-xl transition-all shadow-xs flex items-center justify-center gap-1.5 shrink-0 cursor-pointer`}
-          >
-            {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-            <span>{isSaving ? '저장 중…' : '설정 정보 저장'}</span>
-          </button>
         </div>
 
         <form onSubmit={handleSaveSettings} className="space-y-6">

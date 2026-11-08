@@ -436,7 +436,7 @@ function GenericDashboardView({ onNavigate, enabledCaps = [] }: GenericDashboard
 
       {/* 빠른 작업 */}
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-4 shadow-xs">
-        <h2 className="text-lg font-bold text-slate-900">빠른 작업</h2>
+        <h2 className="text-lg font-bold text-slate-900">자주 쓰는 업무</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button
             type="button"

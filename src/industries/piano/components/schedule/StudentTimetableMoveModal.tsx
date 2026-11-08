@@ -1,6 +1,7 @@
 import { useState, useMemo, type FC } from 'react';
 import { ArrowRight, Calendar, Check, CheckCircle2, Clock, MoveRight, User, Users, X } from 'lucide-react';
 import { Modal } from '@/shared/components';
+import { MicroGuideTooltip } from '@/shared/components/ui';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import { TIMETABLE_DAYS, type SlotPlacement } from './pianoTimetablePlacement';
 import {
@@ -241,8 +242,9 @@ export const StudentTimetableMoveModal: FC<StudentTimetableMoveModalProps> = ({
               onChange={(e) => setIsTemporary(e.target.checked)}
               className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500"
             />
-            <span className="text-xs font-bold text-slate-800">
-              이번 주 하루만 임시 이동 (보강 / 일정 변경)
+            <span className="text-xs font-bold text-slate-800 inline-flex items-center">
+              <span>이번 주 하루만 임시 이동 (보강 / 일정 변경)</span>
+              <MicroGuideTooltip guideKey="temporary_move" />
             </span>
           </label>
           <p className="text-[11px] text-slate-500 pl-6">

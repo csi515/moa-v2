@@ -79,7 +79,7 @@ export const NoticeFormModal: FC<NoticeFormModalProps> = ({
       </div>
 
       <div>
-        <p className="text-xs font-semibold text-slate-700 mb-2">빠른 템플릿</p>
+        <p className="text-xs font-semibold text-slate-700 mb-2">추천 서식</p>
         <div className="grid grid-cols-2 gap-2">
           {templates.map((t) => (
             <button

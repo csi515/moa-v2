@@ -1,5 +1,6 @@
+import { EmptyState } from '@/shared/components';
 import type { FC } from 'react';
-import { Clock, Loader2, Phone, User } from 'lucide-react';
+import { Calendar, Clock, Loader2, Phone, User } from 'lucide-react';
 import type { ReservationDetail } from '@/types';
 import { consultationStatusLabel, formatConsultationTime } from './usePianoConsultationHub';
 
@@ -43,14 +44,15 @@ export const ConsultationTodaySection: FC<{
         )}
       </div>
     ) : rows.length === 0 ? (
-      <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center">
-        <p className="text-sm font-bold text-slate-700">오늘 예정된 상담이 없습니다</p>
-        <p className="text-xs text-slate-500 mt-1">
-          {isScoped
+      <EmptyState
+        icon={<Calendar className="w-10 h-10 text-slate-300" />}
+        title="오늘 예정된 상담이 없습니다"
+        description={
+          isScoped
             ? '담당 학생이거나 본인 상담만 표시됩니다.'
-            : '설정에서 가능시간을 지정하거나 상담 일정을 추가하세요.'}
-        </p>
-      </div>
+            : '설정에서 가능시간을 지정하거나 상담 일정을 추가하세요.'
+        }
+      />
     ) : (
       <ul className="space-y-2">
         {rows.map((row) => {

@@ -503,7 +503,7 @@ export const ProductListView: FC = () => {
                           setQuickInboundQty('10');
                         }}
                         className="text-teal-700 font-bold hover:bg-teal-50 p-1 rounded transition-colors"
-                        title="10개 빠른 입고"
+                        title="10개 간편 입고"
                       >
                         <PlusCircle className="w-3.5 h-3.5" />
                       </button>
@@ -612,7 +612,7 @@ export const ProductListView: FC = () => {
                             title="기성품 바코드 즉시 매핑"
                           >
                             <Barcode className="w-3 h-3" />
-                            <span>+바코드 등록</span>
+                            <span>바코드 등록</span>
                           </button>
                         )}
                       </td>
@@ -631,7 +631,7 @@ export const ProductListView: FC = () => {
                               setQuickInboundQty('10');
                             }}
                             className="p-1 text-slate-400 hover:text-teal-600 rounded-lg hover:bg-teal-50 cursor-pointer"
-                            title="빠른 입고"
+                            title="간편 입고"
                           >
                             <PlusCircle className="w-3.5 h-3.5" />
                           </button>
@@ -729,7 +729,7 @@ export const ProductListView: FC = () => {
       <Modal
         isOpen={Boolean(quickInboundItem)}
         onClose={() => setQuickInboundItem(null)}
-        title="간편 빠른 재고 입고"
+        title="간편 재고 입고"
         maxWidth="sm"
       >
         {quickInboundItem && (

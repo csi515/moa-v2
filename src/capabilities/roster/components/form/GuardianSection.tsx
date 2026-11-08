@@ -18,6 +18,7 @@ import { RELATIONSHIP_OPTIONS } from './studentFormTypes';
 import { STUDENT_FORM_FIELD_IDS } from './studentFormValidation';
 import { useModuleLabels } from '@/core/labels';
 import { FORM_CONTROL_ERROR_CLASS } from '@/shared/components/ui/FormField';
+import { formatSmartPhoneInput } from './studentSmartInputHelpers';
 
 interface Props {
   isEdit: boolean;
@@ -212,9 +213,10 @@ export const GuardianSection: React.FC<Props> = ({
                 <input
                   id={STUDENT_FORM_FIELD_IDS.guardianPhone(idx)}
                   type="tel"
-                  placeholder="전화번호 *"
+                  inputMode="tel"
+                  placeholder="전화번호 * (010 또는 8자리 입력)"
                   value={g.phone}
-                  onChange={(e) => onUpdateGuardian(idx, { phone: e.target.value })}
+                  onChange={(e) => onUpdateGuardian(idx, { phone: formatSmartPhoneInput(e.target.value) })}
                   aria-invalid={Boolean(fieldErrors[`guardian-${idx}-phone`])}
                   className={`w-full px-3 py-2 text-sm border rounded-xl bg-white min-h-[44px] ${
                     fieldErrors[`guardian-${idx}-phone`] ? FORM_CONTROL_ERROR_CLASS : 'border-slate-200'

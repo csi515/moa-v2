@@ -147,6 +147,7 @@ export const PianoAttendanceView: FC = () => {
         density="compact"
         icon={<CheckSquare className="w-6 h-6 text-indigo-600" />}
         title="출결"
+        description="오늘 출결 현황 체크 및 학생별 등하원 기록을 관리합니다"
       />
 
       {/* 요약 = 필터 (모바일 스와이프 칩 / 태블릿 이상 5열 그리드) */}

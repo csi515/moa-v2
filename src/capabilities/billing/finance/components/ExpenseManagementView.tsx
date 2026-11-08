@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect,  useState, useMemo } from 'react';
 import { showToast, openConfirmDialog } from '@/shared/feedback/uiFeedback';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useStorageRefresh } from '@/hooks';
@@ -173,6 +173,15 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
 
     persist();
   };
+
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsModalOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isModalOpen]);
 
   return (
     <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
@@ -387,8 +396,8 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 w-full sm:max-w-md max-h-[90vh] flex flex-col overflow-hidden">
+        <div onClick={() => setIsModalOpen(false)} className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-xs cursor-pointer">
+          <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 w-full sm:max-w-md max-h-[90vh] flex flex-col overflow-hidden cursor-default">
             <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between shrink-0">
               <h3 className="font-bold text-slate-900 text-base">
                 {editingExpense ? '지출 내역 수정' : '신규 지출 등록'}

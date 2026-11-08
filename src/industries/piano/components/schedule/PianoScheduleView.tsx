@@ -86,16 +86,16 @@ export const PianoScheduleView: FC = () => {
             </h2>
           </div>
 
-          {/* 시간표 모드일 때 보강 레슨 직접 추가 버튼 */}
+          {/* 시간표 모드일 때 보강 레슨 관리 버튼 */}
           {segment === 'timetable' && (
             <button
               type="button"
               onClick={() => setShowMakeupModal(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-bold transition shadow-2xs min-h-[36px]"
-              title="결석 학생의 보강 레슨을 일정표에 추가합니다"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-bold transition shadow-2xs min-h-[36px] cursor-pointer"
+              title="결석 원생의 보강 레슨을 배정하거나 관리합니다"
             >
               <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-              <span>+ 보강 레슨 추가</span>
+              <span>보강 일정 관리</span>
             </button>
           )}
         </div>

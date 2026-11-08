@@ -1,5 +1,5 @@
 import { showToast } from '@/shared/feedback/uiFeedback';
-import React, { useState } from 'react';
+import React, { useEffect,  useState } from 'react';
 import {
   X,
   Calendar,
@@ -145,9 +145,17 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
     onClose();
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full border border-slate-200 overflow-hidden my-6">
+    <div onClick={onClose} className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto cursor-pointer">
+      <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl shadow-2xl max-w-xl w-full border border-slate-200 overflow-hidden my-6 cursor-default">
         {/* 모달 헤더 */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
           <div className="flex items-center gap-2.5">
@@ -162,7 +170,9 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-200/50"
+            className="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-200/50 cursor-pointer"
+            aria-label="닫기"
+            title="닫기"
           >
             <X className="w-5 h-5" />
           </button>

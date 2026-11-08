@@ -6,6 +6,7 @@ import { usePermissions } from '@/core/auth/usePermissions';
 import { showSchoolFields } from '@/core/students/levelOptions';
 import { BirthDateInput, FormField, FORM_CONTROL_CLASS, FORM_CONTROL_ERROR_CLASS } from '@/shared/components/ui';
 import { STUDENT_FORM_FIELD_IDS } from './studentFormValidation';
+import { formatSmartPhoneInput } from './studentSmartInputHelpers';
 
 interface Props {
   formData: StudentFormData;
@@ -128,7 +129,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
               type="tel"
               inputMode="tel"
               value={formData.phone}
-              onChange={(e) => onChange({ phone: e.target.value })}
+              onChange={(e) => onChange({ phone: formatSmartPhoneInput(e.target.value) })}
               placeholder="010-0000-0000"
               autoComplete="tel"
               className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
@@ -225,7 +226,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
             type="tel"
             inputMode="tel"
             value={formData.phone}
-            onChange={(e) => onChange({ phone: e.target.value })}
+            onChange={(e) => onChange({ phone: formatSmartPhoneInput(e.target.value) })}
             placeholder="010-0000-0000"
             autoComplete="tel"
             className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"

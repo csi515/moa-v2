@@ -257,7 +257,7 @@ export const ParentManagementView: React.FC = () => {
             className="min-h-[44px] px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md inline-flex items-center gap-1.5 cursor-pointer shrink-0"
           >
             <UserPlus className="w-4 h-4" />
-            <span>+ {contactLabel} 등록</span>
+            <span>{contactLabel} 등록</span>
           </button>
         }
       />

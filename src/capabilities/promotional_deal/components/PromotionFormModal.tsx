@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect,  useState } from 'react';
 import { useCreate } from '@refinedev/core';
 import { X, Tag, Calendar, AlertCircle } from 'lucide-react';
 import { validatePromoDraft, type PromoTargetType } from '../domain/promoEngine';
@@ -82,9 +82,17 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
   const calculatedDiscountRate =
     orig > 0 && spec < orig ? Math.round(((orig - spec) / orig) * 100) : 0;
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 w-full max-w-xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200 cursor-pointer">
+      <div onClick={(e) => e.stopPropagation()} className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 w-full max-w-xl overflow-hidden flex flex-col max-h-[90vh] cursor-default">
         {/* 헤더 */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
           <div className="flex items-center gap-2.5">
@@ -101,8 +109,11 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg transition-colors"
+            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg transition-colors cursor-pointer"
+            aria-label="닫기"
+            title="닫기"
           >
             <X className="w-5 h-5" />
           </button>

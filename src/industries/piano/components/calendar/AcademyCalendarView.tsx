@@ -267,6 +267,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
           density="compact"
           icon={<CalendarDays className="w-6 h-6" />}
           title={`${scheduleLabel} 및 캘린더`}
+          description="학원 정기 일정, 휴원일, 콩쿠르 및 행사 일정을 월별/주별로 조회"
           actions={
             !isScoped ? (
             <button

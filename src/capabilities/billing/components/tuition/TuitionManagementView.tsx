@@ -179,8 +179,8 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
         <>
           <PageHeader
             icon={<CreditCard className="w-6 h-6" />}
-            title="수강료 및 수납 관리"
-            description={`${customerLabel}별 월회비 납부 현황 조회와 수납 처리`}
+            title="수강료 수납 및 청구"
+            description={`${customerLabel}별 수강료 납부 현황 조회와 즉시 수납 처리`}
           />
           <TuitionSummaryCards
           selectedMonth={formatYearMonthLabel(selectedMonth)}

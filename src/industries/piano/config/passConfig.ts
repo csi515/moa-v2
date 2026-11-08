@@ -8,7 +8,7 @@ export const pianoPassConfig: PassManagementConfig = {
   title: '회차권 관리',
   description:
     '레슨 회차권을 등록·관리합니다. 수강 형태가 회차권인 원생은 출석(레슨) 시 1회 차감됩니다. 회차권은 서버에 저장되며 다른 기기와 동기화됩니다.',
-  createLabel: '+ 회차권 등록',
+  createLabel: '회차권 등록',
   emptyTitle: '회차권이 없습니다',
   customerLabel: '원생',
   passName: '회차권',

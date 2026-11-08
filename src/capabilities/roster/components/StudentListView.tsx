@@ -23,7 +23,7 @@ import { enrollmentModeLabel } from './form/enrollmentFormCopy';
 import { StudentFormModal } from './StudentFormModal';
 import { StudentDetailModal } from './StudentDetailModal';
 import { getStudentStatusBadge } from '@/utils/formatters';
-import { FilterBar, SearchField, EmptyState, PaginationBar } from '@/shared/components';
+import { PageHeader, FilterBar, SearchField, EmptyState, PaginationBar } from '@/shared/components';
 import { DENSITY } from '@/shared/styles/density';
 import {
   Users,
@@ -264,29 +264,36 @@ export const StudentListView: React.FC = () => {
 
   return (
     <div className={DENSITY.pageStack}>
-      {!isScoped && (
-        <div className="flex justify-end gap-2 flex-wrap">
-          <button
-            type="button"
-            onClick={() => setIsBulkImportOpen(true)}
-            className="px-4 py-2.5 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition-all border border-slate-200 flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <FileSpreadsheet className="w-4 h-4" />
-            엑셀/CSV 가져오기
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setEditingStudent(null);
-              setIsFormModalOpen(true);
-            }}
-            className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <UserPlus className="w-4 h-4" />
-            {labels.customer.add}
-          </button>
-        </div>
-      )}
+            <PageHeader
+        icon={<Users className="w-6 h-6 text-indigo-600" />}
+        title={labels.customer.section || '원생 관리'}
+        description={`등록된 ${labels.customer.singular}의 기본 정보, 수강 및 출결 상태를 조회하고 관리합니다`}
+        actions={
+          !isScoped ? (
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={() => setIsBulkImportOpen(true)}
+                className="px-3.5 py-2 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition-all border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                엑셀/CSV 가져오기
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingStudent(null);
+                  setIsFormModalOpen(true);
+                }}
+                className="px-4 py-2 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <UserPlus className="w-4 h-4" />
+                {labels.customer.add}
+              </button>
+            </div>
+          ) : undefined
+        }
+      />
 
       <FilterBar className="flex-col items-stretch gap-3">
         {/* 기본: 이름 검색 + 재원/휴원/퇴원(전체)만 노출 */}

@@ -10,7 +10,8 @@ import {
   studentUsesShuttleService,
 } from '@/capabilities/transport';
 import { formatCurrency, formatPhone, getLevelColor } from '@/utils/formatters';
-import { Award, Bus, Link2, MapPin, Star } from 'lucide-react';
+import { Award, Bus, Link2, MapPin, Star, Music2 } from 'lucide-react';
+import { extractWishlistFromStudent } from '../../helpers/studentWishlistHelpers';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
 import { useTenantTerms } from '@/core/i18n';
@@ -56,6 +57,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
   const instructorTerm = t('instructor', '선생님');
   const passTerm = t('pass', '이용권');
   const notes = combineStudentNotes(student.specialNotes, student.memo);
+  const wishlist = extractWishlistFromStudent(student);
 
   return (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -269,6 +271,46 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
           </span>
         </div>
       </div>
+    </div>
+
+    {/* 피아노 특화: 관심 장르 & 배우고 싶은 곡 (위시리스트) */}
+    <div className="md:col-span-2 bg-gradient-to-r from-violet-50/70 via-indigo-50/50 to-slate-50 rounded-2xl p-4 border border-violet-200/70 space-y-2.5">
+      <div className="flex items-center justify-between">
+        <h4 className="text-xs font-bold text-violet-900 uppercase tracking-wider flex items-center gap-1.5">
+          <Music2 className="w-4 h-4 text-violet-600" />
+          관심 음악 장르 & 배우고 싶은 곡 (위시리스트)
+        </h4>
+        <span className="text-[11px] text-violet-600 font-semibold">
+          레슨 맞춤 추천
+        </span>
+      </div>
+      <div className="flex items-center gap-1.5 flex-wrap">
+        {wishlist.genres.length > 0 ? (
+          wishlist.genres.map((genre) => (
+            <span
+              key={genre}
+              className="px-2.5 py-1 rounded-xl bg-white border border-violet-200 text-violet-800 text-xs font-bold shadow-2xs"
+            >
+              🎵 {genre}
+            </span>
+          ))
+        ) : (
+          <span className="text-xs text-slate-400">선택된 선호 장르 없음 (원생 수정에서 등록 가능)</span>
+        )}
+      </div>
+      {wishlist.songs.length > 0 && (
+        <div className="pt-1.5 border-t border-violet-100/80 flex items-center gap-2 flex-wrap">
+          <span className="text-[11px] font-bold text-violet-700">희망 곡:</span>
+          {wishlist.songs.map((song) => (
+            <span
+              key={song}
+              className="px-2 py-0.5 rounded-lg bg-violet-100/80 text-violet-900 text-[11px] font-semibold"
+            >
+              🎹 {song}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
 
     {notes && (

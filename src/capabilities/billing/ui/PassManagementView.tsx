@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Ticket } from 'lucide-react';
+import { Ticket, Plus } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { useStorageRefresh } from '@/hooks';
 import { ScheduleService } from '@/core/services/scheduleService';
@@ -57,7 +57,7 @@ const DEFAULT_CONFIG: Required<PassManagementConfig> = {
   title: '이용권 관리',
   description:
     '횟수제 이용권을 등록하고 잔여 횟수를 관리합니다. 수업 완료 시 1회 차감됩니다. 이 기기에서만 저장되며 다른 기기와 동기화되지 않습니다.',
-  createLabel: '+ 이용권 등록',
+  createLabel: '이용권 등록',
   emptyTitle: '이용권이 없습니다',
   customerLabel: '회원',
   passName: '이용권',
@@ -225,9 +225,10 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
           <button
             type="button"
             onClick={openCreate}
-            className={`px-4 py-2.5 ${cfg.accent} ${cfg.accentHover} text-white text-sm font-bold rounded-xl min-h-[44px] cursor-pointer`}
+            className={`inline-flex items-center gap-1.5 px-4 py-2.5 ${cfg.accent} ${cfg.accentHover} text-white text-sm font-bold rounded-xl min-h-[44px] cursor-pointer shadow-xs`}
           >
-            {cfg.createLabel}
+            <Plus className="w-4 h-4" />
+            <span>{cfg.createLabel}</span>
           </button>
         }
       />

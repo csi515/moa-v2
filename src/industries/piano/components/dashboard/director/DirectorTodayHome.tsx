@@ -1,4 +1,4 @@
-import { useCallback, useMemo, type FC } from 'react';
+import { useCallback, useMemo, useState, type FC } from 'react';
 import { formatCurrency, formatKoreanDate } from '@/utils/formatters';
 import {
   requestOpenConsultationInquiries,
@@ -11,6 +11,8 @@ import { DirectorTodayAttendanceSection } from './DirectorTodayAttendanceSection
 import { DirectorTodayTasksSection, type DirectorTodayTaskItem } from './DirectorTodayTasksSection';
 import { DirectorTodayUnpaidSection } from './DirectorTodayUnpaidSection';
 import { PianoDirector3SecBriefingCard } from './PianoDirector3SecBriefingCard';
+import { DirectorInteractiveOnboardingWizard } from './DirectorInteractiveOnboardingWizard';
+import { FavoriteMenuQuickDock } from './FavoriteMenuQuickDock';
 import { useApp } from '@/context/AppContext';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { GettingStartedQuestWidget } from '@/app/onboarding/GettingStartedQuestWidget';
@@ -69,6 +71,7 @@ export const DirectorTodayHome: FC = () => {
   } = data;
 
   const isEmpty = stats.activeStudents === 0;
+  const [isOnboardingWizardOpen, setIsOnboardingWizardOpen] = useState(false);
 
   const todayAttendanceCounts = useMemo(() => {
     const { expected, dayRecordMap, pinCheckInIds } = expectedDay;
@@ -177,6 +180,8 @@ export const DirectorTodayHome: FC = () => {
         onNavigate={navigate}
       />
 
+      <FavoriteMenuQuickDock onNavigate={navigate} activeTab="dashboard" />
+
       <section className="bg-white border border-slate-200/80 rounded-2xl py-3 px-3.5 sm:p-5 shadow-2xs">
         <p className="text-xs text-slate-400 font-medium">
           {formatKoreanDate(new Date().toISOString())}
@@ -202,15 +207,34 @@ export const DirectorTodayHome: FC = () => {
                 .filter(Boolean)
                 .join(' · ')}
         </p>
-        {isEmpty && (
-          <button
-            type="button"
-            onClick={() => navigate('students')}
-            className="mt-3 min-h-[38px] px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors cursor-pointer"
-          >
-            학생 등록하기
-          </button>
-        )}
+        <div className="flex flex-wrap items-center gap-2 mt-3">
+          {isEmpty ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setIsOnboardingWizardOpen(true)}
+                className="min-h-[38px] px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
+              >
+                <span>✨ 3분 만에 학원 세팅 끝내기 (추천)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('students')}
+                className="min-h-[38px] px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors cursor-pointer"
+              >
+                원생 직접 등록
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setIsOnboardingWizardOpen(true)}
+              className="min-h-[38px] px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5"
+            >
+              <span>💡 3분 학원 세팅 마법사</span>
+            </button>
+          )}
+        </div>
       </section>
 
       {isAdmin && (
@@ -245,6 +269,16 @@ export const DirectorTodayHome: FC = () => {
           />
         </div>
       </div>
+
+      <DirectorInteractiveOnboardingWizard
+        isOpen={isOnboardingWizardOpen}
+        onClose={() => setIsOnboardingWizardOpen(false)}
+        organizationId={currentOrganization?.id}
+        onCompleted={() => {
+          setIsOnboardingWizardOpen(false);
+          window.location.reload();
+        }}
+      />
     </div>
   );
 };

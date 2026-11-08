@@ -29,7 +29,7 @@ interface TuitionFilterBarProps {
 const TUITION_STATUS_CHIPS = [
   { value: 'ALL', label: '전체 상태' },
   { value: 'unpaid', label: '미납' },
-  { value: 'paid', label: '완납' },
+  { value: 'paid', label: '당월 완납' },
   { value: 'partial', label: '일부납' },
   { value: 'overdue', label: '연체' },
 ];
@@ -91,7 +91,7 @@ export const TuitionFilterBar: React.FC<TuitionFilterBarProps> = ({
             }`}
           >
             <CreditCard className="w-4 h-4 shrink-0" />
-            <span>청구서별 내역</span>
+            <span>수강료 고지서별 내역</span>
           </button>
         </div>
 
@@ -178,7 +178,7 @@ export const TuitionFilterBar: React.FC<TuitionFilterBarProps> = ({
             >
               <option value="ALL">전체 상태</option>
               <option value="unpaid">미납</option>
-              <option value="paid">수납 완료</option>
+              <option value="paid">당월 완납 (수납 완료)</option>
               <option value="partial">일부 납부</option>
               <option value="overdue">연체</option>
             </select>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TextbookSale, TextbookPayment } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { Printer, X, CheckCircle2, FileText, Building2, Calendar, User, BookOpen, CreditCard } from 'lucide-react';
@@ -29,9 +29,17 @@ export const TextbookReceiptModal: React.FC<TextbookReceiptModalProps> = ({
     other: '기타'
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+    <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150 cursor-pointer">
+      <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] cursor-default">
         {/* Header (No print) */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 no-print">
           <div className="flex items-center gap-2">

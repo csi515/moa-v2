@@ -1,3 +1,4 @@
+import { EmptyState } from '@/shared/components';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { useState, useEffect } from 'react';
 import { 
@@ -365,17 +366,15 @@ export function CustomerJoinRequestsPanel({
           <p className="mt-4 text-slate-600">로딩 중...</p>
         </div>
       ) : requests.length === 0 ? (
-        <div className="bg-slate-50 rounded-2xl border-2 border-dashed border-slate-300 p-8 text-center">
-          <Clock className="w-10 h-10 text-slate-400 mx-auto mb-3" />
-          <h3 className="text-base font-semibold text-slate-900 mb-1">
-            {emptyHint || '신청 내역이 없습니다'}
-          </h3>
-          {!emptyHint && (
-          <p className="text-sm text-slate-600">
-            {filter === 'pending' ? '대기 중인 신청이 없습니다' : '아직 신청이 없습니다'}
-          </p>
-          )}
-        </div>
+        <EmptyState
+          icon={<Clock className="w-10 h-10 text-slate-300" />}
+          title={emptyHint || '신청 내역이 없습니다'}
+          description={
+            !emptyHint
+              ? (filter === 'pending' ? '대기 중인 신청이 없습니다' : '아직 신청이 없습니다')
+              : undefined
+          }
+        />
       ) : (
         <div className="space-y-4">
           {requests.map((request: CustomerJoinRequest) => (

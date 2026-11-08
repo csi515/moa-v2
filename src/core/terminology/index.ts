@@ -8,3 +8,4 @@ export * from './types';
 export * from './dictionaries';
 export * from './translate';
 export * from './useTerminology';
+export * from './academyFriendlyTerms';

@@ -77,6 +77,7 @@ export const SettingsHubView: FC<SettingsHubViewProps> = ({
         density="compact"
         icon={<Settings className="w-6 h-6" />}
         title={`${workplaceLabel} 운영 설정`}
+        description="학원 기본 정보, 시설 및 연습실 등록, 수납 정책 및 권한 환경설정"
         actions={
           <div className="w-full sm:w-auto overflow-x-auto no-scrollbar -mx-1 px-1 py-0.5">
             <SegmentedControl

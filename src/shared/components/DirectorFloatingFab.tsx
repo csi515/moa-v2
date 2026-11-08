@@ -31,7 +31,7 @@ export const DirectorFloatingFab: React.FC = () => {
       {isOpen && (
         <div className="mb-3 flex flex-col items-end gap-2 transition-all animate-in fade-in slide-in-from-bottom-3 duration-200">
           <div className="bg-slate-900/90 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-lg mb-1">
-            ⚡ 빠른 실행 메뉴
+            ⚡ 자주 쓰는 메뉴
           </div>
 
           <button
@@ -105,7 +105,7 @@ export const DirectorFloatingFab: React.FC = () => {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="빠른 실행 메뉴"
+        aria-label="자주 쓰는 메뉴"
         className={`w-14 h-14 sm:w-14 sm:h-14 min-h-[56px] min-w-[56px] rounded-full shadow-2xl flex items-center justify-center transition-all duration-200 cursor-pointer active:scale-90 ${
           isOpen
             ? 'bg-slate-800 text-white rotate-45 scale-95'

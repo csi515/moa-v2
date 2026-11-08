@@ -167,6 +167,7 @@ export const AttendanceManagementView: React.FC = () => {
         icon={<CheckSquare className="w-6 h-6" />}
         iconClassName={accent.icon}
         title={attendanceManageTitle(industry)}
+        description="원생/회원별 출결 상태 체크 및 실시간 등하원 기록 관리"
         actions={
           <SegmentedControl
             value={subTab}

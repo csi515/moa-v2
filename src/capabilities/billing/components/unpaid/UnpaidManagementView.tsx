@@ -26,7 +26,7 @@ import {
   Phone,
 } from 'lucide-react';
 
-type UnpaidFilter = 'all' | 'overdue';
+type UnpaidFilter = 'all' | 'tuition' | 'textbook' | 'overdue';
 
 const FILTER_TABS: FilterTabItem<UnpaidFilter>[] = [
   { id: 'all', label: '전체 미납' },
@@ -103,12 +103,35 @@ export const UnpaidManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
         />
       )}
 
-      {!embedded && (
+            {!embedded && (
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <SummaryMetricCard label={`미납 ${customerLabel}`} value={`${stats.studentCount}명`} />
-        <SummaryMetricCard label="총 미납액" value={formatCurrency(stats.grandTotal)} variant="rose" />
-        <SummaryMetricCard label="수강료 미납" value={formatCurrency(stats.tuitionTotal)} variant="indigo" />
-        <SummaryMetricCard label="교재비 미납" value={formatCurrency(stats.textbookTotal)} variant="amber" />
+        <SummaryMetricCard
+          label={`미납 ${customerLabel}`}
+          value={`${stats.studentCount}명`}
+          onClick={() => setFilterMode('all')}
+          className={`cursor-pointer transition-all hover:scale-[1.02] ${filterMode === 'all' ? 'ring-2 ring-indigo-500 shadow-xs' : ''}`}
+        />
+        <SummaryMetricCard
+          label="총 미납액"
+          value={formatCurrency(stats.grandTotal)}
+          variant="rose"
+          onClick={() => setFilterMode('all')}
+          className={`cursor-pointer transition-all hover:scale-[1.02] ${filterMode === 'all' ? 'ring-2 ring-rose-500 shadow-xs' : ''}`}
+        />
+        <SummaryMetricCard
+          label="수강료 미납"
+          value={formatCurrency(stats.tuitionTotal)}
+          variant="indigo"
+          onClick={() => setFilterMode('tuition')}
+          className={`cursor-pointer transition-all hover:scale-[1.02] ${filterMode === 'tuition' ? 'ring-2 ring-indigo-500 shadow-xs' : ''}`}
+        />
+        <SummaryMetricCard
+          label="교재비 미납"
+          value={formatCurrency(stats.textbookTotal)}
+          variant="amber"
+          onClick={() => setFilterMode('textbook')}
+          className={`cursor-pointer transition-all hover:scale-[1.02] ${filterMode === 'textbook' ? 'ring-2 ring-amber-500 shadow-xs' : ''}`}
+        />
       </div>
       )}
 

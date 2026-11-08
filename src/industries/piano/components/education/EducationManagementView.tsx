@@ -54,6 +54,13 @@ function EducationSectionView({ section }: { section: EduSection }) {
     reports: '학습 리포트',
   };
 
+  const sectionDescriptions: Record<EduSection, string> = {
+    curriculum: '원생별 교재와 진도 상태를 체계적으로 점검하고 관리합니다',
+    assignments: '원생에게 부여된 연습 과제와 제출 상태를 확인합니다',
+    achievements: '콩쿠르 입상, 급수 시험 등 원생의 교육 성과를 기록합니다',
+    reports: '학부모에게 전달할 월별 교육 리포트를 작성하고 공유합니다',
+  };
+
   const sectionIcons: Record<EduSection, React.ReactNode> = {
     curriculum: <BookOpen className="w-6 h-6" />,
     assignments: <BookOpenCheck className="w-6 h-6" />,
@@ -66,7 +73,8 @@ function EducationSectionView({ section }: { section: EduSection }) {
       <PageHeader
         icon={sectionIcons[section]}
         title={titles[section]}
-        />
+        description={sectionDescriptions[section]}
+      />
 
       {students.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center">

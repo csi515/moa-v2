@@ -280,7 +280,7 @@ export const DashboardPage: React.FC = () => {
       <div>
         <div className="flex items-center gap-1.5 mb-3">
           <Zap className="h-4 w-4 text-amber-500 fill-amber-500" />
-          <h2 className="text-sm font-bold text-slate-800">오늘의 빠른 실행 (Quick Actions)</h2>
+          <h2 className="text-sm font-bold text-slate-800">오늘의 자주 쓰는 업무</h2>
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {quickActions.map((action) => {

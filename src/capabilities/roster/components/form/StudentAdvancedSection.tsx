@@ -1,6 +1,10 @@
 import React from 'react';
-import { BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronUp, Music2 } from 'lucide-react';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
+import {
+  PIANO_GENRE_PRESETS,
+  toggleGenreSelection,
+} from '../../helpers/studentWishlistHelpers';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
 import { getStudentLevelLabel, getStudentLevelOptions } from '@/core/students/levelOptions';
@@ -14,6 +18,14 @@ import {
 import type { StudentFormData } from './studentFormTypes';
 import { enrollmentModeLabel } from './enrollmentFormCopy';
 import { StudentTimetableSlotPicker } from './StudentTimetableSlotPicker';
+import {
+  TUITION_STEP_AMOUNTS,
+  TUITION_DISCOUNT_PRESETS,
+  applyTuitionStep,
+  applyTuitionDiscount,
+  PAYMENT_DAY_PRESETS,
+} from './studentSmartInputHelpers';
+import { MicroGuideTooltip } from '@/shared/components/ui';
 
 interface Props {
   formData: StudentFormData;
@@ -134,6 +146,48 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                   currentStudentId={currentStudentId}
                 />
               </div>
+
+              {/* 피아노 맞춤: 관심 음악 장르 & 배우고 싶은 곡 (위시리스트) */}
+              <div className="sm:col-span-2 space-y-2 pt-2 border-t border-slate-100">
+                <div className="flex items-center justify-between">
+                  <label className="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+                    <Music2 className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>관심 음악 장르 & 배우고 싶은 곡 (레슨 맞춤)</span>
+                  </label>
+                  <span className="text-[10px] text-slate-400">다중 선택 가능</span>
+                </div>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  {PIANO_GENRE_PRESETS.map((genre) => {
+                    const isSelected = (formData.preferredGenres || []).includes(genre.label);
+                    return (
+                      <button
+                        key={genre.id}
+                        type="button"
+                        onClick={() => {
+                          const nextGenres = toggleGenreSelection(formData.preferredGenres || [], genre.label);
+                          onChange({ preferredGenres: nextGenres });
+                        }}
+                        className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                          isSelected
+                            ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs'
+                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
+                        }`}
+                      >
+                        {genre.emoji} {genre.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    value={formData.wishlistSongs || ''}
+                    onChange={(e) => onChange({ wishlistSongs: e.target.value })}
+                    placeholder="배우고 싶은 곡명 입력 (예: 인생의 회전목마, 작은 별 변주곡)"
+                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[40px] placeholder:text-slate-400"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -143,8 +197,9 @@ export const StudentAdvancedSection: React.FC<Props> = ({
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="sm:col-span-2">
-                <label className="block text-[11px] font-semibold text-slate-500 mb-1.5">
-                  {enrollmentModeLabel(industry)}
+                <label className="block text-[11px] font-semibold text-slate-500 mb-1.5 flex items-center">
+                  <span>{enrollmentModeLabel(industry)}</span>
+                  <MicroGuideTooltip guideKey="session_pass" />
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {(
@@ -182,17 +237,56 @@ export const StudentAdvancedSection: React.FC<Props> = ({
               {formData.billingMode === 'monthly' ? (
                 <>
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-500 mb-1">
-                      {regularFeeLabel}
+                    <label className="block text-[11px] font-semibold text-slate-500 mb-1 flex items-center">
+                      <span>{regularFeeLabel}</span>
+                      <MicroGuideTooltip guideKey="regular_tuition" />
                     </label>
                     <CurrencyInput
                       value={formData.tuitionFee}
                       onChange={(val) => onChange({ tuitionFee: val })}
                     />
+                    <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                      <span className="text-[10px] text-slate-400 font-bold">간편 금액:</span>
+                      {TUITION_STEP_AMOUNTS.map((step) => (
+                        <button
+                          key={step.value}
+                          type="button"
+                          onClick={() => {
+                            const nextFee = applyTuitionStep(formData.tuitionFee, step.value);
+                            onChange({ tuitionFee: nextFee });
+                          }}
+                          className="px-2 py-0.5 rounded-lg text-[10px] font-extrabold border border-slate-200 bg-slate-50 text-slate-700 hover:bg-indigo-50 hover:border-indigo-300 hover:text-indigo-600 transition-colors cursor-pointer"
+                        >
+                          {step.label}
+                        </button>
+                      ))}
+                      <span className="text-[10px] text-slate-400 font-bold ml-1">형제 할인:</span>
+                      {TUITION_DISCOUNT_PRESETS.map((discount) => (
+                        <button
+                          key={discount.value}
+                          type="button"
+                          onClick={() => {
+                            const nextFee = applyTuitionDiscount(formData.tuitionFee, discount.value);
+                            onChange({ tuitionFee: nextFee });
+                          }}
+                          className="px-2 py-0.5 rounded-lg text-[10px] font-extrabold border border-amber-200 bg-amber-50/70 text-amber-800 hover:bg-amber-100 hover:border-amber-300 transition-colors cursor-pointer"
+                        >
+                          {discount.label}
+                        </button>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => onChange({ tuitionFee: 0 })}
+                        className="px-2 py-0.5 rounded-lg text-[10px] font-extrabold border border-slate-200 bg-slate-50 text-slate-400 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600 transition-colors cursor-pointer"
+                      >
+                        초기화
+                      </button>
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-500 mb-1">
-                      납부일
+                    <label className="block text-[11px] font-semibold text-slate-500 mb-1 flex items-center">
+                      <span>납부일</span>
+                      <MicroGuideTooltip guideKey="payment_day" />
                     </label>
                     <select
                       value={formData.paymentDay}
@@ -205,6 +299,23 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                         </option>
                       ))}
                     </select>
+                    <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                      <span className="text-[10px] text-slate-400 font-bold">자주 쓰는 일자:</span>
+                      {PAYMENT_DAY_PRESETS.map((day) => (
+                        <button
+                          key={day}
+                          type="button"
+                          onClick={() => onChange({ paymentDay: day })}
+                          className={`px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition-colors cursor-pointer ${
+                            formData.paymentDay === day
+                              ? 'bg-indigo-50 border-indigo-400 text-indigo-700'
+                              : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                          }`}
+                        >
+                          {day}일
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   {/* 신규 등록 시 첫 달 수강료 청구서 자동 생성 체크박스 */}
@@ -218,8 +329,9 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                           className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 shrink-0"
                         />
                         <div className="text-xs">
-                          <span className="font-bold text-indigo-950">
-                            첫 달 {regularFeeLabel} 청구서 자동 발행하기
+                          <span className="font-bold text-indigo-950 inline-flex items-center">
+                            <span>첫 달 {regularFeeLabel} 청구서 자동 발행하기</span>
+                            <MicroGuideTooltip guideKey="auto_invoice" />
                           </span>
                           <span className="block text-[11px] text-indigo-800/80 mt-0.5">
                             원생 등록 완료 시 당월 청구서({Number(formData.tuitionFee || 0).toLocaleString()}원)를 즉시 생성하여 바로 현장 결제할 수 있습니다.

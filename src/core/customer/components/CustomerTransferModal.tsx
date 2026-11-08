@@ -61,7 +61,15 @@ export const CustomerTransferModal: React.FC<CustomerTransferModalProps> = ({
     const timer = setInterval(() => {
       setRemainingSeconds((prev) => (prev <= 1 ? 0 : prev - 1));
     }, 1000);
-    return () => clearInterval(timer);
+    useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  return () => clearInterval(timer);
   }, [step, remainingSeconds]);
 
   if (!isOpen) return null;
@@ -138,8 +146,8 @@ export const CustomerTransferModal: React.FC<CustomerTransferModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-      <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in-95 duration-150">
+    <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs cursor-pointer">
+      <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in-95 duration-150 cursor-default">
         {/* 헤더 */}
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
@@ -154,7 +162,9 @@ export const CustomerTransferModal: React.FC<CustomerTransferModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:bg-slate-100 transition-colors"
+            className="p-1 rounded-lg text-slate-400 hover:bg-slate-100 transition-colors cursor-pointer"
+            aria-label="닫기"
+            title="닫기"
           >
             <X className="w-5 h-5" />
           </button>

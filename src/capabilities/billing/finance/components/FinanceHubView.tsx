@@ -127,6 +127,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
           density="compact"
           icon={<CreditCard className="w-6 h-6 text-indigo-600" />}
           title={`${tuitionTabLabel} 관리`}
+          description="원생별 수강료 수납 내역 및 미납금 현황을 통합 관리"
           actions={
             <SegmentedControl
               value={segment === 'unpaid' ? 'unpaid' : 'tuition'}
@@ -154,6 +155,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
           density="compact"
           icon={<BarChart3 className="w-6 h-6 text-slate-800" />}
           title="재무 관리"
+          description="수납 내역, 강사 급여 정산, 학원 수입·지출 장부를 통합 관리"
           actions={
             <SegmentedControl
               value={segment === 'tuition' || segment === 'unpaid' ? 'overview' : segment}
@@ -182,6 +184,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
         density="compact"
         icon={<BarChart3 className="w-6 h-6" />}
         title={hubNav.title}
+        description="수납 내역, 강사 급여 정산, 학원 수입·지출 장부를 통합 관리"
         actions={
           <SegmentedControl
             value={segment}

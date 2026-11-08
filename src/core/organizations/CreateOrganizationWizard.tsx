@@ -89,10 +89,10 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
   };
 
   const recommendedRoomChips = useMemo(() => {
-    if (formData.industryType === 'piano' || formData.industryType === 'vocal') {
+    if (isPianoIndustry(formData.industryType) || formData.industryType === 'vocal') {
       return ['1번 연습실', '2번 연습실', '3번 연습실', '그랜드룸', '이론실'];
     }
-    if (formData.industryType === 'pilates' || formData.industryType === 'gym') {
+    if (isPilatesIndustry(formData.industryType) || isGymIndustry(formData.industryType)) {
       return ['1:1 개인레슨실', '그룹 레슨실', '유산소존', '락커룸'];
     }
     if (formData.industryType === 'study_cafe') {

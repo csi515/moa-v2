@@ -51,7 +51,7 @@ function getPianoCoreNavItems(labels: ModuleLabels, size: 'sm' | 'md'): NavMenuI
     },
     {
       tab: 'timetable',
-      label: '일정',
+      label: '수업 시간표',
       icon: icon(<CalendarDays className={cls} />),
     },
     {
@@ -64,8 +64,8 @@ function getPianoCoreNavItems(labels: ModuleLabels, size: 'sm' | 'md'): NavMenuI
       label: labels.staff?.management || '선생님 관리',
       icon: icon(<GraduationCap className={cls} />),
     },
-    { tab: 'tuition', label: '수납', icon: icon(<CreditCard className={cls} />) },
-    { tab: 'finance', label: '재무 관리', icon: icon(<BarChart3 className={cls} />) },
+    { tab: 'tuition', label: '수강료 수납', icon: icon(<CreditCard className={cls} />) },
+    { tab: 'finance', label: '학원 장부', icon: icon(<BarChart3 className={cls} />) },
   ];
 }
 

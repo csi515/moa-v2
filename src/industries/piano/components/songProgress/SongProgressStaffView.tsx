@@ -98,6 +98,7 @@ export const SongProgressStaffView: FC = () => {
       <PageHeader
         icon={<Music2 className="w-6 h-6" />}
         title="완곡 스탬프 & 진도"
+        description="원생별 급수 진도와 완곡 스탬프 및 곡 패스 이력을 관리합니다"
       />
 
       {/* 상단 요약 및 승인 대기 알림 카드 */}

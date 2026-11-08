@@ -40,6 +40,8 @@ export interface StudentFormData {
   checkInPin: string;
   autoGeneratePin: boolean;
   autoCreateInvoice?: boolean;
+  preferredGenres?: string[];
+  wishlistSongs?: string;
 }
 
 /** @deprecated 신규는 getStudentLevelOptions(industry) */

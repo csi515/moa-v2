@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect,  useState, useMemo } from 'react';
 import { showToast, openConfirmDialog } from '@/shared/feedback/uiFeedback';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useStorageRefresh } from '@/hooks';
@@ -150,7 +150,16 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
   };
 
   if (!hasFinanceAccess) {
-    return (
+    useEffect(() => {
+    if (!isModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsModalOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isModalOpen]);
+
+  return (
       <div className="bg-white rounded-3xl border border-slate-200 p-8 text-center max-w-md mx-auto my-6 shadow-sm space-y-4">
         <div className="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mx-auto">
           <ShieldAlert className="w-6 h-6" />
@@ -359,8 +368,8 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 w-full sm:max-w-md max-h-[90vh] flex flex-col overflow-hidden">
+        <div onClick={() => setIsModalOpen(false)} className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-xs cursor-pointer">
+          <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 w-full sm:max-w-md max-h-[90vh] flex flex-col overflow-hidden cursor-default">
             <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between shrink-0">
               <h3 className="font-bold text-slate-900 text-base">
                 {editingEntry ? '수입 내역 수정' : '신규 수입 등록'}

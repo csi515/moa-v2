@@ -178,6 +178,7 @@ function IssuePassModal({
             <label className="block text-xs font-bold text-slate-700">휴대폰 번호</label>
             <input
               type="tel"
+              inputMode="tel"
               value={customerPhone}
               onChange={(e) => setCustomerPhone(e.target.value)}
               data-testid="input-pass-customer-phone" placeholder="010-0000-0000"

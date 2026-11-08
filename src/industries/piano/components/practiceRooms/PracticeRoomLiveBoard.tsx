@@ -1,3 +1,4 @@
+import { EmptyState } from '@/shared/components';
 import { useState, useEffect, useMemo, type FC, type FormEvent } from 'react';
 import {
   DoorOpen,
@@ -12,7 +13,14 @@ import {
   ArrowRight,
   LogOut,
   Timer,
+  Wrench,
 } from 'lucide-react';
+import { PianoRoomTuningModal } from './PianoRoomTuningModal';
+import {
+  getRoomTuningRecord,
+  calculateTuningDDay,
+  type RoomTuningRecord,
+} from './pianoTuningHelpers';
 import { Modal, FormField, FORM_CONTROL_CLASS } from '@/shared/components';
 import type {
   PracticeRoomRow,
@@ -79,6 +87,7 @@ export const PracticeRoomLiveBoard: FC<PracticeRoomLiveBoardProps> = ({
   const [endTime, setEndTime] = useState<string>('14:50');
   const [memo, setMemo] = useState<string>('자유 연습');
   const [submitting, setSubmitting] = useState(false);
+  const [tuningModalRecord, setTuningModalRecord] = useState<RoomTuningRecord | null>(null);
 
   // 각 방의 실시간 점유 상태 매핑
   const roomLiveMap = useMemo(() => {
@@ -238,15 +247,11 @@ export const PracticeRoomLiveBoard: FC<PracticeRoomLiveBoardProps> = ({
 
       {/* 2. 연습실 카드 그리드 */}
       {rooms.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
-          <DoorOpen className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-slate-800 mb-1">
-            등록된 연습실 공간이 없습니다.
-          </h3>
-          <p className="text-xs text-slate-500 mb-4">
-            학원 설정 또는 공간 관리에서 연습실을 먼저 추가해 주세요.
-          </p>
-        </div>
+        <EmptyState
+          icon={<DoorOpen className="w-12 h-12 text-slate-300" />}
+          title="등록된 연습실 공간이 없습니다"
+          description="학원 설정 또는 공간 관리에서 연습실을 먼저 추가해 주세요."
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {rooms.map((room) => {
@@ -294,6 +299,31 @@ export const PracticeRoomLiveBoard: FC<PracticeRoomLiveBoardProps> = ({
                       <h4 className="text-sm font-bold text-slate-900 truncate">
                         {room.name}
                       </h4>
+                      {(() => {
+                        const tuningRecord = getRoomTuningRecord(room.id, room.name);
+                        const tuning = calculateTuningDDay(tuningRecord.lastTunedAt, tuningRecord.tuningCycleMonths);
+                        const hasIssue = Boolean(tuningRecord.issueNotes?.trim());
+                        return (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setTuningModalRecord(tuningRecord);
+                            }}
+                            title="피아노 조율 및 건반 상태 점검"
+                            className={`px-1.5 py-0.5 rounded-lg text-[10px] font-bold border transition-colors cursor-pointer shrink-0 flex items-center gap-1 ${
+                              hasIssue
+                                ? 'bg-rose-50 border-rose-300 text-rose-700 font-extrabold animate-pulse'
+                                : tuning.status === 'overdue'
+                                ? 'bg-amber-50 border-amber-300 text-amber-700'
+                                : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50'
+                            }`}
+                          >
+                            <Wrench className="w-2.5 h-2.5" />
+                            <span>{hasIssue ? '⚠️이상' : `조율 D-${Math.max(0, tuning.daysRemaining)}`}</span>
+                          </button>
+                        );
+                      })()}
                     </div>
 
                     {/* 상태 배지 */}
@@ -593,6 +623,19 @@ export const PracticeRoomLiveBoard: FC<PracticeRoomLiveBoardProps> = ({
           </div>
         </form>
       </Modal>
+
+      {/* 피아노 조율 주기 및 건반 이상 메모 모달 */}
+      {tuningModalRecord && (
+        <PianoRoomTuningModal
+          isOpen={Boolean(tuningModalRecord)}
+          onClose={() => setTuningModalRecord(null)}
+          record={tuningModalRecord}
+          onSaved={() => {
+            setTuningModalRecord(null);
+            onReload();
+          }}
+        />
+      )}
     </div>
   );
 };

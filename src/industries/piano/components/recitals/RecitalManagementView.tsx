@@ -31,7 +31,9 @@ import {
   UserPlus,
   Users,
   Video,
+  Sparkles,
 } from 'lucide-react';
+import { PianoRecitalQuickBoard } from './PianoRecitalQuickBoard';
 
 type EventFilter = 'upcoming' | 'past' | 'all';
 
@@ -54,6 +56,7 @@ export const RecitalManagementView: React.FC = () => {
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [participantSearch, setParticipantSearch] = useState('');
+  const [detailTab, setDetailTab] = useState<'quickBoard' | 'participants'>('quickBoard');
 
   const [formTitle, setFormTitle] = useState('');
   const [formDate, setFormDate] = useState(todayIsoLocal);
@@ -143,6 +146,15 @@ export const RecitalManagementView: React.FC = () => {
     });
   };
 
+  const handleSyncBoardParticipants = (participatingIds: string[]) => {
+    if (!selectedEvent) return;
+    RecitalService.saveEvent({
+      ...selectedEvent,
+      participantIds: participatingIds,
+    });
+    showToast(`참가 확정자 ${participatingIds.length}명이 행사에 동기화되었습니다.`, 'success');
+  };
+
   const handleAddParticipant = (studentId: string) => {
     if (!selectedEvent) return;
     RecitalService.addParticipant(selectedEvent.id, studentId);
@@ -175,6 +187,7 @@ export const RecitalManagementView: React.FC = () => {
         icon={<Award className="w-6 h-6" />}
         iconClassName="text-purple-600"
         title="연주회·콩쿠르 관리"
+        description="정기 연주회 참가 원생 배정, 연주곡 선곡 및 콩쿠르 출전 이력 관리"
         actions={
           canManageRecitals ? (
           <button
@@ -341,6 +354,42 @@ export const RecitalManagementView: React.FC = () => {
                 </div>
               </div>
 
+              <div className="flex border-b border-slate-200 bg-slate-50/60 px-5 pt-3 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setDetailTab('quickBoard')}
+                  className={`pb-2.5 px-3 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-all ${
+                    detailTab === 'quickBoard'
+                      ? 'border-indigo-600 text-indigo-700'
+                      : 'border-transparent text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                  1터치 취합 현황판
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDetailTab('participants')}
+                  className={`pb-2.5 px-3 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-all ${
+                    detailTab === 'participants'
+                      ? 'border-indigo-600 text-indigo-700'
+                      : 'border-transparent text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <Users className="w-3.5 h-3.5 text-indigo-600" />
+                  참가 명단 & 연주 영상 ({participants.length}명)
+                </button>
+              </div>
+
+              {detailTab === 'quickBoard' ? (
+                <div className="p-4 sm:p-5">
+                  <PianoRecitalQuickBoard
+                    event={selectedEvent}
+                    students={students}
+                    onSyncParticipants={handleSyncBoardParticipants}
+                  />
+                </div>
+              ) : (
               <div className="p-5 space-y-5">
                 <div>
                   <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2 mb-3">
@@ -482,6 +531,7 @@ export const RecitalManagementView: React.FC = () => {
                   </div>
                 )}
               </div>
+              )}
             </div>
               </div>
             </>

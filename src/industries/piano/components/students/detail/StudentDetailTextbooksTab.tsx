@@ -31,7 +31,7 @@ export const StudentDetailTextbooksTab: React.FC<StudentDetailTextbooksTabProps>
         onClick={onOpenSaleModal}
         className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer shadow-xs"
       >
-        <Plus className="w-3.5 h-3.5" /> + 교재 지급/배부
+        <Plus className="w-3.5 h-3.5" /> 교재 지급/배부
       </button>
     </div>
 

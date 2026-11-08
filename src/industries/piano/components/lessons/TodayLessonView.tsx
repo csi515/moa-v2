@@ -268,6 +268,7 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
     <PageHeader
       icon={<Piano className="w-6 h-6" />}
       title="오늘 수업"
+      description="오늘 예정된 레슨 일정과 담당 강사별 수강생 목록 실시간 확인"
       />
   );
 

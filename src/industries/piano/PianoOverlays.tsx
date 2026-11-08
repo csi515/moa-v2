@@ -3,6 +3,7 @@ import { useApp } from '@/context/AppContext';
 import { OnboardingWizard } from '@/shared/components';
 import { OnboardingResumeCard } from '@/shared/components/onboarding/OnboardingResumeCard';
 import { usePianoOnboardingUi } from './hooks/usePianoOnboardingUi';
+import { PianoQuickActionBottomSheet } from './components/quickAction/PianoQuickActionBottomSheet';
 
 export const PianoOverlays: FC = () => {
   const { activeTab } = useApp();
@@ -27,6 +28,7 @@ export const PianoOverlays: FC = () => {
           />
         </div>
       )}
+      <PianoQuickActionBottomSheet />
     </>
   );
 };

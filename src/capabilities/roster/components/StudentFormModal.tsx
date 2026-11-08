@@ -38,6 +38,10 @@ import { selfAccountEnrollmentNote } from './form/enrollmentFormCopy';
 import { StudentPickupSection } from './form/StudentPickupSection';
 import { StudentFormPostSave } from './form/StudentFormPostSave';
 import {
+  extractWishlistFromStudent,
+  mergeWishlistIntoMetadata,
+} from '../helpers/studentWishlistHelpers';
+import {
   combineStudentNotes,
   newGuardianEntry,
   type GuardianFormEntry,
@@ -175,6 +179,8 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
             : [createPickupAddress({ isDefault: true })],
         checkInPin: '',
         autoGeneratePin: false,
+        preferredGenres: extractWishlistFromStudent(student).genres,
+        wishlistSongs: extractWishlistFromStudent(student).songs.join(', '),
       };
       nextGuardians =
         linked.length > 0
@@ -226,6 +232,8 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         checkInPin: '',
         autoGeneratePin: false,
         autoCreateInvoice: true,
+        preferredGenres: [],
+        wishlistSongs: '',
       };
       nextGuardians = [newGuardianEntry(true)];
       nextCustomFields = extractCustomFieldValues(null, customFieldsDef);
@@ -397,7 +405,11 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
       paymentDay: Number(formData.paymentDay) || 10,
       specialNotes: formData.specialNotes.trim() || undefined,
       memo: undefined,
-      metadata: mergeCustomFieldValues(student?.metadata, customFieldValues),
+      metadata: mergeWishlistIntoMetadata(
+        mergeCustomFieldValues(student?.metadata, customFieldValues),
+        formData.preferredGenres || [],
+        formData.wishlistSongs || ''
+      ),
     };
   };
 
@@ -679,7 +691,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
                   </div>
                   <div>
                     <p className="text-xs font-bold text-indigo-950">
-                      {showDetails ? '상세 정보 접기' : '+ 학교, 수업, 수강료 등 상세 정보 입력하기'}
+                      {showDetails ? '상세 정보 접기' : '학교, 수업, 수강료 등 상세 정보 입력하기'}
                     </p>
                     {!showDetails && (
                       <p className="text-[11px] text-indigo-600/80 mt-0.5">

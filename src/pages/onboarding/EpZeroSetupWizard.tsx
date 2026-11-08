@@ -419,7 +419,7 @@ export const EpZeroSetupWizard: React.FC = () => {
                 </div>
 
                 <div className="p-3 bg-indigo-50/50 rounded-2xl border border-indigo-150 space-y-2">
-                  <span className="font-bold text-indigo-900 block text-[11px]">+ 빠른 차량 추가</span>
+                  <span className="font-bold text-indigo-900 block text-[11px]">+ 차량 바로 등록</span>
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="text"
@@ -468,7 +468,7 @@ export const EpZeroSetupWizard: React.FC = () => {
                 </div>
 
                 <div className="p-3 bg-indigo-50/50 rounded-2xl border border-indigo-150 space-y-2">
-                  <span className="font-bold text-indigo-900 block text-[11px]">+ 빠른 회의실 추가</span>
+                  <span className="font-bold text-indigo-900 block text-[11px]">+ 회의실 바로 등록</span>
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="text"

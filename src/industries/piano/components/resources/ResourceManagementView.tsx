@@ -143,6 +143,7 @@ export const ResourceManagementView: React.FC = () => {
       <PageHeader
         icon={<Music2 className="w-6 h-6" />}
         title="교재 및 피아노 곡 관리"
+        description="학원 보유 악기, 연습실 공간 및 사용 교재 마스터 자원 관리"
         actions={
           <button
             onClick={() => {
