@@ -89,6 +89,8 @@ export interface SaleCreateInput {
   paymentMethod: SalePaymentMethod;
   /** DB 컬럼만 기록. 포인트 ledger는 loyalty Module에서 별도 호출 */
   pointsUsed?: number;
+  /** 네트워크 지연 및 다중 클릭 방지를 위한 클라이언트 멱등성 키 */
+  idempotencyKey?: string;
   items: Array<{
     productId: string;
     variantId?: string | null;

@@ -1,6 +1,7 @@
 import type { FC, MouseEvent } from 'react';
-import { CheckCircle2, ChevronRight, MapPin, Users, XCircle, FileText, Edit3 } from 'lucide-react';
+import { CheckCircle2, ChevronRight, MapPin, Users, XCircle, FileText, Edit3, CreditCard } from 'lucide-react';
 import type { AttendanceRecord, AttendanceStatus, ClassItem, LessonRecord, Student } from '@/types';
+import type { StudentUnpaidBadgeInfo } from '@/capabilities/billing/studentBillingStatusHelpers';
 
 const STATUS_LABEL: Record<AttendanceStatus, string> = {
   present: '출석',
@@ -29,6 +30,8 @@ interface TodayLessonClassListProps {
     classItem: ClassItem,
     status: 'present' | 'absent'
   ) => void;
+  unpaidBadgeMap?: Record<string, StudentUnpaidBadgeInfo | null>;
+  onOpenBilling?: (student: Student) => void;
 }
 
 export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
@@ -40,6 +43,8 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
   findLesson,
   onOpenSession,
   onQuickStatus,
+  unpaidBadgeMap = {},
+  onOpenBilling,
 }) => (
   <div className="space-y-3">
     {uncheckedOnly && (
@@ -141,7 +146,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                             {student.name.slice(0, 1)}
                           </span>
                           <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-1.5">
+                            <div className="flex items-center gap-1.5 flex-wrap">
                               <p className="font-bold text-slate-900 truncate">{student.name}</p>
                               {done && (
                                 <span
@@ -153,6 +158,20 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                 >
                                   {STATUS_LABEL[att!.status]}
                                 </span>
+                              )}
+                              {unpaidBadgeMap[student.id] && (
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onOpenBilling?.(student);
+                                  }}
+                                  className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors cursor-pointer shrink-0"
+                                  title={`${unpaidBadgeMap[student.id]!.tooltip} (클릭하여 수납 관리)`}
+                                >
+                                  <CreditCard className="w-3 h-3 text-amber-600" />
+                                  <span>{unpaidBadgeMap[student.id]!.label}</span>
+                                </button>
                               )}
                             </div>
                             <p className="text-xs text-slate-500 truncate mt-0.5">

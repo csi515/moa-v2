@@ -8,6 +8,8 @@ import {
   lastTuitionPaymentSummaryText,
 } from '@/capabilities/billing/finance/latestTuitionPayment';
 import { TuitionService } from '@/capabilities/billing/finance';
+import { Printer } from 'lucide-react';
+import { TuitionReceiptModal } from './TuitionReceiptModal';
 
 export interface TuitionListStudent {
   id: string;
@@ -33,6 +35,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
   const tuitionPayments = TuitionService.getTuitionPayments();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+  const [selectedReceiptInvoice, setSelectedReceiptInvoice] = useState<TuitionInvoice | null>(null);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -134,6 +137,17 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                       </td>
                       <td className="py-3.5 px-4 text-right">
                         <div className="flex items-center justify-end gap-1.5">
+                          {inv.paidAmount > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => setSelectedReceiptInvoice(inv)}
+                              title="수강료 납입증명서/영수증 인쇄"
+                              className="inline-flex items-center gap-1 px-2.5 py-2 min-h-[40px] border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-xl text-xs transition-colors shadow-2xs cursor-pointer"
+                            >
+                              <Printer className="w-3.5 h-3.5 text-slate-500" />
+                              납입증명서
+                            </button>
+                          )}
                           {inv.status !== 'paid' && inv.status !== 'cancelled' ? (
                             <button
                               type="button"
@@ -221,6 +235,16 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                     )}
                   </div>
                   <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                    {inv.paidAmount > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setSelectedReceiptInvoice(inv)}
+                        className="inline-flex items-center gap-1 px-3 py-2 min-h-[40px] border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-xl text-xs shadow-2xs cursor-pointer"
+                      >
+                        <Printer className="w-3.5 h-3.5 text-slate-500" />
+                        납입증명서
+                      </button>
+                    )}
                     {inv.status !== 'paid' && inv.status !== 'cancelled' ? (
                       <button
                         type="button"
@@ -249,6 +273,13 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
           setCurrentPage(1);
         }}
       />
+
+      {selectedReceiptInvoice && (
+        <TuitionReceiptModal
+          invoice={selectedReceiptInvoice}
+          onClose={() => setSelectedReceiptInvoice(null)}
+        />
+      )}
     </div>
   );
 };

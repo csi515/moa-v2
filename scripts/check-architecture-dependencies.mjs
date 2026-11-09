@@ -105,6 +105,14 @@ export const LEGACY_ALLOWLIST = {
     kinds: ['storage_service_import'],
     reason: 'LEGACY shared booking calendar UI',
   },
+  'src/capabilities/booking/pages/ScheduleCalendarPage.tsx': {
+    kinds: ['storage_service_import'],
+    reason: 'LEGACY shared booking calendar page',
+  },
+  'src/capabilities/consultation/components/ConsultationRecordModal.tsx': {
+    kinds: ['storage_service_import'],
+    reason: 'LEGACY consultation record modal UI',
+  },
   'src/capabilities/consultation/components/ConsultationRecordsView.tsx': {
     kinds: ['storage_service_import'],
     reason: 'LEGACY academy consultation records UI',

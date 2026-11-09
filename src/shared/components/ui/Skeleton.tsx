@@ -32,6 +32,40 @@ export const PageListSkeleton: React.FC<PageListSkeletonProps> = ({
   </div>
 );
 
+/** 테이블 로딩용 스켈레톤 */
+export const TableRowSkeleton: React.FC<{ rows?: number; cols?: number }> = ({
+  rows = 5,
+  cols = 5,
+}) => (
+  <tbody className="divide-y divide-slate-100" role="status" aria-label="테이블 데이터 불러오는 중">
+    {Array.from({ length: rows }, (_, r) => (
+      <tr key={r} className="animate-pulse">
+        {Array.from({ length: cols }, (_, c) => (
+          <td key={c} className="py-3 px-3">
+            <Skeleton className="h-3.5 w-full max-w-[120px] rounded-lg" />
+          </td>
+        ))}
+      </tr>
+    ))}
+  </tbody>
+);
+
+/** 지표 요약 카드 스켈레톤 */
+export const MetricCardSkeleton: React.FC<{ count?: number }> = ({ count = 4 }) => (
+  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+    {Array.from({ length: count }, (_, i) => (
+      <div key={i} className="bg-white rounded-2xl border border-slate-200/90 p-4 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-3 w-20" />
+          <Skeleton className="h-4 w-10 rounded-md" />
+        </div>
+        <Skeleton className="h-7 w-24" />
+        <Skeleton className="h-2.5 w-32" />
+      </div>
+    ))}
+  </div>
+);
+
 interface InlineBusyProps {
   label?: string;
 }

@@ -1,6 +1,7 @@
 import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import React, { useEffect, useState, useMemo } from 'react';
 import { useList, useCreate, useDelete } from '@refinedev/core';
+import type { Database } from '@/lib/supabase/database.types';
 import { useApp } from '@/context/AppContext';
 import { useStaffScope } from '@/hooks';
 import { PageHeader, SummaryMetricCard, FilterBar, SearchField } from '@/shared/components';
@@ -15,13 +16,16 @@ import {
 } from 'lucide-react';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 
+type CustomerRow = Database['core']['Tables']['customers']['Row'];
+type PracticeRecordDbRow = Database['piano']['Tables']['practice_records']['Row'];
+
 export const PracticeRecordsView: React.FC = () => {
   const { showToast, openConfirmDialog } = useApp();
   const { currentOrganization } = useOrganization();
   const { scopeStudents, scopeByStudentIds } = useStaffScope();
 
   // 1. Fetch Students via Refine
-  const studentsList = useList<any>({
+  const studentsList = useList<CustomerRow>({
     resource: 'customers',
     filters: [{ field: 'status', operator: 'eq', value: 'active' }],
     queryOptions: {
@@ -29,12 +33,12 @@ export const PracticeRecordsView: React.FC = () => {
     },
   });
 
-  const allStudents = (studentsList as any).data?.data || (studentsList as any).data || (studentsList as any).query?.data?.data || [];
-  const isLoadingStudents = (studentsList as any).isLoading ?? (studentsList as any).query?.isLoading;
-  const students = useMemo(() => scopeStudents(allStudents), [allStudents, scopeStudents]);
+  const allStudents = (studentsList.query?.data?.data as CustomerRow[]) || [];
+  const isLoadingStudents = studentsList.query?.isLoading ?? false;
+  const students = useMemo(() => scopeStudents(allStudents as unknown as any), [allStudents, scopeStudents]);
 
   // 2. Fetch Practice Records via Refine (piano schema)
-  const practiceListQuery = useList<any>({
+  const practiceListQuery = useList<PracticeRecordDbRow>({
     resource: 'practice_records',
     meta: { schema: 'piano' },
     queryOptions: {
@@ -42,13 +46,14 @@ export const PracticeRecordsView: React.FC = () => {
     },
   });
 
-  const rawRecords = (practiceListQuery as any).data?.data || (practiceListQuery as any).data || (practiceListQuery as any).query?.data?.data || [];
-  const isLoadingPractice = (practiceListQuery as any).isLoading ?? (practiceListQuery as any).query?.isLoading;
+  const rawRecords = (practiceListQuery.query?.data?.data as PracticeRecordDbRow[]) || [];
+  const isLoadingPractice = practiceListQuery.query?.isLoading ?? false;
 
   // Map DB records to UI PracticeRecord type
   const practiceList = useMemo(() => {
-    const mapped = rawRecords.map((r: any) => {
-      const student = allStudents.find((s: any) => s.id === r.customer_id);
+    const mapped = rawRecords.map((r: PracticeRecordDbRow) => {
+      const student = allStudents.find((s) => s.id === r.customer_id);
+      const meta = (r.metadata && typeof r.metadata === 'object' ? r.metadata : {}) as Record<string, any>;
       return {
         id: r.id,
         studentId: r.customer_id,
@@ -62,13 +67,13 @@ export const PracticeRecordsView: React.FC = () => {
         teacherEvaluation: r.teacher_evaluation || undefined,
         difficultyPart: r.difficulty_part || undefined,
         nextAssignment: r.next_assignment || undefined,
-        source: r.metadata?.source,
-        staffReviewed: r.metadata?.staffReviewed,
-        staffReviewedAt: r.metadata?.staffReviewedAt,
-        staffReviewNote: r.metadata?.staffReviewNote,
+        source: meta.source,
+        staffReviewed: meta.staffReviewed,
+        staffReviewedAt: meta.staffReviewedAt,
+        staffReviewNote: meta.staffReviewNote,
       } as PracticeRecord;
     });
-    return scopeByStudentIds<PracticeRecord>(mapped, allStudents);
+    return scopeByStudentIds<PracticeRecord>(mapped, allStudents as unknown as any);
   }, [rawRecords, allStudents, scopeByStudentIds]);
 
   const [studentFilter, setStudentFilter] = useState('ALL');
@@ -155,7 +160,8 @@ export const PracticeRecordsView: React.FC = () => {
     });
   };
 
-  const { mutate: createPractice, isLoading: isCreating } = useCreate() as any;
+  const { mutate: createPractice, mutation } = useCreate<PracticeRecordDbRow>();
+  const isCreating = mutation.isPending;
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const st = students.find((s) => s.id === formData.studentId);
@@ -242,7 +248,7 @@ export const PracticeRecordsView: React.FC = () => {
           </select>
           <select
             value={sourceFilter}
-            onChange={(e) => setSourceFilter(e.target.value as any)}
+            onChange={(e) => setSourceFilter(e.target.value as 'ALL' | 'pending_parent')}
             className="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500"
           >
             <option value="ALL">전체 기록</option>

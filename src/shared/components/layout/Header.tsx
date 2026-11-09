@@ -8,7 +8,9 @@ import { RoleContextSwitcher } from '@/core/organizations/RoleContextSwitcher';
 import { useOptionalOrganization } from '@/core/organizations/OrganizationProvider';
 import { HeaderLocationControl } from '@/core/locations/HeaderLocationControl';
 import { useStorageRefresh } from '@/hooks/useStorageRefresh';
-import { Layers, Users } from 'lucide-react';
+import { Layers, Users, Bell } from 'lucide-react';
+import { NotificationDrawer } from '@/shared/components/notifications/NotificationDrawer';
+import { MoaNotificationService } from '@/shared/components/notifications/notificationService';
 
 const PORTAL_MODE_LABEL = {
   parent: '학부모 포털',
@@ -18,6 +20,17 @@ const PORTAL_MODE_LABEL = {
 export const Header: React.FC = () => {
   const { setActiveTab } = useApp();
   const supabaseOrg = useOptionalOrganization();
+  const [isNotificationOpen, setIsNotificationOpen] = React.useState(false);
+  const [unreadCount, setUnreadCount] = React.useState(0);
+
+  React.useEffect(() => {
+    const updateCount = () => {
+      setUnreadCount(MoaNotificationService.getUnreadCount());
+    };
+    updateCount();
+    const unsub = MoaNotificationService.subscribe(updateCount);
+    return () => unsub();
+  }, []);
   const canEnterParentPortal =
     supabaseOrg?.canAccessParentPortal &&
     !supabaseOrg.isParentOnly &&
@@ -105,6 +118,22 @@ export const Header: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+          {/* 통합 알림 센터 버튼 */}
+          <button
+            type="button"
+            onClick={() => setIsNotificationOpen(true)}
+            className="relative p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 min-h-[40px] min-w-[40px] flex items-center justify-center"
+            aria-label={`알림 확인 (미확인 ${unreadCount}건)`}
+            title="알림 센터"
+          >
+            <Bell className="w-5 h-5" />
+            {unreadCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-xs">
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
+            )}
+          </button>
+
           {canEnterParentPortal && (
             <button
               type="button"
@@ -118,6 +147,14 @@ export const Header: React.FC = () => {
           <RoleContextSwitcher />
         </div>
       </div>
+
+      <NotificationDrawer
+        isOpen={isNotificationOpen}
+        onClose={() => setIsNotificationOpen(false)}
+        onNavigateTab={(tab) => {
+          setActiveTab(tab as any);
+        }}
+      />
     </header>
   );
 };

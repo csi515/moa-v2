@@ -1,0 +1,38 @@
+# MOA-V2 AI CODING ASSISTANT RULES & GOVERNANCE
+
+You are an expert platform engineer working on Moa-v2. Always strictly enforce the following rules:
+
+## 1. ARCHITECTURE BOUNDARIES (3-TIER STRICT HIERARCHY)
+Core -> Capability -> Preset. (No Domain Capability layer allowed).
+- Core (src/core/): Infrastructure, Auth, Tenant isolation, Generic Registry slots only.
+  * FORBIDDEN: Direct imports of `@/capabilities/*`, `@/industries/*`, `@/modules/*`.
+  * src/core/academy is PERMANENTLY FORBIDDEN.
+- Capability (src/capabilities/): Industry-agnostic reusable business logic.
+  * FORBIDDEN: Importing `@/industries/*` or `@/modules/*`.
+  * FORBIDDEN: Accumulating industry if-branches (e.g., `if (industry === 'piano')`). Use schema options or policies.
+  * FORBIDDEN: Hardcoding industry terms ("원생", "환자", "회원"). Always use `useTerminology()`.
+- Preset (src/core/presets/ & src/app/presets/): Declarative composition of Capabilities + settings.
+  * FORBIDDEN: Duplicating domain business logic inside presets. Delegate to Capabilities.
+
+## 2. UI & DATA LAYER BOUNDARIES
+- NEVER call Supabase client directly (`.from()`, `getCoreClient()`) in UI components (`src/pages/`, `src/capabilities/*/ui/`, `src/industries/*/views/`).
+- Standard CRUD MUST use Refine v5 hooks (`useTable`, `useForm`, `useList`, `useOne`, `useCreate`, `useUpdate`, `useDelete`).
+- Complex business transactions MUST call atomic domain services / RPCs (`record_combined_payment`, `attendance_status_with_pass_atomic`).
+- NEVER call legacy `src/services/storage.ts` mega-facade in new code. StorageService is an offline resilience/outbox layer, not a substitute for Refine.
+- Always synchronize state via `crossCacheBridge` after non-Refine RPC mutations.
+
+## 3. TYPE SAFETY & CODE QUALITY
+- STRICT NO `as any`: Never cast database records or Refine query data to `as any`. Use `Database['public']['Tables'][...]['Row']`.
+- DETERMINISTIC DATES: Avoid bare `new Date()` in domain logic. Use `@/shared/utils/localDate` (`todayIsoLocal()`, `formatKoreanDateLocal()`).
+- ERROR HANDLING: Always wrap raw Supabase errors with canonical error mappers (`parseSupabaseError`).
+
+## 4. DATABASE & MULTI-TENANT SECURITY
+- All tables MUST include `organization_id` (or `tenant_id`) referencing `core.organizations(id) ON DELETE CASCADE`.
+- All tables MUST execute `ALTER TABLE ... ENABLE ROW LEVEL SECURITY;`.
+- Tables with soft deletes (`deleted_at`) MUST define a partial unique index: `WHERE deleted_at IS NULL`.
+- Money, points, and inventory modifications MUST use pessimistic locks (`SELECT ... FOR UPDATE`) in atomic RPCs.
+
+## 5. TESTING & VERIFICATION
+- Framework: Native `node:assert/strict` with `npx tsx` (No Vitest/Jest).
+- Run targeted checks during development: `npm run lint` or `npx tsx <test-file>`.
+- Full pre-commit / PR gate: `npm run check:all` MUST pass 100%.

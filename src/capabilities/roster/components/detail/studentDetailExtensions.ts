@@ -1,6 +1,6 @@
 import React, { type ReactNode } from 'react';
 import { FileText } from 'lucide-react';
-import { getIndustryPreset } from '@/app/presets/presetRegistry';
+import { getResolvedPreset } from '@/core/presets/presetResolver';
 import { isPianoIndustry } from '@/core/industry/industryUi';
 import type {
   Student,
@@ -108,7 +108,7 @@ export function resolveStudentDetailTabs(
 
   // ── 업종 프리셋 기반 선언적 탭 자동 조립 (Zero-Duplication Contextual Profile) ──
   if (industryId) {
-    const preset = getIndustryPreset(industryId);
+    const preset = getResolvedPreset(industryId);
     if (preset) {
       const caps = new Set(preset.capabilities || []);
       const passTerm = preset.terms?.pass || '이용권';

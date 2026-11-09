@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useList, useCreate } from '@refinedev/core';
+import { useTerminology } from '@/core/terminology';
 import {
   assembleCareReportMessage,
   renderCareReportSvgCard,
@@ -11,6 +12,8 @@ import {
 } from '../domain/dailyCareReportEngine';
 
 export const DailyCareReportView: React.FC = () => {
+  const { t } = useTerminology();
+  const customerTerm = t('customer.singular', '돌봄 대상');
   const [activeTab, setActiveTab] = useState<'logs' | 'create'>('logs');
   const [subjectName, setSubjectName] = useState('');
   const [mealStatus, setMealStatus] = useState<MealStatus>('all');
@@ -290,7 +293,7 @@ export const DailyCareReportView: React.FC = () => {
 
           <div style={{ marginBottom: '16px' }}>
             <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
-              대상 이름 (원생 / 반려견)
+              대상 이름 ({customerTerm})
             </label>
             <input
               type="text"

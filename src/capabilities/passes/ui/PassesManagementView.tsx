@@ -30,7 +30,7 @@ import {
 } from '../domain/passesFilterPredicate';
 import { invalidateTenantQueries } from '@/core/query/tenantQueryKeys';
 import { notifyStorageFromRefineResource } from '@/core/query/crossCacheBridge';
-import { getIndustryPreset } from '@/app/presets/presetRegistry';
+import { getResolvedPreset } from '@/core/presets/presetResolver';
 import type { PassStarterTemplate } from '@/core/presets/types';
 import { cn } from '@/shared/lib/utils';
 
@@ -307,7 +307,7 @@ export const PassesManagementView: React.FC = () => {
   const [selectedStarterTemplate, setSelectedStarterTemplate] = useState<PassStarterTemplate | null>(null);
 
   const preset = useMemo(() => {
-    return getIndustryPreset(currentOrganization?.industry_type || 'general_academy');
+    return getResolvedPreset(currentOrganization?.industry_type || 'general_academy');
   }, [currentOrganization?.industry_type]);
 
   const starterTemplates = preset?.starterPassTemplates || [];

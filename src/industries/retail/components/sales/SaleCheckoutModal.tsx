@@ -8,6 +8,7 @@ import {
 } from '@/capabilities/commerce';
 import { Modal } from '@/shared/components';
 import { formatCurrency } from '@/utils/formatters';
+import { idempotencyCapability } from '@/core/idempotency';
 import { saleService } from '../../services/saleService';
 import {
   cartLineAmount,
@@ -178,18 +179,21 @@ export const SaleCheckoutModal: FC<Props> = ({
     }));
 
   const finalizeSale = async () => {
+    if (saving) return;
     setSaving(true);
     try {
       if (pointsToUse > maxRedeemablePoints(pointBalance, total)) {
         throw new Error(COPY.pointsExceed);
       }
       const actualPaymentMethod = selectedMethod === 'split' ? 'other' : selectedMethod;
+      const idempotencyKey = idempotencyCapability.newKey();
       const sale = await saleService.createSale({
         organizationId,
         customerId: customer?.id ?? null,
         paymentMethod: actualPaymentMethod,
         pointsUsed: pointsToUse > 0 ? pointsToUse : 0,
         items: buildSaleItems(),
+        idempotencyKey,
       });
       const paid = Math.max(0, sale.totalAmount - (sale.pointsUsed ?? 0));
       let changeInfo: { received: number; change: number } | undefined;

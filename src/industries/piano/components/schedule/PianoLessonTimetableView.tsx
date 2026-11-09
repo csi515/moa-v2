@@ -17,6 +17,15 @@ import { PianoTimetableMobileList } from './PianoTimetableMobileList';
 import { PianoTimetableStudentPicker } from './PianoTimetableStudentPicker';
 import { StudentTimetableMoveModal } from './StudentTimetableMoveModal';
 import { usePianoLessonTimetable } from './usePianoLessonTimetable';
+import { useApp } from '@/context/AppContext';
+import {
+  calculateSlotCapacity,
+  summarizeDayCapacity,
+} from './pianoCapacityGaugeHelpers';
+import {
+  createTemporaryMoveRecord,
+  saveTemporaryMove,
+} from './studentTemporaryMoveHelpers';
 
 /**
  * 피아노 수업 시간표 — 요일·시간대에 「누가 오는지」 배치·이동.
@@ -24,6 +33,7 @@ import { usePianoLessonTimetable } from './usePianoLessonTimetable';
  * 상단 드래그 풀 제거, 클릭 기반 학생 검색 배치 및 정기 반복 등록 지원.
  */
 export const PianoLessonTimetableView: FC = () => {
+  const { showToast } = useApp();
   const navigate = usePianoNavigate();
   const [calendarView, setCalendarView] = useState<CalendarViewMode>('week');
   const [selectedDayFilter, setSelectedDayFilter] = useState<'ALL' | DayOfWeek>('ALL');
@@ -69,10 +79,12 @@ export const PianoLessonTimetableView: FC = () => {
     placement,
     targetDay,
     targetStartTime,
+    isTemporary,
   }: {
     placement: SlotPlacement;
     targetDay: DayOfWeek;
     targetStartTime: string;
+    isTemporary?: boolean;
   }) => {
     const payload: DragPlacementPayload = {
       studentId: placement.student.id,
@@ -81,7 +93,47 @@ export const PianoLessonTimetableView: FC = () => {
       classId: placement.classItem.id,
     };
     movePlacement(payload, targetDay, targetStartTime as any);
+
+    if (isTemporary) {
+      saveTemporaryMove(
+        createTemporaryMoveRecord({
+          studentId: placement.student.id,
+          studentName: placement.student.name,
+          originalDay: (placement.classItem.daysOfWeek?.[0] || '월') as DayOfWeek,
+          originalStartTime: placement.classItem.startTime || '14:00',
+          targetDay,
+          targetStartTime,
+        })
+      );
+      showToast(
+        `${placement.student.name} 학생 수업이 이번 주 ${targetDay}요일 ${targetStartTime}로 임시 보강 이동되었습니다.`,
+        'success'
+      );
+    } else {
+      showToast(
+        `${placement.student.name} 학생 정규 시간표가 ${targetDay}요일 ${targetStartTime}로 변경되었습니다.`,
+        'success'
+      );
+    }
   };
+
+  const totalPianoRooms = useMemo(() => {
+    return rooms.length > 0 ? rooms.length : 5;
+  }, [rooms]);
+
+  const activeFocusDay = selectedDayFilter === 'ALL' ? todayDay : selectedDayFilter;
+
+  const currentDayCapacities = useMemo(() => {
+    const slots = resolveTimetableSlots(visibleClasses);
+    return slots.map((slot) => {
+      const placements = getPlacementsForSlot(students, visibleClasses, activeFocusDay, slot);
+      return calculateSlotCapacity(activeFocusDay, slot, placements.length, totalPianoRooms);
+    });
+  }, [visibleClasses, students, activeFocusDay, totalPianoRooms]);
+
+  const capacitySummary = useMemo(() => {
+    return summarizeDayCapacity(currentDayCapacities);
+  }, [currentDayCapacities]);
 
   const renderTimetable = (sectionClasses: ClassItem[], sectionTeacherId?: string, sectionRoom?: string) => {
     if (useDragGrid && selectedDayFilter === 'ALL') {
@@ -396,11 +448,42 @@ export const PianoLessonTimetableView: FC = () => {
         </div>
       </div>
 
-      {/* 클릭 배치 안내 문구 */}
-      <div className="flex items-center gap-2 text-xs text-slate-600 bg-indigo-50/60 border border-indigo-100/80 rounded-xl px-3.5 py-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 shrink-0" />
-        <span>원하는 요일·시간 칸을 클릭하여 학생을 배치하세요.</span>
+      {/* 피아노 정원 & 연습실 가동 실시간 브리핑 바 */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2.5 shadow-2xs">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-bold text-slate-800 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            {activeFocusDay}요일 정원 현황 (피아노 {totalPianoRooms}대 기준):
+          </span>
+          <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            여유 {capacitySummary.availableSlotCount}슬롯
+          </span>
+          {capacitySummary.fullSlotCount > 0 && (
+            <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+              마감 {capacitySummary.fullSlotCount}슬롯
+            </span>
+          )}
+          {capacitySummary.overflowSlotCount > 0 && (
+            <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200 animate-pulse">
+              ⚠️ 초과 {capacitySummary.overflowSlotCount}슬롯
+            </span>
+          )}
+        </div>
+
+        <div className="text-[11px] text-slate-500 font-medium">
+          총 {capacitySummary.totalStudents}명 수강 중 · 칸 클릭 시 즉시 배치
+        </div>
       </div>
+
+      {/* 초과 슬롯 발생 시 원장님 주의 안내 배너 */}
+      {capacitySummary.overflowSlotCount > 0 && (
+        <div className="rounded-xl border border-rose-200 bg-rose-50/90 px-3.5 py-2 text-xs text-rose-800 font-bold flex items-center gap-2">
+          <span>⚠️</span>
+          <span>
+            {activeFocusDay}요일에 피아노 대수({totalPianoRooms}대)를 초과한 시간대가 있습니다. 대기 연습실 부족이 발생할 수 있으니 시간 분산을 권장합니다.
+          </span>
+        </div>
+      )}
 
       {/* 시간표 렌더링 (선생님별, 강의실별, 또는 전체) */}
       {layoutMode === 'byTeacher' ? (

@@ -41,7 +41,7 @@ import { ResourceReservationRequestModal } from './ResourceReservationRequestMod
 import { ResourceApprovalInboxView } from './ResourceApprovalInboxView';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { listApprovalOrgMembers } from '@/capabilities/approval_workflow/services/approvalWorkflowService';
-import { getIndustryPreset } from '@/app/presets/presetRegistry';
+import { getResolvedPreset } from '@/core/presets/presetResolver';
 
 export type UniversalResourceCalendarViewProps = {
   /** 임베드 시 헤더·승인함 축소 */
@@ -121,7 +121,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
   );
 
   const enableApprovalWorkflow = useMemo(() => {
-    const preset = getIndustryPreset(currentOrganization?.industry_type ?? '');
+    const preset = getResolvedPreset(currentOrganization?.industry_type ?? '');
     const caps = new Set([
       ...(preset?.capabilities ?? []),
       ...activeCapabilities,

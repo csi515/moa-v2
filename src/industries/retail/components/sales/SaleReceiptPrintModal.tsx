@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Share2 } from 'lucide-react';
+import { shareLink } from '@/core/platform/shareLink';
 import { Printer, X, CheckCircle2 } from 'lucide-react';
 import { Modal } from '@/shared/components';
 import { formatCurrency } from '@/utils/formatters';
@@ -45,8 +47,42 @@ export const SaleReceiptPrintModal: React.FC<Props> = ({ isOpen, onClose, receip
   const supplyAmount = Math.round(total / 1.1);
   const vatAmount = total - supplyAmount;
 
+  const [shareStatus, setShareStatus] = useState<string | null>(null);
+
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleShare = async () => {
+    if (!receipt) return;
+    const saleNo = formatSaleNumber(receipt.id);
+    const dateStr = new Date(receipt.createdAt).toLocaleString('ko-KR');
+    const itemsSummary = receipt.items
+      .map((it) => `- ${it.productNameSnapshot} (${it.quantity}개): ${formatCurrency(it.lineAmount)}`)
+      .join('\n');
+    const paymentText = receipt.splitDetail
+      ? `복합결제(현금 ${formatCurrency(receipt.splitDetail.cashAmount)} + 카드 ${formatCurrency(receipt.splitDetail.cardAmount)})`
+      : SALE_PAYMENT_METHOD_LABELS[receipt.paymentMethod] || receipt.paymentMethod;
+
+    const receiptText = `[${orgName} 전자영수증]\n영수증No: ${saleNo}\n거래일시: ${dateStr}\n\n[품목 내역]\n${itemsSummary}\n\n총 결제금액: ${formatCurrency(receipt.totalAmount)}\n결제방식: ${paymentText}\n\n이용해 주셔서 감사합니다.`;
+
+    try {
+      const res = await shareLink({
+        title: `${orgName} 구매 영수증 (${saleNo})`,
+        text: receiptText,
+        url: window.location.href,
+      });
+      if (res === 'copied') {
+        setShareStatus('영수증 내용이 클립보드에 복사되었습니다.');
+        setTimeout(() => setShareStatus(null), 3000);
+      } else if (res === 'shared') {
+        setShareStatus('영수증이 공유되었습니다.');
+        setTimeout(() => setShareStatus(null), 3000);
+      }
+    } catch {
+      setShareStatus('공유에 실패했습니다.');
+      setTimeout(() => setShareStatus(null), 3000);
+    }
   };
 
   return (
@@ -156,23 +192,39 @@ export const SaleReceiptPrintModal: React.FC<Props> = ({ isOpen, onClose, receip
           </div>
         </div>
 
-        {/* 인쇄 및 닫기 버튼 바 */}
-        <div className="p-4 bg-white border-t border-slate-200 flex gap-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex-1 min-h-[44px] rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50"
-          >
-            닫기
-          </button>
-          <button
-            type="button"
-            onClick={handlePrint}
-            className="flex-1 min-h-[44px] rounded-xl bg-teal-600 text-white text-xs font-bold hover:bg-teal-700 flex items-center justify-center gap-1.5 shadow-sm"
-          >
-            <Printer className="w-4 h-4" />
-            영수증 인쇄하기
-          </button>
+        {/* 인쇄, 공유 및 닫기 버튼 바 */}
+        <div className="p-4 bg-white border-t border-slate-200 space-y-2">
+          {shareStatus && (
+            <p className="text-center text-xs font-bold text-teal-700 bg-teal-50 py-1.5 rounded-lg border border-teal-200 animate-in fade-in">
+              {shareStatus}
+            </p>
+          )}
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 min-h-[44px] rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer"
+            >
+              닫기
+            </button>
+            <button
+              type="button"
+              onClick={handleShare}
+              title="카카오톡/문자/외부 앱으로 영수증 공유"
+              className="flex-1 min-h-[44px] rounded-xl border border-teal-200 bg-teal-50 text-teal-800 text-xs font-bold hover:bg-teal-100 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Share2 className="w-4 h-4 text-teal-600" />
+              영수증 공유
+            </button>
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="flex-1 min-h-[44px] rounded-xl bg-teal-600 text-white text-xs font-bold hover:bg-teal-700 flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+            >
+              <Printer className="w-4 h-4" />
+              인쇄하기
+            </button>
+          </div>
         </div>
       </div>
     </Modal>

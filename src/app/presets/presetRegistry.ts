@@ -17,6 +17,7 @@ import type {
   PresetCapabilityId,
 } from '@/core/presets/types';
 import { registerCapabilityBundles } from '@/core/presets/presetAssembler';
+import { registerPresetResolver } from '@/core/presets/presetResolver';
 
 // 기존 5대 기능 스키마 & 리소스
 import { attendanceSetupSchema } from '@/capabilities/attendance/setupSchema';
@@ -3081,9 +3082,9 @@ export const INDUSTRY_PRESETS: Record<string, IndustryPresetDefinition> = {
     name: '일반 소매점',
     description: '바코드 상품 카탈로그, 재고 수불, POS 판매 및 포인트 적립/사용',
     category: 'other',
-    capabilities: ['inventory', 'credit_wallet', 'ledger_simple'] as const,
+    capabilities: ['inventory', 'credit_wallet', 'ledger_simple', 'pickup_orders', 'loyalty_stamp'] as const,
     requiredCapabilities: ['inventory', 'ledger_simple'] as const,
-    optionalCapabilities: ['credit_wallet'] as const,
+    optionalCapabilities: ['credit_wallet', 'pickup_orders', 'loyalty_stamp'] as const,
     businessRules: { pointEarnPercent: 1.0, lowStockAlertThreshold: 5 },
     resourceTypes: [{ name: 'POS 카운터', type: 'equipment' }],
     roles: [
@@ -3666,9 +3667,9 @@ export const INDUSTRY_PRESETS: Record<string, IndustryPresetDefinition> = {
     name: '맞춤 제작 공방 & 수리점',
     description: '단계별 제작/수리 칸반 파이프라인, 원자재 재고 관리 및 픽업 예약',
     category: 'studio',
-    capabilities: ['task_pipeline', 'inventory', 'booking', 'ledger_simple', 'sop_risk_assessment', 'pickup_orders', 'quality_inspection', 'change_management'] as const,
+    capabilities: ['task_pipeline', 'inventory', 'booking', 'ledger_simple', 'sop_risk_assessment', 'pickup_orders', 'quality_inspection', 'change_management', 'loyalty_stamp'] as const,
     requiredCapabilities: ['task_pipeline', 'inventory'] as const,
-    optionalCapabilities: ['booking', 'ledger_simple', 'sop_risk_assessment', 'pickup_orders', 'quality_inspection', 'change_management'] as const,
+    optionalCapabilities: ['booking', 'ledger_simple', 'sop_risk_assessment', 'pickup_orders', 'quality_inspection', 'change_management', 'loyalty_stamp'] as const,
     resourceTypes: [{ name: '작업대', type: 'table' }],
     roles: [{ name: '공방장', rank_order: 1, permissions: ['*'] }],
     readinessLevel: 'basic_ui',
@@ -4461,6 +4462,9 @@ export function getIndustryPreset(presetId: string): IndustryPresetDefinition | 
   if (aliasedKey) return INDUSTRY_PRESETS[aliasedKey];
   return undefined;
 }
+
+// Core 계층에 리졸버 자동 주입 (Capability ➔ Core 단방향 의존성 보장)
+registerPresetResolver(getIndustryPreset);
 
 export function listIndustryPresets(): IndustryPresetDefinition[] {
   return Object.values(INDUSTRY_PRESETS);

@@ -1,7 +1,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import type { Student } from '@/types';
 import { renderGuardianInvite } from '@/core/staff/staffUi';
-import { X, Phone, Edit, UserMinus, UserCheck, CreditCard, ChevronDown } from 'lucide-react';
+import { X, Phone, Edit, UserMinus, UserCheck, CreditCard, ChevronDown, Award } from 'lucide-react';
+import { StudentGrowthReportModal } from './report/StudentGrowthReportModal';
 import { StudentDetailInfoTab } from './detail/StudentDetailInfoTab';
 import { StudentDetailClassesTab } from './detail/StudentDetailClassesTab';
 import { StudentDetailAttendanceTab } from './detail/StudentDetailAttendanceTab';
@@ -13,7 +14,7 @@ import type { DetailTab } from './detail/types';
 import { getStudentDetailExtension } from './detail/studentDetailExtensions';
 import { useStaffGrants } from '@/hooks';
 import { useModuleLabels } from '@/core/labels';
-import { getIndustryPreset } from '@/app/presets/presetRegistry';
+import { getResolvedPreset } from '@/core/presets/presetResolver';
 import { getTodayAttendanceStatus, getTuitionSummaryText } from './detail/student360Helpers';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import { showToast } from '@/shared/feedback/uiFeedback';
@@ -54,6 +55,7 @@ const StudentDetailModalContent: React.FC<
   });
   const { allow } = useStaffGrants();
   const labels = useModuleLabels();
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const detailExtension = getStudentDetailExtension(modal.industryPlugin.id);
   const customerLabel = labels.customer.singular;
   const contactLabel = labels.contact.singular;
@@ -77,7 +79,7 @@ const StudentDetailModalContent: React.FC<
   const activeInMore = moreTabs.some((tab) => tab.id === modal.currentTab);
   const showMoreSection = showMoreTabs || activeInMore;
 
-  const preset = modal.industryPlugin?.id ? getIndustryPreset(modal.industryPlugin.id) : null;
+  const preset = modal.industryPlugin?.id ? getResolvedPreset(modal.industryPlugin.id) : null;
   const caps = new Set(preset?.capabilities || []);
   const lessonTerm = preset?.terms?.lesson || (caps.has('booking') ? '예약' : '수업');
   const passTerm = preset?.terms?.pass || '수납';
@@ -234,6 +236,15 @@ const StudentDetailModalContent: React.FC<
           </div>
 
           <div className="flex items-center gap-1.5 self-end sm:self-center shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsReportModalOpen(true)}
+              className="px-3 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
+              title="원생 월간 성장 리포트 A4 인쇄 / PDF 저장"
+            >
+              <Award className="w-3.5 h-3.5 text-purple-600" />
+              <span className="hidden sm:inline">성장 리포트</span>
+            </button>
             {detailExtension?.renderHeaderActions?.({ student })}
             {canCall && modal.primaryGuardian?.parentPhone && (
               <a
@@ -498,7 +509,14 @@ const StudentDetailModalContent: React.FC<
         studentName: student.name,
         isOpen: modal.guardianLinkOpen,
         onClose: () => modal.setGuardianLinkOpen(false),
+
       })}
+
+      <StudentGrowthReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        student={student}
+      />
     </div>
   );
 };

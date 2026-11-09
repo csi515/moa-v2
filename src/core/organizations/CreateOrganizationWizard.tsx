@@ -25,6 +25,9 @@ import {
   getPlaceLabel,
   getPlaceNamePlaceholder,
   isRetailIndustry,
+  isPianoIndustry,
+  isPilatesIndustry,
+  isGymIndustry,
 } from '../industry/industryUi';
 import { StorageService } from '@/services/storage';
 import { userFacingErrorMessage } from '@/shared/errors/userFacingError';

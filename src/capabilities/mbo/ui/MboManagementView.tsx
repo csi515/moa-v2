@@ -54,7 +54,7 @@ import {
 } from '../services/projectCategoryService';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { useOrganizationTree } from '@/pages/organization/useOrganizationTree';
-import { getIndustryPreset } from '@/app/presets/presetRegistry';
+import { getResolvedPreset } from '@/core/presets/presetResolver';
 import { useAuth } from '@/core/auth/AuthProvider';
 
 const SAMPLE_PORTFOLIO_PROJECTS: PortfolioProject[] = [
@@ -296,7 +296,7 @@ export const MboManagementView: React.FC = () => {
     (currentOrganization?.settings ?? null) as Record<string, unknown> | null
   );
   const hasApprovalWorkflow = useMemo(() => {
-    const preset = getIndustryPreset(currentOrganization?.industry_type ?? '');
+    const preset = getResolvedPreset(currentOrganization?.industry_type ?? '');
     const caps = new Set([...(preset?.capabilities ?? []), ...activeCapabilities]);
     return caps.has('approval_workflow');
   }, [currentOrganization?.industry_type, activeCapabilities]);

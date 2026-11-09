@@ -13,10 +13,12 @@ import { ExpenseManagementView } from './ExpenseManagementView';
 import { TuitionManagementView } from '@/capabilities/billing/components/tuition/TuitionManagementView';
 import { UnpaidManagementView } from '@/capabilities/billing/components/unpaid/UnpaidManagementView';
 import { TeacherPayrollView } from './TeacherPayrollView';
+import { ExecutiveAnalyticsHubView } from './ExecutiveAnalyticsHubView';
 
 export type FinanceHubSegment = FinanceHubSegmentId;
 
 const SEGMENT_TO_TAB: Record<FinanceHubSegment, NavTab> = {
+  analytics: 'finance',
   overview: 'finance',
   income: 'income',
   expenses: 'expenses',
@@ -72,6 +74,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
   const booksOptions = useMemo(
     () => [
       { value: 'overview' as const, label: '재무 요약' },
+      { value: 'analytics' as const, label: '경영 성과 분석' },
       { value: 'income' as const, label: '수입' },
       { value: 'expenses' as const, label: '지출' },
       { value: 'payroll' as const, label: '강사 정산' },
@@ -143,6 +146,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
 
         {segment === 'tuition' && <TuitionManagementView embedded />}
         {segment === 'unpaid' && <UnpaidManagementView embedded />}
+      {segment === 'analytics' && <ExecutiveAnalyticsHubView embedded />}
       </div>
     );
   }
@@ -170,6 +174,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
         />
 
         {segment === 'overview' && <FinanceOverviewView embedded />}
+        {segment === 'analytics' && <ExecutiveAnalyticsHubView embedded />}
         {segment === 'income' && <IncomeManagementView embedded />}
         {segment === 'expenses' && <ExpenseManagementView embedded />}
         {segment === 'payroll' && <TeacherPayrollView embedded />}

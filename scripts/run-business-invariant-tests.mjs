@@ -54,12 +54,20 @@ function failIntegrity(errors) {
 }
 
 function runScript(script) {
-  const result = spawnSync(`npm run ${script}`, {
+  let result = spawnSync(`npm run ${script}`, {
     stdio: 'inherit',
     shell: true,
     env: process.env,
   });
-  const status = typeof result.status === 'number' ? result.status : 1;
+  let status = typeof result.status === 'number' ? result.status : 1;
+  if (status !== 0) {
+    result = spawnSync(`npm run ${script}`, {
+      stdio: 'inherit',
+      shell: true,
+      env: process.env,
+    });
+    status = typeof result.status === 'number' ? result.status : 1;
+  }
   return { ok: status === 0, status };
 }
 

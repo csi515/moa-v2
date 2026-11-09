@@ -29,3 +29,4 @@ export { ResponsiveTable, type ResponsiveColumn, type ResponsiveTableProps } fro
 export { PaginationBar, type PaginationBarProps } from './PaginationBar';
 export { MicroGuideTooltip, type MicroGuideTooltipProps } from './MicroGuideTooltip';
 export { ACADEMY_MICRO_GUIDES, getMicroGuide, type AcademyMicroGuideKey } from './microGuideCatalog';
+export { BulkActionToolbar, type BulkActionToolbarProps, type BulkActionItem } from './BulkActionToolbar';

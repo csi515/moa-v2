@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState, type FC, type MouseEvent } from 'react';
+import { useEffect, useMemo, useState, type FC, type MouseEvent } from 'react';
 import { Clock, CreditCard, Piano } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
@@ -6,6 +6,7 @@ import { StorageService } from '@/services/storage';
 import { StudentService } from '@/core/students';
 import { LessonService } from '@/core/lessons';
 import { TuitionService } from '@/capabilities/finance';
+import { resolveStudentUnpaidBadge, type StudentUnpaidBadgeInfo } from '@/capabilities/billing/studentBillingStatusHelpers';
 import { EmptyState, PageHeader } from '@/shared/components';
 import type { AttendanceRecord, AttendanceStatus, ClassItem, LessonRecord, Student } from '@/types';
 import { todayIsoLocal } from '@/shared/utils/localDate';
@@ -88,6 +89,20 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
       const summary = TuitionService.getStudentBillingSummary(student.id);
       return (summary.grandUnpaid ?? summary.totalUnpaid) > 0;
     }).length;
+  }, [students, refreshKey]);
+
+  const unpaidBadgeMap = useMemo(() => {
+    const map: Record<string, StudentUnpaidBadgeInfo | null> = {};
+    for (const student of students) {
+      const summary = TuitionService.getStudentBillingSummary(student.id);
+      const unpaid = summary.grandUnpaid ?? summary.totalUnpaid;
+      map[student.id] = resolveStudentUnpaidBadge(
+        student.id,
+        unpaid,
+        student.paymentDay
+      );
+    }
+    return map;
   }, [students, refreshKey]);
 
   const offerMakeup = (studentName: string) => {
@@ -336,6 +351,11 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
           findLesson={findLesson}
           onOpenSession={setTarget}
           onQuickStatus={handleQuickStatus}
+          unpaidBadgeMap={unpaidBadgeMap}
+          onOpenBilling={(st) => {
+            showToast(`${st.name} 학생 수납 관리로 이동합니다.`, 'info');
+            setActiveTab('finance');
+          }}
         />
       )}
 

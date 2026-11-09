@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useList, useCreate, useUpdate } from '@refinedev/core';
+import { useTerminology } from '@/core/terminology';
 import {
   recordQuestProgress,
   renderAchievementBadgeSvg,
@@ -12,6 +13,8 @@ import {
 } from '../domain/achievementQuestEngine';
 
 export const AchievementQuestBadgeView: React.FC = () => {
+  const { t } = useTerminology();
+  const customerTerm = t('customer.singular', '회원');
   const [selectedQuestId, setSelectedQuestId] = useState<string | null>(null);
   const [selectedMember, setSelectedMember] = useState<AchievementQuestMemberItem | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -135,9 +138,9 @@ export const AchievementQuestBadgeView: React.FC = () => {
     <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>🎖️ 원생 성취 퀘스트 & 디지털 뱃지 수여 엔진</h1>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>🎖️ {customerTerm} 성취 퀘스트 & 디지털 뱃지 수여 엔진</h1>
           <p style={{ color: '#64748b', margin: 0 }}>
-            원생에게 도전 과제를 부여하고, 목표 완주 시 비용 0원의 고품질 W3C SVG 공식 메달 뱃지를 수여합니다.
+            {customerTerm}에게 도전 과제를 부여하고, 목표 완주 시 비용 0원의 고품질 W3C SVG 공식 메달 뱃지를 수여합니다.
           </p>
         </div>
         <button
@@ -185,7 +188,7 @@ export const AchievementQuestBadgeView: React.FC = () => {
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
               <tr>
-                <th style={{ padding: '12px 16px', fontSize: '13px', color: '#475569' }}>도전자(원생)</th>
+                <th style={{ padding: '12px 16px', fontSize: '13px', color: '#475569' }}>도전자({customerTerm})</th>
                 <th style={{ padding: '12px 16px', fontSize: '13px', color: '#475569' }}>진척도 / 목표</th>
                 <th style={{ padding: '12px 16px', fontSize: '13px', color: '#475569' }}>달성률</th>
                 <th style={{ padding: '12px 16px', fontSize: '13px', color: '#475569' }}>뱃지 상태</th>
@@ -196,7 +199,7 @@ export const AchievementQuestBadgeView: React.FC = () => {
               {currentMembers.length === 0 ? (
                 <tr>
                   <td colSpan={5} style={{ padding: '32px', textAlign: 'center', color: '#94a3b8' }}>
-                    현재 이 퀘스트에 도전 중인 원생이 없습니다.
+                    현재 이 퀘스트에 도전 중인 {customerTerm}이(가) 없습니다.
                   </td>
                 </tr>
               ) : (
@@ -414,7 +417,7 @@ export const AchievementQuestBadgeView: React.FC = () => {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
           <div style={{ background: '#fff', padding: '24px', borderRadius: '12px', width: '360px' }}>
             <h2 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '16px' }}>
-              {selectedMember.memberName} 원생 진척 추가
+              {selectedMember.memberName} {customerTerm} 진척 추가
             </h2>
             <form onSubmit={handleAddProgress}>
               <div style={{ marginBottom: '16px' }}>

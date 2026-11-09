@@ -46,6 +46,7 @@ export interface IndustryRosterListConfig {
 }
 
 export type FinanceHubSegmentId =
+  | 'analytics'
   | 'overview'
   | 'income'
   | 'expenses'

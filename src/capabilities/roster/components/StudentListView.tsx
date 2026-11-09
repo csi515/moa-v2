@@ -23,7 +23,8 @@ import { enrollmentModeLabel } from './form/enrollmentFormCopy';
 import { StudentFormModal } from './StudentFormModal';
 import { StudentDetailModal } from './StudentDetailModal';
 import { getStudentStatusBadge } from '@/utils/formatters';
-import { PageHeader, FilterBar, SearchField, EmptyState, PaginationBar } from '@/shared/components';
+import { PageHeader, FilterBar, SearchField, EmptyState, PaginationBar, BulkActionToolbar } from '@/shared/components';
+import { exportStudentsToCsv } from '../helpers/studentExcelHelpers';
 import { DENSITY } from '@/shared/styles/density';
 import {
   Users,
@@ -33,6 +34,7 @@ import {
   Bus,
   SlidersHorizontal,
   FileSpreadsheet,
+  Download,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { StudentBulkImportModal } from './StudentBulkImportModal';
@@ -56,6 +58,7 @@ const signalClass = (tone: 'ok' | 'warn' | 'muted') => {
 };
 
 export const StudentListView: React.FC = () => {
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const {
     selectedStudentId,
     setSelectedStudentId,
@@ -271,6 +274,15 @@ export const StudentListView: React.FC = () => {
         actions={
           !isScoped ? (
             <div className="flex items-center gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={() => exportStudentsToCsv(filteredStudents, `${labels.customer.singular}명부_${getCurrentYearMonth()}.csv`)}
+                className="px-3.5 py-2 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition-all border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer"
+                title="현재 필터된 목록 엑셀 다운로드"
+              >
+                <Download className="w-4 h-4" />
+                엑셀 내보내기
+              </button>
               <button
                 type="button"
                 onClick={() => setIsBulkImportOpen(true)}
@@ -529,6 +541,23 @@ export const StudentListView: React.FC = () => {
               <table className="w-full text-left text-xs">
                 <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
                   <tr>
+                    <th className="py-2.5 px-3 w-10 text-center">
+                      <input
+                        type="checkbox"
+                        aria-label="전체 선택"
+                        checked={paginatedStudents.length > 0 && paginatedStudents.every((s) => selectedIds.includes(s.id))}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            const newIds = Array.from(new Set([...selectedIds, ...paginatedStudents.map((s) => s.id)]));
+                            setSelectedIds(newIds);
+                          } else {
+                            const pageSet = new Set(paginatedStudents.map((s) => s.id));
+                            setSelectedIds(selectedIds.filter((id) => !pageSet.has(id)));
+                          }
+                        }}
+                        className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer align-middle"
+                      />
+                    </th>
                     <th className="py-2.5 px-3">{labels.customer.singular}</th>
                     <th className="py-2.5 px-3">{labels.service.singular}</th>
                     <th className="py-2.5 px-3">담당</th>
@@ -554,6 +583,20 @@ export const StudentListView: React.FC = () => {
                         onClick={() => handleOpenDetail(st)}
                         className="hover:bg-indigo-50/40 transition-colors cursor-pointer group"
                       >
+                        <td className="py-2.5 px-3 w-10 text-center" onClick={(e) => e.stopPropagation()}>
+                          <input
+                            type="checkbox"
+                            aria-label={`${st.name} 선택`}
+                            checked={selectedIds.includes(st.id)}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              setSelectedIds((prev) =>
+                                prev.includes(st.id) ? prev.filter((id) => id !== st.id) : [...prev, st.id]
+                              );
+                            }}
+                            className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer align-middle"
+                          />
+                        </td>
                         <td className="py-2.5 px-3">
                           <div className="flex items-center gap-2.5 min-w-0">
                             <div
