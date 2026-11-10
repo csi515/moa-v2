@@ -6,6 +6,7 @@ import {
   reserveMakeupLesson,
   cancelMakeupReservation,
   assembleMakeupConfirmationMessage,
+  assembleMakeupTokenIssueNotice,
   MakeupSlot,
 } from './makeupLessonEngine.js';
 
@@ -95,5 +96,18 @@ assert.match(message, /\[보강 수업 확정 안내\]/);
 assert.match(message, /김보강/);
 assert.match(message, /피아노 1실/);
 console.log('✓ 5. 알림 텍스트 조립 통과');
+
+// 6. 보강권 발급 안내문 조립 검증
+const issueMsg = assembleMakeupTokenIssueNotice({
+  academyName: '모아음악학원',
+  studentName: '김보강',
+  originDate: '2026-10-01',
+  expiresAt: '2026-10-31',
+  originReason: 'advance_request',
+});
+assert.match(issueMsg, /\[모아음악학원\] 보강권\(1회\) 발급 안내/);
+assert.match(issueMsg, /사전 결석 신청/);
+assert.match(issueMsg, /~2026-10-31까지/);
+console.log('✓ 6. 보강권 발급 알림 텍스트 조립 통과');
 
 console.log('[test:makeup-lesson] ALL TESTS PASSED! (100%)');

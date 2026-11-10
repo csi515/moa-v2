@@ -11,7 +11,10 @@ import type { PaymentMethod } from '@/capabilities/billing/finance/paymentMethod
 import type { Student } from '@/types';
 import { useStorageRefresh } from '@/hooks';
 import { buildYearMonthOptions } from '@/capabilities/billing/finance/categories';
-import { CreditCard } from 'lucide-react';
+import { CreditCard, Building, AlertCircle, Copy, Check } from 'lucide-react';
+import { settingsStorage } from '@/services/storage/settingsStorage';
+import { formatBankAccountText } from '@/capabilities/billing/finance/paymentMethodLabels';
+import { Modal } from '@/shared/components/ui/Modal';
 import { PageHeader } from '@/shared/components';
 import { CombinedPaymentModal } from './CombinedPaymentModal';
 import { todayIsoLocal } from '@/shared/utils/localDate';
@@ -46,6 +49,37 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
   const [payMemo, setPayMemo] = useState('');
   const [payDate, setPayDate] = useState(todayIsoLocal);
   const [cashReceiptIssued, setCashReceiptIssued] = useState(false);
+  const [settings, setSettingsState] = useState(() => settingsStorage.getSettings());
+  const bankAccountText = formatBankAccountText(settings.bankAccount);
+  const [isBankModalOpen, setIsBankModalOpen] = useState(false);
+  const [bankForm, setBankForm] = useState({
+    bank: typeof settings.bankAccount === 'object' && settings.bankAccount ? settings.bankAccount.bank || '' : '',
+    accountNumber: typeof settings.bankAccount === 'object' && settings.bankAccount ? settings.bankAccount.accountNumber || '' : typeof settings.bankAccount === 'string' ? settings.bankAccount : '',
+    holder: typeof settings.bankAccount === 'object' && settings.bankAccount ? settings.bankAccount.holder || '' : '',
+  });
+  const [copiedAccount, setCopiedAccount] = useState(false);
+
+  const handleSaveBank = () => {
+    const updated = settingsStorage.saveSettings({
+      ...settings,
+      bankAccount: {
+        bank: bankForm.bank.trim(),
+        accountNumber: bankForm.accountNumber.trim(),
+        holder: bankForm.holder.trim(),
+      },
+    });
+    setSettingsState(updated);
+    setIsBankModalOpen(false);
+    showToast('학원 수납 계좌가 성공적으로 저장되었습니다.', 'success');
+  };
+
+  const handleCopyBank = async () => {
+    if (!bankAccountText) return;
+    await navigator.clipboard.writeText(bankAccountText);
+    setCopiedAccount(true);
+    showToast('수납 계좌가 복사되었습니다.', 'success');
+    setTimeout(() => setCopiedAccount(false), 2000);
+  };
 
   const invoices = useMemo(() => TuitionService.getInvoices(), [refreshKey]);
   const students = useMemo(() => StudentService.getStudents(), [refreshKey]);
@@ -189,6 +223,51 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
           onFilterChange={handleSummaryCardFilterChange}
         />
         </>
+      )}
+
+      {/* 학원 수납 계좌 안내 배너 (3번 구멍 방어) */}
+      {!bankAccountText ? (
+        <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs text-amber-950">
+          <div className="flex items-center gap-2.5">
+            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+            <div>
+              <span className="font-bold">학원 수납 계좌번호가 아직 등록되지 않았습니다.</span>
+              <span className="text-amber-800 ml-1 hidden sm:inline">학부모가 청구서에서 확인할 입금 계좌를 등록해주세요.</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsBankModalOpen(true)}
+            className="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-2xs transition self-start sm:self-auto cursor-pointer"
+          >
+            수납 계좌 등록
+          </button>
+        </div>
+      ) : (
+        <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-700">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <Building className="w-4 h-4 text-indigo-600 shrink-0" />
+            <span className="font-bold text-slate-900 shrink-0">학원 수납 계좌:</span>
+            <span className="font-mono font-bold text-slate-800 truncate">{bankAccountText}</span>
+          </div>
+          <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-auto">
+            <button
+              type="button"
+              onClick={handleCopyBank}
+              className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 font-semibold flex items-center gap-1 cursor-pointer"
+            >
+              {copiedAccount ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
+              <span>{copiedAccount ? '복사됨' : '계좌 복사'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsBankModalOpen(true)}
+              className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-semibold cursor-pointer"
+            >
+              수정
+            </button>
+          </div>
+        </div>
       )}
 
       <TuitionFilterBar

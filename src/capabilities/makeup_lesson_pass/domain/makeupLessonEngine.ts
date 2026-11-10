@@ -230,3 +230,35 @@ export function assembleMakeupConfirmationMessage(params: {
     `* 당일 원활한 진행을 위해 5분 전까지 입실 부탁드립니다. 감사합니다.`,
   ].join('\n');
 }
+
+/**
+ * 7. 보강권 발급 안내 카톡/문자 텍스트 조립 (0원 발송)
+ */
+export function assembleMakeupTokenIssueNotice(params: {
+  studentName: string;
+  originDate: string;
+  expiresAt: string;
+  originReason: 'absence' | 'advance_request' | 'instructor_cancel';
+  academyName?: string;
+}): string {
+  const reasonText =
+    params.originReason === 'advance_request'
+      ? '사전 결석 신청'
+      : params.originReason === 'instructor_cancel'
+      ? '학원 사정 휴강'
+      : '결석';
+  const prefix = params.academyName ? `[${params.academyName}] ` : '';
+
+  return [
+    `${prefix}보강권(1회) 발급 안내`,
+    `안녕하세요, ${params.studentName} 보호자님.`,
+    `${params.originDate} 수업(${reasonText}) 건에 대하여 보강권이 발급되었습니다.`,
+    ``,
+    `■ 학생명: ${params.studentName}`,
+    `■ 결석 일자: ${params.originDate}`,
+    `■ 보강 유효기간: ~${params.expiresAt}까지`,
+    ``,
+    `* 유효기간 내에 원장님과 상의하시어 원하시는 요일 및 시간에 보강을 예약해 주시기 바랍니다.`,
+    `* 유효기간이 지난 보강권은 자동 만료되오니 기한 내 사용 부탁드립니다. 감사합니다.`,
+  ].join('\n');
+}

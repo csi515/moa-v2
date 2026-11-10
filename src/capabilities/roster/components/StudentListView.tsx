@@ -35,9 +35,13 @@ import {
   SlidersHorizontal,
   FileSpreadsheet,
   Download,
+  CalendarClock,
+  Share2,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { StudentBulkImportModal } from './StudentBulkImportModal';
+import { BulkScheduleAssignModal } from './schedule/BulkScheduleAssignModal';
+import { ParentInviteShareModal } from './ParentInviteShareModal';
 import {
   WEEKDAY_FILTER_OPTIONS,
   buildAttendanceByStudentToday,
@@ -64,6 +68,7 @@ export const StudentListView: React.FC = () => {
     setSelectedStudentId,
     selectedStudentDetailTab,
     setSelectedStudentDetailTab,
+    setActiveTab,
   } = useApp();
   const refreshKey = useStorageRefresh([
     ...STORAGE_REFRESH_DOMAINS.students,
@@ -137,13 +142,27 @@ export const StudentListView: React.FC = () => {
 
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
+  const [isBulkScheduleModalOpen, setIsBulkScheduleModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
+  const [inviteTargetStudents, setInviteTargetStudents] = useState<Student[]>([]);
+  const [isInviteShareModalOpen, setIsInviteShareModalOpen] = useState(false);
+
+  const handleOpenInviteShare = (student: Student, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setInviteTargetStudents([student]);
+    setIsInviteShareModalOpen(true);
+  };
 
   /** 스코프 강사는 담당만 — draft와 중복 저장하지 않음 */
   const teacherFilter = isScoped && staffId ? staffId : teacherFilterDraft;
   const setTeacherFilter = setTeacherFilterDraft;
 
   /** 상세 모달 대상은 selectedStudentId + students 파생 (동기화 effect 없음) */
+  const selectedStudentsForBulk = useMemo(
+    () => students.filter((s) => selectedIds.includes(s.id)),
+    [students, selectedIds]
+  );
+
   const detailStudent = useMemo(() => {
     if (!selectedStudentId) return null;
     return students.find((s) => s.id === selectedStudentId) || null;
@@ -662,7 +681,18 @@ export const StudentListView: React.FC = () => {
                           {bill.label}
                         </td>
                         <td className="py-2.5 px-3 text-right">
-                          <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 inline-block" />
+                          <div className="flex items-center justify-end gap-1">
+                            <button
+                              type="button"
+                              onClick={(e) => handleOpenInviteShare(st, e)}
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition cursor-pointer"
+                              title="학부모 앱 초대장 복사/공유"
+                              aria-label="학부모 초대"
+                            >
+                              <Share2 className="w-3.5 h-3.5" />
+                            </button>
+                            <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 inline-block" />
+                          </div>
                         </td>
                       </tr>
                     );
@@ -726,7 +756,18 @@ export const StudentListView: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
+                    <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          type="button"
+                          onClick={(e) => handleOpenInviteShare(st, e)}
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition cursor-pointer"
+                          title="학부모 앱 초대장 복사/공유"
+                          aria-label="학부모 초대"
+                        >
+                          <Share2 className="w-3.5 h-3.5" />
+                        </button>
+                        <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
+                      </div>
                   </div>
 
                   <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 text-[11px] font-bold">
@@ -794,6 +835,59 @@ export const StudentListView: React.FC = () => {
         isOpen={isBulkImportOpen}
         onClose={() => setIsBulkImportOpen(false)}
         onCompleted={() => setIsBulkImportOpen(false)}
+      />
+      <BulkActionToolbar
+        selectedCount={selectedIds.length}
+        totalCount={filteredStudents.length}
+        itemName={labels.customer.singular}
+        onClearSelection={() => setSelectedIds([])}
+        actions={[
+          {
+            key: 'parent_invite',
+            label: '선택 학부모 초대장 생성',
+            icon: <Share2 className="w-4 h-4" />,
+            onClick: () => {
+              setInviteTargetStudents(selectedStudentsForBulk);
+              setIsInviteShareModalOpen(true);
+            },
+          },
+          {
+            key: 'schedule_assign',
+            label: '시간표 일괄 배정',
+            icon: <CalendarClock className="w-4 h-4" />,
+            variant: 'primary',
+            onClick: () => setIsBulkScheduleModalOpen(true),
+          },
+          {
+            key: 'export_selected',
+            label: '선택 엑셀 내보내기',
+            icon: <Download className="w-4 h-4" />,
+            onClick: () => {
+              exportStudentsToCsv(
+                selectedStudentsForBulk,
+                `${labels.customer.singular}_선택내보내기_${getCurrentYearMonth()}.csv`
+              );
+            },
+          },
+        ]}
+      />
+      <BulkScheduleAssignModal
+        isOpen={isBulkScheduleModalOpen}
+        onClose={() => setIsBulkScheduleModalOpen(false)}
+        selectedStudents={selectedStudentsForBulk}
+        onAssigned={(msg) => {
+          showToast(msg, 'success');
+          setSelectedIds([]);
+        }}
+        onNavigateToTimetable={() => setActiveTab('classes')}
+      />
+      <ParentInviteShareModal
+        isOpen={isInviteShareModalOpen}
+        onClose={() => {
+          setIsInviteShareModalOpen(false);
+          setInviteTargetStudents([]);
+        }}
+        students={inviteTargetStudents}
       />
     </div>
   );

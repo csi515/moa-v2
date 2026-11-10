@@ -43,6 +43,7 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
   // 대량 등록 모드: 'paste' (엑셀 표 복사/붙여넣기) vs 'file' (파일 업로드)
   const [importMode, setImportMode] = useState<'paste' | 'file'>('paste');
   const [pasteText, setPasteText] = useState('');
+  const [defaultFee, setDefaultFee] = useState<number>(160000);
 
   const [fileName, setFileName] = useState<string | null>(null);
   const [validRows, setValidRows] = useState<StudentImportNormalizedRow[]>([]);
@@ -210,6 +211,7 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
       const result = await runStudentBulkImport(validRows, {
         organizationId,
         onProgress: (p) => setProgress({ completed: p.completed, total: p.total }),
+        fallbackTuitionFee: defaultFee,
       });
       showToast(
         `${result.succeeded}명 등록 완료` +
@@ -230,6 +232,24 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title={STUDENT_IMPORT_UI.title} maxWidth="2xl">
       <div className="p-4 sm:p-6 space-y-4 overflow-y-auto max-h-[85vh]">
+        {/* 기본 수강료 자동 상속 설정 (1번 구멍 방어) */}
+        <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs">
+          <div>
+            <span className="font-bold text-slate-800">기본 수강료 (엑셀에 원비 미기재 시 적용)</span>
+            <p className="text-[11px] text-slate-500 mt-0.5">엑셀 파일에 원비 열이 없거나 비어있는 경우 적용할 기본 금액</p>
+          </div>
+          <div className="flex items-center gap-1 font-bold shrink-0">
+            <input
+              type="number"
+              step="10000"
+              value={defaultFee}
+              onChange={(e) => setDefaultFee(Math.max(0, Number(e.target.value) || 0))}
+              className="w-28 px-2.5 py-1.5 text-right font-mono bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs font-bold"
+            />
+            <span className="text-slate-600">원</span>
+          </div>
+        </div>
+
         {/* 설명 및 모드 탭 전환 */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-100">
           <p className="text-xs sm:text-sm text-slate-600">

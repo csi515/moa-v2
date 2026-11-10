@@ -15,6 +15,9 @@ import {
   type KioskAttendanceResult,
   type KioskStudentMatch,
 } from './kioskPinEngine';
+import { getActiveTemporaryMovesForDate } from '../schedule/studentTemporaryMoveHelpers';
+import { todayIsoLocal } from '@/shared/utils/localDate';
+import { syncDayAttendanceFromPinCheckIn } from '../../services/pinDayAttendanceSync';
 
 interface LobbyAttendanceKioskViewProps {
   onExitKiosk: () => void;
@@ -55,10 +58,15 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
 
         // 4자리 완성 시 자동 출석 확인
         if (nextPin.length === 4) {
-          const res = processKioskCheckin(nextPin, students);
+          const temporaryMoves = getActiveTemporaryMovesForDate(todayIsoLocal());
+          const res = processKioskCheckin(nextPin, students, { temporaryMoves });
           if (res.success) {
             setResult(res);
             setPin('');
+            // 4번: 실제 출결 DB/스토리지 원자적 동기화
+            if (res.studentId) {
+              void syncDayAttendanceFromPinCheckIn(res.studentId);
+            }
             // 3.5초 후 결과 창 자동 해제
             setTimeout(() => {
               setResult(null);
@@ -241,6 +249,16 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
               <Sparkles className="w-3.5 h-3.5" />
               등원 확인 완료
             </div>
+
+            {/* 엣지 6번: 당일 임시 슬롯 자동 배정 뱃지 */}
+            {result.temporaryMoveApplied && (
+              <div className="mb-4 px-3.5 py-2 rounded-2xl bg-purple-900/50 border border-purple-500/50 text-purple-200 text-xs font-bold flex items-center justify-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+                <span>
+                  오늘 임시 수업({result.assignedSlotTime})으로 자동 출결 배정되었습니다.
+                </span>
+              </div>
+            )}
 
             <h3 className="text-3xl sm:text-4xl font-black text-white mb-2">
               {result.studentName} 원생

@@ -17,6 +17,8 @@ import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorag
 import { StorageService } from '@/services/storage';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { StudentBulkImportModal } from '@/capabilities/roster/components/StudentBulkImportModal';
+import { BulkScheduleAssignModal } from '@/capabilities/roster/components/schedule/BulkScheduleAssignModal';
+import { StudentService } from '@/core/students';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 
 export interface DirectorInteractiveOnboardingWizardProps {
@@ -41,6 +43,8 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
   const [student, setStudent] = useState<OnboardingStudentDraft>(DEFAULT_STUDENT_DRAFT);
   const [savedStudentId, setSavedStudentId] = useState<string | null>(null);
   const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
+  const [isBulkScheduleModalOpen, setIsBulkScheduleModalOpen] = useState(false);
+  const [importedStudents, setImportedStudents] = useState<Array<{ id: string; name: string }>>([]);
 
   // 3단계 상태: 시간표 배치
   const [placement, setPlacement] = useState<OnboardingTimetablePlacement>(DEFAULT_PLACEMENT_DRAFT);
@@ -698,6 +702,50 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
                   </strong>
                 </div>
               </div>
+
+              {/* 구멍 1번 해결: 온보딩 직후 기존 원생 엑셀 대량 등록 연결 배너 */}
+              <div
+                style={{
+                  width: '100%',
+                  maxWidth: '460px',
+                  background: 'linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%)',
+                  border: '1px solid #c7d2fe',
+                  borderRadius: '16px',
+                  padding: '16px',
+                  textAlign: 'left',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '12px',
+                }}
+              >
+                <div>
+                  <p style={{ fontSize: '13px', fontWeight: 800, color: '#312e81', margin: 0 }}>
+                    기존 원생 명단(엑셀)이 있으신가요?
+                  </p>
+                  <p style={{ fontSize: '12px', color: '#4338ca', margin: '4px 0 0 0' }}>
+                    엑셀 파일이나 표를 복사해 한 번에 50명 이상 등록하고 시간표에 배정하세요.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsBulkImportOpen(true)}
+                  style={{
+                    padding: '8px 14px',
+                    borderRadius: '10px',
+                    border: 'none',
+                    background: '#4f46e5',
+                    color: '#ffffff',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0 2px 4px rgba(79, 70, 229, 0.2)',
+                  }}
+                >
+                  엑셀 대량 등록 →
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -855,7 +903,22 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
           onClose={() => setIsBulkImportOpen(false)}
           onCompleted={() => {
             setIsBulkImportOpen(false);
-            setStep(3);
+            const allSt = StudentService.getStudents();
+            setImportedStudents(allSt.map((s) => ({ id: s.id, name: s.name })));
+            setIsBulkScheduleModalOpen(true);
+          }}
+        />
+      )}
+
+      {/* 대량 등록된 원생 시간표 일괄 배정 모달 연동 (구멍 1 -> 2번 자연 연계) */}
+      {isBulkScheduleModalOpen && (
+        <BulkScheduleAssignModal
+          isOpen={true}
+          onClose={() => setIsBulkScheduleModalOpen(false)}
+          selectedStudents={importedStudents}
+          onAssigned={(msg) => {
+            showToast(msg, 'success');
+            setIsBulkScheduleModalOpen(false);
           }}
         />
       )}

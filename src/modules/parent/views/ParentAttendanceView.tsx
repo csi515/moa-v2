@@ -1,4 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Ticket, Calendar, Clock, CheckCircle2 } from 'lucide-react';
+import {
+  getAvailableMakeupTokensForStudent,
+  getMakeupRequestsForStudent,
+  type MakeupRequest,
+} from '@/capabilities/makeup_lesson_pass/infrastructure/makeupLessonStorage';
+import type { MakeupToken } from '@/capabilities/makeup_lesson_pass/domain/makeupLessonEngine';
+import { ParentMakeupRequestModal } from '../components/ParentMakeupRequestModal';
 import { Loader2, RefreshCw } from 'lucide-react';
 import { StorageService } from '@/services/storage';
 import { getAttendanceBadge } from '@/utils/formatters';
@@ -38,6 +46,17 @@ export function ParentAttendanceView({
     30
   );
   const [refreshing, setRefreshing] = useState(false);
+  const [activeTokens, setActiveTokens] = useState<Array<MakeupToken & { daysRemaining: number }>>([]);
+  const [makeupRequests, setMakeupRequests] = useState<MakeupRequest[]>([]);
+  const [selectedTokenForRequest, setSelectedTokenForRequest] = useState<(MakeupToken & { daysRemaining: number }) | null>(null);
+  const [requestSuccessMessage, setRequestSuccessMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const tokens = getAvailableMakeupTokensForStudent(student.id, organizationId);
+    const requests = getMakeupRequestsForStudent(organizationId, student.id);
+    setActiveTokens(tokens);
+    setMakeupRequests(requests);
+  }, [student.id, organizationId, refreshing]);
 
   const legacyRecords = StorageService.getAttendance()
     .filter((a) => a.studentId === student.id)
@@ -82,6 +101,77 @@ export function ParentAttendanceView({
           새로고침
         </button>
       </div>
+
+      {requestSuccessMessage && (
+        <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100 text-xs text-emerald-800 flex items-center gap-1.5 animate-in fade-in">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>{requestSuccessMessage}</span>
+        </div>
+      )}
+
+      {/* 보유 중인 보강권 티켓 섹션 (해당 학원 보강권만 표시) */}
+      {activeTokens.length > 0 && (
+        <Section title={`🎟️ 보유 중인 보강권 (${activeTokens.length}장)`}>
+          <div className="space-y-2.5">
+            {activeTokens.map((token) => {
+              const pendingReq = makeupRequests.find(
+                (r) => r.tokenId === token.id && r.status === 'pending'
+              );
+              const reasonLabel =
+                token.originReason === 'advance_request'
+                  ? '사전 연락 결석'
+                  : token.originReason === 'instructor_cancel'
+                  ? '학원 사정 휴강'
+                  : '결석';
+
+              return (
+                <div
+                  key={token.id}
+                  className="p-3.5 rounded-xl border border-indigo-100 bg-gradient-to-r from-indigo-50/60 to-purple-50/40 space-y-2 shadow-2xs"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-bold text-sm text-slate-900">
+                          1회 보강권 ({reasonLabel})
+                        </span>
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-600 text-white">
+                          D-{token.daysRemaining}일 남음
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                        결석일자: <strong>{token.originDate}</strong>
+                        <span className="mx-1 text-slate-300">·</span>
+                        유효기한: <strong>~{token.expiresAt}까지</strong>
+                      </p>
+                    </div>
+
+                    {pendingReq ? (
+                      <span className="text-[11px] font-bold px-2.5 py-1.5 rounded-xl bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
+                        신청 검토 중 ({pendingReq.preferredDate} {pendingReq.preferredTime})
+                      </span>
+                    ) : token.status === 'reserved' ? (
+                      <span className="text-[11px] font-bold px-2.5 py-1.5 rounded-xl bg-sky-50 text-sky-800 border border-sky-200 shrink-0">
+                        보강 확정됨
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setSelectedTokenForRequest(token)}
+                        className="px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-2xs transition-colors cursor-pointer shrink-0 inline-flex items-center gap-1"
+                      >
+                        <Ticket className="w-3.5 h-3.5" />
+                        보강 신청하기
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Section>
+      )}
 
       {error && (
         <div className="p-3 rounded-xl bg-amber-50 border border-amber-100 text-xs text-amber-800">
@@ -177,6 +267,25 @@ export function ParentAttendanceView({
           ))
         )}
       </Section>
-    </div>
+    
+      {selectedTokenForRequest && (
+        <ParentMakeupRequestModal
+          isOpen={!!selectedTokenForRequest}
+          onClose={() => setSelectedTokenForRequest(null)}
+          token={selectedTokenForRequest}
+          studentId={student.id}
+          studentName={student.name}
+          organizationId={organizationId}
+          onRequested={(req) => {
+            setRequestSuccessMessage(
+              `${req.preferredDate} ${req.preferredTime} 보강 신청이 원장님께 제출되었습니다.`
+            );
+            const updatedRequests = getMakeupRequestsForStudent(organizationId, student.id);
+            setMakeupRequests(updatedRequests);
+            setTimeout(() => setRequestSuccessMessage(null), 4000);
+          }}
+        />
+      )}
+</div>
   );
 }

@@ -65,7 +65,7 @@ function toStudentPayload(
     classIds,
     level: defaults.level,
     billingMode: 'monthly',
-    tuitionFee: row.tuitionFee ?? defaults.tuitionFee,
+    tuitionFee: (typeof row.tuitionFee === 'number' && row.tuitionFee > 0) ? row.tuitionFee : defaults.tuitionFee,
     paymentDay: row.paymentDay ?? defaults.paymentDay,
     specialNotes: memoParts.join(' · ') || undefined,
     memo: memoParts.join(' · ') || undefined,
@@ -82,6 +82,7 @@ export async function runStudentBulkImport(
     organizationId: string;
     chunkSize?: number;
     onProgress?: (progress: BulkImportProgress) => void;
+    fallbackTuitionFee?: number;
   }
 ): Promise<BulkImportRunResult> {
   const settings = StorageService.getSettings();
@@ -90,7 +91,7 @@ export async function runStudentBulkImport(
   const defaults = {
     teacherId: teacher?.id || '',
     teacherName: teacher?.name || '',
-    tuitionFee: settings.defaultTuitionFee || 180000,
+    tuitionFee: options.fallbackTuitionFee || settings.defaultTuitionFee || 180000,
     paymentDay: settings.defaultPaymentDay || 10,
     level: 'beginner' as Student['level'],
   };

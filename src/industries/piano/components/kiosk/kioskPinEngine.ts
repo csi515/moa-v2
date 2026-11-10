@@ -8,9 +8,15 @@ export interface KioskStudentMatch {
 export interface KioskAttendanceResult {
   success: boolean;
   message: string;
+  studentId?: string;
   studentName?: string;
   timestamp?: string;
   actionType?: 'checkin' | 'checkout';
+  // 엣지 6번: 키오스크 등원 번호 입력 시 당일 임시 슬롯 자동 바인딩 결과
+  temporaryMoveApplied?: boolean;
+  assignedSlotTime?: string;
+  originalSlotTime?: string;
+  temporaryMoveMemo?: string;
 }
 
 const MASTER_EXIT_PIN = '9999';
@@ -46,12 +52,24 @@ export function verifyMasterExitPin(pin: string, customMasterPin?: string): bool
   return pin.trim() === target;
 }
 
+export interface KioskCheckinOptions {
+  todayIso?: string;
+  temporaryMoves?: Array<{
+    studentId: string;
+    originalStartTime: string;
+    targetStartTime: string;
+    targetDate?: string;
+    memo?: string;
+  }>;
+}
+
 /**
- * 키오스크 4자리 출석 처리 로직
+ * 키오스크 4자리 출석 처리 로직 (엣지 6번: 임시 이동 슬롯 자동 인식)
  */
 export function processKioskCheckin(
   pin: string,
-  students: KioskStudentMatch[]
+  students: KioskStudentMatch[],
+  options?: KioskCheckinOptions
 ): KioskAttendanceResult {
   if (pin.length !== 4) {
     return {
@@ -73,9 +91,31 @@ export function processKioskCheckin(
     now.getMinutes()
   ).padStart(2, '0')}`;
 
+  // 엣지 6번: 당일 임시 이동 레코드 자동 감지
+  const today = options?.todayIso || now.toISOString().slice(0, 10);
+  const tempMove = (options?.temporaryMoves || []).find(
+    (m) => m.studentId === student.id && (m.targetDate ? m.targetDate === today : true)
+  );
+
+  if (tempMove) {
+    return {
+      success: true,
+      message: `${student.name} 원생 출석이 완료되었습니다. (오늘 임시 ${tempMove.targetStartTime} 수업 배정)`,
+      studentId: student.id,
+      studentName: student.name,
+      timestamp: timeStr,
+      actionType: 'checkin',
+      temporaryMoveApplied: true,
+      assignedSlotTime: tempMove.targetStartTime,
+      originalSlotTime: tempMove.originalStartTime,
+      temporaryMoveMemo: tempMove.memo,
+    };
+  }
+
   return {
     success: true,
     message: `${student.name} 원생 출석이 완료되었습니다. (${timeStr})`,
+    studentId: student.id,
     studentName: student.name,
     timestamp: timeStr,
     actionType: 'checkin',

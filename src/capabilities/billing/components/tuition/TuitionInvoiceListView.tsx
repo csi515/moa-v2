@@ -8,7 +8,9 @@ import {
   lastTuitionPaymentSummaryText,
 } from '@/capabilities/billing/finance/latestTuitionPayment';
 import { TuitionService } from '@/capabilities/billing/finance';
-import { Printer } from 'lucide-react';
+import { Printer, MessageSquare } from 'lucide-react';
+import { TuitionInvoiceShareModal } from './TuitionInvoiceShareModal';
+import { formatBankAccountText } from '@/capabilities/billing/finance/paymentMethodLabels';
 import { TuitionReceiptModal } from './TuitionReceiptModal';
 
 export interface TuitionListStudent {
@@ -33,6 +35,9 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
   onOpenPayModal,
 }) => {
   const tuitionPayments = TuitionService.getTuitionPayments();
+  const settings = TuitionService.getSettings();
+  const bankAccountText = formatBankAccountText(settings.bankAccount);
+  const [selectedShareInvoice, setSelectedShareInvoice] = useState<TuitionInvoice | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const [selectedReceiptInvoice, setSelectedReceiptInvoice] = useState<TuitionInvoice | null>(null);
@@ -148,6 +153,17 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                               납입증명서
                             </button>
                           )}
+                          {inv.status !== 'paid' && inv.status !== 'cancelled' && (
+                            <button
+                              type="button"
+                              onClick={() => setSelectedShareInvoice(inv)}
+                              title="카카오톡/문자 원비 청구 안내 복사/공유"
+                              className="inline-flex items-center gap-1 px-2.5 py-2 min-h-[40px] border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-xl text-xs transition-colors shadow-2xs cursor-pointer"
+                            >
+                              <MessageSquare className="w-3.5 h-3.5 text-indigo-600" />
+                              청구 안내
+                            </button>
+                          )}
                           {inv.status !== 'paid' && inv.status !== 'cancelled' ? (
                             <button
                               type="button"
@@ -245,6 +261,16 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                         납입증명서
                       </button>
                     )}
+                    {inv.status !== 'paid' && inv.status !== 'cancelled' && (
+                      <button
+                        type="button"
+                        onClick={() => setSelectedShareInvoice(inv)}
+                        className="inline-flex items-center gap-1 px-3 py-2 min-h-[40px] border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-xl text-xs shadow-2xs cursor-pointer"
+                      >
+                        <MessageSquare className="w-3.5 h-3.5 text-indigo-600" />
+                        청구 안내
+                      </button>
+                    )}
                     {inv.status !== 'paid' && inv.status !== 'cancelled' ? (
                       <button
                         type="button"
@@ -278,6 +304,16 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
         <TuitionReceiptModal
           invoice={selectedReceiptInvoice}
           onClose={() => setSelectedReceiptInvoice(null)}
+        />
+      )}
+
+      {selectedShareInvoice && (
+        <TuitionInvoiceShareModal
+          isOpen={Boolean(selectedShareInvoice)}
+          onClose={() => setSelectedShareInvoice(null)}
+          invoice={selectedShareInvoice}
+          academyName={settings.name || '모아음악학원'}
+          bankAccountText={bankAccountText}
         />
       )}
     </div>

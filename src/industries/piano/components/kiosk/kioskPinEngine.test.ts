@@ -44,6 +44,29 @@ describe('kioskPinEngine', () => {
     assert.match(result.message, /출석이 완료되었습니다/);
   });
 
+  it('automatically redirects checkin to temporary slot when student has temporary move (케이스 6번)', () => {
+    const temporaryMoves = [
+      {
+        studentId: 'st-1',
+        originalStartTime: '14:00',
+        targetStartTime: '16:00',
+        targetDate: '2026-11-10',
+        memo: '오늘만 4시 보강',
+      },
+    ];
+
+    const result = processKioskCheckin('5678', mockStudents, {
+      todayIso: '2026-11-10',
+      temporaryMoves,
+    });
+
+    assert.equal(result.success, true);
+    assert.equal(result.temporaryMoveApplied, true);
+    assert.equal(result.assignedSlotTime, '16:00');
+    assert.equal(result.originalSlotTime, '14:00');
+    assert.match(result.message, /오늘 임시 16:00 수업 배정/);
+  });
+
   it('returns failure when student not found', () => {
     const result = processKioskCheckin('9998', mockStudents);
     assert.equal(result.success, false);

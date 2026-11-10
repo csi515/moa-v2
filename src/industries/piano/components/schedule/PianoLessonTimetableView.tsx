@@ -381,12 +381,21 @@ export const PianoLessonTimetableView: FC = () => {
           )}
         </div>
 
-        {/* 우측: 통계 카운트 & 인쇄 버튼 */}
+        {/* 우측: 통계 카운트 & 원생 일괄 배정 & 인쇄 버튼 */}
         <div className="flex items-center gap-2.5 ml-auto sm:ml-0">
           <span className="text-xs text-slate-500 font-semibold tabular-nums hidden sm:inline">
             반 {visibleClasses.length}
             {layoutMode === 'byTeacher' ? ` · 선생님 ${teacherSections.length}` : ''}
           </span>
+          <button
+            type="button"
+            onClick={() => navigate('students')}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-xs font-bold transition shadow-2xs cursor-pointer"
+            title="원생 목록으로 이동하여 시간표 일괄 배정"
+          >
+            <UserPlus className="w-3.5 h-3.5 text-indigo-600" />
+            <span>원생 목록에서 일괄 배정</span>
+          </button>
           <button
             type="button"
             onClick={() => window.print()}
