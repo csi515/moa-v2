@@ -46,7 +46,7 @@ export function transitionSeatStatus(
           ...current,
           status: 'IN_USE',
           currentOccupantId: context?.occupantId,
-          startTime: context?.startTime ?? new Date().toISOString(),
+          startTime: context?.startTime ?? new Date(Date.now()).toISOString(),
           allottedMinutes: context?.allottedMinutes ?? 60,
         },
         success: true,

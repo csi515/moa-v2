@@ -60,7 +60,7 @@ export const ConsumableDispenserListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '불출 등록 실패', 'error');
+          showToast.error(err, '불출 등록 실패');
         },
       }
     );

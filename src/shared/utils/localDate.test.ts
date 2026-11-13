@@ -86,13 +86,20 @@ function run() {
     '../../../src/industries/piano/components/makeup/MakeupManagementView.tsx',
     '../../../src/industries/piano/components/textbooks/TextbookPaymentModal.tsx',
     '../../../src/industries/piano/services/textbookSaleService.ts',
-    '../../../src/core/finance/services/tuitionService.ts',
-    '../../../src/core/finance/services/invoicePaymentService.ts',
+    '../../../src/capabilities/billing/finance/services/tuitionService.ts',
+    '../../../src/capabilities/billing/finance/services/invoicePaymentService.ts',
     '../../../src/capabilities/roster/components/useStudentDetailModal.ts',
     '../../../src/core/schedules/components/CreateConsultationScheduleModal.tsx',
     '../../../src/shared/components/layout/Header.tsx',
     '../../../src/core/dashboard/IndustryDashboardShell.tsx',
     '../../../src/capabilities/roster/components/StudentListView.tsx',
+    '../../../src/modules/parent/components/ParentMakeupRequestModal.tsx',
+    '../../../src/industries/piano/components/practiceRooms/PianoRoomTuningModal.tsx',
+    '../../../src/industries/piano/components/practiceRooms/pianoTuningHelpers.ts',
+    '../../../src/industries/piano/components/schedule/studentTemporaryMoveHelpers.ts',
+    '../../../src/capabilities/attendance/domain/pinAttendanceValidation.ts',
+    '../../../src/capabilities/attendance/ui/AttendanceManagementView.tsx',
+    '../../../src/modules/parent/views/industryHomeWidgets.tsx',
   ];
   for (const rel of pianoFiles) {
     const src = readFileSync(join(here, rel), 'utf8');

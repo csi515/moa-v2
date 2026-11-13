@@ -92,7 +92,7 @@ export const LevelAssessmentView: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-slate-900">정기 승급 심사 및 모바일 합격증</h1>
           <p className="text-sm text-slate-500 mt-1">
-            승품·승급 루브릭 채점표를 작성하고, 합격 원생에게 W3C 표준 0원 모바일 전자 합격증을 즉시 발급합니다.
+            승품·승급 루브릭 채점표를 작성하고, 합격자에게 W3C 표준 0원 모바일 전자 합격증을 즉시 발급합니다.
           </p>
         </div>
         <div className="flex items-center gap-2">

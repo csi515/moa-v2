@@ -2,6 +2,12 @@ import { DEFAULT_LOCATION_TIMEZONE } from '@/core/locations/types';
 
 /** 브라우저 로컬 타임존 기준 날짜 유틸 (출결·레슨·대시보드 통일) */
 
+/** 결정론적 타임스탬프 ISO 문자열 */
+export function nowIsoLocal(now?: Date | string | number): string {
+  if (now === undefined) return new Date(Date.now()).toISOString();
+  return (now instanceof Date ? now : new Date(now)).toISOString();
+}
+
 export function todayIsoLocal(now: Date = new Date()): string {
   return formatIsoDateLocal(now);
 }

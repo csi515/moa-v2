@@ -158,7 +158,7 @@ export function reserveMakeupLesson(
     studentId: token.studentId,
     studentName: token.studentName,
     status: 'reserved',
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(Date.now()).toISOString(),
   };
 
   return {

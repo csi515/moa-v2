@@ -66,7 +66,7 @@ export const CustomerNoLinkEmptyState: FC<Props> = ({
                       await customerJoinService.cancelMyJoinRequest(r.id);
                       await onReload();
                     } catch (err) {
-                      showToast(err instanceof Error ? err.message : '취소에 실패했습니다', 'error');
+                      showToast.error(err, '취소에 실패했습니다');
                     }
                   }}
                   className="mt-2 w-full py-2 text-xs font-bold text-slate-600 border border-slate-200 rounded-xl min-h-[44px]"

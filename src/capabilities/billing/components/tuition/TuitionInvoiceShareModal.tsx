@@ -39,7 +39,7 @@ export function buildTuitionNoticeMessage(params: {
 
 ${ymLabel} 수강료 납부 안내드립니다.
 
-- 원생명: ${params.studentName}
+- 고객명: ${params.studentName}
 - 수강료: ${formatCurrency(targetAmount)}
 - 납부기한: ${params.dueDate || '해당월 10일'}
 ${accountInfo}
@@ -106,14 +106,14 @@ export const TuitionInvoiceShareModal: React.FC<TuitionInvoiceShareModalProps> =
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={`${invoice.studentName} 원생 수강료 카톡/문자 안내`}
+      title={`${invoice.studentName} 수강료 카톡/문자 안내`}
       maxWidth="md"
     >
       <div className="p-5 sm:p-6 space-y-4">
         {/* 청구 정보 요약 카드 */}
         <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 grid grid-cols-2 gap-3 text-xs">
           <div>
-            <span className="text-slate-400 font-semibold block">청구월 / 원생</span>
+            <span className="text-slate-400 font-semibold block">청구월 / 대상자</span>
             <span className="font-bold text-slate-900 text-sm mt-0.5 block">
               {invoice.yearMonth} · {invoice.studentName}
             </span>

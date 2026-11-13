@@ -308,10 +308,10 @@ export const DigitalContractManagementView: React.FC = () => {
                   </span>
                   <button
                     type="button"
-                    onClick={() => showToast(`[${t.customerName}] 갱신 안내 알림톡이 전송되었습니다.`, 'success')}
+                    onClick={() => showToast(`[${t.customerName}] 갱신 안내 기록이 저장되었습니다 (외부 문자 미발송).`, 'info')}
                     className="ml-1 text-blue-600 hover:underline font-semibold text-[10px]"
                   >
-                    알림톡 발송
+                    안내 기록 (외부 미발송)
                   </button>
                 </div>
               ))}

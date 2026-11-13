@@ -1,3 +1,5 @@
+import { Modal } from '@/shared/components/ui/Modal';
+
 import React, { useMemo, useState, useEffect } from 'react';
 import type { Student } from '@/types';
 import { renderGuardianInvite } from '@/core/staff/staffUi';
@@ -113,7 +115,7 @@ const StudentDetailModalContent: React.FC<
       modal.attendance.setNewAttDate(todayIso);
       modal.attendance.setNewAttStatus('present');
       modal.attendance.onSave({ preventDefault: () => {} } as any);
-      showToast(`🎉 '${student.name}' 원생이 오늘 출석(등원) 처리되었습니다.`, 'success');
+      showToast(`🎉 '${student.name}'님이 오늘 출석 처리되었습니다.`, 'success');
     } catch {
       showToast('출결 처리 중 오류가 발생했습니다.', 'error');
     }
@@ -130,30 +132,19 @@ const StudentDetailModalContent: React.FC<
     }
   };
 
-  // ESC 키로 모달 닫기 지원 (접근성 향상)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  // 선언적 ESC 키 모달 닫기 지원
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-3 bg-slate-900/60 backdrop-blur-xs overflow-y-auto"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label={`${student.name} 원생 상세 정보`}
-    >
-      <div
-        className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 w-full max-w-4xl lg:max-w-6xl overflow-hidden sm:my-4 flex flex-col max-h-[90vh]"
-        onClick={(e) => e.stopPropagation()}
+    <>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        title={`${student.name} 상세 정보`}
+        maxWidth="4xl"
+        hideHeader={true}
       >
-        <div className="p-4 border-b border-slate-100 bg-slate-50/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+        <div className="flex flex-col">
+          <div className="p-4 border-b border-slate-100 bg-slate-50/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-3">
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-base font-extrabold shadow-md shrink-0"
@@ -240,7 +231,7 @@ const StudentDetailModalContent: React.FC<
               type="button"
               onClick={() => setIsReportModalOpen(true)}
               className="px-3 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
-              title="원생 월간 성장 리포트 A4 인쇄 / PDF 저장"
+              title="월간 성장 리포트 A4 인쇄 / PDF 저장"
             >
               <Award className="w-3.5 h-3.5 text-purple-600" />
               <span className="hidden sm:inline">성장 리포트</span>
@@ -495,7 +486,8 @@ const StudentDetailModalContent: React.FC<
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      </Modal>
 
       {detailExtension?.renderModals?.({
         student,
@@ -517,6 +509,6 @@ const StudentDetailModalContent: React.FC<
         onClose={() => setIsReportModalOpen(false)}
         student={student}
       />
-    </div>
+    </>
   );
 };

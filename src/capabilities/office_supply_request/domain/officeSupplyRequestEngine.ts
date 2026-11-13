@@ -57,7 +57,7 @@ export function canManageOfficeSupplyRequest(member: MemberWithRole): boolean {
 }
 
 /** YYYY-MM */
-export function toYearMonth(date: Date = new Date()): string {
+export function toYearMonth(date: Date = new Date(Date.now())): string {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, '0');
   return `${y}-${m}`;
@@ -80,7 +80,7 @@ export function shiftYearMonth(yearMonth: string, deltaMonths: number): string {
  */
 export function isCampaignWritable(
   campaign: Pick<OfficeSupplyCampaign, 'status' | 'deadlineAt'>,
-  now: Date = new Date()
+  now: Date = new Date(Date.now())
 ): boolean {
   if (campaign.status !== 'open') return false;
   const deadline = new Date(campaign.deadlineAt);
@@ -90,7 +90,7 @@ export function isCampaignWritable(
 
 export function campaignLockReason(
   campaign: Pick<OfficeSupplyCampaign, 'status' | 'deadlineAt'>,
-  now: Date = new Date()
+  now: Date = new Date(Date.now())
 ): string | null {
   if (campaign.status === 'closed') return '관리자가 마감했습니다.';
   if (!isCampaignWritable(campaign, now)) return '신청 마감일이 지났습니다.';

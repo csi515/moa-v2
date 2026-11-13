@@ -185,7 +185,7 @@ export const MakeupLessonPassView: React.FC = () => {
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
                 <thead style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
                   <tr>
-                    <th style={{ padding: '12px 16px', fontWeight: 600 }}>수강생</th>
+                    <th style={{ padding: '12px 16px', fontWeight: 600 }}>회원/고객</th>
                     <th style={{ padding: '12px 16px', fontWeight: 600 }}>발생 사유</th>
                     <th style={{ padding: '12px 16px', fontWeight: 600 }}>결석일</th>
                     <th style={{ padding: '12px 16px', fontWeight: 600 }}>만료 예정일</th>
@@ -337,7 +337,7 @@ export const MakeupLessonPassView: React.FC = () => {
 
           <div style={{ marginBottom: '16px' }}>
             <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
-              수강생 이름
+              회원/대상자 성명
             </label>
             <input
               type="text"

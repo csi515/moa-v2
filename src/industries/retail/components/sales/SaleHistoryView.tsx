@@ -67,7 +67,7 @@ export const SaleHistoryView: FC = () => {
         })
       );
     } catch (err) {
-      showToast(err instanceof Error ? err.message : COPY.loadError, 'error');
+      showToast.error(err, COPY.loadError);
       setRows([]);
     } finally {
       setLoading(false);
@@ -129,7 +129,7 @@ export const SaleHistoryView: FC = () => {
     try {
       setDetail(await mapDetail(saleId));
     } catch (err) {
-      showToast(err instanceof Error ? err.message : COPY.loadError, 'error');
+      showToast.error(err, COPY.loadError);
       setDetailOpen(false);
     } finally {
       setDetailLoading(false);

@@ -69,7 +69,7 @@ export const LearningJournalFeedView: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-slate-900">수업 일지 및 성장 알림장 피드</h1>
           <p className="text-sm text-slate-500 mt-1">
-            원생별 수업 진도, 연습 과제, 칭찬 코멘트를 작성하고 학부모 포털 피드로 실시간 소통합니다.
+            회원별 수업 진도, 연습 과제, 칭찬 코멘트를 작성하고 모바일 포털 피드로 실시간 소통합니다.
           </p>
         </div>
         <button
@@ -151,7 +151,7 @@ export const LearningJournalFeedView: React.FC = () => {
             <form onSubmit={handleCreate} className="space-y-3 text-sm">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">원생 이름</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">회원/고객 이름</label>
                   <input
                     type="text"
                     required
@@ -192,7 +192,7 @@ export const LearningJournalFeedView: React.FC = () => {
                   rows={4}
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  placeholder="오늘 집중 지도한 내용과 원생의 성장 포인트를 입력해주세요."
+                  placeholder="오늘 집중 지도한 내용과 고객/회원의 성장 포인트를 입력해주세요."
                   className="w-full px-3 py-2 border rounded-lg text-sm"
                 />
               </div>

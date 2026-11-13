@@ -12,7 +12,9 @@ import {
   BookOpen,
   Coffee,
 } from 'lucide-react';
+import { Modal } from '@/shared/components/ui/Modal';
 import type { DayOfWeek } from '@/core/staff/workWindow';
+import { showToast } from '@/shared/feedback/uiFeedback';
 import {
   saveTemporaryMove,
   createTemporaryMoveRecord,
@@ -123,7 +125,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
 
     // 엣지 8번: 브레이크 타임 선택 차단
     if (BREAK_TIME_SLOTS.includes(targetTime)) {
-      alert('해당 시간은 원내 브레이크(소독/휴게) 시간으로 수업을 배정할 수 없습니다.');
+      showToast('해당 시간은 원내 브레이크(소독/휴게) 시간으로 수업을 배정할 수 없습니다.', 'warning');
       return;
     }
 
@@ -157,38 +159,38 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="quick-move-title"
-    >
-      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
-        {/* 헤더 */}
-        <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-purple-50 to-indigo-50/50">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-purple-600 flex items-center justify-center text-white shadow-md shadow-purple-600/20">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 id="quick-move-title" className="text-lg font-black text-slate-900 tracking-tight">
-                오늘만 임시 변경
-              </h2>
-              <p className="text-xs text-purple-700 font-semibold mt-0.5">
-                정규 시간표는 보존되며 오늘 하루만 다른 슬롯으로 즉시 이동합니다.
-              </p>
-            </div>
-          </div>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="오늘만 임시 변경"
+      description="정규 시간표는 보존되며 오늘 하루만 다른 슬롯으로 즉시 이동합니다."
+      maxWidth="md"
+      footer={
+        <div className="flex items-center justify-between w-full">
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
-            aria-label="닫기"
+            className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-bold transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            취소
+          </button>
+          <button
+            type="button"
+            onClick={() => handleApplyMove(selectedTargetTime)}
+            disabled={!selectedTargetTime || (isShuttleStudent && !shuttleConfirmed)}
+            className={`min-h-[44px] px-6 py-2.5 rounded-xl text-white text-xs font-black shadow-md transition-all cursor-pointer flex items-center gap-1.5 ${
+              !selectedTargetTime || (isShuttleStudent && !shuttleConfirmed)
+                ? 'bg-slate-300 cursor-not-allowed text-slate-500 shadow-none'
+                : 'bg-purple-600 hover:bg-purple-700 shadow-purple-600/20'
+            }`}
+          >
+            <Check className="w-4 h-4" />
+            <span>3초 만에 변경 완료</span>
           </button>
         </div>
-
+      }
+    >
+      <div>
         {/* 원생 및 현재 슬롯 정보 카드 */}
         <div className="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/70">
           <div className="flex items-center justify-between">
@@ -380,31 +382,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
             />
           </div>
         </div>
-
-        {/* 액션 푸터 */}
-        <div className="p-5 sm:p-6 border-t border-slate-100 bg-slate-50/70 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-bold transition-colors cursor-pointer"
-          >
-            취소
-          </button>
-          <button
-            type="button"
-            onClick={() => handleApplyMove(selectedTargetTime)}
-            disabled={!selectedTargetTime || (isShuttleStudent && !shuttleConfirmed)}
-            className={`min-h-[44px] px-6 py-2.5 rounded-xl text-white text-xs font-black shadow-md transition-all cursor-pointer flex items-center gap-1.5 ${
-              !selectedTargetTime || (isShuttleStudent && !shuttleConfirmed)
-                ? 'bg-slate-300 cursor-not-allowed text-slate-500 shadow-none'
-                : 'bg-purple-600 hover:bg-purple-700 shadow-purple-600/20'
-            }`}
-          >
-            <Check className="w-4 h-4" />
-            <span>3초 만에 변경 완료</span>
-          </button>
-        </div>
       </div>
-    </div>
+    </Modal>
   );
 };

@@ -75,7 +75,7 @@ export const CreateConsultationScheduleModal: FC<CreateConsultationScheduleModal
       onClose();
     } catch (err) {
       console.error(err);
-      showToast(err instanceof Error ? err.message : '일정 등록에 실패했습니다.', 'error');
+      showToast.error(err, '일정 등록에 실패했습니다.');
     } finally {
       setSaving(false);
     }

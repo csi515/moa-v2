@@ -1,3 +1,5 @@
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
+
 import React, { useEffect,  useState } from 'react';
 import { useCreate } from '@refinedev/core';
 import { X, Tag, Calendar, AlertCircle } from 'lucide-react';
@@ -82,13 +84,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
   const calculatedDiscountRate =
     orig > 0 && spec < orig ? Math.round(((orig - spec) / orig) * 100) : 0;
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  useEscapeKey(onClose);
 
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200 cursor-pointer">

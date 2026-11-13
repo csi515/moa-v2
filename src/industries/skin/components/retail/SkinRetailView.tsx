@@ -48,10 +48,7 @@ export function SkinRetailView() {
       setCatalog(items);
       setCustomers(customerRows);
     } catch (err) {
-      showToast(
-        err instanceof Error ? err.message : '상품 목록을 불러오지 못했습니다.',
-        'error'
-      );
+      showToast.error(err, '상품 목록을 불러오지 못했습니다.');
     } finally {
       setLoading(false);
     }
@@ -84,7 +81,7 @@ export function SkinRetailView() {
       await reload();
       showToast(editing ? '상품이 수정되었습니다.' : '상품이 등록되었습니다.', 'success');
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '상품 저장에 실패했습니다.', 'error');
+      showToast.error(err, '상품 저장에 실패했습니다.');
     } finally {
       setSaving(false);
     }

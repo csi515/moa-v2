@@ -9,7 +9,7 @@ export interface StudentExportable {
   joinDate?: string;
   tuitionFee?: number;
   notes?: string;
-  guardians?: any[];
+  guardians?: Array<Record<string, unknown>>;
 }
 import { getPrimaryGuardian } from '@/core/parent/guardianHelpers';
 

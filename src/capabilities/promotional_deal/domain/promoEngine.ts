@@ -59,7 +59,7 @@ export interface PriceResolutionResult {
  */
 export function getPromotionStatus(
   promo: PromotionalDeal | null | undefined,
-  currentTime: Date = new Date()
+  currentTime: Date = new Date(Date.now())
 ): PromoStatus {
   if (!promo) {
     return 'NO_DEAL';
@@ -96,7 +96,7 @@ export function getPromotionStatus(
  */
 export function isPromotionActive(
   promo: PromotionalDeal | null | undefined,
-  currentTime: Date = new Date()
+  currentTime: Date = new Date(Date.now())
 ): boolean {
   return getPromotionStatus(promo, currentTime) === 'ACTIVE';
 }
@@ -127,7 +127,7 @@ export function getPromoStatusLabel(status: PromoStatus): string {
 export function resolveCurrentPrice(
   originalPrice: number,
   promo: PromotionalDeal | null | undefined,
-  currentTime: Date = new Date()
+  currentTime: Date = new Date(Date.now())
 ): PriceResolutionResult {
   const status = getPromotionStatus(promo, currentTime);
   const statusLabel = getPromoStatusLabel(status);

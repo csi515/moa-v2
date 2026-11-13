@@ -42,7 +42,7 @@ export function parseExpiryDate(expiryStr: string): Date {
  */
 export function resolveEffectivePassStatus(
   item: Pick<PassRecord, 'status' | 'expires_at' | 'remaining_count' | 'pass_type'>,
-  now: Date | string = new Date()
+  now: Date | string = new Date(Date.now())
 ): PassStatus {
   if (item.status === 'PAUSED') {
     return 'PAUSED';
@@ -71,7 +71,7 @@ export function resolveEffectivePassStatus(
 export function matchesPassesFilter(
   item: PassRecord,
   filter: PassesFilterCriteria,
-  now: Date | string = new Date()
+  now: Date | string = new Date(Date.now())
 ): boolean {
   const targetStatus = filter.status ?? 'ALL';
   if (targetStatus !== 'ALL') {
@@ -110,7 +110,7 @@ export function matchesPassesFilter(
 export function filterPasses(
   items: readonly PassRecord[],
   filter: PassesFilterCriteria,
-  now: Date | string = new Date()
+  now: Date | string = new Date(Date.now())
 ): PassRecord[] {
   return items.filter((item) => matchesPassesFilter(item, filter, now));
 }

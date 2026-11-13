@@ -67,7 +67,7 @@ export function assemblePurchaseOrder(
   orgName: string = '우리 매장',
   sequenceNumber: number = 1
 ): GeneratedPurchaseOrder {
-  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const dateStr = new Date(Date.now()).toISOString().slice(0, 10).replace(/-/g, '');
   const poNumber = `PO-${dateStr}-${String(sequenceNumber).padStart(3, '0')}`;
 
   let totalAmount = 0;
@@ -91,7 +91,7 @@ export function assemblePurchaseOrder(
   const lines = [
     `[발주서] ${orgName} ➔ ${vendorName}`,
     `발주번호: ${poNumber}`,
-    `발주일자: ${new Date().toISOString().slice(0, 10)}`,
+    `발주일자: ${new Date(Date.now()).toISOString().slice(0, 10)}`,
     `-----------------------------`,
     ...orderItems.map(
       (i, idx) => `${idx + 1}. ${i.itemName} : ${i.orderQuantity}${i.unit} (${i.subtotal.toLocaleString()}원)`

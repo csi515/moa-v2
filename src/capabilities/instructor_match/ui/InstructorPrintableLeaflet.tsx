@@ -71,7 +71,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
               {profile.staffName} 강사 안내 리플릿
             </h2>
             <p className="text-xs text-slate-500">
-              A4 단면 인쇄 포스터 및 수강생 모바일 웹 카드 지원
+              A4 단면 인쇄 포스터 및 모바일 웹 카드 지원
             </p>
           </div>
         </div>
@@ -333,7 +333,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
         </div>
       )}
 
-      {/* 2. 모바일 수강생 웹 카드 뷰 */}
+      {/* 2. 모바일 웹 카드 뷰 */}
       {viewMode === 'mobile_card' && (
         <div className="max-w-sm mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200 text-slate-900">
           {/* 모바일 상단 커버 이미지 */}

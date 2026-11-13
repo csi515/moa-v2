@@ -27,7 +27,7 @@ export interface WasteDischargeRecord {
 export function calculateStorageLimitDday(
   firstDischargeDate: string,
   maxStorageDays = 15,
-  now: Date = new Date()
+  now: Date = new Date(Date.now())
 ): { deadlineDate: string; daysRemaining: number; isOverdue: boolean } {
   const startDate = new Date(firstDischargeDate);
   const deadline = new Date(startDate);

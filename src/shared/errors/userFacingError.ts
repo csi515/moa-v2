@@ -71,12 +71,13 @@ function localizedDomainMessage(raw: string): string | null {
   return null;
 }
 
-export function userFacingErrorMessage(error: unknown): string {
+export function userFacingErrorMessage(error: unknown, fallbackMessage?: string): string {
   const raw = rawErrorText(error);
   const localized = localizedDomainMessage(raw);
   if (localized) return localized;
   if (/42p10|on conflict specification|organization_members_org_user_role_unique/.test(raw.toLowerCase())) {
     return '사업장 개설 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요. 문제가 계속되면 고객 지원에 문의해 주세요.';
   }
-  return USER_FACING_ERROR_MESSAGES[classifyUserFacingError(error)];
+  const classified = USER_FACING_ERROR_MESSAGES[classifyUserFacingError(error)];
+  return fallbackMessage ? `${fallbackMessage} (${classified})` : classified;
 }

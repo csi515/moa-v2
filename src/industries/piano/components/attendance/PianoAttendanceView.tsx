@@ -8,6 +8,7 @@ import {
   Users,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
+import { useTerminology } from '@/core/terminology';
 import {
   EmptyState,
   FilterBar,
@@ -45,6 +46,9 @@ type StatChip = {
  */
 export const PianoAttendanceView: FC = () => {
   const { setActiveTab, showToast } = useApp();
+  const { t } = useTerminology();
+  const customerWord = t('customer.singular', '원생');
+
   const {
     selectedDate,
     setSelectedDate,
@@ -68,6 +72,9 @@ export const PianoAttendanceView: FC = () => {
   // 수납 모달 상태 & 갱신 키
   const [paymentTargetStudent, setPaymentTargetStudent] = useState<BatchCheckInStudent | null>(null);
   const [paymentRefreshKey, setPaymentRefreshKey] = useState(0);
+
+  // 일괄 등원 처리 중 락 (더블 클릭 방지)
+  const [isBatchCheckingIn, setIsBatchCheckingIn] = useState(false);
 
   const statChips: StatChip[] = [
     {
@@ -134,10 +141,19 @@ export const PianoAttendanceView: FC = () => {
     return groupAttendanceRowsByTime(rows, { isToday });
   }, [rows, isToday]);
 
-  // 시간대 미등원 학생 일괄 등원 처리
+  // 시간대 미등원 학생 일괄 등원 처리 (이중 클릭 방지 락 적용)
   const handleBatchCheckIn = async (students: BatchCheckInStudent[]) => {
-    for (const st of students) {
-      await handleSetStatus(st, 'present');
+    if (isBatchCheckingIn || students.length === 0) return;
+    setIsBatchCheckingIn(true);
+    try {
+      for (const st of students) {
+        await handleSetStatus(st, 'present');
+      }
+      showToast(`${students.length}명의 ${customerWord} 등원 처리가 완료되었습니다.`, 'success');
+    } catch (err) {
+      showToast('일괄 등원 처리 중 오류가 발생했습니다.', 'error');
+    } finally {
+      setIsBatchCheckingIn(false);
     }
   };
 
@@ -147,7 +163,7 @@ export const PianoAttendanceView: FC = () => {
         density="compact"
         icon={<CheckSquare className="w-6 h-6 text-indigo-600" />}
         title="출결"
-        description="오늘 출결 현황 체크 및 학생별 등하원 기록을 관리합니다"
+        description={`오늘 출결 현황 체크 및 ${customerWord}별 등하원 기록을 관리합니다`}
       />
 
       {/* 요약 = 필터 (모바일 스와이프 칩 / 태블릿 이상 5열 그리드) */}
@@ -186,18 +202,18 @@ export const PianoAttendanceView: FC = () => {
           <div className="flex items-center gap-2">
             <CreditCard className="w-4 h-4 text-amber-600 shrink-0" />
             <span className="font-bold text-amber-950">
-              오늘 출결 대상 중 수강료 수납 안내 학생이 있습니다. (학생 이름 옆 뱃지 클릭 시 즉시 수납)
+              오늘 출결 대상 중 수강료 수납 안내 {customerWord}이(가) 있습니다. ({customerWord} 이름 옆 뱃지 클릭 시 즉시 수납)
             </span>
           </div>
           <div className="flex items-center gap-1.5 font-bold self-end sm:self-auto">
             {billingSummaryStats.dueTodayCount > 0 && (
-              <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-200/60">
-                오늘 결제 {billingSummaryStats.dueTodayCount}명
+              <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-200/60 tabular-nums">
+                오늘 결제 <span className="tabular-nums font-black">{billingSummaryStats.dueTodayCount}</span>명
               </span>
             )}
             {billingSummaryStats.overdueCount > 0 && (
-              <span className="px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 border border-rose-200/60">
-                미납 {billingSummaryStats.overdueCount}명
+              <span className="px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 border border-rose-200/60 tabular-nums">
+                미납 <span className="tabular-nums font-black">{billingSummaryStats.overdueCount}</span>명
               </span>
             )}
           </div>
@@ -243,7 +259,7 @@ export const PianoAttendanceView: FC = () => {
           <SearchField
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="학생 이름 검색"
+            placeholder={`${customerWord} 이름 검색`}
             className="w-full sm:flex-1 sm:max-w-xs"
           />
         </FilterBar>
@@ -256,12 +272,12 @@ export const PianoAttendanceView: FC = () => {
             icon={<Users className="w-10 h-10 text-slate-400" />}
             title={
               expectedCount === 0 && rosterCount === 0
-                ? '이 날 예정된 학생이 없습니다'
-                : '조건에 맞는 학생이 없습니다'
+                ? `이 날 예정된 ${customerWord}이(가) 없습니다`
+                : `조건에 맞는 ${customerWord}이(가) 없습니다`
             }
             description={
               expectedCount === 0 && rosterCount === 0
-                ? '일정(시간표)에서 학생을 배치하면 출결 목록에 나타납니다.'
+                ? `일정(시간표)에서 ${customerWord}을(를) 배치하면 출결 목록에 나타납니다.`
                 : statusFilter !== 'ALL'
                   ? '다른 상태 칩을 눌러 보세요.'
                   : '검색어를 바꿔 보세요.'
@@ -286,6 +302,7 @@ export const PianoAttendanceView: FC = () => {
               group={group}
               pinCheckInIds={pinCheckInIds}
               billingBadgeMap={billingBadgeMap}
+              isBatchCheckingIn={isBatchCheckingIn}
               onOpenStudent={openStudent}
               onOpenPayment={(student) => setPaymentTargetStudent(student)}
               onSetStatus={handleSetStatus}
@@ -314,7 +331,7 @@ export const PianoAttendanceView: FC = () => {
             const studentName = paymentTargetStudent.name;
             setPaymentTargetStudent(null);
             setPaymentRefreshKey((k) => k + 1);
-            showToast(`${studentName} 학생의 수강료 수납 처리가 완료되었습니다.`, 'success');
+            showToast(`${studentName} ${customerWord}의 수강료 수납 처리가 완료되었습니다.`, 'success');
           }}
           onClose={() => setPaymentTargetStudent(null)}
         />

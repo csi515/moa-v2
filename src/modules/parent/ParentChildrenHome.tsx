@@ -55,7 +55,7 @@ export const ParentChildrenHome: React.FC<{ addRequest?: number }> = ({ addReque
         showToast(`${org.name} 사업장 연결이 대기 중입니다`, 'info');
       } catch (err) {
         if (!cancelled) {
-          showToast(err instanceof Error ? err.message : '사업장 조회에 실패했습니다', 'error');
+          showToast.error(err, '사업장 조회에 실패했습니다');
         }
       }
     })();
@@ -163,7 +163,7 @@ export const ParentChildrenHome: React.FC<{ addRequest?: number }> = ({ addReque
       showToast('사업장 연결 요청을 취소했습니다', 'success');
       await refreshPortalTree();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '요청 취소에 실패했습니다', 'error');
+      showToast.error(err, '요청 취소에 실패했습니다');
     }
   };
 

@@ -65,7 +65,7 @@ export const BlacklistGuardListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '출입제한 등록 실패', 'error');
+          showToast.error(err, '출입제한 등록 실패');
         },
       }
     );

@@ -6,6 +6,7 @@
  */
 
 import type { DayOfWeek } from '@/core/staff/workWindow';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 
 export interface TemporaryMoveRecord {
   id: string;
@@ -57,7 +58,7 @@ export function createTemporaryMoveRecord(params: {
   targetTeacherName?: string;
   shuttleChecked?: boolean;
 }): TemporaryMoveRecord {
-  const todayIso = new Date().toISOString().slice(0, 10);
+  const todayIso = todayIsoLocal();
   const targetDate = params.targetDate || todayIso;
   const weekStart = params.weekStartDate || targetDate;
 
@@ -170,7 +171,7 @@ export function swapTemporaryMoves(params: {
   targetDate?: string;
   storageKey?: string;
 }): { recordA: TemporaryMoveRecord; recordB: TemporaryMoveRecord } {
-  const date = params.targetDate || new Date().toISOString().slice(0, 10);
+  const date = params.targetDate || todayIsoLocal();
   const recordA = createTemporaryMoveRecord({
     studentId: params.studentA.id,
     studentName: params.studentA.name,

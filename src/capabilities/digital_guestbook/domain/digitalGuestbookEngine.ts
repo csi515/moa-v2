@@ -78,7 +78,7 @@ export function renderGuestbookCardSvg(entry: DigitalGuestbookEntryItem): string
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
-  const safeDate = (entry.createdAt || new Date().toISOString()).slice(0, 16).replace('T', ' ');
+  const safeDate = (entry.createdAt || new Date(Date.now()).toISOString()).slice(0, 16).replace('T', ' ');
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 250" width="100%" height="100%">
   <rect width="420" height="250" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>

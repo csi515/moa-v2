@@ -49,7 +49,7 @@ export interface MonthlyDepreciationReport {
  */
 export function evaluateRepairVsReplaceDecision(
   asset: EquipmentAsset,
-  asOfDate: string = new Date().toISOString()
+  asOfDate: string = new Date(Date.now()).toISOString()
 ): RepairVsReplaceDecision {
   const startDate = new Date(asset.installedDate);
   const currentDate = new Date(asOfDate);
@@ -97,7 +97,7 @@ export function evaluateRepairVsReplaceDecision(
  */
 export function evaluateEquipmentUrgency(
   asset: EquipmentAsset,
-  asOfDate: string = new Date().toISOString()
+  asOfDate: string = new Date(Date.now()).toISOString()
 ): EquipmentUrgencyLevel {
   if (asset.status === 'breakdown') return 'breakdown';
 

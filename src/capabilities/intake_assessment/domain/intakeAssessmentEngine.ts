@@ -87,7 +87,7 @@ export function analyzeIntakeSubmission(params: {
     answers: params.answers,
     riskFlags,
     hasCriticalCondition,
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(Date.now()).toISOString(),
   };
 }
 

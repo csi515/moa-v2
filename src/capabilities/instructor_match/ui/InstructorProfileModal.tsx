@@ -100,7 +100,7 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
             </div>
             <div>
               <h3 className="font-bold text-slate-900 text-lg">강사 스펙 & 프로필 등록</h3>
-              <p className="text-xs text-slate-500">문화센터 A4 홍보 포스터 및 모바일 수강생 안내장에 반영됩니다.</p>
+              <p className="text-xs text-slate-500">문화센터 A4 홍보 포스터 및 모바일 회원 안내장에 반영됩니다.</p>
             </div>
           </div>
           <button
@@ -228,7 +228,7 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
               rows={3}
               value={introduction}
               onChange={(e) => setIntroduction(e.target.value)}
-              placeholder="수강생들이 집에서도 빵집 수준의 퀄리티를 구현할 수 있도록 친절하고 세심하게 원리를 짚어드립니다..."
+              placeholder="회원들이 일상에서도 높은 퀄리티를 구현할 수 있도록 친절하고 세심하게 원리를 짚어드립니다..."
               className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900 text-xs"
             />
           </div>

@@ -147,7 +147,7 @@ export const TuitionCombinedBillingView: React.FC<TuitionCombinedBillingViewProp
                           {student.parentName} ({student.parentPhone})
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-6 py-4 text-right tabular-nums">
                         <p className="font-bold text-slate-900">{formatCurrency(summary.tuitionBilled || 0)}</p>
                         {summary.tuitionUnpaid > 0 ? (
                           <p className="text-[11px] font-bold text-rose-600">미납: {formatCurrency(summary.tuitionUnpaid)}</p>
@@ -155,7 +155,7 @@ export const TuitionCombinedBillingView: React.FC<TuitionCombinedBillingViewProp
                           <p className="text-[11px] text-emerald-600 font-semibold">전액 완납</p>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-6 py-4 text-right tabular-nums">
                         <p className="font-bold text-slate-900">
                           {(summary.textbookBilled || 0) > 0
                             ? formatCurrency(summary.textbookBilled || 0)
@@ -169,16 +169,16 @@ export const TuitionCombinedBillingView: React.FC<TuitionCombinedBillingViewProp
                           <p className="text-[11px] text-slate-400">-</p>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-right font-black text-slate-900">
+                      <td className="px-6 py-4 text-right font-black text-slate-900 tabular-nums">
                         {formatCurrency(summary.totalBilled || 0)}
                       </td>
-                      <td className="px-6 py-4 text-right font-black text-rose-600">
+                      <td className="px-6 py-4 text-right font-black text-rose-600 tabular-nums">
                         {(summary.totalUnpaid || 0) > 0 ? formatCurrency(summary.totalUnpaid) : '₩0'}
                       </td>
                       <td className="px-6 py-4 text-center">
                         <StatusBadge totalUnpaid={summary.totalUnpaid || 0} totalPaid={summary.totalPaid || 0} />
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-6 py-4 text-right tabular-nums">
                         <div className="flex items-center justify-end gap-1.5">
                           {hasUnpaid && (
                             <button
@@ -234,7 +234,7 @@ export const TuitionCombinedBillingView: React.FC<TuitionCombinedBillingViewProp
                   <StatusBadge totalUnpaid={summary.totalUnpaid || 0} totalPaid={summary.totalPaid || 0} />
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="grid grid-cols-2 gap-2 text-xs tabular-nums">
                   <div className="bg-slate-50 rounded-xl p-2.5">
                     <p className="text-slate-500 font-semibold mb-0.5">수강료</p>
                     <p className="font-bold text-slate-900">{formatCurrency(summary.tuitionBilled || 0)}</p>
@@ -255,7 +255,7 @@ export const TuitionCombinedBillingView: React.FC<TuitionCombinedBillingViewProp
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                <div className="flex items-center justify-between pt-2 border-t border-slate-100 tabular-nums">
                   <div>
                     <p className="text-[11px] text-slate-500">총 미납</p>
                     <p className="text-lg font-black text-rose-600">

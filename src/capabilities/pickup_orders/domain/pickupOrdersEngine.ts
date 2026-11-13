@@ -64,7 +64,7 @@ export const ALLOWED_PICKUP_TRANSITIONS: Record<PickupStage, PickupStage[]> = {
 export function transitionPickupStage(
   order: PickupOrder,
   nextStage: PickupStage,
-  timestamp: string = new Date().toISOString()
+  timestamp: string = new Date(Date.now()).toISOString()
 ): { updatedOrder: PickupOrder; success: boolean; notificationTriggered: boolean; error?: string } {
   if (order.stage === nextStage) {
     return { updatedOrder: order, success: true, notificationTriggered: false };
@@ -102,7 +102,7 @@ export function transitionPickupStage(
  */
 export function summarizePickupOrders(
   orders: readonly PickupOrder[],
-  targetDate: string = new Date().toISOString().slice(0, 10)
+  targetDate: string = new Date(Date.now()).toISOString().slice(0, 10)
 ): PickupKanbanSummary {
   let receivedCount = 0;
   let preparingCount = 0;
@@ -137,7 +137,7 @@ export function summarizePickupOrders(
  */
 export function filterUrgentPickups(
   orders: readonly PickupOrder[],
-  currentTime: string = new Date().toISOString(),
+  currentTime: string = new Date(Date.now()).toISOString(),
   thresholdMinutes: number = 60
 ): PickupOrder[] {
   const currentMs = new Date(currentTime).getTime();

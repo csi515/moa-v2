@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
+
 import {
   X,
   ShieldCheck,
@@ -61,13 +63,7 @@ export const CustomerTransferModal: React.FC<CustomerTransferModalProps> = ({
     const timer = setInterval(() => {
       setRemainingSeconds((prev) => (prev <= 1 ? 0 : prev - 1));
     }, 1000);
-    useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+    
 
   return () => clearInterval(timer);
   }, [step, remainingSeconds]);

@@ -302,7 +302,7 @@ export function createLessonJournalEntry(params: {
     videoUrl: params.videoUrl?.trim(),
     skillsPracticed: cleanSkills,
     homePracticeGuide: params.homePracticeGuide?.trim(),
-    createdAt: params.createdAt ?? new Date().toISOString(),
+    createdAt: params.createdAt ?? new Date(Date.now()).toISOString(),
   };
 }
 
@@ -339,7 +339,7 @@ export function groupJournalEntriesByMonth(
 export function attachGuardianFeedback(
   entry: LessonJournalEntry,
   comment: string,
-  respondedAt: string = new Date().toISOString()
+  respondedAt: string = new Date(Date.now()).toISOString()
 ): LessonJournalEntry {
   return {
     ...entry,

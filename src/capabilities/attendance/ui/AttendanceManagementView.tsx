@@ -23,6 +23,7 @@ import {
   attendancePresentTimeLabel,
 } from '../attendanceIndustryCopy';
 import { useModuleLabels } from '@/core/labels';
+import { todayIsoLocal, formatIsoDateLocal, shiftDateIso } from '@/shared/utils/localDate';
 import type { Student } from '@/types';
 import {
   CheckSquare,
@@ -58,7 +59,7 @@ export const AttendanceManagementView: React.FC = () => {
   const customerTab = getCustomerListTab(industry);
 
   const [subTab, setSubTab] = useState<AttendanceSubTab>('overview');
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
+  const [selectedDate, setSelectedDate] = useState(todayIsoLocal());
   const [searchQuery, setSearchQuery] = useState('');
   const [memoTarget, setMemoTarget] = useState<{
     student: Student;
@@ -75,7 +76,7 @@ export const AttendanceManagementView: React.FC = () => {
   const changeDate = (days: number) => {
     const d = new Date(selectedDate);
     d.setDate(d.getDate() + days);
-    setSelectedDate(d.toISOString().slice(0, 10));
+    setSelectedDate(formatIsoDateLocal(d));
   };
 
   const sessionMap = useMemo(() => {
@@ -167,7 +168,7 @@ export const AttendanceManagementView: React.FC = () => {
         icon={<CheckSquare className="w-6 h-6" />}
         iconClassName={accent.icon}
         title={attendanceManageTitle(industry)}
-        description="원생/회원별 출결 상태 체크 및 실시간 등하원 기록 관리"
+        description="회원 및 고객별 출결 상태 체크 및 실시간 입퇴실 기록 관리"
         actions={
           <SegmentedControl
             value={subTab}

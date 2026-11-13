@@ -28,7 +28,7 @@ const CatalogInner: React.FC = () => {
       const data = await listCatalogItems(orgId, { includeInactive: true });
       setRows(data);
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '목록 조회 실패', 'error');
+      showToast.error(cause, '목록 조회 실패');
     } finally {
       setLoading(false);
     }
@@ -59,7 +59,7 @@ const CatalogInner: React.FC = () => {
       showToast('품목을 추가했습니다.', 'success');
       await reload();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '추가 실패', 'error');
+      showToast.error(cause, '추가 실패');
     } finally {
       setSaving(false);
     }
@@ -70,7 +70,7 @@ const CatalogInner: React.FC = () => {
       await updateCatalogItem(row.id, { is_active: !row.is_active });
       await reload();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '변경 실패', 'error');
+      showToast.error(cause, '변경 실패');
     }
   }
 

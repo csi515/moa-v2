@@ -60,7 +60,7 @@ export const PettyCashListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '지출 등록 실패', 'error');
+          showToast.error(err, '지출 등록 실패');
         },
       }
     );

@@ -203,7 +203,7 @@ export function createPurchaseRequisition(params: {
   }
 
   const seq = params.sequenceNumber ?? Math.floor(100 + Math.random() * 900);
-  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const dateStr = new Date(Date.now()).toISOString().slice(0, 10).replace(/-/g, '');
   const prNumber = `PR-${dateStr}-${String(seq).padStart(3, '0')}`;
 
   let totalEstimatedAmount = 0;
@@ -231,7 +231,7 @@ export function createPurchaseRequisition(params: {
     };
   });
 
-  const nowIso = new Date().toISOString();
+  const nowIso = new Date(Date.now()).toISOString();
   const pr: PurchaseRequisition = {
     id: `pr-${Date.now()}`,
     prNumber,
@@ -439,7 +439,7 @@ export function vetPurchaseRequisition(
   vetter: { name: string; department?: string },
   reason?: string
 ): PurchaseRequisition {
-  const nowIso = new Date().toISOString();
+  const nowIso = new Date(Date.now()).toISOString();
 
   if (action === 'reject') {
     if (!reason || !reason.trim()) {
@@ -520,7 +520,7 @@ export function createPurchaseContractPackage(params: {
     });
   });
 
-  const nowIso = new Date().toISOString();
+  const nowIso = new Date(Date.now()).toISOString();
   const packageNumber = `PKG-${nowIso.slice(0, 10).replace(/-/g, '')}-${Math.floor(
     100 + Math.random() * 900
   )}`;
@@ -618,7 +618,7 @@ export function issueContractPurchaseOrder(params: {
   orderSequence?: number;
 }): ContractPurchaseOrder {
   const { contractPackage, approvers } = params;
-  const now = new Date();
+  const now = new Date(Date.now());
   const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
   const seq = params.orderSequence ?? 1;
   const poNumber = `PO-${dateStr}-${String(seq).padStart(3, '0')}`;

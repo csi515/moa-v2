@@ -11,6 +11,7 @@ import {
   PlusCircle,
 } from 'lucide-react';
 import { formatCurrency } from '@/utils/formatters';
+import { useTerminology } from '@/core/terminology';
 import { SalesStatusFilter } from '../textbookViewTypes';
 
 interface TextbookSalesTabProps {
@@ -26,6 +27,8 @@ export const TextbookSalesTab: React.FC<TextbookSalesTabProps> = ({
   onOpenReceiptModal,
   onCancelSale,
 }) => {
+  const { t } = useTerminology();
+  const customerWord = t('customer.singular', '원생');
   const [salesSearch, setSalesSearch] = useState('');
   const [salesStatusFilter, setSalesStatusFilter] = useState<SalesStatusFilter>('all');
 
@@ -160,7 +163,7 @@ export const TextbookSalesTab: React.FC<TextbookSalesTabProps> = ({
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="학생명, 학부모명, 교재명 검색..."
+              placeholder={`${customerWord}명, 학부모명, 교재명 검색...`}
               value={salesSearch}
               onChange={(e) => setSalesSearch(e.target.value)}
               className="w-full pl-9 pr-4 py-2 min-h-[44px] text-xs rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 bg-white text-slate-900 font-medium"

@@ -367,7 +367,7 @@ export const InstructorCommissionSettlementView: React.FC = () => {
             <thead className="bg-slate-50 text-slate-600 border-b border-slate-200">
               <tr>
                 <th className="py-3 px-3.5 font-semibold">강좌명 / 강사</th>
-                <th className="py-3 px-3 font-semibold text-center">수강생</th>
+                <th className="py-3 px-3 font-semibold text-center">회원/고객</th>
                 <th className="py-3 px-3 font-semibold text-right">총 매출</th>
                 <th className="py-3 px-3 font-semibold text-right">공제(재료+카드)</th>
                 <th className="py-3 px-3 font-semibold text-right">순배분 대상</th>

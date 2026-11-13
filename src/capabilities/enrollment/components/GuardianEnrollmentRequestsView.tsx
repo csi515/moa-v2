@@ -29,7 +29,7 @@ export const GuardianEnrollmentRequestsView: React.FC = () => {
       const data = await getOrgEnrollmentRequests(currentOrganization.id, filter);
       setRequests(data);
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '요청 목록을 불러오지 못했습니다', 'error');
+      showToast.error(err, '요청 목록을 불러오지 못했습니다');
     } finally {
       setLoading(false);
     }
@@ -48,7 +48,7 @@ export const GuardianEnrollmentRequestsView: React.FC = () => {
       );
       await loadRequests();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '승인 처리에 실패했습니다', 'error');
+      showToast.error(err, '승인 처리에 실패했습니다');
     }
   };
 
@@ -58,7 +58,7 @@ export const GuardianEnrollmentRequestsView: React.FC = () => {
       showToast('등록 요청을 거절했습니다', 'info');
       await loadRequests();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '거절 처리에 실패했습니다', 'error');
+      showToast.error(err, '거절 처리에 실패했습니다');
       throw err;
     }
   };

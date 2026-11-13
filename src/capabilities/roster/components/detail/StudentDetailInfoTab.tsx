@@ -295,7 +295,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
             </span>
           ))
         ) : (
-          <span className="text-xs text-slate-400">선택된 선호 장르 없음 (원생 수정에서 등록 가능)</span>
+          <span className="text-xs text-slate-400">선택된 선호 장르 없음 (정보 수정에서 등록 가능)</span>
         )}
       </div>
       {wishlist.songs.length > 0 && (

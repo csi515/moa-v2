@@ -140,7 +140,7 @@ export const InstructorMatchManagementView: React.FC = () => {
             문화센터 강사 스펙 관리 & 원클릭 홍보 포스터
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            강사 상세 약력과 개설 강좌를 관리하고, 원클릭으로 A4 단면 인쇄 포스터 및 수강생 모바일 QR 안내장을 발행합니다.
+            강사 상세 약력과 개설 강좌를 관리하고, 원클릭으로 A4 단면 인쇄 포스터 및 회원 모바일 QR 안내장을 발행합니다.
           </p>
         </div>
 

@@ -127,7 +127,7 @@ export const AvailabilitySettingsView: FC<AvailabilitySettingsViewProps> = ({
       );
     } catch (err) {
       console.error(err);
-      showToast(err instanceof Error ? err.message : '동기화에 실패했습니다.', 'error');
+      showToast.error(err, '동기화에 실패했습니다.');
     } finally {
       setSyncing(false);
     }
@@ -205,7 +205,7 @@ export const AvailabilitySettingsView: FC<AvailabilitySettingsViewProps> = ({
       await syncSlots();
     } catch (err) {
       console.error(err);
-      showToast(err instanceof Error ? err.message : '저장에 실패했습니다.', 'error');
+      showToast.error(err, '저장에 실패했습니다.');
     } finally {
       setSaving(false);
     }
@@ -240,7 +240,7 @@ export const AvailabilitySettingsView: FC<AvailabilitySettingsViewProps> = ({
       await syncSlots();
     } catch (err) {
       console.error(err);
-      showToast(err instanceof Error ? err.message : '예외 저장에 실패했습니다.', 'error');
+      showToast.error(err, '예외 저장에 실패했습니다.');
     }
   };
 

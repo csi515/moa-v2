@@ -69,7 +69,7 @@ export function createSubstituteRequest(params: {
     payRateType: params.payRateType ?? 'hourly',
     offeredFee: params.offeredFee ?? 30000,
     status: 'open',
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(Date.now()).toISOString(),
   };
 }
 
@@ -95,7 +95,7 @@ export function applySubstituteBid(
     candidateName: candidate.name,
     bidMessage: candidate.message,
     status: 'pending',
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(Date.now()).toISOString(),
   };
 
   const updatedRequest: SubstituteRequest = {
@@ -126,7 +126,7 @@ export function approveSubstituteBid(
     assignedStaffId: selectedBid.candidateStaffId,
     assignedName: selectedBid.candidateName,
     status: 'approved',
-    approvedAt: new Date().toISOString(),
+    approvedAt: new Date(Date.now()).toISOString(),
   };
 
   const updatedBids = allBids.map((b) => ({

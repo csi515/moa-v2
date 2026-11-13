@@ -65,7 +65,7 @@ export const LockerOverrideListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '감사 기록 저장 실패', 'error');
+          showToast.error(err, '감사 기록 저장 실패');
         },
       }
     );

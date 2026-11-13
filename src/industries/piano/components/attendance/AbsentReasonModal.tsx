@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
+
 import { Student } from '@/types';
 import { X, AlertCircle, Check } from 'lucide-react';
+import { useTerminology } from '@/core/terminology';
 
 interface AbsentReasonModalProps {
   isOpen: boolean;
@@ -23,24 +26,33 @@ export const AbsentReasonModal: React.FC<AbsentReasonModalProps> = ({
   onClose,
   onConfirm
 }) => {
+  const { t } = useTerminology();
+  const customerWord = t('customer.singular', '원생');
+
   const [selectedReason, setSelectedReason] = useState(COMMON_REASONS[0]);
   const [customReason, setCustomReason] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Reset state when opening/closing or target changes
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedReason(COMMON_REASONS[0]);
+      setCustomReason('');
+      setIsSubmitting(false);
+    }
+  }, [isOpen, student]);
 
   if (!isOpen || !student) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     const finalReason = customReason.trim() || selectedReason;
     onConfirm(finalReason);
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  useEscapeKey(onClose);
 
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200 cursor-pointer">
@@ -56,7 +68,7 @@ export const AbsentReasonModal: React.FC<AbsentReasonModalProps> = ({
                 결석 사유 입력
               </h3>
               <p className="text-xs text-slate-500">
-                {student.name} 학생 ({student.school} {student.grade})
+                {student.name} {customerWord} ({student.school} {student.grade})
               </p>
             </div>
           </div>
@@ -115,15 +127,17 @@ export const AbsentReasonModal: React.FC<AbsentReasonModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-colors cursor-pointer"
+              disabled={isSubmitting}
+              className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-colors cursor-pointer disabled:opacity-50"
             >
               취소
             </button>
             <button
               type="submit"
-              className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors cursor-pointer"
+              disabled={isSubmitting}
+              className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              결석 처리 완료
+              {isSubmitting ? '처리 중...' : '결석 처리 완료'}
             </button>
           </div>
         </form>

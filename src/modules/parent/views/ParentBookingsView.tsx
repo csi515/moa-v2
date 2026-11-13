@@ -50,7 +50,7 @@ export const MyReservationsView: React.FC<ParentBookingsViewProps> = () => {
       showToast('예약이 취소되었습니다.', 'success');
       loadReservations();
     } catch (err: any) {
-      showToast(err?.message || '예약 취소에 실패했습니다.', 'error');
+      showToast.error(err, '예약 취소에 실패했습니다.');
     }
   };
 

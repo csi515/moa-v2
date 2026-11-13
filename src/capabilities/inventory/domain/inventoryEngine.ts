@@ -135,7 +135,7 @@ export function checkSafetyStockWarning(item: InventoryItem): {
  */
 export function generatePurchaseOrderRecommendations(
   items: InventoryItem[],
-  asOfDate: string = new Date().toISOString().split('T')[0]
+  asOfDate: string = new Date(Date.now()).toISOString().split('T')[0]
 ): PurchaseOrderDraft[] {
   const lowStockItems = items.filter((item) => item.currentStock <= item.safetyStock);
   if (lowStockItems.length === 0) return [];
@@ -205,7 +205,7 @@ export function generatePurchaseOrderRecommendations(
  */
 export function convertPurchaseOrderToApInvoicePayload(
   po: PurchaseOrderDraft,
-  invoiceDate: string = new Date().toISOString().split('T')[0],
+  invoiceDate: string = new Date(Date.now()).toISOString().split('T')[0],
   dueDays: number = 30
 ): {
   vendorId: string;
@@ -286,7 +286,7 @@ export function deductBundleStock(params: {
     bundle,
     sellQuantity,
     currentInventory,
-    timestamp = new Date().toISOString(),
+    timestamp = new Date(Date.now()).toISOString(),
     reason = `번들 판매 차감: ${bundle.name} (${sellQuantity}세트)`,
   } = params;
 
@@ -670,7 +670,7 @@ export function evaluateInventoryExpiryStatus(
   expiryDate: string,
   referenceDate?: string
 ): ExpiryAlertStatus {
-  const refDateStr = referenceDate || new Date().toISOString().slice(0, 10);
+  const refDateStr = referenceDate || new Date(Date.now()).toISOString().slice(0, 10);
   const refTime = new Date(refDateStr).getTime();
   const expTime = new Date(expiryDate).getTime();
 
@@ -808,7 +808,7 @@ export function createStockAuditSlip(
   auditorName: string,
   options: { auditDate?: string; approvalThreshold?: number } = {}
 ): StockAuditSlip {
-  const auditDate = options.auditDate || new Date().toISOString().slice(0, 10);
+  const auditDate = options.auditDate || new Date(Date.now()).toISOString().slice(0, 10);
   const threshold = options.approvalThreshold ?? 100000; // 기본 10만 원
 
   const nonMatchList = discrepancies.filter((d) => d.status !== 'MATCH');

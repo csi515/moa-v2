@@ -78,7 +78,7 @@ export function renderParkingPassSvg(reg: ParkingRegistrationItem, allocatedMinu
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
-  const safeDate = (reg.registeredAt || new Date().toISOString()).slice(0, 16).replace('T', ' ');
+  const safeDate = (reg.registeredAt || new Date(Date.now()).toISOString()).slice(0, 16).replace('T', ' ');
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 250" width="100%" height="100%">
   <rect width="420" height="250" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
@@ -109,7 +109,7 @@ export function renderParkingPassSvg(reg: ParkingRegistrationItem, allocatedMinu
  * 0원 카톡/SMS 주차 등록 안내 메시지 조립
  */
 export function formatParkingNotificationText(reg: ParkingRegistrationItem, freeMinutes: number): string {
-  const safeDate = (reg.registeredAt || new Date().toISOString()).slice(0, 16).replace('T', ' ');
+  const safeDate = (reg.registeredAt || new Date(Date.now()).toISOString()).slice(0, 16).replace('T', ' ');
   return `[무료 주차 등록 안내]
 안녕하세요, ${reg.visitorName || '고객'}님.
 방문 매장에서 주차 할인이 정상 등록되었습니다.

@@ -49,7 +49,7 @@ export function transitionRentalStatus(
           ...current,
           status: 'RENTED',
           currentRenterId: payload?.renterId,
-          rentedAt: payload?.rentedAt ?? new Date().toISOString(),
+          rentedAt: payload?.rentedAt ?? new Date(Date.now()).toISOString(),
           dueAt: payload?.dueAt,
           damageNote: undefined,
         },

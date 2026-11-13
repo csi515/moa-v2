@@ -1,3 +1,5 @@
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
+
 import React, { useEffect,  useState } from 'react';
 import { TextbookSale, PaymentMethod } from '@/types';
 import { StorageService } from '@/services/storage';
@@ -53,17 +55,11 @@ export const TextbookPaymentModal: React.FC<TextbookPaymentModalProps> = ({
       );
       onSuccess(res.payment.id);
     } catch (err: any) {
-      showToast(err?.message || '교재비 결제 처리 중 오류가 발생했습니다.', 'error');
+      showToast.error(err, '교재비 결제 처리 중 오류가 발생했습니다.');
     }
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  useEscapeKey(onClose);
 
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150 cursor-pointer">

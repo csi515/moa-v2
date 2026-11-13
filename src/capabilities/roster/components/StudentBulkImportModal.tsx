@@ -9,7 +9,7 @@ import {
   STUDENT_IMPORT_UI,
   buildExistingStudentKeys,
   buildTemplateCsv,
-  buildTemplateWorkbookBuffer,
+  buildTemplateWorkbookBlob,
   parseStudentImportFile,
   parseStudentClipboardText,
   runStudentBulkImport,
@@ -96,7 +96,7 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
     try {
       const rawRows = parseStudentClipboardText(text);
       if (rawRows.length === 0) {
-        showToast('유효한 원생 데이터 행을 찾을 수 없습니다. 표를 다시 복사해 주세요.', 'warning');
+        showToast('유효한 데이터 행을 찾을 수 없습니다. 표를 다시 복사해 주세요.', 'warning');
         return;
       }
 
@@ -108,12 +108,12 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
       setWarnings(result.warnings);
 
       if (result.validRows.length > 0) {
-        showToast(`📋 ${result.validRows.length}명의 원생 데이터를 성공적으로 감지했습니다!`, 'success');
+        showToast(`📋 ${result.validRows.length}명의 데이터를 성공적으로 감지했습니다!`, 'success');
       } else {
         showToast('유효한 행이 없습니다. 오류 목록을 확인해 주세요.', 'warning');
       }
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '붙여넣은 텍스트 파싱 중 오류가 발생했습니다.', 'error');
+      showToast.error(err, '붙여넣은 텍스트 파싱 중 오류가 발생했습니다.');
     }
   };
 
@@ -147,17 +147,18 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
     URL.revokeObjectURL(url);
   };
 
-  const downloadTemplateXlsx = () => {
-    const buffer = buildTemplateWorkbookBuffer();
-    const blob = new Blob([new Uint8Array(buffer)], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'moa-students-import-template.xlsx';
-    a.click();
-    URL.revokeObjectURL(url);
+  const downloadTemplateXlsx = async () => {
+    try {
+      const blob = await buildTemplateWorkbookBlob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'moa-students-import-template.xlsx';
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Failed to download excel template:', err);
+    }
   };
 
   const handleFile = async (file: File | null) => {
@@ -177,10 +178,10 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
       if (result.validRows.length === 0) {
         showToast('유효한 행이 없습니다. 오류 목록을 확인해 주세요.', 'warning');
       } else {
-        showToast(`📁 ${result.validRows.length}명의 원생 데이터를 성공적으로 로드했습니다.`, 'success');
+        showToast(`📁 ${result.validRows.length}명의 데이터를 성공적으로 로드했습니다.`, 'success');
       }
     } catch (err) {
-      showToast(err instanceof Error ? err.message : STUDENT_IMPORT_UI.unsupported, 'error');
+      showToast.error(err, STUDENT_IMPORT_UI.unsupported);
       reset();
     }
   };
@@ -222,7 +223,7 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
       onCompleted();
       onClose();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '일괄 등록 중 오류가 발생했습니다.', 'error');
+      showToast.error(err, '일괄 등록 중 오류가 발생했습니다.');
     } finally {
       setImporting(false);
       setProgress(null);
@@ -253,7 +254,7 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
         {/* 설명 및 모드 탭 전환 */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-100">
           <p className="text-xs sm:text-sm text-slate-600">
-            기존 엑셀 장부나 다른 프로그램의 원생 명단을 손쉽게 대량 등록합니다.
+            기존 엑셀 장부나 다른 프로그램의 명단을 손쉽게 대량 등록합니다.
           </p>
           <div className="flex bg-slate-100 p-1 rounded-xl self-start shrink-0">
             <button

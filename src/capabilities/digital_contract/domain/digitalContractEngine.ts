@@ -135,7 +135,7 @@ export function evaluateContractStatus(
     return contract.status;
   }
 
-  const today = currentDate ? new Date(currentDate) : new Date();
+  const today = currentDate ? new Date(currentDate) : new Date(Date.now());
   const todayStr = today.toISOString().slice(0, 10);
 
   if (todayStr > contract.endDate || contract.usedSessionsOrDays >= contract.totalSessionsOrDays) {
@@ -345,7 +345,7 @@ export function getExpiringContractsForRenewalNotification(
   contracts: readonly SignedContract[],
   referenceDate?: string
 ): ContractRenewalNotificationTarget[] {
-  const refDateStr = referenceDate || new Date().toISOString().slice(0, 10);
+  const refDateStr = referenceDate || new Date(Date.now()).toISOString().slice(0, 10);
   const refTime = new Date(refDateStr).getTime();
 
   const results: ContractRenewalNotificationTarget[] = [];

@@ -1,9 +1,11 @@
-import { useState, useMemo, useEffect, type FC } from 'react';
+import { useState, useMemo, useEffect, useRef, type FC } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { Check, Repeat, Search, Sparkles, UserCheck, UserPlus, X, Calendar } from 'lucide-react';
 import type { DayOfWeek, Student, MakeupItem, Teacher } from '@/types';
 import { StorageService } from '@/services/storage';
 import { scheduleMakeupAtomic } from '@/core/schedules/makeupScheduleAtomic';
 import { useApp } from '@/context/AppContext';
+import { useTerminology } from '@/core/terminology';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import { resolvePianoLessonMinutes, addMinutesToClock } from '../../config/pianoLessonMinutes';
 import { TIMETABLE_DAYS } from './pianoTimetablePlacement';
@@ -82,6 +84,8 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
   onMakeupScheduled,
 }) => {
   const { showToast, triggerRefresh } = useApp();
+  const { t } = useTerminology();
+  const customerWord = t('customer.singular', '원생');
   const [pickerMode, setPickerMode] = useState<'regular' | 'makeup'>('regular');
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [selectedTeacherId, setSelectedTeacherId] = useState<string>(defaultTeacherId || '');
@@ -168,6 +172,14 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
       return nameMatch || schoolMatch || gradeMatch;
     });
   }, [activeStudents, searchQuery]);
+
+  const listParentRef = useRef<HTMLDivElement>(null);
+  const rowVirtualizer = useVirtualizer({
+    count: filteredList.length,
+    getScrollElement: () => listParentRef.current,
+    estimateSize: () => 56,
+    overscan: 5,
+  });
 
   const handleConfirm = () => {
     if (!selectedStudent) return;
@@ -288,69 +300,86 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
           </div>
         </div>
 
-        {/* 학생 목록 */}
-        <ul className="flex-1 overflow-y-auto divide-y divide-slate-100 min-h-[160px] max-h-[300px]">
+        {/* 학생 목록 (가상화 렌더링) */}
+        <div
+          ref={listParentRef}
+          className="flex-1 overflow-y-auto min-h-[160px] max-h-[300px]"
+        >
           {filteredList.length === 0 ? (
-            <li className="p-8 text-center text-sm text-slate-400">
+            <div className="p-8 text-center text-sm text-slate-400">
               {searchQuery ? '일치하는 학생이 없습니다.' : '등록된 재원생이 없습니다.'}
-            </li>
+            </div>
           ) : (
-            filteredList.map((student) => {
-              const isSelected = selectedStudent?.id === student.id;
-              const isAlreadyPlaced = excludeIds?.has(student.id);
+            <div
+              className="relative w-full"
+              style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+            >
+              {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                const student = filteredList[virtualRow.index];
+                if (!student) return null;
+                const isSelected = selectedStudent?.id === student.id;
+                const isAlreadyPlaced = excludeIds?.has(student.id);
 
-              return (
-                <li key={student.id}>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedStudent(student)}
-                    className={`w-full text-left px-4 py-3 min-h-[56px] flex items-center justify-between gap-3 transition-colors ${
-                      isSelected
-                        ? 'bg-indigo-50/90 text-indigo-950 font-bold border-l-4 border-indigo-600'
-                        : 'hover:bg-slate-50 text-slate-800'
-                    }`}
+                return (
+                  <div
+                    key={student.id}
+                    className="absolute left-0 top-0 w-full"
+                    style={{
+                      height: `${virtualRow.size}px`,
+                      transform: `translateY(${virtualRow.start}px)`,
+                    }}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <span
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                          isSelected
-                            ? 'bg-indigo-600 text-white'
-                            : 'bg-indigo-50 text-indigo-700'
-                        }`}
-                      >
-                        {isSelected ? (
-                          <Check className="w-4 h-4 stroke-[3]" />
-                        ) : (
-                          <UserPlus className="w-4 h-4" />
-                        )}
-                      </span>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-sm truncate">{student.name}</span>
-                          {isAlreadyPlaced && (
-                            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">
-                              이 시간 배치됨
-                            </span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedStudent(student)}
+                      className={`w-full h-full text-left px-4 py-2.5 min-h-[56px] flex items-center justify-between gap-3 transition-colors border-b border-slate-100 ${
+                        isSelected
+                          ? 'bg-indigo-50/90 text-indigo-950 font-bold border-l-4 border-indigo-600'
+                          : 'hover:bg-slate-50 text-slate-800'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span
+                          className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                            isSelected
+                              ? 'bg-indigo-600 text-white'
+                              : 'bg-indigo-50 text-indigo-700'
+                          }`}
+                        >
+                          {isSelected ? (
+                            <Check className="w-4 h-4 stroke-[3]" />
+                          ) : (
+                            <UserPlus className="w-4 h-4" />
                           )}
-                        </div>
-                        <span className="block text-[11px] text-slate-400 truncate">
-                          {[student.school, student.grade].filter(Boolean).join(' · ') || '재원생'}
                         </span>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-sm truncate">{student.name}</span>
+                            {isAlreadyPlaced && (
+                              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">
+                                이 시간 배치됨
+                              </span>
+                            )}
+                          </div>
+                          <span className="block text-[11px] text-slate-400 truncate">
+                            {[student.school, student.grade].filter(Boolean).join(' · ') || '재원생'}
+                          </span>
+                        </div>
                       </div>
-                    </div>
 
-                    {isSelected && (
-                      <span className="text-xs text-indigo-600 font-bold shrink-0 flex items-center gap-1">
-                        <UserCheck className="w-4 h-4" />
-                        선택됨
-                      </span>
-                    )}
-                  </button>
-                </li>
-              );
-            })
+                      {isSelected && (
+                        <span className="text-xs text-indigo-600 font-bold shrink-0 flex items-center gap-1">
+                          <UserCheck className="w-4 h-4" />
+                          선택됨
+                        </span>
+                      )}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           )}
-        </ul>
+        </div>
 
         {/* 하단 반복 설정 및 확인 버튼 */}
         <div className="p-4 border-t border-slate-200 bg-slate-50/70 space-y-3">
@@ -449,13 +478,13 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
               <>
                 <UserCheck className="w-4 h-4" />
                 <span>
-                  {selectedStudent.name} 학생을{' '}
+                  {selectedStudent.name} {customerWord}을(를){' '}
                   {isRecurring ? `${selectedDays.join('·')}요일` : `${initialDay || ''}요일`}{' '}
                   {startTime ? `${startTime}에 ` : ''}배치하기
                 </span>
               </>
             ) : (
-              '위 목록에서 학생을 선택하세요'
+              `위 목록에서 ${customerWord}을(를) 선택하세요`
             )}
           </button>
         </div>

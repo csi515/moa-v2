@@ -57,7 +57,7 @@ export const HazardousWasteListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '등록 실패', 'error');
+          showToast.error(err, '등록 실패');
         },
       }
     );

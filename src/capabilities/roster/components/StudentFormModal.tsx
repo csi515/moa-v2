@@ -488,7 +488,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         setInviteModal(invitedWithCodes);
       }
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '저장 중 오류가 발생했습니다.', 'error');
+      showToast.error(err, '저장 중 오류가 발생했습니다.');
     } finally {
       setIsSubmitting(false);
     }

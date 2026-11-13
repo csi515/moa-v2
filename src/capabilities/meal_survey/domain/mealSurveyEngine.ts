@@ -198,7 +198,7 @@ export function isMealSlotWritable(
   settings: MealSurveySettings,
   mealDate: string,
   mealSlot: MealSlot,
-  now: Date = new Date()
+  now: Date = new Date(Date.now())
 ): boolean {
   if (!isMealSlotOffered(settings, mealSlot)) return false;
   let cutoffTime = settings.lunchCutoffTime;

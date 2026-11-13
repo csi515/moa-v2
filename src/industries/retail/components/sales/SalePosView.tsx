@@ -118,7 +118,7 @@ export const SalePosView: FC = () => {
       setCatalog(catalogItems);
       setPromotionalDeals(deals);
     } catch (err) {
-      showToast(err instanceof Error ? err.message : COPY.loadError, 'error');
+      showToast.error(err, COPY.loadError);
       setCatalog([]);
     } finally {
       setLoading(false);

@@ -1,3 +1,5 @@
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
+
 import React, { useState, useEffect } from 'react';
 import { Printer, X, Sparkles, Award, Music, Clock, CheckCircle2, BookOpen, Edit3 } from 'lucide-react';
 import type { StudentReportTarget } from './growthReportHelpers';
@@ -30,13 +32,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
     }
   }, [student, academyName]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  useEscapeKey(onClose, isOpen);
 
   if (!isOpen) return null;
 
@@ -66,7 +62,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
             </div>
             <div>
               <h3 className="font-bold text-slate-900 text-sm">
-                {student.name} 원생 월간 성장 리포트
+                {student.name} 월간 성장 리포트
               </h3>
               <p className="text-[11px] text-slate-500">A4 규격 인쇄 및 PDF 저장 지원</p>
             </div>
@@ -107,7 +103,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
                 <p className="text-xs text-slate-500 mt-1">{report.academyName} · {report.period}</p>
               </div>
               <div className="text-right">
-                <span className="text-xs text-slate-400 font-bold block">원생명</span>
+                <span className="text-xs text-slate-400 font-bold block">성명</span>
                 <span className="text-lg font-black text-slate-900">{report.studentName}</span>
                 <span className="text-xs text-slate-500 block">담당 강사: {report.instructorName}</span>
               </div>

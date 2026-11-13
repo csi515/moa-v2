@@ -92,7 +92,7 @@ export function renderEmergencyAlertSvg(broadcast: EmergencyBroadcastItem): stri
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
-  const safeStartDate = (broadcast.effectiveStart || new Date().toISOString()).slice(0, 16).replace('T', ' ');
+  const safeStartDate = (broadcast.effectiveStart || new Date(Date.now()).toISOString()).slice(0, 16).replace('T', ' ');
   const safeEndDate = broadcast.effectiveEnd ? broadcast.effectiveEnd.slice(0, 16).replace('T', ' ') : '상황 종료 시까지';
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 280" width="100%" height="100%">
@@ -124,7 +124,7 @@ export function renderEmergencyAlertSvg(broadcast: EmergencyBroadcastItem): stri
  */
 export function formatEmergencyBroadcastText(broadcast: EmergencyBroadcastItem, orgName: string): string {
   const style = getSeverityStyle(broadcast.severity);
-  const startPeriod = (broadcast.effectiveStart || new Date().toISOString()).slice(0, 16).replace('T', ' ');
+  const startPeriod = (broadcast.effectiveStart || new Date(Date.now()).toISOString()).slice(0, 16).replace('T', ' ');
   const endPeriod = broadcast.effectiveEnd ? `~ ${broadcast.effectiveEnd.slice(0, 16).replace('T', ' ')}` : '(상황 종료 시까지)';
   const makeupText = broadcast.makeupPolicyNotice ? `\n- 보강/수업 안내: ${broadcast.makeupPolicyNotice}` : '';
 

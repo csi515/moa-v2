@@ -78,7 +78,7 @@ export function buildBulkInviteCopyText(items: GeneratedInviteItem[]): string {
     const phone = item.guardianPhone || item.student.phone || '';
     return `${item.student.name}\t${phone}\t${item.inviteUrl}`;
   });
-  return `원생명\t보호자연락처\t초대링크\n${lines.join('\n')}`;
+  return `성명\t보호자연락처\t초대링크\n${lines.join('\n')}`;
 }
 
 export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({

@@ -246,7 +246,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
       setSelectedBooking(null);
       await loadData();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '취소에 실패했습니다.', 'error');
+      showToast.error(err, '취소에 실패했습니다.');
     } finally {
       setCancelBusy(false);
     }

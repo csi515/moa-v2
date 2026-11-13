@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
+import { showToast } from '@/shared/feedback/uiFeedback';
 
 export interface AssignableStudent {
   id: string;
@@ -211,7 +212,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
     if (selectedStudents.length === 0) return;
 
     if (isOverCapacity && !allowOverCapacity) {
-      alert(`정원(${maxCapacity}명)을 초과합니다. 초과 배정을 원하시면 '정원 초과 허용'을 체크해주세요.`);
+      showToast(`정원(${maxCapacity}명)을 초과합니다. 초과 배정을 원하시면 '정원 초과 허용'을 체크해주세요.`, 'warning');
       return;
     }
 
@@ -222,7 +223,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
 
       if (assignMode === 'create_new') {
         if (selectedDays.length === 0) {
-          alert('수업 요일을 최소 1개 이상 선택해주세요.');
+          showToast('수업 요일을 최소 1개 이상 선택해주세요.', 'warning');
           return;
         }
 
@@ -282,7 +283,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
       } else {
         const found = selectedExistingClass;
         if (!found) {
-          alert('배정할 기존 반을 선택해주세요.');
+          showToast('배정할 기존 반을 선택해주세요.', 'warning');
           return;
         }
         targetClassIds.push(found.id);
@@ -307,7 +308,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
         }
       }
 
-      const msg = `${selectedStudents.length}명의 원생이 [${finalClassName}] 시간표에 성공적으로 배정되었습니다! (신규 등록: ${updatedCount}명)`;
+      const msg = `${selectedStudents.length}명이 [${finalClassName}] 시간표에 성공적으로 배정되었습니다! (신규 등록: ${updatedCount}명)`;
       onAssigned(msg);
       if (onNavigateToTimetable) {
         setAssignedResult({ count: selectedStudents.length, className: finalClassName });
@@ -316,7 +317,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
       }
     } catch (err) {
       console.error('시간표 일괄 배정 중 오류 발생:', err);
-      alert('배정 중 오류가 발생했습니다. 다시 시도해주세요.');
+      showToast('배정 중 오류가 발생했습니다. 다시 시도해주세요.', 'error');
     }
   };
 
@@ -342,7 +343,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
             <div>
               <h3 className="text-xl font-black text-slate-900 tracking-tight">시간표 배정 완료!</h3>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                선택한 <strong className="text-indigo-600 font-bold">{assignedResult.count}명</strong>의 원생이{' '}
+                선택한 <strong className="text-indigo-600 font-bold">{assignedResult.count}명</strong>이{' '}
                 <strong className="text-slate-900 font-bold">[{assignedResult.className}]</strong> 수업 시간표에 성공적으로 배정되었습니다.
               </p>
             </div>
@@ -379,7 +380,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                     시간표 일괄 배정
                   </h2>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    선택된 <strong className="text-indigo-600 font-bold">{selectedStudents.length}명</strong>의 원생을 원하는 시간표 슬롯에 한 번에 배정합니다.
+                    선택된 <strong className="text-indigo-600 font-bold">{selectedStudents.length}명</strong>을 원하는 시간표 슬롯에 한 번에 배정합니다.
                   </p>
                 </div>
               </div>
@@ -393,7 +394,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
           </button>
         </div>
 
-        {/* 선택된 원생 명단 미리보기 배너 */}
+        {/* 선택된 명단 미리보기 배너 */}
         <div className="px-5 py-3 bg-indigo-50/50 border-b border-indigo-100/60 flex items-center gap-2 overflow-x-auto text-xs">
           <span className="font-bold text-indigo-950 shrink-0 flex items-center gap-1">
             <Users className="w-3.5 h-3.5 text-indigo-600" />
@@ -421,7 +422,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
           <div className="mx-5 sm:mx-6 mt-4 p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-900 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-blue-600 shrink-0" />
             <p>
-              선택된 요일은 <strong>주 {selectedDays.length}회({selectedDays.join('')})</strong>입니다. 원생의 등록 수강권(주 1~2회권 등) 잔여 횟수를 고려하여 배정하세요.
+              선택된 요일은 <strong>주 {selectedDays.length}회({selectedDays.join('')})</strong>입니다. 등록 수강권 잔여 횟수를 고려하여 배정하세요.
             </p>
           </div>
         )}
@@ -584,7 +585,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                 </div>
               </div>
 
-              {/* 7번: 요일마다 다른 시작 시간 지정 (불규칙 시간표 원생 지원) */}
+              {/* 7번: 요일마다 다른 시작 시간 지정 */}
               {selectedDays.length > 1 && (
                 <div className="pt-1">
                   <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-800">
@@ -732,7 +733,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
               {/* 엣지 3번: 이미 배정된 학생 안내 */}
               {alreadyAssignedStudents.length > 0 && (
                 <div className="p-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs flex items-center justify-between">
-                  <span>선택된 원생 중 <strong>{alreadyAssignedStudents.length}명</strong>은 이미 이 반에 등록됨</span>
+                  <span>선택된 대상 중 <strong>{alreadyAssignedStudents.length}명</strong>은 이미 이 반에 등록됨</span>
                   <span className="text-[10px] font-bold text-slate-500">중복 방지</span>
                 </div>
               )}

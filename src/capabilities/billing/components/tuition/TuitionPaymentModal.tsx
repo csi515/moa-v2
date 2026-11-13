@@ -6,6 +6,7 @@ import { formatCurrency } from '@/utils/formatters';
 import { ONSITE_PAYMENT_METHOD_OPTIONS } from '@/capabilities/billing/finance/paymentMethodLabels';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { Modal } from '@/shared/components/ui/Modal';
+import { useConfirmDialog } from '@/shared/feedback/useConfirmDialog';
 import { MicroGuideTooltip } from '@/shared/components/ui/MicroGuideTooltip';
 import {
   PIANO_INVOICE_BUNDLE_PRESETS,
@@ -51,6 +52,20 @@ export const TuitionPaymentModal: React.FC<TuitionPaymentModalProps> = ({
   onClose,
 }) => {
   const [copied, setCopied] = useState(false);
+  const confirm = useConfirmDialog();
+
+  const isDirty = payMemo.trim().length > 0 || (invoice.unpaidAmount > 0 && payAmount !== invoice.unpaidAmount);
+
+  const confirmClose = async (proceed: () => void) => {
+    const ok = await confirm({
+      title: '수납 처리 취소',
+      message: '입력 중인 수납 정보가 저장되지 않았습니다. 창을 닫으시겠습니까?',
+      confirmText: '닫기',
+      cancelText: '계속 입력',
+      isDestructive: true,
+    });
+    if (ok) proceed();
+  };
 
   const selectedMethodLabel =
     ONSITE_PAYMENT_METHOD_OPTIONS.find((m) => m.id === payMethod)?.label || '기타';
@@ -76,6 +91,9 @@ export const TuitionPaymentModal: React.FC<TuitionPaymentModalProps> = ({
     <Modal
       isOpen
       onClose={onClose}
+      intent="form"
+      dirty={isDirty}
+      confirmClose={confirmClose}
       title="수강료 수납 완료 처리"
       description={`${invoice.studentName} (${invoice.yearMonth}월)`}
       maxWidth="md"

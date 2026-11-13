@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
+
 import { Student, Textbook, PaymentMethod } from '@/types';
 import { StorageService } from '@/services/storage';
 import { useApp } from '@/context/AppContext';
@@ -125,13 +127,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
       (t.level && t.level.toLowerCase().includes(textbookSearch.toLowerCase()))
   );
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  useEscapeKey(onClose);
 
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150 cursor-pointer">

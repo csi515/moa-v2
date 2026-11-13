@@ -246,7 +246,7 @@ export function resolvePortfolioProjects(
  */
 export function collectAvailableYears(
   projects: PortfolioProject[],
-  fallbackYear: number = new Date().getFullYear()
+  fallbackYear: number = new Date(Date.now()).getFullYear()
 ): number[] {
   const years = new Set<number>([fallbackYear]);
   for (const p of projects) {

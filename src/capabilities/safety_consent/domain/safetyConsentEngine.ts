@@ -22,7 +22,7 @@ export interface ConsentTemplate {
 export function selectActiveConsentTemplate(
   templates: ConsentTemplate[],
   type: string,
-  targetDate: string = new Date().toISOString().slice(0, 10)
+  targetDate: string = new Date(Date.now()).toISOString().slice(0, 10)
 ): ConsentTemplate | undefined {
   const candidates = templates
     .filter((t) => t.type === type && t.isActive && t.effectiveFrom <= targetDate)
@@ -96,7 +96,7 @@ export function buildConsentSubmission(input: {
     throw new Error('서명이 필요합니다.');
   }
   return {
-    consented_at: input.signedAt ?? new Date().toISOString(),
+    consented_at: input.signedAt ?? new Date(Date.now()).toISOString(),
     consent_version: input.version,
     signature: input.signature,
   };
@@ -126,7 +126,7 @@ export function generateConsentAuditRecord(params: {
     };
   }
 
-  const ts = params.timestamp ?? new Date().toISOString();
+  const ts = params.timestamp ?? new Date(Date.now()).toISOString();
 
   // 순수 간이 해시 계산식 (불변 무결성 검증용)
   const rawString = `${params.consentId}:${template.id}:v${template.version}:${signerName}:${signerPhone}:${ts}`;

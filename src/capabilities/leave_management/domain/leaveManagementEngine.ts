@@ -193,7 +193,7 @@ export function applyLeaveApproval(
     const updatedRequest: StaffLeaveRequest = {
       ...request,
       status: 'approved',
-      approvedAt: new Date().toISOString(),
+      approvedAt: new Date(Date.now()).toISOString(),
       rejectionReason: null,
     };
 

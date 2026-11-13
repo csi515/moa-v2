@@ -70,7 +70,7 @@ export const WarrantyClaimListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '접수 실패', 'error');
+          showToast.error(err, '접수 실패');
         },
       }
     );

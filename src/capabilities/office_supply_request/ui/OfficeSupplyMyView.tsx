@@ -59,7 +59,7 @@ export const OfficeSupplyMyView: React.FC = () => {
         setQtyByItem({});
       }
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '조회에 실패했습니다.', 'error');
+      showToast.error(cause, '조회에 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -94,7 +94,7 @@ export const OfficeSupplyMyView: React.FC = () => {
       showToast('신청을 저장했습니다.', 'success');
       await reload();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '저장에 실패했습니다.', 'error');
+      showToast.error(cause, '저장에 실패했습니다.');
     } finally {
       setSaving(false);
     }

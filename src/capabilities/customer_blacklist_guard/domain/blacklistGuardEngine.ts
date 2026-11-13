@@ -28,7 +28,7 @@ export interface AccessAttemptResult {
 export function evaluateAccessAttempt(
   blacklist: BlacklistRecord[],
   targetPhone: string,
-  currentTime: Date = new Date()
+  currentTime: Date = new Date(Date.now())
 ): AccessAttemptResult {
   const cleanedTarget = targetPhone.replace(/[^0-9]/g, '');
   const matched = blacklist.find((b) => {

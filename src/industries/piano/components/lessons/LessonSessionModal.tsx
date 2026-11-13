@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState, type FC, type FormEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState, type FC, type FormEvent } from 'react';
 import { ChevronDown, ChevronUp, Music, Sparkles } from 'lucide-react';
 import { Modal, FormField, FORM_CONTROL_CLASS } from '@/shared/components';
+import { useConfirmDialog } from '@/shared/feedback/useConfirmDialog';
 import type { AttendanceStatus, ClassItem, LessonRecord, Student } from '@/types';
 
 export type LessonSessionForm = {
@@ -67,12 +68,14 @@ export const LessonSessionModal: FC<LessonSessionModalProps> = ({
   onSave,
 }) => {
   const [form, setForm] = useState<LessonSessionForm>(EMPTY_FORM);
+  const [initialForm, setInitialForm] = useState<LessonSessionForm>(EMPTY_FORM);
   const [showDetails, setShowDetails] = useState(false);
+  const confirm = useConfirmDialog();
   const datalistId = useMemo(() => `lesson-songs-${student?.id || 'x'}`, [student?.id]);
 
   useEffect(() => {
     if (!isOpen || !student) return;
-    const initialForm: LessonSessionForm = {
+    const initial: LessonSessionForm = {
       status: existingStatus || 'present',
       songTitle: existingLesson?.songTitle || inProgressSong || '',
       progress: existingLesson?.progress || '',
@@ -83,14 +86,15 @@ export const LessonSessionModal: FC<LessonSessionModalProps> = ({
       nextPlan: existingLesson?.nextPlan || '',
       memo: existingLesson?.memo || '',
     };
-    setForm(initialForm);
+    setForm(initial);
+    setInitialForm(initial);
 
     // 상세 항목에 이미 데이터가 있으면 자동으로 펼침
     if (
-      initialForm.weaknesses ||
-      initialForm.nextPlan ||
-      initialForm.memo ||
-      initialForm.progress
+      initial.weaknesses ||
+      initial.nextPlan ||
+      initial.memo ||
+      initial.progress
     ) {
       setShowDetails(true);
     } else {
@@ -98,13 +102,55 @@ export const LessonSessionModal: FC<LessonSessionModalProps> = ({
     }
   }, [isOpen, student, existingLesson, existingStatus, homeworkHint, inProgressSong]);
 
+  const isDirty = useMemo(() => {
+    return (
+      form.status !== initialForm.status ||
+      form.songTitle !== initialForm.songTitle ||
+      form.progress !== initialForm.progress ||
+      form.lessonContent !== initialForm.lessonContent ||
+      form.strengths !== initialForm.strengths ||
+      form.weaknesses !== initialForm.weaknesses ||
+      form.homework !== initialForm.homework ||
+      form.nextPlan !== initialForm.nextPlan ||
+      form.memo !== initialForm.memo
+    );
+  }, [form, initialForm]);
+
+  const handleConfirmClose = useCallback((proceed: () => void) => {
+    confirm({
+      title: '수업 노트 작성 취소',
+      message: '작성 중인 수업 노트가 저장되지 않았습니다. 창을 닫으시겠습니까?',
+      confirmText: '닫기',
+      cancelText: '계속 작성',
+      isDestructive: true,
+    }).then((ok) => {
+      if (ok) proceed();
+    });
+  }, [confirm]);
+
+  const handleClose = useCallback(() => {
+    if (isDirty) {
+      handleConfirmClose(onClose);
+    } else {
+      onClose();
+    }
+  }, [isDirty, handleConfirmClose, onClose]);
+
   if (!student) return null;
 
   const isAbsent = form.status === 'absent';
   const suggestionChips = songSuggestions.slice(0, 6);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={`${student.name} · 수업 기록`} maxWidth="md">
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title={`${student.name} · 수업 기록`}
+      maxWidth="md"
+      intent="form"
+      dirty={isDirty}
+      confirmClose={handleConfirmClose}
+    >
       <form
         onSubmit={(e: FormEvent) => {
           e.preventDefault();
@@ -300,7 +346,7 @@ export const LessonSessionModal: FC<LessonSessionModalProps> = ({
         <div className="flex gap-2 pt-2 border-t border-slate-100">
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="flex-1 min-h-[46px] rounded-xl border border-slate-200 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
           >
             취소

@@ -77,7 +77,7 @@ export function createTableOrderTicket(
     totalAmount += item.quantity * item.unitPrice;
   });
 
-  const submittedAt = raw.submittedAt || new Date().toISOString();
+  const submittedAt = raw.submittedAt || new Date(Date.now()).toISOString();
 
   return {
     id: ticketId,
@@ -115,7 +115,7 @@ export function advanceTicketStatus(
     );
   }
 
-  const ts = timestamp || new Date().toISOString();
+  const ts = timestamp || new Date(Date.now()).toISOString();
   const updated: TableOrderTicket = {
     ...ticket,
     status: nextStatus,

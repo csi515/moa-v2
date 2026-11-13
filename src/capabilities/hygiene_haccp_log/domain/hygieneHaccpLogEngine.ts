@@ -83,7 +83,7 @@ export function calculateHealthCertStatus(
   expiryDateStr: string,
   baseDateStr?: string
 ): { dDay: number; status: 'valid' | 'warning' | 'expired' } {
-  const base = baseDateStr ? new Date(baseDateStr) : new Date();
+  const base = baseDateStr ? new Date(baseDateStr) : new Date(Date.now());
   base.setHours(0, 0, 0, 0);
 
   const expiry = new Date(expiryDateStr);

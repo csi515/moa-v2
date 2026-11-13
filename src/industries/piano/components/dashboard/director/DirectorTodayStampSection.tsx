@@ -60,7 +60,7 @@ export const DirectorTodayStampSection: FC<DirectorTodayStampSectionProps> = ({ 
       showToast(`${name} · ${row.book_name} ${row.song_title} 스탬프!`, 'success');
       await reload();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '승인 실패', 'error');
+      showToast.error(err, '승인 실패');
     } finally {
       setBusyId(null);
     }

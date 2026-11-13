@@ -124,7 +124,7 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
                   <button
                     type="button"
                     onClick={() => toggleInvoice(inv.id)}
-                    className="w-full flex items-center justify-between gap-2 text-left min-h-[44px]"
+                    className="w-full flex items-center justify-between gap-2 text-left min-h-[44px] cursor-pointer"
                   >
                     <span className="flex items-center gap-2">
                       {isChecked ? (
@@ -134,7 +134,7 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
                       )}
                       <span className="font-bold text-slate-900">{inv.yearMonth} 수강료</span>
                     </span>
-                    <span className="text-rose-600 font-black">
+                    <span className="text-rose-600 font-black tabular-nums">
                       잔액 {formatCurrency(inv.unpaidAmount)}
                     </span>
                   </button>
@@ -152,7 +152,7 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
                             [inv.id]: clampPayableAmount(Number(e.target.value) || 0, inv.unpaidAmount),
                           }))
                         }
-                        className="mt-1 w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-bold min-h-[44px]"
+                        className="mt-1 w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-bold min-h-[44px] tabular-nums"
                       />
                     </label>
                   )}
@@ -179,7 +179,7 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
                   <button
                     type="button"
                     onClick={() => toggleSale(sale.id)}
-                    className="w-full flex items-center justify-between gap-2 text-left min-h-[44px]"
+                    className="w-full flex items-center justify-between gap-2 text-left min-h-[44px] cursor-pointer"
                   >
                     <span className="flex items-center gap-2">
                       {isChecked ? (
@@ -189,7 +189,7 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
                       )}
                       <span className="font-bold text-slate-900">{sale.textbookTitle}</span>
                     </span>
-                    <span className="text-rose-600 font-black">
+                    <span className="text-rose-600 font-black tabular-nums">
                       잔액 {formatCurrency(sale.unpaidAmount)}
                     </span>
                   </button>
@@ -207,7 +207,7 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
                             [sale.id]: clampPayableAmount(Number(e.target.value) || 0, sale.unpaidAmount),
                           }))
                         }
-                        className="mt-1 w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-bold min-h-[44px]"
+                        className="mt-1 w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-bold min-h-[44px] tabular-nums"
                       />
                     </label>
                   )}
@@ -256,12 +256,12 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
         <div className="p-4 bg-slate-900 text-white rounded-xl flex items-center justify-between">
           <div>
             <span className="text-slate-400 block text-[11px]">이번 납부 합계</span>
-            <span className="text-xs text-slate-300">
+            <span className="text-xs text-slate-300 tabular-nums">
               수강료 {formatCurrency(selectedInvoiceTotal)} + 교재{' '}
               {formatCurrency(selectedSaleTotal)}
             </span>
           </div>
-          <span className="text-xl font-black text-emerald-400">
+          <span className="text-xl font-black text-emerald-400 tabular-nums">
             {formatCurrency(grandSelectedTotal)}
           </span>
         </div>
@@ -270,17 +270,21 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2.5 text-xs font-medium text-slate-600 bg-slate-100 rounded-xl min-h-[44px]"
+            className="px-4 py-2.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl min-h-[44px] cursor-pointer transition-colors"
           >
             취소
           </button>
           <button
             type="submit"
             disabled={grandSelectedTotal <= 0 || submitting}
-            className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-semibold rounded-xl bg-emerald-600 text-white disabled:opacity-50 min-h-[44px]"
+            className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50 min-h-[44px] cursor-pointer transition-colors shadow-xs"
           >
             <CheckCircle2 className="w-4 h-4" />
-            수납 · 수입 반영 ({formatCurrency(grandSelectedTotal)})
+            <span className="tabular-nums">
+              {submitting
+                ? '수납 처리 중...'
+                : `수납 · 수입 반영 (${formatCurrency(grandSelectedTotal)})`}
+            </span>
           </button>
         </div>
       </form>

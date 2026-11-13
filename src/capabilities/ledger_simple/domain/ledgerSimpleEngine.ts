@@ -146,7 +146,7 @@ export function lockDailyClosing(
     updatedState: {
       ...currentState,
       isLocked: true,
-      lockedAt: params.timestamp ?? new Date().toISOString(),
+      lockedAt: params.timestamp ?? new Date(Date.now()).toISOString(),
       lockedBy: params.operatorId,
       countedCash: params.countedCash,
       varianceAmount: params.varianceAmount,

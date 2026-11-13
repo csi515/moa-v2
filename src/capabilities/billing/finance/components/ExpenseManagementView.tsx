@@ -1,5 +1,6 @@
 import React, { useEffect,  useState, useMemo } from 'react';
 import { showToast, openConfirmDialog } from '@/shared/feedback/uiFeedback';
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useStorageRefresh } from '@/hooks';
 import { billingStorage } from '@/capabilities/billing/infrastructure/billingStorage';
@@ -34,6 +35,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<FinanceExpense | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     date: new Date().toISOString().slice(0, 10),
@@ -122,12 +124,15 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     if (!formData.description.trim()) {
       showToast('지출 적요를 입력해주세요.', 'warning');
       return;
     }
 
     const persist = () => {
+      setIsSubmitting(true);
+      try {
       billingStorage.saveExpense({
         ...(editingExpense ? { id: editingExpense.id } : {}),
         date: formData.date,
@@ -144,6 +149,9 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
         'success'
       );
       setIsModalOpen(false);
+    } finally {
+      setIsSubmitting(false);
+    }
     };
 
     const yearMonth = formData.date.slice(0, 7);
@@ -174,14 +182,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
     persist();
   };
 
-  useEffect(() => {
-    if (!isModalOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsModalOpen(false);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen]);
+  useEscapeKey(() => setIsModalOpen(false), isModalOpen);
 
   return (
     <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
@@ -225,7 +226,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
               {selectedMonth} 총 지출
             </span>
-            <p className="text-xl font-black text-rose-600 mt-2">
+            <p className="text-xl font-black text-rose-600 tabular-nums mt-2">
               {formatCurrency(totalExpenseAmount)}
             </p>
             <p className="text-xs text-slate-500 mt-1">등록 {filteredExpenses.length}건</p>
@@ -289,7 +290,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
           </select>
         </div>
         <span className="text-xs text-slate-500 font-medium">
-          합계: <strong className="text-rose-600 font-bold">{formatCurrency(totalExpenseAmount)}</strong>
+          합계: <strong className="text-rose-600 font-bold tabular-nums">{formatCurrency(totalExpenseAmount)}</strong>
         </span>
       </div>
 
@@ -324,7 +325,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
                         </span>
                       </td>
                       <td className="py-3.5 px-4 font-semibold text-slate-900">{exp.description}</td>
-                      <td className="py-3.5 px-4 font-black text-rose-600 text-sm">
+                      <td className="py-3.5 px-4 font-black text-rose-600 tabular-nums text-sm">
                         {formatCurrency(exp.amount)}
                       </td>
                       <td className="py-3.5 px-4 text-slate-600">
@@ -370,7 +371,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
                     <p className="font-bold text-slate-900 text-sm">{exp.description}</p>
                     <p className="text-[11px] text-slate-400 font-mono">{exp.date}</p>
                   </div>
-                  <p className="font-black text-rose-600 text-sm">{formatCurrency(exp.amount)}</p>
+                  <p className="font-black text-rose-600 tabular-nums text-sm">{formatCurrency(exp.amount)}</p>
                 </div>
                 <p className="text-xs text-slate-600">
                   {getCategoryLabel(categoryOptions, exp.category)} · {exp.recipient || '결제처 미입력'}
@@ -494,16 +495,18 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 rounded-xl"
+                  disabled={isSubmitting}
+                  className="px-4 py-2.5 min-h-[44px] text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer disabled:opacity-50"
                 >
                   취소
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md flex items-center gap-1.5"
+                  disabled={isSubmitting}
+                  className="px-5 py-2.5 min-h-[44px] text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
                 >
                   <Save className="w-3.5 h-3.5" />
-                  저장
+                  {isSubmitting ? '저장 중…' : '저장'}
                 </button>
               </div>
             </form>

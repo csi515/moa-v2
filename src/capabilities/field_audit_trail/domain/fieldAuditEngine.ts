@@ -19,7 +19,7 @@ export function createAuditDiff(
   changeReason: string,
   beforeObj: Record<string, any>,
   afterObj: Record<string, any>,
-  timestampStr = new Date().toISOString()
+  timestampStr = new Date(Date.now()).toISOString()
 ): AuditTrailLog[] {
   const logs: AuditTrailLog[] = [];
   const keys = new Set([...Object.keys(beforeObj), ...Object.keys(afterObj)]);

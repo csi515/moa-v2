@@ -103,7 +103,7 @@ export function validateHoldingRequest(
   holdStartDate: string,
   holdEndDate: string,
   policy: HoldingPolicy = DEFAULT_HOLDING_POLICY,
-  todayStr: string = formatUtcDate(new Date())
+  todayStr: string = formatUtcDate(new Date(Date.now()))
 ): HoldingValidationResult {
   // 1. 상태 검증
   if (pass.status !== 'ACTIVE' && pass.status !== 'PAUSED') {
@@ -219,7 +219,7 @@ export function applyHolding(
   holdEndDate: string,
   reason: string,
   policy: HoldingPolicy = DEFAULT_HOLDING_POLICY,
-  todayStr: string = formatUtcDate(new Date())
+  todayStr: string = formatUtcDate(new Date(Date.now()))
 ): { updatedPass: HoldablePass; success: boolean; error?: string } {
   const validation = validateHoldingRequest(pass, holdStartDate, holdEndDate, policy, todayStr);
   if (!validation.valid) {
@@ -242,7 +242,7 @@ export function applyHolding(
     days: extendedDays,
     reason,
     status: holdStatus,
-    appliedAt: new Date().toISOString(),
+    appliedAt: new Date(Date.now()).toISOString(),
   };
 
   const nextStatus = isCurrentActiveHold ? 'PAUSED' : pass.status;

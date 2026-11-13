@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useFeedbackStore } from '@/shared/feedback/feedbackStore';
 import { AlertTriangle } from 'lucide-react';
 import { Modal } from './ui/Modal';
 import type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 
 interface ConfirmDialogProps {
   options?: ConfirmDialogOptions | null;
@@ -14,27 +15,15 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ options, onDismiss
   const confirmDialog = options !== undefined ? options : store.confirmDialog;
   const closeConfirmDialog = onDismiss ?? store.closeConfirmDialog;
 
-  useEffect(() => {
-    if (!confirmDialog) return;
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return;
-      e.preventDefault();
-      e.stopPropagation();
-      confirmDialog.onCancel?.();
-      closeConfirmDialog();
-    };
-
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [confirmDialog, closeConfirmDialog]);
-
-  if (!confirmDialog) return null;
-
   const handleCancel = () => {
-    confirmDialog.onCancel?.();
+    confirmDialog?.onCancel?.();
     closeConfirmDialog();
   };
+
+  // 선언적 ESC 키 닫기 훅
+  useEscapeKey(handleCancel, Boolean(confirmDialog));
+
+  if (!confirmDialog) return null;
 
   return (
     <Modal isOpen onClose={handleCancel} title={confirmDialog.title} maxWidth="sm">

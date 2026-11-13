@@ -87,7 +87,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                       <td className="py-3.5 px-4 font-mono font-bold text-slate-600">
                         {inv.yearMonth}
                       </td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-3.5 px-4 tabular-nums">
                         <button
                           type="button"
                           onClick={() => onSelectStudent(inv.studentId)}
@@ -101,15 +101,15 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                           </span>
                         )}
                       </td>
-                      <td className="py-3.5 px-4 text-slate-600">
+                      <td className="py-3.5 px-4 text-slate-600 tabular-nums">
                         {formatCurrency(resolveInvoiceBaseFee(inv))}
                       </td>
-                      <td className="py-3.5 px-4 text-rose-500 font-medium">
+                      <td className="py-3.5 px-4 text-rose-500 font-medium tabular-nums">
                         {(inv.discountAmount ?? inv.discount ?? 0) > 0
                           ? `-${formatCurrency(inv.discountAmount ?? inv.discount ?? 0)}`
                           : '-'}
                       </td>
-                      <td className="py-3.5 px-4 font-extrabold text-slate-900">
+                      <td className="py-3.5 px-4 font-extrabold text-slate-900 tabular-nums">
                         <span className="block">{formatCurrency(inv.totalAmount)}</span>
                         {((inv.textbookFee || 0) > 0 || (inv.extraFee || 0) > 0) && (
                           <span className="block text-[10px] font-medium text-indigo-600 mt-0.5">
@@ -119,7 +119,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                           </span>
                         )}
                       </td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-3.5 px-4 tabular-nums">
                         <span className="font-semibold text-emerald-700">
                           {formatCurrency(inv.paidAmount)}
                         </span>
@@ -135,7 +135,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                         )}
                       </td>
                       <td className="py-3.5 px-4 text-slate-500 font-mono">{inv.dueDate}</td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-3.5 px-4 tabular-nums">
                         <span className={`px-2.5 py-1 rounded-full font-bold text-[10px] ${badge.bg}`}>
                           {badge.label}
                         </span>
@@ -220,7 +220,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                         {inv.yearMonth}월분 (기한: {inv.dueDate})
                       </p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right tabular-nums">
                       <span className="text-sm font-black text-slate-900 block">
                         {formatCurrency(inv.totalAmount)}
                       </span>

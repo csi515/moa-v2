@@ -26,13 +26,13 @@ export interface BookingWaitlistEntry {
  *
  * @param offeredAt 제안 발송 일시 (Date | string | null | undefined)
  * @param timeoutMinutes 만료 허용 시간(분 단위, 기본 30분)
- * @param currentTime 현재 기준 일시 (Date | string, 기본값 new Date())
+ * @param currentTime 현재 기준 일시 (Date | string, 기본값 new Date(Date.now()))
  * @returns 만료 여부 boolean (제안되지 않은 경우 false)
  */
 export function isOfferExpired(
   offeredAt: Date | string | null | undefined,
   timeoutMinutes: number = 30,
-  currentTime: Date | string = new Date()
+  currentTime: Date | string = new Date(Date.now())
 ): boolean {
   if (!offeredAt) {
     return false;

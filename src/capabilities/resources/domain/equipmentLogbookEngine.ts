@@ -56,7 +56,7 @@ export function generateEquipmentLogbookFromReservation(params: {
   const startTime = params.startsAt.slice(11, 16);
   const endTime = params.endsAt.slice(11, 16);
 
-  const nowIso = new Date().toISOString();
+  const nowIso = new Date(Date.now()).toISOString();
 
   return {
     id: `log-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
@@ -93,6 +93,6 @@ export function signEquipmentLogbook(
     equipmentStatus: params.status,
     issueNotes: params.status === 'issue' ? params.issueNotes : undefined,
     isSigned: true,
-    signedAt: params.signedAt || new Date().toISOString(),
+    signedAt: params.signedAt || new Date(Date.now()).toISOString(),
   };
 }

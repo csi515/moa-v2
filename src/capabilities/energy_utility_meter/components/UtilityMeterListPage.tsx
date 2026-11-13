@@ -65,7 +65,7 @@ export const UtilityMeterListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '검침 저장 실패', 'error');
+          showToast.error(err, '검침 저장 실패');
         },
       }
     );

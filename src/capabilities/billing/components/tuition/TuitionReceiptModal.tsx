@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import type { TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { formatCurrency } from '@/utils/formatters';
-import { Printer, X, FileText, CheckCircle2 } from 'lucide-react';
+import { Printer, Download, X, FileText, CheckCircle2 } from 'lucide-react';
 import {
   getLatestTuitionPaymentForInvoice,
 } from '@/capabilities/billing/finance/latestTuitionPayment';
 import { TuitionService } from '@/capabilities/billing/finance';
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
+import { generateReceiptPdfBlob } from '@/shared/components/receipt/PdfReceiptGenerator';
 
 interface TuitionReceiptModalProps {
   invoice: TuitionInvoice;
@@ -51,17 +53,39 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
     ? paymentMethodLabel[latestPayment.paymentMethod] || latestPayment.paymentMethod
     : '수납 확인';
 
+  const [isPdfGenerating, setIsPdfGenerating] = useState(false);
+
   const handlePrint = () => {
     window.print();
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  const handleDownloadPdf = async () => {
+    try {
+      setIsPdfGenerating(true);
+      const blob = await generateReceiptPdfBlob({
+        organizationName: orgName,
+        receiptNumber: receiptNo,
+        transactionDate: paymentDate,
+        customerName: invoice.studentName || '고객',
+        subtotal: invoice.totalAmount,
+        totalPaid: invoice.paidAmount || invoice.totalAmount,
+        paymentMethod: methodText,
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `receipt_${receiptNo}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('PDF receipt generation failed:', err);
+    } finally {
+      setIsPdfGenerating(false);
+    }
+  };
+
+  // 선언적 ESC 키 닫기 훅
+  useEscapeKey(onClose);
 
   return (
     <div
@@ -86,11 +110,21 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
           <div className="flex items-center gap-2">
             <button
               type="button"
+              onClick={handleDownloadPdf}
+              disabled={isPdfGenerating}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition-colors shadow-2xs cursor-pointer min-h-[36px]"
+              title="모바일/PC PDF 파일로 직접 다운로드"
+            >
+              <Download className="w-3.5 h-3.5 text-slate-500" />
+              {isPdfGenerating ? 'PDF 생성 중...' : 'PDF 다운로드'}
+            </button>
+            <button
+              type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs cursor-pointer min-h-[36px]"
             >
               <Printer className="w-3.5 h-3.5" />
-              인쇄 / PDF 저장
+              인쇄
             </button>
             <button
               type="button"
@@ -126,7 +160,7 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
               <span className="font-semibold text-slate-800 font-mono">{receiptNo}</span>
             </div>
             <div>
-              <span className="text-slate-400">원생(학생)명:</span>{' '}
+              <span className="text-slate-400">성명:</span>{' '}
               <span className="font-bold text-slate-900 text-sm">{invoice.studentName}</span>
             </div>
             <div>

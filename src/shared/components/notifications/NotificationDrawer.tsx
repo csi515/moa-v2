@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import type { MoaNotification, NotificationType } from './notificationTypes';
 import { MoaNotificationService } from './notificationService';
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 
 interface NotificationDrawerProps {
   isOpen: boolean;
@@ -79,14 +80,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
   }, []);
 
   // ESC 키로 닫기
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  useEscapeKey(onClose, isOpen);
 
   const unreadCount = useMemo(
     () => notifications.filter((n) => !n.read).length,

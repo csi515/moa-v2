@@ -2,6 +2,8 @@
  * 상품 엑셀/CSV 대량 일괄 등록 & 유효성 검증 순수 엔진 (Pure Domain)
  */
 
+import { parseCsvToMatrix } from '@/shared/utils/excelAdapter';
+
 export interface ParsedCsvRow {
   rowNumber: number;
   name: string;
@@ -45,61 +47,12 @@ export interface CsvParseSummary {
   parsedRows: ParsedCsvRow[];
 }
 
-/** RFC 4180 준수 CSV 행 분리 파서 */
+/** RFC 4180 준수 CSV 행 분리 파서 (excelAdapter 위임) */
 export function parseCsvLines(csvText: string): string[][] {
-  const cleanText = csvText.replace(/^\uFEFF/, ''); // UTF-8 BOM 제거
-  const rows: string[][] = [];
-  let currentRow: string[] = [];
-  let currentField = '';
-  let insideQuote = false;
-
-  for (let i = 0; i < cleanText.length; i++) {
-    const char = cleanText[i];
-    const nextChar = cleanText[i + 1];
-
-    if (insideQuote) {
-      if (char === '"') {
-        if (nextChar === '"') {
-          currentField += '"';
-          i++; // 이스케이프된 따옴표 건너뛰기
-        } else {
-          insideQuote = false;
-        }
-      } else {
-        currentField += char;
-      }
-    } else {
-      if (char === '"') {
-        insideQuote = true;
-      } else if (char === ',') {
-        currentRow.push(currentField.trim());
-        currentField = '';
-      } else if (char === '\r') {
-        if (nextChar === '\n') {
-          i++;
-        }
-        currentRow.push(currentField.trim());
-        rows.push(currentRow);
-        currentRow = [];
-        currentField = '';
-      } else if (char === '\n') {
-        currentRow.push(currentField.trim());
-        rows.push(currentRow);
-        currentRow = [];
-        currentField = '';
-      } else {
-        currentField += char;
-      }
-    }
-  }
-
-  if (currentField.length > 0 || currentRow.length > 0) {
-    currentRow.push(currentField.trim());
-    rows.push(currentRow);
-  }
-
-  // 빈 행 제거
-  return rows.filter((r) => r.length > 0 && r.some((c) => c.length > 0));
+  const rows = parseCsvToMatrix(csvText);
+  return rows
+    .map((r) => r.map((c) => c.trim()))
+    .filter((r) => r.length > 0 && r.some((c) => c.length > 0));
 }
 
 /** 헤더 인덱스 매핑 */

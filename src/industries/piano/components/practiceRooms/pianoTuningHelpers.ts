@@ -5,6 +5,8 @@
  * 이상 건반/페달 점검 메모를 관리하는 도메인 유틸리티.
  */
 
+import { formatIsoDateLocal, todayIsoLocal } from '@/shared/utils/localDate';
+
 export type PianoInstrumentType = 'grand' | 'upright' | 'digital';
 
 export interface RoomTuningRecord {
@@ -41,7 +43,7 @@ export const STORAGE_KEY_PIANO_TUNING = 'moa_piano_room_tuning_v1';
 export function calculateTuningDDay(
   lastTunedAt: string,
   cycleMonths: number = 6,
-  todayIso: string = new Date().toISOString().slice(0, 10)
+  todayIso: string = todayIsoLocal()
 ): {
   nextTuningDate: string;
   daysRemaining: number;
@@ -70,7 +72,7 @@ export function calculateTuningDDay(
   // 조율 예정일 = 최근 조율일 + cycleMonths (월 가산)
   const nextDate = new Date(lastDate);
   nextDate.setMonth(nextDate.getMonth() + cycleMonths);
-  const nextDateStr = nextDate.toISOString().slice(0, 10);
+  const nextDateStr = formatIsoDateLocal(nextDate);
 
   const today = new Date(todayIso);
   const diffTime = nextDate.getTime() - today.getTime();
@@ -140,7 +142,7 @@ export function getRoomTuningRecord(
   // 기본 조율일 = 3개월 전
   const d = new Date();
   d.setMonth(d.getMonth() - 3);
-  const defaultLastTuned = d.toISOString().slice(0, 10);
+  const defaultLastTuned = formatIsoDateLocal(d);
 
   return {
     roomId,
@@ -178,7 +180,7 @@ export function saveRoomTuningRecord(
  */
 export function markRoomTunedToday(
   record: RoomTuningRecord,
-  todayIso: string = new Date().toISOString().slice(0, 10),
+  todayIso: string = todayIsoLocal(),
   storageKey = STORAGE_KEY_PIANO_TUNING
 ): RoomTuningRecord {
   const updated: RoomTuningRecord = {

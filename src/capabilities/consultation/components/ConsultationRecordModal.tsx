@@ -3,6 +3,8 @@ import { StorageService } from '@/services/storage';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import type { Consultation, ConsultationType } from '../types';
 import { Modal } from '@/shared/components/ui/Modal';
+import { useTerminology } from '@/core/terminology';
+import { useConfirmDialog } from '@/shared/feedback/useConfirmDialog';
 import { MessageSquareText, Calendar, User, Save, X, Phone, Tag, UserPlus } from 'lucide-react';
 import { mapConsultationToStudentDraft } from '../utils/consultationStudentMapper';
 
@@ -30,7 +32,7 @@ export interface ConsultationRecordModalProps {
 }
 
 const RESULT_PRESETS = [
-  '원생 등록 완료',
+  '회원 등록 완료',
   '체험 수업 후 결정',
   '시간표 조율 중',
   '상담 완료 (보류)',
@@ -58,6 +60,27 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
   const [type, setType] = useState<ConsultationType>('parent');
   const [content, setContent] = useState<string>('');
   const [result, setResult] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { labels } = useTerminology();
+  const customerWord = labels.customer.singular;
+  const confirm = useConfirmDialog();
+
+  const isDirty = !readOnly && (
+    content.trim() !== (initialData?.content || '').trim() ||
+    result.trim() !== (initialData?.result || '').trim() ||
+    date !== (initialData?.date || '')
+  );
+
+  const confirmClose = async (proceed: () => void) => {
+    const ok = await confirm({
+      title: '상담 일지 작성 취소',
+      message: '작성 중인 상담 내용이 저장되지 않았습니다. 창을 닫으시겠습니까?',
+      confirmText: '작성 취소하고 닫기',
+      cancelText: '계속 작성',
+      isDestructive: true,
+    });
+    if (ok) proceed();
+  };
   const [nextDate, setNextDate] = useState<string>('');
   const [studentName, setStudentName] = useState<string>('');
   const [parentName, setParentName] = useState<string>('');
@@ -78,32 +101,35 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+    if (isSubmitting) return;
     if (!content.trim()) {
       showToast('상담 내용을 입력해주세요.', 'warning');
       return;
     }
 
-    const counselors = StorageService.getTeachers();
-    const counselor = counselors[0];
+    try {
+      setIsSubmitting(true);
+      const counselor = currentUser;
+      const saved = StorageService.saveConsultation({
+        id: initialData?.id,
+        studentId: initialData?.studentId || 'lead_' + Date.now(),
+        studentName: studentName.trim() || '신청자',
+        parentName: parentName.trim() || '학부모',
+        date: date || new Date().toISOString().slice(0, 10),
+        type,
+        content: content.trim(),
+        result: result.trim(),
+        nextDate: nextDate || undefined,
+        counselorId: counselor?.id || '',
+        counselorName: counselor?.name || currentUser.name || '원장',
+      });
 
-    const saved = StorageService.saveConsultation({
-      id: initialData?.id,
-      studentId: initialData?.studentId || 'lead_' + Date.now(),
-      studentName: studentName.trim() || '신청자',
-      parentName: parentName.trim() || '학부모',
-      date: date || new Date().toISOString().slice(0, 10),
-      type,
-      content: content.trim(),
-      result: result.trim(),
-      nextDate: nextDate || undefined,
-      counselorId: counselor?.id || '',
-      counselorName: counselor?.name || currentUser.name || '원장',
-    });
-
-    showToast('상담 기록이 저장되었습니다.', 'success');
-    onSaved?.(saved);
-    onClose();
+      showToast('상담 기록이 저장되었습니다.', 'success');
+      onSaved?.(saved);
+      onClose();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -157,7 +183,7 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
               className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none min-h-[44px] font-bold"
             >
               <option value="parent">학부모 상담 (신규/정기)</option>
-              <option value="student">원생 상담 (체험/레벨)</option>
+              <option value="student">고객 상담 (체험/레벨)</option>
               <option value="career">진로/입시/콩쿠르 상담</option>
               <option value="learning">학습/진도/시간표 조율</option>
             </select>
@@ -209,7 +235,7 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
             disabled={readOnly}
             value={result}
             onChange={(e) => setResult(e.target.value)}
-            placeholder="상담 결과나 다음 액션을 입력하세요 (예: 원생 등록 완료, 월 10만원 수강권 안내)"
+            placeholder="상담 결과나 다음 액션을 입력하세요 (예: 회원 등록 완료, 월 10만원 이용권 안내)"
             className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none min-h-[44px]"
           />
         </div>
@@ -250,7 +276,7 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
                 className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors cursor-pointer min-h-[44px]"
               >
                 <UserPlus className="w-3.5 h-3.5 text-indigo-600" />
-                <span>원생으로 정식 등록하기</span>
+                <span>{customerWord}으로 정식 등록하기</span>
               </button>
             )}
           </div>
@@ -266,10 +292,11 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
             {!readOnly && (
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer min-h-[44px]"
               >
                 <Save className="w-4 h-4" />
-                상담 기록 저장
+                {isSubmitting ? '저장 중…' : '상담 기록 저장'}
               </button>
             )}
           </div>

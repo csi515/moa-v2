@@ -70,7 +70,7 @@ export const CertificateListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '증명서 발급 실패', 'error');
+          showToast.error(err, '증명서 발급 실패');
         },
       }
     );

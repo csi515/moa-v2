@@ -68,7 +68,7 @@ export const FranchiseSupervisionListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '점검 저장 실패', 'error');
+          showToast.error(err, '점검 저장 실패');
         },
       }
     );

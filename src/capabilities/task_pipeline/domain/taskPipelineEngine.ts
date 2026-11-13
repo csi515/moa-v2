@@ -85,7 +85,7 @@ const ALLOWED_TRANSITIONS: Record<PipelineStage, PipelineStage[]> = {
 export function transitionTaskPipelineStage(
   order: TaskOrder,
   targetStage: PipelineStage,
-  timestamp: string = new Date().toISOString(),
+  timestamp: string = new Date(Date.now()).toISOString(),
   reason?: string
 ): { updatedOrder: TaskOrder; success: boolean; error?: string } {
   const allowed = ALLOWED_TRANSITIONS[order.currentStage];
@@ -154,7 +154,7 @@ export function calculateStaffWorkload(
   orders: TaskOrder[],
   warningThreshold: number = 4,
   criticalThreshold: number = 5,
-  currentTime: string = new Date().toISOString()
+  currentTime: string = new Date(Date.now()).toISOString()
 ): StaffWorkloadSummary[] {
   const staffMap = new Map<string, { name: string; tasks: TaskOrder[] }>();
 
@@ -223,7 +223,7 @@ export interface StageBottleneckSummary {
 
 export function detectStageBottlenecks(
   orders: TaskOrder[],
-  currentTime: string = new Date().toISOString()
+  currentTime: string = new Date(Date.now()).toISOString()
 ): StageBottleneckSummary[] {
   const stageStats: Record<PipelineStage, { active: number; breached: number }> = {
     RECEIVED: { active: 0, breached: 0 },

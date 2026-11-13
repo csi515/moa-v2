@@ -65,7 +65,7 @@ const ManageInner: React.FC = () => {
         setSelectedId(list[0].id);
       }
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '캠페인 조회 실패', 'error');
+      showToast.error(cause, '캠페인 조회 실패');
     } finally {
       setLoading(false);
     }
@@ -85,7 +85,7 @@ const ManageInner: React.FC = () => {
       const payload = await listDeptAggregate(orgId, selectedId);
       setAggregate(mapAggregatePayload(payload));
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '취합 조회 실패', 'error');
+      showToast.error(cause, '취합 조회 실패');
       setAggregate(null);
     } finally {
       setAggLoading(false);
@@ -120,7 +120,7 @@ const ManageInner: React.FC = () => {
       await reloadCampaigns();
       await reloadAggregate();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '저장 실패', 'error');
+      showToast.error(cause, '저장 실패');
     }
   }
 
@@ -132,7 +132,7 @@ const ManageInner: React.FC = () => {
       await reloadCampaigns();
       await reloadAggregate();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '마감 실패', 'error');
+      showToast.error(cause, '마감 실패');
     }
   }
 
@@ -149,7 +149,7 @@ const ManageInner: React.FC = () => {
       await reloadCampaigns();
       await reloadAggregate();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '재오픈 실패', 'error');
+      showToast.error(cause, '재오픈 실패');
     }
   }
 

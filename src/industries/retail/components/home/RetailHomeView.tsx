@@ -105,7 +105,7 @@ export const RetailHomeView: FC = () => {
       setStockRows(inventory);
       setRevenueSummary(summary);
     } catch (err) {
-      showToast(err instanceof Error ? err.message : COPY.loadError, 'error');
+      showToast.error(err, COPY.loadError);
       setSales([]);
       setStockRows([]);
       setRevenueSummary(null);

@@ -56,7 +56,7 @@ export function createStaffCallRequest(params: {
     message,
     isSilent,
     status: 'pending',
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(Date.now()).toISOString(),
   };
 }
 
@@ -74,7 +74,7 @@ export function updateStaffCallStatus(
     return {
       ...req,
       status: newStatus,
-      resolvedAt: newStatus === 'resolved' ? new Date().toISOString() : req.resolvedAt,
+      resolvedAt: newStatus === 'resolved' ? new Date(Date.now()).toISOString() : req.resolvedAt,
       resolvedByStaffName: staffName || req.resolvedByStaffName,
     };
   });

@@ -41,7 +41,7 @@ export interface CustomFieldValidationRule {
   min?: number;
   max?: number;
   pattern?: string;
-  customValidator?: (value: any) => boolean | string;
+  customValidator?: (value: unknown) => boolean | string;
 }
 
 export interface CustomFieldDefinition {
@@ -51,7 +51,7 @@ export interface CustomFieldDefinition {
   required?: boolean;
   placeholder?: string;
   options?: readonly (string | CustomFieldOption)[];
-  defaultValue?: any;
+  defaultValue?: unknown;
   description?: string;
   validationRule?: CustomFieldValidationRule;
 }
@@ -64,9 +64,9 @@ export interface UniversalMetadata {
   _preset_id?: string;
   _updated_by?: string;
   _updated_at?: string;
-  custom_fields?: Record<string, any>;
+  custom_fields?: Record<string, unknown>;
   system_flags?: Record<string, boolean>;
-  [key: string]: any; // 레거시 flat 필드 하위 호환 허용
+  [key: string]: unknown; // 레거시 flat 필드 하위 호환 허용
 }
 
 /**

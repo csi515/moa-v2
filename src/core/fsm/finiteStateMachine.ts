@@ -9,16 +9,16 @@
  * - @/types barrel을 import하지 않습니다.
  */
 
-export interface TransitionRule<TState extends string, TEvent extends string, TContext = any> {
+export interface TransitionRule<TState extends string, TEvent extends string, TContext = unknown> {
   from: TState;
   to: TState;
   event: TEvent;
   allowedRoles?: readonly string[];
-  guard?: (context: TContext, payload?: any) => boolean | string;
+  guard?: (context: TContext, payload?: unknown) => boolean | string;
   description?: string;
 }
 
-export interface StateMachineDefinition<TState extends string, TEvent extends string, TContext = any> {
+export interface StateMachineDefinition<TState extends string, TEvent extends string, TContext = unknown> {
   domain: string;
   initialState: TState;
   finalStates?: readonly TState[];
@@ -29,7 +29,7 @@ export interface TransitionAttemptOptions {
   actorRole?: string;
   actorId?: string;
   reason?: string;
-  payload?: any;
+  payload?: unknown;
 }
 
 export interface TransitionResult<TState extends string> {
@@ -43,7 +43,7 @@ export interface TransitionResult<TState extends string> {
 /**
  * 상태 머신 인스턴스 생성
  */
-export function createStateMachine<TState extends string, TEvent extends string, TContext = any>(
+export function createStateMachine<TState extends string, TEvent extends string, TContext = unknown>(
   definition: StateMachineDefinition<TState, TEvent, TContext>
 ) {
   const { domain, initialState, finalStates = [], transitions } = definition;

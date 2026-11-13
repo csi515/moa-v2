@@ -1,33 +1,7 @@
-import * as XLSX from 'xlsx';
 import type { StudentImportRawRow } from './types';
 import { STUDENT_IMPORT_TEMPLATE_HEADERS } from './types';
 import { excelSerialToIsoDate, normalizeHeader } from './validateStudentImport';
-
-function splitCsvLine(line: string): string[] {
-  const cells: string[] = [];
-  let current = '';
-  let inQuotes = false;
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    if (ch === '"') {
-      if (inQuotes && line[i + 1] === '"') {
-        current += '"';
-        i++;
-      } else {
-        inQuotes = !inQuotes;
-      }
-      continue;
-    }
-    if (ch === ',' && !inQuotes) {
-      cells.push(current);
-      current = '';
-      continue;
-    }
-    current += ch;
-  }
-  cells.push(current);
-  return cells.map((c) => c.trim());
-}
+import { parseCsvToMatrix, parseXlsxToMatrix, createXlsxBlob } from '@/shared/utils/excelAdapter';
 
 function cellToString(value: unknown): string {
   if (value == null || value === '') return '';
@@ -65,28 +39,20 @@ function rowsFromMatrix(matrix: unknown[][]): StudentImportRawRow[] {
   return rows;
 }
 
+/** CSV 텍스트 파싱 (PapaParse 기반 RFC 4180 완벽 준수) */
 export function parseStudentImportCsv(text: string): StudentImportRawRow[] {
-  const normalized = text.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const lines = normalized.split('\n').filter((l) => l.trim().length > 0);
-  const matrix = lines.map(splitCsvLine);
+  const matrix = parseCsvToMatrix(text);
   return rowsFromMatrix(matrix);
 }
 
-export function parseStudentImportWorkbook(buffer: ArrayBuffer): StudentImportRawRow[] {
-  const workbook = XLSX.read(buffer, { type: 'array', cellDates: true });
-  const sheetName = workbook.SheetNames[0];
-  if (!sheetName) return [];
-  const sheet = workbook.Sheets[sheetName];
-  const matrix = XLSX.utils.sheet_to_json<unknown[]>(sheet, {
-    header: 1,
-    defval: '',
-    raw: true,
-  }) as unknown[][];
+/** 엑셀 ArrayBuffer / Blob 파싱 (read-excel-file 기반) */
+export async function parseStudentImportWorkbook(buffer: ArrayBuffer | Blob | Uint8Array): Promise<StudentImportRawRow[]> {
+  const matrix = await parseXlsxToMatrix(buffer);
   return rowsFromMatrix(matrix);
 }
 
-/** SheetJS로 마이그레이션용 xlsx 템플릿 생성 */
-export function buildTemplateWorkbookBuffer(): ArrayBuffer {
+/** write-excel-file 기반 마이그레이션용 xlsx 템플릿 Blob 생성 */
+export async function buildTemplateWorkbookBlob(): Promise<Blob> {
   const sample = [
     '김민수',
     '남',
@@ -100,17 +66,20 @@ export function buildTemplateWorkbookBuffer(): ArrayBuffer {
     '모',
     '피아노 초급',
     new Date().toISOString().slice(0, 10),
-    '180000',
-    '10',
+    180000,
+    10,
     '',
   ];
-  const aoa = [STUDENT_IMPORT_TEMPLATE_HEADERS as unknown as string[], sample];
-  const sheet = XLSX.utils.aoa_to_sheet(aoa);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, sheet, '수강생');
-  const out = XLSX.write(wb, { type: 'array', bookType: 'xlsx' });
-  const bytes = out instanceof Uint8Array ? out : new Uint8Array(out as ArrayLike<number>);
-  return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+  return await createXlsxBlob(
+    STUDENT_IMPORT_TEMPLATE_HEADERS as unknown as string[],
+    [sample]
+  );
+}
+
+/** 레거시 호환용 ArrayBuffer 반환 함수 */
+export async function buildTemplateWorkbookBuffer(): Promise<ArrayBuffer> {
+  const blob = await buildTemplateWorkbookBlob();
+  return await blob.arrayBuffer();
 }
 
 export async function parseStudentImportFile(file: File): Promise<StudentImportRawRow[]> {
@@ -121,7 +90,7 @@ export async function parseStudentImportFile(file: File): Promise<StudentImportR
   }
   if (name.endsWith('.xlsx') || name.endsWith('.xls')) {
     const buffer = await file.arrayBuffer();
-    return parseStudentImportWorkbook(buffer);
+    return await parseStudentImportWorkbook(buffer);
   }
   throw new Error('CSV(.csv) 또는 Excel(.xlsx, .xls) 파일만 지원합니다.');
 }

@@ -162,10 +162,7 @@ export const PracticeRoomBookingView: FC = () => {
       setRooms(roomList.filter((r) => r.is_active));
       setBookings(rangeList);
     } catch (err) {
-      showToast(
-        err instanceof Error ? err.message : '연습실 데이터를 불러오지 못했습니다.',
-        'error'
-      );
+      showToast.error(err, '연습실 데이터를 불러오지 못했습니다.');
     } finally {
       setLoading(false);
     }
@@ -258,7 +255,7 @@ export const PracticeRoomBookingView: FC = () => {
       );
       setModalOpen(false);
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '예약 저장 실패', 'error');
+      showToast.error(err, '예약 저장 실패');
     } finally {
       setSaving(false);
     }
@@ -383,7 +380,7 @@ export const PracticeRoomBookingView: FC = () => {
         'success'
       );
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '입실 배정에 실패했습니다.', 'error');
+      showToast.error(err, '입실 배정에 실패했습니다.');
       throw err;
     }
   };
@@ -444,7 +441,7 @@ export const PracticeRoomBookingView: FC = () => {
           setBookings((prev) => upsertById(removeById(prev, row.id), updated));
           showToast(`${roomName} 연습 시간이 ${newEnd}까지 연장되었습니다.`, 'success');
         } catch (err) {
-          showToast(err instanceof Error ? err.message : '연장에 실패했습니다.', 'error');
+          showToast.error(err, '연장에 실패했습니다.');
         }
       },
     });

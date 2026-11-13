@@ -100,7 +100,7 @@ export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 tabular-nums">
         <button
           type="button"
           onClick={() => setActiveTab('income')}
@@ -183,7 +183,7 @@ export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded
         )}
 
         {monthDetail.trend && (
-          <p className="text-xs text-slate-500 mt-3 text-center">
+          <p className="text-xs text-slate-500 mt-3 text-center tabular-nums">
             {selectedMonth} — 수입 {monthDetail.incomeCount}건 · 지출 {monthDetail.expenseCount}건 ·
             순수익 {formatCurrency(monthDetail.trend.net)}
           </p>

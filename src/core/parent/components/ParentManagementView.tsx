@@ -160,7 +160,7 @@ export const ParentManagementView: React.FC = () => {
 
       await loadStatuses();
     } catch (e: any) {
-      showToast(e?.message || '초대에 실패했습니다.', 'error');
+      showToast.error(e, '초대에 실패했습니다.');
     } finally {
       setInviting(false);
     }

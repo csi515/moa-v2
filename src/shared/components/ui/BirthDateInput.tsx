@@ -1,5 +1,6 @@
 import React, { useId, useRef } from 'react';
 import { Calendar } from 'lucide-react';
+import { formatBirthdate } from './SmartInput';
 
 interface Props {
   id?: string;
@@ -10,12 +11,9 @@ interface Props {
   showHint?: boolean;
 }
 
-/** 숫자만 추출해 YYYY-MM-DD 형태로 포맷 */
+/** 숫자만 추출해 YYYY-MM-DD 형태로 포맷 (SmartInput 공통 엔진으로 단일화) */
 export function formatBirthDateDigits(raw: string): string {
-  const digits = raw.replace(/\D/g, '').slice(0, 8);
-  if (digits.length <= 4) return digits;
-  if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
-  return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6)}`;
+  return formatBirthdate(raw);
 }
 
 /** 생년월일: 숫자 직접 입력 + 선택적 달력 */
@@ -58,24 +56,28 @@ export const BirthDateInput: React.FC<Props> = ({
         <button
           type="button"
           onClick={openPicker}
-          className="absolute right-1.5 inline-flex items-center justify-center w-10 h-10 text-slate-400 hover:text-indigo-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          aria-label="달력에서 선택"
+          aria-label="달력에서 생년월일 선택"
+          className="absolute right-2 p-1.5 text-slate-400 hover:text-indigo-600 rounded-lg hover:bg-white transition-colors"
         >
-          <Calendar className="w-4 h-4" />
+          <Calendar className="w-5 h-5" />
         </button>
         <input
           ref={pickerRef}
           type="date"
-          value={/^\d{4}-\d{2}-\d{2}$/.test(value) ? value : ''}
-          onChange={(e) => onChange(e.target.value)}
           tabIndex={-1}
-          aria-hidden
-          className="sr-only"
+          aria-hidden="true"
+          value={value.length === 10 ? value : ''}
+          onChange={(e) => {
+            if (e.target.value) {
+              onChange(e.target.value);
+            }
+          }}
+          className="sr-only pointer-events-none"
         />
       </div>
       {showHint && (
-        <p id={`${inputId}-hint`} className="mt-1 text-[11px] text-slate-400">
-          예: 2017-05-12 (숫자만 입력해도 됩니다)
+        <p id={`${inputId}-hint`} className="text-[11px] text-slate-400 mt-1 pl-1">
+          숫자 8자리(예: 20170512)를 입력하면 자동으로 하이픈이 들어갑니다.
         </p>
       )}
     </div>

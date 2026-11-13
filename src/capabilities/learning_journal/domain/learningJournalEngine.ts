@@ -64,7 +64,7 @@ export function validateJournalEntry(entry: {
  */
 export function acknowledgeJournalByParent(
   journal: LearningJournal,
-  viewedAt: string = new Date().toISOString()
+  viewedAt: string = new Date(Date.now()).toISOString()
 ): LearningJournal {
   return {
     ...journal,

@@ -64,7 +64,7 @@ export const CoatroomListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '보관 접수 실패', 'error');
+          showToast.error(err, '보관 접수 실패');
         },
       }
     );

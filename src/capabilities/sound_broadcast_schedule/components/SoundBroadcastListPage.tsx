@@ -70,7 +70,7 @@ export const SoundBroadcastListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '스케줄 등록 실패', 'error');
+          showToast.error(err, '스케줄 등록 실패');
         },
       }
     );

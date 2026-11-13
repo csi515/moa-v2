@@ -59,7 +59,7 @@ export const LostCardListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '카드 등록 실패', 'error');
+          showToast.error(err, '카드 등록 실패');
         },
       }
     );
@@ -87,7 +87,7 @@ export const LostCardListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '상태 변경 실패', 'error');
+          showToast.error(err, '상태 변경 실패');
         },
       }
     );

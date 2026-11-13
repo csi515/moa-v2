@@ -50,7 +50,7 @@ function VolunteerManageInner() {
       setActivities(acts);
       setSignups(signs);
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '조회에 실패했습니다.', 'error');
+      showToast.error(cause, '조회에 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -91,7 +91,7 @@ function VolunteerManageInner() {
       showToast('봉사활동이 게시되었습니다.', 'success');
       await reload();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '게시에 실패했습니다.', 'error');
+      showToast.error(cause, '게시에 실패했습니다.');
     } finally {
       setSubmitting(false);
     }
@@ -106,7 +106,7 @@ function VolunteerManageInner() {
       );
       await reload();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '상태 변경에 실패했습니다.', 'error');
+      showToast.error(cause, '상태 변경에 실패했습니다.');
     }
   }
 
@@ -138,7 +138,7 @@ function VolunteerManageInner() {
       });
       await reload();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '체크인 변경 실패', 'error');
+      showToast.error(cause, '체크인 변경 실패');
     }
   }
 

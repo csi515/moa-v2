@@ -66,7 +66,7 @@ export const PosReconciliationListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '시재금 마감 저장 실패', 'error');
+          showToast.error(err, '시재금 마감 저장 실패');
         },
       }
     );

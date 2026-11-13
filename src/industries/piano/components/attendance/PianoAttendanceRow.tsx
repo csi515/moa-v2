@@ -58,7 +58,7 @@ export const PianoAttendanceRow: FC<PianoAttendanceRowProps> = ({
           <button
             type="button"
             onClick={onOpenStudent}
-            className="font-bold text-slate-900 text-base sm:text-sm hover:text-indigo-600 text-left min-h-[40px] sm:min-h-0 inline-flex items-center transition-colors"
+            className="font-bold text-slate-900 text-base sm:text-sm hover:text-indigo-600 text-left min-h-[44px] sm:min-h-0 inline-flex items-center transition-colors"
           >
             {student.name}
           </button>

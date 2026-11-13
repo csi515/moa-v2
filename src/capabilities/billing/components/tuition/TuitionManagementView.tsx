@@ -96,7 +96,7 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
     let cancelled = false;
     void TuitionService.ensureMonthlyInvoicesForMonth(selectedMonth).catch((err) => {
       if (cancelled) return;
-      showToast(err instanceof Error ? err.message : '월회비 청구를 준비하지 못했습니다.', 'error');
+      showToast.error(err, '월회비 청구를 준비하지 못했습니다.');
     });
     return () => {
       cancelled = true;

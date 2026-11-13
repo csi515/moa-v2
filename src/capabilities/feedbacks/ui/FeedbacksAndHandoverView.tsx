@@ -76,7 +76,7 @@ export const FeedbacksAndHandoverView: React.FC = () => {
       occurred_at: new Date().toISOString(),
       severity: 'minor',
       title: '계단 발 헛디딤 찰과상',
-      description: '하원 중 원생이 계단에서 넘어져 무릎 찰과상 발생. 보건실 소독 및 밴드 부착 조치 완료.',
+      description: '이동 중 이용객이 계단에서 넘어져 무릎 찰과상 발생. 보건실 소독 및 밴드 부착 조치 완료.',
       actions_taken: '환부 소독 및 학부모 안심 전화 안내',
       preventive_measures: '계단 미끄럼 방지 테이프 점검',
       is_resolved: true,

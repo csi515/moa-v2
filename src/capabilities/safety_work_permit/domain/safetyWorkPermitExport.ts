@@ -7,7 +7,7 @@ import type { SafetyWorkPermit } from './safetyWorkPermitEngine';
 export function generatePtwAuditCsv(
   permits: SafetyWorkPermit[],
   orgName = '사업장',
-  year = new Date().getFullYear()
+  year = new Date(Date.now()).getFullYear()
 ): string {
   const headers = [
     '허가서번호',

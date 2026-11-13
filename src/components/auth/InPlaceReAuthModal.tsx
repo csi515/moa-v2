@@ -32,7 +32,7 @@ export function InPlaceReAuthModal() {
       closeReAuthModal();
       showToast('세션이 안전하게 연장되었습니다', 'success');
     } catch (error) {
-      showToast(error instanceof Error ? error.message : '다시 인증하지 못했습니다.', 'error');
+      showToast.error(error, '다시 인증하지 못했습니다.');
     } finally {
       setBusy(false);
     }

@@ -70,7 +70,7 @@ export const OnboardingListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '온보딩 등록 실패', 'error');
+          showToast.error(err, '온보딩 등록 실패');
         },
       }
     );

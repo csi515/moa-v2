@@ -14,6 +14,7 @@ import {
   BookOpen,
   Ticket,
 } from 'lucide-react';
+import { AttendanceBadge } from '@/shared/components/ui/AttendanceBadge';
 import type { AttendanceRecord, AttendanceStatus, ClassItem, LessonRecord, Student } from '@/types';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import type { StudentUnpaidBadgeInfo } from '@/capabilities/billing/studentBillingStatusHelpers';
@@ -395,16 +396,8 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-1.5 flex-wrap">
                                 <p className="font-bold text-slate-900 truncate">{student.name}</p>
-                                {done && (
-                                  <span
-                                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${
-                                      att?.status === 'absent'
-                                        ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                                        : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                    }`}
-                                  >
-                                    {STATUS_LABEL[att!.status]}
-                                  </span>
+                                {done && att && (
+                                  <AttendanceBadge status={att.status} size="sm" />
                                 )}
                                 {unpaidBadgeMap[student.id] && (
                                   <button
@@ -591,16 +584,8 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                     맞교환
                                   </span>
                                 )}
-                                {done && (
-                                  <span
-                                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${
-                                      att?.status === 'absent'
-                                        ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                                        : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                    }`}
-                                  >
-                                    {STATUS_LABEL[att!.status]}
-                                  </span>
+                                {done && att && (
+                                  <AttendanceBadge status={att.status} size="sm" />
                                 )}
                               </div>
                               <p className="text-xs text-slate-500 truncate mt-0.5">

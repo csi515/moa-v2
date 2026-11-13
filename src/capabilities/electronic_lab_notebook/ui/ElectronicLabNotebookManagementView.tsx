@@ -61,7 +61,7 @@ const INITIAL_NOTES: ExperimentNote[] = [
     attachments: [],
     status: 'submitted',
     authorId: 'u-ms-lee',
-    authorName: '이선임 (대학원생)',
+    authorName: '이선임 (선임연구원)',
     authorSignedAt: '2026-10-23T11:20:00Z',
     witnessId: null,
     witnessName: null,

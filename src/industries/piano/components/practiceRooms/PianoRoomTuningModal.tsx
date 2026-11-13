@@ -1,6 +1,7 @@
 import React, { useState, useEffect, type FC } from 'react';
 import { Wrench, CheckCircle2, AlertTriangle, X, Clock, Calendar, Sparkles } from 'lucide-react';
 import { Modal } from '@/shared/components/ui/Modal';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   type RoomTuningRecord,
   type PianoInstrumentType,
@@ -25,7 +26,7 @@ export const PianoRoomTuningModal: FC<PianoRoomTuningModalProps> = ({
   onSaved,
 }) => {
   const [currentRecord, setCurrentRecord] = useState<RoomTuningRecord>(record);
-  const todayIso = new Date().toISOString().slice(0, 10);
+  const todayIso = todayIsoLocal();
 
   useEffect(() => {
     setCurrentRecord(record);

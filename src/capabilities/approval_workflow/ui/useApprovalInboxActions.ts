@@ -101,7 +101,7 @@ export function useApprovalInboxActions(input: {
       refreshAll();
       return true;
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '기안 실패', 'error');
+      showToast.error(cause, '기안 실패');
       return false;
     } finally {
       setBusy(false);
@@ -124,7 +124,7 @@ export function useApprovalInboxActions(input: {
       refreshAll();
       return true;
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '재상신 실패', 'error');
+      showToast.error(cause, '재상신 실패');
       return false;
     } finally {
       setBusy(false);

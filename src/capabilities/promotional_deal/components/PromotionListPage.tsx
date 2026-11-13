@@ -68,7 +68,7 @@ export const PromotionListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '상태 변경에 실패했습니다.', 'error');
+          showToast.error(err, '상태 변경에 실패했습니다.');
         },
       }
     );

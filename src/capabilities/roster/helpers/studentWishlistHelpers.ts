@@ -52,7 +52,7 @@ export function parseWishlistSongs(raw: string | string[] | undefined | null): s
 /**
  * 원생 객체로부터 관심 장르와 위시리스트 곡을 안전하게 추출
  */
-export function extractWishlistFromStudent(student: any): { genres: string[]; songs: string[] } {
+export function extractWishlistFromStudent(student: { metadata?: Record<string, unknown> } | null | undefined): { genres: string[]; songs: string[] } {
   if (!student) return { genres: [], songs: [] };
 
   const meta = student.metadata || {};
@@ -62,7 +62,7 @@ export function extractWishlistFromStudent(student: any): { genres: string[]; so
 
   const songs: string[] = Array.isArray(meta.wishlistSongs)
     ? meta.wishlistSongs
-    : parseWishlistSongs(meta.wishlistSongs || '');
+    : parseWishlistSongs(typeof meta.wishlistSongs === 'string' ? meta.wishlistSongs : '');
 
   return { genres, songs };
 }
@@ -71,10 +71,10 @@ export function extractWishlistFromStudent(student: any): { genres: string[]; so
  * 기존 원생 metadata에 선호 장르와 위시리스트 곡을 안전하게 병합
  */
 export function mergeWishlistIntoMetadata(
-  existingMetadata: Record<string, any> | undefined | null,
+  existingMetadata: Record<string, unknown> | undefined | null,
   genres: string[],
   songs: string[] | string
-): Record<string, any> {
+): Record<string, unknown> {
   const base = existingMetadata ? { ...existingMetadata } : {};
   const cleanSongs = Array.isArray(songs) ? songs : parseWishlistSongs(songs);
 

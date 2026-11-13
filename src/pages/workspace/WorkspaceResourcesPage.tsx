@@ -99,7 +99,7 @@ export const WorkspaceResourcesPage: React.FC = () => {
       });
       setInstances(rows);
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '자원 목록 조회 실패', 'error');
+      showToast.error(cause, '자원 목록 조회 실패');
     } finally {
       setLoadingInstances(false);
     }
@@ -169,7 +169,7 @@ export const WorkspaceResourcesPage: React.FC = () => {
       showToast('자원 인스턴스가 저장되었습니다.', 'success');
       await reloadInstances();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '저장 실패', 'error');
+      showToast.error(cause, '저장 실패');
     }
   };
 

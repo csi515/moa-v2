@@ -349,7 +349,7 @@ export const EmergencyAlertBroadcastView: React.FC = () => {
                 <textarea
                   value={closureReason}
                   onChange={(e) => setClosureReason(e.target.value)}
-                  placeholder="기상청 대설 경보 발령 및 빙판길 원생 낙상/차량 안전사고 예방"
+                  placeholder="기상청 대설 경보 발령 및 빙판길 이용객 낙상/차량 안전사고 예방"
                   rows={2}
                   required
                   style={{ width: '100%', padding: '8px', border: '1px solid #cbd5e1', borderRadius: '6px' }}

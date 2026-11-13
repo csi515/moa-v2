@@ -87,7 +87,7 @@ export const StudentFormPostSave: React.FC<Props> = ({
           onClick={onOpenDetail}
           className="min-h-[44px] px-3.5 rounded-xl text-xs font-bold bg-white border border-emerald-200 text-emerald-800 hover:bg-emerald-50 transition-colors cursor-pointer"
         >
-          원생 상세 보기
+          상세 정보 보기
         </button>
 
         <button

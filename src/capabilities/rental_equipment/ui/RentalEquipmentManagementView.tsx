@@ -78,7 +78,7 @@ export const RentalEquipmentManagementView: React.FC = () => {
     void update(item.id, toRow(res.nextItem)).then(() => {
       showToast(`'${item.name}' 상태가 변경되었습니다.`, 'success');
     }).catch((cause) => {
-      showToast(cause instanceof Error ? cause.message : '저장 실패', 'error');
+      showToast.error(cause, '저장 실패');
     });
   };
 
@@ -323,7 +323,7 @@ export const RentalEquipmentManagementView: React.FC = () => {
               setIsNewModalOpen(false);
             showToast(`'${newItem.name}' 비품이 등록되었습니다.`, 'success');
             }).catch((cause) => {
-              showToast(cause instanceof Error ? cause.message : '등록 실패', 'error');
+              showToast.error(cause, '등록 실패');
             });
           }}
         />

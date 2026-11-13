@@ -24,7 +24,7 @@ export function exportTableToCsv<T>(
   const dataRows = data.map((row) => {
     return columns
       .map((col) => {
-        let val: any;
+        let val: unknown;
         if (col.formatter) {
           val = col.formatter(row);
         } else if (col.key !== undefined) {

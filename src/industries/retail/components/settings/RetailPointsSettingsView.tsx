@@ -96,7 +96,7 @@ export const RetailPointsSettingsView: FC<Props> = ({ onBack }) => {
       setEnabled(rolled.enabled);
       setEarnEnabled(rolled.earnEnabled);
       setRateText(String(rolled.earnRatePercent));
-      showToast(err instanceof Error ? err.message : COPY.saveError, 'error');
+      showToast.error(err, COPY.saveError);
     } finally {
       setSaving(false);
     }

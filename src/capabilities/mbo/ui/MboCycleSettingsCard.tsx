@@ -44,7 +44,7 @@ export function MboCycleSettingsCard({ onChange }: Props) {
       onChange?.(next);
       showToast('목표 잠금과 평가 기간이 저장되었습니다.', 'success');
     } catch (error) {
-      showToast(error instanceof Error ? error.message : '저장에 실패했습니다.', 'error');
+      showToast.error(error, '저장에 실패했습니다.');
     } finally {
       setBusy(false);
     }

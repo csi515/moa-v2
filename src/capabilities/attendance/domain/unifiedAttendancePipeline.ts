@@ -29,16 +29,16 @@ export interface AttendanceEvent {
 }
 
 export interface AttendancePipelineContext {
-  customer?: any;
+  customer?: Record<string, unknown>;
   organizationId?: string;
   industry?: string;
-  settings?: any;
+  settings?: Record<string, unknown>;
 }
 
 export interface AttendancePipelineStepResult {
   ok: boolean;
   warning?: string;
-  data?: any;
+  data?: unknown;
 }
 
 export interface AttendancePipelineStep {

@@ -36,7 +36,7 @@ export function normalizeTreatmentEntry(
   id: string,
   raw: RawTreatmentInput
 ): NormalizedTreatmentEntry {
-  const ts = raw.performedAt ?? new Date().toISOString();
+  const ts = raw.performedAt ?? new Date(Date.now()).toISOString();
   const dateStr = ts.slice(0, 10);
 
   const cleanColors = (raw.colorCodes ?? [])

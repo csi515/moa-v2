@@ -6,6 +6,7 @@ import {
   redeemGuardianLinkToken,
 } from '@/core/parent/services/guardianLinkService';
 import { normalizeGuardianLinkCode } from '@/core/platform/deepLinkParser';
+import { userFacingErrorMessage } from '@/shared/errors/userFacingError';
 
 type ToastFn = (message: string, type?: 'success' | 'error' | 'info' | 'warning') => void;
 
@@ -60,7 +61,7 @@ export function useGuardianLinkRedeem(params: {
         await refreshPortalTree();
         return true;
       } catch (err) {
-        showToast(err instanceof Error ? err.message : '연결 코드가 유효하지 않습니다.', 'error');
+        showToast(userFacingErrorMessage(err, '연결 코드가 유효하지 않습니다.'), 'error');
         return false;
       } finally {
         setRedeeming(false);
@@ -85,10 +86,7 @@ export function useGuardianLinkRedeem(params: {
           setPendingToken(null);
           setLinkPreview(null);
           setShowConsent(false);
-          showToast(
-            err instanceof Error ? err.message : '연결 코드가 유효하지 않습니다.',
-            'error'
-          );
+          showToast(userFacingErrorMessage(err, '연결 코드가 유효하지 않습니다.'), 'error');
         }
       })();
     },

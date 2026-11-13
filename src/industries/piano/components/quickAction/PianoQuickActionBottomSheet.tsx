@@ -1,3 +1,5 @@
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
+
 import React, { useState, useEffect, type FC } from 'react';
 import {
   Zap,
@@ -23,15 +25,7 @@ export const PianoQuickActionBottomSheet: FC = () => {
   const [showStudentForm, setShowStudentForm] = useState(false);
 
   // ESC 키로 바텀시트 닫기
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        setIsOpen(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+  useEscapeKey(() => setIsOpen(false), isOpen);
 
   const handleActionClick = (actionId: QuickActionId) => {
     const behavior = resolveQuickActionBehavior(actionId);

@@ -7,7 +7,7 @@ import type { VehicleMileageLog } from './vehicleMileageLogEngine';
 export function generateNtsMileageCsv(
   logs: VehicleMileageLog[],
   orgName = '사업장',
-  fiscalYear = new Date().getFullYear()
+  fiscalYear = new Date(Date.now()).getFullYear()
 ): string {
   const headers = [
     '차량번호',

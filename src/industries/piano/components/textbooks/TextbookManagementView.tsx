@@ -9,6 +9,7 @@ import { StorageService } from '@/services/storage';
 import { useApp } from '@/context/AppContext';
 import { BookOpen, ShoppingBag, Plus } from 'lucide-react';
 import { PageHeader } from '@/shared/components';
+import { useTerminology } from '@/core/terminology';
 import { textbookCoreStock } from '@/industries/piano/services/textbookCoreStock';
 import { useStorageRefresh } from '@/hooks/useStorageRefresh';
 import { STORAGE_KEYS } from '@/services/adapters/storageKeys';
@@ -28,6 +29,8 @@ import { TextbookHistoryTab } from './tabs/TextbookHistoryTab';
 
 export const TextbookManagementView: React.FC = () => {
   const { openConfirmDialog, showToast, triggerRefresh } = useApp();
+  const { t } = useTerminology();
+  const customerWord = t('customer.singular', '원생');
   // 교재 domain만 — 학생/예약 변경으로 loadData 재실행 방지
   const refreshKey = useStorageRefresh('textbooks');
 
@@ -125,10 +128,7 @@ export const TextbookManagementView: React.FC = () => {
               triggerRefresh();
             }
           } catch (err) {
-            showToast(
-              err instanceof Error ? err.message : '교재 사용 중지에 실패했습니다.',
-              'error'
-            );
+            showToast.error(err, '교재 사용 중지에 실패했습니다.');
           }
         })();
       },
@@ -149,10 +149,7 @@ export const TextbookManagementView: React.FC = () => {
               triggerRefresh();
             }
           } catch (err) {
-            showToast(
-              err instanceof Error ? err.message : '교재 상태 변경에 실패했습니다.',
-              'error'
-            );
+            showToast.error(err, '교재 상태 변경에 실패했습니다.');
           }
         })();
       },
@@ -174,10 +171,7 @@ export const TextbookManagementView: React.FC = () => {
               triggerRefresh();
             }
           } catch (err) {
-            showToast(
-              err instanceof Error ? err.message : '교재 지급 취소에 실패했습니다.',
-              'error'
-            );
+            showToast.error(err, '교재 지급 취소에 실패했습니다.');
           }
         })();
       },
@@ -215,7 +209,7 @@ export const TextbookManagementView: React.FC = () => {
       <PageHeader
         icon={<BookOpen className="w-6 h-6 text-indigo-600" />}
         title="교재 관리"
-        description="교재 입고·재고 현황 파악 및 원생별 교재 배부와 수납 내역을 통합 관리합니다"
+        description={`교재 입고·재고 현황 파악 및 ${customerWord}별 교재 배부와 수납 내역을 통합 관리합니다`}
         actions={
           <div className="flex flex-wrap items-center gap-2">
             <button
@@ -224,7 +218,7 @@ export const TextbookManagementView: React.FC = () => {
               className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs font-bold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs cursor-pointer active:scale-95"
             >
               <ShoppingBag className="w-4 h-4" />
-              <span>원생 교재 배부</span>
+              <span>{customerWord} 교재 배부</span>
             </button>
             <button
               type="button"
@@ -309,10 +303,7 @@ export const TextbookManagementView: React.FC = () => {
                 setIsFormModalOpen(false);
                 triggerRefresh();
               } catch (err) {
-                showToast(
-                  err instanceof Error ? err.message : '교재 저장에 실패했습니다.',
-                  'error'
-                );
+                showToast.error(err, '교재 저장에 실패했습니다.');
               }
             })();
           }}

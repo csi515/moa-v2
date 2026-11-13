@@ -129,7 +129,7 @@ export function VehicleShuttleManagementView() {
     });
   }, [sortedStops, currentStopIndex, elapsedMinutes]);
 
-  // 원생 승하차 상태 토글
+  // 탑승자 승하차 상태 토글
   const handleCheckBoarding = (studentId: string, stopId: string, nextStatus: BoardingStatus) => {
     const updated = [
       ...boardingLogs.filter((l) => !(l.studentId === studentId && l.stopId === stopId)),
@@ -143,7 +143,7 @@ export function VehicleShuttleManagementView() {
     setBoardingLogs(updated);
 
     const statusText = nextStatus === 'BOARDED' ? '탑승 완료' : nextStatus === 'ABSENT' ? '결석(미탑승)' : '하차 완료';
-    showToast(`${studentId.replace('std-', '')} 원생이 [${statusText}] 처리되었습니다.`, 'success');
+    showToast(`${studentId.replace('std-', '')} 탑승자가 [${statusText}] 처리되었습니다.`, 'success');
   };
 
   // 운행 시작/종료 토글
@@ -249,7 +249,7 @@ export function VehicleShuttleManagementView() {
             <p className="text-xs text-slate-500">{currentRoute.driverName} ({currentRoute.driverPhone})</p>
           </div>
           <div className="p-3 bg-slate-50 rounded-xl">
-            <span className="text-[11px] font-bold text-slate-400">총 탑승 예정 원생</span>
+            <span className="text-[11px] font-bold text-slate-400">총 탑승 예정 인원</span>
             <p className="text-xl font-black text-slate-900 mt-0.5">{stats.totalAssignedStudents}명</p>
             <span className="text-[10px] text-slate-400">전체 코스 합산</span>
           </div>
@@ -276,12 +276,12 @@ export function VehicleShuttleManagementView() {
                 다음 정류장: [{arrivalNotice.nextStop.name}] 도착 {arrivalNotice.minutesRemainingToNextStop}분 전!
               </p>
               <p className="text-xs text-amber-700 mt-0.5">
-                해당 정류장 탑승 예정 원생({arrivalNotice.targetStudentIds.join(', ')}) 학부모님께 자동 알림톡이 전송되었습니다.
+                해당 정류장 탑승 예정 대상({arrivalNotice.targetStudentIds.join(', ')}) 도착 예정 상태가 기록되었습니다 (외부 문자 미발송).
               </p>
             </div>
           </div>
           <span className="px-2.5 py-1 bg-amber-200/60 text-amber-900 rounded-lg text-xs font-bold">
-            자동 발송 완료
+            도착 안내 기록됨 (로컬 전용)
           </span>
         </div>
       )}
@@ -334,9 +334,9 @@ export function VehicleShuttleManagementView() {
                   )}
                 </div>
 
-                {/* 정류장 배정 원생 목록 */}
+                {/* 정류장 배정 인원 목록 */}
                 {stop.assignedStudentIds.length === 0 ? (
-                  <p className="text-xs text-slate-400 pt-2">탑승/하차 예정 원생이 없는 경유지입니다.</p>
+                  <p className="text-xs text-slate-400 pt-2">탑승/하차 예정 인원이 없는 경유지입니다.</p>
                 ) : (
                   <div className="space-y-2 pt-3" data-testid="stop-roster">
                     {stop.assignedStudentIds.map((stdId) => {

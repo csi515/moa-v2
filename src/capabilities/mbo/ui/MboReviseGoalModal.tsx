@@ -59,7 +59,7 @@ export const MboReviseGoalModal: React.FC<Props> = ({
           })
             .then(finishLocal)
             .catch((cause) => {
-              showToast(cause instanceof Error ? cause.message : '수정 실패', 'error');
+              showToast.error(cause, '수정 실패');
             })
             .finally(() => setBusy(false));
         }}

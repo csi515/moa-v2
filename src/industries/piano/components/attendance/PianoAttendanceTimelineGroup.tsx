@@ -20,6 +20,7 @@ interface PianoAttendanceTimelineGroupProps {
   group: PianoTimelineGroup<PianoAttendanceRowItem>;
   pinCheckInIds: Set<string>;
   billingBadgeMap?: Map<string, AttendanceBillingBadgeInfo | null>;
+  isBatchCheckingIn?: boolean;
   onOpenStudent: (studentId: string) => void;
   onOpenPayment?: (student: TimelineRowStudent) => void;
   onSetStatus: (student: TimelineRowStudent, status: Exclude<DayStatus, 'unchecked'>) => void;
@@ -30,6 +31,7 @@ export const PianoAttendanceTimelineGroup: FC<PianoAttendanceTimelineGroupProps>
   group,
   pinCheckInIds,
   billingBadgeMap,
+  isBatchCheckingIn = false,
   onOpenStudent,
   onOpenPayment,
   onSetStatus,
@@ -91,7 +93,7 @@ export const PianoAttendanceTimelineGroup: FC<PianoAttendanceTimelineGroupProps>
             <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
               {timeLabel}
             </h2>
-            <span className="text-xs font-semibold text-slate-500">
+            <span className="text-xs font-semibold text-slate-500 tabular-nums">
               {totalCount}명
             </span>
           </div>
@@ -111,7 +113,7 @@ export const PianoAttendanceTimelineGroup: FC<PianoAttendanceTimelineGroupProps>
               전원 출석 완료
             </span>
           ) : uncheckedCount > 0 ? (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold bg-amber-100/80 text-amber-900">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold bg-amber-100/80 text-amber-900 tabular-nums">
               미등원 {uncheckedCount}명
             </span>
           ) : null}
@@ -122,11 +124,14 @@ export const PianoAttendanceTimelineGroup: FC<PianoAttendanceTimelineGroupProps>
           <div className="self-end sm:self-auto">
             <button
               type="button"
+              disabled={isBatchCheckingIn}
               onClick={() => onBatchCheckIn(uncheckedStudents)}
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-colors"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 min-h-[36px] rounded-lg text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Check className="w-3.5 h-3.5" />
-              미등원 {uncheckedStudents.length}명 일괄 등원
+              <span className="tabular-nums">
+                {isBatchCheckingIn ? '등원 처리 중...' : `미등원 ${uncheckedStudents.length}명 일괄 등원`}
+              </span>
             </button>
           </div>
         )}

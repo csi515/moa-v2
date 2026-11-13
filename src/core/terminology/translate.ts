@@ -30,14 +30,14 @@ export function translateTerm(
 
   const resolvedKey = SHORTCUT_MAP[key] ?? key;
   const parts = resolvedKey.split('.');
-  let current: any = dict;
+  let current: unknown = dict;
 
   for (const part of parts) {
     if (current == null || typeof current !== 'object') {
       current = undefined;
       break;
     }
-    current = current[part];
+    current = (current as Record<string, unknown>)[part];
   }
 
   if (typeof current === 'string' && current.length > 0) {

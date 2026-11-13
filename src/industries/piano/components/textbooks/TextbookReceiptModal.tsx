@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
+
 import { TextbookSale, TextbookPayment } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { Printer, X, CheckCircle2, FileText, Building2, Calendar, User, BookOpen, CreditCard } from 'lucide-react';
@@ -29,13 +31,7 @@ export const TextbookReceiptModal: React.FC<TextbookReceiptModalProps> = ({
     other: '기타'
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  useEscapeKey(onClose);
 
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150 cursor-pointer">

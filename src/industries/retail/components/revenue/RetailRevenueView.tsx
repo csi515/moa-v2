@@ -45,7 +45,7 @@ export const RetailRevenueView: FC = () => {
       });
       setSummary(data);
     } catch (err) {
-      showToast(err instanceof Error ? err.message : COPY.loadError, 'error');
+      showToast.error(err, COPY.loadError);
       setSummary(null);
     } finally {
       setLoading(false);

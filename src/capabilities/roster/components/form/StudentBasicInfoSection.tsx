@@ -16,7 +16,7 @@ interface Props {
   /**
    * 렌더링 모드:
    * - 'all' (기본): 이름 + 상세 신상정보 전체
-   * - 'name-only': 필수 원생 이름만 렌더링 (점진적 공개의 상단 필수 영역)
+   * - 'name-only': 필수 성명만 렌더링 (점진적 공개의 상단 필수 영역)
    * - 'details-only': 등록일, 생년월일, 성별, 학교, 학년 등 상세 영역만 렌더링
    */
   mode?: 'all' | 'name-only' | 'details-only';
@@ -123,7 +123,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
           )}
           <div className={showSchool ? 'sm:col-span-2' : undefined}>
             <label className="block text-xs font-semibold text-slate-700 mb-1">
-              원생 본인 연락처 <span className="text-slate-400 font-normal text-[11px]">휴대폰이 있는 경우만 입력</span>
+              본인 연락처 <span className="text-slate-400 font-normal text-[11px]">휴대폰이 있는 경우만 입력</span>
             </label>
             <input
               type="tel"
@@ -220,7 +220,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
         )}
         <div className={showSchool ? 'sm:col-span-2' : undefined}>
           <label className="block text-xs font-semibold text-slate-700 mb-1">
-            원생 본인 연락처 <span className="text-slate-400 font-normal text-[11px]">휴대폰이 있는 경우만 입력</span>
+            본인 연락처 <span className="text-slate-400 font-normal text-[11px]">휴대폰이 있는 경우만 입력</span>
           </label>
           <input
             type="tel"

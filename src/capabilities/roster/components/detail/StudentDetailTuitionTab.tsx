@@ -210,7 +210,7 @@ export const StudentDetailTuitionTab: React.FC<StudentDetailTuitionTabProps> = (
             <Receipt className="w-4 h-4 text-indigo-600" />
             수납 내역 영수증
           </h4>
-          <p className="text-[11px] text-slate-500">원생 개인의 월회비 및 교재비 납부 히스토리입니다.</p>
+          <p className="text-[11px] text-slate-500">개인의 월회비 및 교재비 납부 히스토리입니다.</p>
         </div>
         {onOpenTextbookSale && (
           <button

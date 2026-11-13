@@ -288,7 +288,7 @@ export const StudentListView: React.FC = () => {
     <div className={DENSITY.pageStack}>
             <PageHeader
         icon={<Users className="w-6 h-6 text-indigo-600" />}
-        title={labels.customer.section || '원생 관리'}
+        title={labels.customer.section || '회원 관리'}
         description={`등록된 ${labels.customer.singular}의 기본 정보, 수강 및 출결 상태를 조회하고 관리합니다`}
         actions={
           !isScoped ? (

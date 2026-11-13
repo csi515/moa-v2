@@ -100,7 +100,7 @@ export const ApprovalWorkflowManagementView: React.FC<Props> = ({
       showToast('결재선이 저장되었습니다.', 'success');
       reloadSavedLines();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '결재선 저장 실패', 'error');
+      showToast.error(cause, '결재선 저장 실패');
       throw cause;
     }
   };
@@ -111,7 +111,7 @@ export const ApprovalWorkflowManagementView: React.FC<Props> = ({
       showToast('결재선을 삭제했습니다.', 'success');
       reloadSavedLines();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '결재선 삭제 실패', 'error');
+      showToast.error(cause, '결재선 삭제 실패');
       throw cause;
     }
   };

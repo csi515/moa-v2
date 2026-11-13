@@ -203,7 +203,7 @@ export function buildConsultationFromLead(
     customerId?: string;
   }
 ) {
-  const consultDate = options?.consultationDate || lead.trial_date || new Date().toISOString().slice(0, 10);
+  const consultDate = options?.consultationDate || lead.trial_date || new Date(Date.now()).toISOString().slice(0, 10);
   return {
     customer_id: options?.customerId || lead.id,
     staff_id: options?.staffId || lead.assigned_staff_id || null,
@@ -227,7 +227,7 @@ export function buildCustomerFromLead(lead: TrialLead) {
     metadata: {
       lead_id: lead.id,
       source: lead.source,
-      converted_at: new Date().toISOString(),
+      converted_at: new Date(Date.now()).toISOString(),
     },
   };
 }

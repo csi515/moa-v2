@@ -83,7 +83,7 @@ export function stampCard(params: {
     addCount = 1,
     source = 'MANUAL',
     sourceReferenceId,
-    timestamp = new Date().toISOString(),
+    timestamp = new Date(Date.now()).toISOString(),
   } = params;
 
   if (addCount <= 0) {
@@ -165,7 +165,7 @@ export function recordAttendanceStamp(params: {
   processedEventIds?: string[];
   timestamp?: string;
 }): { success: boolean; result?: StampActionResult; error?: string } {
-  const { board, attendanceId, processedEventIds = [], timestamp = new Date().toISOString() } = params;
+  const { board, attendanceId, processedEventIds = [], timestamp = new Date(Date.now()).toISOString() } = params;
 
   if (processedEventIds.includes(attendanceId)) {
     return { success: false, error: 'ALREADY_PROCESSED_ATTENDANCE' };
@@ -200,7 +200,7 @@ export function recordPurchaseStamp(params: {
     saleAmount,
     unitAmountPerStamp,
     processedSaleIds = [],
-    timestamp = new Date().toISOString(),
+    timestamp = new Date(Date.now()).toISOString(),
   } = params;
 
   if (processedSaleIds.includes(saleId)) {
@@ -237,7 +237,7 @@ export function convertRewardCouponToPass(params: {
 }): { passRecord: ConvertedPassRecord; updatedCoupon: StampRewardCoupon } {
   const { coupon, organizationId, validityDays = 30 } = params;
 
-  const now = new Date();
+  const now = new Date(Date.now());
   const startDate = now.toISOString().slice(0, 10);
   const endDate = new Date(now.getTime() + validityDays * 24 * 3600 * 1000).toISOString().slice(0, 10);
 
@@ -270,7 +270,7 @@ export function convertRewardCouponToPass(params: {
  */
 export function redeemRewardCoupon(
   coupon: StampRewardCoupon,
-  targetDate: string = new Date().toISOString().slice(0, 10)
+  targetDate: string = new Date(Date.now()).toISOString().slice(0, 10)
 ): { updatedCoupon: StampRewardCoupon; success: boolean; error?: string } {
   if (coupon.isRedeemed) {
     return { updatedCoupon: coupon, success: false, error: 'ALREADY_REDEEMED' };
@@ -283,7 +283,7 @@ export function redeemRewardCoupon(
     updatedCoupon: {
       ...coupon,
       isRedeemed: true,
-      redeemedAt: new Date().toISOString(),
+      redeemedAt: new Date(Date.now()).toISOString(),
     },
     success: true,
   };
@@ -309,7 +309,7 @@ export function createCustomerDefaultBoard(params: {
     rewardTitle,
   } = params;
 
-  const now = new Date().toISOString();
+  const now = new Date(Date.now()).toISOString();
 
   if (templateType === 'ACADEMY_PRAISE') {
     return {

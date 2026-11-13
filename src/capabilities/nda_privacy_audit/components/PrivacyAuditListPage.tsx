@@ -60,7 +60,7 @@ export const PrivacyAuditListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '열람 감사 기록 저장 실패', 'error');
+          showToast.error(err, '열람 감사 기록 저장 실패');
         },
       }
     );

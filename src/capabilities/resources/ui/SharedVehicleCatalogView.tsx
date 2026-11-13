@@ -43,7 +43,7 @@ export function SharedVehicleCatalogView() {
       const list = await listResources({ organizationId: orgId, kind: VEHICLE_RESOURCE_KIND });
       setRows(list);
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '차량 목록을 불러오지 못했습니다.', 'error');
+      showToast.error(err, '차량 목록을 불러오지 못했습니다.');
     } finally {
       setLoading(false);
     }
@@ -73,7 +73,7 @@ export function SharedVehicleCatalogView() {
       setFormOpen(false);
       await load();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '등록에 실패했습니다.', 'error');
+      showToast.error(err, '등록에 실패했습니다.');
     } finally {
       setSaving(false);
     }
@@ -85,7 +85,7 @@ export function SharedVehicleCatalogView() {
       await setResourceActive(orgId, row.id, !row.active);
       await load();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '상태 변경 실패', 'error');
+      showToast.error(err, '상태 변경 실패');
     }
   };
 

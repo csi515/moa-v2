@@ -109,7 +109,7 @@ export const RetailCustomerHubView: FC = () => {
           latestAmount: salesRes.data[0]?.totalAmount || 0,
         });
       } catch (err) {
-        showToast(err instanceof Error ? err.message : '오류가 발생했습니다.', 'error');
+        showToast.error(err, '오류가 발생했습니다.');
         setPanel('list');
       } finally {
         setDetailLoading(false);
@@ -137,7 +137,7 @@ export const RetailCustomerHubView: FC = () => {
         });
         setPointTxs(txs);
       } catch (err) {
-        showToast(err instanceof Error ? err.message : '오류가 발생했습니다.', 'error');
+        showToast.error(err, '오류가 발생했습니다.');
       } finally {
         setPointLoading(false);
       }
@@ -170,7 +170,7 @@ export const RetailCustomerHubView: FC = () => {
         });
         setSaleModalOpen(true);
       } catch (err) {
-        showToast(err instanceof Error ? err.message : '오류가 발생했습니다.', 'error');
+        showToast.error(err, '오류가 발생했습니다.');
       }
     },
     [orgId, showToast]

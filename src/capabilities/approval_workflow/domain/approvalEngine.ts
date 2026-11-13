@@ -133,7 +133,7 @@ export function transitionApprovalStep(
     return { success: false, error: '현재 대기 중인 결재 단계가 아닙니다.' };
   }
 
-  const now = new Date().toISOString();
+  const now = new Date(Date.now()).toISOString();
   const nextSteps = [...request.steps];
 
   if (action === 'approve') {

@@ -133,7 +133,7 @@ export function createPatentInventionDeclaration(params: {
     return { patent: null, error: shareValidation.errorMessage };
   }
 
-  const nowIso = new Date().toISOString();
+  const nowIso = new Date(Date.now()).toISOString();
   const receiptDate = params.receiptDate || nowIso.slice(0, 10);
 
   const patent: PatentAsset = {
@@ -176,7 +176,7 @@ export function conductPatentReview(
     };
   }
 
-  const reviewDate = reviewParams.reviewDate || new Date().toISOString().slice(0, 10);
+  const reviewDate = reviewParams.reviewDate || new Date(Date.now()).toISOString().slice(0, 10);
   const updatedPatent: PatentAsset = {
     ...patent,
     status: status === 'approved' ? 'review_completed' : 'rejected',
@@ -242,7 +242,7 @@ export function recordInventionRewardPayment(
     params.totalRewardAmount,
     patent.inventors
   );
-  const paidDate = params.paidDate || new Date().toISOString().slice(0, 10);
+  const paidDate = params.paidDate || new Date(Date.now()).toISOString().slice(0, 10);
 
   const rewardItem: InventionRewardItem = {
     type: rewardType,

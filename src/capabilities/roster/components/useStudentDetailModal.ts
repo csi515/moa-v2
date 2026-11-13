@@ -506,7 +506,7 @@ export function useStudentDetailModal({
       showToast(`₩${payAmount.toLocaleString()}원 수납 처리가 완료되었습니다.`, 'success');
       setPayInvoiceId(null);
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '수납 처리에 실패했습니다.', 'error');
+      showToast.error(err, '수납 처리에 실패했습니다.');
     }
   };
 

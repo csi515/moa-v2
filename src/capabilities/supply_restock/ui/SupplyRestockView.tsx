@@ -205,7 +205,7 @@ export const SupplyRestockView: React.FC = () => {
       setApprovalPr(null);
       prQuery?.refetch();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '결재 상신 실패', 'error');
+      showToast.error(cause, '결재 상신 실패');
     } finally {
       setApprovalBusy(false);
     }

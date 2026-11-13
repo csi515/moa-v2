@@ -140,7 +140,7 @@ export const InventoryListView: FC = () => {
         return central?.id ?? scoped[0]?.id ?? null;
       });
     } catch (err) {
-      showToast(err instanceof Error ? err.message : COPY.loadError, 'error');
+      showToast.error(err, COPY.loadError);
       setLocations([]);
     }
   }, [orgId, memberScope, showToast]);
@@ -158,7 +158,7 @@ export const InventoryListView: FC = () => {
         })
       );
     } catch (err) {
-      showToast(err instanceof Error ? err.message : COPY.loadError, 'error');
+      showToast.error(err, COPY.loadError);
       setRows([]);
     } finally {
       setLoading(false);
@@ -650,10 +650,7 @@ export const InventoryListView: FC = () => {
                     setSelectedLocationId(created.id);
                   })
                   .catch((err) => {
-                    showToast(
-                      err instanceof Error ? err.message : COPY.addDeptLocationError,
-                      'error'
-                    );
+                    showToast.error(err, COPY.addDeptLocationError);
                   })
                   .finally(() => setSavingLoc(false));
               }}

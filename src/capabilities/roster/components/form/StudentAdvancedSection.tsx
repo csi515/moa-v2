@@ -334,7 +334,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                             <MicroGuideTooltip guideKey="auto_invoice" />
                           </span>
                           <span className="block text-[11px] text-indigo-800/80 mt-0.5">
-                            원생 등록 완료 시 당월 청구서({Number(formData.tuitionFee || 0).toLocaleString()}원)를 즉시 생성하여 바로 현장 결제할 수 있습니다.
+                            등록 완료 시 당월 청구서({Number(formData.tuitionFee || 0).toLocaleString()}원)를 즉시 생성하여 바로 현장 결제할 수 있습니다.
                           </span>
                         </div>
                       </label>

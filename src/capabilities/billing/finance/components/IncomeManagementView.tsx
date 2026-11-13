@@ -1,5 +1,6 @@
 import React, { useEffect,  useState, useMemo } from 'react';
 import { showToast, openConfirmDialog } from '@/shared/feedback/uiFeedback';
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useStorageRefresh } from '@/hooks';
 import { billingStorage } from '@/capabilities/billing/infrastructure/billingStorage';
@@ -149,17 +150,10 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
     setIsModalOpen(false);
   };
 
-  if (!hasFinanceAccess) {
-    useEffect(() => {
-    if (!isModalOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsModalOpen(false);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen]);
+  useEscapeKey(() => setIsModalOpen(false), isModalOpen);
 
-  return (
+  if (!hasFinanceAccess) {
+    return (
       <div className="bg-white rounded-3xl border border-slate-200 p-8 text-center max-w-md mx-auto my-6 shadow-sm space-y-4">
         <div className="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mx-auto">
           <ShieldAlert className="w-6 h-6" />
@@ -211,7 +205,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
           <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             {selectedMonth} 직접 등록 수입
           </span>
-          <p className="text-xl font-black text-emerald-600 mt-2">{formatCurrency(totalAmount)}</p>
+          <p className="text-xl font-black text-emerald-600 tabular-nums mt-2">{formatCurrency(totalAmount)}</p>
           <p className="text-xs text-slate-500 mt-1">등록 {filteredEntries.length}건</p>
         </div>
       )}
@@ -243,7 +237,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
           </select>
         </div>
         <span className="text-xs text-slate-500 font-medium">
-          합계: <strong className="text-emerald-600 font-bold">{formatCurrency(totalAmount)}</strong>
+          합계: <strong className="text-emerald-600 font-bold tabular-nums">{formatCurrency(totalAmount)}</strong>
         </span>
       </div>
 
@@ -288,7 +282,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                           )}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 font-black text-emerald-600 text-sm">
+                      <td className="py-3.5 px-4 font-black text-emerald-600 tabular-nums text-sm">
                         {formatCurrency(entry.amount)}
                       </td>
                       <td className="py-3.5 px-4 text-slate-600">
@@ -342,7 +336,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                     </p>
                     <p className="text-[11px] text-slate-400 font-mono">{entry.date}</p>
                   </div>
-                  <p className="font-black text-emerald-600 text-sm">{formatCurrency(entry.amount)}</p>
+                  <p className="font-black text-emerald-600 tabular-nums text-sm">{formatCurrency(entry.amount)}</p>
                 </div>
                 <p className="text-xs text-slate-600">
                   {getCategoryLabel(categoryOptions, entry.category)} · {entry.payer || '입금처 미입력'}

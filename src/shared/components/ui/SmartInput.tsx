@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useRef, useImperativeHandle } from 'react';
 import { cn } from '@/shared/lib/utils';
 
 export type SmartInputType = 'text' | 'phone' | 'currency' | 'bizno' | 'birthdate';
@@ -70,6 +70,8 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
     ref
   ) => {
     const inputId = id || (label ? `smart-input-${label.replace(/\s+/g, '-')}` : undefined);
+    const innerRef = useRef<HTMLInputElement>(null);
+    useImperativeHandle(ref, () => innerRef.current!);
 
     const getDisplayValue = (): string => {
       const strVal = value !== undefined && value !== null ? value.toString() : '';
@@ -90,7 +92,9 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const inputVal = e.target.value;
+      const input = e.target;
+      const inputVal = input.value;
+      const prevCursor = input.selectionStart || 0;
 
       if (!onChange) return;
 
@@ -98,21 +102,40 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
         const raw = inputVal.replace(/\D/g, '').slice(0, 11);
         const formatted = formatPhoneNumber(raw);
         onChange(raw, formatted);
+        preserveCursor(input, prevCursor, inputVal, formatted);
       } else if (smartType === 'bizno') {
         const raw = inputVal.replace(/\D/g, '').slice(0, 10);
         const formatted = formatBizNo(raw);
         onChange(raw, formatted);
+        preserveCursor(input, prevCursor, inputVal, formatted);
       } else if (smartType === 'birthdate') {
         const raw = inputVal.replace(/\D/g, '').slice(0, 8);
         const formatted = formatBirthdate(raw);
         onChange(raw, formatted);
+        preserveCursor(input, prevCursor, inputVal, formatted);
       } else if (smartType === 'currency') {
         const raw = inputVal.replace(/\D/g, '');
         const formatted = formatCurrency(raw);
         onChange(raw, formatted);
+        preserveCursor(input, prevCursor, inputVal, formatted);
       } else {
         onChange(inputVal, inputVal);
       }
+    };
+
+    // 포맷팅 후 커서 점프 방지 (Caret preservation)
+    const preserveCursor = (
+      input: HTMLInputElement,
+      prevCursor: number,
+      prevVal: string,
+      nextVal: string
+    ) => {
+      requestAnimationFrame(() => {
+        if (!input) return;
+        const diff = nextVal.length - prevVal.length;
+        const newPos = Math.max(0, Math.min(prevCursor + diff, nextVal.length));
+        input.setSelectionRange(newPos, newPos);
+      });
     };
 
     return (
@@ -129,7 +152,7 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
         <div className="relative">
           <input
             {...props}
-            ref={ref}
+            ref={innerRef}
             id={inputId}
             disabled={disabled}
             type="text"

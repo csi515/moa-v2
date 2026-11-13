@@ -51,7 +51,7 @@ export function ConsultationForm({
       });
       setStudentName('');
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '상담 신청에 실패했습니다', 'error');
+      showToast.error(err, '상담 신청에 실패했습니다');
     }
   };
 

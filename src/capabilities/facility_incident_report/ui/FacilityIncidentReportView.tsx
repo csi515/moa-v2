@@ -19,7 +19,7 @@ export const FacilityIncidentReportView: React.FC = () => {
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [personName, setPersonName] = useState('');
-  const [personRole, setPersonRole] = useState('원생');
+  const [personRole, setPersonRole] = useState('이용객');
   const [description, setDescription] = useState('');
   const [injuryDetails, setInjuryDetails] = useState('');
   const [emergencyAction, setEmergencyAction] = useState('');
@@ -416,7 +416,7 @@ export const FacilityIncidentReportView: React.FC = () => {
                   onChange={(e) => handleHospitalChange(e.target.checked)}
                 />
                 <label htmlFor="hospitalTransport" style={{ fontSize: '13px', fontWeight: 'bold', color: '#dc2626' }}>
-                  🚑 병원 후송/진료 동행 여부 (체크 시 Severe 자동 판정)
+                  🚑 병원 후송/의료기관 동행 여부 (체크 시 Severe 자동 판정)
                 </label>
               </div>
 

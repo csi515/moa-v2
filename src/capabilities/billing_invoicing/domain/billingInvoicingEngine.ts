@@ -98,7 +98,7 @@ export function transitionInvoiceStatus(
         updatedInvoice: {
           ...current,
           status: 'PAID',
-          paidAt: payload?.paidAt ?? new Date().toISOString(),
+          paidAt: payload?.paidAt ?? new Date(Date.now()).toISOString(),
         },
         success: true,
       };
@@ -453,7 +453,7 @@ export function calculateAccountsReceivableAging(
   unpaidRecords: UnpaidRecord[],
   referenceDate?: string
 ): AccountsReceivableAgingSummary {
-  const refDateStr = referenceDate || new Date().toISOString().slice(0, 10);
+  const refDateStr = referenceDate || new Date(Date.now()).toISOString().slice(0, 10);
   const refTime = new Date(refDateStr).getTime();
 
   let totalUnpaidAmount = 0;

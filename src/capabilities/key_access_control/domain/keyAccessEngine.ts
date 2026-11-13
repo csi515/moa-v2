@@ -22,7 +22,7 @@ export interface AccessKeyRecord {
 export function checkPinRotationNeeded(
   lastChangedAt: string | undefined,
   rotationCycleDays: number,
-  now: Date = new Date()
+  now: Date = new Date(Date.now())
 ): { needsRotation: boolean; daysElapsed: number } {
   if (!lastChangedAt) {
     return { needsRotation: true, daysElapsed: 999 };

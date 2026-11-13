@@ -152,10 +152,7 @@ export const PilatesParentBookingsView: React.FC<{
                         await ScheduleService.cancelBookingAsParent(b.id);
                         showToast('예약 신청을 취소했습니다.', 'info');
                       } catch (err) {
-                        showToast(
-                          err instanceof Error ? err.message : '취소에 실패했습니다.',
-                          'error'
-                        );
+                        showToast.error(err, '취소에 실패했습니다.');
                       }
                     })();
                   }}

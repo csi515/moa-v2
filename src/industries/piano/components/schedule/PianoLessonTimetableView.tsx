@@ -18,6 +18,7 @@ import { PianoTimetableStudentPicker } from './PianoTimetableStudentPicker';
 import { StudentTimetableMoveModal } from './StudentTimetableMoveModal';
 import { usePianoLessonTimetable } from './usePianoLessonTimetable';
 import { useApp } from '@/context/AppContext';
+import { useTerminology } from '@/core/terminology';
 import {
   calculateSlotCapacity,
   summarizeDayCapacity,
@@ -34,6 +35,8 @@ import {
  */
 export const PianoLessonTimetableView: FC = () => {
   const { showToast } = useApp();
+  const { t } = useTerminology();
+  const customerWord = t('customer.singular', '원생');
   const navigate = usePianoNavigate();
   const [calendarView, setCalendarView] = useState<CalendarViewMode>('week');
   const [selectedDayFilter, setSelectedDayFilter] = useState<'ALL' | DayOfWeek>('ALL');
@@ -106,12 +109,12 @@ export const PianoLessonTimetableView: FC = () => {
         })
       );
       showToast(
-        `${placement.student.name} 학생 수업이 이번 주 ${targetDay}요일 ${targetStartTime}로 임시 보강 이동되었습니다.`,
+        `${placement.student.name} ${customerWord} 수업이 이번 주 ${targetDay}요일 ${targetStartTime}로 임시 보강 이동되었습니다.`,
         'success'
       );
     } else {
       showToast(
-        `${placement.student.name} 학생 정규 시간표가 ${targetDay}요일 ${targetStartTime}로 변경되었습니다.`,
+        `${placement.student.name} ${customerWord} 정규 시간표가 ${targetDay}요일 ${targetStartTime}로 변경되었습니다.`,
         'success'
       );
     }
@@ -191,7 +194,7 @@ export const PianoLessonTimetableView: FC = () => {
                     setMoveTargetPlacement(p);
                   }
                 }}
-                title={p.editable ? `${p.student.name} 학생 탭하여 다른 시간대로 이동 (또는 드래그)` : undefined}
+                title={p.editable ? `${p.student.name} ${customerWord} 탭하여 다른 시간대로 이동 (또는 드래그)` : undefined}
               >
                 <div className="flex items-start justify-between gap-1">
                   <div className="min-w-0 flex-1">
@@ -251,21 +254,21 @@ export const PianoLessonTimetableView: FC = () => {
     return (
       <EmptyState
         icon={<Users className="w-10 h-10" />}
-        title="등록된 학생이 없습니다"
-        description="학생을 등록한 뒤 시간표에 일정을 배치할 수 있습니다."
+        title={`등록된 ${customerWord}이(가) 없습니다`}
+        description={`${customerWord}을(를) 등록한 뒤 시간표에 일정을 배치할 수 있습니다.`}
         action={{
-          label: '학생 등록하기',
+          label: `${customerWord} 등록하기`,
           onClick: () => navigate('students'),
           icon: <UserPlus className="w-4 h-4" />,
         }}
         guide={{
           badge: '30초 시작 가이드',
           title: '레슨 시간표 배치',
-          tip: '학생을 등록한 뒤 이 화면에서 요일·시간 칸을 탭하면 배치됩니다.',
+          tip: `${customerWord}을(를) 등록한 뒤 이 화면에서 요일·시간 칸을 탭하면 배치됩니다.`,
           steps: [
-            { stepNumber: 1, title: '학생 등록', detail: '원생 명부에서 첫 학생을 등록합니다.' },
+            { stepNumber: 1, title: `${customerWord} 등록`, detail: `명부에서 첫 ${customerWord}을(를) 등록합니다.` },
             { stepNumber: 2, title: '시간대 선택', detail: '원하는 요일·시작 시간을 탭합니다.' },
-            { stepNumber: 3, title: '학생 배치', detail: '미배치 학생을 골라 칸에 넣습니다.' },
+            { stepNumber: 3, title: `${customerWord} 배치`, detail: `미배치 ${customerWord}을(를) 골라 칸에 넣습니다.` },
           ],
         }}
       />
@@ -394,7 +397,7 @@ export const PianoLessonTimetableView: FC = () => {
             title="원생 목록으로 이동하여 시간표 일괄 배정"
           >
             <UserPlus className="w-3.5 h-3.5 text-indigo-600" />
-            <span>원생 목록에서 일괄 배정</span>
+            <span>{customerWord} 목록에서 일괄 배정</span>
           </button>
           <button
             type="button"
@@ -464,23 +467,23 @@ export const PianoLessonTimetableView: FC = () => {
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
             {activeFocusDay}요일 정원 현황 (피아노 {totalPianoRooms}대 기준):
           </span>
-          <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 tabular-nums">
             여유 {capacitySummary.availableSlotCount}슬롯
           </span>
           {capacitySummary.fullSlotCount > 0 && (
-            <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+            <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200 tabular-nums">
               마감 {capacitySummary.fullSlotCount}슬롯
             </span>
           )}
           {capacitySummary.overflowSlotCount > 0 && (
-            <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200 animate-pulse">
+            <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200 animate-pulse tabular-nums">
               ⚠️ 초과 {capacitySummary.overflowSlotCount}슬롯
             </span>
           )}
         </div>
 
-        <div className="text-[11px] text-slate-500 font-medium">
-          총 {capacitySummary.totalStudents}명 수강 중 · 칸 클릭 시 즉시 배치
+        <div className="text-[11px] text-slate-500 font-medium tabular-nums">
+          총 <span className="font-bold text-slate-800">{capacitySummary.totalStudents}</span>명 수강 중 · 칸 클릭 시 즉시 배치
         </div>
       </div>
 
@@ -538,7 +541,7 @@ export const PianoLessonTimetableView: FC = () => {
       {/* 클릭 시 오픈되는 학생 검색 및 정기 반복 배치 모달 */}
       <PianoTimetableStudentPicker
         isOpen={!!pickerSlot}
-        title="학생 시간표 배치"
+        title={`${customerWord} 시간표 배치`}
         subtitle={
           pickerSlot ? `${pickerSlot.day}요일 ${pickerSlot.startTime} 배치` : undefined
         }

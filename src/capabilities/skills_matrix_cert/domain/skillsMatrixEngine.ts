@@ -30,7 +30,7 @@ export interface StaffSkillsMatrixRecord {
 
 export function checkCertificationExpiry(
   expiresAt: string | undefined,
-  now: Date = new Date(),
+  now: Date = new Date(Date.now()),
   warningDays = 60
 ): { status: CertExpiryStatus; daysRemaining: number | null } {
   if (!expiresAt) {

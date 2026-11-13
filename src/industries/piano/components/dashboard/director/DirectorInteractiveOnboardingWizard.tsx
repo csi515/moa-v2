@@ -1,3 +1,5 @@
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
+
 import React, { useEffect,  useState } from 'react';
 import {
   type OnboardingOperatingHours,
@@ -160,13 +162,7 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
 
   const timeSlots = generateAvailableLessonTimeSlots(hours.startTime, hours.endTime, 60);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  useEscapeKey(onClose);
 
   return (
     <div

@@ -55,6 +55,32 @@ export default defineConfig({
             if (id.includes("/zod/")) {
               return "zod-vendor";
             }
+            if (id.includes("pdf-lib")) {
+              return "pdf-vendor";
+            }
+            if (
+              id.includes("papaparse") ||
+              id.includes("read-excel-file") ||
+              id.includes("write-excel-file")
+            ) {
+              return "excel-vendor";
+            }
+            if (id.includes("dexie")) {
+              return "offline-db-vendor";
+            }
+            if (id.includes("sonner")) {
+              return "feedback-vendor";
+            }
+            if (id.includes("@tiptap")) {
+              return "editor-vendor";
+            }
+            if (
+              id.includes("html5-qrcode") ||
+              id.includes("qrcode.react") ||
+              id.includes("jsbarcode")
+            ) {
+              return "barcode-vendor";
+            }
             if (id.includes("/xlsx/")) {
               return "xlsx-vendor";
             }

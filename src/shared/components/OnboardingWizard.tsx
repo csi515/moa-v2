@@ -176,7 +176,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       onComplete();
       showToast(`${trimmedName} 기본 설정이 완료되었습니다! 대시보드로 이동합니다.`, 'success');
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '학원 정보 저장 중 오류가 발생했습니다.', 'error');
+      showToast.error(err, '학원 정보 저장 중 오류가 발생했습니다.');
     } finally {
       setIsSaving(false);
     }
@@ -232,7 +232,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       );
       goNext();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '학원 정보 저장 중 오류가 발생했습니다.', 'error');
+      showToast.error(err, '학원 정보 저장 중 오류가 발생했습니다.');
     } finally {
       setIsSaving(false);
     }
@@ -245,7 +245,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       await persistLocalAndOrg({ business_hours: business_hours || undefined });
       goNext();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '운영 시간 저장 중 오류가 발생했습니다.', 'error');
+      showToast.error(err, '운영 시간 저장 중 오류가 발생했습니다.');
     } finally {
       setIsSaving(false);
     }
@@ -257,7 +257,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       await persistLocalAndOrg({ defaultLessonMinutes: lessonMinutes });
       goNext();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '수업 기본값 저장 중 오류가 발생했습니다.', 'error');
+      showToast.error(err, '수업 기본값 저장 중 오류가 발생했습니다.');
     } finally {
       setIsSaving(false);
     }
@@ -273,7 +273,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       });
       goNext();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '수납 기본값 저장 중 오류가 발생했습니다.', 'error');
+      showToast.error(err, '수납 기본값 저장 중 오류가 발생했습니다.');
     } finally {
       setIsSaving(false);
     }

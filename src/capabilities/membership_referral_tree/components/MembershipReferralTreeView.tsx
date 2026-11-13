@@ -101,7 +101,7 @@ export const MembershipReferralTreeView: React.FC = () => {
   const [selectedGroup, setSelectedGroup] = useState<FamilyGroup | null>(INITIAL_GROUPS[0]);
   const [creditInput, setCreditInput] = useState<number>(50000);
 
-  // 신규 원생 추가 폼
+  // 신규 회원 추가 폼
   const [newChildName, setNewChildName] = useState('');
   const [newChildTuition, setNewChildTuition] = useState(150000);
 
@@ -209,7 +209,7 @@ export const MembershipReferralTreeView: React.FC = () => {
         <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
           <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>등록 패밀리 그룹</div>
           <div style={{ fontSize: '24px', fontWeight: 700, color: '#111827' }}>{totalFamilies} 가구</div>
-          <div style={{ fontSize: '12px', color: '#10b981', marginTop: '4px' }}>총 {totalChildren}명 원생 묶음 관리</div>
+          <div style={{ fontSize: '12px', color: '#10b981', marginTop: '4px' }}>총 {totalChildren}명 회원 묶음 관리</div>
         </div>
         <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
           <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>형제 자동 결합 할인</div>

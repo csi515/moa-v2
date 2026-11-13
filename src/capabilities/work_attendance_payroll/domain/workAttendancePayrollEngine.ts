@@ -394,7 +394,7 @@ export function generatePayrollSlip(
     taxableGrossPay: nonTaxable.taxableGrossPay,
     deductions,
     netPay,
-    issuedAt: new Date().toISOString(),
+    issuedAt: new Date(Date.now()).toISOString(),
   };
 }
 
@@ -603,7 +603,7 @@ export function checkQualificationExpiry(
     };
   }
 
-  const refDate = referenceDateStr ? new Date(referenceDateStr) : new Date();
+  const refDate = referenceDateStr ? new Date(referenceDateStr) : new Date(Date.now());
   const expDate = new Date(qualification.expiryDate);
   const diffTime = expDate.getTime() - refDate.getTime();
   const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -692,7 +692,7 @@ export function evaluateTrainingEffectiveness(
   const isEffective = evalData.score >= 70;
   const evaluation: TrainingEffectivenessEvaluation = {
     evaluatorStaffId: evalData.evaluatorStaffId,
-    evaluatedAt: evalData.evaluatedAt || new Date().toISOString(),
+    evaluatedAt: evalData.evaluatedAt || new Date(Date.now()).toISOString(),
     score: Math.min(100, Math.max(0, evalData.score)),
     result: isEffective ? 'effective' : 'retraining_required',
     criteriaMet: isEffective,
@@ -703,7 +703,7 @@ export function evaluateTrainingEffectiveness(
   return {
     ...record,
     trainingStatus: 'completed',
-    completedDate: record.completedDate || new Date().toISOString().split('T')[0],
+    completedDate: record.completedDate || new Date(Date.now()).toISOString().split('T')[0],
     effectivenessEvaluation: evaluation,
   };
 }

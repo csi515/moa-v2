@@ -63,7 +63,7 @@ export const ProjectCategoryManager: React.FC<Props> = ({
       showToast('이름이 변경되었습니다.', 'success');
       onChanged();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '변경 실패', 'error');
+      showToast.error(cause, '변경 실패');
     }
   };
 
@@ -145,7 +145,7 @@ export const ProjectCategoryManager: React.FC<Props> = ({
                         onChanged();
                       })
                       .catch((cause) => {
-                        showToast(cause instanceof Error ? cause.message : '보관 실패', 'error');
+                        showToast.error(cause, '보관 실패');
                       });
                   }}
                 >
@@ -186,7 +186,7 @@ export const ProjectCategoryManager: React.FC<Props> = ({
                         onChanged();
                       })
                       .catch((cause) => {
-                        showToast(cause instanceof Error ? cause.message : '복구 실패', 'error');
+                        showToast.error(cause, '복구 실패');
                       });
                   }}
                 >

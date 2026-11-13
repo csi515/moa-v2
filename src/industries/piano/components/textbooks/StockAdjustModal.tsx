@@ -1,3 +1,5 @@
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
+
 import React, { useEffect,  useState } from 'react';
 import { Textbook } from '@/types';
 import { StorageService } from '@/services/storage';
@@ -50,17 +52,11 @@ export const StockAdjustModal: React.FC<StockAdjustModalProps> = ({
         onSuccess();
       }
     } catch (err: any) {
-      showToast(err?.message || '재고 조정 처리 중 오류가 발생했습니다.', 'error');
+      showToast.error(err, '재고 조정 처리 중 오류가 발생했습니다.');
     }
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  useEscapeKey(onClose);
 
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150 cursor-pointer">

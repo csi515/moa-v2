@@ -89,7 +89,7 @@ export function archiveCategory(category: ProjectCategory, archivedAt?: string):
   return {
     ...category,
     isActive: false,
-    archivedAt: archivedAt ?? new Date().toISOString(),
+    archivedAt: archivedAt ?? new Date(Date.now()).toISOString(),
   };
 }
 

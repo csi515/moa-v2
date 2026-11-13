@@ -62,7 +62,7 @@ export const UniformGearListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '지급 등록 실패', 'error');
+          showToast.error(err, '지급 등록 실패');
         },
       }
     );

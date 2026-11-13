@@ -554,7 +554,7 @@ export function usePianoConsultationHub() {
         await loadAllData();
         await loadToday();
       } catch (err: any) {
-        showToast(err?.message || '확정 처리에 실패했습니다.', 'error');
+        showToast.error(err, '확정 처리에 실패했습니다.');
       } finally {
         setIsConfirmingId(null);
       }

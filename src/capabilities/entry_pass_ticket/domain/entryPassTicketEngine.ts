@@ -60,7 +60,7 @@ export function issueEntryPassTicket(params: {
     price: params.price ?? 0,
     status: 'issued',
     securityHash,
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(Date.now()).toISOString(),
   };
 }
 
@@ -107,7 +107,7 @@ export function processTicketScan(
       };
     }
 
-    const now = new Date().toISOString();
+    const now = new Date(Date.now()).toISOString();
     const updatedTicket: EntryPassTicket = {
       ...ticket,
       status: 'checked_in',
@@ -132,7 +132,7 @@ export function processTicketScan(
       };
     }
 
-    const now = new Date().toISOString();
+    const now = new Date(Date.now()).toISOString();
     const updatedTicket: EntryPassTicket = {
       ...ticket,
       status: 'checked_out',

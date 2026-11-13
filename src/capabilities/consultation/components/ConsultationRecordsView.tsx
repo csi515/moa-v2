@@ -89,7 +89,7 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
     e.preventDefault();
     const st = students.find((s) => s.id === formData.studentId);
     if (!st) {
-      showToast('원생을 선택해주세요.', 'warning');
+      showToast('회원을 선택해주세요.', 'warning');
       return;
     }
     if (!formData.content.trim()) {
@@ -152,14 +152,14 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
         >
           <option value="ALL">전체 상담 유형</option>
           <option value="parent">학부모 상담</option>
-          <option value="student">원생 상담</option>
+          <option value="student">회원 상담</option>
           <option value="career">진로/입시 상담</option>
           <option value="learning">학습/진도 상담</option>
         </select>
         <SearchField
           value={searchQuery}
           onChange={setSearchQuery}
-          placeholder="원생, 학부모, 내용 검색..."
+          placeholder="회원, 보호자, 내용 검색..."
           className="flex-1 min-w-[200px]"
         />
         <span className="text-xs text-slate-500 font-medium shrink-0">
@@ -192,7 +192,7 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
                     </button>
                     <span className="text-xs text-slate-500">({c.parentName} 학부모)</span>
                     <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-800">
-                      {c.type === 'parent' ? '학부모 상담' : c.type === 'learning' ? '학습 진도' : c.type === 'career' ? '진로/입시' : '원생 상담'}
+                      {c.type === 'parent' ? '학부모 상담' : c.type === 'learning' ? '학습 진도' : c.type === 'career' ? '진로/입시' : '회원 상담'}
                     </span>
                   </div>
                   <p className="text-xs text-slate-400 font-mono mt-0.5">
@@ -249,7 +249,7 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">원생 선택</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">회원 선택</label>
                   <select
                     value={formData.studentId}
                     onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
@@ -283,7 +283,7 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
                     className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
                   >
                     <option value="parent">학부모 상담</option>
-                    <option value="student">원생 상담</option>
+                    <option value="student">회원 상담</option>
                     <option value="career">진로/입시 상담</option>
                     <option value="learning">학습/진도 상담</option>
                   </select>
@@ -306,7 +306,7 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
                 <textarea
                   rows={4}
                   required
-                  placeholder="학부모와의 대화 내용, 원생의 피아노 연습 고민, 성향 등을 기록하세요..."
+                  placeholder="보호자와의 대화 내용, 고객의 연습 고민, 성향 등을 기록하세요..."
                   value={formData.content}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                   className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none resize-none leading-relaxed"

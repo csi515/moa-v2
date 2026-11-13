@@ -32,7 +32,7 @@ export const ParentAccountSection: FC<{ industryType?: IndustryType | string }> 
       await refreshPortalTree();
       showToast('연락처를 저장했습니다', 'success');
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '연락처 저장에 실패했습니다', 'error');
+      showToast.error(err, '연락처 저장에 실패했습니다');
     } finally {
       setSaving(false);
     }

@@ -23,6 +23,8 @@ interface ModalProps {
   confirmClose?: (proceed: () => void) => void;
   /** 스크롤 콘텐츠 밖에 고정되는 액션 영역 */
   footer?: ReactNode;
+  /** 커스텀 헤더를 직접 구현하는 경우 기본 헤더 숨김 */
+  hideHeader?: boolean;
 }
 
 const MAX_WIDTH_CLASS = {
@@ -49,6 +51,7 @@ export const Modal: React.FC<ModalProps> = ({
   dirty = false,
   confirmClose,
   footer,
+  hideHeader = false,
 }) => {
   const titleId = useId();
   const descriptionId = useId();
@@ -115,6 +118,7 @@ export const Modal: React.FC<ModalProps> = ({
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
       >
+        {!hideHeader && (
         <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white flex items-center justify-between shrink-0 gap-2">
           <div className="min-w-0">
             <h3 id={titleId} className="font-bold text-slate-900 text-base truncate">
@@ -138,6 +142,7 @@ export const Modal: React.FC<ModalProps> = ({
             </button>
           </div>
         </div>
+        )}
         <div className="overflow-y-auto flex-1 min-h-0">{children}</div>
         {footer ? (
           <div className="shrink-0 border-t border-slate-100 bg-white px-4 sm:px-6 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">

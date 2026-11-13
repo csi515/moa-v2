@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
+import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 
 export interface AppDrawerProps {
   open: boolean;
@@ -31,25 +32,20 @@ export const AppDrawer: React.FC<AppDrawerProps> = ({
   const [dragOffset, setDragOffset] = useState<number>(0);
   const sheetRef = useRef<HTMLDivElement>(null);
 
-  // ESC 키 닫기 및 모달 활성화 시 배경 스크롤 방지
+  // 선언적 ESC 키 닫기
+  useEscapeKey(() => onOpenChange(false), open);
+
+  // 모달 활성화 시 배경 스크롤 방지
   useEffect(() => {
     if (!open) return;
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onOpenChange(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-
     return () => {
       document.body.style.overflow = originalOverflow;
-      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [open, onOpenChange]);
+  }, [open]);
 
   if (!open) return null;
 

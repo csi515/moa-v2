@@ -201,6 +201,6 @@ export function generateIso30414Report(params: {
       completionRatePercent: trainingMetrics.completionRatePercent,
       effectivenessRatePercent: trainingMetrics.effectivenessRatePercent,
     },
-    generatedAt: new Date().toISOString(),
+    generatedAt: new Date(Date.now()).toISOString(),
   };
 }

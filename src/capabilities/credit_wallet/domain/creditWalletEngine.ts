@@ -82,7 +82,7 @@ export function applyWalletTransaction(
   success: boolean;
   error?: string;
 } {
-  const ts = tx.timestamp ?? new Date().toISOString();
+  const ts = tx.timestamp ?? new Date(Date.now()).toISOString();
 
   if (tx.amount <= 0) {
     return {

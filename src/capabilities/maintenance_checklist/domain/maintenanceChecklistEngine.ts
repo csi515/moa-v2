@@ -199,7 +199,7 @@ export function generateCapaTicketFromInspectionFail(
   options: { assignedTeam?: string; reportedAt?: string } = {}
 ): CapaTicketDraft {
   const checkRes = evaluateToleranceResult(failedParam);
-  const reportedAt = options.reportedAt || new Date().toISOString();
+  const reportedAt = options.reportedAt || new Date(Date.now()).toISOString();
   const dateStr = reportedAt.slice(2, 10).replace(/-/g, '');
   const ticketNumber = `CAPA-${dateStr}-${Math.floor(100 + Math.random() * 900)}`;
 

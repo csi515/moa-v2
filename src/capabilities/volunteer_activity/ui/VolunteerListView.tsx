@@ -55,7 +55,7 @@ export const VolunteerListView: React.FC = () => {
       setActivities(acts.filter((a) => a.status !== 'cancelled'));
       setSignups(signs);
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '조회에 실패했습니다.', 'error');
+      showToast.error(cause, '조회에 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -72,7 +72,7 @@ export const VolunteerListView: React.FC = () => {
       showToast('참여 신청이 완료되었습니다.', 'success');
       await reload();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '참여에 실패했습니다.', 'error');
+      showToast.error(cause, '참여에 실패했습니다.');
       await reload();
     } finally {
       setBusyId(null);
@@ -86,7 +86,7 @@ export const VolunteerListView: React.FC = () => {
       showToast('참여가 취소되었습니다.', 'success');
       await reload();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '취소에 실패했습니다.', 'error');
+      showToast.error(cause, '취소에 실패했습니다.');
       await reload();
     } finally {
       setBusyId(null);

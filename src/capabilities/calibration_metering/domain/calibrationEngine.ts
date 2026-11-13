@@ -28,7 +28,7 @@ export function evaluateDeviceCalibration(
   cycleMonths: number,
   measuredError: number,
   maxTolerance: number,
-  currentTime: Date = new Date(),
+  currentTime: Date = new Date(Date.now()),
   warningDays = 30
 ): { nextDue: string; status: CalibrationStatus; daysRemaining: number } {
   // 허용 오차 초과 판정

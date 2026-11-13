@@ -4,6 +4,7 @@ export {
   parseStudentImportFile,
   parseStudentImportWorkbook,
   buildTemplateWorkbookBuffer,
+  buildTemplateWorkbookBlob,
 } from './parseStudentImport';
 export {
   validateStudentImportRows,

@@ -28,7 +28,7 @@ const MealSurveySettingsInner: React.FC = () => {
       const row = await ensureMealSurveySettings(orgId);
       setDraft(settingsRowToDomain(row));
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '설정을 불러오지 못했습니다.', 'error');
+      showToast.error(cause, '설정을 불러오지 못했습니다.');
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,7 @@ const MealSurveySettingsInner: React.FC = () => {
       setDraft(settingsRowToDomain(row));
       showToast('식수 설정을 저장했습니다.', 'success');
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '저장에 실패했습니다.', 'error');
+      showToast.error(cause, '저장에 실패했습니다.');
     } finally {
       setSaving(false);
     }

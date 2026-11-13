@@ -73,7 +73,7 @@ export const CalibrationListPage: React.FC = () => {
           refetch();
         },
         onError: (err) => {
-          showToast(err?.message || '장비 등록 실패', 'error');
+          showToast.error(err, '장비 등록 실패');
         },
       }
     );

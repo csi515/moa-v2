@@ -328,10 +328,7 @@ export const OrganizationDangerZoneCard: FC<OrganizationDangerZoneCardProps> = (
         org.clearOrganization();
       }
     } catch (err) {
-      showToast(
-        err instanceof Error ? err.message : '조직 삭제 중 오류가 발생했습니다.',
-        'error'
-      );
+      showToast.error(err, '조직 삭제 중 오류가 발생했습니다.');
     } finally {
       setIsDeleting(false);
     }

@@ -111,7 +111,7 @@ export function ParentMoreView({
             await refreshPortalTree();
             goToChildren();
           } catch (err) {
-            showToast(err instanceof Error ? err.message : '연결 해제에 실패했습니다', 'error');
+            showToast.error(err, '연결 해제에 실패했습니다');
           } finally {
             setUnlinking(false);
           }

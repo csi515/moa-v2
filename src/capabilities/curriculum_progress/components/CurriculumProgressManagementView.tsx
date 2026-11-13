@@ -270,7 +270,7 @@ export function CurriculumProgressManagementView() {
             <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
             <input
               type="text"
-              placeholder="수강생 검색..."
+              placeholder="회원/학습자 검색..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -315,14 +315,14 @@ export function CurriculumProgressManagementView() {
         <div className="md:col-span-2 space-y-6">
           {activeTab === 'progress' ? (
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-6">
-              {/* 수강생 진도 현황 헤더 카드 */}
+              {/* 회원 진도 현황 헤더 카드 */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                 <div>
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold">
                     <Award className="w-3.5 h-3.5" />
                     <span>현재 과정: {currentStudent.targetLevel}</span>
                   </div>
-                  <h2 className="text-lg font-bold text-slate-900 mt-1">{currentStudent.name} 수강생 진도율</h2>
+                  <h2 className="text-lg font-bold text-slate-900 mt-1">{currentStudent.name} 회원 진도율</h2>
                 </div>
 
                 <div className="flex items-center gap-2">

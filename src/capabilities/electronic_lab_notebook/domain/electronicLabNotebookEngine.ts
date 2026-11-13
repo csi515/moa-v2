@@ -126,7 +126,7 @@ export function createExperimentNote(params: {
   authorId: string;
   authorName: string;
 }): ExperimentNote {
-  const now = new Date().toISOString();
+  const now = new Date(Date.now()).toISOString();
   return {
     id: params.id || `eln-${Date.now()}`,
     organizationId: params.organizationId,
@@ -169,7 +169,7 @@ export function signNoteAsAuthor(
     return { note, error: `현재 상태(${NOTEBOOK_STATUS_LABELS[note.status]})에서는 서명할 수 없습니다.` };
   }
 
-  const signedAt = new Date().toISOString();
+  const signedAt = new Date(Date.now()).toISOString();
   const payload = buildIntegrityPayload({
     ...note,
     authorId,
@@ -213,7 +213,7 @@ export function witnessNote(
     };
   }
 
-  const witnessedAt = new Date().toISOString();
+  const witnessedAt = new Date(Date.now()).toISOString();
   const updated: ExperimentNote = {
     ...note,
     witnessId,

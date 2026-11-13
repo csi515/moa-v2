@@ -125,7 +125,7 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
           density="compact"
           icon={<TrendingUp className="w-6 h-6 text-indigo-600" />}
           title="경영 성과 분석"
-          description="원생 증감 추이, 결제 수단 점유율 및 연습실 시간대별 가동률 분석"
+          description="회원 증감 추이, 결제 수단 점유율 및 공간 가동률 분석"
         />
       )}
 
@@ -133,7 +133,7 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 mb-1">
-            <span className="text-xs font-bold">재원생 순증 (전월비)</span>
+            <span className="text-xs font-bold">회원 순증 (전월비)</span>
             <span className="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md flex items-center gap-0.5">
               <ArrowUpRight className="w-3 h-3" /> +7.7%
             </span>
@@ -178,7 +178,7 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
         </div>
       </div>
 
-      {/* 2. 원생 & 매출 6개월 추세선 인터랙티브 차트 */}
+      {/* 2. 회원 & 매출 6개월 추세선 인터랙티브 차트 */}
       <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-2xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
@@ -193,7 +193,7 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
           <SegmentedControl
             value={trendMetric}
             options={[
-              { value: 'students', label: '원생 수 (명)' },
+              { value: 'students', label: '회원 수 (명)' },
               { value: 'revenue', label: '매출액 (만원)' },
             ]}
             onChange={(v) => setTrendMetric(v as any)}

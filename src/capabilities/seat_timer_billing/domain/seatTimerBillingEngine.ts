@@ -69,7 +69,7 @@ export function calculateSeatTimerBilling(
     };
   }
 
-  const now = currentTime ? new Date(currentTime) : new Date();
+  const now = currentTime ? new Date(currentTime) : new Date(Date.now());
   const start = new Date(slot.startTime);
   const diffMs = Math.max(0, now.getTime() - start.getTime());
   const elapsedMinutes = Math.floor(diffMs / (1000 * 60));

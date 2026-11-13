@@ -130,7 +130,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
           density="compact"
           icon={<CreditCard className="w-6 h-6 text-indigo-600" />}
           title={`${tuitionTabLabel} 관리`}
-          description="원생별 수강료 수납 내역 및 미납금 현황을 통합 관리"
+          description="회원별 수납 내역 및 미납금 현황을 통합 관리"
           actions={
             <SegmentedControl
               value={segment === 'unpaid' ? 'unpaid' : 'tuition'}

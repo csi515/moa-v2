@@ -232,7 +232,7 @@ export function generateHometaxPurchaseTaxSummary(
  */
 export function calculateApAgingReport(
   invoices: PurchaseInvoice[],
-  asOfDate: string = new Date().toISOString().split('T')[0]
+  asOfDate: string = new Date(Date.now()).toISOString().split('T')[0]
 ): ApAgingBucket {
   const asOf = new Date(asOfDate).getTime();
 

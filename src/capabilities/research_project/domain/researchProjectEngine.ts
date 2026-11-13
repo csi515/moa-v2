@@ -346,7 +346,7 @@ export function decideGate(
     };
   }
 
-  const decidedAt = decision.decidedAt || new Date().toISOString();
+  const decidedAt = decision.decidedAt || new Date(Date.now()).toISOString();
   const gates = project.gates.map((g) =>
     g.gateOrder === gateOrder
       ? {

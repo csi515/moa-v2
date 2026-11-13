@@ -182,7 +182,7 @@ export function deductFamilyPass(
     memberName,
     deductedCount: 1,
     usedAt: targetDate,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date(Date.now()).toISOString(),
     memo,
   };
 

@@ -83,7 +83,7 @@ export function registerWaitlistEntry(
     hasInfant: params.hasInfant,
     seatPreference: params.seatPreference,
     status: 'waiting',
-    registeredAt: new Date().toISOString(),
+    registeredAt: new Date(Date.now()).toISOString(),
   };
 
   return {
@@ -104,7 +104,7 @@ export function callWaitlistEntry(
     return {
       ...e,
       status: 'called',
-      calledAt: new Date().toISOString(),
+      calledAt: new Date(Date.now()).toISOString(),
     };
   });
 }
@@ -121,7 +121,7 @@ export function seatWaitlistEntry(
     return {
       ...e,
       status: 'seated',
-      seatedAt: new Date().toISOString(),
+      seatedAt: new Date(Date.now()).toISOString(),
     };
   });
 }

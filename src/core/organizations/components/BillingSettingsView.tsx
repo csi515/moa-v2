@@ -111,10 +111,7 @@ export const BillingSettingsView: FC = () => {
       triggerRefresh();
       showToast(`${feeLabel} 및 수납 설정이 저장되었습니다.`, 'success');
     } catch (err) {
-      showToast(
-        err instanceof Error ? err.message : '수납 설정 저장 중 오류가 발생했습니다.',
-        'error'
-      );
+      showToast.error(err, '수납 설정 저장 중 오류가 발생했습니다.');
     } finally {
       setIsSaving(false);
     }

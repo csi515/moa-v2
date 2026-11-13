@@ -639,7 +639,7 @@ export const BookingCalendarView: React.FC = () => {
         bookingUi.consumePassOnNoShow ? { consumeOnNoShow: true } : undefined
       );
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '상태 변경에 실패했습니다.', 'error');
+      showToast.error(err, '상태 변경에 실패했습니다.');
       return;
     }
     if (!result) {

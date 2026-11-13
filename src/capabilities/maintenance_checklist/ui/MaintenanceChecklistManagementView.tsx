@@ -426,7 +426,7 @@ export const MaintenanceChecklistManagementView: React.FC = () => {
               setIsNewModalOpen(false);
               showToast('신규 점검 항목이 등록되었습니다.', 'success');
             }).catch((cause) => {
-              showToast(cause instanceof Error ? cause.message : '등록 실패', 'error');
+              showToast.error(cause, '등록 실패');
             });
           }}
         />

@@ -82,7 +82,7 @@ export const MealSurveyMyView: React.FC = () => {
       }
       setStatusByKey(next);
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '조회에 실패했습니다.', 'error');
+      showToast.error(cause, '조회에 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -125,7 +125,7 @@ export const MealSurveyMyView: React.FC = () => {
       }
       setStatusByKey((prev) => ({ ...prev, [key]: next }));
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '저장에 실패했습니다.', 'error');
+      showToast.error(cause, '저장에 실패했습니다.');
       await reload();
     } finally {
       setBusyKey(null);
@@ -144,7 +144,7 @@ export const MealSurveyMyView: React.FC = () => {
       showToast(`불참 처리 ${result.skipped_cells}칸 반영`, 'success');
       await reload();
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '불참 처리 실패', 'error');
+      showToast.error(cause, '불참 처리 실패');
     }
   }
 

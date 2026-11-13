@@ -20,6 +20,7 @@ import {
 import { PageHeader, PaginationBar } from '@/shared/components';
 import { Modal } from '@/shared/components/ui/Modal';
 import { AvailabilitySettingsView } from '@/capabilities/scheduling/availability';
+import { useTerminology } from '@/core/terminology';
 import { ConsultationQrModal } from '@/core/schedules/components/ConsultationQrModal';
 import { CreateConsultationScheduleModal } from '@/core/schedules/components/CreateConsultationScheduleModal';
 import { ConsultationRecordModal } from '@/capabilities/consultation';
@@ -39,6 +40,9 @@ import {
  * - 원스톱 모달 상담 일지 기록 및 원생 전환 지원
  */
 export const PianoConsultationHubView: FC = () => {
+  const { t } = useTerminology();
+  const customerWord = t('customer.singular', '원생');
+
   const [showQr, setShowQr] = useState(false);
   const [showCreateSchedule, setShowCreateSchedule] = useState(false);
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
@@ -168,7 +172,7 @@ export const PianoConsultationHubView: FC = () => {
               당일
             </span>
           </div>
-          <div className="mt-1 text-xl sm:text-2xl font-black">
+          <div className="mt-1 text-xl sm:text-2xl font-black tabular-nums">
             {summaryCounts.todayCount}
             <span className="text-xs font-medium ml-1">건</span>
           </div>
@@ -202,7 +206,7 @@ export const PianoConsultationHubView: FC = () => {
               </span>
             )}
           </div>
-          <div className="mt-1 text-xl sm:text-2xl font-black">
+          <div className="mt-1 text-xl sm:text-2xl font-black tabular-nums">
             {summaryCounts.pendingCount}
             <span className="text-xs font-medium ml-1">건</span>
           </div>
@@ -227,7 +231,7 @@ export const PianoConsultationHubView: FC = () => {
               예약 확정
             </span>
           </div>
-          <div className="mt-1 text-xl sm:text-2xl font-black">
+          <div className="mt-1 text-xl sm:text-2xl font-black tabular-nums">
             {summaryCounts.confirmedCount}
             <span className="text-xs font-medium ml-1">건</span>
           </div>
@@ -252,7 +256,7 @@ export const PianoConsultationHubView: FC = () => {
               기록 완료
             </span>
           </div>
-          <div className="mt-1 text-xl sm:text-2xl font-black">
+          <div className="mt-1 text-xl sm:text-2xl font-black tabular-nums">
             {summaryCounts.completedCount}
             <span className="text-xs font-medium ml-1">건</span>
           </div>
@@ -268,7 +272,7 @@ export const PianoConsultationHubView: FC = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="신청자, 원생 이름, 연락처, 희망 과정 검색..."
+              placeholder={`신청자, ${customerWord} 이름, 연락처, 희망 과정 검색...`}
               className="w-full pl-9 pr-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none min-h-[44px]"
             />
           </div>
@@ -287,7 +291,7 @@ export const PianoConsultationHubView: FC = () => {
         </div>
 
         <div className="text-xs text-slate-500 font-medium shrink-0 self-end sm:self-center">
-          총 <strong className="text-indigo-600 font-bold">{filteredRows.length}</strong>건 조회됨
+          총 <strong className="text-indigo-600 font-bold tabular-nums">{filteredRows.length}</strong>건 조회됨
         </div>
       </div>
 
@@ -387,7 +391,7 @@ export const PianoConsultationHubView: FC = () => {
                               {row.applicantName}
                               {row.isRegisteredStudent && (
                                 <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-700 font-semibold">
-                                  원생
+                                  {customerWord}
                                 </span>
                               )}
                             </div>
@@ -472,10 +476,10 @@ export const PianoConsultationHubView: FC = () => {
                               type="button"
                               onClick={() => handleOpenRegister(row)}
                               className="px-2.5 py-1.5 min-h-[36px] rounded-xl border border-indigo-200 bg-white hover:bg-indigo-50 text-indigo-700 font-bold text-xs inline-flex items-center gap-1 transition-colors cursor-pointer"
-                              title="신규 원생으로 등록"
+                              title={`신규 ${customerWord}(으)로 등록`}
                             >
                               <UserPlus className="w-3.5 h-3.5" />
-                              <span>원생 등록</span>
+                              <span>{customerWord} 등록</span>
                             </button>
                           ) : (
                             <span className="text-[11px] text-slate-400 font-medium px-2 py-1">
@@ -513,7 +517,7 @@ export const PianoConsultationHubView: FC = () => {
                           </span>
                           {row.isRegisteredStudent && (
                             <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-700 font-semibold">
-                              원생
+                              {customerWord}
                             </span>
                           )}
                         </div>
@@ -564,7 +568,7 @@ export const PianoConsultationHubView: FC = () => {
                     {row.phone && (
                       <a
                         href={`tel:${row.phone}`}
-                        className="min-h-[40px] px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs inline-flex items-center justify-center gap-1.5 flex-1 transition-colors shadow-2xs"
+                        className="min-h-[44px] px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs inline-flex items-center justify-center gap-1.5 flex-1 transition-colors shadow-2xs"
                       >
                         <Phone className="w-3.5 h-3.5 text-emerald-600" />
                         <span>전화</span>
@@ -573,7 +577,7 @@ export const PianoConsultationHubView: FC = () => {
                     <button
                       type="button"
                       onClick={() => handleOpenRecord(row)}
-                      className={`min-h-[40px] px-3 rounded-xl border font-bold text-xs inline-flex items-center justify-center gap-1.5 flex-1 transition-colors ${
+                      className={`min-h-[44px] px-3 rounded-xl border font-bold text-xs inline-flex items-center justify-center gap-1.5 flex-1 transition-colors ${
                         row.hasRecord
                           ? 'border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100'
                           : 'border-slate-200 bg-white text-slate-700 hover:border-indigo-300 shadow-2xs'
@@ -587,7 +591,7 @@ export const PianoConsultationHubView: FC = () => {
                         type="button"
                         disabled={isConfirming}
                         onClick={() => confirmRow(row)}
-                        className="min-h-[40px] px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs inline-flex items-center justify-center gap-1 flex-1 shadow-xs disabled:opacity-50"
+                        className="min-h-[44px] px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs inline-flex items-center justify-center gap-1 flex-1 shadow-xs disabled:opacity-50 cursor-pointer"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         <span>{isConfirming ? '처리 중' : '확정'}</span>
@@ -597,10 +601,10 @@ export const PianoConsultationHubView: FC = () => {
                       <button
                         type="button"
                         onClick={() => handleOpenRegister(row)}
-                        className="min-h-[40px] px-3 rounded-xl border border-indigo-200 bg-white hover:bg-indigo-50 text-indigo-700 font-bold text-xs inline-flex items-center justify-center gap-1 flex-1 shadow-2xs"
+                        className="min-h-[44px] px-3 rounded-xl border border-indigo-200 bg-white hover:bg-indigo-50 text-indigo-700 font-bold text-xs inline-flex items-center justify-center gap-1 flex-1 shadow-2xs cursor-pointer"
                       >
                         <UserPlus className="w-3.5 h-3.5" />
-                        <span>원생 등록</span>
+                        <span>{customerWord} 등록</span>
                       </button>
                     ) : (
                       <span className="text-[11px] text-slate-400 font-medium px-2 py-1 text-center flex-1">

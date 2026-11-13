@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useActiveUser } from '@/shared/session/useActiveUser';
 import type { FeedbackTone, WorkStatusMessage } from '@/shared/feedback/feedbackPolicy';
 import type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
-import { bindUiFeedback, unbindUiFeedback } from '@/shared/feedback/uiFeedback';
+import { bindUiFeedback, unbindUiFeedback, showToast, type ShowToast } from '@/shared/feedback/uiFeedback';
 import { feedbackStore, type ToastMessage } from '@/shared/feedback/feedbackStore';
 import { bindNavigationBridge, unbindNavigationBridge } from '@/shared/navigation/navigationBridge';
 import type { NavTab, StudentDetailTab, CustomerDetailTab } from '@/shared/navigation/navigationTypes';
@@ -42,11 +42,7 @@ interface AppContextType {
   currentUser: User;
   
   toasts: ToastMessage[];
-  showToast: (
-    message: string,
-    type?: 'success' | 'error' | 'info' | 'warning',
-    title?: string
-  ) => void;
+  showToast: ShowToast;
   dismissToast: (id: string) => void;
   
   confirmDialog: ConfirmDialogOptions | null;
@@ -150,7 +146,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         currentUser,
         
         toasts: [],
-        showToast: feedbackStore.showToast,
+        showToast: showToast,
         dismissToast: feedbackStore.dismissToast,
         
         confirmDialog: null,

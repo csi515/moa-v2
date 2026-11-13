@@ -108,7 +108,7 @@ export function transitionTurnaroundState(
       return {
         nextStatus: 'ready_for_next',
         allowed: true,
-        cleanedAt: new Date().toISOString(),
+        cleanedAt: new Date(Date.now()).toISOString(),
       };
     }
 

@@ -1,5 +1,6 @@
 import { attendanceStorage } from '@/capabilities/attendance/infrastructure/attendanceStorage';
 import { settingsStorage } from '@/services/storage/settingsStorage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { isAttendanceModuleEnabled } from './features';
 
 export type PinAttendanceValidationResult = {
@@ -14,7 +15,7 @@ export function runPinAttendanceValidation(industry = 'piano'): PinAttendanceVal
   const settings = settingsStorage.getSettings();
   const enabled = isAttendanceModuleEnabled(settings, industry);
   const sessions = attendanceStorage.getAttendanceSessions();
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayIsoLocal();
   const todaySessions = sessions.filter((s) => s.sessionDate === today);
 
   results.push({

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import JsBarcode from 'jsbarcode';
 
 /**
- * Code-128 B 모드 패턴 테이블 (순수 클라이언트 SVG 바코드 렌더러)
- * 외부 라이브러리/SDK 없이 100% 순수 Web SVG로 바코드를 렌더링 (비용 0원 원칙)
+ * Code-128 B 모드 패턴 테이블 (레거시 하위 호환용)
  */
 const CODE128_PATTERNS: string[] = [
   '212222', '222122', '222221', '121223', '121322', '131222', '122213', '122312', '132212', '221213',
@@ -15,14 +15,14 @@ const CODE128_PATTERNS: string[] = [
   '112412', '122114', '122411', '142112', '142211', '241211', '221114', '413111', '241112', '134111',
   '111242', '121142', '121241', '114212', '124112', '124211', '411212', '421112', '421211', '212141',
   '214121', '412121', '111143', '111341', '131141', '114113', '114311', '411113', '411311', '113141',
-  '114131', '311141', '411131', '211412', '211214', '211232', '2331112'
+  '114131', '311141', '411131', '211412', '211214', '211232', '2331112',
 ];
 
 const START_CODE_B = 104;
 const STOP_CODE = 106;
 
 /**
- * 텍스트를 Code-128 패턴으로 인코딩하여 SVG rect 배열로 변환
+ * 텍스트를 Code-128 패턴으로 인코딩하여 SVG rect 배열로 변환 (하위 호환 보존)
  */
 export function encodeCode128(text: string): { width: number; bars: { x: number; width: number }[] } {
   const codes: number[] = [START_CODE_B];
@@ -49,7 +49,6 @@ export function encodeCode128(text: string): { width: number; bars: { x: number;
     for (let j = 0; j < pattern.length; j++) {
       const w = parseInt(pattern[j], 10);
       if (j % 2 === 0) {
-        // Bar (검은색)
         bars.push({ x: currentX, width: w });
       }
       currentX += w;
@@ -60,67 +59,78 @@ export function encodeCode128(text: string): { width: number; bars: { x: number;
 }
 
 /**
- * 1D 바코드 SVG 렌더러
+ * 표준 1D 바코드 SVG 렌더러 (JsBarcode 기반 표준화)
  */
 export const BarcodeSvg: React.FC<{
   value: string;
+  format?: 'CODE128' | 'EAN13' | 'pharmacode';
   height?: number;
   barWidthMultiplier?: number;
   showText?: boolean;
   className?: string;
-}> = ({ value, height = 40, barWidthMultiplier = 1.2, showText = true, className = '' }) => {
-  const clean = value || '00000000';
-  const { width, bars } = React.useMemo(() => encodeCode128(clean), [clean]);
-  const svgWidth = width * barWidthMultiplier;
+}> = ({
+  value,
+  format = 'CODE128',
+  height = 40,
+  barWidthMultiplier = 1.2,
+  showText = true,
+  className = '',
+}) => {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const clean = value?.trim() || '00000000';
+
+  useEffect(() => {
+    if (!svgRef.current) return;
+    try {
+      JsBarcode(svgRef.current, clean, {
+        format,
+        width: barWidthMultiplier,
+        height,
+        displayValue: showText,
+        fontSize: 10,
+        font: 'monospace',
+        textMargin: 2,
+        margin: 0,
+        background: '#ffffff',
+        lineColor: '#000000',
+      });
+    } catch {
+      // Fallback: 포맷 오류 시 CODE128 강제 시도
+      try {
+        JsBarcode(svgRef.current, clean, {
+          format: 'CODE128',
+          width: barWidthMultiplier,
+          height,
+          displayValue: showText,
+        });
+      } catch {
+        // ignore
+      }
+    }
+  }, [clean, format, height, barWidthMultiplier, showText]);
 
   return (
     <div className={`inline-flex flex-col items-center select-none ${className}`}>
-      <svg
-        viewBox={`0 0 ${width} ${height}`}
-        width={svgWidth}
-        height={height}
-        className="overflow-visible"
-        shapeRendering="crispEdges"
-      >
-        <rect width={width} height={height} fill="#ffffff" />
-        {bars.map((bar, idx) => (
-          <rect
-            key={idx}
-            x={bar.x}
-            y={0}
-            width={bar.width}
-            height={height}
-            fill="#000000"
-          />
-        ))}
-      </svg>
-      {showText && (
-        <span className="font-mono text-[10px] font-bold text-slate-700 tracking-wider mt-0.5">
-          {clean}
-        </span>
-      )}
+      <svg ref={svgRef} className="overflow-visible" shapeRendering="crispEdges" />
     </div>
   );
 };
 
 /**
  * 경량 순수 SVG QR 코드 렌더러
- * 모아앱 상품 URL 또는 딥링크를 순수 SVG 매트릭스로 표현
  */
 export const QrCodeSvg: React.FC<{
   value: string;
   size?: number;
   className?: string;
 }> = ({ value, size = 80, className = '' }) => {
-  // 간단하고 안정적인 의사 랜덤 해시 기반 결정론적 매트릭스 (가드 패턴 포함)
-  // Finder pattern (7x7) 3개(좌상, 우상, 좌하)가 포함된 표준 QR 모양 시각화
   const matrixSize = 25;
   const modules = React.useMemo(() => {
     const grid: boolean[][] = Array.from({ length: matrixSize }, () =>
       Array(matrixSize).fill(false)
     );
 
-    // 1. Finder Patterns (7x7 상단 좌/우, 하단 좌)
+    // 1. Finder Patterns
     const addFinder = (startX: number, startY: number) => {
       for (let r = 0; r < 7; r++) {
         for (let c = 0; c < 7; c++) {
@@ -134,17 +144,17 @@ export const QrCodeSvg: React.FC<{
       }
     };
 
-    addFinder(0, 0); // 좌상
-    addFinder(matrixSize - 7, 0); // 우상
-    addFinder(0, matrixSize - 7); // 좌하
+    addFinder(0, 0);
+    addFinder(matrixSize - 7, 0);
+    addFinder(0, matrixSize - 7);
 
-    // 2. 타이밍 패턴 (가로/세로 점선)
+    // 2. 타이밍 패턴
     for (let i = 8; i < matrixSize - 8; i++) {
       grid[6][i] = i % 2 === 0;
       grid[i][6] = i % 2 === 0;
     }
 
-    // 3. 데이터 인코딩 영역 (텍스트 해시 기반 결정론적 비트 채움)
+    // 3. 데이터 인코딩
     let hash = 0;
     for (let i = 0; i < value.length; i++) {
       hash = (hash * 31 + value.charCodeAt(i)) >>> 0;
@@ -153,7 +163,6 @@ export const QrCodeSvg: React.FC<{
     let bitIdx = 0;
     for (let r = 0; r < matrixSize; r++) {
       for (let c = 0; c < matrixSize; c++) {
-        // Finder pattern 및 타이밍 패턴 제외
         const inTopLeft = r < 8 && c < 8;
         const inTopRight = r < 8 && c >= matrixSize - 8;
         const inBottomLeft = r >= matrixSize - 8 && c < 8;

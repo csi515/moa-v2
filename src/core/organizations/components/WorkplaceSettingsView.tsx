@@ -210,10 +210,7 @@ export const WorkplaceSettingsView: FC = () => {
       triggerRefresh();
       showToast(`${placeLabel} 기본 정보가 저장되었습니다.`, 'success');
     } catch (err) {
-      showToast(
-        err instanceof Error ? err.message : '설정 저장 중 오류가 발생했습니다.',
-        'error'
-      );
+      showToast.error(err, '설정 저장 중 오류가 발생했습니다.');
     } finally {
       setIsSaving(false);
     }

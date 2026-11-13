@@ -102,7 +102,7 @@ export const ProductListView: FC = () => {
       setCategories(cats);
       setStockByProductId(stockMap);
     } catch (err) {
-      showToast(err instanceof Error ? err.message : COPY.loadError, 'error');
+      showToast.error(err, COPY.loadError);
       setItems([]);
     } finally {
       setLoading(false);
@@ -207,7 +207,7 @@ export const ProductListView: FC = () => {
             unitPrice: item.price,
           });
         } catch (err) {
-          showToast(err instanceof Error ? err.message : '바코드 생성에 실패했습니다.', 'error');
+          showToast.error(err, '바코드 생성에 실패했습니다.');
         }
       },
     });
@@ -243,7 +243,7 @@ export const ProductListView: FC = () => {
       setInlinePriceEditingId(null);
       showToast(`'${item.name}' 판매가가 ${formatCurrency(newPrice)}로 수정되었습니다.`, 'success');
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '가격 수정에 실패했습니다.', 'error');
+      showToast.error(err, '가격 수정에 실패했습니다.');
     } finally {
       setInlinePriceSaving(false);
     }
@@ -280,7 +280,7 @@ export const ProductListView: FC = () => {
         'success'
       );
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '바코드 수정에 실패했습니다.', 'error');
+      showToast.error(err, '바코드 수정에 실패했습니다.');
     } finally {
       setInlineBarcodeSaving(false);
     }
@@ -313,7 +313,7 @@ export const ProductListView: FC = () => {
       setQuickInboundItem(null);
       setQuickInboundQty('');
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '입고 처리에 실패했습니다.', 'error');
+      showToast.error(err, '입고 처리에 실패했습니다.');
     } finally {
       setQuickInboundSaving(false);
     }

@@ -2,6 +2,7 @@ import { useState, useMemo, type FC } from 'react';
 import { ArrowRight, Calendar, Check, CheckCircle2, Clock, MoveRight, User, Users, X } from 'lucide-react';
 import { Modal } from '@/shared/components';
 import { MicroGuideTooltip } from '@/shared/components/ui';
+import { useTerminology } from '@/core/terminology';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import { TIMETABLE_DAYS, type SlotPlacement } from './pianoTimetablePlacement';
 import {
@@ -33,6 +34,9 @@ export const StudentTimetableMoveModal: FC<StudentTimetableMoveModalProps> = ({
   onClose,
   onConfirmMove,
 }) => {
+  const { t } = useTerminology();
+  const customerWord = t('customer.singular', '원생');
+
   if (!placement) return null;
 
   const currentDay = (placement.classItem.daysOfWeek?.[0] || '월') as DayOfWeek;
@@ -85,7 +89,7 @@ export const StudentTimetableMoveModal: FC<StudentTimetableMoveModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={`${placement.student.name} 학생 수업 시간표 이동`}
+      title={`${placement.student.name} ${customerWord} 수업 시간표 이동`}
       maxWidth="lg"
     >
       <div className="space-y-4 p-5 pb-6">

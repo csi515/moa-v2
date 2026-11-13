@@ -43,7 +43,7 @@ export function validateAuditReason(
   return { isValid: true };
 }
 
-export function isEligibleForPurge(withdrawnAt: string, retentionYears: number, now: Date = new Date()): boolean {
+export function isEligibleForPurge(withdrawnAt: string, retentionYears: number, now: Date = new Date(Date.now())): boolean {
   const withdrawnDate = new Date(withdrawnAt);
   const cutoffDate = new Date(withdrawnDate);
   cutoffDate.setFullYear(cutoffDate.getFullYear() + retentionYears);

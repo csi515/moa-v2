@@ -18,7 +18,7 @@ export const NpsSurveyCollectorView: React.FC = () => {
 
   // 새 캠페인 폼
   const [title, setTitle] = useState('');
-  const [targetAudience, setTargetAudience] = useState('전체 원생/고객');
+  const [targetAudience, setTargetAudience] = useState('전체 회원/고객');
   const [description, setDescription] = useState('');
 
   // 캠페인 목록
@@ -110,7 +110,7 @@ export const NpsSurveyCollectorView: React.FC = () => {
         <div>
           <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 8px 0' }}>📊 모바일 만족도 & NPS 설문 분석기</h1>
           <p style={{ color: '#64748b', margin: 0 }}>
-            원생 및 고객의 NPS(순추천지수)를 실시간 집계하고, 불만 고객의 이탈을 사전에 방지하는 원스톱 서베이 허브입니다.
+            회원 및 고객의 NPS(순추천지수)를 실시간 집계하고, 불만 고객의 이탈을 사전에 방지하는 원스톱 서베이 허브입니다.
           </p>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
@@ -290,7 +290,7 @@ export const NpsSurveyCollectorView: React.FC = () => {
                   type="text"
                   value={targetAudience}
                   onChange={(e) => setTargetAudience(e.target.value)}
-                  placeholder="예: 전체 회원, 1개월차 신규 원생 등"
+                  placeholder="예: 전체 회원, 1개월차 신규 고객 등"
                   style={{ width: '100%', padding: '8px', border: '1px solid #cbd5e1', borderRadius: '6px' }}
                 />
               </div>
@@ -300,7 +300,7 @@ export const NpsSurveyCollectorView: React.FC = () => {
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="원생/학부모님께 전달할 감사 인사 및 취지"
+                  placeholder="고객/회원님께 전달할 감사 인사 및 취지"
                   rows={3}
                   style={{ width: '100%', padding: '8px', border: '1px solid #cbd5e1', borderRadius: '6px' }}
                 />

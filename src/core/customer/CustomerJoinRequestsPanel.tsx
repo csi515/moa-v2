@@ -279,7 +279,7 @@ export function CustomerJoinRequestsPanel({
       onUpdated?.();
       await loadRequests();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '승인에 실패했습니다', 'error');
+      showToast.error(err, '승인에 실패했습니다');
     }
   };
 
@@ -289,7 +289,7 @@ export function CustomerJoinRequestsPanel({
       onUpdated?.();
       await loadRequests();
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '반려에 실패했습니다', 'error');
+      showToast.error(err, '반려에 실패했습니다');
     }
   };
 

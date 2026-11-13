@@ -19,7 +19,7 @@ export const ParkingValidatorView: React.FC = () => {
   const [vehicleNumber, setVehicleNumber] = useState('');
   const [visitorName, setVisitorName] = useState('');
   const [visitorRole, setVisitorRole] = useState('학부모');
-  const [purpose, setPurpose] = useState('원생 픽업/상담');
+  const [purpose, setPurpose] = useState('회원·고객 방문');
   const [freeMinutes, setFreeMinutes] = useState(60);
 
   // 주차권 배치(입고) 폼
@@ -392,7 +392,7 @@ export const ParkingValidatorView: React.FC = () => {
                     style={{ width: '100%', padding: '8px', border: '1px solid #cbd5e1', borderRadius: '6px' }}
                   >
                     <option value="학부모">학부모</option>
-                    <option value="원생">원생</option>
+                    <option value="고객">고객/회원</option>
                     <option value="회원">회원</option>
                     <option value="방문객">방문객/상담</option>
                   </select>

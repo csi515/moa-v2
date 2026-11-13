@@ -86,7 +86,7 @@ export function calculateWorkOrderInvoice(order: WorkOrderItem): WorkOrderInvoic
 export function advanceWorkOrderStage(
   order: WorkOrderItem,
   nextStage: WorkOrderStage,
-  timestamp = new Date().toISOString()
+  timestamp = new Date(Date.now()).toISOString()
 ): WorkOrderItem {
   return {
     ...order,

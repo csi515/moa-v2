@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { StorageService } from '@/services/storage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { LessonService } from '@/core/lessons';
 import { ScheduleService } from '@/core/services/scheduleService';
 import { formatCurrency } from '@/utils/formatters';
@@ -38,7 +39,7 @@ export function DaycareHomeWidget({ student, onNavigate }: ParentHomeWidgetSlotP
   );
 
   const todayPickup = useMemo(() => {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = todayIsoLocal();
     return StorageService.getCarePickupLogs()
       .filter((log) => log.studentId === student.id && log.pickupDate === today)
       .sort((a, b) => b.pickedUpAt.localeCompare(a.pickedUpAt))[0];

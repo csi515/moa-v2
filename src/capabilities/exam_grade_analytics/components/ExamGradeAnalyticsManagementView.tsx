@@ -126,10 +126,10 @@ export function ExamGradeAnalyticsManagementView() {
         </div>
       </div>
 
-      {/* 원생별 성적 및 레이더 분석 목록 */}
+      {/* 회원/수험생별 성적 및 레이더 분석 목록 */}
       <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-          <h2 className="text-sm font-bold text-slate-800">원생별 채점 성적표 및 취약 단원 진단</h2>
+          <h2 className="text-sm font-bold text-slate-800">회원·수험생별 채점 성적표 및 취약 단원 진단</h2>
           <span className="text-xs text-slate-400">총 {submissions.length}명</span>
         </div>
 

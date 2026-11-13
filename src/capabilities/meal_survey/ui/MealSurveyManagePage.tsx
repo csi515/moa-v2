@@ -47,7 +47,7 @@ const MealSurveyManageInner: React.FC = () => {
       const data = await listMealSurveyOverview(orgId, range.from, range.to);
       setOverview(data);
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : '현황 조회에 실패했습니다.', 'error');
+      showToast.error(cause, '현황 조회에 실패했습니다.');
     } finally {
       setLoading(false);
     }

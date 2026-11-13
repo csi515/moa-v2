@@ -316,7 +316,7 @@ export const LeaveRequestModal: React.FC<LeaveRequestModalProps> = ({
                 setReason(e.target.value);
                 setValidationError(null);
               }}
-              placeholder="구체적인 휴가 사유를 작성하세요 (예: 개인 용무 및 병원 진료, 리프레시 등)"
+              placeholder="구체적인 휴가 사유를 작성하세요 (예: 개인 용무 및 건강검진, 리프레시 등)"
               className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-800 resize-none h-20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
               required
             />

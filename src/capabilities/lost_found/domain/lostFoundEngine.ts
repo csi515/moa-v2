@@ -77,7 +77,7 @@ export function calculateExpiryDate(foundAt: string, retentionDays: number): str
  * 2. 현재일 기준 잔여 보관 일수(D-Day) 계산 (순수 함수)
  */
 export function calculateDaysRemaining(expiryDate: string, currentDate?: string): number {
-  const current = currentDate ? new Date(currentDate) : new Date();
+  const current = currentDate ? new Date(currentDate) : new Date(Date.now());
   const currentOnlyDate = new Date(current.toISOString().slice(0, 10)).getTime();
   const expiryTime = new Date(expiryDate).getTime();
   const diffTime = expiryTime - currentOnlyDate;

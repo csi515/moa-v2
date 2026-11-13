@@ -100,7 +100,7 @@ export function VehicleShuttleCommuteView() {
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
-            <span>원생 안심통학 셔틀</span>
+            <span>안심 통학·통근 셔틀</span>
           </button>
         </div>
 
