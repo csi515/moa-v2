@@ -39,6 +39,7 @@ test.describe('헤드리스 브라우저 자동화 (E2E / Headless Browser Testi
     await wizardModal.searchAndSelectAddress('테헤란로', '서울특별시 강남구 테헤란로 123');
     await wizardModal.enterAddressDetail('지하 1층');
     await wizardModal.proceedToNextStep();
+    await wizardModal.skipRoomsAndFinish();
 
     // 사업장 생성 완료 검증 및 진입
     expect(mockCtx.orgCreated).toBe(true);

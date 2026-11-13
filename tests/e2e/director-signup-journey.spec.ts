@@ -34,6 +34,7 @@ test.describe('Director signup-to-workspace journey', () => {
     await wizardModal.searchAndSelectAddress('테헤란로', '서울특별시 강남구 테헤란로 123');
     await wizardModal.enterAddressDetail('2층');
     await wizardModal.proceedToNextStep();
+    await wizardModal.skipRoomsAndFinish();
 
     expect(mockCtx.orgCreated).toBe(true);
     await wizardModal.expectCompletionAndEnter();

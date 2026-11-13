@@ -78,8 +78,8 @@ export const AddressSearchModal: FC<AddressSearchModalProps> = ({
     };
   }, [isOpen, manualMode, onSelect, onClose]);
 
-  const handleManualSubmit = (e?: FormEvent) => {
-    e?.preventDefault();
+  const handleManualSubmit = (e?: FormEvent | { preventDefault?: () => void }) => {
+    e?.preventDefault?.();
     const trimmed = manualInput.trim();
     if (!trimmed) return;
 
@@ -113,6 +113,7 @@ export const AddressSearchModal: FC<AddressSearchModalProps> = ({
           </p>
           <button
             type="button"
+            data-testid="btn-address-manual-mode"
             onClick={() => setManualMode((prev) => !prev)}
             className="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition min-h-[32px] px-2 rounded-lg hover:bg-indigo-50 inline-flex items-center gap-1 cursor-pointer"
           >
@@ -132,7 +133,8 @@ export const AddressSearchModal: FC<AddressSearchModalProps> = ({
 
         {/* 1. 직접 주소 입력 모드 */}
         {manualMode ? (
-          <form onSubmit={handleManualSubmit} className="space-y-4 py-2">
+          // 위저드 등 상위 <form> 내부에 중첩되면 HTML이 깨지므로 form 태그 대신 div 사용
+          <div className="space-y-4 py-2">
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
                 소재지 주소 입력
@@ -141,8 +143,15 @@ export const AddressSearchModal: FC<AddressSearchModalProps> = ({
                 type="text"
                 value={manualInput}
                 onChange={(e) => setManualInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleManualSubmit();
+                  }
+                }}
                 placeholder="예: 서울시 강남구 테헤란로 123"
                 autoFocus
+                data-testid="input-address-search-keyword"
                 className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[44px]"
               />
             </div>
@@ -155,15 +164,17 @@ export const AddressSearchModal: FC<AddressSearchModalProps> = ({
                 취소
               </button>
               <button
-                type="submit"
+                type="button"
                 disabled={!manualInput.trim()}
+                data-testid="btn-address-search-submit"
+                onClick={() => handleManualSubmit()}
                 className="px-4 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl min-h-[40px] disabled:opacity-50 inline-flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <Check className="w-4 h-4" />
                 <span>입력한 주소 적용</span>
               </button>
             </div>
-          </form>
+          </div>
         ) : (
           /* 2. 카카오 우편번호 서비스 임베드 모드 */
           <div className="relative min-h-[460px] rounded-xl overflow-hidden border border-slate-200 bg-slate-50">

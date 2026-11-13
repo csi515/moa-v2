@@ -41,8 +41,9 @@ test.describe('Director Onboarding & Ops Flow (Moa v2)', () => {
     // 8. 상세주소 입력
     await wizardModal.enterAddressDetail('3층 301호');
 
-    // 9. 사업장 정보 입력 완료 -> 개설 제출 (단일 스텝 원스톱 개설)
+    // 9. 사업장 정보 → 강의실 스텝 → 건너뛰고 개설
     await wizardModal.proceedToNextStep();
+    await wizardModal.skipRoomsAndFinish();
 
     // 10. 완료 화면 노출 및 사업장 진입 검증
     expect(mockCtx.orgCreated).toBe(true);

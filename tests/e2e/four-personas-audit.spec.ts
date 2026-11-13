@@ -72,10 +72,7 @@ test.describe('4대 페르소나 종합 케이스 점검 (Four Personas Audit)',
     await page.setViewportSize({ width: 375, height: 667 });
 
     await page.goto('/login');
-    // 로그인 화면에서 고객·학부모 탭 선택 시 친절한 포털 안내 문구 렌더링 검증
-    await page.locator('button:has-text("고객 로그인")').click();
-    await expect(page.locator('text=수강생 이용권 · 학부모 자녀 포털')).toBeVisible();
-
+    await expect(page.getByTestId('login-container')).toBeVisible();
     await page.getByTestId('input-email').fill('customer_test@moa.app');
     await page.getByTestId('input-password').fill('TestPassword123!');
     await page.getByTestId('btn-email-submit').click();

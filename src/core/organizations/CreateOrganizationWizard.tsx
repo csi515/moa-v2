@@ -519,6 +519,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
                 <button
                   type="button"
                   disabled={isSaving}
+                  data-testid="btn-wizard-skip-rooms"
                   onClick={() => void handleFinish([])}
                   className="px-4 py-2.5 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200/80 rounded-xl min-h-[44px] transition cursor-pointer"
                 >
@@ -527,6 +528,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
                 <button
                   type="button"
                   disabled={isSaving}
+                  data-testid="btn-wizard-submit"
                   onClick={() => void handleFinish(rooms)}
                   className="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl min-h-[44px] disabled:opacity-50 inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer"
                 >
