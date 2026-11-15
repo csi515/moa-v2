@@ -15,32 +15,8 @@ const generatedFile = join(root, 'src/lib/supabase/database.generated.ts');
 const migrationsDir = join(root, 'supabase/migrations');
 const SCHEMAS = ['core', 'piano', 'bath', 'platform'];
 
-/** 이미 타입에 없는 테이블. 이번 작업에서 schema를 채우지 않고 위치만 고정한다. */
-const KNOWN_MISSING_TABLES = new Set([
-  'core.academy_data_sharing_consents',
-  'core.auth_providers',
-  'core.customer_join_requests',
-  'core.guardian_enrollment_requests',
-  'core.guardian_link_tokens',
-  'core.org_parent_profiles',
-  'core.organization_join_requests',
-  'core.organization_quotas',
-  'core.parent_invitations',
-  'core.parent_student_guardians',
-  'core.parents',
-  'core.practice_rooms',
-  'core.push_device_tokens',
-  'core.rate_limit_configs',
-  'core.room_reservations',
-  'core.staff_invitations',
-  'core.student_enrollments',
-  'core.students',
-  'piano.song_progress',
-  'core.anonymous_grievances',
-  'core.booking_seat_locks',
-  'core.departments',
-  'core.mbo_cycle_settings',
-]);
+/** 누락 테이블 허용 목록 (Phase 1 완료: 100% 타이핑 달성으로 0개 유지) */
+const KNOWN_MISSING_TABLES = new Set([]);
 
 const CREATE_TABLE_RE =
   /CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(core|piano|bath|platform)\.([A-Za-z_][A-Za-z0-9_]*)/gi;

@@ -357,6 +357,7 @@ export const INVENTORY_CANDIDATES = {
   'test:access-control': 'authorization(refine access control adapter integration). ci-cd static security에 있음',
   'test:student-crud': 'students(refine student crud data provider contract). ci-cd static integration에 있음',
   'test:standard-list-view': 'shared/components/ui StandardListView pagination/debounce/CSV unit test',
+  'test:moa-data-hooks': 'shared/hooks/data Moa-v2 integrated data hooks (useMoaTable, useMoaMutation) unit test',
   'test:logout-protection': 'auth(conditional logout protection with offline pending mutation guard). ci-cd static integration에 있음',
   'test:settings-storage': 'persistence/settings(multi-vertical settings deep merge). candidate',
 };

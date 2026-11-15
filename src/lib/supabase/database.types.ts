@@ -56,6 +56,562 @@ export type LearningReportStatus = 'draft' | 'published' | 'archived';
 export interface Database {
   core: {
     Tables: {
+      academy_data_sharing_consents: {
+        Row: {
+          id: string;
+          parent_id: string;
+          student_id: string;
+          organization_id: string;
+          shared_fields: Json;
+          consented_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          parent_id: string;
+          student_id: string;
+          organization_id: string;
+          shared_fields?: Json;
+          consented_at?: string;
+          created_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['academy_data_sharing_consents']['Insert']>;
+      };
+      auth_providers: {
+        Row: {
+          id: string;
+          user_id: string;
+          provider: string;
+          provider_user_id: string;
+          email: string | null;
+          phone: string | null;
+          metadata: Json;
+          verified_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          provider: string;
+          provider_user_id: string;
+          email?: string | null;
+          phone?: string | null;
+          metadata?: Json;
+          verified_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['auth_providers']['Insert']>;
+      };
+      customer_join_requests: {
+        Row: {
+          id: string;
+          organization_id: string;
+          applicant_user_id: string;
+          applicant_name: string;
+          applicant_phone: string | null;
+          applicant_email: string | null;
+          request_type: string;
+          message: string | null;
+          customer_metadata: Json;
+          status: string;
+          reviewed_by: string | null;
+          reviewed_at: string | null;
+          reject_reason: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          applicant_user_id: string;
+          applicant_name: string;
+          applicant_phone?: string | null;
+          applicant_email?: string | null;
+          request_type?: string;
+          message?: string | null;
+          customer_metadata?: Json;
+          status?: string;
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          reject_reason?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['customer_join_requests']['Insert']>;
+      };
+      guardian_enrollment_requests: {
+        Row: {
+          id: string;
+          parent_id: string;
+          student_id: string;
+          organization_id: string;
+          status: string;
+          requested_at: string;
+          reviewed_at: string | null;
+          reviewed_by: string | null;
+          rejection_reason: string | null;
+          consent_fields: Json;
+          notes: string | null;
+          metadata: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          parent_id: string;
+          student_id: string;
+          organization_id: string;
+          status?: string;
+          requested_at?: string;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
+          rejection_reason?: string | null;
+          consent_fields?: Json;
+          notes?: string | null;
+          metadata?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['guardian_enrollment_requests']['Insert']>;
+      };
+      guardian_link_tokens: {
+        Row: {
+          id: string;
+          organization_id: string;
+          student_id: string | null;
+          enrollment_id: string | null;
+          token_hash: string;
+          token_type: string;
+          expires_at: string | null;
+          max_uses: number;
+          used_count: number;
+          created_by: string | null;
+          metadata: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          student_id?: string | null;
+          enrollment_id?: string | null;
+          token_hash: string;
+          token_type?: string;
+          expires_at?: string | null;
+          max_uses?: number;
+          used_count?: number;
+          created_by?: string | null;
+          metadata?: Json;
+          created_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['guardian_link_tokens']['Insert']>;
+      };
+      org_parent_profiles: {
+        Row: {
+          parent_id: string;
+          organization_id: string;
+          customer_id: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          parent_id: string;
+          organization_id: string;
+          customer_id: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['org_parent_profiles']['Insert']>;
+      };
+      organization_join_requests: {
+        Row: {
+          id: string;
+          organization_id: string;
+          user_id: string;
+          requested_role: string;
+          status: string;
+          message: string | null;
+          rejection_reason: string | null;
+          approved_by: string | null;
+          created_at: string;
+          updated_at: string;
+          resolved_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          user_id: string;
+          requested_role?: string;
+          status?: string;
+          message?: string | null;
+          rejection_reason?: string | null;
+          approved_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          resolved_at?: string | null;
+        };
+        Update: Partial<Database['core']['Tables']['organization_join_requests']['Insert']>;
+      };
+      organization_quotas: {
+        Row: {
+          id: string;
+          organization_id: string;
+          quota_type: string;
+          quota_limit: number;
+          quota_used: number;
+          reset_at: string | null;
+          metadata: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          quota_type: string;
+          quota_limit: number;
+          quota_used?: number;
+          reset_at?: string | null;
+          metadata?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['organization_quotas']['Insert']>;
+      };
+      parent_invitations: {
+        Row: {
+          id: string;
+          organization_id: string;
+          parent_customer_id: string;
+          email: string;
+          role: string;
+          invited_by: string | null;
+          status: string;
+          created_at: string;
+          accepted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          parent_customer_id: string;
+          email: string;
+          role?: string;
+          invited_by?: string | null;
+          status?: string;
+          created_at?: string;
+          accepted_at?: string | null;
+        };
+        Update: Partial<Database['core']['Tables']['parent_invitations']['Insert']>;
+      };
+      parent_student_guardians: {
+        Row: {
+          parent_id: string;
+          student_id: string;
+          relationship: string;
+          is_primary: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          parent_id: string;
+          student_id: string;
+          relationship?: string;
+          is_primary?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['parent_student_guardians']['Insert']>;
+      };
+      parents: {
+        Row: {
+          id: string;
+          user_id: string | null;
+          name: string;
+          phone: string | null;
+          email: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string | null;
+          name?: string;
+          phone?: string | null;
+          email?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['parents']['Insert']>;
+      };
+      practice_rooms: {
+        Row: {
+          id: string;
+          organization_id: string;
+          name: string;
+          capacity: number;
+          open_time: string;
+          close_time: string;
+          is_active: boolean;
+          memo: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          name: string;
+          capacity?: number;
+          open_time?: string;
+          close_time?: string;
+          is_active?: boolean;
+          memo?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['practice_rooms']['Insert']>;
+      };
+      push_device_tokens: {
+        Row: {
+          id: string;
+          user_id: string;
+          organization_id: string | null;
+          token: string;
+          platform: 'ios' | 'android' | 'web';
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          organization_id?: string | null;
+          token: string;
+          platform: 'ios' | 'android' | 'web';
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['push_device_tokens']['Insert']>;
+      };
+      rate_limit_configs: {
+        Row: {
+          id: string;
+          limit_type: string;
+          max_requests: number;
+          window_seconds: number;
+          description: string | null;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          limit_type: string;
+          max_requests: number;
+          window_seconds: number;
+          description?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['rate_limit_configs']['Insert']>;
+      };
+      room_reservations: {
+        Row: {
+          id: string;
+          organization_id: string;
+          room_id: string;
+          customer_id: string;
+          requested_by: string;
+          starts_at: string;
+          ends_at: string;
+          status: string;
+          memo: string | null;
+          reviewed_by: string | null;
+          reviewed_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          room_id: string;
+          customer_id: string;
+          requested_by: string;
+          starts_at: string;
+          ends_at: string;
+          status?: string;
+          memo?: string | null;
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['room_reservations']['Insert']>;
+      };
+      staff_invitations: {
+        Row: {
+          id: string;
+          organization_id: string;
+          staff_id: string;
+          email: string;
+          role: string;
+          invited_by: string | null;
+          status: string;
+          created_at: string;
+          accepted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          staff_id: string;
+          email: string;
+          role?: string;
+          invited_by?: string | null;
+          status?: string;
+          created_at?: string;
+          accepted_at?: string | null;
+        };
+        Update: Partial<Database['core']['Tables']['staff_invitations']['Insert']>;
+      };
+      student_enrollments: {
+        Row: {
+          id: string;
+          student_id: string;
+          organization_id: string;
+          customer_id: string;
+          status: string;
+          enrolled_at: string;
+          left_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          student_id: string;
+          organization_id: string;
+          customer_id: string;
+          status?: string;
+          enrolled_at?: string;
+          left_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['student_enrollments']['Insert']>;
+      };
+      students: {
+        Row: {
+          id: string;
+          display_name: string;
+          birth_date: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          display_name: string;
+          birth_date?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['students']['Insert']>;
+      };
+      anonymous_grievances: {
+        Row: {
+          id: string;
+          organization_id: string;
+          author_user_id: string | null;
+          visibility: string;
+          ticket_code: string;
+          access_pin_hash: string | null;
+          category: string;
+          subject_title: string;
+          incident_content: string;
+          evidence_attached: boolean;
+          status: string;
+          investigation_feedback: string | null;
+          submitted_at: string;
+          resolved_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          author_user_id?: string | null;
+          visibility?: string;
+          ticket_code: string;
+          access_pin_hash?: string | null;
+          category?: string;
+          subject_title: string;
+          incident_content: string;
+          evidence_attached?: boolean;
+          status?: string;
+          investigation_feedback?: string | null;
+          submitted_at?: string;
+          resolved_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['anonymous_grievances']['Insert']>;
+      };
+      booking_seat_locks: {
+        Row: {
+          id: string;
+          organization_id: string;
+          remaining: number;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          remaining?: number;
+          deleted_at?: string | null;
+        };
+        Update: Partial<Database['core']['Tables']['booking_seat_locks']['Insert']>;
+      };
+      departments: {
+        Row: {
+          id: string;
+          organization_id: string;
+          name: string;
+          manager_staff_id: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          name: string;
+          manager_staff_id?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['departments']['Insert']>;
+      };
+      mbo_cycle_settings: {
+        Row: {
+          organization_id: string;
+          goal_lock_enabled: boolean;
+          goal_lock_month: number;
+          goal_lock_day: number;
+          review_start_month: number;
+          review_start_day: number;
+          review_end_month: number;
+          review_end_day: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          organization_id: string;
+          goal_lock_enabled?: boolean;
+          goal_lock_month?: number;
+          goal_lock_day?: number;
+          review_start_month?: number;
+          review_start_day?: number;
+          review_end_month?: number;
+          review_end_day?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: Partial<Database['core']['Tables']['mbo_cycle_settings']['Insert']>;
+      };
       promotional_deals: {
         Row: {
           id: string;
@@ -7276,6 +7832,39 @@ export interface Database {
   };
   piano: {
     Tables: {
+      song_progress: {
+        Row: {
+          id: string;
+          organization_id: string;
+          customer_id: string;
+          book_name: string;
+          song_title: string;
+          status: string;
+          stamps_awarded: number;
+          requested_at: string;
+          approved_at: string | null;
+          approved_by: string | null;
+          memo: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          customer_id: string;
+          book_name: string;
+          song_title: string;
+          status?: string;
+          stamps_awarded?: number;
+          requested_at?: string;
+          approved_at?: string | null;
+          approved_by?: string | null;
+          memo?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['piano']['Tables']['song_progress']['Insert']>;
+      };
       customers: {
         Row: {
           customer_id: string;
