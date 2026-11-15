@@ -4,9 +4,9 @@ import { getOwnerLabel } from '@/core/industry/industryUi';
 import { getIndustryPlugin } from '@/core/industry/registry';
 import { withOwnerFinanceTabs } from '@/core/industry/pluginTypes';
 import { filterIndustryNavTabs } from '@/core/industry/catalog';
-import type { UserRole } from '@/types';
+import type { UserRole } from '@/core/auth/types/sessionUser';
 import { isAttendanceModuleEnabled } from '@/core/attendance/features';
-import type { AcademySettings } from '@/types';
+import type { AcademySettings } from '@/core/organizations/settingsTypes';
 import {
   isOrgOwner,
   resolveRoleAccessKind,

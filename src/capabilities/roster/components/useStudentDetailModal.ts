@@ -25,7 +25,9 @@ import {
   getLevelColor,
   getStudentStatusBadge,
 } from '@/utils/formatters';
-import type { AttendanceStatus, ClassItem, DayOfWeek } from '@/types';
+import type { AttendanceStatus } from '@/capabilities/attendance';
+import type { ClassItem } from '@/types';
+import type { DayOfWeek } from '@/core/staff/workWindow';
 import { getStudentExitActionLabel } from './studentExitActionLabel';
 import { useModuleLabels } from '@/core/labels';
 import { DetailTab, getDetailTabConfig } from './detail/types';
