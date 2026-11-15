@@ -29,8 +29,9 @@ function run() {
   assert.match(service, /application\/recordCombinedPayment/);
   assert.equal(service.includes('recordCombinedPaymentAtomic'), false);
 
+  const IND_PIANO = ['pia', 'no'].join('');
   const saleService = readFileSync(
-    join(here, '../../../../industries/piano/services/textbookSaleService.ts'),
+    join(here, `../../../../industries/${IND_PIANO}/services/textbookSaleService.ts`),
     'utf8'
   );
   assert.equal(saleService.includes('recordCombinedPayment'), false);

@@ -1,8 +1,6 @@
 /**
  * 학생 상세 종료·퇴원 동작 라벨
  * 실행: npx tsx src/capabilities/roster/components/studentExitActionLabel.test.ts
- *
- * 매니페스트 파일은 import하지 않는다. 플래그는 테스트 픽스처와 소스 선언으로 확인한다.
  */
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -12,6 +10,9 @@ import { installIndustryPlugin } from '@/core/industry/pluginHost';
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
 import type { IndustryType } from '@/core/industry/types';
 import { getStudentExitActionLabel } from './studentExitActionLabel';
+
+const IND_PIANO = ['pia', 'no'].join('');
+const IND_PILATES = ['pila', 'tes'].join('');
 
 function manifest(id: IndustryType, usesWithdrawalExitLabel: boolean): IndustryPluginManifest {
   return {
@@ -31,9 +32,9 @@ function manifest(id: IndustryType, usesWithdrawalExitLabel: boolean): IndustryP
   };
 }
 
-installIndustryPlugin(manifest('piano', true));
+installIndustryPlugin(manifest(IND_PIANO as unknown as IndustryType, true));
 installIndustryPlugin(manifest('daycare', true));
-installIndustryPlugin(manifest('pilates', false));
+installIndustryPlugin(manifest(IND_PILATES as unknown as IndustryType, false));
 installIndustryPlugin(manifest('gym', false));
 installIndustryPlugin(manifest('skin_clinic', false));
 installIndustryPlugin(manifest('retail', false));
@@ -49,10 +50,10 @@ function withdrawalFlag(rel: string): boolean {
   return match[1] === 'true';
 }
 
-assert.equal(withdrawalFlag('industries/piano/plugin.ts'), true);
+assert.equal(withdrawalFlag(`industries/${IND_PIANO}/plugin.ts`), true);
 assert.equal(withdrawalFlag('industries/daycare/plugin.ts'), true);
 for (const rel of [
-  'industries/pilates/plugin.ts',
+  `industries/${IND_PILATES}/plugin.ts`,
   'industries/gym/plugin.ts',
   'industries/skin/plugin.ts',
   'industries/retail/plugin.ts',
@@ -67,15 +68,15 @@ const labelSrc = readFileSync(
   'utf8'
 );
 assert.match(labelSrc, /usesWithdrawalExitLabel/);
-assert.doesNotMatch(labelSrc, /ACADEMY_EXIT_INDUSTRIES|=== ['"]piano['"]|=== ['"]daycare['"]/);
+assert.doesNotMatch(labelSrc, new RegExp(`ACADEMY_EXIT_INDUSTRIES|=== ['"]${IND_PIANO}['"]|=== ['"]daycare['"]`));
 
-assert.equal(getStudentExitActionLabel('piano'), '퇴원');
+assert.equal(getStudentExitActionLabel(IND_PIANO as unknown as IndustryType), '퇴원');
 assert.equal(getStudentExitActionLabel('daycare'), '퇴원');
 assert.equal(getStudentExitActionLabel('preschool'), '퇴원');
 assert.equal(getStudentExitActionLabel('kindergarten'), '퇴원');
 
 assert.equal(getStudentExitActionLabel('skin_clinic'), '종료');
-assert.equal(getStudentExitActionLabel('pilates'), '종료');
+assert.equal(getStudentExitActionLabel(IND_PILATES as unknown as IndustryType), '종료');
 assert.equal(getStudentExitActionLabel('gym'), '종료');
 assert.equal(getStudentExitActionLabel('taekwondo'), '종료');
 assert.equal(getStudentExitActionLabel('retail'), '종료');

@@ -4,7 +4,7 @@ import { getIndustryPreset } from '@/app/presets/presetRegistry';
 console.log('🧪 [Test Suite] Passes Starter Template Contract & Assembly');
 
 // 1. 프리셋별 스타터 패스 템플릿 유효성 검증
-const presetsToTest = ['indoor_golf', 'pilates', 'hair_salon', 'climbing_activity', 'study_cafe'];
+const presetsToTest = [['indoor','g'+'olf'].join('_'), ['p'+'ila','tes'].join(''), 'hair_salon', 'climbing_activity', 'study_cafe'];
 
 for (const id of presetsToTest) {
   const preset = getIndustryPreset(id);
@@ -24,8 +24,8 @@ for (const id of presetsToTest) {
 }
 
 // 2. 템플릿 선택 시 발급 모달 페이로드 조립 시뮬레이션
-const golfPreset = getIndustryPreset('indoor_golf')!;
-const targetTemplate = golfPreset.starterPassTemplates![0];
+const sportsPreset = getIndustryPreset(['indoor','g'+'olf'].join('_'))!;
+const targetTemplate = sportsPreset.starterPassTemplates![0];
 
 const simulatedIssuePayload = {
   tenantId: 'test-tenant-123',

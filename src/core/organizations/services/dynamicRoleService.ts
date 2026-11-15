@@ -36,16 +36,31 @@ export async function listDynamicRoles(organizationId: string): Promise<DynamicR
   }));
 }
 
+interface DynamicQueryClient {
+  from: (table: string) => {
+    select: (cols: string) => {
+      eq: (col: string, val: unknown) => {
+        order: (col: string, opts?: { ascending?: boolean }) => Promise<{ data: unknown[] | null; error: Error | null }>;
+        single: () => Promise<{ data: { feature_permissions?: Record<string, boolean> | null } | null; error: Error | null }>;
+      };
+    };
+    update: (patch: Record<string, unknown>) => {
+      eq: (col: string, val: unknown) => Promise<{ error: Error | null }>;
+    };
+  };
+  rpc: (fn: string, args?: Record<string, unknown>) => Promise<{ data?: unknown; error: { message: string } | null }>;
+}
+
 export async function listRoleMembers(organizationId: string): Promise<DynamicMemberRow[]> {
-  const client = getCoreClient();
-  const memberRes = await (client as any)
+  const client = getCoreClient() as unknown as DynamicQueryClient;
+  const memberRes = await client
     .from('organization_members')
     .select('id,user_id,role,organization_role_id,custom_role_id,is_active,joined_at,feature_permissions')
     .eq('organization_id', organizationId)
     .order('created_at', { ascending: true });
   if (memberRes.error) {
     // fallback if extra columns aren't matched
-    const fallbackRes = await client
+    const fallbackRes = await getCoreClient()
       .from('organization_members')
       .select('id,user_id,role,organization_role_id')
       .eq('organization_id', organizationId);
@@ -90,8 +105,8 @@ export async function assignOrganizationRole(
   roleId: string | null,
   reason: string = ''
 ): Promise<void> {
-  const client = getCoreClient();
-  const rpcRes = await (client as any).rpc('assign_or_revoke_member_role', {
+  const client = getCoreClient() as unknown as DynamicQueryClient;
+  const rpcRes = await client.rpc('assign_or_revoke_member_role', {
     p_target_member_id: memberId,
     p_new_role_id: roleId || null,
     p_reason: reason,
@@ -102,7 +117,7 @@ export async function assignOrganizationRole(
     if (msg.includes('does not exist') || msg.includes('not found in schema')) {
       const result = await client
         .from('organization_members')
-        .update({ organization_role_id: roleId } as any)
+        .update({ organization_role_id: roleId })
         .eq('id', memberId);
       if (result.error) throw new Error(result.error.message);
       return;
@@ -120,8 +135,8 @@ export async function grantMemberFeaturePermission(
   featureKey: string,
   enabled: boolean
 ): Promise<void> {
-  const client = getCoreClient();
-  const rpcRes = await (client as any).rpc('grant_member_feature_permission', {
+  const client = getCoreClient() as unknown as DynamicQueryClient;
+  const rpcRes = await client.rpc('grant_member_feature_permission', {
     p_target_member_id: memberId,
     p_feature_key: featureKey,
     p_enabled: enabled,
@@ -131,13 +146,13 @@ export async function grantMemberFeaturePermission(
     const msg = rpcRes.error.message || '';
     if (msg.includes('does not exist') || msg.includes('not found in schema')) {
       // 로컬/테스트 환경 fallback
-      const { data: member } = await (client as any)
+      const { data: member } = await client
         .from('organization_members')
         .select('feature_permissions')
         .eq('id', memberId)
         .single();
-      const nextPerms = { ...((member as any)?.feature_permissions || {}), [featureKey]: enabled };
-      const { error } = await (client as any)
+      const nextPerms = { ...((member?.feature_permissions as Record<string, boolean> | undefined) || {}), [featureKey]: enabled };
+      const { error } = await client
         .from('organization_members')
         .update({ feature_permissions: nextPerms })
         .eq('id', memberId);

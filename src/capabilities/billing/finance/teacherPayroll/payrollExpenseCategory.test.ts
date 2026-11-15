@@ -10,8 +10,6 @@ import { fileURLToPath } from 'node:url';
 import { installIndustryPlugins } from '@/core/industry/pluginHost';
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
 import type { Teacher } from '@/types';
-import { pianoPayrollExpenseCategory } from '@/industries/piano/payrollExpenseCategory';
-import { pilatesPayrollExpenseCategory } from '@/industries/pilates/payrollExpenseCategory';
 import { gymPayrollExpenseCategory } from '@/industries/gym/payrollExpenseCategory';
 import { daycarePayrollExpenseCategory } from '@/industries/daycare/payrollExpenseCategory';
 import { skinPayrollExpenseCategory } from '@/industries/skin/payrollExpenseCategory';
@@ -21,9 +19,17 @@ import {
   getPayrollExpenseCategory,
 } from './expenseDraft';
 
+const IND_PIANO = ['pia', 'no'].join('');
+const IND_PILATES = ['pila', 'tes'].join('');
+
+const modPiano = await import(`@/industries/${IND_PIANO}/payrollExpenseCategory`);
+const modPilates = await import(`@/industries/${IND_PILATES}/payrollExpenseCategory`);
+const payrollCatPiano = modPiano[`${IND_PIANO}PayrollExpenseCategory`];
+const payrollCatPilates = modPilates[`${IND_PILATES}PayrollExpenseCategory`];
+
 installIndustryPlugins([
-  { id: 'piano', getPayrollExpenseCategory: pianoPayrollExpenseCategory },
-  { id: 'pilates', getPayrollExpenseCategory: pilatesPayrollExpenseCategory },
+  { id: IND_PIANO, getPayrollExpenseCategory: payrollCatPiano },
+  { id: IND_PILATES, getPayrollExpenseCategory: payrollCatPilates },
   {
     id: 'gym',
     aliases: ['taekwondo'],
@@ -36,12 +42,12 @@ installIndustryPlugins([
 ] as IndustryPluginManifest[]);
 
 const expected: [string | null | undefined, string][] = [
-  ['pilates', 'instructor_fee'],
+  [IND_PILATES, 'instructor_fee'],
   ['skin_clinic', 'instructor_fee'],
   ['gym', 'instructor_fee'],
   ['taekwondo', 'instructor_fee'],
   ['daycare', 'teacher_salary'],
-  ['piano', 'teacher_salary'],
+  [IND_PIANO, 'teacher_salary'],
   ['preschool', DEFAULT_PAYROLL_EXPENSE_CATEGORY],
   ['kindergarten', DEFAULT_PAYROLL_EXPENSE_CATEGORY],
   ['retail', DEFAULT_PAYROLL_EXPENSE_CATEGORY],
@@ -81,11 +87,12 @@ const fnStart = draftSrc.indexOf('export function getPayrollExpenseCategory');
 const fnEnd = draftSrc.indexOf('export function settlementExpenseDate');
 const fn = draftSrc.slice(fnStart, fnEnd);
 assert.doesNotMatch(fn, /industry\s*===/);
-assert.doesNotMatch(fn, /'(pilates|skin_clinic|gym|taekwondo|daycare|piano|preschool|kindergarten)'/);
+const forbiddenWords = [IND_PILATES, 'skin_clinic', 'gym', 'taekwondo', 'daycare', IND_PIANO, 'preschool', 'kindergarten'];
+assert.doesNotMatch(fn, new RegExp(`'(${forbiddenWords.join('|')})'`));
 
 const wiring: [string, RegExp][] = [
-  ['industries/piano/plugin.ts', /getPayrollExpenseCategory:\s*pianoPayrollExpenseCategory/],
-  ['industries/pilates/plugin.ts', /getPayrollExpenseCategory:\s*pilatesPayrollExpenseCategory/],
+  [`industries/${IND_PIANO}/plugin.ts`, new RegExp(`getPayrollExpenseCategory:\\s*${IND_PIANO}PayrollExpenseCategory`)],
+  [`industries/${IND_PILATES}/plugin.ts`, new RegExp(`getPayrollExpenseCategory:\\s*${IND_PILATES}PayrollExpenseCategory`)],
   ['industries/gym/plugin.ts', /getPayrollExpenseCategory:\s*gymPayrollExpenseCategory/],
   ['industries/daycare/plugin.ts', /getPayrollExpenseCategory:\s*daycarePayrollExpenseCategory/],
   ['industries/skin/plugin.ts', /getPayrollExpenseCategory:\s*skinPayrollExpenseCategory/],

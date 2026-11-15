@@ -43,6 +43,42 @@ import {
   Loader2,
 } from 'lucide-react';
 
+interface StaffRow {
+  id: string;
+  name: string;
+  phone?: string | null;
+  email?: string | null;
+  user_id?: string | null;
+  status?: string;
+  created_at: string;
+  metadata?: {
+    hireDate?: string;
+    payType?: TeacherPayType;
+    payRate?: number;
+    hourlyRate?: number;
+    salary?: number;
+    color?: string;
+    specialty?: string;
+    memo?: string;
+    grants?: StaffGrants;
+  } | null;
+}
+
+interface ClassRow {
+  id: string;
+  name?: string;
+  metadata?: {
+    teacherId?: string;
+  } | null;
+}
+
+interface CustomerRow {
+  id: string;
+  name?: string;
+  status?: string;
+  teacher_id?: string | null;
+}
+
 export const TeacherManagementView: React.FC = () => {
   const { showToast, openConfirmDialog } = useApp();
   const labels = useModuleLabels();
@@ -50,33 +86,36 @@ export const TeacherManagementView: React.FC = () => {
   const canManageAccounts = isOrgAdmin(currentRole);
 
   // TanStack Query (via @refinedev/core) 로 데이터 페칭
-  const staffList = useList<any>({
+  const staffList = useList<StaffRow>({
     resource: 'staff',
     meta: { select: '*' }
   });
-  const staffData = (staffList as any).data || staffList.query?.data;
-  const isStaffLoading = (staffList as any).isLoading ?? staffList.query?.isLoading;
-  const classesList = useList<any>({
+  const staffRows = staffList.query.data?.data || [];
+  const isStaffLoading = staffList.query.isLoading;
+
+  const classesList = useList<ClassRow>({
     resource: 'classes',
     meta: { select: '*' }
   });
-  const classesData = (classesList as any).data || classesList.query?.data;
-  const isClassesLoading = (classesList as any).isLoading ?? classesList.query?.isLoading;
-  const customersList = useList<any>({
+  const classRows = classesList.query.data?.data || [];
+  const isClassesLoading = classesList.query.isLoading;
+
+  const customersList = useList<CustomerRow>({
     resource: 'customers',
     meta: { select: '*' }
   });
-  const customersData = (customersList as any).data || customersList.query?.data;
-  const isCustomersLoading = (customersList as any).isLoading ?? customersList.query?.isLoading;
+  const customerRows = customersList.query.data?.data || [];
+  const isCustomersLoading = customersList.query.isLoading;
+
   const rolesList = useList<{ id: string; name: string }>({
     resource: 'tenant_roles',
     meta: { select: 'id,name' },
     pagination: { mode: 'off' },
   });
   const tenantRoles = useMemo(() => {
-    const raw = (rolesList as any).data?.data || rolesList.query?.data?.data || [];
-    return Array.isArray(raw) ? (raw as { id: string; name: string }[]) : [];
-  }, [rolesList]);
+    const raw = rolesList.query.data?.data || [];
+    return Array.isArray(raw) ? raw : [];
+  }, [rolesList.query.data]);
   const [inviteRoleId, setInviteRoleId] = useState('');
   useEffect(() => {
     if (!inviteRoleId && tenantRoles.length > 0) {
@@ -86,49 +125,52 @@ export const TeacherManagementView: React.FC = () => {
     }
   }, [tenantRoles, inviteRoleId]);
 
-  const { mutate: createStaff } = useCreate<any>();
-  const { mutate: updateStaff } = useUpdate<any>();
-  const { mutate: deleteStaff } = useDelete<any>();
+  const { mutate: createStaff } = useCreate<StaffRow>();
+  const { mutate: updateStaff } = useUpdate<StaffRow>();
+  const { mutate: deleteStaff } = useDelete();
 
   // DB 스키마 -> UI 모델(Teacher) 어댑터
   const teachers: Teacher[] = useMemo(() => {
     if (isStaffLoading || isClassesLoading || isCustomersLoading) return [];
 
-  return (staffData?.data || []).map(row => ({
-      id: row.id,
-      name: row.name,
-      phone: row.phone || '',
-      email: row.email || undefined,
-      userId: row.user_id,
-      status: row.status as Teacher['status'],
-      hireDate: (row.metadata as any)?.hireDate || row.created_at,
-      payType: (row.metadata as any)?.payType,
-      payRate: (row.metadata as any)?.payRate,
-      hourlyRate: (row.metadata as any)?.hourlyRate,
-      salary: (row.metadata as any)?.salary,
-      color: (row.metadata as any)?.color,
-      specialty: (row.metadata as any)?.specialty,
-      memo: (row.metadata as any)?.memo,
-      grants: (row.metadata as any)?.grants,
-    }));
-  }, [staffData]);
+    return staffRows.map(row => {
+      const meta = row.metadata;
+      return {
+        id: row.id,
+        name: row.name,
+        phone: row.phone || '',
+        email: row.email || undefined,
+        userId: row.user_id,
+        status: row.status as Teacher['status'],
+        hireDate: meta?.hireDate || row.created_at,
+        payType: meta?.payType,
+        payRate: meta?.payRate,
+        hourlyRate: meta?.hourlyRate,
+        salary: meta?.salary,
+        color: meta?.color,
+        specialty: meta?.specialty,
+        memo: meta?.memo,
+        grants: meta?.grants,
+      };
+    });
+  }, [isStaffLoading, isClassesLoading, isCustomersLoading, staffRows]);
 
   const classes = useMemo(() => {
-    return (classesData?.data || []).map(row => ({
+    return classRows.map(row => ({
       id: row.id,
       name: row.name,
-      teacherId: (row.metadata as any)?.teacherId,
+      teacherId: row.metadata?.teacherId,
     }));
-  }, [classesData]);
+  }, [classRows]);
 
   const students = useMemo(() => {
-    return (customersData?.data || []).map(row => ({
+    return customerRows.map(row => ({
       id: row.id,
       name: row.name,
       status: row.status,
       teacherId: row.teacher_id,
     }));
-  }, [customersData]);
+  }, [customerRows]);
 
 
   const [isModalOpen, setIsModalOpen] = useState(false);

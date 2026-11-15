@@ -6,13 +6,15 @@
  * 직관적인 MenuVisibilitySettingsView를 제공합니다.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { MenuVisibilitySettingsView } from './MenuVisibilitySettingsView';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { OPERATION_TOOL_SETS } from '@/core/presets/operationBundles';
 import { resolveCapabilityDependencies } from '@/core/capabilities/capabilityDependency';
 import type { CapabilityId } from '@/capabilities/_shared/capabilityTypes';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { PresetCapabilityCatalogModal } from '@/shared/components/presets/PresetCapabilityCatalogModal';
+import { BookOpen } from 'lucide-react';
 
 export { MenuVisibilitySettingsView };
 
@@ -22,6 +24,7 @@ function friendlyName(name: string): string {
 
 export const CapabilitySwitchboardPage: React.FC = () => {
   const { activeCapabilities, updateActiveCapabilities } = useOrganization();
+  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
 
   async function toggleSet(capabilities: readonly string[], enable: boolean) {
     let next = [...activeCapabilities];
@@ -41,9 +44,19 @@ export const CapabilitySwitchboardPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <header>
-        <h1 className="text-xl font-black">우리 매장 맞춤 세트</h1>
-        <p className="text-sm text-slate-500">추천 운영 도구를 켜면 필요한 선행 기능도 함께 열립니다.</p>
+      <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-xl font-black">우리 매장 맞춤 세트</h1>
+          <p className="text-sm text-slate-500">추천 운영 도구를 켜면 필요한 선행 기능도 함께 열립니다.</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setIsCatalogOpen(true)}
+          className="inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-3.5 py-2 text-xs font-bold text-indigo-700 hover:bg-indigo-100 transition-colors"
+        >
+          <BookOpen className="h-4 w-4" />
+          52개 업종 권장 카탈로그 둘러보기
+        </button>
       </header>
       <div className="grid gap-3 sm:grid-cols-2">
         {OPERATION_TOOL_SETS.map((set) => {
@@ -60,8 +73,13 @@ export const CapabilitySwitchboardPage: React.FC = () => {
         })}
       </div>
       <MenuVisibilitySettingsView />
+
+      <PresetCapabilityCatalogModal
+        isOpen={isCatalogOpen}
+        onClose={() => setIsCatalogOpen(false)}
+      />
     </div>
   );
-}
+};
 
 export default CapabilitySwitchboardPage;

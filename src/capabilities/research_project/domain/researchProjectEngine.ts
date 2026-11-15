@@ -67,7 +67,7 @@ export function buildMemberProjectLoad(
 export const MEMBER_ROLE_LABELS: Record<ResearchMemberRole, string> = {
   lead: '연구 책임자 (PI/연구담당)',
   co_lead: '부책임자 (랩장/부담당)',
-  member: '참여연구원 (대학원생/팀원)',
+  member: '참여연구원 (연구원/팀원)',
 };
 
 /** 학술 및 R&D 산출물 세부 분류 */

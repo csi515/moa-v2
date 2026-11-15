@@ -134,8 +134,8 @@ describe('nps_survey_collector - domain engine', () => {
     assert.ok(svg.includes('<svg'));
     assert.ok(svg.includes('NPS'));
 
-    const invitation = formatSurveyInvitationText('2026년 가을학기 수업 만족도 설문', '모아 음악학원', 'camp-123');
-    assert.ok(invitation.includes('모아 음악학원'));
+    const invitation = formatSurveyInvitationText('2026년 가을학기 수업 만족도 설문', '모아 아카데미', 'camp-123');
+    assert.ok(invitation.includes('모아 아카데미'));
     assert.ok(invitation.includes('https://moa.app/survey/camp-123'));
   });
 });

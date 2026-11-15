@@ -41,6 +41,8 @@ export const Header: React.FC = () => {
   const {
     currentOrganization,
     clearOrganization,
+    organizations,
+    selectOrganization,
     canAccessCustomerPortal,
     customerPortalActive,
     enterCustomerPortal,
@@ -56,6 +58,22 @@ export const Header: React.FC = () => {
   const [pendingJoinCount, setPendingJoinCount] = useState<number>(0);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState<boolean>(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState<boolean>(false);
+  const [isOrgSwitcherOpen, setIsOrgSwitcherOpen] = useState<boolean>(false);
+  const orgSwitcherRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (orgSwitcherRef.current && !orgSwitcherRef.current.contains(event.target as Node)) {
+        setIsOrgSwitcherOpen(false);
+      }
+    };
+    if (isOrgSwitcherOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isOrgSwitcherOpen]);
 
   const isCustomerView = customerPortalActive || location.pathname.startsWith("/customer");
 
@@ -118,7 +136,7 @@ export const Header: React.FC = () => {
             </span>
           </Link>
           {currentOrganization && (
-            <div className="flex items-center gap-2 border-l border-slate-200 pl-3 min-w-0">
+            <div ref={orgSwitcherRef} className="relative flex items-center gap-2 border-l border-slate-200 pl-3 min-w-0">
               <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 max-w-[120px] truncate sm:max-w-xs">
                 <Building2 className="h-3.5 w-3.5 text-slate-500 shrink-0" />
                 <span className="truncate">{currentOrganization.name}</span>
@@ -134,12 +152,73 @@ export const Header: React.FC = () => {
               </span>
               <button
                 type="button"
-                onClick={() => clearOrganization()}
-                className="text-xs text-indigo-600 hover:text-indigo-800 font-medium hover:underline shrink-0"
-                title="사업장 변경"
+                onClick={() => setIsOrgSwitcherOpen((prev) => !prev)}
+                className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 font-medium hover:underline shrink-0 px-1 py-0.5 rounded"
+                title="사업장 변경 (In-Place)"
               >
                 변경
               </button>
+
+              {/* In-Place 사업장 전환 드롭다운 메뉴 (Zero-Reload) */}
+              {isOrgSwitcherOpen && (
+                <div className="absolute top-full left-3 mt-2 w-72 rounded-2xl bg-white p-2 shadow-xl border border-slate-200/90 z-50 animate-in fade-in-50 zoom-in-95 duration-100">
+                  <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-500">소속 사업장 전환</span>
+                    <span className="text-[10px] text-indigo-600 font-medium bg-indigo-50 px-1.5 py-0.5 rounded-full">
+                      {organizations.length}개 운영 중
+                    </span>
+                  </div>
+                  <div className="max-h-60 overflow-y-auto py-1 divide-y divide-slate-50">
+                    {organizations.map((org) => {
+                      const isCurrent = org.organizationId === currentOrganization.id;
+                      const orgPreset = getIndustryPreset(org.organization?.industry_type || "");
+                      return (
+                        <button
+                          key={org.id}
+                          type="button"
+                          onClick={async () => {
+                            if (!isCurrent) {
+                              setIsOrgSwitcherOpen(false);
+                              await selectOrganization(org.organizationId);
+                              navigate("/workspace");
+                            } else {
+                              setIsOrgSwitcherOpen(false);
+                            }
+                          }}
+                          className={cn(
+                            "w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors",
+                            isCurrent
+                              ? "bg-indigo-50/80 text-indigo-900 font-bold"
+                              : "hover:bg-slate-50 text-slate-700"
+                          )}
+                        >
+                          <div className="min-w-0 pr-2">
+                            <p className="truncate font-medium">{org.organization?.name || "사업장"}</p>
+                            <p className="text-[10px] text-slate-400">
+                              {orgPreset?.name || getIndustryLabel(org.organization?.industry_type)} · {org.role}
+                            </p>
+                          </div>
+                          {isCurrent && (
+                            <span className="h-2 w-2 rounded-full bg-indigo-600 shrink-0" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="border-t border-slate-100 pt-1.5 mt-1 flex items-center justify-between px-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsOrgSwitcherOpen(false);
+                        clearOrganization();
+                      }}
+                      className="text-[11px] text-slate-500 hover:text-slate-800 font-medium py-1"
+                    >
+                      전체 사업장 선택 화면으로 이동
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

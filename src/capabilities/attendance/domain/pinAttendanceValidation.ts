@@ -10,7 +10,7 @@ export type PinAttendanceValidationResult = {
 };
 
 /** PIN 사용/미사용·입실 only 스모크 검증 (로컬 스토리지) */
-export function runPinAttendanceValidation(industry = 'piano'): PinAttendanceValidationResult[] {
+export function runPinAttendanceValidation(industry = 'default'): PinAttendanceValidationResult[] {
   const results: PinAttendanceValidationResult[] = [];
   const settings = settingsStorage.getSettings();
   const enabled = isAttendanceModuleEnabled(settings, industry);

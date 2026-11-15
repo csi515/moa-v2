@@ -20,7 +20,7 @@ export function mapResourceReservationError(message: string, fallback: string): 
     return new Error('운영 시간 외에는 예약할 수 없습니다.');
   }
   if (message.includes('closed')) {
-    return new Error('학원 휴무일에는 예약할 수 없습니다.');
+    return new Error('사업장 휴무일에는 예약할 수 없습니다.');
   }
   if (message.includes('Permission denied')) {
     return new Error('권한이 없습니다.');

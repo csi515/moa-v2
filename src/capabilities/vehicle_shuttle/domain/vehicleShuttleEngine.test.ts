@@ -18,7 +18,7 @@ function run() {
     },
     {
       id: 'stop-1',
-      name: '학원 출발점',
+      name: '센터 출발점',
       sequenceOrder: 1,
       scheduledMinutesFromStart: 0,
       assignedStudentIds: [],

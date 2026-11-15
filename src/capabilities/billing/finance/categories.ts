@@ -14,7 +14,7 @@ export interface CategoryOption {
 /** 업종 공통 지출 카테고리 */
 export const COMMON_EXPENSE_CATEGORIES: CategoryOption[] = DEFAULT_COMMON_EXPENSE_CATEGORIES;
 
-/** 피아노 학원 추가 지출 카테고리 */
+/** 전문 교육 운영 추가 지출 카테고리 */
 export const PIANO_EXPENSE_CATEGORIES: CategoryOption[] = DEFAULT_PIANO_EXPENSE_CATEGORIES;
 
 /** 피부관리샵 추가 지출 카테고리 */

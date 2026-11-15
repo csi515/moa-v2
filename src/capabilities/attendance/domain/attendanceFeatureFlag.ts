@@ -28,7 +28,7 @@ export function withAttendanceModuleEnabled(
 
 /**
  * 기존 org에 features.attendance.enabled가 없을 때 기본값 확정.
- * PIN/세션 데이터가 있으면 true(기존 PIN 학원 보호), 없으면 false(MANUAL).
+ * PIN/세션 데이터가 있으면 true(기존 PIN 사업장 보호), 없으면 false(MANUAL).
  */
 export function resolveAttendanceEnabledForBackfill(params: {
   settings: AcademySettings;

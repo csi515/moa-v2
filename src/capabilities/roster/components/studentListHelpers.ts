@@ -100,8 +100,8 @@ export function buildBillingByStudent(
   return map;
 }
 
-/** 피아노 목록 — 수강 형태 표시 (일반 / 회차권) */
-export function getPianoBillingModeLabel(student: Pick<Student, 'billingMode'>): string {
+/** 고객 목록 — 수강 형태 표시 (일반 / 회차권) */
+export function getSessionBillingModeLabel(student: Pick<Student, 'billingMode'>): string {
   return normalizeBillingMode(student.billingMode) === 'session_pass' ? '회차권' : '일반';
 }
 
@@ -163,10 +163,10 @@ export function getStudentPassOrMembershipSignal(
 }
 
 /**
- * 피아노 목록 — 회차권 컬럼 (하위 호환용).
+ * 고객 목록 — 회차권 컬럼.
  * 등록된 회차권이 없으면 해당 없음, 있으면 남은 N회.
  */
-export function getPianoSessionPassColumnLabel(
+export function getSessionPassColumnLabel(
   studentId: string,
   passes: SessionPass[]
 ): string {

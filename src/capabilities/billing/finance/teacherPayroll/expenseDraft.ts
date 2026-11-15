@@ -10,7 +10,7 @@ export const DEFAULT_PAYROLL_EXPENSE_CATEGORY = 'salary';
 /**
  * 강사 정산 지출 카테고리.
  * 업종 id 분기는 하지 않는다. 플러그인 훅이 값을 낸다.
- * 빈 값은 piano로 바꾸지 않고 기본값을 유지한다.
+ * 빈 값은 기본값을 유지한다.
  * 별칭은 플러그인 매니페스트 aliases에 있는 것만 그 훅을 쓴다.
  */
 export function getPayrollExpenseCategory(industry?: string | null): string {

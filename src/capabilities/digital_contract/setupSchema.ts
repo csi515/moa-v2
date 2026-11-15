@@ -23,7 +23,7 @@ export const digitalContractSetupSchema: CapabilitySetupSchema = {
       id: 'enabledContractTypes',
       label: '사용할 계약서 양식 목록 (쉼표 구분)',
       type: 'tags',
-      defaultValue: ['1:1 PT 표준계약서', '헬스/피트니스 회원권 계약서', '학원 수강 등록원서', '직원/강사 근로계약서'],
+      defaultValue: ['1:1 PT 표준계약서', '헬스/피트니스 회원권 계약서', '수강 등록원서', '직원/강사 근로계약서'],
     },
     {
       id: 'archiveStorageYears',

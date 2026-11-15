@@ -8,8 +8,10 @@ import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
 import { getOrganizationId, getStorageAdapter, STORAGE_KEYS } from '@/services/adapters';
 import { paymentRowToInvoice } from '@/services/adapters/sync/mappers/invoiceMappers';
 import { transactionRowToTuitionPayment } from '@/services/adapters/sync/financeEntityMappers';
-import { pianoRowToPayment } from '@/services/adapters/sync/piano/textbookPaymentMappers';
-import { pianoRowToSale } from '@/services/adapters/sync/piano/textbookSalesMappers';
+import {
+  textbookPaymentRowToEntity as tbRowToPayment,
+  textbookSaleRowToEntity as tbRowToSale,
+} from '@/services/adapters/sync/commerceMappers';
 import type { Json } from '@/lib/supabase/database.types';
 import type {
   CombinedPaymentRequest,
@@ -51,8 +53,8 @@ const APP_TO_DB: Record<string, string> = {
 
 type InvoiceRow = Parameters<typeof paymentRowToInvoice>[0];
 type TxRow = Parameters<typeof transactionRowToTuitionPayment>[0];
-type SaleRow = Parameters<typeof pianoRowToSale>[0];
-type TbPayRow = Parameters<typeof pianoRowToPayment>[0];
+type SaleRow = Parameters<typeof tbRowToSale>[0];
+type TbPayRow = Parameters<typeof tbRowToPayment>[0];
 
 type TuitionRpcItem = {
   action?: string;
@@ -213,7 +215,7 @@ export async function recordCombinedPaymentAtomic(
     if (item.action === 'skipped_linked') continue;
     if (!item.sale || !item.payment) continue;
     const local = sales.find((sale) => sale.id === item.sale?.id);
-    const mapped = pianoRowToSale(item.sale);
+    const mapped = tbRowToSale(item.sale);
     const updatedSale: TextbookSale = {
       ...(local || mapped),
       ...mapped,
@@ -221,7 +223,7 @@ export async function recordCombinedPaymentAtomic(
       textbookTitle: local?.textbookTitle || mapped.textbookTitle,
       billingInvoiceId: local?.billingInvoiceId,
     };
-    const payment = pianoRowToPayment(item.payment);
+    const payment = tbRowToPayment(item.payment);
     payment.studentId = payment.studentId || updatedSale.studentId;
     payment.studentName = payment.studentName || updatedSale.studentName;
     payment.textbookTitle = payment.textbookTitle || updatedSale.textbookTitle;

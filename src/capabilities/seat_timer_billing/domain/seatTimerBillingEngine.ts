@@ -1,7 +1,7 @@
 /**
  * 시간제 공간 타이머 & 초과요금 자동 과금 도메인 엔진 (Pure Functions)
  *
- * 적용 업종: 스터디카페(study_cafe), 공간·파티룸 대여(space_rental), 실내 골프 타석(indoor_golf)
+ * 적용 업종: 스터디카페(study_cafe), 공간·파티룸 대여(space_rental), 실내 스포츠 타석
  *
  * 주요 기능:
  *  1. 좌석/룸/타석별 실시간 잔여시간 카운트다운 타이머 계산
@@ -9,7 +9,7 @@
  *  3. 입실/퇴실/청소대기 상태머신 (AVAILABLE -> OCCUPIED -> OVERDUE -> CLEANING -> AVAILABLE)
  */
 
-export type SeatSpaceType = 'study_desk' | 'meeting_room' | 'golf_bay' | 'party_room';
+export type SeatSpaceType = 'study_desk' | 'meeting_room' | 'sports_bay' | 'party_room' | string;
 export type SeatTimerStatus = 'AVAILABLE' | 'OCCUPIED' | 'OVERDUE' | 'CLEANING';
 
 export interface SeatTimerSlot {

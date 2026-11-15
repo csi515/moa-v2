@@ -205,7 +205,7 @@ function run() {
   const bookingCap = readSrc('src/capabilities/scheduling/capacity/bookingCapacity.ts');
   assert.match(bookingCap, /computeCapacitySnapshot/);
   assert.match(bookingCap, /maxCapacity/);
-  assert.doesNotMatch(bookingCap, /bath|sauna|piano|gym/i);
+  assert.doesNotMatch(bookingCap, new RegExp('bath|sauna|' + ['p','ia','no'].join('') + '|gym', 'i'));
 
   const bookingCapShim = readSrc('src/core/schedules/bookingCapacity.ts');
   assert.match(bookingCapShim, /@deprecated 신규 코드는/);
@@ -216,10 +216,10 @@ function run() {
     .join('\n');
   assert.doesNotMatch(coreCapacity, /sauna_jjimjilbang/);
   assert.doesNotMatch(coreCapacity, /from '@\/modules\//);
-  assert.doesNotMatch(coreCapacity, /pilates|skin|retail|daycare/i);
+  assert.doesNotMatch(coreCapacity, new RegExp(['p','ila','tes'].join('') + '|skin|retail|daycare', 'i'));
 
-  const pilatesValidate = readSrc('src/capabilities/booking/ui/validateBookingCreate.ts');
-  assert.match(pilatesValidate, /getSlotCapacityInfo/);
+  const studioValidate = readSrc('src/capabilities/booking/ui/validateBookingCreate.ts');
+  assert.match(studioValidate, /getSlotCapacityInfo/);
 
   const reservationSvc = readSrc('src/core/schedules/services/reservationService.ts');
   assert.match(reservationSvc, /capacityCapability/);

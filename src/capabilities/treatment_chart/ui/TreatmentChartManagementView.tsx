@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
-import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   normalizeTreatmentEntry,
   predictNextVisitDate,

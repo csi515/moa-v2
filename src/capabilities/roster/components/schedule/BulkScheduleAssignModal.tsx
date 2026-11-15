@@ -301,11 +301,14 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
         const toAdd = targetClassIds.filter((cid) => !filteredIds.includes(cid));
         if (toAdd.length > 0) {
           const nextClassIds = Array.from(new Set([...filteredIds, ...targetClassIds]));
-          rosterStorage.saveStudent({
-            ...st,
-            classIds: nextClassIds,
-          } as any);
-          updatedCount++;
+          const existing = rosterStorage.getStudentById(st.id);
+          if (existing) {
+            rosterStorage.saveStudent({
+              ...existing,
+              classIds: nextClassIds,
+            });
+            updatedCount++;
+          }
         }
       }
 

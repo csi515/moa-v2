@@ -18,7 +18,7 @@ import {
   determineInitialReservationStatus,
 } from '../reservationService';
 import { useActiveUser } from '@/shared/session/useActiveUser';
-import { createApprovalWithChosenLine } from '@/capabilities/approval_workflow/services/approvalWorkflowService';
+import { createApprovalWithChosenLine } from '@/capabilities/approval_workflow';
 
 interface ResourceReservationRequestModalProps {
   organizationId: string;
@@ -36,7 +36,7 @@ interface ResourceReservationRequestModalProps {
   requesterDepartmentName?: string;
   /**
    * member: 사내 직원(request_member_room_reservation, require_approval 시 pending).
-   * customer: 학원 고객 신청(request_room_reservation, pending 가능).
+   * customer: 고객 신청(request_room_reservation, pending 가능).
    */
   bookingMode?: 'member' | 'customer';
   /** require_approval 시 전자결재 연계에 사용 */

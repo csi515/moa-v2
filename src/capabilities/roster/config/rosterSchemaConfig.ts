@@ -8,6 +8,7 @@ import {
 import type { IndustryType } from '@/core/industry/types';
 import type {
   RosterFieldDefinition,
+  RosterFieldType,
   RosterPresentationPolicy,
   UnifiedRosterConfig,
 } from '../types/rosterSchema';
@@ -197,7 +198,7 @@ export function getRosterConfigForIndustry(
       id: cf.key,
       name: cf.key,
       label: cf.label,
-      type: cf.type as any,
+      type: cf.type as RosterFieldType,
       required: cf.required,
       placeholder: cf.placeholder,
       options: cf.options,

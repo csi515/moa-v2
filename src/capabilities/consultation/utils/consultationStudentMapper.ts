@@ -27,7 +27,7 @@ export interface StudentDraftFromConsultation {
 }
 
 /**
- * 상담 데이터에서 적절한 피아노/학원 레벨 추론
+ * 상담 데이터에서 적절한 커리큘럼 레벨 추론
  * 예: '바이엘', '체르니', '어드벤쳐', '소나티네', '유아', '성인' 등
  */
 export function inferStudentLevelFromCourse(course?: string, notes?: string): string {

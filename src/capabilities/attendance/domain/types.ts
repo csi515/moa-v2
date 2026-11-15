@@ -3,7 +3,7 @@ export type CheckInMethod = 'pin' | 'qr' | 'nfc' | 'kiosk' | 'manual';
 
 /**
  * Attendance 체크인 행 (core.attendance_sessions).
- * Session(방문 사실)이나 수업 출석(piano.attendance)이 아니다.
+ * Session(방문 사실)이나 수업 출석 원장이 아니다.
  * 출석 여부는 checkInAt. 별도 status를 schedules/reservations에 미러하지 않는다.
  */
 export interface AttendanceSession {

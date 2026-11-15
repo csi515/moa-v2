@@ -24,7 +24,7 @@ export interface IntakeTemplate {
   id: string;
   organizationId: string;
   title: string;
-  industryTarget: 'fitness' | 'pilates' | 'beauty' | 'counseling' | 'pet' | 'general';
+  industryTarget: 'fitness' | 'studio' | 'beauty' | 'counseling' | 'pet' | 'general' | string;
   questionSections: IntakeSection[];
   isActive: boolean;
 }

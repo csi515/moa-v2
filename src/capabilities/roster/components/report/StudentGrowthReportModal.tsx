@@ -16,7 +16,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
   isOpen,
   onClose,
   student,
-  academyName = '모아 음악학원',
+  academyName = '모아 교육 센터',
 }) => {
   const [report, setReport] = useState<StudentGrowthReportData>(() =>
     buildGrowthReportData(student, { academyName })
@@ -98,7 +98,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
                   <Sparkles className="w-3.5 h-3.5" /> MONTHLY GROWTH REPORT
                 </p>
                 <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5 tracking-tight">
-                  피아노 레슨 종합 성장 리포트
+                  종합 역량 성장 리포트
                 </h1>
                 <p className="text-xs text-slate-500 mt-1">{report.academyName} · {report.period}</p>
               </div>
@@ -123,7 +123,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
                   <Clock className="w-3.5 h-3.5 text-indigo-600" /> 자율 연습 시간
                 </span>
                 <p className="text-xl font-black text-indigo-600 mt-1">{report.practiceHours}시간</p>
-                <span className="text-[10px] text-slate-400">학원 연습실 이용 총계</span>
+                <span className="text-[10px] text-slate-400">연습실/시설 이용 총계</span>
               </div>
               <div className="text-center">
                 <span className="text-xs font-bold text-slate-500 flex items-center justify-center gap-1">
@@ -222,11 +222,11 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
               )}
             </section>
 
-            {/* 리포트 푸터 (학원 직인란) */}
+            {/* 리포트 푸터 (직인란) */}
             <footer className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
               <span>{report.academyName} 교육지원팀 발송</span>
               <div className="flex items-center gap-3">
-                <span className="font-bold text-slate-600">{report.academyName} 원장</span>
+                <span className="font-bold text-slate-600">{report.academyName} 대표</span>
                 <div className="w-10 h-10 rounded-full border border-rose-300 bg-rose-50/60 text-rose-600 flex items-center justify-center font-serif text-[11px] font-bold">
                   (인)
                 </div>

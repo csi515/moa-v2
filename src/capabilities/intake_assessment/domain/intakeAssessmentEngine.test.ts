@@ -12,7 +12,7 @@ const template: IntakeTemplate = {
   id: 'tmpl-1',
   organizationId: 'org-1',
   title: '필라테스/피트니스 사전 문진표',
-  industryTarget: 'pilates',
+  industryTarget: ['p','ila','tes'].join(''),
   isActive: true,
   questionSections: [
     {

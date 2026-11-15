@@ -149,7 +149,7 @@ export function pinRevealHandoff(
   return `${getCustomerLabel(resolved(industry))}에게 전달하세요`;
 }
 
-/** 보호자 출결 빈 목록. academy 훅이면 기존 학원 문장, 아니면 placeLabel. */
+/** 보호자 출결 빈 목록. academy 훅이면 기본 안내 문장, 아니면 placeLabel. */
 export function parentAttendanceEmpty(
   industry: IndustryType | string | null | undefined,
 ): string {

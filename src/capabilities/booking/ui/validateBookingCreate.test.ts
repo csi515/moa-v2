@@ -1,12 +1,12 @@
 /**
  * validateBookingCreate unit test
- * 실행: npm run test:pilates-booking-validate
+ * 실행: npm run test:studio-booking-validate
  */
 import assert from 'node:assert/strict';
 import type { Booking, ServiceOffering } from '@/core/types/schedule';
 import {
   validateBookingCreate,
-  validatePilatesCreateRules,
+  validateStudioCreateRules,
   validateSkinCreateRules,
 } from './validateBookingCreate';
 
@@ -51,7 +51,7 @@ const labels = { customer: '회원', staff: '강사', service: '수업' };
 }
 
 {
-  const pilates = validatePilatesCreateRules({
+  const studioRule = validateStudioCreateRules({
     member: { id: 'm1', name: '홍길동' },
     service,
     instructor: { id: 't1', name: '김강사' },
@@ -61,8 +61,8 @@ const labels = { customer: '회원', staff: '강사', service: '수업' };
     remainingSessions: 0,
     staffLabel: '강사',
   });
-  assert.equal(pilates.ok, false);
-  if (!pilates.ok) assert.match(pilates.message, /이용권/);
+  assert.equal(studioRule.ok, false);
+  if (!studioRule.ok) assert.match(studioRule.message, /이용권/);
 }
 
 {
@@ -78,7 +78,7 @@ const labels = { customer: '회원', staff: '강사', service: '수업' };
     endsAt: '2026-09-22T10:50:00',
     status: 'scheduled',
   } as Booking;
-  const pilates = validatePilatesCreateRules({
+  const studioRule = validateStudioCreateRules({
     member: { id: 'm1', name: '홍길동' },
     service,
     instructor: { id: 't1', name: '김강사' },
@@ -88,12 +88,12 @@ const labels = { customer: '회원', staff: '강사', service: '수업' };
     remainingSessions: 3,
     staffLabel: '강사',
   });
-  assert.equal(pilates.ok, false);
-  if (!pilates.ok) assert.match(pilates.message, /이미 등록/);
+  assert.equal(studioRule.ok, false);
+  if (!studioRule.ok) assert.match(studioRule.message, /이미 등록/);
 }
 
 {
-  const ok = validatePilatesCreateRules({
+  const ok = validateStudioCreateRules({
     member: { id: 'm2', name: '신규' },
     service,
     instructor: { id: 't1', name: '김강사' },

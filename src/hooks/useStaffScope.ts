@@ -70,6 +70,7 @@ export interface StaffScopeState {
   scopeStudents: (students: Student[]) => Student[];
   scopeClasses: (classes: ClassItem[]) => ClassItem[];
   scopeBookings: (bookings: Booking[], students?: Student[]) => Booking[];
+  scopeMembers: (members: Student[], bookings: Booking[]) => Student[];
   scopeMembersForPilates: (members: Student[], bookings: Booking[]) => Student[];
   scopeByStudentIds: <T extends { studentId: string }>(items: T[], students: Student[]) => T[];
   scopeLessons: (lessons: LessonRecord[], students?: Student[]) => LessonRecord[];
@@ -237,6 +238,7 @@ export function useStaffScope(): StaffScopeState {
     scopeStudents,
     scopeClasses,
     scopeBookings,
+    scopeMembers: scopeMembersForPilates,
     scopeMembersForPilates,
     scopeByStudentIds,
     scopeLessons,

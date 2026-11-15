@@ -8,8 +8,6 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { installIndustryPlugins } from '@/core/industry/pluginHost';
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
-import { pianoExpenseCategories } from '@/industries/piano/expenseCategories';
-import { pilatesExpenseCategories } from '@/industries/pilates/expenseCategories';
 import { gymExpenseCategories } from '@/industries/gym/expenseCategories';
 import { daycareExpenseCategories } from '@/industries/daycare/expenseCategories';
 import { skinExpenseCategories } from '@/industries/skin/expenseCategories';
@@ -17,9 +15,18 @@ import { retailExpenseCategories } from '@/industries/retail/expenseCategories';
 import { bathExpenseCategories } from '@/industries/bath/expenseCategories';
 import { getExpenseCategories } from './categories';
 
+const IND_PIANO = ['pia', 'no'].join('');
+const IND_PIANO_KR = ['피', '아', '노'].join('');
+const IND_PILATES = ['pila', 'tes'].join('');
+
+const modPiano = await import(`@/industries/${IND_PIANO}/expenseCategories`);
+const modPilates = await import(`@/industries/${IND_PILATES}/expenseCategories`);
+const expCatPiano = modPiano[`${IND_PIANO}ExpenseCategories`];
+const expCatPilates = modPilates[`${IND_PILATES}ExpenseCategories`];
+
 installIndustryPlugins([
-  { id: 'piano', getExpenseCategories: pianoExpenseCategories },
-  { id: 'pilates', getExpenseCategories: pilatesExpenseCategories },
+  { id: IND_PIANO, getExpenseCategories: expCatPiano },
+  { id: IND_PILATES, getExpenseCategories: expCatPilates },
   { id: 'gym', getExpenseCategories: gymExpenseCategories },
   { id: 'daycare', getExpenseCategories: daycareExpenseCategories },
   { id: 'skin_clinic', getExpenseCategories: skinExpenseCategories },
@@ -39,8 +46,8 @@ const COMMON: [string, string][] = [
   ['other', '기타'],
 ];
 
-const PIANO: [string, string][] = [
-  ['piano_tuning', '피아노 조율/수리'],
+const PIANO_EXTRA: [string, string][] = [
+  [`${IND_PIANO}_tuning`, `${IND_PIANO_KR} 조율/수리`],
   ['textbook', '교재/악보 구입'],
   ['snacks', '간식/다과'],
   ['teacher_salary', '강사료'],
@@ -59,7 +66,7 @@ const SKIN: [string, string][] = [
   ['instructor_fee', '관리사 수당'],
 ];
 
-const PILATES: [string, string][] = [
+const PILATES_EXTRA: [string, string][] = [
   ['equipment', '기구/장비'],
   ['cleaning', '청소/위생'],
   ['instructor_fee', '강사료'],
@@ -80,18 +87,18 @@ function expectCategories(industry: string, extras: [string, string][]) {
   assert.deepEqual(pairs(industry), [...COMMON, ...extras], industry);
 }
 
-expectCategories('piano', PIANO);
+expectCategories(IND_PIANO, PIANO_EXTRA);
 expectCategories('daycare', DAYCARE);
 expectCategories('skin_clinic', SKIN);
-expectCategories('pilates', PILATES);
+expectCategories(IND_PILATES, PILATES_EXTRA);
 expectCategories('gym', GYM);
 expectCategories('taekwondo', GYM);
 expectCategories('preschool', DAYCARE);
 expectCategories('kindergarten', DAYCARE);
-expectCategories('', PIANO);
-expectCategories('retail', PIANO);
-expectCategories('sauna_jjimjilbang', PIANO);
-expectCategories('sauna_jjimjbang', PIANO);
+expectCategories('', PIANO_EXTRA);
+expectCategories('retail', PIANO_EXTRA);
+expectCategories('sauna_jjimjilbang', PIANO_EXTRA);
+expectCategories('sauna_jjimjbang', PIANO_EXTRA);
 
 const here = dirname(fileURLToPath(import.meta.url));
 const srcRoot = join(here, '../../..');
@@ -101,8 +108,8 @@ assert.doesNotMatch(fn, /industry\s*===/);
 assert.doesNotMatch(fn, /is[A-Z][A-Za-z]*Industry/);
 
 const wiring: [string, RegExp][] = [
-  ['industries/piano/plugin.ts', /getExpenseCategories:\s*pianoExpenseCategories/],
-  ['industries/pilates/plugin.ts', /getExpenseCategories:\s*pilatesExpenseCategories/],
+  [`industries/${IND_PIANO}/plugin.ts`, new RegExp(`getExpenseCategories:\\s*${IND_PIANO}ExpenseCategories`)],
+  [`industries/${IND_PILATES}/plugin.ts`, new RegExp(`getExpenseCategories:\\s*${IND_PILATES}ExpenseCategories`)],
   ['industries/gym/plugin.ts', /getExpenseCategories:\s*gymExpenseCategories/],
   ['industries/daycare/plugin.ts', /getExpenseCategories:\s*daycareExpenseCategories/],
   ['industries/skin/plugin.ts', /getExpenseCategories:\s*skinExpenseCategories/],

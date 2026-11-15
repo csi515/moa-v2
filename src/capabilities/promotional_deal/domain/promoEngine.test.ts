@@ -15,7 +15,7 @@ function run() {
     tenant_id: 'tenant-abc',
     title: '봄맞이 필라테스 3개월권 한정 특가',
     target_type: 'PASS',
-    target_id: 'pass-pilates-3m',
+    target_id: 'pass-studio-3m',
     original_price: 300000,
     special_price: 210000, // 30% 할인
     start_at: '2026-10-18T10:00:00Z',
@@ -98,7 +98,7 @@ function run() {
 
   // 6. 특가 정책 없음 (NO_DEAL)
   {
-    const result = resolveCurrentPrice(150000, null, new Date());
+    const result = resolveCurrentPrice(150000, null, new Date('2026-11-15T12:00:00Z'));
     assert.equal(result.currentPrice, 150000);
     assert.equal(result.isDiscounted, false);
     assert.equal(result.status, 'NO_DEAL');

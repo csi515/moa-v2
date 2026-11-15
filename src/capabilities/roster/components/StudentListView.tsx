@@ -52,8 +52,8 @@ import {
   getClassLabel,
   getCurrentYearMonth,
   getMonthBillingSignal,
-  getPianoBillingModeLabel,
-  getPianoSessionPassColumnLabel,
+  getSessionBillingModeLabel,
+  getSessionPassColumnLabel,
   getTodayAttendanceSignal,
   studentHasWeekday,
 } from './studentListHelpers';
@@ -595,9 +595,9 @@ export const StudentListView: React.FC = () => {
                     const badge = getStudentStatusBadge(st.status);
                     const att = getTodayAttendanceSignal(st.id, todayAttendanceByStudent);
                     const bill = getMonthBillingSignal(billingByStudent.get(st.id));
-                    const billingModeLabel = showSessionColumns ? getPianoBillingModeLabel(st) : '';
+                    const billingModeLabel = showSessionColumns ? getSessionBillingModeLabel(st) : '';
                     const passLabel = showSessionColumns
-                      ? getPianoSessionPassColumnLabel(st.id, sessionPasses)
+                      ? getSessionPassColumnLabel(st.id, sessionPasses)
                       : '';
                     return (
                       <tr
@@ -712,9 +712,9 @@ export const StudentListView: React.FC = () => {
               const att = getTodayAttendanceSignal(st.id, todayAttendanceByStudent);
               const bill = getMonthBillingSignal(billingByStudent.get(st.id));
               const guardian = getPrimaryGuardian(st.id);
-              const billingModeLabel = showSessionColumns ? getPianoBillingModeLabel(st) : '';
+              const billingModeLabel = showSessionColumns ? getSessionBillingModeLabel(st) : '';
               const passLabel = showSessionColumns
-                ? getPianoSessionPassColumnLabel(st.id, sessionPasses)
+                ? getSessionPassColumnLabel(st.id, sessionPasses)
                 : '';
               return (
                 <button

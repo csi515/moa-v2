@@ -312,7 +312,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
           isOpen={Boolean(selectedShareInvoice)}
           onClose={() => setSelectedShareInvoice(null)}
           invoice={selectedShareInvoice}
-          academyName={settings.name || '모아음악학원'}
+          academyName={settings.name || '모아 센터'}
           bankAccountText={bankAccountText}
         />
       )}

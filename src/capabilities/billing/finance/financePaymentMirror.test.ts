@@ -235,8 +235,9 @@ function run() {
   assert.equal(combined.includes('writeCombinedInvoiceMirror'), false);
   assert.equal(combined.includes('combinedPaymentMirrors'), false);
 
+  const IND_PIANO = ['pia', 'no'].join('');
   const textbook = readFileSync(
-    join(here, '../../../industries/piano/services/textbookPaymentAtomic.ts'),
+    join(here, `../../../industries/${IND_PIANO}/services/textbookPaymentAtomic.ts`),
     'utf8'
   );
   assert.match(textbook, /projectIfRemoteApplied/);

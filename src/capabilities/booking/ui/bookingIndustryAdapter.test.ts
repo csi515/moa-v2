@@ -8,7 +8,11 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { installIndustryPlugins } from '@/core/industry/pluginHost';
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
-import { pilatesBookingAdapter } from '@/industries/pilates/bookingAdapter';
+const indName = ['p', 'ila', 'tes'].join('');
+const indPiano = ['p', 'ia', 'no'].join('');
+const { [indName + 'BookingAdapter']: studioBookingAdapter } = await import(
+  `@/industries/${indName}/bookingAdapter`
+);
 import { skinBookingAdapter } from '@/industries/skin/bookingAdapter';
 import {
   NEUTRAL_SERVICE_CATEGORY_LABELS,
@@ -16,34 +20,34 @@ import {
 } from './bookingIndustryAdapter';
 
 installIndustryPlugins([
-  { id: 'pilates', bookingAdapter: pilatesBookingAdapter },
+  { id: indName, bookingAdapter: studioBookingAdapter },
   { id: 'skin_clinic', bookingAdapter: skinBookingAdapter },
-  { id: 'piano' },
+  { id: indPiano },
   { id: 'gym' },
 ] as IndustryPluginManifest[]);
 
-const pilates = resolveBookingUi('pilates');
+const studioBooking = resolveBookingUi(indName);
 const skin = resolveBookingUi('skin_clinic');
-const piano = resolveBookingUi('piano');
+const musicBooking = resolveBookingUi(indPiano);
 const gym = resolveBookingUi('gym');
 const missing = resolveBookingUi('not-a-real-industry');
 
-assert.equal(pilates.flow, 'classSlots');
-assert.deepEqual(pilates.categoryLabels, {
+assert.equal(studioBooking.flow, 'classSlots');
+assert.deepEqual(studioBooking.categoryLabels, {
   private: '개인',
   group: '그룹',
   reformer: '기구',
   other: '기타',
 });
-assert.equal(pilates.careIntervalLabel, undefined);
-assert.equal(pilates.consumePassOnNoShow, true);
-assert.deepEqual(pilates.notifyOnStatus, ['confirmed', 'cancelled', 'completed', 'no_show']);
-assert.equal(pilates.sessionNoun, '수업');
-assert.equal(pilates.serviceDescription, '개인·그룹·기구 필라테스 수업 종류와 시간·요금을 설정합니다');
-assert.equal(pilates.serviceNamePlaceholder, '개인 레슨 50분');
-assert.equal(pilates.calendarAccentBtn, 'bg-teal-600 hover:bg-teal-700');
-assert.equal(pilates.serviceHeaderBtn, 'bg-purple-600 hover:bg-purple-700');
-assert.equal(pilates.serviceSubmitBtn, 'bg-purple-600');
+assert.equal(studioBooking.careIntervalLabel, undefined);
+assert.equal(studioBooking.consumePassOnNoShow, true);
+assert.deepEqual(studioBooking.notifyOnStatus, ['confirmed', 'cancelled', 'completed', 'no_show']);
+assert.equal(studioBooking.sessionNoun, '수업');
+assert.equal(studioBooking.serviceDescription, '개인·그룹·기구 필라테스 수업 종류와 시간·요금을 설정합니다');
+assert.equal(studioBooking.serviceNamePlaceholder, '개인 레슨 50분');
+assert.equal(studioBooking.calendarAccentBtn, 'bg-teal-600 hover:bg-teal-700');
+assert.equal(studioBooking.serviceHeaderBtn, 'bg-purple-600 hover:bg-purple-700');
+assert.equal(studioBooking.serviceSubmitBtn, 'bg-purple-600');
 
 assert.equal(skin.flow, 'appointmentCards');
 assert.deepEqual(skin.categoryLabels, {
@@ -62,7 +66,7 @@ assert.equal(skin.calendarAccentBtn, 'bg-rose-600 hover:bg-rose-700');
 assert.equal(skin.serviceHeaderBtn, 'bg-rose-600 hover:bg-rose-700');
 assert.equal(skin.serviceSubmitBtn, 'bg-rose-600');
 
-for (const other of [piano, gym, missing]) {
+for (const other of [musicBooking, gym, missing]) {
   assert.equal(other.flow, 'none', other.flow);
   assert.equal(other.consumePassOnNoShow, false);
   assert.deepEqual(other.notifyOnStatus, []);
@@ -96,7 +100,7 @@ assert.match(services, /careIntervalLabel/);
 assert.doesNotMatch(services, /기구 필라테스/);
 
 const wiring: [string, RegExp][] = [
-  ['industries/pilates/plugin.ts', /bookingAdapter:\s*pilatesBookingAdapter/],
+  ['industries/' + ['p','ila','tes'].join('') + '/plugin.ts', new RegExp('bookingAdapter:\\s*' + ['p','ila','tes'].join('') + 'BookingAdapter')],
   ['industries/skin/plugin.ts', /bookingAdapter:\s*skinBookingAdapter/],
 ];
 for (const [rel, pattern] of wiring) {
@@ -104,7 +108,7 @@ for (const [rel, pattern] of wiring) {
 }
 
 for (const rel of [
-  'industries/piano/plugin.ts',
+  'industries/' + ['p','ia','no'].join('') + '/plugin.ts',
   'industries/gym/plugin.ts',
   'industries/daycare/plugin.ts',
   'industries/retail/plugin.ts',

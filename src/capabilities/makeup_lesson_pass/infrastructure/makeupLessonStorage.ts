@@ -87,7 +87,7 @@ export function issueAndSaveMakeupToken(params: {
 
 /**
  * 특정 학생의 결석 일자(originDate)에 대해 이미 발급된 유효한 토큰이 있는지 조회합니다.
- * organizationId가 제공되면 해당 학원으로 격리 필터링합니다.
+ * organizationId가 제공되면 해당 테넌트로 격리 필터링합니다.
  */
 export function findActiveMakeupTokenForAbsence(
   studentId: string,
@@ -114,7 +114,7 @@ export function findActiveMakeupTokenForAbsence(
 
 /**
  * 특정 학생이 보유한 사용 가능한(available) 보강 토큰 목록을 조회합니다.
- * organizationId가 제공되면 해당 학원으로 격리 필터링합니다 (학부모 앱 멀티 테넌트 대응).
+ * organizationId가 제공되면 해당 테넌트로 격리 필터링합니다 (학부모 앱 멀티 테넌트 대응).
  */
 export function getAvailableMakeupTokensForStudent(
   studentId: string,
@@ -201,7 +201,7 @@ export function createMakeupRequest(params: {
 }
 
 /**
- * 특정 학원의 대기 중(pending)인 보강 신청 목록을 조회합니다 (원장님용).
+ * 특정 테넌트의 대기 중(pending)인 보강 신청 목록을 조회합니다 (원장님용).
  */
 export function getPendingMakeupRequests(organizationId: string): MakeupRequest[] {
   const requests = loadMakeupRequests();

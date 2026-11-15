@@ -168,6 +168,14 @@ export const BUSINESS_INVARIANT_TESTS = [
   { script: 'test:post-login-navigation', group: 'authorization', kind: 'unit', ci: 'always', order: 97 },
   { script: 'test:journey-states', group: 'authorization', kind: 'unit', ci: 'always', order: 98 },
   { script: 'test:map-login-error', group: 'authorization', kind: 'unit', ci: 'always', order: 99 },
+  {
+    script: 'test:multi-industry-smoke',
+    group: 'industry',
+    kind: 'contract',
+    ci: 'always',
+    order: 100,
+    note: '7대 산업군 14개 대표 업종 멀티-테넌시 스모크 불변성 테스트',
+  },
 ];
 
 /** 메타/그룹 러너 — inventory 후보가 아님 */

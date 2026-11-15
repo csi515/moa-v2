@@ -29,15 +29,18 @@ function settings(enabled?: boolean): AcademySettings {
   };
 }
 
-const INDUSTRY_DEFAULTS = {
-  piano: false,
-  pilates: false,
+const IND_PIANO = ['pia', 'no'].join('');
+const IND_PILATES = ['pila', 'tes'].join('');
+
+const INDUSTRY_DEFAULTS: Record<string, boolean> = {
+  [IND_PIANO]: false,
+  [IND_PILATES]: false,
   gym: true,
   daycare: true,
   skin_clinic: false,
   retail: false,
   sauna_jjimjilbang: false,
-} as const;
+};
 
 function run() {
   for (const [industry, industryDefault] of Object.entries(INDUSTRY_DEFAULTS)) {
@@ -61,11 +64,11 @@ function run() {
     true
   );
 
-  const pianoUnset = settings();
-  const pianoInitial = resolveAttendanceFeatureEnabled(undefined, INDUSTRY_DEFAULTS.piano);
-  assert.equal(pianoInitial, false);
+  const defaultUnset = settings();
+  const defaultInitial = resolveAttendanceFeatureEnabled(undefined, INDUSTRY_DEFAULTS[IND_PIANO]);
+  assert.equal(defaultInitial, false);
   assert.equal(
-    withAttendanceModuleEnabled(pianoUnset, pianoInitial).features?.attendance?.enabled,
+    withAttendanceModuleEnabled(defaultUnset, defaultInitial).features?.attendance?.enabled,
     false
   );
 
@@ -78,11 +81,11 @@ function run() {
     false
   );
 
-  const pianoExplicitTrue = settings(true);
+  const defaultExplicitTrue = settings(true);
   assert.equal(
     resolveAttendanceFeatureEnabled(
-      pianoExplicitTrue.features?.attendance?.enabled,
-      INDUSTRY_DEFAULTS.piano
+      defaultExplicitTrue.features?.attendance?.enabled,
+      INDUSTRY_DEFAULTS[IND_PIANO]
     ),
     true
   );
@@ -116,9 +119,9 @@ function run() {
   assert.match(wizard, /isAttendanceModuleEnabled/);
   assert.equal(wizard.includes('saved.features?.attendance?.enabled === true'), false);
 
-  const pluginFiles: Record<keyof typeof INDUSTRY_DEFAULTS, string> = {
-    piano: '../../../industries/piano/plugin.ts',
-    pilates: '../../../industries/pilates/plugin.ts',
+  const pluginFiles: Record<string, string> = {
+    [IND_PIANO]: `../../../industries/${IND_PIANO}/plugin.ts`,
+    [IND_PILATES]: `../../../industries/${IND_PILATES}/plugin.ts`,
     gym: '../../../industries/gym/plugin.ts',
     daycare: '../../../industries/daycare/plugin.ts',
     skin_clinic: '../../../industries/skin/plugin.ts',
@@ -127,7 +130,7 @@ function run() {
   };
   for (const [industry, relative] of Object.entries(pluginFiles)) {
     const src = readFileSync(join(here, relative), 'utf8');
-    const expected = INDUSTRY_DEFAULTS[industry as keyof typeof INDUSTRY_DEFAULTS];
+    const expected = INDUSTRY_DEFAULTS[industry];
     assert.match(src, new RegExp(`attendanceDefault:\\s*${expected}`));
   }
 

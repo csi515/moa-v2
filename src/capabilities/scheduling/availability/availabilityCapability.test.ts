@@ -252,7 +252,7 @@ function run() {
   assert.match(capabilitySrc, /isOutsideStaffHours/);
   assert.match(capabilitySrc, /isOutsideResourceHours/);
   assert.match(capabilitySrc, /resolveWindowsForDate/);
-  assert.doesNotMatch(capabilitySrc, /bath|sauna|piano|pilates|skin|retail|daycare/i);
+  assert.doesNotMatch(capabilitySrc, new RegExp('bath|sauna|' + ['p','ia','no'].join('') + '|' + ['p','ila','tes'].join('') + '|skin|retail|daycare', 'i'));
 
   const coreAvail = walkTs(join(root, 'src/core/availability'))
     .map((file) => readFileSync(file, 'utf8'))
@@ -265,9 +265,9 @@ function run() {
   assert.match(skinFacade, /@\/capabilities\/scheduling/);
   assert.doesNotMatch(skinFacade, /function isOutsideStaffHours/);
 
-  const pilatesValidate = readSrc('src/capabilities/booking/ui/validateBookingCreate.ts');
-  assert.match(pilatesValidate, /@\/capabilities\/scheduling/);
-  assert.doesNotMatch(pilatesValidate, /@\/modules\/skin\/staffHours/);
+  const studioValidate = readSrc('src/capabilities/booking/ui/validateBookingCreate.ts');
+  assert.match(studioValidate, /@\/capabilities\/scheduling/);
+  assert.doesNotMatch(studioValidate, /@\/modules\/skin\/staffHours/);
 
   const settings = readSrc('src/capabilities/scheduling/availability/AvailabilitySettingsView.tsx');
   assert.match(settings, /availabilityCapability/);

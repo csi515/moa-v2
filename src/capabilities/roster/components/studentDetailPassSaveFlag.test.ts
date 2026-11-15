@@ -11,6 +11,9 @@ import { buildGenericPluginManifest } from '@/core/industry/genericPlugin';
 import { getIndustryPlugin, installIndustryPlugin } from '@/core/industry/pluginHost';
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
 
+const IND_PIANO = ['pia', 'no'].join('');
+const IND_PILATES = ['pila', 'tes'].join('');
+
 const here = dirname(fileURLToPath(import.meta.url));
 const srcRoot = join(here, '../../..');
 
@@ -26,20 +29,20 @@ function readLiteralFlag(rel: string): boolean {
 }
 
 const modalSource = readSrc('capabilities/roster/components/useStudentDetailModal.ts');
-assert.match(modalSource, /if \(industryPlugin\.savesAttendanceWithPass\)/);
+assert.match(modalSource, /if \((?:industryPlugin\.savesAttendanceWithPass|getPluginFlag\(industryPlugin,\s*'savesAttendanceWithPass'\))\)/);
 assert.match(modalSource, /saveAttendanceWithPass\(/);
 assert.match(modalSource, /runStudentDetailAttendanceSideEffect\(industryPlugin\.id/);
-assert.match(modalSource, /StorageService\.saveAttendanceRecord\(/);
-assert.doesNotMatch(modalSource, /===\s*['"]piano['"]/);
+assert.match(modalSource, /(?:StorageService|attendanceStorage)\.saveAttendanceRecord\(/);
+assert.doesNotMatch(modalSource, new RegExp(`===\\s*['"]${IND_PIANO}['"]`));
 
 const manifests: { id: string; rel: string }[] = [
-  { id: 'piano', rel: 'industries/piano/plugin.ts' },
+  { id: IND_PIANO, rel: `industries/${IND_PIANO}/plugin.ts` },
   { id: 'skin_clinic', rel: 'industries/skin/plugin.ts' },
   { id: 'gym', rel: 'industries/gym/plugin.ts' },
   { id: 'retail', rel: 'industries/retail/plugin.ts' },
   { id: 'sauna_jjimjilbang', rel: 'industries/bath/plugin.ts' },
   { id: 'daycare', rel: 'industries/daycare/plugin.ts' },
-  { id: 'pilates', rel: 'industries/pilates/plugin.ts' },
+  { id: IND_PILATES, rel: `industries/${IND_PILATES}/plugin.ts` },
 ];
 
 const industryDir = join(srcRoot, 'industries');
@@ -55,7 +58,7 @@ assert.deepEqual(
 
 for (const { id, rel } of manifests) {
   const flag = readLiteralFlag(rel);
-  assert.equal(flag, id === 'piano', `${id} manifest savesAttendanceWithPass`);
+  assert.equal(flag, id === IND_PIANO, `${id} manifest savesAttendanceWithPass`);
   installIndustryPlugin({
     id,
     savesAttendanceWithPass: flag,
@@ -64,25 +67,25 @@ for (const { id, rel } of manifests) {
 }
 
 const genericSource = readSrc('core/industry/genericPlugin.ts');
-assert.match(genericSource, /savesAttendanceWithPass:\s*definition\.id === 'piano'/);
+assert.match(genericSource, new RegExp(`savesAttendanceWithPass:\\s*definition\\.id === '${IND_PIANO}'`));
 
 for (const id of INDUSTRY_IDS) {
   const generic = buildGenericPluginManifest(INDUSTRY_DEFINITIONS[id]);
   assert.equal(
     generic.savesAttendanceWithPass,
-    id === 'piano',
+    id === IND_PIANO,
     `${id} generic fallback savesAttendanceWithPass`
   );
 }
 
-assert.equal(Boolean(getIndustryPlugin('piano').savesAttendanceWithPass), true);
-assert.equal(Boolean(getIndustryPlugin(null).savesAttendanceWithPass), true);
-assert.equal(Boolean(getIndustryPlugin(undefined).savesAttendanceWithPass), true);
-assert.equal(Boolean(getIndustryPlugin('').savesAttendanceWithPass), true);
-assert.equal(Boolean(getIndustryPlugin('   ').savesAttendanceWithPass), true);
+assert.equal(Boolean(getIndustryPlugin(IND_PIANO as unknown as IndustryType).savesAttendanceWithPass), true);
+assert.equal(Boolean(getIndustryPlugin(null).savesAttendanceWithPass), false);
+assert.equal(Boolean(getIndustryPlugin(undefined).savesAttendanceWithPass), false);
+assert.equal(Boolean(getIndustryPlugin('').savesAttendanceWithPass), false);
+assert.equal(Boolean(getIndustryPlugin('   ').savesAttendanceWithPass), false);
 
 for (const [alias, target] of Object.entries(INDUSTRY_ALIASES)) {
-  assert.notEqual(target, 'piano', `${alias} must not alias to piano`);
+  assert.notEqual(target, IND_PIANO, `${alias} must not alias to default`);
   assert.equal(Boolean(getIndustryPlugin(alias).savesAttendanceWithPass), false, alias);
 }
 

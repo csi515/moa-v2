@@ -202,8 +202,8 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
           : [
               {
                 ...newGuardianEntry(true),
-                name: (student as any).parentName || '',
-                phone: (student as any).parentPhone || '',
+                name: (student as Student & { parentName?: string }).parentName || '',
+                phone: (student as Student & { parentPhone?: string }).parentPhone || '',
               },
             ];
       nextCustomFields = extractCustomFieldValues(student.metadata, customFieldsDef);

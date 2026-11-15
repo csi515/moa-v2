@@ -141,7 +141,7 @@ export function ScheduleCalendarPage() {
   };
 
   // 2. Refine useList 활용 (선언적 데이터 계층 및 로컬 스토리지 폴백 보장)
-  const customersList = useList<any>({
+  const customersList = useList<Student>({
     resource: 'customers',
     filters: [
       {
@@ -153,35 +153,31 @@ export function ScheduleCalendarPage() {
     pagination: { mode: 'off' },
   });
 
-  const classesList = useList<any>({
+  const classesList = useList<ClassItem>({
     resource: 'classes',
     pagination: { mode: 'off' },
   });
 
-  const isLoadingCustomers =
-    (customersList as any).isLoading || (customersList as any).query?.isLoading;
-  const isLoadingClasses =
-    (classesList as any).isLoading || (classesList as any).query?.isLoading;
+  const isLoadingCustomers = customersList.query.isLoading;
+  const isLoadingClasses = classesList.query.isLoading;
 
   // 회원 목록: Refine 응답 우선 + rosterStorage 폴백
   const activeMembers: Student[] = useMemo(() => {
-    const rawRefine =
-      (customersList as any).data?.data || (customersList as any).query?.data?.data;
+    const rawRefine = customersList.query.data?.data;
     if (rawRefine && rawRefine.length > 0) {
-      return rawRefine.filter((c: any) => c.status === 'active');
+      return rawRefine.filter((c) => c.status === 'active');
     }
     return rosterStorage.getStudents().filter((s) => s.status === 'active');
-  }, [customersList]);
+  }, [customersList.query.data]);
 
   // 수업 목록: Refine 응답 우선 + rosterStorage 폴백
   const allClasses: ClassItem[] = useMemo(() => {
-    const rawRefine =
-      (classesList as any).data?.data || (classesList as any).query?.data?.data;
+    const rawRefine = classesList.query.data?.data;
     if (rawRefine && rawRefine.length > 0) {
-      return rawRefine as ClassItem[];
+      return rawRefine;
     }
     return rosterStorage.getClasses();
-  }, [classesList]);
+  }, [classesList.query.data]);
 
   const teachers = useMemo(() => rosterStorage.getTeachers(), []);
 
@@ -241,7 +237,7 @@ export function ScheduleCalendarPage() {
           dayOfWeek: dayKo,
           startTime: cls.startTime,
           endTime: cls.endTime || '18:00',
-          colorTheme: (cls.color as any) || 'indigo',
+          colorTheme: (cls.color as CalendarEventItem['colorTheme']) || 'indigo',
           capacity: {
             current: enrolled.length,
             max: cls.capacity || 6,

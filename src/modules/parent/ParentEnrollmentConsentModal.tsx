@@ -269,5 +269,4 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
       </div>
     </Modal>
   );
-  );
 };

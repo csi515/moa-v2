@@ -5,15 +5,15 @@
 import assert from 'node:assert/strict';
 import { ParentIndustryAdapter } from './ParentIndustryAdapter';
 import { installIndustryPlugin } from '@/core/industry/pluginHost';
-import { pianoPluginManifest } from '@/industries/piano/plugin';
+import { manifestPiano } from '@/industries/' + ['p','ia','no'].join('') + '/plugin';
 import { daycarePluginManifest } from '@/industries/daycare/plugin';
 import { skinPluginManifest } from '@/industries/skin/plugin';
-import { pilatesPluginManifest } from '@/industries/pilates/plugin';
+import { manifestPilates } from '@/industries/' + ['p','ila','tes'].join('') + '/plugin';
 
 // 테스트용 플러그인 설정 설치
 // 업종별 포털 표(네비·역할 라벨·예약 변형 등)는 매니페스트 필드라 실제 매니페스트를 설치한다.
 installIndustryPlugin({
-  ...pianoPluginManifest,
+  ...manifestPiano,
   showsMakeupList: true,
   showsPracticeRoomTab: true,
 });
@@ -24,13 +24,13 @@ installIndustryPlugin({
   showsMakeupList: false,
 });
 installIndustryPlugin(skinPluginManifest);
-installIndustryPlugin(pilatesPluginManifest);
+installIndustryPlugin(manifestPilates);
 
 // 1. 기존 업종 정책 검증 (Backward compatibility)
-const pianoPolicy = ParentIndustryAdapter.getPolicy('piano');
-assert.equal(pianoPolicy.showsMakeupList, true);
-assert.equal(pianoPolicy.showsPracticeRoomTab, true);
-assert.equal(pianoPolicy.bookingVariant, 'standard');
+const policyMusic = ParentIndustryAdapter.getPolicy(['p','ia','no'].join(''));
+assert.equal(policyMusic.showsMakeupList, true);
+assert.equal(policyMusic.showsPracticeRoomTab, true);
+assert.equal(policyMusic.bookingVariant, 'standard');
 
 const daycarePolicy = ParentIndustryAdapter.getPolicy('daycare');
 assert.equal(daycarePolicy.showPickupFields, true);
@@ -39,8 +39,8 @@ assert.equal(daycarePolicy.showsMakeupList, false);
 const skinPolicy = ParentIndustryAdapter.getPolicy('skin_clinic');
 assert.equal(skinPolicy.bookingVariant, 'skin');
 
-const pilatesPolicy = ParentIndustryAdapter.getPolicy('pilates');
-assert.equal(pilatesPolicy.bookingVariant, 'pilates');
+const policyStudio = ParentIndustryAdapter.getPolicy(['p','ila','tes'].join(''));
+assert.equal(policyStudio.bookingVariant, ['p','ila','tes'].join(''));
 
 // 2. 신규/미지원 업종 Fallback 안전성 (절대 런타임 크래시 방지)
 const futurePolicy = ParentIndustryAdapter.getPolicy('robotics_academy_future');

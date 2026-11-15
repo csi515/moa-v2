@@ -117,6 +117,7 @@ const P20_1_BUSINESS_INVARIANT_CHAIN = [
   'test:post-login-navigation',
   'test:journey-states',
   'test:map-login-error',
+  'test:multi-industry-smoke',
 ];
 
 const scripts = loadPackageScripts();

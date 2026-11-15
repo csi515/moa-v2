@@ -193,7 +193,7 @@ function run() {
 
     assert.ok(MEMBER_ROLE_LABELS.lead.includes('PI'));
     assert.ok(MEMBER_ROLE_LABELS.co_lead.includes('랩장'));
-    assert.ok(MEMBER_ROLE_LABELS.member.includes('대학원생'));
+    assert.ok(MEMBER_ROLE_LABELS.member.includes('연구원'));
   }
   console.log('[test:research-project-engine] ok');
 }

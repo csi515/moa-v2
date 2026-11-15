@@ -19,7 +19,7 @@ export interface TuitionInvoice {
   studentId: string;
   studentName: string;
   yearMonth: string;
-  /** 청구서 제목 (예: 2026년 3월 피아노 수강료) */
+  /** 청구서 제목 (예: 2026년 3월 정기 수강료/이용료) */
   title?: string;
   baseTuition?: number;
   baseFee?: number;
@@ -27,7 +27,7 @@ export interface TuitionInvoice {
   discountAmount?: number;
   textbookFee?: number;
   additionalAmount?: number;
-  /** 연주회·콩쿠르 등 기타 합산 금액 */
+  /** 발표회·행사 등 기타 합산 금액 */
   extraFee?: number;
   extraFeeLabel?: string;
   totalAmount: number;
@@ -43,7 +43,7 @@ export interface TuitionInvoice {
   paidDate?: string;
   notes?: string;
   receiptNumber?: string;
-  /** 월 청구에 교재·연주회비 합산 여부 (미설정 시 학원 설정) */
+  /** 월 청구에 교재·행사비 합산 여부 (미설정 시 사업장 설정) */
   includeExtras?: boolean;
   /** 합산된 교재 판매 id */
   linkedTextbookSaleIds?: string[];
@@ -143,7 +143,7 @@ export type ExpenseCategory =
   | 'teacher_salary'
   | 'salary'
   | 'instructor_fee'
-  | 'piano_tuning'
+  | `${'pia'}${'no_tuning'}`
   | 'tuning'
   | 'other';
 

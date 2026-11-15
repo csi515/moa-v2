@@ -92,17 +92,17 @@ assert.equal(metricsT1.bookingCount, 2);
 assert.equal(metricsT1.totalServiceUnits, 4);
 assert.equal(metricsT1.workHours, 40);
 
-// 4. Staff with bookings only (e.g. Pilates instructor)
-const pilatesMetrics = computeStaffPerformanceMetrics({
+// 4. Staff with bookings only (e.g. Session instructor)
+const bookingInstructorMetrics = computeStaffPerformanceMetrics({
   staffId: 't1',
   yearMonth: '2026-10',
   bookings: mockBookings,
   workHours: 20,
 });
 
-assert.equal(pilatesMetrics.lessonCount, 0);
-assert.equal(pilatesMetrics.bookingCount, 2);
-assert.equal(pilatesMetrics.totalServiceUnits, 2);
-assert.equal(pilatesMetrics.workHours, 20);
+assert.equal(bookingInstructorMetrics.lessonCount, 0);
+assert.equal(bookingInstructorMetrics.bookingCount, 2);
+assert.equal(bookingInstructorMetrics.totalServiceUnits, 2);
+assert.equal(bookingInstructorMetrics.workHours, 20);
 
 console.log('payrollCalcMetrics.test.ts: all tests passed!');

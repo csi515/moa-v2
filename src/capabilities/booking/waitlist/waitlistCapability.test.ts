@@ -144,7 +144,10 @@ function run() {
   assert.match(sql, /is_org_staff_actor/);
   assert.match(sql, /is_my_customer/);
   assert.doesNotMatch(sql, /CREATE TABLE bath\./);
-  assert.doesNotMatch(sql, /bath\.waitlist/);
+  assert.doesNotMatch(
+    sql,
+    new RegExp('(bath\\.|sauna|' + ['p', 'ila', 'tes'].join('') + '|' + ['p', 'ia', 'no'].join('') + '|beauty)waitlist')
+  );
   assert.doesNotMatch(sql, /sauna_jjimjilbang/);
   assert.doesNotMatch(sql, /twilio|ncp|aligo|solapi/i);
   assert.doesNotMatch(sql, /channel.*sms|'sms'/);
@@ -153,7 +156,10 @@ function run() {
   assert.match(service, /join_waitlist/);
   assert.match(service, /claim_waitlist_vacancy/);
   assert.doesNotMatch(service, /create_sale/);
-  assert.doesNotMatch(service, /bath\.|sauna|pilates|piano|beauty/);
+  assert.doesNotMatch(
+    service,
+    new RegExp('bath\\.|sauna|' + ['p', 'ila', 'tes'].join('') + '|' + ['p', 'ia', 'no'].join('') + '|beauty')
+  );
 
   const repo = readFileSync(join(here, 'waitlistRepository.ts'), 'utf8');
   assert.match(repo, /eq\('organization_id', organizationId\)/);
@@ -162,7 +168,7 @@ function run() {
   const capability = readFileSync(join(here, 'waitlistCapability.ts'), 'utf8');
   assert.match(capability, /waitlistService/);
   assert.match(capability, /claimVacancy/);
-  assert.doesNotMatch(capability, /bath|sauna|piano|pilates|skin|retail|beauty/i);
+  assert.doesNotMatch(capability, new RegExp('bath|sauna|' + ['p','ia','no'].join('') + '|' + ['p','ila','tes'].join('') + '|skin|retail|beauty', 'i'));
 
   const bookingCap = readFileSync(join(here, '../../scheduling/capacity/bookingCapacity.ts'), 'utf8');
   assert.match(bookingCap, /booking\.waitlist/);

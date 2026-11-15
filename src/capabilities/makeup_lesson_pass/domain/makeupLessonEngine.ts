@@ -243,7 +243,7 @@ export function assembleMakeupTokenIssueNotice(params: {
     params.originReason === 'advance_request'
       ? '사전 결석 신청'
       : params.originReason === 'instructor_cancel'
-      ? '학원 사정 휴강'
+      ? '기관 사정 휴강'
       : '결석';
   const prefix = params.academyName ? `[${params.academyName}] ` : '';
 

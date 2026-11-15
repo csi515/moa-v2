@@ -118,7 +118,7 @@ export async function toggleCheckInByPinLocal(params: {
   };
 }
 
-/** PIN 중복 검사 후 해시 생성 (학원 내 동일 숫자 PIN 금지) */
+/** PIN 중복 검사 후 해시 생성 (사업장 내 동일 숫자 PIN 금지) */
 export async function assignCustomerPin(params: {
   organizationId: string;
   customerId: string;

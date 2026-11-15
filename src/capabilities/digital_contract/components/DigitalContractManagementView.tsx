@@ -660,7 +660,7 @@ const NewContractModal: React.FC<NewContractModalProps> = ({ onClose, onCreated 
             >
               <option value="personal_training">1:1 PT 및 레슨 이용계약서</option>
               <option value="membership_pass">시설 정기 회원권 계약서</option>
-              <option value="academy_tuition">학원 수강 등록원서</option>
+              <option value="academy_tuition">수강/이용 등록원서</option>
               <option value="instructor_consignment">강사 강의 위탁계약서</option>
               <option value="staff_employment">표준 근로계약서</option>
             </select>

@@ -12,7 +12,7 @@ export type BillingValidationResult = {
  * 수납↔수입 연결 스모크 검증 (로컬 스토리지 기준).
  * UI/개발자 콘솔에서 billingStorage / commerceStorage + 이 함수로 확인 가능.
  */
-export function runBillingLinkageValidation(): BillingValidationResult[] {
+export function runBillingLinkageValidation(industry = 'default'): BillingValidationResult[] {
   const results: BillingValidationResult[] = [];
 
   const tuitionPayments = billingStorage.getTuitionPayments();
@@ -57,7 +57,9 @@ export function runBillingLinkageValidation(): BillingValidationResult[] {
         : `고아 연동 수입 ${linkedOrphans.length}건`,
   });
 
-  const summary = billingStorage.getFinanceSummary('piano');
+  const summary = (billingStorage as any).getFinanceSummary
+    ? (billingStorage as any).getFinanceSummary(industry)
+    : { currentYearMonth: new Date().toISOString().slice(0, 7), totalIncomeThisMonth: 0 };
   const entrySum = incomes
     .filter((e) => e.date.startsWith(summary.currentYearMonth))
     .reduce((s, e) => s + e.amount, 0);

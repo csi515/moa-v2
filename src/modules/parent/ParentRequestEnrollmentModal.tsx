@@ -216,5 +216,4 @@ export const ParentRequestEnrollmentModal: React.FC<ParentRequestEnrollmentModal
       </div>
     </Modal>
   );
-  );
 };

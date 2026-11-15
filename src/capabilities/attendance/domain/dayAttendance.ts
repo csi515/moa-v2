@@ -1,6 +1,6 @@
-/** 등원(일자) 출결 — 레슨(classId) 출결과 구분하는 sentinel */
+/** 일자별 기본 출결 — 레슨(classId) 출결과 구분하는 sentinel */
 export const DAY_ATTENDANCE_CLASS_ID = 'c-default';
-export const DAY_ATTENDANCE_CLASS_NAME = '학원 등원';
+export const DAY_ATTENDANCE_CLASS_NAME = '기본 출석';
 
 export type DayAttendanceRow = {
   date: string;

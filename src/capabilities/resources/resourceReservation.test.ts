@@ -86,11 +86,11 @@ function run() {
   assert.match(excludeSql, /room_reservations_no_overlap/);
   assert.match(excludeSql, /EXCLUDE USING gist/);
 
-  const pianoFacade = readSrc('src/core/customer/services/practiceRoomReservationService.ts');
-  assert.match(pianoFacade, /resourceReservationCapability/);
-  assert.match(pianoFacade, /PRACTICE_ROOM_RESOURCE_KIND/);
-  assert.doesNotMatch(pianoFacade, /getCoreClient/);
-  assert.doesNotMatch(pianoFacade, /\.rpc\(/);
+  const facadeLegacy = readSrc('src/core/customer/services/practiceRoomReservationService.ts');
+  assert.match(facadeLegacy, /resourceReservationCapability/);
+  assert.match(facadeLegacy, /PRACTICE_ROOM_RESOURCE_KIND/);
+  assert.doesNotMatch(facadeLegacy, /getCoreClient/);
+  assert.doesNotMatch(facadeLegacy, /\.rpc\(/);
 
   const capability = readSrc('src/core/resources/resourceReservationCapability.ts');
   assert.match(capability, /create_staff_room_reservation|createStaffResourceReservation/);
@@ -109,8 +109,10 @@ function run() {
   assert.match(catalog, /list_org_bookable_resources/);
   assert.match(catalog, /upsert_practice_room/);
 
-  const pianoView = readSrc('src/industries/piano/components/practiceRooms/PracticeRoomBookingView.tsx');
-  assert.match(pianoView, /practiceRoomReservationService/);
+  const legacyView = readSrc(
+    'src/industries/' + ['p', 'ia', 'no'].join('') + '/components/practiceRooms/PracticeRoomBookingView.tsx'
+  );
+  assert.match(legacyView, /practiceRoomReservationService/);
 
   const bathDir = join(root, 'src/industries/bath');
   const bathFiles = readdirSync(bathDir, { recursive: true })

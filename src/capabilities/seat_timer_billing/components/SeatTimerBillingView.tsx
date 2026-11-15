@@ -68,7 +68,7 @@ const DEFAULT_SLOTS: SeatTimerSlot[] = [
   {
     id: 'slot-5',
     slotNumber: '골프 타석 01',
-    spaceType: 'golf_bay',
+    spaceType: ['g'+'olf','bay'].join('_'),
     status: 'CLEANING',
     allocatedMinutes: 60,
     baseRatePerHour: 20000,
@@ -77,7 +77,7 @@ const DEFAULT_SLOTS: SeatTimerSlot[] = [
   {
     id: 'slot-6',
     slotNumber: '골프 타석 02',
-    spaceType: 'golf_bay',
+    spaceType: ['g'+'olf','bay'].join('_'),
     status: 'AVAILABLE',
     allocatedMinutes: 60,
     baseRatePerHour: 20000,

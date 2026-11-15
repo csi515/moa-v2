@@ -52,7 +52,7 @@ export function buildParentInviteShareMessage(params: {
   guardianName?: string;
   expiresDays?: number;
 }): string {
-  const org = params.organizationName || '학원';
+  const org = params.organizationName || '사업장';
   const student = params.studentName;
   const guardianGreeting = params.guardianName
     ? `${params.guardianName} 학부모님`
@@ -61,13 +61,13 @@ export function buildParentInviteShareMessage(params: {
 
   return `[${org}] ${guardianGreeting} 안녕하세요!
 
-학원 출결 알림, 레슨 진도 및 주간 시간표 확인을 위한 '모아 학부모 앱' 초대장입니다.
+출결 알림, 세션 진도 및 주간 일정 확인을 위한 '모아 보호자 앱' 초대장입니다.
 
 아래 초대 링크를 터치하시면 별도 절차 없이 원클릭으로 간편하게 연결됩니다:
 ${params.inviteUrl}
 
 (유효기간: 발급일로부터 ${days}일 이내 접속)
-궁금하신 점이나 문의사항은 언제든 편하게 학원으로 연락해 주세요. 감사합니다.`;
+궁금하신 점이나 문의사항은 언제든 편하게 사업장으로 연락해 주세요. 감사합니다.`;
 }
 
 /**
@@ -88,7 +88,7 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
 }) => {
   const { currentOrganization } = useOrganization();
   const orgId = currentOrganization?.id || 'demo-org';
-  const orgName = currentOrganization?.name || '음악학원';
+  const orgName = currentOrganization?.name || '모아 센터';
 
   const [loading, setLoading] = useState(false);
   const [inviteItems, setInviteItems] = useState<GeneratedInviteItem[]>([]);

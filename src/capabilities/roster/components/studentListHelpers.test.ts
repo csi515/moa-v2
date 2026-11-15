@@ -1,8 +1,8 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  getPianoBillingModeLabel,
-  getPianoSessionPassColumnLabel,
+  getSessionBillingModeLabel,
+  getSessionPassColumnLabel,
   getStudentPassOrMembershipSignal,
   getMonthBillingSignal,
   getTodayAttendanceSignal,
@@ -249,14 +249,14 @@ describe('studentListHelpers - getStudentPassOrMembershipSignal', () => {
 });
 
 describe('studentListHelpers - legacy & existing helpers', () => {
-  it('getPianoBillingModeLabel: session_pass이면 회차권, 아니면 일반을 반환한다', () => {
-    assert.equal(getPianoBillingModeLabel({ billingMode: 'session_pass' }), '회차권');
-    assert.equal(getPianoBillingModeLabel({ billingMode: 'monthly' }), '일반');
-    assert.equal(getPianoBillingModeLabel({}), '일반');
+  it('getSessionBillingModeLabel: session_pass이면 회차권, 아니면 일반을 반환한다', () => {
+    assert.equal(getSessionBillingModeLabel({ billingMode: 'session_pass' }), '회차권');
+    assert.equal(getSessionBillingModeLabel({ billingMode: 'monthly' }), '일반');
+    assert.equal(getSessionBillingModeLabel({}), '일반');
   });
 
-  it('getPianoSessionPassColumnLabel: 회차권이 없으면 해당 없음, 있으면 남은 N회를 반환한다', () => {
-    assert.equal(getPianoSessionPassColumnLabel('st-1', []), '해당 없음');
+  it('getSessionPassColumnLabel: 회차권이 없으면 해당 없음, 있으면 남은 N회를 반환한다', () => {
+    assert.equal(getSessionPassColumnLabel('st-1', []), '해당 없음');
 
     const passes: SessionPass[] = [
       {
@@ -270,7 +270,7 @@ describe('studentListHelpers - legacy & existing helpers', () => {
         createdAt: '2026-01-01T00:00:00Z',
       },
     ];
-    assert.equal(getPianoSessionPassColumnLabel('st-1', passes), '남은 4회');
+    assert.equal(getSessionPassColumnLabel('st-1', passes), '남은 4회');
   });
 
   it('getMonthBillingSignal: 미납/완납/청구없음 신호를 적절한 톤으로 반환한다', () => {

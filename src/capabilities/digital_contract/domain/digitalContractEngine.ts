@@ -1,7 +1,7 @@
 /**
  * 현장 전자계약 & 환불 규정 서명 보관 도메인 엔진 (Pure Functions)
  *
- * 적용 업종: 1:1 PT샵(pt_fitness), 헬스장(gym_fitness), 학원 8종, 미용실, 스파
+ * 적용 업종: 1:1 PT샵(pt_fitness), 헬스장(gym_fitness), 교육/학습 8종, 미용실, 스파
  *
  * 주요 기능:
  *  1. 표준이용계약서(PT, 회원권, 수강료) 및 표준근로계약서 조항 관리
@@ -12,7 +12,7 @@
 export type ContractTemplateType =
   | 'personal_training' // 1:1 PT 및 레슨 이용계약서
   | 'membership_pass' // 피트니스/시설 정기 회원권 계약서
-  | 'academy_tuition' // 학원 수강 등록 및 교습비 계약서
+  | 'academy_tuition' // 수강 등록 및 교습비 계약서
   | 'staff_employment' // 파트타임 강사/직원 표준근로계약서
   | 'instructor_consignment'; // 문화센터 강사 강의 위탁 및 매출배분 계약서
 

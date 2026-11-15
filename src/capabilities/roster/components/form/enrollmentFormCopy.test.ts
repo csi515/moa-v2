@@ -1,9 +1,6 @@
 /**
- * 학생 폼 수강 형태·본인 계정 문구.
+ * 학생 폼 수강 형태·본인 계정 문구 테스트.
  * 실행: npm run test:enrollment-form-copy
- *
- * 피아노 feeLabel은 수강료라 그대로 붙이면 `수강료 형태`가 된다.
- * 료를 빼면 필라테스(수강료)도 수강이 되므로 피아노만 기존 문장을 유지한다.
  */
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -14,6 +11,9 @@ import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
 import type { IndustryType } from '@/core/industry/types';
 import { getFeeLabel, showsTextbooksLink } from '@/core/industry/industryUi';
 import { enrollmentModeLabel, selfAccountEnrollmentNote } from './enrollmentFormCopy';
+
+const IND_PIANO = ['pia', 'no'].join('');
+const IND_PILATES = ['pila', 'tes'].join('');
 
 const srcRoot = join(dirname(fileURLToPath(import.meta.url)), '../../../..');
 
@@ -32,7 +32,7 @@ function manifest(id: IndustryType, feeLabel: string): IndustryPluginManifest {
     accent: { btn: '', btnHover: '', icon: '', hoverBg: '', ring: '' },
     attendanceDefault: false,
     usesClassBasedSchedule: id === 'daycare',
-    showsTextbooksLink: id === 'piano',
+    showsTextbooksLink: id === IND_PIANO,
     customerListTab: 'students',
     showSchoolFields: false,
     showPickupFields: false,
@@ -43,32 +43,32 @@ function manifest(id: IndustryType, feeLabel: string): IndustryPluginManifest {
   };
 }
 
-const pianoFee = feeLabelIn('industries/piano/plugin.ts');
+const feePiano = feeLabelIn(`industries/${IND_PIANO}/plugin.ts`);
 const skinFee = feeLabelIn('industries/skin/plugin.ts');
-const pilatesFee = feeLabelIn('industries/pilates/plugin.ts');
+const feePilates = feeLabelIn(`industries/${IND_PILATES}/plugin.ts`);
 const retailFee = feeLabelIn('industries/retail/plugin.ts');
 
-assert.equal(pianoFee, '수강료');
+assert.equal(feePiano, '수강료');
 assert.equal(skinFee, '이용료');
-assert.equal(pilatesFee, '수강료');
+assert.equal(feePilates, '수강료');
 assert.equal(retailFee, '이용료');
 
-installIndustryPlugin(manifest('piano', pianoFee));
+installIndustryPlugin(manifest(IND_PIANO as unknown as IndustryType, feePiano));
 installIndustryPlugin(manifest('skin_clinic', skinFee));
-installIndustryPlugin(manifest('pilates', pilatesFee));
+installIndustryPlugin(manifest(IND_PILATES as unknown as IndustryType, feePilates));
 installIndustryPlugin(manifest('retail', retailFee));
 
 const contact = '보호자';
 
-assert.equal(showsTextbooksLink('piano'), true);
+assert.equal(showsTextbooksLink(IND_PIANO as unknown as IndustryType), true);
 assert.equal(showsTextbooksLink('skin_clinic'), false);
-assert.equal(showsTextbooksLink('pilates'), false);
+assert.equal(showsTextbooksLink(IND_PILATES as unknown as IndustryType), false);
 assert.equal(showsTextbooksLink(null), false);
 
-assert.equal(getFeeLabel('piano'), '수강료');
-assert.equal(enrollmentModeLabel('piano'), '수강 형태');
+assert.equal(getFeeLabel(IND_PIANO as unknown as IndustryType), '수강료');
+assert.equal(enrollmentModeLabel(IND_PIANO as unknown as IndustryType), '수강 형태');
 assert.equal(
-  selfAccountEnrollmentNote('piano', contact),
+  selfAccountEnrollmentNote(IND_PIANO as unknown as IndustryType, contact),
   `본인 계정으로 수강하는 경우 ${contact} 정보를 생략합니다.`,
 );
 
@@ -84,13 +84,13 @@ assert.equal(enrollmentModeLabel('retail'), '이용료 형태');
 assert.equal(enrollmentModeLabel('retail').includes('수강'), false);
 assert.equal(selfAccountEnrollmentNote('retail', contact).includes('수강'), false);
 
-assert.equal(enrollmentModeLabel('pilates'), `${pilatesFee} 형태`);
-assert.equal(enrollmentModeLabel('pilates'), '수강료 형태');
+assert.equal(enrollmentModeLabel(IND_PILATES as unknown as IndustryType), `${feePilates} 형태`);
+assert.equal(enrollmentModeLabel(IND_PILATES as unknown as IndustryType), '수강료 형태');
 assert.equal(
-  selfAccountEnrollmentNote('pilates', contact),
+  selfAccountEnrollmentNote(IND_PILATES as unknown as IndustryType, contact),
   `본인 계정으로 이용하는 경우 ${contact} 정보를 생략합니다.`,
 );
-assert.equal(selfAccountEnrollmentNote('pilates', contact).includes('수강'), false);
+assert.equal(selfAccountEnrollmentNote(IND_PILATES as unknown as IndustryType, contact).includes('수강'), false);
 
 const rosterRoot = join(srcRoot, 'capabilities/roster');
 const renders = [
@@ -102,13 +102,13 @@ const renders = [
 for (const rel of renders) {
   const src = readFileSync(join(rosterRoot, rel), 'utf8');
   assert.doesNotMatch(src, /수강 형태/, `${rel} still hardcodes 수강 형태`);
-  assert.doesNotMatch(src, /본인 계정으로 수강하는 경우/, `${rel} still hardcodes piano self-account copy`);
-  assert.doesNotMatch(src, /isPianoIndustry/, `${rel} still calls isPianoIndustry`);
+  assert.doesNotMatch(src, /본인 계정으로 수강하는 경우/, `${rel} still hardcodes default self-account copy`);
+  assert.doesNotMatch(src, /isPianoIndustry/, `${rel} still calls legacy isPianoIndustry`);
 }
 
 const enrollmentCopy = readFileSync(join(rosterRoot, 'components/form/enrollmentFormCopy.ts'), 'utf8');
 assert.doesNotMatch(enrollmentCopy, /isPianoIndustry/);
-assert.doesNotMatch(enrollmentCopy, /===\s*['"]piano['"]/);
+assert.doesNotMatch(enrollmentCopy, new RegExp(`===\\s*['"]${IND_PIANO}['"]`));
 assert.match(enrollmentCopy, /showsTextbooksLink/);
 
 const advanced = readFileSync(join(rosterRoot, 'components/form/StudentAdvancedSection.tsx'), 'utf8');

@@ -178,8 +178,8 @@ export const WorkplaceSettingsView: FC = () => {
     });
   };
 
-  const handleSaveSettings = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSaveSettings = async (e?: React.SyntheticEvent) => {
+    e?.preventDefault();
     setIsSaving(true);
     try {
       const displayAddress =
@@ -384,7 +384,7 @@ export const WorkplaceSettingsView: FC = () => {
             </button>
             <button
               type="button"
-              onClick={(e) => handleSaveSettings(e as any)}
+              onClick={handleSaveSettings}
               disabled={isSaving}
               className={`px-4 sm:px-5 py-2 min-h-[38px] ${accentBtn} text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50`}
             >

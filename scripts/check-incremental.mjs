@@ -97,8 +97,8 @@ export function inspectFile(filePath, contentOverride = null, changedLines = nul
   };
 
   // [RULE 1] 아키텍처 의존성 경계 검사
-  // Core/Capability -> Industry 참조 금지
-  if (relPath.startsWith('src/core/') || relPath.startsWith('src/capabilities/')) {
+  // Core/Capability -> Industry 참조 금지 (테스트 파일 제외: check-architecture-dependencies와 일치)
+  if ((relPath.startsWith('src/core/') || relPath.startsWith('src/capabilities/')) && !/\.test\.(ts|tsx)$/.test(relPath)) {
     const lines = cleanContent.split('\n');
     lines.forEach((line, idx) => {
       if (/from\s+['"][^'"]*\/industries\//.test(line) || /from\s+['"]@\/industries\//.test(line)) {

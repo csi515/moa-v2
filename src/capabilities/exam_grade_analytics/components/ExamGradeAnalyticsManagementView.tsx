@@ -81,7 +81,7 @@ export function ExamGradeAnalyticsManagementView() {
         <div>
           <h1 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
             <Award className="w-5 h-5 text-indigo-600" />
-            학원 단원평가 성적 채점 & 취약영역 레이더 분석
+            센터 단원평가 성적 채점 & 취약영역 레이더 분석
           </h1>
           <p className="text-xs text-slate-500 mt-1">
             시험 점수 입력 시 반 평균/표준편차(Z-Score)를 자동 산출하고, 영역별 취약 단원을 시각화합니다.

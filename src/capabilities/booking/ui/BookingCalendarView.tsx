@@ -51,7 +51,7 @@ export const BookingCalendarView: React.FC = () => {
   const accentTab = bookingUi.calendarAccentTab;
   const accentText = bookingUi.calendarAccentText;
   const refreshKey = useStorageRefresh('bookings');
-  const { isScoped, staffId, scopeMembersForPilates } = useStaffScope();
+  const { isScoped, staffId, scopeMembers } = useStaffScope();
 
   // 동료 스케줄 상호 조회 / 오버레이 필터 모드
   const [scheduleScopeMode, setScheduleScopeMode] = React.useState<ScheduleViewMode>(
@@ -128,11 +128,11 @@ export const BookingCalendarView: React.FC = () => {
 
   const members = useMemo(
     () =>
-      scopeMembersForPilates(
+      scopeMembers(
         rosterStorage.getStudents().filter((s) => s.status === 'active'),
         allBookingsRaw
       ),
-    [allBookingsRaw, scopeMembersForPilates, refreshKey]
+    [allBookingsRaw, scopeMembers, refreshKey]
   );
 
   const {

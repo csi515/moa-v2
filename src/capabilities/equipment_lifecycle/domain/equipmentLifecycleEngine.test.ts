@@ -11,7 +11,7 @@ import {
 console.log('--- Testing equipmentLifecycleEngine ---');
 
 // Test 1: Straight-line depreciation and repair vs replace recommendation
-const pilatesReformer: EquipmentAsset = {
+const studioReformer: EquipmentAsset = {
   id: 'eq_1',
   name: '캐딜락 리포머 1호',
   category: 'fitness',
@@ -24,7 +24,7 @@ const pilatesReformer: EquipmentAsset = {
   status: 'good',
 };
 
-const decision1 = evaluateRepairVsReplaceDecision(pilatesReformer, '2026-10-14T00:00:00Z');
+const decision1 = evaluateRepairVsReplaceDecision(studioReformer, '2026-10-14T00:00:00Z');
 assert.strictEqual(decision1.depreciationMonthsElapsed, 24);
 assert.strictEqual(decision1.repairCostRatioPercent, 20);
 assert.strictEqual(decision1.recommendation, 'maintain_repair');
@@ -53,13 +53,13 @@ console.log('✅ Test 2 passed: High repair cost triggers replacement recommenda
 const urgencyDue = evaluateEquipmentUrgency(oldEspressoMachine, '2026-10-14T00:00:00Z');
 assert.strictEqual(urgencyDue, 'overdue');
 
-const reported = reportEquipmentBreakdown(pilatesReformer, '리포머 3번 스프링 파손 위험');
+const reported = reportEquipmentBreakdown(studioReformer, '리포머 3번 스프링 파손 위험');
 assert.strictEqual(reported.status, 'breakdown');
 assert.strictEqual(reported.breakdownNotes, '리포머 3번 스프링 파손 위험');
 console.log('✅ Test 3 passed: Overdue maintenance detection and breakdown reporting');
 
 // Test 4: 월별 감가상각비 집계 및 간이 손익계산서(ledger_simple) 분개 전표 생성
-const assets = [pilatesReformer, oldEspressoMachine];
+const assets = [studioReformer, oldEspressoMachine];
 const depReport = calculateMonthlyDepreciationReport(assets, '2026-10');
 
 // 리포머: (6,000,000 - 600,000) / 60개월 = 월 90,000원 (상각 진행 중)

@@ -100,8 +100,8 @@ describe('emergency_alert_broadcast - domain engine', () => {
     assert.ok(svg.includes('대설주의보'));
     assert.ok(svg.includes('CRITICAL'));
 
-    const text = formatEmergencyBroadcastText(broadcast, '모아 예체능 학원');
-    assert.ok(text.includes('모아 예체능 학원'));
+    const text = formatEmergencyBroadcastText(broadcast, '모아 예체능 센터');
+    assert.ok(text.includes('모아 예체능 센터'));
     assert.ok(text.includes('대설주의보'));
     assert.ok(text.includes('https://moa.app/alert/bc-1'));
     assert.ok(text.includes('보강 처리됩니다'));

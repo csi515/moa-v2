@@ -2,9 +2,9 @@ import type { IndustryType } from '@/core/industry/types';
 import { getFeeLabel, showsTextbooksLink } from '@/core/industry/industryUi';
 
 /**
- * 원생 등록 폼의 학원형 문구와 시간표 배치.
+ * 원생 등록 폼의 교육형 문구와 시간표 배치.
  * 업종 id를 비교하지 않는다. 교재 링크 플래그가 켜진 업종만
- * 기존 피아노 문구와 시간표 버튼을 쓴다. 지금은 피아노 매니페스트만 true다.
+ * 기존 문구와 시간표 버튼을 쓴다.
  * 반 시간표(usesClassBasedSchedule)는 체육관·어린이집도 켜져 있어 쓰면
  * 시간표 버튼을 보는 업종이 늘어난다.
  */
@@ -14,7 +14,7 @@ function usesAcademyRosterForm(
   return showsTextbooksLink(industry);
 }
 
-/** 고급 섹션 제목. 학원형 폼은 기존 문구(가운데 점·공백, (선택) 없음)를 유지한다. */
+/** 고급 섹션 제목. 교육형 폼은 기존 문구(가운데 점·공백, (선택) 없음)를 유지한다. */
 export function rosterAdvancedSectionTitle(
   industry: IndustryType | string | null | undefined,
 ): string {
@@ -24,7 +24,7 @@ export function rosterAdvancedSectionTitle(
 
 /**
  * 수업 배정 안내.
- * 학원형 폼만 시간표 반영을 말한다. 다른 업종은 시간표 배치 UI를 열지 않는 중립 문장이다.
+ * 교육형 폼만 시간표 반영을 말한다. 다른 업종은 시간표 배치 UI를 열지 않는 중립 문장이다.
  */
 export function rosterClassAssignHelper(
   industry: IndustryType | string | null | undefined,
@@ -36,7 +36,7 @@ export function rosterClassAssignHelper(
   return `선택한 ${serviceLabel}은(는) 나중에 추가해도 됩니다.`;
 }
 
-/** 요금 블록 제목. 학원형 폼은 feeLabel이 수강료가 아니게 바뀌어도 기존 문구를 유지한다. */
+/** 요금 블록 제목. 교육형 폼은 feeLabel이 수강료가 아니게 바뀌어도 기존 문구를 유지한다. */
 export function rosterFeeInfoHeading(
   industry: IndustryType | string | null | undefined,
 ): string {
@@ -44,7 +44,7 @@ export function rosterFeeInfoHeading(
   return `${getFeeLabel(industry)} 정보`;
 }
 
-/** 월 청구 금액 라벨. 학원형 폼은 기존 문구를 유지한다. */
+/** 월 청구 금액 라벨. 교육형 폼은 기존 문구를 유지한다. */
 export function rosterRegularFeeLabel(
   industry: IndustryType | string | null | undefined,
 ): string {
@@ -52,7 +52,7 @@ export function rosterRegularFeeLabel(
   return `정규 수업 ${getFeeLabel(industry)}`;
 }
 
-/** 신규 등록 모달 설명. 학원형 폼은 보호자·수강료 문구를 그대로 둔다. */
+/** 신규 등록 모달 설명. 교육형 폼은 보호자·수강료 문구를 그대로 둔다. */
 export function rosterCreateFormDescription(
   industry: IndustryType | string | null | undefined,
   contactLabel: string,
@@ -70,7 +70,7 @@ export function rosterNotesPlaceholder(contactLabel: string): string {
 
 /**
  * 등록 직후 안내.
- * 학원형 폼은 서비스 라벨이 반일 때 기존 문장과 같다. 다른 업종은 시간표를 말하지 않는다.
+ * 교육형 폼은 서비스 라벨이 반일 때 기존 문장과 같다. 다른 업종은 시간표를 말하지 않는다.
  */
 export function rosterPostSaveHint(
   industry: IndustryType | string | null | undefined,
@@ -82,5 +82,5 @@ export function rosterPostSaveHint(
   return '다음 작업을 선택하세요.';
 }
 
-/** 학원형 폼의 시간표 배치 버튼. 다른 업종에는 이 버튼을 그리지 않는다. */
+/** 교육형 폼의 시간표 배치 버튼. 다른 업종에는 이 버튼을 그리지 않는다. */
 export const ROSTER_TIMETABLE_PLACE_BUTTON = '시간표에 배치';

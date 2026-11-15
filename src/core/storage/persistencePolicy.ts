@@ -48,6 +48,7 @@ export const PERSISTENCE_POLICY_RULES: Record<PersistencePolicy, PersistencePoli
  * 값은 src/services/adapters/storageKeys.ts STORAGE_KEYS 와 동일해야 한다.
  */
 export const DECLARED_STORAGE_KEY_POLICIES = {
+  // 1. 서버 신뢰성 (Server-Authoritative)
   piano_app_tuition_payments: 'server-authoritative',
   piano_app_invoices: 'server-authoritative',
   core_session_passes: 'server-authoritative',
@@ -55,24 +56,12 @@ export const DECLARED_STORAGE_KEY_POLICIES = {
   core_schedules: 'server-authoritative',
   piano_app_textbook_sales: 'server-authoritative',
   piano_app_textbook_payments: 'server-authoritative',
+
+  // 2. 서버-로컬 캐시 동기화 (Server-With-Local-Cache)
   piano_app_students: 'server-with-local-cache',
   piano_app_teachers: 'server-with-local-cache',
   piano_app_settings: 'server-with-local-cache',
   piano_app_attendance: 'server-with-local-cache',
-  daycare_care_child_records: 'server-with-local-cache',
-  daycare_care_incidents: 'server-with-local-cache',
-  piano_app_active_user: 'local-only',
-  piano_app_initialized_v3: 'local-only',
-  piano_app_onboarding_progress_v1: 'local-only',
-  core_shuttle_ride_requests: 'local-only',
-} as const satisfies Record<string, PersistencePolicy>;
-
-/**
- * 아직 재분류하지 않은 기존 STORAGE_KEYS.
- * 신규 키는 여기가 아니라 DECLARED_STORAGE_KEY_POLICIES에 넣는다.
- * 런타임 fallback은 유지한다 — 이 목록은 누락 탐지용.
- */
-export const LEGACY_STORAGE_KEY_POLICIES = {
   piano_app_parents: 'server-with-local-cache',
   core_parent_student_links: 'server-with-local-cache',
   piano_app_classes: 'server-with-local-cache',
@@ -97,8 +86,9 @@ export const LEGACY_STORAGE_KEY_POLICIES = {
   piano_learning_reports: 'server-with-local-cache',
   piano_app_notifications: 'server-with-local-cache',
   core_service_offerings: 'server-with-local-cache',
-  core_slot_recruitments: 'local-only',
   core_practice_room_bookings: 'server-with-local-cache',
+  daycare_care_child_records: 'server-with-local-cache',
+  daycare_care_incidents: 'server-with-local-cache',
   daycare_care_journals: 'server-with-local-cache',
   daycare_medication_requests: 'server-with-local-cache',
   daycare_care_staff_health_certs: 'server-with-local-cache',
@@ -106,7 +96,19 @@ export const LEGACY_STORAGE_KEY_POLICIES = {
   daycare_care_meal_samples: 'server-with-local-cache',
   daycare_care_cctv_requests: 'server-with-local-cache',
   daycare_care_pickup_logs: 'server-with-local-cache',
+
+  // 3. 로컬 전용 (Local-Only)
+  piano_app_active_user: 'local-only',
+  piano_app_initialized_v3: 'local-only',
+  piano_app_onboarding_progress_v1: 'local-only',
+  core_shuttle_ride_requests: 'local-only',
+  core_slot_recruitments: 'local-only',
 } as const satisfies Record<string, PersistencePolicy>;
+
+/**
+ * 하위 호환성 및 마이그레이션 완료: 모든 기존 STORAGE_KEYS가 DECLARED로 승격됨.
+ */
+export const LEGACY_STORAGE_KEY_POLICIES = {} as const satisfies Record<string, PersistencePolicy>;
 
 /** pendingMutations / syncOutbox 는 데이터가 아니라 offline command 큐. */
 export const OFFLINE_COMMAND_STORE_POLICIES = {

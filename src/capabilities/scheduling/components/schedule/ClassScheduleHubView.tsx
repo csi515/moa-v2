@@ -12,7 +12,7 @@ export interface ClassScheduleHubViewProps {
 }
 
 /**
- * 반·시간표 기반 업종 공통 일정 허브 (Gym/Daycare/Piano 패턴)
+ * 반·시간표 기반 업종 공통 일정 허브 (클래스/시간표 기반 패턴)
  * timetable ↔ calendar 딥링크 유지
  */
 export const ClassScheduleHubView: FC<ClassScheduleHubViewProps> = ({ calendarView: CalendarView }) => {

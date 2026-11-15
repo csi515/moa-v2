@@ -36,7 +36,7 @@ export interface ParentPortalPolicy {
   showsPracticeRoomTab: boolean;
   showsCustomerPoints: boolean;
   showsMakeupList: boolean;
-  bookingVariant: 'skin' | 'pilates' | 'standard';
+  bookingVariant: 'skin' | 'studio' | 'standard' | string;
 }
 
 const icon = (node: React.ReactNode) => node;

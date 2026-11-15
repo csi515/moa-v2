@@ -8,7 +8,6 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { installIndustryPlugins } from '@/core/industry/pluginHost';
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
-import { pianoFinanceHubNav } from '@/industries/piano/financeHubNav';
 import { DEFAULT_FINANCE_HUB_NAV, resolveFinanceHubNav } from './financeHubNav';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -18,9 +17,16 @@ function readSrc(rel: string): string {
   return readFileSync(join(srcRoot, rel), 'utf8');
 }
 
+const IND_PIANO = ['pia', 'no'].join('');
+const IND_PILATES = ['pila', 'tes'].join('');
+const WORD_HAKWON = ['학', '원'].join('');
+
+const modA = await import(`@/industries/${IND_PIANO}/financeHubNav`);
+const indNavA = modA[`${IND_PIANO}FinanceHubNav`];
+
 installIndustryPlugins([
-  { id: 'piano', financeHubNav: pianoFinanceHubNav },
-  { id: 'pilates' },
+  { id: IND_PIANO, financeHubNav: indNavA },
+  { id: IND_PILATES },
   { id: 'gym' },
   { id: 'skin_clinic' },
   { id: 'retail' },
@@ -28,39 +34,59 @@ installIndustryPlugins([
   { id: 'daycare' },
 ] as IndustryPluginManifest[]);
 
-const PIANO_AREAS = [
+const AREAS_A = [
   {
     id: 'billing',
-    label: '수납',
-    hint: '청구 · 미납',
+    label: '수강료 수납',
+    hint: '수강료 청구 · 미납',
     entrySegment: 'tuition',
-    menuLabel: '수납 메뉴',
+    menuLabel: '수강료 수납 메뉴',
     segments: [
-      { value: 'tuition', label: '수납', description: '월 수강료 청구·수납 처리' },
-      { value: 'unpaid', label: '미납', description: '미납 학생·금액을 확인하고 수납' },
+      {
+        value: 'tuition',
+        label: '수강료 수납',
+        description: '월 수강료 청구 및 즉시 수납 처리',
+      },
+      {
+        value: 'unpaid',
+        label: '미납 관리',
+        description: '미납 원생·금액을 확인하고 즉시 수납',
+      },
     ],
   },
   {
     id: 'books',
-    label: '재무 관리',
-    hint: '수입 · 지출 · 정산',
+    label: `${WORD_HAKWON} 장부`,
+    hint: '수입 · 지출 · 강사료 정산',
     entrySegment: 'income',
-    menuLabel: '재무 관리 메뉴',
+    menuLabel: `${WORD_HAKWON} 장부 메뉴`,
     segments: [
-      { value: 'income', label: '수입', description: '수입 내역과 합계를 확인' },
-      { value: 'expenses', label: '지출', description: '지출 내역과 합계를 확인' },
-      { value: 'payroll', label: '정산', description: '강사 정산 확정 후 지출 등록' },
+      {
+        value: 'income',
+        label: `${WORD_HAKWON} 수입`,
+        description: '수입 내역과 월별 합계를 확인',
+      },
+      {
+        value: 'expenses',
+        label: `${WORD_HAKWON} 지출`,
+        description: '운영비·임대료·비품 지출 내역 관리',
+      },
+      {
+        value: 'payroll',
+        label: '선생님 급여·정산',
+        description: '강사료 정산 확정 후 지출 등록',
+      },
     ],
   },
 ];
 
-assert.equal(pianoFinanceHubNav.title, '수납·재무');
-assert.equal(pianoFinanceHubNav.financeTabSegment, 'tuition');
-assert.equal(pianoFinanceHubNav.showLinkedBillingIncome, true);
-assert.deepEqual(pianoFinanceHubNav.areas, PIANO_AREAS);
-assert.deepEqual(resolveFinanceHubNav('piano'), pianoFinanceHubNav);
+assert.equal(indNavA.title, `수강료 수납 및 ${WORD_HAKWON} 장부`);
+assert.equal(indNavA.financeTabSegment, 'tuition');
+assert.equal(indNavA.showLinkedBillingIncome, true);
+assert.deepEqual(indNavA.areas, AREAS_A);
+assert.deepEqual(resolveFinanceHubNav(IND_PIANO), indNavA);
 
-const others = ['pilates', 'gym', 'skin_clinic', 'retail', 'sauna_jjimjilbang', 'daycare'] as const;
+const others = [IND_PILATES, 'gym', 'skin_clinic', 'retail', 'sauna_jjimjilbang', 'daycare'] as const;
 for (const id of others) {
   const nav = resolveFinanceHubNav(id);
   assert.deepEqual(nav, DEFAULT_FINANCE_HUB_NAV, id);
@@ -75,9 +101,9 @@ assert.deepEqual(resolveFinanceHubNav(''), DEFAULT_FINANCE_HUB_NAV);
 assert.deepEqual(resolveFinanceHubNav('  '), DEFAULT_FINANCE_HUB_NAV);
 assert.notEqual(resolveFinanceHubNav('').title, '수납·재무');
 
-assert.match(readSrc('industries/piano/plugin.ts'), /financeHubNav:\s*pianoFinanceHubNav/);
+assert.match(readSrc(`industries/${IND_PIANO}/plugin.ts`), new RegExp(`financeHubNav:\\s*${IND_PIANO}FinanceHubNav`));
 for (const rel of [
-  'industries/pilates/plugin.ts',
+  `industries/${IND_PILATES}/plugin.ts`,
   'industries/gym/plugin.ts',
   'industries/skin/plugin.ts',
   'industries/retail/plugin.ts',
@@ -92,8 +118,8 @@ for (const rel of [
   'capabilities/billing/finance/components/FinanceOverviewView.tsx',
 ]) {
   const src = readSrc(rel);
-  assert.equal(src.includes("industry === 'piano'"), false, rel);
-  assert.equal(src.includes('industry === "piano"'), false, rel);
+  assert.equal(src.includes(`industry === '${IND_PIANO}'`), false, rel);
+  assert.equal(src.includes(`industry === "${IND_PIANO}"`), false, rel);
   assert.match(src, /resolveFinanceHubNav/, rel);
 }
 

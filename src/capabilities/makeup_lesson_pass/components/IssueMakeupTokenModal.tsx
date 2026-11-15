@@ -24,7 +24,7 @@ export const IssueMakeupTokenModal: React.FC<IssueMakeupTokenModalProps> = ({
   onClose,
   student,
   originDate,
-  academyName = '학원',
+  academyName = '교육원/센터',
   onIssued,
 }) => {
   const [originReason, setOriginReason] = useState<'advance_request' | 'absence' | 'instructor_cancel'>('advance_request');
@@ -148,7 +148,7 @@ export const IssueMakeupTokenModal: React.FC<IssueMakeupTokenModalProps> = ({
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >
-                학원 사정
+                센터 사정
               </button>
             </div>
           </div>

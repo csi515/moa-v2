@@ -99,13 +99,13 @@ console.log('✓ 5. 알림 텍스트 조립 통과');
 
 // 6. 보강권 발급 안내문 조립 검증
 const issueMsg = assembleMakeupTokenIssueNotice({
-  academyName: '모아음악학원',
+  academyName: '모아아카데미',
   studentName: '김보강',
   originDate: '2026-10-01',
   expiresAt: '2026-10-31',
   originReason: 'advance_request',
 });
-assert.match(issueMsg, /\[모아음악학원\] 보강권\(1회\) 발급 안내/);
+assert.match(issueMsg, /\[모아아카데미\] 보강권\(1회\) 발급 안내/);
 assert.match(issueMsg, /사전 결석 신청/);
 assert.match(issueMsg, /~2026-10-31까지/);
 console.log('✓ 6. 보강권 발급 알림 텍스트 조립 통과');

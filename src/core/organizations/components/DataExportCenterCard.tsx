@@ -64,7 +64,7 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
       },
       { header: '보호자명', formatter: (s) => s.parentName || '' },
       { header: '보호자연락처', formatter: (s) => s.parentPhone || '' },
-      { header: '보호자관계', formatter: (s) => (s as any).parentRelationship || '보호자' },
+      { header: '보호자관계', formatter: (s) => (s as { parentRelationship?: string }).parentRelationship || '보호자' },
       { header: '등록일자', formatter: (s) => s.joinDate || s.createdAt || '' },
       { header: '특이사항 및 메모', formatter: (s) => s.specialNotes || s.memo || '' },
     ];

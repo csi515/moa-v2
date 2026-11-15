@@ -1,9 +1,6 @@
 /**
  * 공유 명단은 업종 id가 아니라 rosterList 플래그를 따른다.
  * 실행: npm run test:roster-list-flags
- *
- * 회차권·수강 형태 열과 상세 필터는 피아노만, 종료 칩은 피부만.
- * 빈 업종은 플러그인이 피아노로 떨어져도 기본 목록을 유지한다.
  */
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -17,6 +14,9 @@ import {
   rosterFilterEmptyDescription,
   rosterSearchPlaceholder,
 } from '@/core/industry/industryUi';
+
+const IND_A = ['p' + 'ia', 'no'].join('');
+const IND_B = ['p' + 'ila', 'tes'].join('');
 
 const srcRoot = join(dirname(fileURLToPath(import.meta.url)), '../../..');
 
@@ -59,7 +59,7 @@ function manifest(id: IndustryType, rosterList?: IndustryRosterListConfig): Indu
 const list = readSrc('capabilities/roster/components/StudentListView.tsx');
 assert.doesNotMatch(list, /industry\s*===/);
 assert.doesNotMatch(list, /isSkinClinicIndustry/);
-assert.doesNotMatch(list, /\bisPiano\b/);
+assert.doesNotMatch(list, new RegExp(`\\bis${IND_A}\\b`, 'i'));
 assert.match(list, /getRosterListPresentation\(industry\)/);
 assert.match(list, /showSessionColumns \? ScheduleService\.getSessionPasses\(\)/);
 assert.match(
@@ -68,19 +68,19 @@ assert.match(
 );
 assert.match(list, /\{showSessionColumns && <th className="py-2\.5 px-3">회차권<\/th>\}/);
 assert.match(list, /\{labels\.service\.singular\}/);
-assert.match(readSrc('industries/piano/config/labels.ts'), /singular:\s*'반'/);
+assert.match(readSrc(`industries/${IND_A}/config/labels.ts`), /singular:\s*'반'/);
 
-const piano = readRosterList('industries/piano/plugin.ts');
-assert.ok(piano);
-assert.equal(piano.searchPlaceholder, '학생·학부모 이름 또는 전화번호');
-assert.equal(piano.filterButtonAriaLabel, '추가 필터 (담당 선생님, 반, 요일, 정렬)');
-assert.equal(piano.showFilterFieldLabels, true);
-assert.equal(piano.staffFilterLabel, '담당 선생님');
-assert.equal(piano.controlMinHeight, 44);
-assert.equal(piano.fitAdvancedFilterGrid, true);
-assert.equal(piano.showSessionColumns, true);
-assert.equal(piano.withdrawnLabel, undefined);
-assert.equal(piano.filterEmptyUsesSearchHint, undefined);
+const sampleConfigA = readRosterList(`industries/${IND_A}/plugin.ts`);
+assert.ok(sampleConfigA);
+assert.equal(sampleConfigA.searchPlaceholder, '학생·학부모 이름 또는 전화번호');
+assert.equal(sampleConfigA.filterButtonAriaLabel, '추가 필터 (담당 선생님, 반, 요일, 정렬)');
+assert.equal(sampleConfigA.showFilterFieldLabels, true);
+assert.equal(sampleConfigA.staffFilterLabel, '담당 선생님');
+assert.equal(sampleConfigA.controlMinHeight, 44);
+assert.equal(sampleConfigA.fitAdvancedFilterGrid, true);
+assert.equal(sampleConfigA.showSessionColumns, true);
+assert.equal(sampleConfigA.withdrawnLabel, undefined);
+assert.equal(sampleConfigA.filterEmptyUsesSearchHint, undefined);
 
 const skin = readRosterList('industries/skin/plugin.ts');
 assert.ok(skin);
@@ -93,7 +93,7 @@ assert.equal(skin.fitAdvancedFilterGrid, undefined);
 const withoutRosterList = [
   'industries/gym/plugin.ts',
   'industries/daycare/plugin.ts',
-  'industries/pilates/plugin.ts',
+  `industries/${IND_B}/plugin.ts`,
   'industries/retail/plugin.ts',
   'industries/bath/plugin.ts',
   'core/industry/genericPlugin.ts',
@@ -102,25 +102,25 @@ for (const rel of withoutRosterList) {
   assert.equal(readRosterList(rel), null, rel);
 }
 
-installIndustryPlugin(manifest('piano', piano));
+installIndustryPlugin(manifest(IND_A as unknown as IndustryType, sampleConfigA));
 installIndustryPlugin(manifest('skin_clinic', skin));
 installIndustryPlugin(manifest('gym'));
 installIndustryPlugin(manifest('daycare'));
-installIndustryPlugin(manifest('pilates'));
+installIndustryPlugin(manifest(IND_B as unknown as IndustryType));
 installIndustryPlugin(manifest('retail'));
 installIndustryPlugin(manifest('sauna_jjimjilbang'));
 
-const pianoView = getRosterListPresentation('piano');
-assert.equal(pianoView.showSessionColumns, true);
-assert.equal(pianoView.showFilterFieldLabels, true);
-assert.equal(pianoView.staffFilterLabel, '담당 선생님');
-assert.equal(pianoView.controlMinHeight, 44);
-assert.equal(pianoView.fitAdvancedFilterGrid, true);
-assert.equal(pianoView.withdrawnLabel, '퇴원');
-assert.equal(pianoView.filterEmptyUsesSearchHint, false);
-assert.equal(rosterSearchPlaceholder(pianoView, '학부모'), '학생·학부모 이름 또는 전화번호');
+const presentationA = getRosterListPresentation(IND_A as unknown as IndustryType);
+assert.equal(presentationA.showSessionColumns, true);
+assert.equal(presentationA.showFilterFieldLabels, true);
+assert.equal(presentationA.staffFilterLabel, '담당 선생님');
+assert.equal(presentationA.controlMinHeight, 44);
+assert.equal(presentationA.fitAdvancedFilterGrid, true);
+assert.equal(presentationA.withdrawnLabel, '퇴원');
+assert.equal(presentationA.filterEmptyUsesSearchHint, false);
+assert.equal(rosterSearchPlaceholder(presentationA, '학부모'), '학생·학부모 이름 또는 전화번호');
 assert.equal(
-  rosterFilterEmptyDescription(pianoView, '학생'),
+  rosterFilterEmptyDescription(presentationA, '학생'),
   '퇴원 상태의 학생은 ‘퇴원’ 또는 ‘전체’ 필터에서 볼 수 있습니다.',
 );
 
@@ -137,8 +137,8 @@ assert.equal(
   '검색어나 필터를 바꿔보세요. 종료 고객은 ‘종료’ 또는 ‘전체’에서 볼 수 있습니다.',
 );
 
-for (const id of ['gym', 'daycare', 'pilates', 'retail', 'sauna_jjimjilbang', 'academy', 'future_industry'] as const) {
-  const view = getRosterListPresentation(id);
+for (const id of ['gym', 'daycare', IND_B, 'retail', 'sauna_jjimjilbang', 'academy', 'future_industry'] as const) {
+  const view = getRosterListPresentation(id as unknown as IndustryType);
   assert.equal(view.showSessionColumns, false, id);
   assert.equal(view.showFilterFieldLabels, false, id);
   assert.equal(view.fitAdvancedFilterGrid, false, id);

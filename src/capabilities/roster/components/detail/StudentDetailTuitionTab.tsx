@@ -322,7 +322,7 @@ export const StudentDetailTuitionTab: React.FC<StudentDetailTuitionTabProps> = (
       {/* 4. 화면 하단 안내 링크 */}
       <div className="pt-2 text-center">
         <p className="text-[11px] text-slate-400">
-          학원 전체 수납 내역 및 청구서 관리는 <span className="font-semibold text-slate-600">[수납]</span> 메뉴에서 확인하실 수 있습니다.
+          전체 수납 내역 및 청구서 관리는 <span className="font-semibold text-slate-600">[수납]</span> 메뉴에서 확인하실 수 있습니다.
         </p>
       </div>
     </div>

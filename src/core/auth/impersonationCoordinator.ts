@@ -18,8 +18,8 @@ function getSessionStorage(): Storage | null {
   if (typeof window !== 'undefined' && window.sessionStorage) {
     return window.sessionStorage;
   }
-  if (typeof globalThis !== 'undefined' && (globalThis as any).sessionStorage) {
-    return (globalThis as any).sessionStorage as Storage;
+  if (typeof globalThis !== 'undefined' && 'sessionStorage' in globalThis) {
+    return (globalThis as unknown as { sessionStorage: Storage }).sessionStorage;
   }
   return null;
 }
@@ -28,8 +28,8 @@ function getLocalStorage(): Storage | null {
   if (typeof window !== 'undefined' && window.localStorage) {
     return window.localStorage;
   }
-  if (typeof globalThis !== 'undefined' && (globalThis as any).localStorage) {
-    return (globalThis as any).localStorage as Storage;
+  if (typeof globalThis !== 'undefined' && 'localStorage' in globalThis) {
+    return (globalThis as unknown as { localStorage: Storage }).localStorage;
   }
   return null;
 }

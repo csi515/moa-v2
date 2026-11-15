@@ -90,7 +90,7 @@ function run() {
 
   // 4. Web Share 청구서 텍스트 생성 검증 (0원 비용 원칙)
   const share = generateInvoiceShareText({
-    orgName: '모아피아노학원',
+    orgName: '모아아카데미',
     memberName: '홍길동',
     billingYearMonth: '2026년 6월',
     amount: 200000,
@@ -100,7 +100,7 @@ function run() {
     accountHolder: '모아원장',
   });
 
-  assert.match(share.title, /모아피아노학원/);
+  assert.match(share.title, /모아아카데미/);
   assert.match(share.text, /홍길동/);
   assert.match(share.text, /200,000원/);
   assert.match(share.text, /2026-06-30/);

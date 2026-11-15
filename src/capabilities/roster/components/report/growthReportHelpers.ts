@@ -61,6 +61,6 @@ export function buildGrowthReportData(
     teacherComment:
       options?.teacherComment ||
       `${student.name} 학생은 이번 달 바른 손모양과 일정한 템포 유지를 집중 연습하여 타건의 울림이 한층 맑고 또렷해졌습니다. 특히 연습실 자율 연습에 성실히 참여하며 새로운 곡에 대한 흥미와 성취감이 매우 돋보입니다. 다음 달에는 페달링 기법과 셈여림(dynamics) 표현을 더 깊이 지도할 예정입니다.`,
-    academyName: options?.academyName || '모아 피아노 음악학원',
+    academyName: options?.academyName || '모아 교육 센터',
   };
 }

@@ -87,7 +87,7 @@ function buildEndsAt(startsAt: string, durationMinutes: number): string {
 }
 
 /** 필라테스: 이용권·중복 등록·강사 수업 겹침 */
-export function validatePilatesCreateRules(params: {
+export function validateStudioCreateRules(params: {
   member: BookingParty;
   service: ServiceOffering;
   instructor: BookingParty;
@@ -249,7 +249,7 @@ export function validateBookingCreate(
     !skin && nextCapacity && nextCapacity !== currentMaxCapacity ? nextCapacity : null;
 
   if (!skin) {
-    const pilates = validatePilatesCreateRules({
+    const studioRule = validateStudioCreateRules({
       member,
       service,
       instructor,
@@ -259,8 +259,8 @@ export function validateBookingCreate(
       remainingSessions: ctx.remainingSessions(member.id),
       staffLabel: labels.staff,
     });
-    if (pilates.ok === false) {
-      return { ok: false, message: pilates.message };
+    if (studioRule.ok === false) {
+      return { ok: false, message: studioRule.message };
     }
   }
 

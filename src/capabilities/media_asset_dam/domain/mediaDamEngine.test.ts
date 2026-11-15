@@ -43,7 +43,7 @@ function run() {
   assert.equal(filtered[0].id, 'm1');
 
   // 3. 유효성 검증
-  assert.equal(validateMediaAssetInput('학원 인테리어 사진', ['시설', '인테리어']).isValid, true);
+  assert.equal(validateMediaAssetInput('센터 인테리어 사진', ['시설', '인테리어']).isValid, true);
   assert.equal(validateMediaAssetInput('', ['시설']).isValid, false);
   assert.equal(validateMediaAssetInput('인테리어', []).isValid, false);
 

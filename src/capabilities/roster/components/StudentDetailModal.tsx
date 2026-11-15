@@ -101,11 +101,18 @@ const StudentDetailModalContent: React.FC<
 
   const todayIso = todayIsoLocal();
   const todayAtt = useMemo(
-    () => getTodayAttendanceStatus(modal.allAttendance as any, todayIso),
+    () =>
+      getTodayAttendanceStatus(
+        modal.allAttendance as Parameters<typeof getTodayAttendanceStatus>[0],
+        todayIso
+      ),
     [modal.allAttendance, todayIso]
   );
   const tuitionStatus = useMemo(
-    () => getTuitionSummaryText(modal.billingSummary as any),
+    () =>
+      getTuitionSummaryText(
+        modal.billingSummary as unknown as Parameters<typeof getTuitionSummaryText>[0]
+      ),
     [modal.billingSummary]
   );
 
@@ -114,7 +121,7 @@ const StudentDetailModalContent: React.FC<
     try {
       modal.attendance.setNewAttDate(todayIso);
       modal.attendance.setNewAttStatus('present');
-      modal.attendance.onSave({ preventDefault: () => {} } as any);
+      modal.attendance.onSave({ preventDefault: () => {} } as React.FormEvent);
       showToast(`🎉 '${student.name}'님이 오늘 출석 처리되었습니다.`, 'success');
     } catch {
       showToast('출결 처리 중 오류가 발생했습니다.', 'error');

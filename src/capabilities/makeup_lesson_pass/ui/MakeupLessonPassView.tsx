@@ -205,7 +205,7 @@ export const MakeupLessonPassView: React.FC = () => {
                             ? '결석'
                             : tok.originReason === 'advance_request'
                             ? '사전 신청'
-                            : '학원 휴강'}
+                            : '센터 휴강'}
                         </td>
                         <td style={{ padding: '12px 16px', color: '#4B5563' }}>{tok.originDate}</td>
                         <td style={{ padding: '12px 16px', color: '#4B5563' }}>{tok.expiresAt}</td>

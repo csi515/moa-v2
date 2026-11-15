@@ -24,8 +24,8 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
   const latestPayment = getLatestTuitionPaymentForInvoice(tuitionPayments, invoice.id);
 
   const orgSettings = (currentOrganization?.settings ?? {}) as Record<string, any>;
-  const orgName = currentOrganization?.name || '음악학원';
-  const representative = orgSettings.representative || orgSettings.ownerName || '원장';
+  const orgName = currentOrganization?.name || '모아 센터';
+  const representative = orgSettings.representative || orgSettings.ownerName || '대표';
   const businessNumber = orgSettings.businessNumber || orgSettings.biz_number || '등록번호 미등록';
   const phone = orgSettings.phone || orgSettings.contactPhone || '-';
   const address = orgSettings.address || orgSettings.roadAddress || '';
@@ -250,7 +250,7 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
               {sealUrl ? (
                 <img
                   src={sealUrl}
-                  alt="학원 직인"
+                  alt="직인"
                   className="w-12 h-12 object-contain inline-block ml-1"
                 />
               ) : (

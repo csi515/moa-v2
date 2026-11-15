@@ -1,4 +1,4 @@
-/** Piano 연습실 호환 kind. 공통 유형은 RESOURCE_KINDS. */
+/** 시설/공간 연습실 호환 kind. 공통 유형은 RESOURCE_KINDS. */
 export const PRACTICE_ROOM_RESOURCE_KIND = 'practice_room';
 
 /** 업종 무관 Resource 유형. Core는 이 값으로 분기하지 않는다. */
@@ -50,7 +50,7 @@ export type ResourceReservation = {
   id: string;
   organization_id: string;
   resourceId: string;
-  /** 학원 고객 예약 시 customers.id. 사내 직원 예약은 null. */
+  /** 고객 예약 시 customers.id. 사내 직원 예약은 null. */
   customer_id: string | null;
   requested_by: string;
   starts_at: string;
@@ -67,7 +67,7 @@ export type ResourceReservation = {
   requesterName?: string;
 };
 
-/** Piano UI 호환 — room_id = bookable_resources.id */
+/** 공간 UI 호환 — room_id = bookable_resources.id */
 export type PracticeRoomRow = {
   id: string;
   organization_id: string;

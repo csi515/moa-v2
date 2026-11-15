@@ -143,5 +143,4 @@ export const ParentInviteResultModal: React.FC<ParentInviteResultModalProps> = (
       </div>
     </Modal>
   );
-  );
 };

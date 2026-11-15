@@ -1,8 +1,8 @@
 /**
  * 전문가·프리랜서 인센티브 & 요율 정산 순수 도메인 엔진 (Pure Functions)
  *
- * 적용 업종: 미용실(hair_salon), 1:1 PT샵(pt_fitness), 학원 강사, 자동차 정비소(auto_repair),
- *           골프 아카데미(golf_academy), 피부과/에스테틱(skin_clinic), 네일샵(nail_salon) 등
+ * 적용 업종: 미용실(hair_salon), 1:1 PT샵(pt_fitness), 전문 강사, 자동차 정비소(auto_repair),
+ *           스포츠 아카데미(sports_academy), 피부과/에스테틱(skin_clinic), 네일샵(nail_salon) 등
  *
  * 주요 기능:
  *  1. 개인별 매출 기여도 및 시술/레슨/정비 단가 기준 커미션(인센티브) 계산

@@ -197,7 +197,9 @@ export function useStudentDetailModal({
     queryOptions: { enabled: !!student.id && showsPracticeRecords },
   });
   
-  const rawPracticeRecords = (practiceRecordsList as any).data?.data || (practiceRecordsList as any).query?.data?.data || [];
+  type RefineListQuery<T> = { data?: { data?: T[] }; query?: { data?: { data?: T[] } } };
+  const queryResult = practiceRecordsList as RefineListQuery<Record<string, any>>;
+  const rawPracticeRecords = queryResult.data?.data || queryResult.query?.data?.data || [];
   const allPractice = React.useMemo(() => {
     return rawPracticeRecords.map((r: any) => ({
       id: r.id,

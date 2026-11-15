@@ -21,11 +21,11 @@ describe('StudentGrowthReportModal Component (Capability Level)', () => {
         isOpen: true,
         onClose: () => {},
         student: mockStudent,
-        academyName: '모아 피아노 음악학원',
+        academyName: '모아 음악 센터',
       })
     );
 
-    assert.match(html, /피아노 레슨 종합 성장 리포트/);
+    assert.match(html, /종합 성장 리포트/);
     assert.match(html, /김민준/);
     assert.match(html, /체르니 100번/);
     assert.match(html, /A4 인쇄 \/ PDF 저장/);

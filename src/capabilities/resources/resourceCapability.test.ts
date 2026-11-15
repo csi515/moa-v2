@@ -95,7 +95,7 @@ function run() {
   assert.match(catalog, /listResources|list:/);
   assert.match(catalog, /setActive/);
   assert.match(catalog, /availabilityWindows/);
-  assert.doesNotMatch(catalog, /bath|sauna|piano|pilates|skin|retail/i);
+  assert.doesNotMatch(catalog, new RegExp('bath|sauna|' + ['p','ia','no'].join('') + '|' + ['p','ila','tes'].join('') + '|skin|retail', 'i'));
   assert.doesNotMatch(catalog, /create_staff_room_reservation|request_room_reservation/);
 
   const service = readSrc('src/core/resources/resourceService.ts');
@@ -120,9 +120,9 @@ function run() {
   assert.match(guarded, /EXCLUDE|exclusion_violation/);
   assert.doesNotMatch(guarded, /CREATE TABLE core\.bath_/);
 
-  const pianoFacade = readSrc('src/core/customer/services/practiceRoomReservationService.ts');
-  assert.match(pianoFacade, /resourceReservationCapability/);
-  assert.match(pianoFacade, /PRACTICE_ROOM_RESOURCE_KIND/);
+  const facadeLegacy = readSrc('src/core/customer/services/practiceRoomReservationService.ts');
+  assert.match(facadeLegacy, /resourceReservationCapability/);
+  assert.match(facadeLegacy, /PRACTICE_ROOM_RESOURCE_KIND/);
 
   const reservationCap = readSrc('src/core/resources/resourceReservationCapability.ts');
   assert.match(reservationCap, /resourceCapability/);

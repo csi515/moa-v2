@@ -174,7 +174,7 @@ export function listActiveResourceReservationRows(
   });
 }
 
-/** 학원·고객 예약 신청 (pending). 연결된 customer 필수. */
+/** 사업장·고객 예약 신청 (pending). 연결된 customer 필수. */
 export async function requestResourceReservation(
   params: RequestResourceReservationInput
 ): Promise<string> {

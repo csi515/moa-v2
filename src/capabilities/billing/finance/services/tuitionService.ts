@@ -178,7 +178,7 @@ export const TuitionService = {
 
   /**
    * 현금영수증 발행 요청 메모.
-   * 국세청/PG 자동 발행이 아니라, 학원이 현장 발행할 수 있도록 청구서에 요청 플래그만 남긴다.
+   * 국세청/PG 자동 발행이 아니라, 사업장이 현장 발행할 수 있도록 청구서에 요청 플래그만 남긴다.
    * (request_payment_cash_receipt RPC는 payment_id를 요구하므로 invoiceId로 호출하지 않는다.)
    */
   async requestCashReceipt(invoiceId: string): Promise<TuitionInvoice | null> {

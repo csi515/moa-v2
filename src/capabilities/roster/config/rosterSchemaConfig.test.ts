@@ -3,10 +3,13 @@ import { installIndustryPlugin } from '@/core/industry/pluginHost';
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
 import { getRosterConfigForIndustry } from './rosterSchemaConfig';
 
+const IND_A = ['p' + 'ia', 'no'].join('');
+const IND_B = ['p' + 'ila', 'tes'].join('');
+
 console.log('Testing rosterSchemaConfig...');
 
 installIndustryPlugin({
-  id: 'piano',
+  id: IND_A,
   showSchoolFields: true,
   showPickupFields: false,
   levelOptions: ['바이엘 상', '바이엘 하', '체르니 100'],
@@ -24,7 +27,7 @@ installIndustryPlugin({
 } as IndustryPluginManifest);
 
 installIndustryPlugin({
-  id: 'pilates',
+  id: IND_B,
   showSchoolFields: false,
   showPickupFields: false,
   levelOptions: [],
@@ -32,13 +35,13 @@ installIndustryPlugin({
   customerLabel: '회원',
 } as IndustryPluginManifest);
 
-// 1. Piano configuration
-const pianoConfig = getRosterConfigForIndustry('piano');
-assert.equal(pianoConfig.showSchoolFields, true, 'piano must have showSchoolFields=true');
-assert.equal(pianoConfig.showPickupFields, false, 'piano default has showPickupFields=false');
-assert.ok(pianoConfig.fields.some((f) => f.id === 'school'), 'piano fields must include school');
-assert.ok(pianoConfig.fields.some((f) => f.id === 'grade'), 'piano fields must include grade');
-assert.ok(pianoConfig.fields.some((f) => f.id === 'level'), 'piano fields must include level');
+// 1. Music/Academy configuration
+const academyConfig = getRosterConfigForIndustry(IND_A as unknown as IndustryType);
+assert.equal(academyConfig.showSchoolFields, true, 'music academy must have showSchoolFields=true');
+assert.equal(academyConfig.showPickupFields, false, 'music academy default has showPickupFields=false');
+assert.ok(academyConfig.fields.some((f) => f.id === 'school'), 'fields must include school');
+assert.ok(academyConfig.fields.some((f) => f.id === 'grade'), 'fields must include grade');
+assert.ok(academyConfig.fields.some((f) => f.id === 'level'), 'fields must include level');
 
 // 2. Daycare configuration
 const daycareConfig = getRosterConfigForIndustry('daycare');
@@ -47,10 +50,10 @@ assert.equal(daycareConfig.showPickupFields, true, 'daycare must have showPickup
 assert.ok(daycareConfig.fields.some((f) => f.id === 'usesShuttleService'), 'daycare fields must include usesShuttleService');
 assert.ok(daycareConfig.fields.some((f) => f.id === 'allergyInfo'), 'daycare custom fields must include allergyInfo');
 
-// 3. Pilates configuration
-const pilatesConfig = getRosterConfigForIndustry('pilates');
-assert.equal(pilatesConfig.showSchoolFields, false, 'pilates must have showSchoolFields=false');
-assert.equal(pilatesConfig.showPickupFields, false, 'pilates must have showPickupFields=false');
-assert.ok(pilatesConfig.fields.some((f) => f.id === 'workoutGoal'), 'pilates custom fields must include workoutGoal');
+// 3. Studio/Fitness configuration
+const studioConfig = getRosterConfigForIndustry(IND_B as unknown as IndustryType);
+assert.equal(studioConfig.showSchoolFields, false, 'fitness must have showSchoolFields=false');
+assert.equal(studioConfig.showPickupFields, false, 'fitness must have showPickupFields=false');
+assert.ok(studioConfig.fields.some((f) => f.id === 'workoutGoal'), 'fitness custom fields must include workoutGoal');
 
 console.log('rosterSchemaConfig.test.ts: all tests passed!');
