@@ -7,6 +7,7 @@ import { ONSITE_PAYMENT_METHOD_OPTIONS } from '@/capabilities/billing/finance/pa
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { Modal } from '@/shared/components/ui/Modal';
 import { useConfirmDialog } from '@/shared/feedback/useConfirmDialog';
+import { useAsyncLock } from '@/shared/hooks/useAsyncLock';
 import { MicroGuideTooltip } from '@/shared/components/ui/MicroGuideTooltip';
 import {
   PIANO_INVOICE_BUNDLE_PRESETS,
@@ -53,6 +54,14 @@ export const TuitionPaymentModal: React.FC<TuitionPaymentModalProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const confirm = useConfirmDialog();
+  const { isLocked, runWithLock } = useAsyncLock({ cooldownMs: 500 });
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    void runWithLock(async () => {
+      await onSubmit(e);
+    });
+  };
 
   const isDirty = payMemo.trim().length > 0 || (invoice.unpaidAmount > 0 && payAmount !== invoice.unpaidAmount);
 
@@ -133,16 +142,16 @@ export const TuitionPaymentModal: React.FC<TuitionPaymentModalProps> = ({
             <button
               type="submit"
               form="tuition-payment-form"
-              disabled={submitting || payAmount <= 0}
+              disabled={submitting || isLocked || payAmount <= 0}
               className="px-5 py-2.5 min-h-[44px] text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md disabled:opacity-50 transition-all cursor-pointer"
             >
-              {submitting ? '수납 처리 중…' : '수납 확인'}
+              {submitting || isLocked ? '수납 처리 중…' : '수납 확인'}
             </button>
           </div>
         </div>
       }
     >
-      <form id="tuition-payment-form" onSubmit={onSubmit} className="p-6 space-y-4">
+      <form id="tuition-payment-form" onSubmit={handleFormSubmit} className="p-6 space-y-4">
         {invoice.cashReceiptRequested && (
           <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] text-amber-800 font-semibold">
             학부모가 현금영수증 발행을 요청했습니다.

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Check, Copy, Link2, Mail, X } from 'lucide-react';
+import { Check, Copy, Mail } from 'lucide-react';
+import { Modal } from '@/shared/components/ui/Modal';
 import type { ParentInviteLinkCode } from '@/core/parent/services/parentInviteService';
 import { buildParentInviteUrl } from '@/core/parent/services/parentInviteService';
 import { GuardianLinkQrDisplay } from '@/modules/parent/components/GuardianLinkQrDisplay';
@@ -36,28 +37,24 @@ export const ParentInviteResultModal: React.FC<ParentInviteResultModalProps> = (
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold flex items-center gap-2">
-            <Link2 className="w-4 h-4 text-indigo-600" />
-            초대 완료
-          </h3>
-          <button type="button" onClick={onClose} aria-label="닫기">
-            <X className="w-5 h-5 text-slate-400" />
-          </button>
-        </div>
-
-        <p className="text-sm text-slate-600 mb-2">
+    <Modal
+      isOpen={true}
+      onClose={onClose}
+      title="초대 완료"
+      maxWidth="md"
+      intent="view"
+    >
+      <div className="space-y-4">
+        <p className="text-sm text-slate-600">
           <strong>{parentName}</strong> ({email}) · {organizationName}
         </p>
-        <p className="text-xs text-slate-500 mb-4">
+        <p className="text-xs text-slate-500">
           {contactLabel}님이 로그인한 뒤 아래 링크나 연결 코드로 직접 수락해야 연결됩니다. 같은 이메일로
           가입해도 자동으로 연결되지 않습니다.
         </p>
 
         <div
-          className={`mb-4 p-3 rounded-xl text-sm flex items-start gap-2 border ${
+          className={`p-3 rounded-xl text-sm flex items-start gap-2 border ${
             emailSent 
               ? 'bg-emerald-50 text-emerald-800 border-emerald-100' 
               : 'bg-amber-50 text-amber-800 border-amber-100'
@@ -85,7 +82,7 @@ export const ParentInviteResultModal: React.FC<ParentInviteResultModalProps> = (
         </div>
 
         {primary && (
-          <div className="mb-4 space-y-3">
+          <div className="space-y-3">
             <p className="text-xs font-bold text-slate-500">초대 바로가기 링크</p>
             <GuardianLinkQrDisplay url={buildParentInviteUrl(primary.token)} />
             <button
@@ -144,6 +141,7 @@ export const ParentInviteResultModal: React.FC<ParentInviteResultModalProps> = (
           </div>
         )}
       </div>
-    </div>
+    </Modal>
+  );
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { X, Loader2, Shield, CheckCircle2, RotateCcw, PenTool } from 'lucide-react';
+import { Loader2, CheckCircle2, RotateCcw, PenTool } from 'lucide-react';
+import { Modal } from '@/shared/components/ui/Modal';
 import { getPlaceLabel } from '@/core/industry/industryUi';
 import type { OrganizationSearchResult } from '@/core/parent/services/enrollmentRequestService';
 import type { GlobalStudent } from '@/core/parent/types/globalParent';
@@ -122,19 +123,41 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-900/60">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-indigo-600" />
-            <h3 className="font-bold text-lg">정보 제공 동의</h3>
-          </div>
-          <button type="button" onClick={onClose} aria-label="닫기" disabled={loading}>
-            <X className="w-5 h-5 text-slate-400" />
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="정보 제공 동의"
+      maxWidth="md"
+      intent="form"
+      dirty={Boolean(notes.trim() || hasSigned)}
+      footer={
+        <div className="flex gap-2.5 w-full">
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={loading}
+            className="flex-1 min-h-[48px] h-12 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl disabled:opacity-50 transition-colors cursor-pointer"
+          >
+            취소
+          </button>
+          <button
+            type="button"
+            onClick={() => void handleSubmit()}
+            disabled={loading || consentFields.length === 0 || !hasSigned}
+            className="flex-1 min-h-[48px] h-12 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 shadow-md shadow-indigo-100 transition-all cursor-pointer"
+          >
+            {loading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <CheckCircle2 className="w-4 h-4" />
+            )}
+            동의 및 서명 제출
           </button>
         </div>
-
-        <div className="mb-4 p-4 bg-indigo-50 border border-indigo-100 rounded-xl">
+      }
+    >
+      <div className="space-y-4">
+        <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl">
           <p className="text-sm font-bold text-indigo-900 mb-2">등록 정보</p>
           <div className="space-y-1 text-sm text-indigo-800">
             <p>• 자녀: <span className="font-bold">{student.displayName}</span></p>
@@ -142,16 +165,16 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
           </div>
         </div>
 
-        <p className="text-sm text-slate-600 mb-4 leading-relaxed">
+        <p className="text-sm text-slate-600 leading-relaxed">
           {place}에 자녀 등록을 요청합니다. 아래 정보가 {place}에 공유됩니다.
           {place} 승인 후 정식 등록이 완료됩니다.
         </p>
 
         {error && (
-          <div className="mb-4 p-3 rounded-lg bg-rose-50 text-xs text-rose-700">{error}</div>
+          <div className="p-3 rounded-lg bg-rose-50 text-xs text-rose-700">{error}</div>
         )}
 
-        <div className="mb-4">
+        <div>
           <p className="text-xs font-bold text-slate-500 mb-2">제공 정보 선택</p>
           <div className="space-y-2">
             {DEFAULT_SHARED_CHILD_FIELDS.map((field) => (
@@ -180,7 +203,7 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
           </div>
         </div>
 
-        <div className="mb-4">
+        <div>
           <label className="block">
             <span className="text-xs font-bold text-slate-500">{place}에 전달할 메시지 (선택)</span>
             <textarea
@@ -197,7 +220,7 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
         </div>
 
         {/* 학부모 모바일 전자 서명 패드 */}
-        <div className="mb-4">
+        <div>
           <div className="flex items-center justify-between mb-1.5">
             <span className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
               <PenTool className="w-3.5 h-3.5 text-indigo-600" />
@@ -235,7 +258,7 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
           </div>
         </div>
 
-        <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl mb-4">
+        <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl">
           <p className="text-xs font-bold text-amber-900 mb-1">⚠️ 유의사항</p>
           <ul className="text-xs text-amber-800 space-y-0.5">
             <li>• {place} 승인 후 정식 등록이 완료됩니다</li>
@@ -243,31 +266,8 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
             <li>• 승인 후 {place} 포털에서 자녀 정보를 확인할 수 있습니다</li>
           </ul>
         </div>
-
-        <div className="flex gap-2.5">
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={loading}
-            className="flex-1 min-h-[48px] h-12 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl disabled:opacity-50 transition-colors cursor-pointer"
-          >
-            취소
-          </button>
-          <button
-            type="button"
-            onClick={() => void handleSubmit()}
-            disabled={loading || consentFields.length === 0 || !hasSigned}
-            className="flex-1 min-h-[48px] h-12 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 shadow-md shadow-indigo-100 transition-all cursor-pointer"
-          >
-            {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <CheckCircle2 className="w-4 h-4" />
-            )}
-            동의 및 서명 제출
-          </button>
-        </div>
       </div>
-    </div>
+    </Modal>
+  );
   );
 };

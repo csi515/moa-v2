@@ -7,6 +7,7 @@ import {
 import type { GlobalStudent } from '@/core/parent/types/globalParent';
 import { registerParentChild, updateParentChild } from '@/core/parent/services/parentChildService';
 import { BirthDateInput } from '@/shared/components/ui';
+import { Modal } from '@/shared/components/ui/Modal';
 
 interface ParentAddChildModalProps {
   isOpen: boolean;
@@ -115,31 +116,25 @@ export const ParentAddChildModal: React.FC<ParentAddChildModalProps> = ({
     }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold flex items-center gap-2">
-            {isEdit ? (
-              <Pencil className="w-4 h-4 text-indigo-600" />
-            ) : (
-              <UserPlus className="w-4 h-4 text-indigo-600" />
-            )}
-            {isEdit ? '자녀 정보 수정' : '내 자녀 등록'}
-          </h3>
-          <button type="button" onClick={onClose} aria-label="닫기">
-            <X className="w-5 h-5 text-slate-400" />
-          </button>
-        </div>
-
-        <p className="text-sm text-slate-600 mb-4">
-          {isEdit
-            ? '이름·생년월일·학교·학년을 고칠 수 있습니다. 학원 연결은 QR·연결 코드 또는 학원 연결하기로 진행합니다.'
-            : '이름만 필수입니다. 생년월일을 넣으면 같은 이름의 자녀와 잘못 합쳐지는 일을 줄일 수 있습니다.'}
-        </p>
-
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={isEdit ? '자녀 정보 수정' : '내 자녀 등록'}
+      description={
+        isEdit
+          ? '이름·생년월일·학교·학년을 고칠 수 있습니다.'
+          : '이름만 필수입니다. 생년월일을 넣으면 같은 이름의 자녀와 잘못 합쳐지는 일을 줄일 수 있습니다.'
+      }
+      maxWidth="sm"
+      intent="form"
+      dirty={Boolean(displayName.trim())}
+    >
+      <div className="space-y-4">
         {error && (
-          <div className="mb-3 p-2 rounded-lg bg-rose-50 text-xs text-rose-700">{error}</div>
+          <div className="p-2 rounded-lg bg-rose-50 text-xs text-rose-700">{error}</div>
         )}
 
         <div className="space-y-3">
@@ -224,12 +219,12 @@ export const ParentAddChildModal: React.FC<ParentAddChildModalProps> = ({
           type="button"
           onClick={() => void handleSubmit()}
           disabled={loading}
-          className="mt-5 w-full py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px] disabled:opacity-50"
+          className="mt-5 w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px] disabled:opacity-50 transition-colors cursor-pointer"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : isEdit ? <Pencil className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
           {isEdit ? '저장' : '등록하기'}
         </button>
       </div>
-    </div>
+    </Modal>
   );
 };
