@@ -7,7 +7,7 @@ import { ONSITE_PAYMENT_METHOD_OPTIONS } from '@/capabilities/billing/finance/pa
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { Modal } from '@/shared/components/ui/Modal';
 import { useConfirmDialog } from '@/shared/feedback/useConfirmDialog';
-import { useAsyncLock } from '@/shared/hooks/useAsyncLock';
+import { useAsyncLock, useClipboard } from '@/shared/hooks';
 import { MicroGuideTooltip } from '@/shared/components/ui/MicroGuideTooltip';
 import {
   PIANO_INVOICE_BUNDLE_PRESETS,
@@ -52,7 +52,7 @@ export const TuitionPaymentModal: React.FC<TuitionPaymentModalProps> = ({
   onSubmit,
   onClose,
 }) => {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useClipboard({ timeout: 2000 });
   const confirm = useConfirmDialog();
   const { isLocked, runWithLock } = useAsyncLock({ cooldownMs: 500 });
 
@@ -89,11 +89,7 @@ export const TuitionPaymentModal: React.FC<TuitionPaymentModalProps> = ({
       memo: payMemo,
     });
 
-    const success = await copyTextToClipboard(text);
-    if (success) {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
+    void copy(text);
   };
 
   return (
@@ -248,7 +244,7 @@ export const TuitionPaymentModal: React.FC<TuitionPaymentModalProps> = ({
           </span>
         </label>
         <p className="text-[10px] text-slate-400 -mt-2">
-          국세청·PG 자동 발행이 아닙니다. 학원에서 직접 발행한 경우만 체크하세요.
+          국세청·PG 자동 발행이 아닙니다. 사업장에서 직접 발행한 경우만 체크하세요.
         </p>
       </form>
     </Modal>

@@ -1,4 +1,4 @@
-import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { useTenantStorage } from '@/shared/storage/useTenantStorage';
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Megaphone,
@@ -70,27 +70,10 @@ export function RetentionMarketingView() {
   const currentDate = '2026-10-15';
   const workplaceName = '모아 파트너스';
 
-  const [templates, setTemplates] = useState<MessageTemplate[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_TEMPLATES));
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // ignore
-    }
-    return DEFAULT_TEMPLATES;
-  });
-
-  const [history, setHistory] = useState<DispatchHistoryItem[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_HISTORY));
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // ignore
-    }
-    return [
-      { customerId: 'c-old', triggerType: 'PASS_EXPIRING', sentAt: '2026-10-10T09:00:00Z' },
-    ];
-  });
+  const [templates, setTemplates] = useTenantStorage<MessageTemplate[]>(STORAGE_KEY_TEMPLATES, DEFAULT_TEMPLATES);
+  const [history, setHistory] = useTenantStorage<DispatchHistoryItem[]>(STORAGE_KEY_HISTORY, [
+    { customerId: 'c-old', triggerType: 'PASS_EXPIRING', sentAt: '2026-10-10T09:00:00Z' },
+  ]);
 
   // 오늘 감지된 후보자 목록 스캔
   const candidates = useMemo(() => {
@@ -125,14 +108,6 @@ export function RetentionMarketingView() {
   useEffect(() => {
     setQueue(initialQueue);
   }, [initialQueue]);
-
-  useEffect(() => {
-    localStorage.setItem(getTenantStorageKey(STORAGE_KEY_TEMPLATES), JSON.stringify(templates));
-  }, [templates]);
-
-  useEffect(() => {
-    localStorage.setItem(getTenantStorageKey(STORAGE_KEY_HISTORY), JSON.stringify(history));
-  }, [history]);
 
   // 개별/일괄 발송 — 실제 알림톡·SMS 채널 미연동. 미리보기만 허용.
   const handleSendSingle = (_item: MarketingDispatchItem) => {

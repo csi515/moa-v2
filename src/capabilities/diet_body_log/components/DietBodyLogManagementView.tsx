@@ -1,6 +1,6 @@
-import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { useTenantStorage } from '@/shared/storage/useTenantStorage';
 import { todayIsoLocal } from '@/shared/utils/localDate';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Activity,
   Dumbbell,
@@ -103,35 +103,9 @@ export function DietBodyLogManagementView() {
   const [selectedMemberId, setSelectedMemberId] = useState<string>('mem-1');
   const [activeTab, setActiveTab] = useState<'inbody' | 'workout' | 'diet'>('inbody');
 
-  const [inbodyRecords, setInbodyRecords] = useState<InbodyRecord[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_INBODY));
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // ignore
-    }
-    return INITIAL_INBODY_RECORDS;
-  });
-
-  const [workoutLogs, setWorkoutLogs] = useState<WorkoutExerciseLog[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_WORKOUT));
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // ignore
-    }
-    return INITIAL_WORKOUT_LOGS;
-  });
-
-  const [mealLogs, setMealLogs] = useState<DietMealLog[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_MEALS));
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // ignore
-    }
-    return INITIAL_MEAL_LOGS;
-  });
+  const [inbodyRecords, setInbodyRecords] = useTenantStorage<InbodyRecord[]>(STORAGE_KEY_INBODY, INITIAL_INBODY_RECORDS);
+  const [workoutLogs, setWorkoutLogs] = useTenantStorage<WorkoutExerciseLog[]>(STORAGE_KEY_WORKOUT, INITIAL_WORKOUT_LOGS);
+  const [mealLogs, setMealLogs] = useTenantStorage<DietMealLog[]>(STORAGE_KEY_MEALS, INITIAL_MEAL_LOGS);
 
   // 인바디 신규 입력 폼 모달 상태
   const [isInbodyModalOpen, setIsInbodyModalOpen] = useState(false);
@@ -145,18 +119,6 @@ export function DietBodyLogManagementView() {
 
   // 트레이너 피드백 입력 상태 (mealId -> string)
   const [feedbackDrafts, setFeedbackDrafts] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    localStorage.setItem(getTenantStorageKey(STORAGE_KEY_INBODY), JSON.stringify(inbodyRecords));
-  }, [inbodyRecords]);
-
-  useEffect(() => {
-    localStorage.setItem(getTenantStorageKey(STORAGE_KEY_WORKOUT), JSON.stringify(workoutLogs));
-  }, [workoutLogs]);
-
-  useEffect(() => {
-    localStorage.setItem(getTenantStorageKey(STORAGE_KEY_MEALS), JSON.stringify(mealLogs));
-  }, [mealLogs]);
 
   const currentMember = DEFAULT_MEMBERS.find((m) => m.id === selectedMemberId) || DEFAULT_MEMBERS[0];
 

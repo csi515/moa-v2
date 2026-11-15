@@ -14,6 +14,7 @@ import { buildYearMonthOptions } from '@/capabilities/billing/finance/categories
 import { CreditCard, Building, AlertCircle, Copy, Check } from 'lucide-react';
 import { settingsStorage } from '@/services/storage/settingsStorage';
 import { formatBankAccountText } from '@/capabilities/billing/finance/paymentMethodLabels';
+import { useClipboard } from '@/shared/hooks';
 import { Modal } from '@/shared/components/ui/Modal';
 import { PageHeader } from '@/shared/components';
 import { CombinedPaymentModal } from './CombinedPaymentModal';
@@ -57,7 +58,10 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
     accountNumber: typeof settings.bankAccount === 'object' && settings.bankAccount ? settings.bankAccount.accountNumber || '' : typeof settings.bankAccount === 'string' ? settings.bankAccount : '',
     holder: typeof settings.bankAccount === 'object' && settings.bankAccount ? settings.bankAccount.holder || '' : '',
   });
-  const [copiedAccount, setCopiedAccount] = useState(false);
+  const { copied: copiedAccount, copy: copyAccount } = useClipboard({
+    timeout: 2000,
+    onSuccess: () => showToast('수납 계좌가 복사되었습니다.', 'success'),
+  });
 
   const handleSaveBank = () => {
     const updated = settingsStorage.saveSettings({
@@ -70,15 +74,12 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
     });
     setSettingsState(updated);
     setIsBankModalOpen(false);
-    showToast('학원 수납 계좌가 성공적으로 저장되었습니다.', 'success');
+    showToast('수납 계좌가 성공적으로 저장되었습니다.', 'success');
   };
 
   const handleCopyBank = async () => {
     if (!bankAccountText) return;
-    await navigator.clipboard.writeText(bankAccountText);
-    setCopiedAccount(true);
-    showToast('수납 계좌가 복사되었습니다.', 'success');
-    setTimeout(() => setCopiedAccount(false), 2000);
+    await copyAccount(bankAccountText);
   };
 
   const invoices = useMemo(() => TuitionService.getInvoices(), [refreshKey]);
@@ -225,14 +226,14 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
         </>
       )}
 
-      {/* 학원 수납 계좌 안내 배너 (3번 구멍 방어) */}
+      {/* 수납 계좌 안내 배너 (3번 구멍 방어) */}
       {!bankAccountText ? (
         <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs text-amber-950">
           <div className="flex items-center gap-2.5">
             <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
             <div>
-              <span className="font-bold">학원 수납 계좌번호가 아직 등록되지 않았습니다.</span>
-              <span className="text-amber-800 ml-1 hidden sm:inline">학부모가 청구서에서 확인할 입금 계좌를 등록해주세요.</span>
+              <span className="font-bold">수납 계좌번호가 아직 등록되지 않았습니다.</span>
+              <span className="text-amber-800 ml-1 hidden sm:inline">고객/학부모가 청구서에서 확인할 입금 계좌를 등록해주세요.</span>
             </div>
           </div>
           <button
@@ -247,7 +248,7 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
         <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-700">
           <div className="flex items-center gap-2.5 min-w-0">
             <Building className="w-4 h-4 text-indigo-600 shrink-0" />
-            <span className="font-bold text-slate-900 shrink-0">학원 수납 계좌:</span>
+            <span className="font-bold text-slate-900 shrink-0">수납 계좌:</span>
             <span className="font-mono font-bold text-slate-800 truncate">{bankAccountText}</span>
           </div>
           <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-auto">

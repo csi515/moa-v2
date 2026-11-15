@@ -1,6 +1,7 @@
 import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState } from 'react';
 import { useList, useCreate, useUpdate } from '@refinedev/core';
+import { useClipboard } from '@/shared/hooks';
 import {
   formatPhoneNumber,
   validateGuestbookConsent,
@@ -14,7 +15,7 @@ import {
 export const DigitalGuestbookView: React.FC = () => {
   const [selectedEntry, setSelectedEntry] = useState<DigitalGuestbookEntryItem | null>(null);
   const [showCheckInModal, setShowCheckInModal] = useState(false);
-  const [copySuccess, setCopySuccess] = useState(false);
+  const { copied: copySuccess, copy: copyWelcome } = useClipboard({ timeout: 2000 });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 내방객 등록 폼
@@ -103,11 +104,8 @@ export const DigitalGuestbookView: React.FC = () => {
   };
 
   const handleCopyWelcome = (entry: DigitalGuestbookEntryItem) => {
-    const text = formatGuestbookWelcomeText(entry, '우리 학원/매장');
-    navigator.clipboard.writeText(text).then(() => {
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
-    });
+    const text = formatGuestbookWelcomeText(entry, '우리 매장/센터');
+    void copyWelcome(text);
   };
 
   return (

@@ -1,5 +1,6 @@
 import { showToast } from '@/shared/feedback/uiFeedback';
 import React, { useState } from 'react';
+import { useClipboard } from '@/shared/hooks';
 import {
   Printer,
   Share2,
@@ -38,7 +39,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
   onBack,
 }) => {
   const [viewMode, setViewMode] = useState<'a4_poster' | 'mobile_card'>('a4_poster');
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useClipboard({ timeout: 2000 });
 
   const leafletData: PrintableLeafletData = generatePrintableLeafletData(profile, centerInfo);
 
@@ -47,9 +48,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(leafletData.footer.qrPayload);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    void copy(leafletData.footer.qrPayload);
   };
 
   return (

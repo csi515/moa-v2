@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useList, useCreate, useUpdate } from '@refinedev/core';
+import { useClipboard } from '@/shared/hooks';
 import {
   calculateAcknowledgmentStats,
   renderEmergencyAlertSvg,
@@ -13,7 +14,7 @@ import {
 export const EmergencyAlertBroadcastView: React.FC = () => {
   const [selectedBroadcastId, setSelectedBroadcastId] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [copySuccess, setCopySuccess] = useState(false);
+  const { copied: copySuccess, copy: copyNotice } = useClipboard({ timeout: 2000 });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 긴급 공지 발령 폼
@@ -100,11 +101,8 @@ export const EmergencyAlertBroadcastView: React.FC = () => {
   };
 
   const handleCopyNotice = (broadcast: EmergencyBroadcastItem) => {
-    const text = formatEmergencyBroadcastText(broadcast, '우리 학원/매장');
-    navigator.clipboard.writeText(text).then(() => {
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
-    });
+    const text = formatEmergencyBroadcastText(broadcast, '우리 매장/센터');
+    void copyNotice(text);
   };
 
   return (

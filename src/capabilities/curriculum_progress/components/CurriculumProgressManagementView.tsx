@@ -1,4 +1,4 @@
-import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { useTenantStorage } from '@/shared/storage/useTenantStorage';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useList } from '@refinedev/core';
 import {
@@ -32,22 +32,22 @@ interface StudentItem {
 }
 
 const DEFAULT_STUDENTS: StudentItem[] = [
-  { id: 'std-1', name: '김민수', targetLevel: 'lv-piano-1' },
-  { id: 'std-2', name: '이지은', targetLevel: 'lv-piano-2' },
-  { id: 'std-3', name: '박도현', targetLevel: 'lv-piano-1' },
+  { id: 'std-1', name: '김민수', targetLevel: 'lv-music-1' },
+  { id: 'std-2', name: '이지은', targetLevel: 'lv-music-2' },
+  { id: 'std-3', name: '박도현', targetLevel: 'lv-music-1' },
   { id: 'std-4', name: '최서아', targetLevel: 'lv-taekwondo-1' },
   { id: 'std-5', name: '윤하은', targetLevel: 'lv-swim-1' },
 ];
 
 const DEFAULT_CURRICULUM_ITEMS: CurriculumItemDefinition[] = [
-  { id: 'item-101', levelId: 'lv-piano-1', title: '바이엘 1~10 (오른손 기본 음계)', sortOrder: 1, required: true },
-  { id: 'item-102', levelId: 'lv-piano-1', title: '바이엘 11~20 (양손 기본 박자)', sortOrder: 2, required: true },
-  { id: 'item-103', levelId: 'lv-piano-1', title: '바이엘 21~30 (화음 연습곡)', sortOrder: 3, required: false },
-  { id: 'item-104', levelId: 'lv-piano-1', title: '바이엘 마스터 (작은 별 연주곡)', sortOrder: 4, required: true },
+  { id: 'item-101', levelId: 'lv-music-1', title: '바이엘 1~10 (오른손 기본 음계)', sortOrder: 1, required: true },
+  { id: 'item-102', levelId: 'lv-music-1', title: '바이엘 11~20 (양손 기본 박자)', sortOrder: 2, required: true },
+  { id: 'item-103', levelId: 'lv-music-1', title: '바이엘 21~30 (화음 연습곡)', sortOrder: 3, required: false },
+  { id: 'item-104', levelId: 'lv-music-1', title: '바이엘 마스터 (작은 별 연주곡)', sortOrder: 4, required: true },
 
-  { id: 'item-201', levelId: 'lv-piano-2', title: '체르니 100 No.1 (손가락 독립)', sortOrder: 1, required: true },
-  { id: 'item-202', levelId: 'lv-piano-2', title: '체르니 100 No.5 (아르페지오 기초)', sortOrder: 2, required: true },
-  { id: 'item-203', levelId: 'lv-piano-2', title: '체르니 100 No.10 (셈여림 표현)', sortOrder: 3, required: true },
+  { id: 'item-201', levelId: 'lv-music-2', title: '체르니 100 No.1 (손가락 독립)', sortOrder: 1, required: true },
+  { id: 'item-202', levelId: 'lv-music-2', title: '체르니 100 No.5 (아르페지오 기초)', sortOrder: 2, required: true },
+  { id: 'item-203', levelId: 'lv-music-2', title: '체르니 100 No.10 (셈여림 표현)', sortOrder: 3, required: true },
 
   { id: 'item-301', levelId: 'lv-taekwondo-1', title: '기본 서기와 주먹 지르기', sortOrder: 1, required: true },
   { id: 'item-302', levelId: 'lv-taekwondo-1', title: '태극 1장 품새', sortOrder: 2, required: true },
@@ -76,7 +76,7 @@ export function CurriculumProgressManagementView() {
       return remote.map((c) => ({
         id: c.id,
         name: c.name,
-        targetLevel: c.level || c.metadata?.target_level || 'lv-piano-1',
+        targetLevel: c.level || c.metadata?.target_level || 'lv-music-1',
       }));
     }
     return DEFAULT_STUDENTS;
@@ -85,35 +85,19 @@ export function CurriculumProgressManagementView() {
   const [searchQuery, setSearchQuery] = useState('');
 
   // 진도 상태 관리
-  const [progressRecords, setProgressRecords] = useState<Record<string, StudentProgressRecord[]>>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_PROGRESS));
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // ignore
-    }
-    return {
-      'std-1': [
-        { curriculumItemId: 'item-101', status: 'mastered', completedAt: '2026-10-01' },
-        { curriculumItemId: 'item-102', status: 'completed', completedAt: '2026-10-08' },
-        { curriculumItemId: 'item-103', status: 'in_progress' },
-      ],
-      'std-2': [
-        { curriculumItemId: 'item-201', status: 'completed', completedAt: '2026-10-05' },
-      ],
-    };
+  const [progressRecords, setProgressRecords] = useTenantStorage<Record<string, StudentProgressRecord[]>>(STORAGE_KEY_PROGRESS, {
+    'std-1': [
+      { curriculumItemId: 'item-101', status: 'mastered', completedAt: '2026-10-01' },
+      { curriculumItemId: 'item-102', status: 'completed', completedAt: '2026-10-08' },
+      { curriculumItemId: 'item-103', status: 'in_progress' },
+    ],
+    'std-2': [
+      { curriculumItemId: 'item-201', status: 'completed', completedAt: '2026-10-05' },
+    ],
   });
 
   // 월간 리포트 이력
-  const [reports, setReports] = useState<MonthlyGrowthReportSummary[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_REPORTS));
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // ignore
-    }
-    return [];
-  });
+  const [reports, setReports] = useTenantStorage<MonthlyGrowthReportSummary[]>(STORAGE_KEY_REPORTS, []);
 
   // 리포트 작성용 로컬 폼 상태
   const [reportInput, setReportInput] = useState({
@@ -123,14 +107,6 @@ export function CurriculumProgressManagementView() {
     lessonsCount: 8,
     instructorComment: '기초 박자 감각이 매우 훌륭하며, 양손 독립 연주를 자연스럽게 소화하고 있습니다.',
   });
-
-  useEffect(() => {
-    localStorage.setItem(getTenantStorageKey(STORAGE_KEY_PROGRESS), JSON.stringify(progressRecords));
-  }, [progressRecords]);
-
-  useEffect(() => {
-    localStorage.setItem(getTenantStorageKey(STORAGE_KEY_REPORTS), JSON.stringify(reports));
-  }, [reports]);
 
   const currentStudent = studentsList.find((s) => s.id === selectedStudentId) || studentsList[0];
   const currentStudentProgress = progressRecords[currentStudent.id] || [];

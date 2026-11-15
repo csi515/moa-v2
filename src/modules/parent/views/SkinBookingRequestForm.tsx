@@ -73,6 +73,7 @@ export function SkinBookingRequestForm({ student }: { student: Student }) {
       }
     }
     scheduleService.saveBooking({
+      id: crypto.randomUUID(),
       customerId: student.id,
       customerName: student.name,
       staffId: instructor?.id,

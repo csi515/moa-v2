@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useList, useCreate, useUpdate } from '@refinedev/core';
 import { useTerminology } from '@/core/terminology';
+import { useClipboard } from '@/shared/hooks';
 import {
   recordQuestProgress,
   renderAchievementBadgeSvg,
@@ -19,7 +20,7 @@ export const AchievementQuestBadgeView: React.FC = () => {
   const [selectedMember, setSelectedMember] = useState<AchievementQuestMemberItem | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
-  const [copySuccess, setCopySuccess] = useState(false);
+  const { copied: copySuccess, copy: copyCelebration } = useClipboard({ timeout: 2000 });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 퀘스트 생성 폼
@@ -128,10 +129,7 @@ export const AchievementQuestBadgeView: React.FC = () => {
 
   const handleCopyCelebration = (quest: AchievementQuestItem, member: AchievementQuestMemberItem) => {
     const text = formatAchievementShareText(quest, member);
-    navigator.clipboard.writeText(text).then(() => {
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
-    });
+    void copyCelebration(text);
   };
 
   return (

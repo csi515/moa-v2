@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useList, useCreate, useUpdate } from '@refinedev/core';
+import { useClipboard } from '@/shared/hooks';
 import {
   evaluateIncidentSeverity,
   renderIncidentReportSvg,
@@ -12,7 +13,7 @@ import {
 export const FacilityIncidentReportView: React.FC = () => {
   const [selectedIncident, setSelectedIncident] = useState<IncidentReportItem | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [copySuccess, setCopySuccess] = useState(false);
+  const { copied: copySuccess, copy: copyNotice } = useClipboard({ timeout: 2000 });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 폼 입력 상태
@@ -109,10 +110,7 @@ export const FacilityIncidentReportView: React.FC = () => {
 
   const handleCopyNotice = (report: IncidentReportItem) => {
     const text = formatIncidentNotificationText(report);
-    navigator.clipboard.writeText(text).then(() => {
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
-    });
+    void copyNotice(text);
   };
 
   return (

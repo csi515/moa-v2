@@ -1,4 +1,4 @@
-import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { useTenantStorage } from '@/shared/storage/useTenantStorage';
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Bus,
@@ -40,7 +40,7 @@ const DEFAULT_ROUTES: ShuttleRoute[] = [
     stops: [
       {
         id: 'stop-101',
-        name: '학원 출발지 (본관 앞)',
+        name: '센터 출발지 (본관 앞)',
         sequenceOrder: 1,
         scheduledMinutesFromStart: 0,
         assignedStudentIds: [],
@@ -61,7 +61,7 @@ const DEFAULT_ROUTES: ShuttleRoute[] = [
       },
       {
         id: 'stop-104',
-        name: '학원 도착 (하차)',
+        name: '센터 도착 (하차)',
         sequenceOrder: 4,
         scheduledMinutesFromStart: 20,
         assignedStudentIds: [],
@@ -72,40 +72,15 @@ const DEFAULT_ROUTES: ShuttleRoute[] = [
 
 export function VehicleShuttleManagementView() {
   const [selectedRouteId, setSelectedRouteId] = useState<string>('route-1');
-  const [routes, setRoutes] = useState<ShuttleRoute[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_SHUTTLE_ROUTES));
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // ignore
-    }
-    return DEFAULT_ROUTES;
-  });
-
-  const [boardingLogs, setBoardingLogs] = useState<BoardingCheckRecord[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_BOARDING_LOGS));
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // ignore
-    }
-    return [
-      { studentId: 'std-김민수', stopId: 'stop-102', status: 'BOARDED', timestamp: '2026-10-15 14:36' },
-    ];
-  });
+  const [routes, setRoutes] = useTenantStorage<ShuttleRoute[]>(STORAGE_KEY_SHUTTLE_ROUTES, DEFAULT_ROUTES);
+  const [boardingLogs, setBoardingLogs] = useTenantStorage<BoardingCheckRecord[]>(STORAGE_KEY_BOARDING_LOGS, [
+    { studentId: 'std-김민수', stopId: 'stop-102', status: 'BOARDED', timestamp: '2026-10-15 14:36' },
+  ]);
 
   const [isDriving, setIsDriving] = useState(false);
   const [dispatchDone, setDispatchDone] = useState(false);
   const [currentStopIndex, setCurrentStopIndex] = useState(1);
   const [elapsedMinutes, setElapsedMinutes] = useState(5);
-
-  useEffect(() => {
-    localStorage.setItem(getTenantStorageKey(STORAGE_KEY_SHUTTLE_ROUTES), JSON.stringify(routes));
-  }, [routes]);
-
-  useEffect(() => {
-    localStorage.setItem(getTenantStorageKey(STORAGE_KEY_BOARDING_LOGS), JSON.stringify(boardingLogs));
-  }, [boardingLogs]);
 
   const currentRoute = routes.find((r) => r.id === selectedRouteId) || routes[0];
   const sortedStops = useMemo(() => normalizeRouteStops(currentRoute.stops), [currentRoute.stops]);

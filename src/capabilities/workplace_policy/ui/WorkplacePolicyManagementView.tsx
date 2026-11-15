@@ -1,4 +1,4 @@
-import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { useTenantStorage } from '@/shared/storage/useTenantStorage';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useList, useCreate, useUpdate } from '@refinedev/core';
@@ -69,23 +69,8 @@ const DEFAULT_POLICIES: WorkplacePolicy[] = [
 ];
 
 export const WorkplacePolicyManagementView: React.FC = () => {
-  const [localPolicies, setLocalPolicies] = useState<WorkplacePolicy[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_POLICIES));
-      return saved ? JSON.parse(saved) : DEFAULT_POLICIES;
-    } catch {
-      return DEFAULT_POLICIES;
-    }
-  });
-
-  const [localAcknowledgements, setLocalAcknowledgements] = useState<PolicyAcknowledgement[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_ACKS));
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [localPolicies, setLocalPolicies] = useTenantStorage<WorkplacePolicy[]>(STORAGE_KEY_POLICIES, DEFAULT_POLICIES);
+  const [localAcknowledgements, setLocalAcknowledgements] = useTenantStorage<PolicyAcknowledgement[]>(STORAGE_KEY_ACKS, []);
 
   // Refine DB 데이터 바인딩
   const { query: policyQuery } = useList<any>({
@@ -157,23 +142,6 @@ export const WorkplacePolicyManagementView: React.FC = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [hasSignature, setHasSignature] = useState(false);
   const [signerStaffId] = useState('staff-current');
-
-  // 로컬 캐시 영속화
-  useEffect(() => {
-    try {
-      localStorage.setItem(getTenantStorageKey(STORAGE_KEY_POLICIES), JSON.stringify(localPolicies));
-    } catch (e) {
-      console.warn('Failed to save policies:', e);
-    }
-  }, [localPolicies]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(getTenantStorageKey(STORAGE_KEY_ACKS), JSON.stringify(localAcknowledgements));
-    } catch (e) {
-      console.warn('Failed to save acknowledgements:', e);
-    }
-  }, [localAcknowledgements]);
 
   // 임의의 직원 풀 (통계 산출용)
   const mockStaffList = useMemo(() => ['staff-current', 'staff-2', 'staff-3'], []);

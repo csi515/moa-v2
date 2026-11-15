@@ -28,7 +28,7 @@ export interface UseGenericEntityRecordsResult<T> {
 /**
  * 18개 Long-tail Capability를 위한 전사 공통 클라우드 DB 연동 React Hook
  */
-export function useGenericEntityRecords<T extends Record<string, any>>(
+export function useGenericEntityRecords<T extends object>(
   options: UseGenericEntityRecordsOptions<T>
 ): UseGenericEntityRecordsResult<T> {
   const { entityType, defaultRecords = [], recordKeyExtractor, idExtractor } = options;
