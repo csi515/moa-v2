@@ -21,6 +21,7 @@ import {
   Layers,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { LocalStorageNoticeBanner } from '@/shared/components';
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
 import {
   transitionTaskPipelineStage,
@@ -234,6 +235,8 @@ export const TaskPipelineKanbanView: React.FC<TaskPipelineKanbanViewProps> = ({
           </button>
         </div>
       </div>
+
+      <LocalStorageNoticeBanner featureName="작업 공정 칸반 파이프라인" />
 
       {/* 팀원별 업무 부하(Workload Clumping) & 병목 공정 위젯 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

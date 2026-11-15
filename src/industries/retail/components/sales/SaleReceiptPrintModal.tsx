@@ -39,6 +39,21 @@ interface Props {
 export const SaleReceiptPrintModal: React.FC<Props> = ({ isOpen, onClose, receipt }) => {
   const { currentOrganization } = useOrganization();
   const orgName = currentOrganization?.name || '모아 스토어';
+  const orgSettings = (currentOrganization?.settings || {}) as Record<string, any>;
+  const bizNumber =
+    currentOrganization?.business_registration_number ||
+    orgSettings.bizNumber ||
+    orgSettings.businessNumber ||
+    '-';
+  const representativeName =
+    orgSettings.representativeName ||
+    orgSettings.ownerName ||
+    orgSettings.directorName ||
+    '-';
+  const orgAddress = currentOrganization?.road_address
+    ? `${currentOrganization.road_address} ${currentOrganization.address_detail || ''}`.trim()
+    : orgSettings.address || '-';
+  const orgPhone = orgSettings.phone || orgSettings.contactPhone || '-';
 
   if (!isOpen || !receipt) return null;
 
@@ -64,7 +79,8 @@ export const SaleReceiptPrintModal: React.FC<Props> = ({ isOpen, onClose, receip
       ? `복합결제(현금 ${formatCurrency(receipt.splitDetail.cashAmount)} + 카드 ${formatCurrency(receipt.splitDetail.cardAmount)})`
       : SALE_PAYMENT_METHOD_LABELS[receipt.paymentMethod] || receipt.paymentMethod;
 
-    const receiptText = `[${orgName} 전자영수증]\n영수증No: ${saleNo}\n거래일시: ${dateStr}\n\n[품목 내역]\n${itemsSummary}\n\n총 결제금액: ${formatCurrency(receipt.totalAmount)}\n결제방식: ${paymentText}\n\n이용해 주셔서 감사합니다.`;
+    const bizSummary = bizNumber !== '-' ? `\n사업자번호: ${bizNumber} | 대표: ${representativeName}` : '';
+    const receiptText = `[${orgName} 전자영수증]${bizSummary}\n영수증No: ${saleNo}\n거래일시: ${dateStr}\n\n[품목 내역]\n${itemsSummary}\n\n총 결제금액: ${formatCurrency(receipt.totalAmount)}\n결제방식: ${paymentText}\n\n이용해 주셔서 감사합니다.`;
 
     try {
       const res = await shareLink({
@@ -100,6 +116,32 @@ export const SaleReceiptPrintModal: React.FC<Props> = ({ isOpen, onClose, receip
                 {orgName}
               </h2>
               <p className="text-[11px] text-slate-500">영수증 (매출전표)</p>
+            </div>
+
+            {/* 사업자 정보 (부가가치세법상 법정 필수 기재사항) */}
+            <div className="text-[10px] text-slate-600 space-y-0.5 border-b border-dashed border-slate-200 pb-2">
+              <div className="flex justify-between">
+                <span>사업자등록번호:</span>
+                <span className="font-semibold tabular-nums">{bizNumber}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>대표자 / 상호:</span>
+                <span>
+                  {representativeName} / {orgName}
+                </span>
+              </div>
+              {orgAddress !== '-' && (
+                <div className="flex justify-between text-[9px] text-slate-500">
+                  <span>소재지:</span>
+                  <span className="truncate max-w-[200px]">{orgAddress}</span>
+                </div>
+              )}
+              {orgPhone !== '-' && (
+                <div className="flex justify-between text-[9px] text-slate-500">
+                  <span>전화번호:</span>
+                  <span className="tabular-nums">{orgPhone}</span>
+                </div>
+              )}
             </div>
 
             {/* 영수증 정보 */}

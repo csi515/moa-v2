@@ -18,6 +18,7 @@ import {
   Layers,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { LocalStorageNoticeBanner } from '@/shared/components';
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
 import {
   detectShiftSlotConflict,
@@ -185,6 +186,8 @@ export const ShiftScheduleManagementView: React.FC = () => {
           </button>
         </div>
       </div>
+
+      <LocalStorageNoticeBanner featureName="교대근무 및 시프트 시간표" />
 
       {/* 주 52시간 한도 초과 경보 배너 */}
       {over52WarningCount > 0 && (

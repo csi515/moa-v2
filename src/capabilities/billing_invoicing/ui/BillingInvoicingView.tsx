@@ -21,6 +21,7 @@ import {
   Download,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { LocalStorageNoticeBanner } from '@/shared/components';
 import { ListLoadingSkeleton } from '@/components/common/LoadingSkeleton';
 import { ActionableEmptyState } from '@/components/common/ActionableEmptyState';
 import { commitOptimistic } from '@/core/feedback/optimisticStatus';
@@ -418,6 +419,8 @@ export const BillingInvoicingView: React.FC<BillingInvoicingViewProps> = ({
           </button>
         </div>
       </div>
+
+      <LocalStorageNoticeBanner featureName="세무 청구서 및 세금계산서" />
 
       {/* 미수금 에이징(Aging) 4구간 위젯 카드 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

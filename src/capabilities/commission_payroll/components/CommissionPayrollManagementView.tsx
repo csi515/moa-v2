@@ -16,6 +16,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { LocalStorageNoticeBanner } from '@/shared/components';
 import {
   calculateStaffPayroll,
   summarizePayrollBatch,
@@ -244,6 +245,8 @@ export const CommissionPayrollManagementView: React.FC = () => {
           </button>
         </div>
       </div>
+
+      <LocalStorageNoticeBanner featureName="프리랜서 인센티브 및 정산" />
 
       {/* 종합 메트릭 카드 4종 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

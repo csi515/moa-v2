@@ -44,6 +44,7 @@ export const StockInboundModal: FC<Props> = ({
   const [variantId, setVariantId] = useState('');
   const [quantity, setQuantity] = useState('');
   const [unitCost, setUnitCost] = useState('');
+  const [vendorName, setVendorName] = useState('');
   const [memo, setMemo] = useState('');
   const [saving, setSaving] = useState(false);
   const [scannedFeedback, setScannedFeedback] = useState<string | null>(null);
@@ -134,6 +135,7 @@ export const StockInboundModal: FC<Props> = ({
     }
     setQuantity('');
     setUnitCost('');
+    setVendorName('');
     setMemo('');
   }, [isOpen, initialRow, products]);
 
@@ -170,10 +172,18 @@ export const StockInboundModal: FC<Props> = ({
     try {
       let reasonText = memo.trim();
       const costNum = Number(unitCost);
+      const vendorClean = vendorName.trim();
+      const headerTags: string[] = [];
+      if (vendorClean) {
+        headerTags.push(`[공급처: ${vendorClean}]`);
+      }
       if (Number.isFinite(costNum) && costNum > 0) {
         const totalCost = costNum * qty;
-        const costInfo = `[매입단가: ${formatCurrency(costNum)}, 총매입: ${formatCurrency(totalCost)}]`;
-        reasonText = reasonText ? `${costInfo} ${reasonText}` : costInfo;
+        headerTags.push(`[매입단가: ${formatCurrency(costNum)}, 총매입: ${formatCurrency(totalCost)}]`);
+      }
+      if (headerTags.length > 0) {
+        const tagStr = headerTags.join(' ');
+        reasonText = reasonText ? `${tagStr} ${reasonText}` : tagStr;
       }
 
       const result = await inventoryService.applyInbound({
@@ -290,6 +300,16 @@ export const StockInboundModal: FC<Props> = ({
             </span>
           </div>
         )}
+
+        <FormField label="매입 거래처 (공급업체, 선택)">
+          <input
+            type="text"
+            value={vendorName}
+            onChange={(e) => setVendorName(e.target.value)}
+            className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
+            placeholder="예: (주)대한물류, 서울총판"
+          />
+        </FormField>
 
         <FormField label={COPY.inboundMemo}>
           <textarea

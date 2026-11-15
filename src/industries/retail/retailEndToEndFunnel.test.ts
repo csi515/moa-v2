@@ -38,13 +38,16 @@ describe('Retail End-to-End Funnel Integrity Tests', () => {
     assert.ok(matched);
     assert.equal(matched.productId, 'prod-1');
 
-    // 매입단가 메모 포맷 검증
+    // 매입단가 및 공급처(Vendor) 메모 포맷 검증
     const qty = 20;
     const unitCost = 2500;
+    const vendorName = '(주)대한물류';
     const totalCost = qty * unitCost;
+    const vendorTag = `[공급처: ${vendorName}]`;
     const costInfo = `[매입단가: ₩2,500, 총매입: ₩50,000]`;
-    const finalReason = `${costInfo} 정기 납품 입고`;
+    const finalReason = `${vendorTag} ${costInfo} 정기 납품 입고`;
 
+    assert.ok(finalReason.includes('[공급처: (주)대한물류]'));
     assert.ok(finalReason.includes('[매입단가: ₩2,500, 총매입: ₩50,000]'));
     assert.equal(totalCost, 50000);
   });

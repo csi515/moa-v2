@@ -178,7 +178,7 @@ export async function fetchLockers(
   }
 
   const client = getCoreClient();
-  const query = (client as any)
+  const query = client
     .from('lockers')
     .select(
       `id, tenant_id, locker_number, section, status, assigned_customer_id,
@@ -254,7 +254,7 @@ export async function assignLockerRecord(input: AssignLockerInput): Promise<void
   }
 
   // 2. 사물함 업데이트
-  const { error: lockerError } = await (client as any)
+  const { error: lockerError } = await client
     .from('lockers')
     .update({
       status: 'OCCUPIED',
@@ -288,7 +288,7 @@ export async function extendLockerRecord(
   const baseMs = Math.max(Date.now(), new Date(baseExpiry).getTime());
   const newExpiry = new Date(baseMs + extendDays * 86_400_000).toISOString().split('T')[0];
 
-  const { error } = await (client as any)
+  const { error } = await client
     .from('lockers')
     .update({
       expires_at: newExpiry,
@@ -309,7 +309,7 @@ export async function releaseLockerRecord(lockerId: string): Promise<void> {
   if (!isSupabaseConfigured()) return;
 
   const client = getCoreClient();
-  const { error } = await (client as any)
+  const { error } = await client
     .from('lockers')
     .update({
       status: 'AVAILABLE',
@@ -336,7 +336,7 @@ export async function addLockerRecord(
   if (!isSupabaseConfigured()) return;
 
   const client = getCoreClient();
-  const { error } = await (client as any).from('lockers').insert({
+  const { error } = await client.from('lockers').insert({
     tenant_id: tenantId,
     locker_number: lockerNumber.trim(),
     section: section.trim() || '공용',

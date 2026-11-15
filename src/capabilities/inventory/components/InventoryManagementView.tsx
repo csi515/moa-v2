@@ -20,6 +20,7 @@ import {
   SlidersHorizontal,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { LocalStorageNoticeBanner } from '@/shared/components';
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
 import {
   applyStockMovement,
@@ -322,6 +323,8 @@ export const InventoryManagementView: React.FC<InventoryManagementViewProps> = (
           </button>
         </div>
       </div>
+
+      <LocalStorageNoticeBanner featureName="FEFO 로트·실사 재고" />
 
       {/* 4대 주요 지표 카드 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

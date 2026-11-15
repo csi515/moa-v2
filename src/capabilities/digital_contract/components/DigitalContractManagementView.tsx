@@ -21,6 +21,7 @@ import {
   Filter,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { LocalStorageNoticeBanner } from '@/shared/components';
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
 import {
   calculateRefundEstimate,
@@ -276,6 +277,8 @@ export const DigitalContractManagementView: React.FC = () => {
           </button>
         </div>
       </div>
+
+      <LocalStorageNoticeBanner featureName="전자계약서" />
 
       {/* 만료 D-Day 알림 배너 (D-30 / D-14) */}
       {renewalTargets.length > 0 && (
