@@ -34,6 +34,7 @@ import { createI18nProvider } from "./providers/i18nProvider";
 import { liveProvider } from "./providers/liveProvider";
 import { ToastContainer, ConfirmDialog, AppErrorBoundary } from "@/shared/components";
 import { LoadingScreen } from "@/shared/components/LoadingScreen";
+import { OverlayProvider } from "@/shared/overlay";
 
 import { DynamicRoleSettingsPage, FinanceRouteGate } from "@/pages/settings/DynamicRoleSettingsPage";
 import { ConsentSignatureModal } from "@/capabilities/safety_consent/ui/ConsentSignatureModal";
@@ -478,13 +479,15 @@ export const App: React.FC = () => {
         <AuthProvider>
           <OrganizationProvider>
             <AppProvider>
-              <GlobalNetworkStatusBar />
-              <SupabaseRoleSync />
-              <InPlaceReAuthModal />
-              <AppBootstrapGate>
-                <RefineApp />
-              </AppBootstrapGate>
-              <DevToolsSandboxBar />
+              <OverlayProvider>
+                <GlobalNetworkStatusBar />
+                <SupabaseRoleSync />
+                <InPlaceReAuthModal />
+                <AppBootstrapGate>
+                  <RefineApp />
+                </AppBootstrapGate>
+                <DevToolsSandboxBar />
+              </OverlayProvider>
             </AppProvider>
           </OrganizationProvider>
         </AuthProvider>

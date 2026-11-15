@@ -61,7 +61,6 @@ export const ALLOWED_MODAL_FILES = new Set([
  */
 export const LEGACY_MODAL_BASELINE = new Set([
   'src/capabilities/mbo/ui/MboRevisionTimelineModal.tsx',
-  'src/capabilities/mbo/ui/OrganizationMemberPickerModal.tsx',
   'src/capabilities/mbo/ui/ProjectCategoryManager.tsx',
   'src/capabilities/resources/ui/UniversalResourceCalendarView.tsx',
   'src/capabilities/sop_risk_assessment/components/ApprovalActionModal.tsx',
