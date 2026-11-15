@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { LocalStorageNoticeBanner } from '@/shared/components';
-import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { useTenantStorage } from '@/shared/storage';
 import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
 import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 import {
@@ -169,9 +169,6 @@ export const InventoryManagementView: React.FC<InventoryManagementViewProps> = (
   const [isStockOutFefoModalOpen, setIsStockOutFefoModalOpen] = useState(false);
   const [selectedItemForFefo, setSelectedItemForFefo] = useState<InventoryItem | null>(null);
 
-  const storageKeyItems = getTenantStorageKey(STORAGE_KEY_ITEMS);
-  const storageKeyLots = getTenantStorageKey(STORAGE_KEY_LOTS);
-
   // Refine v5 데이터 페칭
   const { query: itemsQuery } = useList<any>({
     resource: 'inventory_items',
@@ -184,22 +181,16 @@ export const InventoryManagementView: React.FC<InventoryManagementViewProps> = (
   const { mutate: mutateCreateItem } = useCreate();
   const { mutate: mutateUpdateItem } = useUpdate();
 
-  // 로컬 폴백 상태
-  const [localItems, setLocalItems] = useState<(InventoryItem & { location?: WarehouseLocation })[]>(() => {
-    try {
-      const saved = localStorage.getItem(storageKeyItems);
-      if (saved) return JSON.parse(saved);
-    } catch {}
-    return DEFAULT_INVENTORY_ITEMS;
-  });
+  // 로컬 폴백 상태 (테넌트 격리)
+  const [localItems, setLocalItems] = useTenantStorage<(InventoryItem & { location?: WarehouseLocation })[]>(
+    'inventory_items_data',
+    DEFAULT_INVENTORY_ITEMS
+  );
 
-  const [lots, setLots] = useState<(StockLotItem & { location?: WarehouseLocation })[]>(() => {
-    try {
-      const saved = localStorage.getItem(storageKeyLots);
-      if (saved) return JSON.parse(saved);
-    } catch {}
-    return DEFAULT_LOTS;
-  });
+  const [lots, setLots] = useTenantStorage<(StockLotItem & { location?: WarehouseLocation })[]>(
+    'inventory_lots_data',
+    DEFAULT_LOTS
+  );
 
   const items = useMemo(() => {
     if (refineItems && refineItems.length > 0) return refineItems;
@@ -208,16 +199,10 @@ export const InventoryManagementView: React.FC<InventoryManagementViewProps> = (
 
   const saveLocalItems = (next: (InventoryItem & { location?: WarehouseLocation })[]) => {
     setLocalItems(next);
-    try {
-      localStorage.setItem(storageKeyItems, JSON.stringify(next));
-    } catch {}
   };
 
   const saveLots = (next: (StockLotItem & { location?: WarehouseLocation })[]) => {
     setLots(next);
-    try {
-      localStorage.setItem(storageKeyLots, JSON.stringify(next));
-    } catch {}
   };
 
   // 실사 대사표 데이터 상태

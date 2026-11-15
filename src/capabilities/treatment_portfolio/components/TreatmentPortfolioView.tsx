@@ -1,4 +1,4 @@
-import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { useTenantStorage } from '@/shared/storage';
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Sparkles,
@@ -99,25 +99,12 @@ const DEFAULT_STYLES: PortfolioStyleItem[] = [
 ];
 
 export const TreatmentPortfolioView: React.FC = () => {
-  const [styles, setStyles] = useState<PortfolioStyleItem[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_PORTFOLIO));
-      return saved ? JSON.parse(saved) : DEFAULT_STYLES;
-    } catch {
-      return DEFAULT_STYLES;
-    }
-  });
+  const [styles, setStyles] = useTenantStorage<PortfolioStyleItem[]>('treatment_portfolio_styles', DEFAULT_STYLES);
 
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStyleId, setSelectedStyleId] = useState<string>(DEFAULT_STYLES[0].id);
   const [selectedOptionIds, setSelectedOptionIds] = useState<string[]>([]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(getTenantStorageKey(STORAGE_KEY_PORTFOLIO), JSON.stringify(styles));
-    } catch {}
-  }, [styles]);
 
   const selectedStyle = styles.find((s) => s.id === selectedStyleId) || styles[0];
 

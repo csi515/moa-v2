@@ -1,4 +1,4 @@
-import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { useTenantStorage } from '@/shared/storage';
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Calculator,
@@ -126,23 +126,8 @@ const DEFAULT_ITEMS: ServicePerformanceItem[] = [
 ];
 
 export const CommissionPayrollManagementView: React.FC = () => {
-  const [policies, setPolicies] = useState<StaffPayrollPolicy[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_POLICIES));
-      return saved ? JSON.parse(saved) : DEFAULT_POLICIES;
-    } catch {
-      return DEFAULT_POLICIES;
-    }
-  });
-
-  const [items, setItems] = useState<ServicePerformanceItem[]>(() => {
-    try {
-      const saved = localStorage.getItem(getTenantStorageKey(STORAGE_KEY_ITEMS));
-      return saved ? JSON.parse(saved) : DEFAULT_ITEMS;
-    } catch {
-      return DEFAULT_ITEMS;
-    }
-  });
+  const [policies, setPolicies] = useTenantStorage<StaffPayrollPolicy[]>('commission_payroll_policies', DEFAULT_POLICIES);
+  const [items, setItems] = useTenantStorage<ServicePerformanceItem[]>('commission_payroll_items', DEFAULT_ITEMS);
 
   const [selectedStaffId, setSelectedStaffId] = useState<string>(DEFAULT_POLICIES[0].staffId);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -153,18 +138,6 @@ export const CommissionPayrollManagementView: React.FC = () => {
   const [newGrossSales, setNewGrossSales] = useState<number>(100000);
   const [newPaymentMethod, setNewPaymentMethod] = useState<PaymentMethod>('card');
   const [newMaterialCost, setNewMaterialCost] = useState<number>(0);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(getTenantStorageKey(STORAGE_KEY_POLICIES), JSON.stringify(policies));
-    } catch {}
-  }, [policies]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(getTenantStorageKey(STORAGE_KEY_ITEMS), JSON.stringify(items));
-    } catch {}
-  }, [items]);
 
   const summary = useMemo(() => {
     return summarizePayrollBatch(policies, items);

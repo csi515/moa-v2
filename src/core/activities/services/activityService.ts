@@ -95,7 +95,9 @@ export async function recordActivity(
       const existing: ActivityItem[] = raw ? JSON.parse(raw) : [];
       existing.unshift(itemToSave);
       window.localStorage.setItem(key, JSON.stringify(existing.slice(0, 100))); // 최근 100건 보관
-    } catch {}
+    } catch (err) {
+      console.warn('[ActivityService] 로컬 폴백 저장 실패:', err);
+    }
   }
 
   return itemToSave;

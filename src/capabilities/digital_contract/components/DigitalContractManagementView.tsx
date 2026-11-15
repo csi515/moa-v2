@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { LocalStorageNoticeBanner } from '@/shared/components';
-import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { useTenantStorage } from '@/shared/storage';
 import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
 import {
   calculateRefundEstimate,
@@ -109,8 +109,6 @@ const DEFAULT_CONTRACTS: SignedContract[] = [
 ];
 
 export const DigitalContractManagementView: React.FC = () => {
-  const storageKey = getTenantStorageKey(STORAGE_KEY_CONTRACTS);
-
   // 1. Refine v5 데이터 페칭
   const { query } = useList<any>({
     resource: 'digital_contracts',
@@ -123,15 +121,8 @@ export const DigitalContractManagementView: React.FC = () => {
   const { mutate: mutateCreate } = useCreate();
   const { mutate: mutateUpdate } = useUpdate();
 
-  // 2. 로컬스토리지 폴백 상태
-  const [localContracts, setLocalContracts] = useState<SignedContract[]>(() => {
-    try {
-      const saved = localStorage.getItem(storageKey);
-      return saved ? JSON.parse(saved) : DEFAULT_CONTRACTS;
-    } catch {
-      return DEFAULT_CONTRACTS;
-    }
-  });
+  // 2. 로컬스토리지 폴백 상태 (테넌트 격리)
+  const [localContracts, setLocalContracts] = useTenantStorage<SignedContract[]>('digital_contracts_data', DEFAULT_CONTRACTS);
 
   const contracts = useMemo(() => {
     if (refineContracts && refineContracts.length > 0) return refineContracts;
@@ -140,9 +131,6 @@ export const DigitalContractManagementView: React.FC = () => {
 
   const saveLocalContracts = (next: SignedContract[]) => {
     setLocalContracts(next);
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(next));
-    } catch {}
   };
 
   const [selectedContractId, setSelectedContractId] = useState<string>(DEFAULT_CONTRACTS[0].id);

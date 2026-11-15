@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { LocalStorageNoticeBanner } from '@/shared/components';
-import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { useTenantStorage } from '@/shared/storage';
 import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
 import {
   detectShiftSlotConflict,
@@ -70,8 +70,6 @@ const SAMPLE_SHIFTS: ShiftWithStaffName[] = [
 ];
 
 export const ShiftScheduleManagementView: React.FC = () => {
-  const storageKey = getTenantStorageKey(STORAGE_KEY_SHIFTS);
-
   // 1. Refine v5 데이터 페칭
   const { query } = useList<any>({
     resource: 'shift_schedules',
@@ -84,14 +82,8 @@ export const ShiftScheduleManagementView: React.FC = () => {
   const { mutate: mutateCreate } = useCreate();
   const { mutate: mutateUpdate } = useUpdate();
 
-  // 2. 로컬스토리지 폴백 상태
-  const [localShifts, setLocalShifts] = useState<ShiftWithStaffName[]>(() => {
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) return JSON.parse(saved);
-    } catch {}
-    return SAMPLE_SHIFTS;
-  });
+  // 2. 로컬스토리지 폴백 상태 (테넌트 격리)
+  const [localShifts, setLocalShifts] = useTenantStorage<ShiftWithStaffName[]>('shift_schedules_data', SAMPLE_SHIFTS);
 
   const shifts = useMemo(() => {
     if (refineShifts && refineShifts.length > 0) return refineShifts;
@@ -100,9 +92,6 @@ export const ShiftScheduleManagementView: React.FC = () => {
 
   const saveLocalShifts = (next: ShiftWithStaffName[]) => {
     setLocalShifts(next);
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(next));
-    } catch {}
   };
 
   const [searchTerm, setSearchTerm] = useState('');
