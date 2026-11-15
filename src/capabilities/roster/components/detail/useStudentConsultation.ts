@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import { getPrimaryGuardian } from '@/core/parent';
+import type { CanonicalConsultationType, CustomerId } from '@/shared/kernel';
 
 export interface UseStudentConsultationParams {
   student: {
-    id: string;
+    id: CustomerId;
     name: string;
     parentName?: string;
   };
@@ -17,7 +18,7 @@ export interface UseStudentConsultationParams {
     studentName: string;
     parentName: string;
     date: string;
-    type: any;
+    type: CanonicalConsultationType;
     content: string;
     result: string;
     nextDate?: string;
@@ -34,7 +35,7 @@ export function useStudentConsultation({
   onSaveConsultation,
 }: UseStudentConsultationParams) {
   const [isAddCstOpen, setIsAddCstOpen] = useState(false);
-  const [newCstType, setNewCstType] = useState<any>('learning');
+  const [newCstType, setNewCstType] = useState<CanonicalConsultationType>('learning');
   const [newCstContent, setNewCstContent] = useState('');
   const [newCstResult, setNewCstResult] = useState('');
   const [newCstNextDate, setNewCstNextDate] = useState('');

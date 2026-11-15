@@ -3,10 +3,11 @@ import { useCreate } from '@refinedev/core';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { todayIsoLocal } from '@/shared/utils/localDate';
+import type { CustomerId } from '@/shared/kernel';
 
 export interface UseStudentPracticeParams {
   student: {
-    id: string;
+    id: CustomerId;
     name: string;
   };
   practiceRecordsResource?: string;

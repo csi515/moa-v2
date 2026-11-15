@@ -1,22 +1,23 @@
 import { useState } from 'react';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import type { CanonicalPaymentMethod, Money } from '@/shared/kernel';
 
 export interface UseStudentPaymentParams {
   onRecordPayment?: (
     invoiceId: string,
-    amount: number,
-    method: any,
+    amount: Money,
+    method: CanonicalPaymentMethod,
     memo: string
   ) => Promise<any>;
 }
 
 export function useStudentPayment(params?: UseStudentPaymentParams) {
   const [payInvoiceId, setPayInvoiceId] = useState<string | null>(null);
-  const [payAmount, setPayAmount] = useState(0);
-  const [payMethod, setPayMethod] = useState<any>('onsite_card');
+  const [payAmount, setPayAmount] = useState<Money>(0);
+  const [payMethod, setPayMethod] = useState<CanonicalPaymentMethod>('onsite_card');
   const [payMemo, setPayMemo] = useState('');
 
-  const handleOpenPayModal = (inv: any) => {
+  const handleOpenPayModal = (inv: { id: string; unpaidAmount: number }) => {
     setPayInvoiceId(inv.id);
     setPayAmount(inv.unpaidAmount);
     setPayMethod('onsite_card');
