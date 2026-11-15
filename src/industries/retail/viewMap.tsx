@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
 import { RetailHomeView } from './components/home/RetailHomeView';
 import { ProductListView } from './components/products/ProductListView';
 import { InventoryListView } from './components/inventory/InventoryListView';
@@ -9,7 +9,8 @@ import { RetailRevenueView } from './components/revenue/RetailRevenueView';
 import { RetailSettingsView } from './components/settings/RetailSettingsView';
 import { RetailCustomerHubView } from './components/customers/RetailCustomerHubView';
 import { RetailStaffHubView } from './components/staff/RetailStaffHubView';
-import { LedgerClosingView } from '@/capabilities/ledger_simple';
+import { LedgerClosingView, type PosDailySummary } from '@/capabilities/ledger_simple';
+import { retailRevenueService } from './services/retailRevenueService';
 import { useApp } from '@/context/AppContext';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
@@ -32,10 +33,42 @@ function RetailLedgerView() {
   const { currentOrganization } = useOrganization();
   const preset = getIndustryPreset(currentOrganization?.industry_type);
   const showHandover = Boolean(preset?.businessRules?.shiftHandoverCashCount);
+  const orgId = currentOrganization?.id;
+
+  const [posSummary, setPosSummary] = useState<PosDailySummary | null>(null);
+
+  useEffect(() => {
+    if (!orgId) return;
+    let cancelled = false;
+    const today = retailRevenueService.todayYmd();
+    (async () => {
+      try {
+        const data = await retailRevenueService.getSummary({
+          organizationId: orgId,
+          range: { fromYmd: today, toYmd: today },
+        });
+        if (cancelled) return;
+        const cashRow = data.byPayment.find((p) => p.paymentMethod === 'cash');
+        const cardRow = data.byPayment.find((p) => p.paymentMethod === 'card');
+        setPosSummary({
+          cashNet: cashRow?.amount ?? 0,
+          cardNet: cardRow?.amount ?? 0,
+          totalNet: data.netSalesAmount,
+          count: data.saleCount,
+        });
+      } catch {
+        if (!cancelled) setPosSummary(null);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [orgId]);
 
   return (
     <LedgerClosingView
-      showPosSeparationNote
+      showPosSeparationNote={false}
+      posDailySummary={posSummary}
       handoverHint={
         showHandover
           ? {
