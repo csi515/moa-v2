@@ -26,6 +26,7 @@ import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { EmptyState, PageHeader, Modal } from '@/shared/components';
 import { SearchField } from '@/shared/components/ui';
+import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 import { formatCurrency } from '@/utils/formatters';
 import {
   useBarcodeScanner,
@@ -101,6 +102,12 @@ export const SalePosView: FC = () => {
 
   // [빠른 터치 매대] 펼치기/접기 상태
   const [quickTouchExpanded, setQuickTouchExpanded] = useState(false);
+
+  // [상용 UX] 장바구니에 상품이 있을 때 브라우저 이탈 방지
+  useDirtyFormGuard({
+    isDirty: cart.length > 0,
+    message: '계산 중인 장바구니 상품이 있습니다. 페이지를 벗어나시겠습니까?',
+  });
 
   const load = useCallback(async () => {
     if (!orgId || !isSupabaseConfigured()) {

@@ -7,6 +7,7 @@ import {
   pointRedeemService,
 } from '@/capabilities/commerce';
 import { Modal } from '@/shared/components';
+import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 import { formatCurrency } from '@/utils/formatters';
 import { idempotencyCapability } from '@/core/idempotency';
 import { saleService } from '../../services/saleService';
@@ -238,6 +239,19 @@ export const SaleCheckoutModal: FC<Props> = ({
     }
   };
 
+  const isDirty = lines.length > 0 && isOpen;
+  const { confirmDiscard, handleModalConfirmClose } = useDirtyFormGuard({
+    isDirty,
+    confirmTitle: '결제 취소 확인',
+    confirmMessage: '결제를 중단하고 창을 닫으시겠습니까?',
+  });
+
+  const handleSafeClose = async () => {
+    if (await confirmDiscard()) {
+      onClose();
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (saving) return;
@@ -297,7 +311,15 @@ export const SaleCheckoutModal: FC<Props> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={COPY.checkoutTitle} maxWidth="md">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={COPY.checkoutTitle}
+      maxWidth="md"
+      intent="form"
+      dirty={isDirty}
+      confirmClose={handleModalConfirmClose}
+    >
       <form onSubmit={handleSubmit} className="flex flex-col max-h-[85vh]">
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
           <section className="space-y-2">
@@ -702,7 +724,7 @@ export const SaleCheckoutModal: FC<Props> = ({
         <div className="flex gap-2 p-4 sm:p-6 border-t border-slate-100 bg-white">
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleSafeClose}
             className="flex-1 min-h-[48px] rounded-xl border border-slate-200 text-sm font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
           >
             {COPY.cancel}

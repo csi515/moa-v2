@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Modal } from '@/shared/components/ui/Modal';
 import { buildConsentSubmission, nextConsentStatus } from '../domain/safetyConsentEngine';
 
 const REQUIRED = ['개인정보', '안전수칙', '환불규정'] as const;
@@ -57,20 +58,38 @@ export function ConsentSignatureModal({ openOnMount = true }: Props) {
   if (status === 'SIGNED' && !open) {
     return <p className="text-xs text-emerald-700">동의 기록 {saved}</p>;
   }
-  if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end bg-black/40" role="dialog">
-      <div className="w-full rounded-t-2xl bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-        <h2 className="text-lg font-black">필수 동의서</h2>
-        <ul className="mt-2 text-sm text-slate-600">
-          {REQUIRED.map((item) => <li key={item}>{item}</li>)}
+    <Modal
+      isOpen={open}
+      onClose={() => setOpen(false)}
+      title="필수 동의서"
+      maxWidth="md"
+      intent="form"
+    >
+      <div className="space-y-4">
+        <ul className="text-sm text-slate-600 list-disc pl-5 space-y-1">
+          {REQUIRED.map((item) => (
+            <li key={item} className="font-medium text-slate-700">{item} 동의</li>
+          ))}
         </ul>
-        <canvas ref={canvasRef} width={320} height={140} className="mt-3 w-full rounded-xl border bg-slate-50 touch-none" />
-        <button type="button" className="mt-3 min-h-12 w-full rounded-xl bg-slate-900 font-bold text-white" onClick={submit}>
+        <div>
+          <label className="block text-xs font-bold text-slate-500 mb-1">자필 전자서명</label>
+          <canvas
+            ref={canvasRef}
+            width={320}
+            height={140}
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 touch-none cursor-crosshair"
+          />
+        </div>
+        <button
+          type="button"
+          className="min-h-[48px] w-full rounded-xl bg-slate-900 font-bold text-white hover:bg-black transition-colors cursor-pointer"
+          onClick={submit}
+        >
           서명 제출
         </button>
       </div>
-    </div>
+    </Modal>
   );
 }

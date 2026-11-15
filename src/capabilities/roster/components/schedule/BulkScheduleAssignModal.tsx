@@ -15,6 +15,7 @@ import {
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { Modal } from '@/shared/components/ui/Modal';
 
 export interface AssignableStudent {
   id: string;
@@ -326,17 +327,25 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
     onClose();
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="bulk-assign-title"
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title={assignedResult ? '시간표 배정 완료' : '시간표 일괄 배정'}
+      description={
+        assignedResult
+          ? undefined
+          : `선택된 ${selectedStudents.length}명을 원하는 시간표 슬롯에 한 번에 배정합니다.`
+      }
+      maxWidth="lg"
+      intent="form"
     >
-      <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+      <div className="space-y-4">
         {assignedResult ? (
           /* 배정 완료 화면 (2번: 주간 시간표 즉시 연결 내비게이션) */
-          <div className="p-6 sm:p-8 text-center space-y-5">
+          <div className="py-4 text-center space-y-5">
             <div className="w-16 h-16 rounded-3xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">
               <CheckCircle2 className="w-9 h-9" />
             </div>
@@ -369,53 +378,28 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
           </div>
         ) : (
           <>
-            {/* 모달 헤더 */}
-            <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20">
-                  <Calendar className="w-5 h-5" />
-                </div>
-                <div>
-                  <h2 id="bulk-assign-title" className="text-lg font-black text-slate-900 tracking-tight">
-                    시간표 일괄 배정
-                  </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    선택된 <strong className="text-indigo-600 font-bold">{selectedStudents.length}명</strong>을 원하는 시간표 슬롯에 한 번에 배정합니다.
-                  </p>
-                </div>
+            {/* 선택된 명단 미리보기 배너 */}
+            <div className="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100/60 flex items-center gap-2 overflow-x-auto text-xs">
+              <span className="font-bold text-indigo-950 shrink-0 flex items-center gap-1">
+                <Users className="w-3.5 h-3.5 text-indigo-600" />
+                배정 대상:
+              </span>
+              <div className="flex items-center gap-1.5 flex-wrap max-h-16 overflow-y-auto">
+                {selectedStudents.slice(0, 8).map((st) => (
+                  <span
+                    key={st.id}
+                    className="px-2 py-0.5 bg-white border border-indigo-200 text-indigo-700 font-semibold rounded-lg shadow-2xs"
+                  >
+                    {st.name}
+                  </span>
+                ))}
+                {selectedStudents.length > 8 && (
+                  <span className="text-[11px] font-bold text-indigo-600">
+                    외 {selectedStudents.length - 8}명
+                  </span>
+                )}
               </div>
-              <button
-                type="button"
-                onClick={handleClose}
-            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
-            aria-label="닫기"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* 선택된 명단 미리보기 배너 */}
-        <div className="px-5 py-3 bg-indigo-50/50 border-b border-indigo-100/60 flex items-center gap-2 overflow-x-auto text-xs">
-          <span className="font-bold text-indigo-950 shrink-0 flex items-center gap-1">
-            <Users className="w-3.5 h-3.5 text-indigo-600" />
-            배정 대상:
-          </span>
-          <div className="flex items-center gap-1.5 flex-wrap max-h-16 overflow-y-auto">
-            {selectedStudents.slice(0, 8).map((st) => (
-              <span
-                key={st.id}
-                className="px-2 py-0.5 bg-white border border-indigo-200 text-indigo-700 font-semibold rounded-lg shadow-2xs"
-              >
-                {st.name}
-              </span>
-            ))}
-            {selectedStudents.length > 8 && (
-              <span className="text-[11px] font-bold text-indigo-600">
-                외 {selectedStudents.length - 8}명
-              </span>
-            )}
-          </div>
-        </div>
+            </div>
 
         {/* 엣지 4번: 주당 레슨 빈도 안내 칩 */}
         {selectedDays.length >= 3 && assignMode === 'create_new' && (
@@ -793,6 +777,6 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
           </>
         )}
       </div>
-    </div>
+    </Modal>
   );
 };

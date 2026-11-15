@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState, type DragEvent } from 'react';
 import { Download, FileSpreadsheet, Loader2, Upload, ClipboardCheck, Sparkles, AlertCircle } from 'lucide-react';
 import { Modal } from '@/shared/components/ui';
+import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useOptionalOrganization } from '@/core/organizations/OrganizationProvider';
 import { getPrimaryGuardian } from '@/core/parent/guardianHelpers';
@@ -230,8 +231,23 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
     }
   };
 
+  const isDirty = (validRows.length > 0 || Boolean(pasteText.trim()) || Boolean(fileName)) && isOpen;
+  const { handleModalConfirmClose } = useDirtyFormGuard({
+    isDirty,
+    confirmTitle: '가져오기 취소 확인',
+    confirmMessage: `가져오기 대기 중인 ${customerLabel} 데이터가 있습니다. 창을 닫으시겠습니까?`,
+  });
+
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title={STUDENT_IMPORT_UI.title} maxWidth="2xl">
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title={STUDENT_IMPORT_UI.title}
+      maxWidth="2xl"
+      intent="form"
+      dirty={isDirty}
+      confirmClose={handleModalConfirmClose}
+    >
       <div className="p-4 sm:p-6 space-y-4 overflow-y-auto max-h-[85vh]">
         {/* 기본 수강료 자동 상속 설정 (1번 구멍 방어) */}
         <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs">
