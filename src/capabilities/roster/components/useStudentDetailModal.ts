@@ -30,6 +30,10 @@ import type { ClassItem } from '@/types';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import { getStudentExitActionLabel } from './studentExitActionLabel';
 import { useModuleLabels } from '@/core/labels';
+import { useStudentConsultation } from './detail/useStudentConsultation';
+import { useStudentPayment } from './detail/useStudentPayment';
+import { useStudentTextbooks } from './detail/useStudentTextbooks';
+import { useStudentPractice } from './detail/useStudentPractice';
 import { DetailTab, getDetailTabConfig } from './detail/types';
 import {
   getStudentDetailExtension,
@@ -132,19 +136,6 @@ export function useStudentDetailModal({
   const [newAttMemo, setNewAttMemo] = useState('');
   const [newAttClassId, setNewAttClassId] = useState('');
 
-  const [isAddCstOpen, setIsAddCstOpen] = useState(false);
-  const [newCstType, setNewCstType] = useState<any>('learning');
-  const [newCstContent, setNewCstContent] = useState('');
-  const [newCstResult, setNewCstResult] = useState('');
-  const [newCstNextDate, setNewCstNextDate] = useState('');
-
-  const [isAddPrOpen, setIsAddPrOpen] = useState(false);
-  const [newPrDate, setNewPrDate] = useState(todayIsoLocal);
-  const [newPrMinutes, setNewPrMinutes] = useState(40);
-  const [newPrSong, setNewPrSong] = useState('');
-  const [newPrDifficulty, setNewPrDifficulty] = useState('');
-  const [newPrHomework, setNewPrHomework] = useState('');
-
   const [isAddVideoOpen, setIsAddVideoOpen] = useState(false);
   const [newVideoTitle, setNewVideoTitle] = useState('');
   const [newVideoUrl, setNewVideoUrl] = useState('');
@@ -155,16 +146,28 @@ export function useStudentDetailModal({
   const [newVideoMemo, setNewVideoMemo] = useState('');
   const [previewVideoId, setPreviewVideoId] = useState<string | null>(null);
 
-  const [payInvoiceId, setPayInvoiceId] = useState<string | null>(null);
-  const [payAmount, setPayAmount] = useState(0);
-  const [payMethod, setPayMethod] = useState<PaymentMethod>('onsite_card');
-  const [payMemo, setPayMemo] = useState('');
+  const studentDetailExtension = getStudentDetailExtension(industryPlugin.id);
+  const showsPracticeRecords = Boolean(studentDetailExtension?.showsPracticeRecords);
+  const practiceRecordsResource = studentDetailExtension?.practiceRecordsResource || 'practice_records';
+  const practiceRecordsSchema = studentDetailExtension?.practiceRecordsSchema;
 
-  const [isStudentSaleModalOpen, setIsStudentSaleModalOpen] = useState(false);
-  const [isStudentTbPaymentModalOpen, setIsStudentTbPaymentModalOpen] = useState(false);
-  const [selectedStudentSaleForPay, setSelectedStudentSaleForPay] = useState<TextbookSale | null>(null);
-  const [isTbReceiptOpen, setIsTbReceiptOpen] = useState(false);
-  const [tbReceiptSale, setTbReceiptSale] = useState<TextbookSale | null>(null);
+  const consultationSub = useStudentConsultation({
+    student,
+    currentUser,
+    contactSingularLabel: labels.contact.singular,
+    counselorId: rosterStorage.getTeachers()[0]?.id || '',
+    onSaveConsultation: (data) => schedulingStorage.saveConsultation(data),
+  });
+  const paymentSub = useStudentPayment({
+    onRecordPayment: (invoiceId, amount, method, memo) =>
+      TuitionService.recordPayment(invoiceId, amount, method, memo),
+  });
+  const textbookSub = useStudentTextbooks();
+  const practiceSub = useStudentPractice({
+    student: { id: student.id, name: student.name },
+    practiceRecordsResource,
+    practiceRecordsSchema,
+  });
 
   const allClasses = rosterStorage.getClasses();
   const enrolledClasses = allClasses.filter((c) => student.classIds?.includes(c.id));
@@ -184,11 +187,6 @@ export function useStudentDetailModal({
   const allLessons = LessonService.getLessonRecordsByStudent(student.id);
   const allVideos = parentStorage.getPerformanceVideosByStudentId(student.id);
   const recitalEvents = parentStorage.getRecitalEvents();
-
-  const studentDetailExtension = getStudentDetailExtension(industryPlugin.id);
-  const showsPracticeRecords = Boolean(studentDetailExtension?.showsPracticeRecords);
-  const practiceRecordsResource = studentDetailExtension?.practiceRecordsResource || 'practice_records';
-  const practiceRecordsSchema = studentDetailExtension?.practiceRecordsSchema;
 
   const practiceRecordsList = useList<any>({
     resource: practiceRecordsResource,
@@ -356,78 +354,6 @@ export function useStudentDetailModal({
     setNewAttClassId('');
   };
 
-  const handleSaveConsultation = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newCstContent.trim()) {
-      showToast('상담 내용을 입력해주세요.', 'warning');
-      return;
-    }
-    schedulingStorage.saveConsultation({
-      studentId: student.id,
-      studentName: student.name,
-      parentName:
-        getPrimaryGuardian(student.id)?.parentName ||
-        student.parentName ||
-        labels.contact.singular,
-      date: todayIsoLocal(),
-      type: newCstType,
-      content: newCstContent.trim(),
-      result: newCstResult.trim(),
-      nextDate: newCstNextDate || undefined,
-      counselorId: rosterStorage.getTeachers()[0]?.id || '',
-      counselorName: currentUser.name,
-    });
-    showToast('상담 기록이 저장되었습니다.', 'success');
-    setIsAddCstOpen(false);
-    setNewCstContent('');
-    setNewCstResult('');
-  };
-
-  const { currentOrganization } = useOrganization();
-  const { mutate: createPracticeRecord } = useCreate() as any;
-
-  const handleSavePractice = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newPrSong.trim()) {
-      showToast('연습곡을 입력해주세요.', 'warning');
-      return;
-    }
-    
-    createPracticeRecord(
-      {
-        resource: practiceRecordsResource,
-        ...(practiceRecordsSchema ? { meta: { schema: practiceRecordsSchema } } : {}),
-        values: {
-          organization_id: currentOrganization?.id,
-          customer_id: student.id,
-          practice_date: newPrDate,
-          minutes: Number(newPrMinutes) || 30,
-          song_title: newPrSong.trim(),
-          homework: newPrHomework.trim() || null,
-          difficulty_part: newPrDifficulty.trim() || null,
-          teacher_evaluation: '⭐⭐⭐⭐',
-          metadata: {
-            source: 'staff',
-            staffReviewed: true,
-            studentName: student.name,
-          }
-        },
-      },
-      {
-        onSuccess: () => {
-          showToast('연습 기록이 저장되었습니다.', 'success');
-          setIsAddPrOpen(false);
-          setNewPrSong('');
-          setNewPrDifficulty('');
-          setNewPrHomework('');
-        },
-        onError: () => {
-          showToast('연습 기록 저장에 실패했습니다.', 'error');
-        }
-      }
-    );
-  };
-
   const handleSaveVideo = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newVideoTitle.trim()) {
@@ -493,29 +419,6 @@ export function useStudentDetailModal({
     getStudentDetailExtension(industryPlugin.id)?.performanceVideoTypeLabel ||
     DEFAULT_VIDEO_TYPE_LABEL;
 
-  const handleOpenPayModal = (inv: TuitionInvoice) => {
-    setPayInvoiceId(inv.id);
-    setPayAmount(inv.unpaidAmount);
-    setPayMethod('onsite_card');
-    setPayMemo('');
-  };
-
-  const handleProcessPayment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!payInvoiceId) return;
-    try {
-      const updated = await TuitionService.recordPayment(payInvoiceId, payAmount, payMethod, payMemo);
-      if (!updated) {
-        showToast('수납 처리에 실패했습니다.', 'error');
-        return;
-      }
-      showToast(`₩${payAmount.toLocaleString()}원 수납 처리가 완료되었습니다.`, 'success');
-      setPayInvoiceId(null);
-    } catch (err) {
-      showToast.error(err, '수납 처리에 실패했습니다.');
-    }
-  };
-
   const statusBadge = getStudentStatusBadge(student.status);
 
   const baseTabConfig = getDetailTabConfig({
@@ -572,7 +475,7 @@ export function useStudentDetailModal({
 
   const openQuickConsultation = () => {
     setCurrentTab('consultations');
-    setIsAddCstOpen(true);
+    consultationSub.setIsAddCstOpen(true);
   };
 
   const openQuickTuition = () => {
@@ -628,56 +531,10 @@ export function useStudentDetailModal({
       attendanceClassOptions,
       onSave: handleSaveAttendance,
     },
-    tuition: {
-      payInvoiceId,
-      setPayInvoiceId,
-      payAmount,
-      setPayAmount,
-      payMethod,
-      setPayMethod,
-      payMemo,
-      setPayMemo,
-      onOpenPayModal: handleOpenPayModal,
-      onProcessPayment: handleProcessPayment,
-    },
-    textbooks: {
-      isStudentSaleModalOpen,
-      setIsStudentSaleModalOpen,
-      isStudentTbPaymentModalOpen,
-      setIsStudentTbPaymentModalOpen,
-      selectedStudentSaleForPay,
-      setSelectedStudentSaleForPay,
-      isTbReceiptOpen,
-      setIsTbReceiptOpen,
-      tbReceiptSale,
-      setTbReceiptSale,
-    },
-    consultations: {
-      isAddCstOpen,
-      setIsAddCstOpen,
-      newCstType,
-      setNewCstType,
-      newCstContent,
-      setNewCstContent,
-      newCstResult,
-      setNewCstResult,
-      newCstNextDate,
-      setNewCstNextDate,
-      onSave: handleSaveConsultation,
-    },
-    practice: {
-      isAddPrOpen,
-      setIsAddPrOpen,
-      newPrDate,
-      setNewPrDate,
-      newPrMinutes,
-      setNewPrMinutes,
-      newPrSong,
-      setNewPrSong,
-      newPrDifficulty,
-      setNewPrDifficulty,
-      onSave: handleSavePractice,
-    },
+    tuition: paymentSub,
+    textbooks: textbookSub,
+    consultations: consultationSub,
+    practice: practiceSub,
     videos: {
       videoTypeLabel,
       isAddVideoOpen,
