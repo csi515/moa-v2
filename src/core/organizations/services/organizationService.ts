@@ -290,7 +290,8 @@ export async function fetchUserMembershipsWithContext(): Promise<OrganizationMem
  * Phase 1: 활성 멤버십 컨텍스트 설정
  */
 export async function setActiveMembership(membershipId: string): Promise<void> {
-  const { error } = await getCoreClient().rpc('set_active_membership' as any, {
+  const client = getCoreClient() as unknown as { rpc: (fn: string, args?: Record<string, unknown>) => Promise<{ error: Error | null }> };
+  const { error } = await client.rpc('set_active_membership', {
     p_membership_id: membershipId,
   });
 
@@ -301,7 +302,8 @@ export async function setActiveMembership(membershipId: string): Promise<void> {
  * Phase 1: 활성 멤버십 컨텍스트 클리어
  */
 export async function clearActiveMembership(): Promise<void> {
-  const { error } = await getCoreClient().rpc('clear_active_membership' as any);
+  const client = getCoreClient() as unknown as { rpc: (fn: string) => Promise<{ error: Error | null }> };
+  const { error } = await client.rpc('clear_active_membership');
 
   if (error) throw error;
 }
@@ -397,7 +399,10 @@ export function getRoleLabel(
 
 /** 조직 삭제 (소유자만 가능) */
 export async function deleteOrganization(organizationId: string): Promise<void> {
-  const { data, error } = await getCoreClient().rpc('delete_organization' as any, {
+  const client = getCoreClient() as unknown as {
+    rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: boolean | null; error: Error | null }>;
+  };
+  const { data, error } = await client.rpc('delete_organization', {
     p_organization_id: organizationId,
   });
 
@@ -514,8 +519,10 @@ export async function transferOrganizationOwnership(
   newOwnerMemberId: string,
   reason: string
 ): Promise<void> {
-  const client = getCoreClient();
-  const { error } = await (client.rpc as any)('transfer_organization_ownership', {
+  const client = getCoreClient() as unknown as {
+    rpc: (fn: string, args: Record<string, unknown>) => Promise<{ error: { message: string } | null }>;
+  };
+  const { error } = await client.rpc('transfer_organization_ownership', {
     p_new_owner_member_id: newOwnerMemberId,
     p_reason: reason.trim(),
   });
@@ -542,10 +549,9 @@ export async function createInitialDepartments(
   const rows = departments.map((d) => ({
     organization_id: organizationId,
     name: d.name.trim(),
-    code: d.code?.trim() || null,
   }));
 
-  const { error } = await client.from('departments').insert(rows as any);
+  const { error } = await client.from('departments').insert(rows);
   if (error) {
     throw new Error(userFacingErrorMessage(error) || error.message || '부서 초기 등록에 실패했습니다.');
   }

@@ -3,10 +3,11 @@ import { useList, useCreate, useDelete } from '@refinedev/core';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { getPlaceLabel } from '@/core/industry/industryUi';
-import { usePublicHolidays, holidaysOnDate, holidaysForMonth } from '@/core/calendar';
+import { usePublicHolidays, holidaysOnDate, holidaysForMonth } from '@/capabilities/scheduling/calendar';
 import { useStaffScope } from '@/hooks';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { PageHeader, FilterBar, Modal } from '@/shared/components';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { AcademyEvent } from '@/types';
 import { visibleStaffCalendarEvents } from './visibleStaffCalendarEvents';
 import {

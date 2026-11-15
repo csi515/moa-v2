@@ -16,6 +16,8 @@ import {
 } from '../auth/services/ownerBusinessGate';
 import type { Organization, MemberRole } from '../../lib/supabase';
 import { getCoreClient } from '../../lib/supabase';
+import type { Json } from '@/lib/supabase/database.types';
+import { toJsonValue } from '@/shared/kernel';
 
 import { StorageService } from '../../services/storage';
 import { runLoginAccountSync } from '../accounts/loginBootstrapService';
@@ -528,7 +530,8 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
   }, [currentOrganization]);
 
   const customTerms = useMemo(() => {
-    return ((currentOrganization?.settings as any)?.custom_terms ?? {}) as Record<string, string>;
+    const settingsRecord = currentOrganization?.settings as Record<string, unknown> | null | undefined;
+    return (settingsRecord?.custom_terms ?? {}) as Record<string, string>;
   }, [currentOrganization]);
 
   const updateActiveCapabilities = useCallback(
@@ -536,7 +539,7 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
       const orgId = currentOrganization?.id;
       if (!orgId) return;
 
-      const currentSettings = ((currentOrganization.settings as any) || {}) as Record<string, unknown>;
+      const currentSettings = ((currentOrganization.settings as Record<string, unknown> | null | undefined) || {});
       const nextSettings = {
         ...currentSettings,
         active_capabilities: newCaps,
@@ -547,9 +550,8 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
         await client
           .from('organizations')
           .update({
-            active_capabilities: newCaps,
-            settings: nextSettings,
-          } as any)
+            settings: toJsonValue(nextSettings),
+          })
           .eq('id', orgId);
       } catch (err) {
         console.warn('Failed to update active_capabilities in DB, updating local state:', err);
@@ -564,7 +566,7 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
                   ...m.organization,
                   active_capabilities: newCaps,
                   settings: nextSettings,
-                } as any,
+                } as unknown as Organization,
               }
             : m
         )
@@ -577,7 +579,7 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
                 ...prev.organization,
                 active_capabilities: newCaps,
                 settings: nextSettings,
-              } as any,
+              } as unknown as Organization,
             }
           : prev
       );
@@ -590,7 +592,7 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
       const orgId = currentOrganization?.id;
       if (!orgId) return;
 
-      const currentSettings = ((currentOrganization.settings as any) || {}) as Record<string, unknown>;
+      const currentSettings = ((currentOrganization.settings as Record<string, unknown> | null | undefined) || {});
       const nextSettings = {
         ...currentSettings,
         custom_terms: newTerms,
@@ -601,8 +603,8 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
         await client
           .from('organizations')
           .update({
-            settings: nextSettings,
-          } as any)
+            settings: toJsonValue(nextSettings),
+          })
           .eq('id', orgId);
       } catch (err) {
         console.warn('Failed to update custom_terms in DB, updating local state:', err);
@@ -616,7 +618,7 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
                 organization: {
                   ...m.organization,
                   settings: nextSettings,
-                } as any,
+                } as unknown as Organization,
               }
             : m
         )
@@ -628,7 +630,7 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
               organization: {
                 ...prev.organization,
                 settings: nextSettings,
-              } as any,
+              } as unknown as Organization,
             }
           : prev
       );
@@ -641,7 +643,7 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
       const orgId = currentOrganization?.id;
       if (!orgId) return;
 
-      const currentSettings = ((currentOrganization.settings as any) || {}) as Record<string, unknown>;
+      const currentSettings = ((currentOrganization.settings as Record<string, unknown> | null | undefined) || {});
       const nextSettings = {
         ...currentSettings,
         hidden_capabilities: newHidden,
@@ -652,8 +654,8 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
         await client
           .from('organizations')
           .update({
-            settings: nextSettings,
-          } as any)
+            settings: toJsonValue(nextSettings),
+          })
           .eq('id', orgId);
       } catch (err) {
         console.warn('Failed to update hidden_capabilities in DB, updating local state:', err);
@@ -667,7 +669,7 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
                 organization: {
                   ...m.organization,
                   settings: nextSettings,
-                } as any,
+                } as unknown as Organization,
               }
             : m
         )
@@ -679,7 +681,7 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
               organization: {
                 ...prev.organization,
                 settings: nextSettings,
-              } as any,
+              } as unknown as Organization,
             }
           : prev
       );
