@@ -1,10 +1,11 @@
 import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 
-import React, { useEffect,  useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCreate } from '@refinedev/core';
 import { X, Tag, Calendar, AlertCircle } from 'lucide-react';
 import { validatePromoDraft, type PromoTargetType } from '../domain/promoEngine';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { useAsyncLock } from '@/shared/hooks';
 
 interface PromotionFormModalProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
 }) => {
   const { mutate: createDeal } = useCreate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isLocked, runWithLock } = useAsyncLock({ cooldownMs: 500 });
 
   const [title, setTitle] = useState('');
   const [targetType, setTargetType] = useState<PromoTargetType>('PASS');
@@ -34,6 +36,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting || isLocked) return;
     setFormError(null);
 
     const draft = {
@@ -54,28 +57,34 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
       return;
     }
 
-    setIsSubmitting(true);
-    createDeal(
-      {
-        resource: 'promotional_deals',
-        values: {
-          ...draft,
-          sold_quantity: 0,
-        },
-      },
-      {
-        onSuccess: () => {
-          setIsSubmitting(false);
-          showToast('새 [기간 한정 특가] 이벤트가 성공적으로 등록되었습니다.', 'success');
-          onSuccess?.();
-          onClose();
-        },
-        onError: (error) => {
-          setIsSubmitting(false);
-          setFormError(error?.message || '이벤트 등록에 실패했습니다. 다시 시도해 주세요.');
-        },
-      }
-    );
+    runWithLock(async () => {
+      setIsSubmitting(true);
+      await new Promise<void>((resolve) => {
+        createDeal(
+          {
+            resource: 'promotional_deals',
+            values: {
+              ...draft,
+              sold_quantity: 0,
+            },
+          },
+          {
+            onSuccess: () => {
+              setIsSubmitting(false);
+              showToast('새 [기간 한정 특가] 이벤트가 성공적으로 등록되었습니다.', 'success');
+              onSuccess?.();
+              onClose();
+              resolve();
+            },
+            onError: (error) => {
+              setIsSubmitting(false);
+              setFormError(error?.message || '이벤트 등록에 실패했습니다. 다시 시도해 주세요.');
+              resolve();
+            },
+          }
+        );
+      });
+    });
   };
 
   // 실시간 할인율 계산
@@ -277,17 +286,17 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              disabled={isSubmitting}
-              className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+              disabled={isSubmitting || isLocked}
+              className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors disabled:opacity-50"
             >
               취소
             </button>
             <button
               type="submit"
-              disabled={isSubmitting}
-              className="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-xl transition-colors shadow-sm disabled:opacity-50"
+              disabled={isSubmitting || isLocked}
+              className="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-xl transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? '등록 중...' : '[기간 한정 특가] 등록하기'}
+              {isSubmitting || isLocked ? '등록 중...' : '[기간 한정 특가] 등록하기'}
             </button>
           </div>
         </form>

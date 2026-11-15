@@ -6,6 +6,7 @@ import type { Consultation, ConsultationType } from '../types';
 import { Modal } from '@/shared/components/ui/Modal';
 import { useTerminology } from '@/core/terminology';
 import { useConfirmDialog } from '@/shared/feedback/useConfirmDialog';
+import { useAsyncLock } from '@/shared/hooks';
 import { MessageSquareText, Calendar, User, Save, X, Phone, Tag, UserPlus } from 'lucide-react';
 import { mapConsultationToStudentDraft } from '../utils/consultationStudentMapper';
 
@@ -62,6 +63,7 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
   const [content, setContent] = useState<string>('');
   const [result, setResult] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isLocked, runWithLock } = useAsyncLock({ cooldownMs: 500 });
   const { labels } = useTerminology();
   const customerWord = labels.customer.singular;
   const confirm = useConfirmDialog();
@@ -102,35 +104,37 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting) return;
+    if (isSubmitting || isLocked) return;
     if (!content.trim()) {
       showToast('상담 내용을 입력해주세요.', 'warning');
       return;
     }
 
-    try {
-      setIsSubmitting(true);
-      const counselor = currentUser;
-      const saved = schedulingStorage.saveConsultation({
-        id: initialData?.id,
-        studentId: initialData?.studentId || 'lead_' + Date.now(),
-        studentName: studentName.trim() || '신청자',
-        parentName: parentName.trim() || '학부모',
-        date: date || todayIsoLocal(),
-        type,
-        content: content.trim(),
-        result: result.trim(),
-        nextDate: nextDate || undefined,
-        counselorId: counselor?.id || '',
-        counselorName: counselor?.name || currentUser.name || '원장',
-      });
+    runWithLock(async () => {
+      try {
+        setIsSubmitting(true);
+        const counselor = currentUser;
+        const saved = schedulingStorage.saveConsultation({
+          id: initialData?.id,
+          studentId: initialData?.studentId || 'lead_' + Date.now(),
+          studentName: studentName.trim() || '신청자',
+          parentName: parentName.trim() || '학부모',
+          date: date || todayIsoLocal(),
+          type,
+          content: content.trim(),
+          result: result.trim(),
+          nextDate: nextDate || undefined,
+          counselorId: counselor?.id || '',
+          counselorName: counselor?.name || currentUser.name || '원장',
+        });
 
-      showToast('상담 기록이 저장되었습니다.', 'success');
-      onSaved?.(saved);
-      onClose();
-    } finally {
-      setIsSubmitting(false);
-    }
+        showToast('상담 기록이 저장되었습니다.', 'success');
+        onSaved?.(saved);
+        onClose();
+      } finally {
+        setIsSubmitting(false);
+      }
+    });
   };
 
   return (
@@ -293,11 +297,11 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
             {!readOnly && (
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer min-h-[44px]"
+                disabled={isSubmitting || isLocked}
+                className="px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer min-h-[44px]"
               >
                 <Save className="w-4 h-4" />
-                {isSubmitting ? '저장 중…' : '상담 기록 저장'}
+                {isSubmitting || isLocked ? '저장 중…' : '상담 기록 저장'}
               </button>
             )}
           </div>

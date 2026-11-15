@@ -2,6 +2,7 @@ import React from 'react';
 import type { ServiceOffering } from '@/core/types/schedule';
 import type { SlotCapacityInfo } from '@/capabilities/scheduling/capacity';
 import { Modal } from '@/shared/components';
+import { useAsyncLock } from '@/shared/hooks';
 
 type Party = { id: string; name: string };
 type Room = { id: string; name: string };
@@ -92,9 +93,18 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
   onSaveCapacityOnly,
   onSubmit,
 }) => {
+  const { isLocked, runWithLock } = useAsyncLock({ cooldownMs: 500 });
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    void runWithLock(async () => {
+      await onSubmit(e);
+    });
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="새 예약 등록">
-      <form onSubmit={onSubmit} className="p-6 space-y-4">
+      <form onSubmit={handleFormSubmit} className="p-6 space-y-4">
         <div>
           <label className="block text-xs font-semibold text-slate-700 mb-1">{staffLabel} *</label>
           {isScoped ? (
@@ -311,7 +321,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
         </div>
         <button
           type="submit"
-          disabled={Boolean(draftCapacity?.isClosed) || !resolvedFormStaffId}
+          disabled={Boolean(draftCapacity?.isClosed) || !resolvedFormStaffId || isLocked}
           className={`w-full py-2.5 ${accentBtn} disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl text-sm min-h-[44px]`}
         >
           등록

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, Copy, Check, Ticket, Calendar } from 'lucide-react';
 import { Modal } from '@/shared/components/ui/Modal';
+import { useAsyncLock, useClipboard } from '@/shared/hooks';
 import {
   assembleMakeupTokenIssueNotice,
   type MakeupToken,
@@ -30,8 +31,8 @@ export const IssueMakeupTokenModal: React.FC<IssueMakeupTokenModalProps> = ({
   const [originReason, setOriginReason] = useState<'advance_request' | 'absence' | 'instructor_cancel'>('advance_request');
   const [validityDays, setValidityDays] = useState<number>(30);
   const [issuedToken, setIssuedToken] = useState<MakeupToken | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const { isLocked, runWithLock } = useAsyncLock({ cooldownMs: 500 });
+  const { copied, copy } = useClipboard({ timeout: 2500 });
 
   // 모달이 열릴 때마다 초기화
   useEffect(() => {
@@ -39,8 +40,6 @@ export const IssueMakeupTokenModal: React.FC<IssueMakeupTokenModalProps> = ({
       setOriginReason('advance_request');
       setValidityDays(30);
       setIssuedToken(null);
-      setIsSubmitting(false);
-      setCopied(false);
     }
   }, [isOpen]);
 
@@ -48,9 +47,7 @@ export const IssueMakeupTokenModal: React.FC<IssueMakeupTokenModalProps> = ({
 
   const handleIssue = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-    try {
+    void runWithLock(async () => {
       const token = issueAndSaveMakeupToken({
         studentId: student.id,
         studentName: student.name,
@@ -60,9 +57,7 @@ export const IssueMakeupTokenModal: React.FC<IssueMakeupTokenModalProps> = ({
       });
       setIssuedToken(token);
       onIssued?.(token);
-    } finally {
-      setIsSubmitting(false);
-    }
+    });
   };
 
   const handleCopyNotice = () => {
@@ -75,11 +70,7 @@ export const IssueMakeupTokenModal: React.FC<IssueMakeupTokenModalProps> = ({
       academyName,
     });
 
-    if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    }
+    void copy(text);
   };
 
   return (
@@ -186,11 +177,11 @@ export const IssueMakeupTokenModal: React.FC<IssueMakeupTokenModalProps> = ({
             </button>
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isLocked}
               className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-xs transition-colors cursor-pointer inline-flex items-center gap-1.5"
             >
               <Ticket className="w-3.5 h-3.5" />
-              {isSubmitting ? '발급 중...' : '보강권 발급 (1회)'}
+              {isLocked ? '발급 중...' : '보강권 발급 (1회)'}
             </button>
           </div>
         </form>

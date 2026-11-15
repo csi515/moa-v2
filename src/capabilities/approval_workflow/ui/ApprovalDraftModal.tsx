@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { ApprovalMemberOption, SavedApprovalLine } from '../services/approvalWorkflowService';
 import { readRejectionHistory } from '../domain/approvalLine';
 import { ApprovalLinePicker } from './ApprovalLinePicker';
+import { useAsyncLock } from '@/shared/hooks';
 
 type Props = {
   open: boolean;
@@ -54,6 +55,7 @@ export const ApprovalDraftModal: React.FC<Props> = ({
   const [reviewerId, setReviewerId] = useState(initialReviewerId);
   const [approverId, setApproverId] = useState(initialApproverId);
   const [selectedLineId, setSelectedLineId] = useState('');
+  const { isLocked, runWithLock } = useAsyncLock({ cooldownMs: 500 });
 
   useEffect(() => {
     if (!open) return;
@@ -89,7 +91,9 @@ export const ApprovalDraftModal: React.FC<Props> = ({
           className="mt-4 space-y-3"
           onSubmit={(event) => {
             event.preventDefault();
-            onSubmit({ title, amount, description, reviewerId, approverId });
+            void runWithLock(async () => {
+              await onSubmit({ title, amount, description, reviewerId, approverId });
+            });
           }}
         >
           <label className="block text-xs font-semibold text-slate-700">
@@ -199,7 +203,7 @@ export const ApprovalDraftModal: React.FC<Props> = ({
             </button>
             <button
               type="submit"
-              disabled={busy}
+              disabled={busy || isLocked}
               className="h-12 flex-1 rounded-xl bg-indigo-600 text-sm font-medium text-white disabled:opacity-50"
             >
               {mode === 'resubmit' ? '다시 상신' : '상신'}

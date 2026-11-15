@@ -11,6 +11,7 @@ import {
 import { usePermissions } from '@/core/auth/usePermissions';
 import { getCustomerLabel } from '@/core/industry/industryUi';
 import { useModuleLabels } from '@/core/labels';
+import { useAsyncLock } from '@/shared/hooks';
 import { Modal } from '@/shared/components/ui/Modal';
 import { CreditCard, CheckSquare, Square, CheckCircle2 } from 'lucide-react';
 import { formatCurrency } from '@/utils/formatters';
@@ -45,6 +46,7 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
     customerLabel,
     onSuccess,
   });
+  const { isLocked, runWithLock } = useAsyncLock({ cooldownMs: 500 });
 
   const billingSummary = TuitionService.getStudentBillingSummary(student.id, yearMonth);
   const { invoices: unpaidInvoices, sales: unpaidSales } = unpaidCombinedBillingLines(billingSummary);
@@ -82,21 +84,23 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    void submit(
-      buildCombinedPaymentRequest({
-        studentId: student.id,
-        yearMonth,
-        invoices: unpaidInvoices,
-        sales: unpaidSales,
-        selectedInvoiceIds,
-        selectedSaleIds,
-        invoiceAmounts,
-        saleAmounts,
-        paymentMethod,
-        paymentDate,
-        memo,
-      })
-    );
+    void runWithLock(async () => {
+      await submit(
+        buildCombinedPaymentRequest({
+          studentId: student.id,
+          yearMonth,
+          invoices: unpaidInvoices,
+          sales: unpaidSales,
+          selectedInvoiceIds,
+          selectedSaleIds,
+          invoiceAmounts,
+          saleAmounts,
+          paymentMethod,
+          paymentDate,
+          memo,
+        })
+      );
+    });
   };
 
   return (
@@ -276,7 +280,7 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
           </button>
           <button
             type="submit"
-            disabled={grandSelectedTotal <= 0 || submitting}
+            disabled={grandSelectedTotal <= 0 || submitting || isLocked}
             className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50 min-h-[44px] cursor-pointer transition-colors shadow-xs"
           >
             <CheckCircle2 className="w-4 h-4" />

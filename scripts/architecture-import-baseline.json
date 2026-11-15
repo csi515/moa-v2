@@ -816,7 +816,7 @@
   },
   {
     "file": "src/capabilities/resources/ui/ResourceReservationRequestModal.tsx",
-    "spec": "@/capabilities/approval_workflow/services/approvalWorkflowService",
+    "spec": "@/capabilities/approval_workflow",
     "kind": "capability-cross"
   },
   {
@@ -917,6 +917,11 @@
   {
     "file": "src/capabilities/roster/components/useStudentDetailModal.ts",
     "spec": "@/capabilities/finance",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/useStudentDetailModal.ts",
+    "spec": "@/capabilities/attendance",
     "kind": "capability-cross"
   },
   {
