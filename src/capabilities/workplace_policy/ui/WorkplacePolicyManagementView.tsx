@@ -1,4 +1,5 @@
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useList, useCreate, useUpdate } from '@refinedev/core';
 import { showToast } from '@/shared/feedback/uiFeedback';
@@ -110,7 +111,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
       content: String(row.content),
       version: Number(row.version ?? 1),
       isMandatory: Boolean(row.is_mandatory ?? true),
-      effectiveDate: String(row.effective_date || new Date().toISOString().slice(0, 10)),
+      effectiveDate: String(row.effective_date || todayIsoLocal()),
       createdAt: String(row.created_at || new Date().toISOString()),
       updatedAt: String(row.updated_at || new Date().toISOString()),
     }));
@@ -250,7 +251,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
       content: formContent.trim(),
       version: 1,
       isMandatory: formIsMandatory,
-      effectiveDate: new Date().toISOString().slice(0, 10),
+      effectiveDate: todayIsoLocal(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -266,7 +267,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
           content: formContent.trim(),
           version: 1,
           is_mandatory: formIsMandatory,
-          effective_date: new Date().toISOString().slice(0, 10),
+          effective_date: todayIsoLocal(),
         },
       },
       {

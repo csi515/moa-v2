@@ -3,6 +3,7 @@ import { Plus } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { StorageService } from '@/services/storage';
 import { useStorageRefresh } from '@/hooks';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import type { Student } from '@/types';
@@ -24,7 +25,7 @@ export function ParentMedicationView({
   const refreshKey = useStorageRefresh();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form, setForm] = useState({
-    requestDate: new Date().toISOString().slice(0, 10),
+    requestDate: todayIsoLocal(),
     medicineName: '',
     dosage: '',
     times: MEDICATION_DEFAULTS.times,
@@ -45,7 +46,7 @@ export function ParentMedicationView({
 
   const openCreate = () => {
     setForm({
-      requestDate: new Date().toISOString().slice(0, 10),
+      requestDate: todayIsoLocal(),
       medicineName: '',
       dosage: '',
       times: MEDICATION_DEFAULTS.times,

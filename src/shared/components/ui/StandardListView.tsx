@@ -15,6 +15,7 @@ import { EmptyStateHero } from './EmptyStateHero';
 import { SearchField } from './SearchField';
 import { downloadCsv } from '@/shared/utils/csvDownload';
 import { userFacingErrorMessage } from '@/shared/errors/userFacingError';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 
 export interface SearchConfig<T> {
   placeholder?: string;
@@ -224,7 +225,7 @@ export function StandardListView<T>({
 
   const handleExport = () => {
     if (!isExportEnabled) return;
-    const filename = exportConfig.filename || `export_${new Date().toISOString().slice(0, 10)}.csv`;
+    const filename = exportConfig.filename || `export_${todayIsoLocal()}.csv`;
     const headers =
       exportConfig.headers ||
       columns

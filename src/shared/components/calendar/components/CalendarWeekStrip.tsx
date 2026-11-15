@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { CalendarEventItem } from '../types';
+import { formatIsoDateLocal } from '@/shared/utils/localDate';
 
 export interface CalendarWeekStripProps {
   currentDate: Date;
@@ -39,7 +40,7 @@ export const CalendarWeekStrip: React.FC<CalendarWeekStripProps> = ({
     const map = new Map<string, { total: number; full: number; available: number }>();
 
     for (const d of weekDays) {
-      const dateStr = d.toISOString().slice(0, 10);
+      const dateStr = formatIsoDateLocal(d);
       const dayEvents = events.filter((ev) => ev.date === dateStr);
       let fullCount = 0;
       let availableCount = 0;
@@ -136,7 +137,7 @@ export const CalendarWeekStrip: React.FC<CalendarWeekStripProps> = ({
         {weekDays.map((d, idx) => {
           const selected = isSelected(d);
           const today = isToday(d);
-          const dateStr = d.toISOString().slice(0, 10);
+          const dateStr = formatIsoDateLocal(d);
           const stat = dayStats.get(dateStr) || { total: 0, full: 0, available: 0 };
           const isSunday = idx === 0;
           const isSaturday = idx === 6;

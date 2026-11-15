@@ -13,7 +13,8 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
-import { generateInstructorConsignmentClauses } from '@/capabilities/digital_contract/domain/digitalContractEngine';
+import { yearMonthLocal } from '@/shared/utils/localDate';
+import { generateInstructorConsignmentClauses } from '@/capabilities/digital_contract';
 
 export interface InstructorContractData {
   id: string;
@@ -156,7 +157,7 @@ export const InstructorContractModal: React.FC<InstructorContractModalProps> = (
 
     const newContract: InstructorContractData = {
       id: `ctr-inst-${Date.now()}`,
-      contractNumber: `CTR-INS-${new Date().toISOString().slice(0, 7).replace('-', '')}-${Math.floor(
+      contractNumber: `CTR-INS-${yearMonthLocal().replace('-', '')}-${Math.floor(
         100 + Math.random() * 900
       )}`,
       instructorName,

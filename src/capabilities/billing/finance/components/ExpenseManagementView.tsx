@@ -1,5 +1,5 @@
 import React, { useEffect,  useState, useMemo } from 'react';
-import { todayIsoLocal } from '@/shared/utils/localDate';
+import { todayIsoLocal, yearMonthLocal } from '@/shared/utils/localDate';
 import { showToast, openConfirmDialog } from '@/shared/feedback/uiFeedback';
 import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 import { usePermissions } from '@/core/auth/usePermissions';
@@ -33,7 +33,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
   const refreshKey = useStorageRefresh('finance');
   const categoryOptions = getExpenseCategories(industry);
 
-  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
+  const [selectedMonth, setSelectedMonth] = useState(yearMonthLocal());
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<FinanceExpense | null>(null);

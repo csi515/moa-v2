@@ -12,6 +12,7 @@ import {
 import { StorageService } from '@/services/storage';
 import { PageHeader, SummaryMetricCard, EmptyState } from '@/shared/components';
 import { formatKoreanDate } from '@/utils/formatters';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { Activity, Calendar, Users, Dumbbell, Plus } from 'lucide-react';
 
 /** 필라테스 강사 전용 축소 대시보드 */
@@ -20,7 +21,7 @@ const PilatesStaffDashboard: React.FC = () => {
   const refreshKey = useStorageRefresh('bookings');
   const { scopeBookings, scopeMembersForPilates, staffId } = useStaffScope();
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayIsoLocal();
   const scheduleService = useScheduleService();
   const allBookingsRaw = scheduleService.getBookings();
   const occupancyIndex = useMemo(
@@ -217,7 +218,7 @@ const PilatesAdminDashboard: React.FC = () => {
   const { setActiveTab } = useApp();
   const refreshKey = useStorageRefresh('bookings');
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayIsoLocal();
   const todayBookings = useMemo(
     () => scheduleService.getBookingsByDate(today),
     [today, refreshKey]

@@ -3,6 +3,7 @@ import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { StorageService } from '@/services/storage';
 import { exportTableToCsv, type CsvColumn } from '@/core/utils/exportTableToCsv';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { interceptExportWithAudit } from '@/core/audit/auditExportInterceptor';
 import { SettingsCard } from '@/shared/components/ui';
 import {
@@ -40,7 +41,7 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
   const [isExportingAll, setIsExportingAll] = useState(false);
   const [exportingKey, setExportingKey] = useState<string | null>(null);
 
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = todayIsoLocal();
 
   // 1. 원생 명부 대장 내보내기
   const exportStudents = async (): Promise<number> => {

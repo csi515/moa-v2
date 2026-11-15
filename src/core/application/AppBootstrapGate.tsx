@@ -21,7 +21,7 @@ interface AppBootstrapGateProps {
  */
 export const AppBootstrapGate: FC<AppBootstrapGateProps> = ({ children }) => {
   const { user, loading: authLoading } = useAuth();
-  const { loading: orgLoading, organizationsStatus } = useOrganization();
+  const { loading: orgLoading, organizationsStatus, refreshOrganizations } = useOrganization();
 
   if (authLoading) {
     return <LoadingScreen message={JOURNEY_LOADING_MESSAGES.checkingSession} />;
@@ -32,7 +32,12 @@ export const AppBootstrapGate: FC<AppBootstrapGateProps> = ({ children }) => {
   }
 
   if (orgLoading || organizationsStatus === 'loading') {
-    return <LoadingScreen message={JOURNEY_LOADING_MESSAGES.loadingOrganizations} />;
+    return (
+      <LoadingScreen
+        message={JOURNEY_LOADING_MESSAGES.loadingOrganizations}
+        onRetry={() => void refreshOrganizations()}
+      />
+    );
   }
 
   // error + 0 membership 도 Selector 로 보낸다 (게이트에서 막지 않음)

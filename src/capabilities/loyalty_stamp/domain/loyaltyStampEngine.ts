@@ -7,6 +7,8 @@
  *  - 세차장/공방: 10회 이용 시 1회 무료 또는 왁스 코팅 서비스
  */
 
+import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
+
 export type StampTriggerSource = 'MANUAL' | 'ATTENDANCE' | 'PURCHASE';
 
 export interface StampRewardCoupon {
@@ -237,9 +239,8 @@ export function convertRewardCouponToPass(params: {
 }): { passRecord: ConvertedPassRecord; updatedCoupon: StampRewardCoupon } {
   const { coupon, organizationId, validityDays = 30 } = params;
 
-  const now = new Date(Date.now());
-  const startDate = now.toISOString().slice(0, 10);
-  const endDate = new Date(now.getTime() + validityDays * 24 * 3600 * 1000).toISOString().slice(0, 10);
+  const startDate = todayIsoLocal();
+  const endDate = shiftDateIso(startDate, validityDays);
 
   const passId = `pass-reward-${coupon.id}`;
 
@@ -270,7 +271,7 @@ export function convertRewardCouponToPass(params: {
  */
 export function redeemRewardCoupon(
   coupon: StampRewardCoupon,
-  targetDate: string = new Date(Date.now()).toISOString().slice(0, 10)
+  targetDate: string = todayIsoLocal()
 ): { updatedCoupon: StampRewardCoupon; success: boolean; error?: string } {
   if (coupon.isRedeemed) {
     return { updatedCoupon: coupon, success: false, error: 'ALREADY_REDEEMED' };

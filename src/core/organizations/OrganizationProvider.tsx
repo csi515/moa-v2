@@ -444,41 +444,86 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
     );
   }, []);
 
+  const PREV_STAFF_ORG_KEY = 'moa.prevStaffOrgId';
+
   const enterParentPortal = useCallback(() => {
+    // 원장/직원 사업장 컨텍스트를 스택에 안전 보존
+    const currentOrgId = selectedMembership?.organizationId || currentOrganization?.id;
+    if (currentOrgId) {
+      try {
+        sessionStorage.setItem(PREV_STAFF_ORG_KEY, currentOrgId);
+      } catch {
+        // private mode
+      }
+    }
     commitPortalMode('parent');
     // 이중 역할: staff org 컨텍스트가 포털 푸시/스토리지에 남지 않도록 해제
     orgService.clearStoredOrganizationId();
     applyMembershipSelection(memberships, null);
-  }, [memberships, applyMembershipSelection, commitPortalMode]);
+  }, [memberships, applyMembershipSelection, commitPortalMode, selectedMembership, currentOrganization]);
 
   useGuardianDeepLinkPortalSync(user?.id, enterParentPortal);
 
   const exitParentPortal = useCallback(() => {
     commitPortalMode('none');
-  }, [commitPortalMode]);
+    // 보존해 둔 원장/직원 사업장 컨텍스트 복원
+    try {
+      const savedOrgId = sessionStorage.getItem(PREV_STAFF_ORG_KEY);
+      if (savedOrgId) {
+        sessionStorage.removeItem(PREV_STAFF_ORG_KEY);
+        void selectOrganization(savedOrgId).catch((err) => {
+          console.warn('[org] failed to restore workplace org after exiting parent portal:', err);
+        });
+      }
+    } catch {
+      // ignore
+    }
+  }, [commitPortalMode, selectOrganization]);
 
   const enterCustomerPortal = useCallback(() => {
+    const currentOrgId = selectedMembership?.organizationId || currentOrganization?.id;
+    if (currentOrgId) {
+      try {
+        sessionStorage.setItem(PREV_STAFF_ORG_KEY, currentOrgId);
+      } catch {
+        // private mode
+      }
+    }
     commitPortalMode('customer');
-  }, [commitPortalMode]);
+  }, [commitPortalMode, selectedMembership, currentOrganization]);
 
   const exitCustomerPortal = useCallback(() => {
     commitPortalMode('none');
-  }, [commitPortalMode]);
+    try {
+      const savedOrgId = sessionStorage.getItem(PREV_STAFF_ORG_KEY);
+      if (savedOrgId) {
+        sessionStorage.removeItem(PREV_STAFF_ORG_KEY);
+        void selectOrganization(savedOrgId).catch((err) => {
+          console.warn('[org] failed to restore workplace org after exiting customer portal:', err);
+        });
+      }
+    } catch {
+      // ignore
+    }
+  }, [commitPortalMode, selectOrganization]);
 
   const activeCapabilities = useMemo(() => {
-    const raw = (currentOrganization as any)?.active_capabilities;
-    const fromSettings = (currentOrganization?.settings as any)?.active_capabilities;
-    const customAddons = (currentOrganization?.settings as any)?.custom_addons;
+    const orgRecord = currentOrganization as Record<string, unknown> | null;
+    const settingsRecord = currentOrganization?.settings as Record<string, unknown> | undefined;
+    const raw = orgRecord?.active_capabilities;
+    const fromSettings = settingsRecord?.active_capabilities;
+    const customAddons = settingsRecord?.custom_addons;
     const set = new Set<string>();
-    if (Array.isArray(raw)) raw.forEach((c) => set.add(c));
-    if (Array.isArray(fromSettings)) fromSettings.forEach((c) => set.add(c));
-    if (Array.isArray(customAddons)) customAddons.forEach((c) => set.add(c));
+    if (Array.isArray(raw)) raw.forEach((c) => typeof c === 'string' && set.add(c));
+    if (Array.isArray(fromSettings)) fromSettings.forEach((c) => typeof c === 'string' && set.add(c));
+    if (Array.isArray(customAddons)) customAddons.forEach((c) => typeof c === 'string' && set.add(c));
     return Array.from(set);
   }, [currentOrganization]);
 
   const hiddenCapabilities = useMemo(() => {
-    const fromSettings = (currentOrganization?.settings as any)?.hidden_capabilities;
-    if (Array.isArray(fromSettings)) return fromSettings as string[];
+    const settingsRecord = currentOrganization?.settings as Record<string, unknown> | undefined;
+    const fromSettings = settingsRecord?.hidden_capabilities;
+    if (Array.isArray(fromSettings)) return fromSettings.filter((c): c is string => typeof c === 'string');
     return [];
   }, [currentOrganization]);
 

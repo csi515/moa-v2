@@ -7,6 +7,8 @@
  * 4단계: 전자결재 및 발주서(PO) 일괄 발행 & 재고(inventory) '입고 대기' 연동
  */
 
+import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
+
 export interface ItemProcurementHistory {
   sku: string;
   itemName: string;
@@ -203,7 +205,7 @@ export function createPurchaseRequisition(params: {
   }
 
   const seq = params.sequenceNumber ?? Math.floor(100 + Math.random() * 900);
-  const dateStr = new Date(Date.now()).toISOString().slice(0, 10).replace(/-/g, '');
+  const dateStr = todayIsoLocal().replace(/-/g, '');
   const prNumber = `PR-${dateStr}-${String(seq).padStart(3, '0')}`;
 
   let totalEstimatedAmount = 0;
@@ -619,7 +621,7 @@ export function issueContractPurchaseOrder(params: {
 }): ContractPurchaseOrder {
   const { contractPackage, approvers } = params;
   const now = new Date(Date.now());
-  const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
+  const dateStr = todayIsoLocal().replace(/-/g, '');
   const seq = params.orderSequence ?? 1;
   const poNumber = `PO-${dateStr}-${String(seq).padStart(3, '0')}`;
 
@@ -661,7 +663,7 @@ export function issueContractPurchaseOrder(params: {
 
   const dueDate =
     params.deliveryDueDate ||
-    new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    shiftDateIso(todayIsoLocal(), 7);
 
   return {
     poNumber,

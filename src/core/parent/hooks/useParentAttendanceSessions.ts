@@ -1,11 +1,12 @@
 ﻿import { useCallback, useEffect, useMemo, useState } from 'react';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import type { AttendanceSession } from '@/core/attendance/types';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { StorageService } from '@/services/storage';
 import { fetchParentAttendanceSessions } from '../services/parentAttendanceService';
 
 function todayDateString(): string {
-  return new Date().toISOString().slice(0, 10);
+  return todayIsoLocal();
 }
 
 function getLocalSessions(customerId: string, limit: number): AttendanceSession[] {

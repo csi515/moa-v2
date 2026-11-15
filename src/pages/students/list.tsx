@@ -20,6 +20,7 @@ import {
   type ResponsiveColumn,
 } from "@/shared/components/ui";
 import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
+import { todayIsoLocal } from "@/shared/utils/localDate";
 
 export interface CustomerRecord {
   id: string;
@@ -441,7 +442,7 @@ export const StudentListPage: React.FC = () => {
           onPageSizeChange: (size) => setPageSize(size),
         }}
         exportable={{
-          filename: `${customerWord}목록_${new Date().toISOString().slice(0, 10)}.csv`,
+          filename: `${customerWord}목록_${todayIsoLocal()}.csv`,
           headers: [`${customerWord} 이름`, "연락처", "이메일", "상태", "등록일자"],
           getRowData: (s) => [
             s.name,

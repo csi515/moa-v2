@@ -2,6 +2,8 @@
  * 재고·자재 입출고, 안전재고 관리 및 자동 발주(Auto-PO) 엔진 (Pure Function Domain)
  */
 
+import { todayIsoLocal } from '@/shared/utils/localDate';
+
 export type StockMovementType = 'IN' | 'OUT' | 'ADJUST' | 'DISCARD';
 
 export type InventoryItemType = 'goods' | 'textbook' | 'consumable';
@@ -670,7 +672,7 @@ export function evaluateInventoryExpiryStatus(
   expiryDate: string,
   referenceDate?: string
 ): ExpiryAlertStatus {
-  const refDateStr = referenceDate || new Date(Date.now()).toISOString().slice(0, 10);
+  const refDateStr = referenceDate || todayIsoLocal();
   const refTime = new Date(refDateStr).getTime();
   const expTime = new Date(expiryDate).getTime();
 
@@ -808,7 +810,7 @@ export function createStockAuditSlip(
   auditorName: string,
   options: { auditDate?: string; approvalThreshold?: number } = {}
 ): StockAuditSlip {
-  const auditDate = options.auditDate || new Date(Date.now()).toISOString().slice(0, 10);
+  const auditDate = options.auditDate || todayIsoLocal();
   const threshold = options.approvalThreshold ?? 100000; // 기본 10만 원
 
   const nonMatchList = discrepancies.filter((d) => d.status !== 'MATCH');

@@ -17,6 +17,7 @@ import {
 } from './reservationService';
 import { RESOURCE_RESERVATION_BLOCKING_STATUSES } from './types';
 import { dayRangeSeoul } from './seoulTime';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 
 export const resourceReservationCapability = {
   listResources: resourceCapability.listBookable,
@@ -47,7 +48,7 @@ export const resourceReservationCapability = {
     customerId: string,
     options?: { fromDate?: string; limit?: number }
   ) {
-    const from = options?.fromDate || new Date().toISOString().slice(0, 10);
+    const from = options?.fromDate || todayIsoLocal();
     const { start } = dayRangeSeoul(from);
     const rows = await listResourceReservationRows({
       organizationId,

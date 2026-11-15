@@ -1,4 +1,5 @@
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { PracticeRoomStatusGrid } from './components/PracticeRoomStatusGrid';
 import {
@@ -35,7 +36,7 @@ export function CustomerPracticeRoomView({ organizationId }: { organizationId: s
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(() => todayIsoLocal());
   const [roomId, setRoomId] = useState('');
   const [startTime, setStartTime] = useState('18:00');
   const [endTime, setEndTime] = useState('19:00');

@@ -1,4 +1,5 @@
 import type { SessionPass } from '@/core/types/schedule';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 
 export type SessionPassRow = {
   id: string;
@@ -134,7 +135,7 @@ export function sessionPassToPassRow(pass: SessionPass, tenantId: string): PassR
     remaining_count: remaining,
     status,
     is_active: isActive,
-    start_date: pass.purchasedAt ? pass.purchasedAt.slice(0, 10) : new Date().toISOString().slice(0, 10),
+    start_date: pass.purchasedAt ? pass.purchasedAt.slice(0, 10) : todayIsoLocal(),
     expires_at: pass.expiresAt ? pass.expiresAt.slice(0, 10) : null,
     created_at: pass.purchasedAt || new Date().toISOString(),
     updated_at: new Date().toISOString(),

@@ -245,6 +245,8 @@ export function validateWeekly52HourLimit(params: {
 // 교대조(3교대/2교대) 순환 템플릿 원클릭 생성 엔진
 // ============================================================================
 
+import { shiftDateIso } from '@/shared/utils/localDate';
+
 export interface ShiftTemplate {
   id: string;
   name: string; // e.g. "주간 (Day)", "야간 (Night)", "비번 (Off)"
@@ -300,8 +302,7 @@ export function generateShiftCycleForMonth(params: {
       // 익일 종료 여부 판정 (예: 22:00 ~ 06:00)
       let endDateStr = dateStr;
       if (template.endTime < template.startTime) {
-        const nextDay = new Date(year, month - 1, day + 1);
-        endDateStr = nextDay.toISOString().slice(0, 10);
+        endDateStr = shiftDateIso(dateStr, 1);
       }
       const endAt = `${endDateStr}T${template.endTime}:00Z`;
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useList, useCreate } from '@refinedev/core';
+import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
 import {
   evaluateTokenValidity,
   assembleMakeupConfirmationMessage,
@@ -36,10 +37,8 @@ export const MakeupLessonPassView: React.FC = () => {
     e.preventDefault();
     if (!selectedStudentName.trim()) return;
 
-    const todayStr = new Date().toISOString().slice(0, 10);
-    const expiry = new Date();
-    expiry.setDate(expiry.getDate() + 30);
-    const expiresAt = expiry.toISOString().slice(0, 10);
+    const todayStr = todayIsoLocal();
+    const expiresAt = shiftDateIso(todayStr, 30);
 
     setIsCreatingToken(true);
     createToken(
@@ -85,7 +84,7 @@ export const MakeupLessonPassView: React.FC = () => {
     }
   };
 
-  const currentDateStr = new Date().toISOString().slice(0, 10);
+  const currentDateStr = todayIsoLocal();
 
   return (
     <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>

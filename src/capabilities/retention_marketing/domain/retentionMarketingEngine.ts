@@ -9,6 +9,8 @@
  *  4. 템플릿 변수 치환 ({고객명}, {만료일}, {남은일수}, {사업장}) 및 쿨다운 중복 방지 발송 큐 생성
  */
 
+import { shiftDateIso } from '@/shared/utils/localDate';
+
 export type RetentionTriggerType =
   | 'PASS_EXPIRING' // 수강권/회원권 만료 예고
   | 'LOCKER_EXPIRING' // 사물함 만료 예고
@@ -123,7 +125,7 @@ export function scanDueTreatments(params: {
         customerName: t.customerName,
         customerPhone: t.customerPhone,
         triggerType: 'TREATMENT_DUE',
-        referenceDate: new Date(targetMs).toISOString().slice(0, 10),
+        referenceDate: shiftDateIso(t.lastPerformedDate, t.cycleWeeks * 7),
         daysRemaining,
       });
     }

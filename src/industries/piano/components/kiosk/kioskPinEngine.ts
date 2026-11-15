@@ -1,3 +1,4 @@
+import { todayIsoLocal } from '@/shared/utils/localDate';
 export interface KioskStudentMatch {
   id: string;
   name: string;
@@ -92,7 +93,7 @@ export function processKioskCheckin(
   ).padStart(2, '0')}`;
 
   // 엣지 6번: 당일 임시 이동 레코드 자동 감지
-  const today = options?.todayIso || now.toISOString().slice(0, 10);
+  const today = options?.todayIso || todayIsoLocal();
   const tempMove = (options?.temporaryMoves || []).find(
     (m) => m.studentId === student.id && (m.targetDate ? m.targetDate === today : true)
   );

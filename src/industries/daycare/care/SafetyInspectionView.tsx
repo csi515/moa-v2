@@ -2,6 +2,7 @@ import { useMemo, useState, type FC, type FormEvent } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useStorageRefresh } from '@/hooks';
 import { careStorage } from './careStorage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { EmptyState, Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { ClipboardCheck, Plus, Printer, Save } from 'lucide-react';
@@ -25,7 +26,7 @@ export const SafetyInspectionView: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editing, setEditing] = useState<SafetyInspectionLog | null>(null);
   const [form, setForm] = useState({
-    logDate: new Date().toISOString().slice(0, 10),
+    logDate: todayIsoLocal(),
     kind: 'fire_drill' as SafetyCheckKind,
     items: defaultSafetyItems('fire_drill'),
     note: '',
@@ -34,7 +35,7 @@ export const SafetyInspectionView: FC = () => {
   const openCreate = () => {
     setEditing(null);
     setForm({
-      logDate: new Date().toISOString().slice(0, 10),
+      logDate: todayIsoLocal(),
       kind: 'fire_drill',
       items: defaultSafetyItems('fire_drill'),
       note: '',

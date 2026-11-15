@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useList, useCreate } from '@refinedev/core';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   calculateJournalStats,
   type LearningJournal,
@@ -21,7 +22,7 @@ export const LearningJournalFeedView: React.FC = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [studentName, setStudentName] = useState('');
-  const [lessonDate, setLessonDate] = useState(new Date().toISOString().slice(0, 10));
+  const [lessonDate, setLessonDate] = useState(todayIsoLocal());
   const [homework, setHomework] = useState('');
 
   const journals = data?.data ?? [];

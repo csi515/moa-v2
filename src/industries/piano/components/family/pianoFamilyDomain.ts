@@ -1,6 +1,7 @@
 /**
  * 피아노 학원 가족/형제자매 동시 관리 & 수강료 결제 묶음 처리 도메인 엔진
  */
+import { todayIsoLocal } from '@/shared/utils/localDate';
 
 export interface PianoStudentSummary {
   id: string;
@@ -136,7 +137,7 @@ export function detectAndMergeFamilyGroups(
         representativePhone: first.parentPhone || first.phone || cleanPhone,
         studentIds: siblings.map(s => s.id),
         sharedCreditBalance: 0,
-        createdAt: new Date().toISOString().slice(0, 10),
+        createdAt: todayIsoLocal(),
         isAutoDetected: true,
       });
     }

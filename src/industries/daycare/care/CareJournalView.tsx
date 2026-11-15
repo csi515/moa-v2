@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type FC, type FormEvent } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { careStorage } from './careStorage';
 import { PageHeader, EmptyState, Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS, SegmentedControl } from '@/shared/components/ui';
@@ -34,10 +35,10 @@ export const CareJournalView: FC = () => {
     [scopeStudents, refreshKey]
   );
   const journals = useMemo(() => careStorage.getCareJournals(), [refreshKey]);
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayIsoLocal();
   const close = useMemo(() => buildTodayCareClose(students, today), [students, today, refreshKey]);
 
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
+  const [selectedDate, setSelectedDate] = useState(todayIsoLocal());
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editing, setEditing] = useState<CareJournal | null>(null);

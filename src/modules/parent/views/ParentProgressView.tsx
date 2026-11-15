@@ -2,6 +2,7 @@ import { useMemo, useState, type FormEvent } from 'react';
 import { useList, useCreate } from '@refinedev/core';
 import { StorageService } from '@/services/storage';
 import { useStorageRefresh } from '@/hooks';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { useApp } from '@/context/AppContext';
 import { Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
@@ -66,7 +67,7 @@ export function ParentProgressView({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form, setForm] = useState({
-    date: new Date().toISOString().slice(0, 10),
+    date: todayIsoLocal(),
     minutes: 30,
     songTitle: '',
     homework: '',
@@ -81,7 +82,7 @@ export function ParentProgressView({
 
   const openCreate = () => {
     setForm({
-      date: new Date().toISOString().slice(0, 10),
+      date: todayIsoLocal(),
       minutes: 30,
       songTitle: '',
       homework: '',

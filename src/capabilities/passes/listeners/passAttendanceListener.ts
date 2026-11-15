@@ -18,6 +18,7 @@ import {
   type DomainEventBus,
 } from '@/core/events';
 import { deductPassUsage, type PassDefinition } from '../domain/passesEngine';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 
 export interface PassDeductionHandlerOptions {
   /** 수강권 조회 함수 (인메모리 또는 DB 서비스 주입 가능) */
@@ -50,7 +51,7 @@ export async function handleAttendanceCheckedInForPass(
   }
 
   // 2. 수강권 차감 계산 (도메인 엔진 순수 함수 호출)
-  const targetDate = checkInTime ? checkInTime.slice(0, 10) : new Date().toISOString().slice(0, 10);
+  const targetDate = checkInTime ? checkInTime.slice(0, 10) : todayIsoLocal();
   const deductionResult = deductPassUsage(activePass, targetDate);
 
   if (!deductionResult.success) {

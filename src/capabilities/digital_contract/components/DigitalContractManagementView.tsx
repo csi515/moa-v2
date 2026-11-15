@@ -23,6 +23,7 @@ import {
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { LocalStorageNoticeBanner } from '@/shared/components';
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
 import {
   calculateRefundEstimate,
   calculateKftcStandardRefund,
@@ -624,9 +625,7 @@ const NewContractModal: React.FC<NewContractModalProps> = ({ onClose, onCreated 
   const [templateType, setTemplateType] = useState<ContractTemplateType>('personal_training');
   const [amount, setAmount] = useState('1500000');
   const [totalSessions, setTotalSessions] = useState('30');
-  const [endDate, setEndDate] = useState(
-    new Date(Date.now() + 90 * 24 * 3600 * 1000).toISOString().slice(0, 10)
-  );
+  const [endDate, setEndDate] = useState(shiftDateIso(todayIsoLocal(), 90));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -637,13 +636,13 @@ const NewContractModal: React.FC<NewContractModalProps> = ({ onClose, onCreated 
 
     const newCtr: SignedContract = {
       id: `ctr-${Date.now()}`,
-      contractNumber: `CTR-${new Date().toISOString().slice(2, 10).replace(/-/g, '')}-${Math.floor(100 + Math.random() * 900)}`,
+      contractNumber: `CTR-${todayIsoLocal().slice(2).replace(/-/g, '')}-${Math.floor(100 + Math.random() * 900)}`,
       templateType,
       title: title.trim(),
       customerName: customerName.trim(),
       customerPhone: customerPhone.trim(),
       totalContractAmount: Number(amount) || 0,
-      startDate: new Date().toISOString().slice(0, 10),
+      startDate: todayIsoLocal(),
       endDate,
       totalSessionsOrDays: Number(totalSessions) || 1,
       usedSessionsOrDays: 0,

@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Ticket, Lock } from "lucide-react";
 
 import { InPlaceReAuthModal } from "@/components/auth/InPlaceReAuthModal";
+import { GlobalNetworkStatusBar } from "@/core/platform/GlobalNetworkStatusBar";
 import { installAuthInterceptor } from "@/providers/authInterceptor";
 import { AuthProvider } from "@/core/auth/AuthProvider";
 import { OrganizationProvider, useOrganization } from "@/core/organizations/OrganizationProvider";
@@ -477,6 +478,7 @@ export const App: React.FC = () => {
         <AuthProvider>
           <OrganizationProvider>
             <AppProvider>
+              <GlobalNetworkStatusBar />
               <SupabaseRoleSync />
               <InPlaceReAuthModal />
               <AppBootstrapGate>

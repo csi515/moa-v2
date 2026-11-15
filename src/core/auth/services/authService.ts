@@ -27,6 +27,23 @@ export async function getSession(): Promise<Session | null> {
   return data.session;
 }
 
+/** 만료된 세션 토큰을 갱신한다 (Silent Refresh 및 인플레이스 재인증용) */
+export async function refreshSession(): Promise<Session | null> {
+  const { data, error } = await getCoreClient().auth.refreshSession();
+  if (error) throw error;
+  return data.session;
+}
+
+/** 유저의 인증 제공자(provider) 식별 (email, kakao, google, apple, naver 등) */
+export function getUserProvider(user?: User | null): string {
+  if (!user) return 'email';
+  const appProvider = user.app_metadata?.provider;
+  if (typeof appProvider === 'string' && appProvider) return appProvider;
+  const identityProvider = user.identities?.[0]?.provider;
+  if (typeof identityProvider === 'string' && identityProvider) return identityProvider;
+  return 'email';
+}
+
 export async function signUp({
   email,
   password,

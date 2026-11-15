@@ -22,6 +22,7 @@ import {
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { LocalStorageNoticeBanner } from '@/shared/components';
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
 import {
   applyStockMovement,
   checkSafetyStockWarning,
@@ -121,7 +122,7 @@ const DEFAULT_LOTS: (StockLotItem & { location?: WarehouseLocation })[] = [
     id: 'lot-01',
     itemId: 'inv-02',
     lotNumber: 'LOT-261015-M1',
-    expiryDate: new Date(Date.now() + 3 * 24 * 3600 * 1000).toISOString().slice(0, 10), // 3일 후 만료 (임박)
+    expiryDate: shiftDateIso(todayIsoLocal(), 3), // 3일 후 만료 (임박)
     quantity: 4,
     locationName: 'ZONE-C (냉장) / RACK-01 / BIN-01',
   },
@@ -129,7 +130,7 @@ const DEFAULT_LOTS: (StockLotItem & { location?: WarehouseLocation })[] = [
     id: 'lot-02',
     itemId: 'inv-02',
     lotNumber: 'LOT-261025-M2',
-    expiryDate: new Date(Date.now() + 10 * 24 * 3600 * 1000).toISOString().slice(0, 10), // 10일 후 만료 (30일 이내)
+    expiryDate: shiftDateIso(todayIsoLocal(), 10), // 10일 후 만료 (30일 이내)
     quantity: 8,
     locationName: 'ZONE-C (냉장) / RACK-01 / BIN-01',
   },
@@ -137,7 +138,7 @@ const DEFAULT_LOTS: (StockLotItem & { location?: WarehouseLocation })[] = [
     id: 'lot-03',
     itemId: 'inv-01',
     lotNumber: 'LOT-261101-C1',
-    expiryDate: new Date(Date.now() + 45 * 24 * 3600 * 1000).toISOString().slice(0, 10), // 정상
+    expiryDate: shiftDateIso(todayIsoLocal(), 45), // 정상
     quantity: 45,
     locationName: 'ZONE-A (상온) / RACK-01 / BIN-03',
   },
@@ -145,7 +146,7 @@ const DEFAULT_LOTS: (StockLotItem & { location?: WarehouseLocation })[] = [
     id: 'lot-04',
     itemId: 'inv-03',
     lotNumber: 'LOT-260930-S1',
-    expiryDate: new Date(Date.now() - 2 * 24 * 3600 * 1000).toISOString().slice(0, 10), // 만료됨
+    expiryDate: shiftDateIso(todayIsoLocal(), -2), // 만료됨
     quantity: 2,
     locationName: 'ZONE-A (상온) / RACK-02 / BIN-05',
   },
@@ -865,9 +866,9 @@ interface StockInLotModalProps {
 
 const StockInLotModal: React.FC<StockInLotModalProps> = ({ items, onClose, onCreated }) => {
   const [selectedItemId, setSelectedItemId] = useState(items[0]?.id || '');
-  const [lotNumber, setLotNumber] = useState(`LOT-${new Date().toISOString().slice(2, 10).replace(/-/g, '')}-01`);
+  const [lotNumber, setLotNumber] = useState(`LOT-${todayIsoLocal().slice(2).replace(/-/g, '')}-01`);
   const [expiryDate, setExpiryDate] = useState(
-    new Date(Date.now() + 60 * 24 * 3600 * 1000).toISOString().slice(0, 10)
+    shiftDateIso(todayIsoLocal(), 60)
   );
   const [quantity, setQuantity] = useState('20');
 

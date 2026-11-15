@@ -6,6 +6,8 @@
  *  - 휴원, 방학, 시간표 개편, 대회 참가 등의 공지사항을 모아 앱 상단 롤링 배너 및 팝업 모달로 실시간 전달
  */
 
+import { todayIsoLocal, nowIsoLocal } from '@/shared/utils/localDate';
+
 export type AnnouncementPriority = 'NORMAL' | 'URGENT' | 'EMERGENCY';
 
 export type AudienceType = 'ALL' | 'MEMBERS' | 'GUARDIANS';
@@ -48,7 +50,7 @@ export function filterActiveAnnouncements(params: {
 }): ActiveAnnouncementResult {
   const {
     announcements,
-    targetDate = new Date().toISOString().slice(0, 10),
+    targetDate = todayIsoLocal(),
     audience = 'ALL',
   } = params;
 
@@ -118,7 +120,7 @@ export function createTenantAnnouncement(params: {
     targetAudience: params.targetAudience ?? 'ALL',
     actionUrl: params.actionUrl?.trim(),
     isActive: true,
-    createdAt: params.createdAt ?? new Date().toISOString(),
+    createdAt: params.createdAt ?? nowIsoLocal(),
   };
 
   return {

@@ -1,3 +1,5 @@
+import { shiftDateIso } from '@/shared/utils/localDate';
+
 /**
  * 미용·시술·케어 히스토리 차트 엔진 (Pure Function Domain)
  *
@@ -82,7 +84,7 @@ export function predictNextVisitDate(params: {
   // cycleWeeks * 7일 후
   const cycleDays = cycleWeeks * 7;
   const targetMs = lastMs + cycleDays * 24 * 3600 * 1000;
-  const targetVisitDate = new Date(targetMs).toISOString().slice(0, 10);
+  const targetVisitDate = shiftDateIso(lastPerformedDate, cycleWeeks * 7);
 
   const daysRemaining = Math.ceil((targetMs - curMs) / (1000 * 3600 * 24));
   const isOverdue = daysRemaining < 0;

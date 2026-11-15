@@ -10,6 +10,7 @@ import {
 } from '@/core/customer/studentJoinInbox';
 import { useStaffScope } from '@/hooks';
 import { StorageService } from '@/services/storage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import type { CustomerJoinRequest, ReservationDetail, Consultation } from '@/types';
 import { inquiryBelongsToStaff, reservationBelongsToStaff } from './staffConsultationScope';
 import {
@@ -98,17 +99,8 @@ export interface UnifiedConsultationRow {
 
 export function isSameDayAsToday(dateStr?: string): boolean {
   if (!dateStr) return false;
-  const target = new Date(dateStr);
-  if (isNaN(target.getTime())) {
-    const todayStr = new Date().toISOString().slice(0, 10);
-    return dateStr.startsWith(todayStr);
-  }
-  const today = new Date();
-  return (
-    target.getFullYear() === today.getFullYear() &&
-    target.getMonth() === today.getMonth() &&
-    target.getDate() === today.getDate()
-  );
+  const todayStr = todayIsoLocal();
+  return dateStr.startsWith(todayStr);
 }
 
 export function formatConsultationSchedule(dateStr?: string): { display: string; isToday: boolean } {

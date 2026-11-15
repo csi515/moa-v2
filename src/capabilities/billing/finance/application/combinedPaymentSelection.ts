@@ -3,6 +3,7 @@
  * UI 입력값을 결제 request로 바꿀 때만 사용한다.
  */
 import type { CombinedPaymentRequest, PaymentMethod } from '@/types';
+import { yearMonthLocal } from '@/shared/utils/localDate';
 
 export type PayableLine = { id: string; unpaidAmount: number };
 
@@ -46,7 +47,7 @@ export function selectedPayableLines(
 }
 
 export function resolveCombinedPaymentYearMonth(yearMonth?: string): string {
-  return yearMonth ?? new Date().toISOString().slice(0, 7);
+  return yearMonth ?? yearMonthLocal();
 }
 
 export function buildCombinedPaymentRequest(params: {

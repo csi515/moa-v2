@@ -7,6 +7,23 @@ type Replay = {
 const queue: Replay[] = [];
 const listeners = new Set<(open: boolean) => void>();
 let installed = false;
+let refreshingPromise: Promise<boolean> | null = null;
+
+async function trySilentRefresh(): Promise<boolean> {
+  if (refreshingPromise) return refreshingPromise;
+  refreshingPromise = (async () => {
+    try {
+      const { refreshSession } = await import('@/core/auth/services/authService');
+      const session = await refreshSession();
+      return Boolean(session?.access_token);
+    } catch {
+      return false;
+    } finally {
+      refreshingPromise = null;
+    }
+  })();
+  return refreshingPromise;
+}
 
 export function subscribeReAuth(listener: (open: boolean) => void): () => void {
   listeners.add(listener);
@@ -45,7 +62,7 @@ export function discardPendingRequests(): void {
 }
 
 function shouldIgnore(url: string): boolean {
-  return url.includes('/auth/v1/token') || url.includes('/auth/v1/logout');
+  return url.includes('/auth/v1/') || url.includes('/auth/v1/token') || url.includes('/auth/v1/logout');
 }
 
 export function installAuthInterceptor(): void {
@@ -59,6 +76,16 @@ export function installAuthInterceptor(): void {
     }
     const response = await original(request.clone());
     if (response.status !== 401) return response;
+
+    // 1단계: Silent Refresh를 선행 시도하여 모달 없이 자동 복구
+    const refreshed = await trySilentRefresh();
+    if (refreshed) {
+      const replay = request.clone();
+      replay.headers.set('x-moa-replay', '1');
+      return original(replay);
+    }
+
+    // 2단계: 자동 갱신 실패 시 사용자에게 인플레이스 재인증 요청
     openReAuthModal();
     return new Promise<Response>((resolve, reject) => {
       queue.push({

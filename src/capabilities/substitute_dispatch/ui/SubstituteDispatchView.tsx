@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useList, useCreate } from '@refinedev/core';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   assembleSubstituteBroadcastMessage,
   type SubstituteRequest,
@@ -9,7 +10,7 @@ export const SubstituteDispatchView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'requests' | 'create'>('requests');
   const [requesterName, setRequesterName] = useState('');
   const [className, setClassName] = useState('');
-  const [targetDate, setTargetDate] = useState(new Date().toISOString().slice(0, 10));
+  const [targetDate, setTargetDate] = useState(todayIsoLocal());
   const [startTime, setStartTime] = useState('15:00');
   const [endTime, setEndTime] = useState('15:50');
   const [reason, setReason] = useState<'illness' | 'family_event' | 'personal' | 'vacation'>('illness');

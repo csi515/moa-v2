@@ -162,7 +162,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         phone: student.phone || '',
         school: student.school || '',
         grade: student.grade || '',
-        joinDate: student.joinDate || new Date().toISOString().slice(0, 10),
+        joinDate: student.joinDate || todayIsoLocal(),
         leaveDate: student.leaveDate || '',
         status: student.status || 'active',
         teacherId: student.teacherId || teachers[0]?.id || '',

@@ -1,4 +1,5 @@
 import type { Parent, Student } from '../../types';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { STORAGE_KEYS } from '../adapters';
 import { deleteById, generateEntityId, getItem, setItem, type StorageApi } from './helpers';
 import { isMonthlyBillingStudent } from '@/core/students/billingMode';
@@ -91,14 +92,14 @@ export function createCustomerStorage(api: StorageApi) {
           saved = { ...list[idx], ...parent, id: parent.id };
           list[idx] = saved;
         } else {
-          saved = { ...parent, id: parent.id, createdAt: new Date().toISOString().slice(0, 10) };
+          saved = { ...parent, id: parent.id, createdAt: todayIsoLocal() };
           list.unshift(saved);
         }
       } else {
         saved = {
           ...parent,
           id: generateEntityId('p'),
-          createdAt: new Date().toISOString().slice(0, 10),
+          createdAt: todayIsoLocal(),
         };
         list.unshift(saved);
       }

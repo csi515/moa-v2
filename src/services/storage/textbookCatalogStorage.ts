@@ -1,4 +1,5 @@
 import type { Textbook, TextbookInventoryTransaction } from '../../types';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { STORAGE_KEYS } from '../adapters';
 import { generateEntityId, getItem, setItem, type StorageApi } from './helpers';
 import { textbookCoreStock } from '@/industries/piano/services/textbookCoreStock';
@@ -175,7 +176,7 @@ export function createTextbookCatalogStorage(api: StorageApi) {
           quantity: requestedStock,
           previousStock: 0,
           currentStock: requestedStock,
-          transactionDate: new Date().toISOString().slice(0, 10),
+          transactionDate: todayIsoLocal(),
           memo: '신규 교재 등록 시 초기 재고 설정',
         });
       }
@@ -276,7 +277,7 @@ export function createTextbookCatalogStorage(api: StorageApi) {
           previousStock: res.previousStock,
           currentStock: res.quantityAfter,
           referenceId: res.movement.referenceId || undefined,
-          transactionDate: new Date().toISOString().slice(0, 10),
+          transactionDate: todayIsoLocal(),
           memo:
             memo ||
             `${transactionType === 'inbound' ? '교재 입고' : transactionType === 'return' ? '반품 입고' : '재고 수동 조정'}`,
@@ -311,7 +312,7 @@ export function createTextbookCatalogStorage(api: StorageApi) {
         quantity: quantityDelta,
         previousStock: prevStock,
         currentStock: newStock,
-        transactionDate: new Date().toISOString().slice(0, 10),
+        transactionDate: todayIsoLocal(),
         memo:
           memo ||
           `${transactionType === 'inbound' ? '교재 입고' : transactionType === 'return' ? '반품 입고' : '재고 수동 조정'}`,

@@ -1,3 +1,4 @@
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   issueMakeupToken,
   evaluateTokenValidity,
@@ -92,7 +93,7 @@ export function findActiveMakeupTokenForAbsence(
   studentId: string,
   originDate: string,
   organizationId?: string,
-  currentDateStr: string = new Date().toISOString().slice(0, 10)
+  currentDateStr: string = todayIsoLocal()
 ): { token: MakeupToken; daysRemaining: number } | null {
   const all = loadMakeupTokens();
   const matched = all.find(
@@ -118,7 +119,7 @@ export function findActiveMakeupTokenForAbsence(
 export function getAvailableMakeupTokensForStudent(
   studentId: string,
   organizationId?: string,
-  currentDateStr: string = new Date().toISOString().slice(0, 10)
+  currentDateStr: string = todayIsoLocal()
 ): Array<MakeupToken & { daysRemaining: number }> {
   const all = loadMakeupTokens();
   return all

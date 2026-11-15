@@ -27,6 +27,7 @@ import { ActionableEmptyState } from '@/components/common/ActionableEmptyState';
 import { commitOptimistic } from '@/core/feedback/optimisticStatus';
 import { celebrateSuccess, pulseError } from '@/core/feedback/sensoryFeedback';
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { todayIsoLocal, yearMonthLocal, shiftDateIso } from '@/shared/utils/localDate';
 import {
   transitionInvoiceStatus,
   filterMonthlyFees,
@@ -332,7 +333,7 @@ export const BillingInvoicingView: React.FC<BillingInvoicingViewProps> = ({
 
       return {
         invoiceType: '01',
-        writeDate: new Date().toISOString().slice(0, 10),
+        writeDate: todayIsoLocal(),
         supplier: {
           businessNumber: '123-45-67890',
           companyName: orgName,
@@ -351,7 +352,7 @@ export const BillingInvoicingView: React.FC<BillingInvoicingViewProps> = ({
         },
         items: [
           {
-            day: new Date().toISOString().slice(8, 10),
+            day: todayIsoLocal().slice(8, 10),
             itemName: `${inv.billingYearMonth} 정기 정산 및 용역 대금`,
             supplyAmount,
             taxAmount,
@@ -366,7 +367,7 @@ export const BillingInvoicingView: React.FC<BillingInvoicingViewProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `hometax_tax_invoices_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute('download', `hometax_tax_invoices_${todayIsoLocal()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -817,12 +818,8 @@ interface NewInvoiceModalProps {
 const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({ onClose, onCreated }) => {
   const [memberName, setMemberName] = useState('');
   const [amount, setAmount] = useState('2000000');
-  const [billingYearMonth, setBillingYearMonth] = useState(
-    new Date().toISOString().slice(0, 7)
-  );
-  const [dueDate, setDueDate] = useState(
-    new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
-  );
+  const [billingYearMonth, setBillingYearMonth] = useState(yearMonthLocal());
+  const [dueDate, setDueDate] = useState(shiftDateIso(todayIsoLocal(), 14));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

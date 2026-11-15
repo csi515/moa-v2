@@ -59,9 +59,17 @@ export const Modal: React.FC<ModalProps> = ({
   const triggerRef = useRef<HTMLElement | null>(null);
 
   const requestClose = useCallback(() => {
-    if (intent === 'form' && dirty && confirmClose) {
-      confirmClose(onClose);
-      return;
+    if (intent === 'form' && dirty) {
+      if (confirmClose) {
+        confirmClose(onClose);
+        return;
+      }
+      if (
+        typeof window !== 'undefined' &&
+        !window.confirm('작성 중인 변경사항이 저장되지 않았습니다. 창을 닫으시겠습니까?')
+      ) {
+        return;
+      }
     }
     onClose();
   }, [confirmClose, dirty, intent, onClose]);

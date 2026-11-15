@@ -80,7 +80,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newEvent, setNewEvent] = useState({
     title: '',
-    startDate: now.toISOString().slice(0, 10),
+    startDate: todayIsoLocal(),
     type: 'concert' as AcademyEvent['type'],
     description: '',
     color: '#4f46e5',

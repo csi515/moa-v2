@@ -6,6 +6,8 @@
  * 3. 직무발명 보상금(출원/등록) 지급 및 발명자별 지분율 배분 계산
  */
 
+import { todayIsoLocal } from '@/shared/utils/localDate';
+
 export interface PatentInventor {
   inventorId: string;
   inventorName: string;
@@ -176,7 +178,7 @@ export function conductPatentReview(
     };
   }
 
-  const reviewDate = reviewParams.reviewDate || new Date(Date.now()).toISOString().slice(0, 10);
+  const reviewDate = reviewParams.reviewDate || todayIsoLocal();
   const updatedPatent: PatentAsset = {
     ...patent,
     status: status === 'approved' ? 'review_completed' : 'rejected',
@@ -242,7 +244,7 @@ export function recordInventionRewardPayment(
     params.totalRewardAmount,
     patent.inventors
   );
-  const paidDate = params.paidDate || new Date(Date.now()).toISOString().slice(0, 10);
+  const paidDate = params.paidDate || todayIsoLocal();
 
   const rewardItem: InventionRewardItem = {
     type: rewardType,

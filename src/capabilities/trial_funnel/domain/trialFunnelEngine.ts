@@ -1,3 +1,5 @@
+import { todayIsoLocal } from '@/shared/utils/localDate';
+
 /**
  * 무료 체험 및 신규 상담 리드 파이프라인 엔진 (Pure Domain Function)
  * 5단계 퍼널 상태 머신 및 단계별 전환율 분석
@@ -203,7 +205,7 @@ export function buildConsultationFromLead(
     customerId?: string;
   }
 ) {
-  const consultDate = options?.consultationDate || lead.trial_date || new Date(Date.now()).toISOString().slice(0, 10);
+  const consultDate = options?.consultationDate || lead.trial_date || todayIsoLocal();
   return {
     customer_id: options?.customerId || lead.id,
     staff_id: options?.staffId || lead.assigned_staff_id || null,

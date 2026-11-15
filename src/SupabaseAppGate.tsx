@@ -59,6 +59,7 @@ export const SupabaseAppGate: FC<SupabaseAppGateProps> = ({ children }) => {
     customerPortalActive,
     portalMode,
     blockedOwnerOrgIds,
+    refreshOrganizations,
   } = useOrganization();
 
   // 1. 인증 확인 중
@@ -73,7 +74,12 @@ export const SupabaseAppGate: FC<SupabaseAppGateProps> = ({ children }) => {
 
   // 3. 사업장 / 멤버십 로딩 중
   if (orgLoading || organizationsStatus === 'loading') {
-    return <LoadingScreen message={JOURNEY_LOADING_MESSAGES.loadingOrganizations} />;
+    return (
+      <LoadingScreen
+        message={JOURNEY_LOADING_MESSAGES.loadingOrganizations}
+        onRetry={() => void refreshOrganizations()}
+      />
+    );
   }
 
   // 4. 멤버십 fetch 실패(0건)도 OrganizationSelector 로 보냄 — 재시도·학원 개설 UX

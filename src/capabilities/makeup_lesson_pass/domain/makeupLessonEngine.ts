@@ -4,6 +4,8 @@
  * 비용 0원 원칙: 순수 도메인 함수로 상태 전이 및 알림 텍스트 조립
  */
 
+import { shiftDateIso } from '@/shared/utils/localDate';
+
 export type TokenStatus = 'available' | 'reserved' | 'used' | 'expired' | 'canceled';
 export type SlotStatus = 'open' | 'full' | 'closed';
 export type ReservationStatus = 'reserved' | 'attended' | 'absent' | 'canceled';
@@ -58,11 +60,7 @@ export function issueMakeupToken(params: {
   validityDays?: number;
 }): MakeupToken {
   const validity = params.validityDays ?? 30;
-  const baseDate = new Date(params.originDate);
-  const expiryDate = new Date(baseDate);
-  expiryDate.setDate(expiryDate.getDate() + validity);
-
-  const expiresAt = expiryDate.toISOString().slice(0, 10);
+  const expiresAt = shiftDateIso(params.originDate, validity);
 
   return {
     id: params.id,

@@ -3,6 +3,7 @@ import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { StorageService } from '@/services/storage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   FormField,
   FORM_CONTROL_CLASS,
@@ -167,7 +168,7 @@ export const OrganizationBackupCard: FC<OrganizationBackupCardProps> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `organization_backup_${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `organization_backup_${todayIsoLocal()}.json`;
     a.click();
     URL.revokeObjectURL(url);
     showToast(`${placeLabel} 전체 데이터 백업 파일이 다운로드되었습니다.`, 'success');

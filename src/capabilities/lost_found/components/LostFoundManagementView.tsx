@@ -19,6 +19,7 @@ import {
   Archive,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { todayIsoLocal, yearMonthLocal } from '@/shared/utils/localDate';
 import {
   calculateExpiryDate,
   calculateDaysRemaining,
@@ -145,7 +146,7 @@ export const LostFoundManagementView: React.FC = () => {
     } catch {}
   }, [items]);
 
-  const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const todayStr = useMemo(() => todayIsoLocal(), []);
 
   const summary = useMemo(() => {
     return summarizeLostAndFound(items, todayStr);
@@ -201,7 +202,7 @@ export const LostFoundManagementView: React.FC = () => {
 
     const newItem: LostItem = {
       id: `item-${Date.now()}`,
-      itemCode: `LF-${new Date().toISOString().slice(0, 7).replace('-', '')}-${String(
+      itemCode: `LF-${yearMonthLocal().replace('-', '')}-${String(
         items.length + 1
       ).padStart(3, '0')}`,
       title: newTitle.trim(),

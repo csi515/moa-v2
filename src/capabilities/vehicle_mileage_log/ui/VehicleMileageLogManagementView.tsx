@@ -17,6 +17,7 @@ import {
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { useActiveUser } from '@/shared/session/useActiveUser';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { generateNtsMileageCsv, downloadCsvFile } from '../domain/vehicleMileageLogExport';
 import {
   calculateTripDistance,
@@ -220,7 +221,7 @@ export const VehicleMileageLogManagementView: React.FC = () => {
 
   const handleExportNtsCsv = () => {
     const csv = generateNtsMileageCsv(logs, currentOrganization?.name || '사업장', new Date().getFullYear());
-    downloadCsvFile(`업무용승용차운행기록부_${currentOrganization?.name || '사업장'}_${new Date().toISOString().slice(0, 10)}.csv`, csv);
+    downloadCsvFile(`업무용승용차운행기록부_${currentOrganization?.name || '사업장'}_${todayIsoLocal()}.csv`, csv);
     showToast('국세청 표준 서식(5년 법적 보존용) 운행기록부가 다운로드되었습니다.', 'success');
   };
 

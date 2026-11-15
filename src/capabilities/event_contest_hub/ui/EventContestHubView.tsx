@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useList, useCreate } from '@refinedev/core';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   assembleContestCueSheet,
   renderContestSvgAward,
@@ -10,7 +11,7 @@ import {
 export const EventContestHubView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'contests' | 'entries' | 'create'>('contests');
   const [title, setTitle] = useState('');
-  const [eventDate, setEventDate] = useState(new Date().toISOString().slice(0, 10));
+  const [eventDate, setEventDate] = useState(todayIsoLocal());
   const [venueName, setVenueName] = useState('본원 그랜드 아트홀');
   const [entryFee, setEntryFee] = useState(30000);
   const [cueSheetText, setCueSheetText] = useState<string | null>(null);

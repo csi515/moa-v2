@@ -20,6 +20,7 @@ import {
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { LocalStorageNoticeBanner } from '@/shared/components';
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
 import {
   detectShiftSlotConflict,
   calculateShiftWage,
@@ -43,8 +44,8 @@ const SAMPLE_SHIFTS: ShiftWithStaffName[] = [
     id: 'sft-001',
     staffId: 'staff-1',
     staffName: '이지훈 (오전 오픈)',
-    startAt: `${new Date().toISOString().slice(0, 10)}T08:00:00Z`,
-    endAt: `${new Date().toISOString().slice(0, 10)}T17:00:00Z`, // 9시간 - 1시간 휴게 = 8시간
+    startAt: `${todayIsoLocal()}T08:00:00Z`,
+    endAt: `${todayIsoLocal()}T17:00:00Z`, // 9시간 - 1시간 휴게 = 8시간
     breakMinutes: 60,
     hourlyRate: 11000,
   },
@@ -52,8 +53,8 @@ const SAMPLE_SHIFTS: ShiftWithStaffName[] = [
     id: 'sft-002',
     staffId: 'staff-2',
     staffName: '김민아 (오후 피크)',
-    startAt: `${new Date().toISOString().slice(0, 10)}T14:00:00Z`,
-    endAt: `${new Date().toISOString().slice(0, 10)}T23:00:00Z`,
+    startAt: `${todayIsoLocal()}T14:00:00Z`,
+    endAt: `${todayIsoLocal()}T23:00:00Z`,
     breakMinutes: 60,
     hourlyRate: 11000,
   },
@@ -61,8 +62,8 @@ const SAMPLE_SHIFTS: ShiftWithStaffName[] = [
     id: 'sft-003',
     staffId: 'staff-3',
     staffName: '박준영 (야간 마감)',
-    startAt: `${new Date().toISOString().slice(0, 10)}T22:00:00Z`,
-    endAt: `${new Date(Date.now() + 24 * 3600 * 1000).toISOString().slice(0, 10)}T06:00:00Z`,
+    startAt: `${todayIsoLocal()}T22:00:00Z`,
+    endAt: `${shiftDateIso(todayIsoLocal(), 1)}T06:00:00Z`,
     breakMinutes: 60,
     hourlyRate: 12000,
   },
@@ -111,10 +112,12 @@ export const ShiftScheduleManagementView: React.FC = () => {
 
   // 주간 시작일 (해당 주 월요일 기준)
   const currentWeekMonday = useMemo(() => {
-    const d = new Date();
+    const today = todayIsoLocal();
+    const d = new Date(`${today}T12:00:00`);
     const day = d.getDay();
     const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-    return new Date(d.setDate(diff)).toISOString().slice(0, 10);
+    d.setDate(diff);
+    return todayIsoLocal(d);
   }, []);
 
   // 직원별 주 52시간 현황 집계
@@ -420,7 +423,7 @@ const NewShiftModal: React.FC<NewShiftModalProps> = ({
 }) => {
   const [staffId, setStaffId] = useState('staff-1');
   const [staffName, setStaffName] = useState('이지훈 (오전)');
-  const [shiftDate, setShiftDate] = useState(new Date().toISOString().slice(0, 10));
+  const [shiftDate, setShiftDate] = useState(todayIsoLocal());
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('18:00');
   const [breakMinutes, setBreakMinutes] = useState('60');

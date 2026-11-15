@@ -4,6 +4,7 @@ import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { transportStorage } from '@/capabilities/transport/infrastructure/transportStorage';
 import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { FormField, FORM_CONTROL_CLASS, FilterTabs, FilterBar, SearchField } from '@/shared/components/ui';
 import { PageHeader, EmptyState, Modal } from '@/shared/components';
 import { useModuleLabels } from '@/core/labels';
@@ -34,7 +35,7 @@ export const ShuttleRideRequestView: FC = () => {
   );
   const requests = useMemo(() => transportStorage.getShuttleRideRequests(), [refreshKey]);
 
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
+  const [selectedDate, setSelectedDate] = useState(todayIsoLocal());
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -18,6 +18,7 @@ import {
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { LocalStorageNoticeBanner } from '@/shared/components';
 import { EmptyState } from '@/shared/components/ui';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   calculateStaffPayroll,
   summarizePayrollBatch,
@@ -188,7 +189,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
     const newItem: ServicePerformanceItem = {
       id: `perf-${Date.now()}`,
       staffId: selectedStaffId,
-      serviceDate: new Date().toISOString().slice(0, 10),
+      serviceDate: todayIsoLocal(),
       serviceName: newServiceName.trim(),
       customerName: newCustomerName.trim(),
       grossSales: newGrossSales,

@@ -7,6 +7,7 @@ import type {
   TuitionInvoice,
 } from '../../types';
 import { STORAGE_KEYS } from '../adapters';
+import { yearMonthLocal } from '@/shared/utils/localDate';
 import { generateEntityId, getItem, setItem, type StorageApi } from './helpers';
 import {
   isTextbookSaleDbAvailable,
@@ -140,7 +141,7 @@ export function createTextbookSalesStorage(api: StorageApi) {
     },
 
     getStudentBillingSummary(studentId: string, yearMonth?: string): StudentMonthlyBillingSummary {
-      const ym = yearMonth || new Date().toISOString().slice(0, 7);
+      const ym = yearMonth || yearMonthLocal();
       const students = (api.getStudents as () => Student[])();
       const student = students.find((s) => s.id === studentId);
       const studentName = student ? student.name : '미상 원생';
@@ -248,7 +249,7 @@ export function createTextbookSalesStorage(api: StorageApi) {
       monthlyBooksSold: number;
       lowStockBooksCount: number;
     } {
-      const ym = yearMonth || new Date().toISOString().slice(0, 7);
+      const ym = yearMonth || yearMonthLocal();
       const allSales = (api.getTextbookSales as () => TextbookSale[])();
       const allPayments = (api.getTextbookPayments as () => TextbookPayment[])();
       const allTextbooks = (api.getTextbooks as () => Textbook[])();

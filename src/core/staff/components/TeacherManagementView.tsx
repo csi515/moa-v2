@@ -22,6 +22,7 @@ import { PageHeader } from '@/shared/components';
 import { Modal } from '@/shared/components/ui/Modal';
 import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { Teacher, type TeacherPayType } from '@/types';
 import { payTypeLabel, payTypeRateUnitLabel, payTypeUsesUnitRate } from '@/core/finance/teacherPayroll';
 import { normalizeStaffGrants, type StaffGrants } from '@/core/staff/staffGrants';
@@ -175,7 +176,7 @@ export const TeacherManagementView: React.FC = () => {
     name: '',
     phone: '',
     email: '',
-    hireDate: new Date().toISOString().slice(0, 10),
+    hireDate: todayIsoLocal(),
     specialty: '클래식 피아노, 기초 테크닉',
     status: 'active' as 'active' | 'inactive',
     color: '#4f46e5',
@@ -191,7 +192,7 @@ export const TeacherManagementView: React.FC = () => {
       name: '',
       phone: '010-0000-0000',
       email: '',
-      hireDate: new Date().toISOString().slice(0, 10),
+      hireDate: todayIsoLocal(),
       specialty: '유아 피아노, 반주법, 콩쿠르 지도',
       status: 'active',
       color: '#8b5cf6',

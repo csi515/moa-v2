@@ -1,3 +1,5 @@
+import { todayIsoLocal } from '@/shared/utils/localDate';
+
 /**
  * 소모품/비품 안전재고 감지 및 간이 발주서(PO) 조립 엔진 (Pure Domain Functions)
  * 안전재고 미달 품목 실시간 감지, 공급처별 발주서 텍스트 조립 (Web Share API 지원)
@@ -67,7 +69,7 @@ export function assemblePurchaseOrder(
   orgName: string = '우리 매장',
   sequenceNumber: number = 1
 ): GeneratedPurchaseOrder {
-  const dateStr = new Date(Date.now()).toISOString().slice(0, 10).replace(/-/g, '');
+  const dateStr = todayIsoLocal().replace(/-/g, '');
   const poNumber = `PO-${dateStr}-${String(sequenceNumber).padStart(3, '0')}`;
 
   let totalAmount = 0;
@@ -91,7 +93,7 @@ export function assemblePurchaseOrder(
   const lines = [
     `[발주서] ${orgName} ➔ ${vendorName}`,
     `발주번호: ${poNumber}`,
-    `발주일자: ${new Date(Date.now()).toISOString().slice(0, 10)}`,
+    `발주일자: ${todayIsoLocal()}`,
     `-----------------------------`,
     ...orderItems.map(
       (i, idx) => `${idx + 1}. ${i.itemName} : ${i.orderQuantity}${i.unit} (${i.subtotal.toLocaleString()}원)`

@@ -3,6 +3,7 @@ import { Bus, Plus } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { StorageService } from '@/services/storage';
 import { useStorageRefresh } from '@/hooks';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import type { Student } from '@/types';
@@ -36,7 +37,7 @@ export function ParentShuttleView({
   const defaultAddr = getDefaultPickupAddress(student);
 
   const [form, setForm] = useState({
-    rideDate: new Date().toISOString().slice(0, 10),
+    rideDate: todayIsoLocal(),
     direction: (defaultAddr?.shuttleDirection || 'both') as ShuttleDirection,
     pickupAddressId: defaultAddr?.id || '',
     addressLabel: defaultAddr?.label || '집',
@@ -75,7 +76,7 @@ export function ParentShuttleView({
   const openCreate = () => {
     const addr = getDefaultPickupAddress(student);
     setForm({
-      rideDate: new Date().toISOString().slice(0, 10),
+      rideDate: todayIsoLocal(),
       direction: addr?.shuttleDirection || 'both',
       pickupAddressId: addr?.id || '',
       addressLabel: addr?.label || '집',

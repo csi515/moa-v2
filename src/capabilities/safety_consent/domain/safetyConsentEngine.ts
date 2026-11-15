@@ -1,3 +1,5 @@
+import { todayIsoLocal } from '@/shared/utils/localDate';
+
 /**
  * 전자 동의서 & 안전 서약서 엔진 (Pure Function Domain)
  *
@@ -22,7 +24,7 @@ export interface ConsentTemplate {
 export function selectActiveConsentTemplate(
   templates: ConsentTemplate[],
   type: string,
-  targetDate: string = new Date(Date.now()).toISOString().slice(0, 10)
+  targetDate: string = todayIsoLocal()
 ): ConsentTemplate | undefined {
   const candidates = templates
     .filter((t) => t.type === type && t.isActive && t.effectiveFrom <= targetDate)

@@ -4,10 +4,12 @@
  */
 import type { PaymentMethod, TuitionInvoice } from '@/types';
 import { formatCurrency } from '@/utils/formatters';
+import { isOnline } from '@/shared/utils/networkGuard';
 
 export const TUITION_PAYMENT_AMOUNT_REQUIRED_MESSAGE = '납부 금액은 0원보다 커야 합니다.';
 export const TUITION_PAYMENT_EXCEEDS_UNPAID_MESSAGE = '미납 금액을 초과할 수 없습니다.';
 export const TUITION_PAYMENT_FAILED_MESSAGE = '수납 처리에 실패했습니다.';
+export const TUITION_PAYMENT_OFFLINE_MESSAGE = '인터넷 연결이 오프라인 상태입니다. 네트워크 연결 확인 후 다시 시도해 주세요.';
 
 export function validateTuitionInvoiceAmount(amount: number, unpaidAmount: number): string | null {
   if (amount <= 0) return TUITION_PAYMENT_AMOUNT_REQUIRED_MESSAGE;
@@ -51,6 +53,9 @@ export async function runTuitionInvoicePayment(
   deps: TuitionInvoicePaymentDeps
 ): Promise<TuitionInvoicePaymentOutcome> {
   if (deps.busy.current) return { ok: false, skipped: true };
+  if (!isOnline()) {
+    return { ok: false, message: TUITION_PAYMENT_OFFLINE_MESSAGE, toast: 'warning' };
+  }
   if (!deps.invoice) {
     return { ok: false, message: TUITION_PAYMENT_FAILED_MESSAGE, toast: 'error' };
   }

@@ -2,6 +2,7 @@ import { useMemo, useState, type FC, type FormEvent } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { careStorage } from './careStorage';
 import { PageHeader, EmptyState, Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS, FilterTabs } from '@/shared/components/ui';
@@ -27,7 +28,7 @@ export const MedicationRequestView: FC = () => {
   );
   const requests = useMemo(() => careStorage.getMedicationRequests(), [refreshKey]);
 
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
+  const [selectedDate, setSelectedDate] = useState(todayIsoLocal());
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);

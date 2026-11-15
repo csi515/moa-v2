@@ -1,6 +1,8 @@
+import { yearMonthLocal } from '@/shared/utils/localDate';
+
 /** YYYY-MM 형식의 현재 월 */
 export function getCurrentYearMonth(): string {
-  return new Date().toISOString().slice(0, 7);
+  return yearMonthLocal();
 }
 
 /** 청구월 + 납부일 → dueDate (YYYY-MM-DD) */

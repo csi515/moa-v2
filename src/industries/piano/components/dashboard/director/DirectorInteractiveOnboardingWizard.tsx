@@ -17,6 +17,7 @@ import {
 import { Clock, UserPlus, Calendar, CheckCircle2, Sparkles, ArrowRight, ArrowLeft, X, FileSpreadsheet } from 'lucide-react';
 import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
 import { StorageService } from '@/services/storage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { StudentBulkImportModal } from '@/capabilities/roster/components/StudentBulkImportModal';
 import { BulkScheduleAssignModal } from '@/capabilities/roster/components/schedule/BulkScheduleAssignModal';
@@ -82,7 +83,7 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
         parentName: student.parentName || `${student.name} 학부모`,
         parentPhone: student.parentPhone.trim(),
         phone: student.parentPhone.trim(),
-        joinDate: new Date().toISOString().slice(0, 10),
+        joinDate: todayIsoLocal(),
         status: 'active',
         teacherId: 't-director',
         teacherName: '원장님',

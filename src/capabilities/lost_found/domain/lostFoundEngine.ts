@@ -10,6 +10,8 @@
  *  3. 만료 임박(7일 이내) 분실물 필터 및 수령 반환율 통계 산출
  */
 
+import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
+
 export type LostItemCategory =
   | 'electronics' // 전자기기 (이어폰, 워치, 휴대폰 등)
   | 'clothing' // 의류/신발 (운동복, 외투, 운동화 등)
@@ -68,17 +70,15 @@ export interface LostAndFoundSummary {
  * 1. 보관 만료일(YYYY-MM-DD) 계산 (순수 함수)
  */
 export function calculateExpiryDate(foundAt: string, retentionDays: number): string {
-  const date = new Date(foundAt);
-  date.setDate(date.getDate() + retentionDays);
-  return date.toISOString().slice(0, 10);
+  return shiftDateIso(foundAt, retentionDays);
 }
 
 /**
  * 2. 현재일 기준 잔여 보관 일수(D-Day) 계산 (순수 함수)
  */
 export function calculateDaysRemaining(expiryDate: string, currentDate?: string): number {
-  const current = currentDate ? new Date(currentDate) : new Date(Date.now());
-  const currentOnlyDate = new Date(current.toISOString().slice(0, 10)).getTime();
+  const currentStr = currentDate || todayIsoLocal();
+  const currentOnlyDate = new Date(currentStr).getTime();
   const expiryTime = new Date(expiryDate).getTime();
   const diffTime = expiryTime - currentOnlyDate;
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));

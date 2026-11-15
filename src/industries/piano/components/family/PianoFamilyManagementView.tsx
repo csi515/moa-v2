@@ -14,6 +14,7 @@ import {
 import { FamilyBundlePaymentModal } from './FamilyBundlePaymentModal';
 import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
 import { billingStorage } from '@/capabilities/billing/infrastructure/billingStorage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { PageHeader, Modal } from '@/shared/components';
 import {
@@ -168,7 +169,7 @@ export const PianoFamilyManagementView: React.FC = () => {
         amount,
         method as any,
         memo || '패밀리 묶음 수납 자동 분할',
-        new Date().toISOString().slice(0, 10)
+        todayIsoLocal()
       );
       return true;
     } catch {

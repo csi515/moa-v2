@@ -7,6 +7,7 @@ import { getSlotCapacityInfo } from '@/capabilities/scheduling/capacity';
 import { isOutsideStaffHours } from '@/capabilities/scheduling/availability/windows';
 import { findStaffTimeConflict } from '@/capabilities/booking/domain/bookingRooms';
 import { formatBankAccountText } from '@/capabilities/finance/paymentMethodLabels';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import type { Student } from '@/types';
 
 /** 피부관리 고객 — 시술 예약 신청 */
@@ -15,7 +16,7 @@ export function SkinBookingRequestForm({ student }: { student: Student }) {
   const [open, setOpen] = useState(false);
   const [serviceId, setServiceId] = useState('');
   const [staffId, setStaffId] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(todayIsoLocal());
   const [time, setTime] = useState('10:00');
   const [memo, setMemo] = useState('');
   const [waitlist, setWaitlist] = useState(false);

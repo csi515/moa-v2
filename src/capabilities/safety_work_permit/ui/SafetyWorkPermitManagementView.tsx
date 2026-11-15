@@ -20,6 +20,7 @@ import {
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { useActiveUser } from '@/shared/session/useActiveUser';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { generatePtwAuditCsv, downloadCsvFile } from '../domain/safetyWorkPermitExport';
 import {
   assessGasSafety,
@@ -312,7 +313,7 @@ export const SafetyWorkPermitManagementView: React.FC = () => {
 
   const handleExportPtwCsv = () => {
     const csv = generatePtwAuditCsv(permits, currentOrganization?.name || '사업장', new Date().getFullYear());
-    downloadCsvFile(`안전작업허가서(PTW)감사대장_${currentOrganization?.name || '사업장'}_${new Date().toISOString().slice(0, 10)}.csv`, csv);
+    downloadCsvFile(`안전작업허가서(PTW)감사대장_${currentOrganization?.name || '사업장'}_${todayIsoLocal()}.csv`, csv);
     showToast('산업안전보건법 3년 법적 보존용 감사 대장 CSV가 다운로드되었습니다.', 'success');
   };
 

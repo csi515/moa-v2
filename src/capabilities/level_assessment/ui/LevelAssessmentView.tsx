@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useList, useCreate } from '@refinedev/core';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   evaluateAssessment,
   generateCertificateNumber,
@@ -37,7 +38,7 @@ export const LevelAssessmentView: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [program, setProgram] = useState('태권도');
-  const [assessmentDate, setAssessmentDate] = useState(new Date().toISOString().slice(0, 10));
+  const [assessmentDate, setAssessmentDate] = useState(todayIsoLocal());
   const [passingScore, setPassingScore] = useState(70);
 
   // 전자 합격증 미리보기 모달 상태
@@ -75,7 +76,7 @@ export const LevelAssessmentView: React.FC = () => {
       studentName: '김민지',
       targetLevel: '태권도 1품(검은띠)',
       certificateNumber: certNum,
-      issueDate: new Date().toISOString().slice(0, 10),
+      issueDate: todayIsoLocal(),
       organizationName: '우리 매장 태권도장',
     });
     setPreviewCertSvg(svg);

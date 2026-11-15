@@ -18,6 +18,15 @@ export function mapLoginErrorMessage(raw?: string | null): string {
   if (/too many requests|rate limit/i.test(raw)) {
     return '로그인 시도가 너무 많습니다. 잠시 후 다시 시도해 주세요.';
   }
+  if (/failed to fetch|networkerror|network_error|retryablefetcherror|fetch failed/i.test(raw)) {
+    return '네트워크 연결이 불안정합니다. 인터넷 연결 상태를 확인하고 다시 시도해 주세요.';
+  }
+  if (/timeout|aborted/i.test(raw)) {
+    return '서버 응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.';
+  }
+  if (/access_denied|user_cancelled/i.test(raw)) {
+    return '로그인이 취소되었습니다.';
+  }
 
   return raw;
 }

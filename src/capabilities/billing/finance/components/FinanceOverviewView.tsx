@@ -6,6 +6,7 @@ import { billingStorage } from '@/capabilities/billing/infrastructure/billingSto
 import { resolveFinanceHubNav } from '@/capabilities/billing/finance/financeHubNav';
 import { formatCurrency } from '@/utils/formatters';
 import { buildYearMonthOptions } from '@/capabilities/billing/finance/categories';
+import { yearMonthLocal } from '@/shared/utils/localDate';
 import {
   TrendingUp,
   TrendingDown,
@@ -29,7 +30,7 @@ export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded
   const { industry, isOwner, isAdmin, canPermission } = usePermissions();
   const hasFinanceAccess = isOwner || isAdmin || canPermission('finance.read');
   const refreshKey = useStorageRefresh('finance');
-  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
+  const [selectedMonth, setSelectedMonth] = useState(yearMonthLocal());
 
   useEffect(() => {
     // 사용자 화면에 토스트나 팝업을 띄우지 않고 조용히 누락 건 자동 점검 및 보정

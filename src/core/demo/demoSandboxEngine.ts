@@ -1,3 +1,4 @@
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { StorageService } from '@/services/storage';
 
 export interface DemoStudentTemplate {
@@ -117,8 +118,7 @@ export const DemoSandboxEngine = {
    */
   injectDemoData(): { insertedStudents: number } {
     let count = 0;
-    const now = new Date();
-    const todayStr = now.toISOString().slice(0, 10);
+    const todayStr = todayIsoLocal();
 
     // 1. 학생 8명 생성
     for (const p of DEMO_STUDENT_PRESETS) {

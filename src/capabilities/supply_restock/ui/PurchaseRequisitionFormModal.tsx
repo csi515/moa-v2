@@ -85,7 +85,7 @@ export const PurchaseRequisitionFormModal: React.FC<PurchaseRequisitionFormModal
   const [department, setDepartment] = useState('생산1팀');
   const [requesterName, setRequesterName] = useState('현장 담당자');
   const [targetDeliveryDate, setTargetDeliveryDate] = useState(
-    new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+    shiftDateIso(todayIsoLocal(), 5)
   );
   // ★ 구매 사유 필수
   const [justification, setJustification] = useState('');

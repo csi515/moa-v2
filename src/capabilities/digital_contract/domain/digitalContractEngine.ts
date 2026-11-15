@@ -17,6 +17,7 @@ export type ContractTemplateType =
   | 'instructor_consignment'; // 문화센터 강사 강의 위탁 및 매출배분 계약서
 
 import { createStateMachine } from '@/core/fsm/finiteStateMachine';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 
 export type ContractStatus =
   | 'DRAFT'
@@ -135,8 +136,7 @@ export function evaluateContractStatus(
     return contract.status;
   }
 
-  const today = currentDate ? new Date(currentDate) : new Date(Date.now());
-  const todayStr = today.toISOString().slice(0, 10);
+  const todayStr = currentDate || todayIsoLocal();
 
   if (todayStr > contract.endDate || contract.usedSessionsOrDays >= contract.totalSessionsOrDays) {
     return 'EXPIRED';
@@ -345,7 +345,7 @@ export function getExpiringContractsForRenewalNotification(
   contracts: readonly SignedContract[],
   referenceDate?: string
 ): ContractRenewalNotificationTarget[] {
-  const refDateStr = referenceDate || new Date(Date.now()).toISOString().slice(0, 10);
+  const refDateStr = referenceDate || todayIsoLocal();
   const refTime = new Date(refDateStr).getTime();
 
   const results: ContractRenewalNotificationTarget[] = [];

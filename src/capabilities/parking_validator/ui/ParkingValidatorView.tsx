@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useList, useCreate, useUpdate } from '@refinedev/core';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   normalizeVehicleNumber,
   renderParkingPassSvg,
@@ -105,7 +106,7 @@ export const ParkingValidatorView: React.FC = () => {
           purchased_quantity: purchasedQty,
           used_quantity: 0,
           unit_cost: unitCost,
-          purchased_date: new Date().toISOString().slice(0, 10),
+          purchased_date: todayIsoLocal(),
         },
       },
       {
@@ -203,7 +204,7 @@ export const ParkingValidatorView: React.FC = () => {
         <div style={{ background: '#fff', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
           <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>오늘 등록된 차량</div>
           <div style={{ fontSize: '26px', fontWeight: 'bold', color: '#0f172a' }}>
-            {registrations.filter((r) => r.registeredAt?.slice(0, 10) === new Date().toISOString().slice(0, 10)).length}대
+            {registrations.filter((r) => r.registeredAt?.slice(0, 10) === todayIsoLocal()).length}대
           </div>
           <div style={{ fontSize: '11px', color: '#94a3b8' }}>전체 누적 {registrations.length}대</div>
         </div>

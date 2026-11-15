@@ -12,6 +12,7 @@ import type { StaffMetadata } from '../../types';
 import type { AcademySettings, Teacher } from '../../../../types';
 import type { Booking, ServiceOffering } from '../../../../core/types/schedule';
 import type { PickupAddress } from '../../../../core/transport/types';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 
 
 // ─── Staff (Teachers) ───────────────────────────────────────────────
@@ -56,7 +57,7 @@ export function staffRowToTeacher(row: {
     phone: row.phone || '',
     email: row.email || undefined,
     userId: row.user_id ?? null,
-    hireDate: meta.hireDate || new Date().toISOString().slice(0, 10),
+    hireDate: meta.hireDate || todayIsoLocal(),
     status: (row.status as Teacher['status']) || 'active',
     specialty: meta.specialty,
     salary: meta.salary,

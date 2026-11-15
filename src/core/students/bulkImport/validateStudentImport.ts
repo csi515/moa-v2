@@ -5,6 +5,7 @@ import type {
   StudentImportValidationResult,
 } from './types';
 import { STUDENT_IMPORT_TEMPLATE_HEADERS } from './types';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 
 const HEADER_ALIASES: Record<string, string> = {
   이름: '이름',
@@ -170,7 +171,7 @@ export function normalizeImportRow(row: StudentImportRawRow): StudentImportNorma
     guardianEmail: g('보호자이메일'),
     relationship: parseRelationship(g('관계')),
     courseSubject: g('수강과목'),
-    joinDate: parseImportDate(g('입학일')) || new Date().toISOString().slice(0, 10),
+    joinDate: parseImportDate(g('입학일')) || todayIsoLocal(),
     tuitionFee: parseMoney(g('월수강료')),
     paymentDay: parseDay(g('납부일')),
     memo: g('메모'),
@@ -311,7 +312,7 @@ export function buildTemplateCsv(): string {
     'parent@example.com',
     '모',
     '피아노 초급',
-    new Date().toISOString().slice(0, 10),
+    todayIsoLocal(),
     '180000',
     '10',
     '',

@@ -10,6 +10,7 @@ import { includesLinkedBillingIncome } from '@/core/industry/industryUi';
 import { installIndustryPlugin } from '@/core/industry/pluginHost';
 import type { IndustryPluginManifest } from '@/core/industry/pluginTypes';
 import { createFinanceStorage } from '@/services/storage/financeStorage';
+import { yearMonthLocal } from '@/shared/utils/localDate';
 import type { StorageApi } from '@/services/storage/helpers';
 import type { Expense, IncomeEntry } from '@/capabilities/billing/finance/types';
 
@@ -71,7 +72,7 @@ assert.match(
   /getFinanceSummary\(industry\)/
 );
 
-const yearMonth = new Date().toISOString().slice(0, 7);
+const yearMonth = yearMonthLocal();
 const [year, month] = yearMonth.split('-').map((part) => Number(part));
 const previous = new Date(Date.UTC(year, month - 2, 1)).toISOString().slice(0, 7);
 

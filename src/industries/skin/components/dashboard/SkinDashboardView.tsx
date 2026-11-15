@@ -8,6 +8,7 @@ import { isUnassignedCustomerRequest } from '@/industries/skin/bookingRooms';
 import { StorageService } from '@/services/storage';
 import { PageHeader, SummaryMetricCard, EmptyState } from '@/shared/components';
 import { formatKoreanDate } from '@/utils/formatters';
+import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
 import { Calendar, Plus, Sparkles, Users } from 'lucide-react';
 
 const SkinStaffDashboard: React.FC = () => {
@@ -19,7 +20,7 @@ const SkinStaffDashboard: React.FC = () => {
   const customer = labels.customer.singular;
   const service = labels.service.singular;
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayIsoLocal();
   const scheduleService = useScheduleService();
   const allBookingsRaw = scheduleService.getBookings();
   const todayBookings = useMemo(() => {
@@ -135,7 +136,7 @@ const SkinAdminDashboard: React.FC = () => {
   const staff = labels.staff.singular;
   const service = labels.service.management;
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayIsoLocal();
   const todayBookings = useMemo(
     () => scheduleService.getBookingsByDate(today),
     [today, refreshKey]
@@ -167,9 +168,7 @@ const SkinAdminDashboard: React.FC = () => {
     for (const [id, last] of latest) {
       const offering = services.find((item) => item.id === last.serviceId);
       if (!offering?.careIntervalDays) continue;
-      const due = new Date(last.startsAt);
-      due.setDate(due.getDate() + offering.careIntervalDays);
-      const dueIso = due.toISOString().slice(0, 10);
+      const dueIso = shiftDateIso(last.startsAt.slice(0, 10), offering.careIntervalDays);
       if (dueIso <= today) dueList.push({ id, name: last.name, due: dueIso });
     }
     return dueList.slice(0, 8);

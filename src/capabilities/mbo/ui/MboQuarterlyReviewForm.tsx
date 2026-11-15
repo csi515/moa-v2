@@ -10,6 +10,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 
 export interface ProgressLogItem {
   id: string;
@@ -71,7 +72,7 @@ export const MboQuarterlyReviewForm: React.FC<MboQuarterlyReviewFormProps> = ({
     onCreateLog({
       projectId,
       authorName: '현재 실무자',
-      logDate: new Date().toISOString().slice(0, 10),
+      logDate: todayIsoLocal(),
       progressRate: logProgress,
       achievements: logAchievements.trim(),
       issuesAndActions: logIssues.trim() || undefined,

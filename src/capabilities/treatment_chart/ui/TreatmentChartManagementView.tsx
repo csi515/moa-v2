@@ -14,6 +14,8 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
   normalizeTreatmentEntry,
   predictNextVisitDate,
@@ -33,7 +35,7 @@ const SAMPLE_ENTRIES: NormalizedTreatmentEntry[] = [
     colorCodes: ['#991b1b', '7-45'],
     photoUrls: { before: [], after: [] },
     price: 130000,
-    performedDate: new Date(Date.now() - 25 * 24 * 3600 * 1000).toISOString().slice(0, 10),
+    performedDate: shiftDateIso(todayIsoLocal(), -25),
     performedAt: new Date(Date.now() - 25 * 24 * 3600 * 1000).toISOString(),
   },
   {
@@ -45,7 +47,7 @@ const SAMPLE_ENTRIES: NormalizedTreatmentEntry[] = [
     colorCodes: ['#fbcfe8', 'Syrup-04'],
     photoUrls: { before: [], after: [] },
     price: 65000,
-    performedDate: new Date(Date.now() - 32 * 24 * 3600 * 1000).toISOString().slice(0, 10),
+    performedDate: shiftDateIso(todayIsoLocal(), -32),
     performedAt: new Date(Date.now() - 32 * 24 * 3600 * 1000).toISOString(),
   },
   {
@@ -57,7 +59,7 @@ const SAMPLE_ENTRIES: NormalizedTreatmentEntry[] = [
     colorCodes: [],
     photoUrls: { before: [], after: [] },
     price: 90000,
-    performedDate: new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString().slice(0, 10),
+    performedDate: shiftDateIso(todayIsoLocal(), -10),
     performedAt: new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString(),
   },
 ];
@@ -151,7 +153,7 @@ export const TreatmentChartManagementView: React.FC = () => {
           const prediction = predictNextVisitDate({
             lastPerformedDate: entry.performedDate,
             cycleWeeks: 4,
-            currentDate: new Date().toISOString().slice(0, 10),
+            currentDate: todayIsoLocal(),
           });
 
           return (

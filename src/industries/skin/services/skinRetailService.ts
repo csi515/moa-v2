@@ -6,6 +6,7 @@ import { customerLinkService } from '@/core/customer/services/customerLinkServic
 import type { CustomerSearchResult } from '@/core/customer/services/customerLinkService';
 import { recordRetailSaleReturnIncomeReversal } from '@/capabilities/finance/billingIncomeLink';
 import { StorageService } from '@/services/storage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import type { PaymentMethod } from '@/types';
 import { migrateSkinRetailCatalogIfNeeded } from './skinRetailCatalogMigrate';
 
@@ -158,7 +159,7 @@ export const skinRetailService = {
     }
 
     StorageService.saveIncomeEntry({
-      date: new Date().toISOString().slice(0, 10),
+      date: todayIsoLocal(),
       category: 'product',
       amount,
       paymentMethod: input.paymentMethod,
@@ -212,7 +213,7 @@ export const skinRetailService = {
       saleId: input.saleId,
       returnId: result.id,
       amount: result.totalAmount,
-      date: new Date().toISOString().slice(0, 10),
+      date: todayIsoLocal(),
       paymentMethod: input.paymentMethod || 'card',
       description: `반품 · ${productLabel}`,
       payer,

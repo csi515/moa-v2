@@ -2,6 +2,7 @@ import type { StudentImportRawRow } from './types';
 import { STUDENT_IMPORT_TEMPLATE_HEADERS } from './types';
 import { excelSerialToIsoDate, normalizeHeader } from './validateStudentImport';
 import { parseCsvToMatrix, parseXlsxToMatrix, createXlsxBlob } from '@/shared/utils/excelAdapter';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 
 function cellToString(value: unknown): string {
   if (value == null || value === '') return '';
@@ -65,7 +66,7 @@ export async function buildTemplateWorkbookBlob(): Promise<Blob> {
     'parent@example.com',
     '모',
     '피아노 초급',
-    new Date().toISOString().slice(0, 10),
+    todayIsoLocal(),
     180000,
     10,
     '',

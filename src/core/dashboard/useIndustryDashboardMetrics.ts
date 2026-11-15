@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useStorageRefresh, useStaffScope } from '@/hooks';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { StorageService } from '@/services/storage';
 import type { ClassItem, Student, Teacher } from '@/types';
 
@@ -15,7 +16,7 @@ export interface IndustryDashboardMetrics {
 export function useIndustryDashboardMetrics(): IndustryDashboardMetrics {
   const refreshKey = useStorageRefresh();
   const { scopeStudents } = useStaffScope();
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayIsoLocal();
 
   const students = useMemo(
     () => scopeStudents(StorageService.getStudents()).filter((student) => student.status === 'active'),

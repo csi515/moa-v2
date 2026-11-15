@@ -10,6 +10,8 @@
  *  RECEIVED (접수) -> PREPARING (제작 중) -> READY_FOR_PICKUP (픽업 대기/고객 알림) -> COMPLETED (수령 완료)
  */
 
+import { todayIsoLocal } from '@/shared/utils/localDate';
+
 export type PickupStage =
   | 'RECEIVED' // 주문 접수
   | 'PREPARING' // 제작/준비 중
@@ -102,7 +104,7 @@ export function transitionPickupStage(
  */
 export function summarizePickupOrders(
   orders: readonly PickupOrder[],
-  targetDate: string = new Date(Date.now()).toISOString().slice(0, 10)
+  targetDate: string = todayIsoLocal()
 ): PickupKanbanSummary {
   let receivedCount = 0;
   let preparingCount = 0;

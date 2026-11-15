@@ -1,4 +1,5 @@
 import type { IncomeEntry, FinanceSummary } from '../../core/finance/types';
+import { todayIsoLocal, yearMonthLocal } from '@/shared/utils/localDate';
 import type {
   Expense,
   TuitionInvoice,
@@ -21,7 +22,7 @@ export function createFinanceStorage(api: StorageApi) {
   return {
     normalizeInvoiceStatus(inv: TuitionInvoice): TuitionInvoice {
       if (inv.status === 'paid') return inv;
-      const today = new Date().toISOString().slice(0, 10);
+      const today = todayIsoLocal();
       if (inv.unpaidAmount > 0 && inv.dueDate < today) {
         return { ...inv, status: 'overdue' };
       }
@@ -147,7 +148,7 @@ export function createFinanceStorage(api: StorageApi) {
     getFinanceSummary(industry: string = 'piano'): FinanceSummary {
       const expenses = (api.getExpenses as () => Expense[])();
       const incomeEntries = (api.getIncomeEntries as () => IncomeEntry[])();
-      const currentYearMonth = new Date().toISOString().slice(0, 7);
+      const currentYearMonth = yearMonthLocal();
 
       const getIncomeForMonth = (ym: string, linkedOnly?: boolean): number =>
         incomeEntries
@@ -171,7 +172,7 @@ export function createFinanceStorage(api: StorageApi) {
       const now = new Date();
       for (let i = 5; i >= 0; i--) {
         const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        months.push(d.toISOString().slice(0, 7));
+        months.push(yearMonthLocal(d));
       }
 
       const monthlyTrend = months.map((ym) => {
@@ -198,7 +199,7 @@ export function createFinanceStorage(api: StorageApi) {
     },
 
     getUnpaidInvoices(): UnpaidInvoiceItem[] {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = todayIsoLocal();
       return (api.getInvoices as () => TuitionInvoice[])()
         .filter((inv) => {
           const unpaid = inv.unpaidAmount ?? Math.max(0, inv.totalAmount - inv.paidAmount);
@@ -320,7 +321,7 @@ export function createFinanceStorage(api: StorageApi) {
       otherRevenue: number;
       totalRevenue: number;
     } {
-      const ym = yearMonth || new Date().toISOString().slice(0, 7);
+      const ym = yearMonth || yearMonthLocal();
       const entries = (api.getIncomeEntries as () => IncomeEntry[])().filter((e) =>
         e.date.startsWith(ym)
       );

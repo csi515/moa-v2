@@ -4,6 +4,7 @@ import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { useModuleLabels } from '@/core/labels';
 import { StorageService } from '@/services/storage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { PageHeader, EmptyState, Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS, FilterTabs, FilterBar, SearchField } from '@/shared/components/ui';
 import { Calendar } from 'lucide-react';
@@ -33,7 +34,7 @@ export const ShuttleRideRequestView: FC = () => {
   );
   const requests = useMemo(() => StorageService.getShuttleRideRequests(), [refreshKey]);
 
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
+  const [selectedDate, setSelectedDate] = useState(todayIsoLocal());
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);

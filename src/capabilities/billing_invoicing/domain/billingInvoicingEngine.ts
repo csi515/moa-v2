@@ -10,6 +10,8 @@
 
 export type InvoiceStatus = 'PENDING' | 'UNPAID' | 'PAID' | 'OVERDUE' | 'WAIVED';
 
+import { todayIsoLocal } from '@/shared/utils/localDate';
+
 export type CounterFeeFilter = 'all' | 'open' | 'paid';
 
 const OPEN_FEE_STATUSES = new Set(['PENDING', 'UNPAID', 'OVERDUE']);
@@ -453,7 +455,7 @@ export function calculateAccountsReceivableAging(
   unpaidRecords: UnpaidRecord[],
   referenceDate?: string
 ): AccountsReceivableAgingSummary {
-  const refDateStr = referenceDate || new Date(Date.now()).toISOString().slice(0, 10);
+  const refDateStr = referenceDate || todayIsoLocal();
   const refTime = new Date(refDateStr).getTime();
 
   let totalUnpaidAmount = 0;
