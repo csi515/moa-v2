@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { CanAccess } from '@refinedev/core';
 import {
   Crown,
@@ -19,7 +20,8 @@ import { transferOrganizationOwnership } from '@/core/organizations/services/org
 const CONFIRM_TEXT = '소유권 이전 확인';
 
 export function OwnershipTransferCard(): React.JSX.Element {
-  const { currentOrganization } = useOrganization();
+  const queryClient = useQueryClient();
+  const { currentOrganization, refreshOrganizations } = useOrganization();
   const { role } = useAuthorization();
   const orgId = currentOrganization?.id ?? '';
 
@@ -76,10 +78,8 @@ export function OwnershipTransferCard(): React.JSX.Element {
       await transferOrganizationOwnership(selectedMemberId, reason.trim());
       setSuccess(true);
       setShowConfirmModal(false);
-      // 소유권 이전 완료 후 안내
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
+      queryClient.invalidateQueries();
+      await refreshOrganizations({ quiet: true });
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : '소유권 이전에 실패했습니다.');
     } finally {
@@ -140,7 +140,7 @@ export function OwnershipTransferCard(): React.JSX.Element {
             <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-600" />
             <h4 className="mt-3 text-sm font-bold text-emerald-900">소유권 이전이 성공적으로 완료되었습니다</h4>
             <p className="mt-1 text-xs text-emerald-700">
-              신임 대표자에게 사업자 권한이 인계되었으며, 기존 세션이 만료되었습니다. 잠시 후 새로고침됩니다...
+              신임 대표자에게 사업자 권한이 인계되었으며, 권한 및 조직 정보가 갱신되었습니다.
             </p>
           </div>
         ) : (

@@ -1,4 +1,5 @@
 import { useRef, useState, type ChangeEvent, type FC } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
@@ -157,6 +158,7 @@ export const OrganizationBackupCard: FC<OrganizationBackupCardProps> = ({
   accentIcon = 'text-indigo-600',
   accentHover = 'hover:bg-indigo-50/60',
 }) => {
+  const queryClient = useQueryClient();
   const { showToast, openConfirmDialog } = useApp();
   const [isImporting, setIsImporting] = useState(false);
   const importInputRef = useRef<HTMLInputElement>(null);
@@ -182,10 +184,9 @@ export const OrganizationBackupCard: FC<OrganizationBackupCardProps> = ({
         const content = event.target?.result as string;
         const success = StorageService.importAllData(content);
         if (success) {
-          showToast('데이터 복원이 완료되었습니다. 페이지를 새로고침합니다.', 'success');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+          queryClient.invalidateQueries();
+          StorageService.notifyListeners('*');
+          showToast('데이터 복원이 완료되었습니다. 화면이 갱신되었습니다.', 'success');
         } else {
           showToast('유효하지 않은 백업 파일 형식입니다.', 'error');
         }

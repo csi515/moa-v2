@@ -1,4 +1,6 @@
 import { useCallback, useMemo, useState, type FC } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { StorageService } from '@/services/storage';
 import { formatCurrency, formatKoreanDate } from '@/utils/formatters';
 import {
   requestOpenConsultationInquiries,
@@ -42,6 +44,7 @@ function openDirectorTodayTask(
 
 /** 원장 홈 — Getting Started → 오늘 일정 → 출결 요약 → 처리할 업무 → 미납 */
 export const DirectorTodayHome: FC = () => {
+  const queryClient = useQueryClient();
   const { currentUser } = useApp();
   const { currentOrganization } = useOrganization();
   const { isAdmin } = usePermissions();
@@ -279,7 +282,8 @@ export const DirectorTodayHome: FC = () => {
         organizationId={currentOrganization?.id}
         onCompleted={() => {
           setIsOnboardingWizardOpen(false);
-          window.location.reload();
+          queryClient.invalidateQueries();
+          StorageService.notifyListeners('*');
         }}
       />
     </div>

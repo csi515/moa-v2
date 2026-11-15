@@ -12,6 +12,7 @@ import type { StaffMetadata } from '../../types';
 import type { AcademySettings, Teacher } from '../../../../types';
 import type { Booking, ServiceOffering } from '../../../../core/types/schedule';
 import type { PickupAddress } from '../../../../core/transport/types';
+import { toJsonValue } from '@/shared/kernel';
 
 
 // ─── Notifications ────────────────────────────────────────────────
@@ -51,7 +52,7 @@ export function notificationToRow(notif: AppNotification, organizationId: string
     channel: 'app' as const,
     scheduled_at: notif.scheduledDate || null,
     sent_at: notif.sentAt || null,
-    metadata: metadata as unknown as Json,
+    metadata: toJsonValue(metadata),
   };
 }
 

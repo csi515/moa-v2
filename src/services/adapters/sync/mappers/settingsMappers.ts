@@ -23,6 +23,6 @@ export function parseOrganizationSettings(
   if (!settings || typeof settings !== 'object' || Array.isArray(settings)) {
     return fallback;
   }
-  return { ...fallback, ...(settings as unknown as AcademySettings) };
+  return { ...fallback, ...(settings as Partial<AcademySettings>) };
 }
 

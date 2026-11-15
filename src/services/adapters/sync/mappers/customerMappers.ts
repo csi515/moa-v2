@@ -12,6 +12,7 @@ import type { StaffMetadata } from '../../types';
 import type { AcademySettings, Teacher } from '../../../../types';
 import type { Booking, ServiceOffering } from '../../../../core/types/schedule';
 import type { PickupAddress } from '../../../../core/transport/types';
+import { toJsonValue } from '@/shared/kernel';
 
 
 // ─── Customers (Students / Parents) ───────────────────────────────
@@ -84,7 +85,7 @@ export function studentToCustomerRow(student: Student, organizationId: string) {
     phone: student.phone || null,
     email: null,
     status: student.status,
-    metadata: metadata as unknown as Json,
+    metadata: toJsonValue(metadata),
     memo: student.memo || null,
   };
 }
@@ -152,7 +153,7 @@ export function parentToCustomerRow(parent: Parent, organizationId: string) {
     phone: parent.phone || null,
     email: parent.email || null,
     status: 'active',
-    metadata: metadata as unknown as Json,
+    metadata: toJsonValue(metadata),
     memo: parent.notes || null,
   };
 }

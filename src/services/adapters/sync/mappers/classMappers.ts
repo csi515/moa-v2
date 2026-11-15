@@ -12,6 +12,7 @@ import type { StaffMetadata } from '../../types';
 import type { AcademySettings, Teacher } from '../../../../types';
 import type { Booking, ServiceOffering } from '../../../../core/types/schedule';
 import type { PickupAddress } from '../../../../core/transport/types';
+import { toJsonValue, parseMetadata } from '@/shared/kernel';
 
 
 // ─── Services (Classes) ───────────────────────────────────────────
@@ -60,7 +61,7 @@ export function classToServiceRow(cls: ClassItem, organizationId: string) {
     duration_minutes: parseDurationMinutes(cls.startTime, cls.endTime),
     is_active: true,
     is_schedulable: true,
-    metadata: metadata as unknown as Json,
+    metadata: toJsonValue(metadata),
   };
 }
 
@@ -71,7 +72,7 @@ export function serviceRowToClass(row: {
   metadata: Json;
   description: string | null;
 }): ClassItem {
-  const meta = (row.metadata || {}) as unknown as ServiceMetadata;
+  const meta = parseMetadata<ServiceMetadata>(row.metadata);
   return {
     id: row.id,
     name: row.name,

@@ -20,6 +20,7 @@ import {
   scheduleSessionPassId,
   scheduleStaffId,
 } from '@/core/metadata';
+import { toJsonValue, parseMetadata } from '@/shared/kernel';
 
 
 // ─── Schedules (Attendance) ───────────────────────────────────────
@@ -70,7 +71,7 @@ export function attendanceToScheduleRow(
     ends_at: endsAt,
     status: ATTENDANCE_STATUS_MAP[record.status] as 'completed' | 'no_show' | 'confirmed',
     memo: record.memo || null,
-    metadata: metadata as unknown as Json,
+    metadata: toJsonValue(metadata),
   };
 }
 
@@ -84,7 +85,7 @@ export function scheduleRowToAttendance(row: {
   metadata: Json;
   created_at: string;
 }): AttendanceRecord {
-  const meta = (row.metadata || {}) as unknown as ScheduleMetadata;
+  const meta = parseMetadata<ScheduleMetadata>(row.metadata);
   const statusReverse: Record<string, AttendanceRecord['status']> = {
     completed: meta.attendanceStatus || 'present',
     no_show: 'absent',
@@ -169,7 +170,7 @@ export function serviceOfferingToRow(offering: ServiceOffering, organizationId: 
     duration_minutes: offering.durationMinutes,
     is_active: offering.isActive,
     is_schedulable: offering.isSchedulable,
-    metadata: metadata as unknown as Json,
+    metadata: toJsonValue(metadata),
   };
 }
 
@@ -238,7 +239,7 @@ export function bookingToScheduleRow(booking: Booking, organizationId: string) {
     session_pass_id: promoted.session_pass_id,
     room: promoted.room,
     room_id: promoted.room_id,
-    metadata: metadata as unknown as Json,
+    metadata: toJsonValue(metadata),
   };
 }
 
@@ -257,7 +258,7 @@ export function scheduleRowToBooking(row: {
   room?: string | null;
   room_id?: string | null;
 }): Booking {
-  const meta = (row.metadata || {}) as unknown as BookingMetadata;
+  const meta = parseMetadata<BookingMetadata>(row.metadata);
   return {
     id: row.id,
     customerId: row.customer_id || '',
@@ -336,7 +337,7 @@ export function practiceRoomBookingToScheduleRow(
     status: PRACTICE_STATUS_TO_DB[booking.status] || 'scheduled',
     memo: booking.memo || null,
     room: promoted.room,
-    metadata: metadata as unknown as Json,
+    metadata: toJsonValue(metadata),
   };
 }
 
@@ -352,7 +353,7 @@ export function scheduleRowToPracticeRoomBooking(row: {
   created_at: string;
   room?: string | null;
 }): PracticeRoomBooking {
-  const meta = (row.metadata || {}) as unknown as BookingMetadata;
+  const meta = parseMetadata<BookingMetadata>(row.metadata);
   const date = meta.date || row.starts_at.slice(0, 10);
   const startTime = meta.startTime || row.starts_at.slice(11, 16);
   const endTime = meta.endTime || row.ends_at.slice(11, 16);

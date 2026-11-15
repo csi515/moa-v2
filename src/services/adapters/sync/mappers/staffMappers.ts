@@ -13,6 +13,7 @@ import type { AcademySettings, Teacher } from '../../../../types';
 import type { Booking, ServiceOffering } from '../../../../core/types/schedule';
 import type { PickupAddress } from '../../../../core/transport/types';
 import { todayIsoLocal } from '@/shared/utils/localDate';
+import { toJsonValue } from '@/shared/kernel';
 
 
 // ─── Staff (Teachers) ───────────────────────────────────────────────
@@ -37,7 +38,7 @@ export function teacherToStaffRow(teacher: Teacher, organizationId: string) {
     phone: teacher.phone || null,
     email: teacher.email || null,
     status: teacher.status,
-    metadata: metadata as unknown as Json,
+    metadata: toJsonValue(metadata),
   };
 }
 

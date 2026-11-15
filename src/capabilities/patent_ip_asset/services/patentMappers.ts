@@ -1,4 +1,5 @@
 import type { Json } from '@/lib/supabase/database.types';
+import { toJsonValue } from '@/shared/kernel';
 import type {
   PatentAsset,
   PatentInventor,
@@ -79,11 +80,11 @@ export function patentAssetToInsert(
     title: asset.inventionTitle,
     summary: asset.summary,
     tech_field: asset.techField,
-    inventor_ids: asset.inventors as unknown as Json,
+    inventor_ids: toJsonValue(asset.inventors),
     status: asset.status,
     filing_date: asset.receiptDate,
-    document_urls: (asset.documentUrls ?? []) as unknown as Json,
-    payload: {
+    document_urls: toJsonValue(asset.documentUrls ?? []),
+    payload: toJsonValue({
       review: asset.review,
       applicationNumber: asset.applicationNumber,
       applicationDate: asset.applicationDate,
@@ -91,7 +92,7 @@ export function patentAssetToInsert(
       registrationDate: asset.registrationDate,
       applicationReward: asset.applicationReward,
       registrationReward: asset.registrationReward,
-    } as unknown as Json,
+    }),
   };
 }
 
@@ -101,11 +102,11 @@ export function patentAssetToUpdate(asset: PatentAsset): Partial<PatentRow> {
     title: asset.inventionTitle,
     summary: asset.summary,
     tech_field: asset.techField,
-    inventor_ids: asset.inventors as unknown as Json,
+    inventor_ids: toJsonValue(asset.inventors),
     status: asset.status,
     filing_date: asset.receiptDate,
-    document_urls: (asset.documentUrls ?? []) as unknown as Json,
-    payload: {
+    document_urls: toJsonValue(asset.documentUrls ?? []),
+    payload: toJsonValue({
       review: asset.review,
       applicationNumber: asset.applicationNumber,
       applicationDate: asset.applicationDate,
@@ -113,7 +114,7 @@ export function patentAssetToUpdate(asset: PatentAsset): Partial<PatentRow> {
       registrationDate: asset.registrationDate,
       applicationReward: asset.applicationReward,
       registrationReward: asset.registrationReward,
-    } as unknown as Json,
+    }),
     updated_at: new Date().toISOString(),
   };
 }
