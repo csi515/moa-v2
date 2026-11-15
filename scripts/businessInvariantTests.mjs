@@ -205,6 +205,7 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:changed': 'Phase 2 smart changed test runner',
   'test:fast': 'Phase 2 fast incremental check and test chain',
   'test:declarative-ui': 'Phase 3 declarative ui unit',
+  'test:devtools': 'Phase 5 devtools sandbox unit',
   'test:migration-syntax': 'lint/check:migration-syntax와 중복',
   'test:invoice-dedupe': 'test:finance 자식',
   'test:invoice-textbook-link': 'test:finance 자식',

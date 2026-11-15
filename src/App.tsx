@@ -36,6 +36,7 @@ import { LoadingScreen } from "@/shared/components/LoadingScreen";
 
 import { DynamicRoleSettingsPage, FinanceRouteGate } from "@/pages/settings/DynamicRoleSettingsPage";
 import { ConsentSignatureModal } from "@/capabilities/safety_consent/ui/ConsentSignatureModal";
+import { DevToolsSandboxBar } from "@/shared/components/devtools";
 import { Header } from "./components/layout/Header";
 import { Layout } from "./components/layout/Layout";
 import { LoginPage } from "./pages/auth/LoginPage";
@@ -481,6 +482,7 @@ export const App: React.FC = () => {
               <AppBootstrapGate>
                 <RefineApp />
               </AppBootstrapGate>
+              <DevToolsSandboxBar />
             </AppProvider>
           </OrganizationProvider>
         </AuthProvider>
