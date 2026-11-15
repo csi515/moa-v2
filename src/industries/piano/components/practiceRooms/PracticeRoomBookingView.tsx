@@ -4,7 +4,9 @@ import { ChevronLeft, ChevronRight, Plus, DoorOpen } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { StudentService } from '@/core/students';
-import { StorageService } from '@/services/storage';
+import { settingsStorage } from '@/services/storage/settingsStorage';
+import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
+import { attendanceStorage } from '@/capabilities/attendance/infrastructure/attendanceStorage';
 import {
   FormField,
   FORM_CONTROL_CLASS,
@@ -126,10 +128,10 @@ export const PracticeRoomBookingView: FC = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  const settings = StorageService.getSettings();
+  const settings = settingsStorage.getSettings();
   const students = useMemo(() => StudentService.getActiveStudents(), []);
-  const classes = useMemo(() => StorageService.getClasses(), []);
-  const makeups = useMemo(() => StorageService.getMakeupItems(), []);
+  const classes = useMemo(() => rosterStorage.getClasses(), []);
+  const makeups = useMemo(() => attendanceStorage.getMakeupItems(), []);
   const seedRoomNames = useMemo(
     () => getPracticeRoomNames({ settings, classes }),
     [settings, classes]

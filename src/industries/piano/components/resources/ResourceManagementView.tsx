@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '@/context/AppContext';
-import { StorageService } from '@/services/storage';
+import { parentStorage } from '@/capabilities/parent/infrastructure/parentStorage';
+import { storageApi } from '@/services/storage/storageApi';
 import { PageHeader, FilterBar, SearchField } from '@/shared/components';
 import type { Song } from '@/core/lessons/types';
 import type { PianoStudentLevel } from '@/industries/piano/types/studentLevel';
@@ -101,13 +102,13 @@ export const ResourceManagementView: React.FC = () => {
 
   useEffect(() => {
     const loadResources = () => {
-      const items = StorageService.getSongs()
+      const items = parentStorage.getSongs()
         .filter((s) => s.resourceType)
         .map(songToResource);
       setResources(items);
     };
     loadResources();
-    const unsubscribe = StorageService.subscribe(loadResources);
+    const unsubscribe = storageApi.subscribe(loadResources);
     return () => unsubscribe();
   }, []);
 
@@ -127,14 +128,14 @@ export const ResourceManagementView: React.FC = () => {
     e.preventDefault();
     if (!formData.title.trim()) return;
 
-    StorageService.saveSong(resourceToSong(formData));
+    parentStorage.saveSong(resourceToSong(formData));
     showToast(`'${formData.title}' 교재/곡이 등록되었습니다.`, 'success');
     setIsModalOpen(false);
     setFormData(EMPTY_FORM);
   };
 
   const handleDelete = (id: string) => {
-    StorageService.deleteSong(id);
+    parentStorage.deleteSong(id);
     showToast('삭제되었습니다.', 'info');
   };
 
