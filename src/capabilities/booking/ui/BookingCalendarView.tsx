@@ -5,7 +5,8 @@ import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
 import { resolveBookingUi } from './bookingIndustryAdapter';
 import { ScheduleService } from '@/core/services/scheduleService';
-import { StorageService } from '@/services/storage';
+import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
+import { settingsStorage } from '@/services/storage/settingsStorage';
 import type { Booking, BookingStatus } from '@/core/types/schedule';
 import { BOOKING_STATUS_LABEL } from '@/core/schedules/bookingStatusLabel';
 import { bookingChangeNotice } from '@/core/schedules/bookingChangeNotice';
@@ -21,7 +22,7 @@ import {
 } from '@/capabilities/booking/domain/bookingRooms';
 import { rescheduleBooking } from '@/capabilities/booking/domain/rescheduleBooking';
 import { notifyBookingChange } from '@/capabilities/booking';
-import { validateScheduleConstraints } from '@/capabilities/scheduling/domain/calendarConstraintEngine';
+import { validateScheduleConstraints } from '@/capabilities/scheduling';
 import { EmptyState, FilterTabs, Modal, PageHeader, UnifiedScheduleCalendar, type CalendarEventItem, type CalendarResourceColumn, type CalendarSlotTarget } from '@/shared/components';
 import { Calendar, List, Users, Eye, EyeOff, UserCheck, ShieldAlert } from 'lucide-react';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
@@ -67,10 +68,10 @@ export const BookingCalendarView: React.FC = () => {
     [allBookingsRaw, refreshKey]
   );
 
-  const instructors = StorageService.getTeachers().filter((t) => t.status === 'active');
+  const instructors = rosterStorage.getTeachers().filter((t) => t.status === 'active');
   const services = ScheduleService.getActiveServiceOfferings();
   const treatmentRooms = useMemo(
-    () => getConfiguredRooms(StorageService.getSettings()).filter((room) => room.kind === 'treatment'),
+    () => getConfiguredRooms(settingsStorage.getSettings()).filter((room) => room.kind === 'treatment'),
     [refreshKey]
   );
 
@@ -128,7 +129,7 @@ export const BookingCalendarView: React.FC = () => {
   const members = useMemo(
     () =>
       scopeMembersForPilates(
-        StorageService.getStudents().filter((s) => s.status === 'active'),
+        rosterStorage.getStudents().filter((s) => s.status === 'active'),
         allBookingsRaw
       ),
     [allBookingsRaw, scopeMembersForPilates, refreshKey]
@@ -414,7 +415,7 @@ export const BookingCalendarView: React.FC = () => {
       },
       getBookings: () => ScheduleService.getBookings(),
       getRecruitments: () => ScheduleService.getSlotRecruitments(),
-      getStaffHours: () => StorageService.getSettings().staffHours,
+      getStaffHours: () => settingsStorage.getSettings().staffHours,
       remainingSessions: (id) => ScheduleService.getCustomerRemainingSessions(id),
       applySlotCapacity: (svcId, stId, starts, next) =>
         saveSlotCapacity(svcId, stId, starts, next),
@@ -458,7 +459,7 @@ export const BookingCalendarView: React.FC = () => {
         staffId: instructor.id,
         startsAt: booking.startsAt,
         endsAt: booking.endsAt,
-        windows: StorageService.getSettings().staffHours,
+        windows: settingsStorage.getSettings().staffHours,
       })
     ) {
       showToast(`${instructor.name} 근무시간이 아닙니다.`, 'warning');
@@ -519,7 +520,7 @@ export const BookingCalendarView: React.FC = () => {
 
   const notifyCustomer = (booking: Booking, title: string, message: string) => {
     if (bookingUi.notifyOnStatus.length === 0) return;
-    const student = StorageService.getStudents().find((item) => item.id === booking.customerId);
+    const student = rosterStorage.getStudents().find((item) => item.id === booking.customerId);
     notifyBookingChange({
       studentId: booking.customerId,
       studentName: booking.customerName,
@@ -561,7 +562,7 @@ export const BookingCalendarView: React.FC = () => {
         staffId: booking.staffId,
         startsAt: booking.startsAt,
         endsAt: booking.endsAt,
-        windows: StorageService.getSettings().staffHours,
+        windows: settingsStorage.getSettings().staffHours,
       })
     ) {
       showToast('관리사 근무시간이 아닙니다.', 'warning');
@@ -612,7 +613,7 @@ export const BookingCalendarView: React.FC = () => {
         staffId: booking.staffId,
         startsAt: booking.startsAt,
         endsAt: booking.endsAt,
-        windows: StorageService.getSettings().staffHours,
+        windows: settingsStorage.getSettings().staffHours,
       })
     ) {
       showToast('관리사 근무시간이 아니어서 확정할 수 없습니다.', 'warning');

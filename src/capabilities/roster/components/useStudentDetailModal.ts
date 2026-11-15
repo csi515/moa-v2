@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { useList, useCreate } from '@refinedev/core';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
-import { StorageService } from '@/services/storage';
+import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
+import { attendanceStorage } from '@/capabilities/attendance/infrastructure/attendanceStorage';
+import { commerceStorage } from '@/capabilities/commerce/infrastructure/commerceStorage';
+import { parentStorage } from '@/capabilities/parent/infrastructure/parentStorage';
+import { schedulingStorage } from '@/capabilities/scheduling/infrastructure/schedulingStorage';
 import { StudentService } from '@/core/students';
 import { TuitionService } from '@/capabilities/finance';
 import { LessonService } from '@/core/lessons';
@@ -160,7 +164,7 @@ export function useStudentDetailModal({
   const [isTbReceiptOpen, setIsTbReceiptOpen] = useState(false);
   const [tbReceiptSale, setTbReceiptSale] = useState<TextbookSale | null>(null);
 
-  const allClasses = StorageService.getClasses();
+  const allClasses = rosterStorage.getClasses();
   const enrolledClasses = allClasses.filter((c) => student.classIds?.includes(c.id));
   const attendanceClassOptions = React.useMemo(
     () => getEnrolledClassesOnDate(enrolledClasses, newAttDate),
@@ -172,12 +176,12 @@ export function useStudentDetailModal({
     setNewAttClassId((prev) => nextManualAttendanceClassId(attendanceClassOptions, prev));
   }, [isAddAttOpen, attendanceClassOptions]);
 
-  const allAttendance = StorageService.getAttendance().filter((a) => a.studentId === student.id);
+  const allAttendance = attendanceStorage.getAttendance().filter((a) => a.studentId === student.id);
   const allInvoices = TuitionService.getInvoicesByStudent(student.id);
-  const allConsultations = StorageService.getConsultations().filter((c) => c.studentId === student.id);
+  const allConsultations = schedulingStorage.getConsultations().filter((c) => c.studentId === student.id);
   const allLessons = LessonService.getLessonRecordsByStudent(student.id);
-  const allVideos = StorageService.getPerformanceVideosByStudentId(student.id);
-  const recitalEvents = StorageService.getRecitalEvents();
+  const allVideos = parentStorage.getPerformanceVideosByStudentId(student.id);
+  const recitalEvents = parentStorage.getRecitalEvents();
 
   const studentDetailExtension = getStudentDetailExtension(industryPlugin.id);
   const showsPracticeRecords = Boolean(studentDetailExtension?.showsPracticeRecords);
@@ -211,8 +215,8 @@ export function useStudentDetailModal({
       createdAt: r.created_at,
     })).sort((a: any, b: any) => b.date.localeCompare(a.date) || (b.createdAt || '').localeCompare(a.createdAt || ''));
   }, [rawPracticeRecords, student.name]);
-  const studentSales = StorageService.getTextbookSalesByStudentId(student.id);
-  const billingSummary = StorageService.getStudentBillingSummary(
+  const studentSales = commerceStorage.getTextbookSalesByStudentId(student.id);
+  const billingSummary = commerceStorage.getStudentBillingSummary(
     student.id,
     yearMonthLocal()
   );
@@ -290,7 +294,7 @@ export function useStudentDetailModal({
     const { classId, className } = resolved;
 
     const status = newAttStatus as AttendanceStatus;
-    const existing = StorageService.getAttendance().find(
+    const existing = attendanceStorage.getAttendance().find(
       (r) => r.date === newAttDate && r.studentId === student.id && r.classId === classId
     );
     if (getPluginFlag(industryPlugin, 'savesAttendanceWithPass')) {
@@ -319,7 +323,7 @@ export function useStudentDetailModal({
         showToast(passResult.warning, 'warning');
         return;
       }
-      StorageService.saveAttendanceRecord({
+      attendanceStorage.saveAttendanceRecord({
         ...(existing ? { id: existing.id } : {}),
         date: newAttDate,
         studentId: student.id,
@@ -356,7 +360,7 @@ export function useStudentDetailModal({
       showToast('상담 내용을 입력해주세요.', 'warning');
       return;
     }
-    StorageService.saveConsultation({
+    schedulingStorage.saveConsultation({
       studentId: student.id,
       studentName: student.name,
       parentName:
@@ -368,7 +372,7 @@ export function useStudentDetailModal({
       content: newCstContent.trim(),
       result: newCstResult.trim(),
       nextDate: newCstNextDate || undefined,
-      counselorId: StorageService.getTeachers()[0]?.id || '',
+      counselorId: rosterStorage.getTeachers()[0]?.id || '',
       counselorName: currentUser.name,
     });
     showToast('상담 기록이 저장되었습니다.', 'success');
@@ -436,7 +440,7 @@ export function useStudentDetailModal({
       ? recitalEvents.find((ev) => ev.id === newVideoEventId)
       : undefined;
 
-    StorageService.savePerformanceVideo({
+    parentStorage.savePerformanceVideo({
       studentId: student.id,
       studentName: student.name,
       title: newVideoTitle.trim(),
@@ -476,7 +480,7 @@ export function useStudentDetailModal({
       isDestructive: true,
       confirmText: '삭제하기',
       onConfirm: () => {
-        StorageService.deletePerformanceVideo(video.id);
+        parentStorage.deletePerformanceVideo(video.id);
         if (previewVideoId === video.id) setPreviewVideoId(null);
         showToast('연주 영상이 삭제되었습니다.', 'info');
       },

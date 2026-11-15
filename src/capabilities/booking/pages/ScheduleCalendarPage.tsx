@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useList } from '@refinedev/core';
-import { StorageService } from '@/services/storage';
+import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
 import {
   Calendar as CalendarIcon,
   Clock,
@@ -163,27 +163,27 @@ export function ScheduleCalendarPage() {
   const isLoadingClasses =
     (classesList as any).isLoading || (classesList as any).query?.isLoading;
 
-  // 회원 목록: Refine 응답 우선 + StorageService 폴백
+  // 회원 목록: Refine 응답 우선 + rosterStorage 폴백
   const activeMembers: Student[] = useMemo(() => {
     const rawRefine =
       (customersList as any).data?.data || (customersList as any).query?.data?.data;
     if (rawRefine && rawRefine.length > 0) {
       return rawRefine.filter((c: any) => c.status === 'active');
     }
-    return StorageService.getStudents().filter((s) => s.status === 'active');
+    return rosterStorage.getStudents().filter((s) => s.status === 'active');
   }, [customersList]);
 
-  // 수업 목록: Refine 응답 우선 + StorageService 폴백
+  // 수업 목록: Refine 응답 우선 + rosterStorage 폴백
   const allClasses: ClassItem[] = useMemo(() => {
     const rawRefine =
       (classesList as any).data?.data || (classesList as any).query?.data?.data;
     if (rawRefine && rawRefine.length > 0) {
       return rawRefine as ClassItem[];
     }
-    return StorageService.getClasses();
+    return rosterStorage.getClasses();
   }, [classesList]);
 
-  const teachers = useMemo(() => StorageService.getTeachers(), []);
+  const teachers = useMemo(() => rosterStorage.getTeachers(), []);
 
   // 우측 패널 회원 검색어 상태
   const [memberSearchQuery, setMemberSearchQuery] = useState('');
@@ -297,8 +297,9 @@ export function ScheduleCalendarPage() {
     }
 
     const teacher = teachers.find((t) => t.id === newTeacherId);
-    const newClass: ClassItem = {
-      id: `cls_${Date.now()}`,
+    const newClassId = `cls_${Date.now()}`;
+    rosterStorage.saveClass({
+      id: newClassId,
       name: newClassName.trim(),
       teacherId: newTeacherId,
       teacherName: teacher?.name || '강사 미지정',
@@ -308,27 +309,25 @@ export function ScheduleCalendarPage() {
       endTime: newEndTime,
       capacity: newCapacity,
       color: '#4f46e5',
-    };
-
-    StorageService.saveClass(newClass);
+    });
 
     // 선택된 학생들에게 classId 배정
     if (selectedStudentIdsForNew.length > 0) {
-      const allStudents = StorageService.getStudents();
+      const allStudents = rosterStorage.getStudents();
       for (const s of allStudents) {
         if (selectedStudentIdsForNew.includes(s.id)) {
           const currentClasses = s.classIds || [];
-          if (!currentClasses.includes(newClass.id)) {
-            StorageService.saveStudent({
+          if (!currentClasses.includes(newClassId)) {
+            rosterStorage.saveStudent({
               ...s,
-              classIds: [...currentClasses, newClass.id],
+              classIds: [...currentClasses, newClassId],
             });
           }
         }
       }
     }
 
-    showToast(`'${newClass.name}' 수업이 성공적으로 등록되었습니다.`, 'success');
+    showToast(`'${newClassName.trim()}' 수업이 성공적으로 등록되었습니다.`, 'success');
     setCreateModalOpen(false);
   };
 

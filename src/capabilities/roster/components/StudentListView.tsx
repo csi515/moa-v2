@@ -14,7 +14,9 @@ import { studentUsesShuttleService } from '@/capabilities/transport';
 import { useStaffScope, useStorageRefresh } from '@/hooks';
 import { STORAGE_REFRESH_DOMAINS } from '@/hooks/useStorageRefresh';
 import { getPrimaryGuardian, studentMatchesGuardianQuery } from '@/core/parent/guardianHelpers';
-import { StorageService } from '@/services/storage';
+import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
+import { attendanceStorage } from '@/capabilities/attendance/infrastructure/attendanceStorage';
+import { commerceStorage } from '@/capabilities/commerce/infrastructure/commerceStorage';
 import { StudentService } from '@/core/students';
 import { ScheduleService } from '@/core/services/scheduleService';
 import type { DayOfWeek, Student } from '@/types';
@@ -95,12 +97,12 @@ export const StudentListView: React.FC = () => {
     () => scopeStudents(StudentService.getStudents()),
     [scopeStudents, refreshKey]
   );
-  const teachers = StorageService.getTeachers();
+  const teachers = rosterStorage.getTeachers();
   const classes = useMemo(
     () =>
       isScoped && staffId
-        ? StorageService.getClasses().filter((c) => c.teacherId === staffId)
-        : StorageService.getClasses(),
+        ? rosterStorage.getClasses().filter((c) => c.teacherId === staffId)
+        : rosterStorage.getClasses(),
     [isScoped, staffId, refreshKey]
   );
   const classNameById = useMemo(() => {
@@ -117,11 +119,11 @@ export const StudentListView: React.FC = () => {
   const yearMonth = getCurrentYearMonth();
 
   const todayAttendanceByStudent = useMemo(
-    () => buildAttendanceByStudentToday(StorageService.getAttendance(), today),
+    () => buildAttendanceByStudentToday(attendanceStorage.getAttendance(), today),
     [today, refreshKey]
   );
   const billingByStudent = useMemo(
-    () => buildBillingByStudent(StorageService.getAllStudentsBillingSummary(yearMonth)),
+    () => buildBillingByStudent(commerceStorage.getAllStudentsBillingSummary(yearMonth)),
     [yearMonth, refreshKey]
   );
   const sessionPasses = useMemo(

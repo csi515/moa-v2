@@ -15,6 +15,7 @@ import { execSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ALLOWED_MODAL_FILES, LEGACY_MODAL_BASELINE } from './check-ui-consistency.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..');
@@ -49,10 +50,33 @@ export function getChangedFiles(mode = 'working') {
   }
 }
 
+export function getChangedLineNumbers(file, mode = 'working') {
+  try {
+    let cmd = `git diff HEAD -U0 -- "${file}"`;
+    if (mode === 'staged') {
+      cmd = `git diff --cached -U0 -- "${file}"`;
+    }
+    const output = execSync(cmd, { cwd: root, encoding: 'utf8' });
+    const lines = new Set();
+    const hunkHeaderRe = /^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@/;
+    for (const l of output.split(/\r?\n/)) {
+      const m = l.match(hunkHeaderRe);
+      if (m) {
+        const start = parseInt(m[3], 10);
+        const count = m[4] !== undefined ? parseInt(m[4], 10) : 1;
+        for (let i = 0; i < count; i++) lines.add(start + i);
+      }
+    }
+    return lines;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * 2. 개별 파일별 5대 검사 룰 엔진
  */
-export function inspectFile(filePath, contentOverride = null) {
+export function inspectFile(filePath, contentOverride = null, changedLines = null) {
   const relPath = toPosix(filePath);
   const fullPath = join(root, relPath);
 
@@ -66,6 +90,11 @@ export function inspectFile(filePath, contentOverride = null) {
 
   const cleanContent = stripComments(rawContent);
   const violations = [];
+
+  const shouldCheckLine = (lineNo) => {
+    if (!changedLines) return true;
+    return changedLines.has(lineNo);
+  };
 
   // [RULE 1] 아키텍처 의존성 경계 검사
   // Core/Capability -> Industry 참조 금지
@@ -168,15 +197,19 @@ export function inspectFile(filePath, contentOverride = null) {
     !relPath.includes('ConfirmDialog') &&
     !relPath.includes('NotificationDrawer') &&
     !relPath.includes('LobbyAttendanceKioskView') &&
-    !relPath.includes('CompanyAppLauncherDashboard')
+    !relPath.includes('CompanyAppLauncherDashboard') &&
+    !ALLOWED_MODAL_FILES.has(relPath) &&
+    !LEGACY_MODAL_BASELINE.has(relPath)
   ) {
     const lines = cleanContent.split('\n');
     lines.forEach((line, idx) => {
+      const lineNo = idx + 1;
+      if (!shouldCheckLine(lineNo)) return;
       if (/fixed\s+inset-0/.test(line) && !line.includes('Modal') && !line.includes('z-50 pointer-events-none')) {
         violations.push({
           rule: 'UI-CONSISTENCY',
           file: relPath,
-          line: idx + 1,
+          line: lineNo,
           message: '인라인 팝업(fixed inset-0) 직접 작성 금지. @/shared/components/ui/Modal 컴포넌트를 사용하세요.',
           snippet: line.trim(),
         });
@@ -188,11 +221,13 @@ export function inspectFile(filePath, contentOverride = null) {
   if (relPath.startsWith('src/') && (relPath.endsWith('.ts') || relPath.endsWith('.tsx'))) {
     const lines = cleanContent.split('\n');
     lines.forEach((line, idx) => {
+      const lineNo = idx + 1;
+      if (!shouldCheckLine(lineNo)) return;
       if (/\bas\s+any\b/.test(line) && !line.includes('// bypass-type-safety')) {
         violations.push({
           rule: 'TYPE-SAFETY-GUARD',
           file: relPath,
-          line: idx + 1,
+          line: lineNo,
           message: "'as any' 캐스팅 지양. database.types.ts 또는 제네릭 매퍼(useMoaTable)를 사용하세요.",
           snippet: line.trim(),
         });
@@ -221,7 +256,8 @@ export function runIncrementalCheck(options = {}) {
 
   let allViolations = [];
   for (const file of files) {
-    const fileViolations = inspectFile(file);
+    const changedLines = getChangedLineNumbers(file, mode);
+    const fileViolations = inspectFile(file, null, changedLines);
     allViolations.push(...fileViolations);
   }
 

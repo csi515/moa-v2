@@ -5,7 +5,8 @@ import { showToast } from '@/shared/feedback/uiFeedback';
 import { useStorageRefresh } from '@/hooks';
 import { useTerminology } from '@/core/terminology';
 import { ScheduleService } from '@/core/services/scheduleService';
-import { StorageService } from '@/services/storage';
+import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
+import { settingsStorage } from '@/services/storage/settingsStorage';
 import type { SessionPass, SessionPassStatus } from '@/core/types/schedule';
 import {
   type SessionPassPackage,
@@ -107,14 +108,14 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const packages: SessionPassPackage[] = useMemo(() => {
-    const settings = StorageService.getSettings();
+    const settings = settingsStorage.getSettings();
     return settings.sessionPassPackages && settings.sessionPassPackages.length > 0
       ? settings.sessionPassPackages
       : DEFAULT_SESSION_PASS_PACKAGES;
   }, [isModalOpen]);
 
   const members = useMemo(() => {
-    const list = StorageService.getStudents().filter((s) => s.status === 'active');
+    const list = rosterStorage.getStudents().filter((s) => s.status === 'active');
     if (!cfg.preferSessionPassStudents) return list;
     return [...list].sort((a, b) => {
       const aPass = a.billingMode === 'session_pass' ? 0 : 1;
@@ -206,7 +207,7 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
       }
 
       if (member.billingMode !== 'session_pass') {
-        StorageService.saveStudent({
+        rosterStorage.saveStudent({
           ...member,
           billingMode: 'session_pass',
         });

@@ -18,7 +18,8 @@ import { getRosterConfigForIndustry } from '../config/rosterSchemaConfig';
 import { createPickupAddress, normalizePickupAddresses, sanitizePickupAddressesForSave } from '@/capabilities/transport';
 import { searchParents, getGuardiansForStudent } from '@/core/parent/guardianHelpers';
 import { requestPlaceStudentOnTimetable } from '@/core/customer/studentJoinInbox';
-import { StorageService } from '@/services/storage';
+import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
+import { settingsStorage } from '@/services/storage/settingsStorage';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { Student, Parent } from '@/types';
 import {
@@ -86,10 +87,10 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
   const organizationId = org?.currentOrganization?.id || 'local-org';
   const formRef = useRef<HTMLFormElement>(null);
 
-  const teachers = useMemo(() => (isOpen ? StorageService.getTeachers() : []), [isOpen]);
-  const classes = useMemo(() => (isOpen ? StorageService.getClasses() : []), [isOpen]);
-  const allStudents = useMemo(() => (isOpen ? StorageService.getStudents() : []), [isOpen]);
-  const settings = useMemo(() => (isOpen ? StorageService.getSettings() : ({} as any)), [isOpen]);
+  const teachers = useMemo(() => (isOpen ? rosterStorage.getTeachers() : []), [isOpen]);
+  const classes = useMemo(() => (isOpen ? rosterStorage.getClasses() : []), [isOpen]);
+  const allStudents = useMemo(() => (isOpen ? rosterStorage.getStudents() : []), [isOpen]);
+  const settings = useMemo(() => (isOpen ? settingsStorage.getSettings() : settingsStorage.getSettings()), [isOpen]);
   const defaultLevel = useMemo(() => getStudentLevelOptions(industry)[0], [industry]);
   const rosterConfig = useMemo(
     () =>

@@ -5,7 +5,8 @@ import { usePermissions } from '@/core/auth/usePermissions';
 import { getCustomerLabel, getPlaceLabel } from '@/core/industry/industryUi';
 import { useModuleLabels } from '@/core/labels';
 import { useTenantTerms } from '@/core/i18n';
-import { StorageService } from '@/services/storage';
+import { schedulingStorage } from '@/capabilities/scheduling/infrastructure/schedulingStorage';
+import { settingsStorage } from '@/services/storage/settingsStorage';
 import { PageHeader } from '@/shared/components';
 import { ClassItem, DayOfWeek } from '@/types';
 import {
@@ -41,15 +42,15 @@ export const ClassManagementView: React.FC = () => {
   const placeLabel = getPlaceLabel(industry);
   const refreshKey = useStorageRefresh('classes');
 
-  const classes = useMemo(() => StorageService.getClasses(), [refreshKey]);
-  const teachers = useMemo(() => StorageService.getTeachers(), [refreshKey]);
-  const students = useMemo(() => StorageService.getStudents(), [refreshKey]);
-  const textbooks = useMemo(() => StorageService.getTextbooks(), [refreshKey]);
+  const classes = useMemo(() => schedulingStorage.getClasses(), [refreshKey]);
+  const teachers = useMemo(() => schedulingStorage.getTeachers(), [refreshKey]);
+  const students = useMemo(() => schedulingStorage.getStudents(), [refreshKey]);
+  const textbooks = useMemo(() => schedulingStorage.getTextbooks(), [refreshKey]);
 
   const roomNames = useMemo(
     () =>
       getRoomNames({
-        settings: StorageService.getSettings(),
+        settings: settingsStorage.getSettings(),
         classes,
       }),
     [classes, refreshKey]
@@ -76,8 +77,8 @@ export const ClassManagementView: React.FC = () => {
   const handleOpenCreate = () => {
     setEditingClass(null);
     const rooms = getRoomNames({
-      settings: StorageService.getSettings(),
-      classes: StorageService.getClasses(),
+      settings: settingsStorage.getSettings(),
+      classes: schedulingStorage.getClasses(),
     });
     setFormData({
       name: '',
@@ -89,7 +90,7 @@ export const ClassManagementView: React.FC = () => {
       teacherId: teachers[0]?.id || '',
       room: rooms[0] || '',
       color: '#4f46e5',
-      textbook: StorageService.getTextbooks()[0]?.title || '',
+      textbook: schedulingStorage.getTextbooks()[0]?.title || '',
       memo: ''
     });
     setIsModalOpen(true);
@@ -120,7 +121,7 @@ export const ClassManagementView: React.FC = () => {
       isDestructive: true,
       confirmText: '삭제하기',
       onConfirm: () => {
-        StorageService.deleteClass(cls.id);
+        schedulingStorage.deleteClass(cls.id);
         showToast(`'${cls.name}' ${serviceLabel}이(가) 삭제되었습니다.`, 'info');
       }
     });
@@ -160,7 +161,7 @@ export const ClassManagementView: React.FC = () => {
     });
 
     const save = () => {
-      StorageService.saveClass({
+      schedulingStorage.saveClass({
         ...(editingClass ? { id: editingClass.id } : {}),
         name: formData.name.trim(),
         targetLevel: formData.targetLevel,

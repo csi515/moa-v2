@@ -3,7 +3,8 @@ import { todayIsoLocal } from '@/shared/utils/localDate';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useStaffScope } from '@/hooks';
 import { getPrimaryGuardian, studentMatchesGuardianQuery } from '@/core/parent/guardianHelpers';
-import { StorageService } from '@/services/storage';
+import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
+import { schedulingStorage } from '@/capabilities/scheduling/infrastructure/schedulingStorage';
 import { PageHeader, FilterBar, SearchField } from '@/shared/components';
 import type { Consultation, ConsultationType } from '../types';
 import {
@@ -24,10 +25,10 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
   const { showToast, openConfirmDialog, currentUser, setSelectedStudentId, setActiveTab } = useApp();
   const { scopeStudents, scopeConsultations } = useStaffScope();
 
-  const allStudents = StorageService.getStudents();
+  const allStudents = rosterStorage.getStudents();
   const students = useMemo(() => scopeStudents(allStudents), [allStudents, scopeStudents]);
   const consultations = useMemo(
-    () => scopeConsultations(StorageService.getConsultations()),
+    () => scopeConsultations(schedulingStorage.getConsultations()),
     [scopeConsultations]
   );
 
@@ -80,7 +81,7 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
       isDestructive: true,
       confirmText: '삭제하기',
       onConfirm: () => {
-        StorageService.deleteConsultation(c.id);
+        schedulingStorage.deleteConsultation(c.id);
         showToast('상담 기록이 삭제되었습니다.', 'info');
       }
     });
@@ -98,7 +99,7 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
       return;
     }
 
-    StorageService.saveConsultation({
+    schedulingStorage.saveConsultation({
       studentId: st.id,
       studentName: st.name,
       parentName: getPrimaryGuardian(st.id)?.parentName || st.parentName || '학부모',
@@ -107,7 +108,7 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
       content: formData.content.trim(),
       result: formData.result.trim(),
       nextDate: formData.nextDate || undefined,
-      counselorId: StorageService.getTeachers()[0]?.id || '',
+      counselorId: rosterStorage.getTeachers()[0]?.id || '',
       counselorName: currentUser.name
     });
 

@@ -440,6 +440,11 @@
     "kind": "capability-cross"
   },
   {
+    "file": "src/capabilities/billing/ui/PassManagementView.tsx",
+    "spec": "@/capabilities/roster/infrastructure/rosterStorage",
+    "kind": "capability-cross"
+  },
+  {
     "file": "src/capabilities/billing/utils/invoiceExtras.ts",
     "spec": "@/capabilities/commerce/textbookTypes",
     "kind": "capability-cross"
@@ -457,6 +462,16 @@
   {
     "file": "src/capabilities/booking/notifications/bookingNotification.ts",
     "spec": "@/capabilities/resources/types",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/booking/pages/ScheduleCalendarPage.tsx",
+    "spec": "@/capabilities/roster/infrastructure/rosterStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/booking/ui/BookingCalendarView.tsx",
+    "spec": "@/capabilities/roster/infrastructure/rosterStorage",
     "kind": "capability-cross"
   },
   {
@@ -502,6 +517,21 @@
   {
     "file": "src/capabilities/commission_payroll/ui/InstructorContractModal.tsx",
     "spec": "@/capabilities/digital_contract/domain/digitalContractEngine",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/consultation/components/ConsultationRecordModal.tsx",
+    "spec": "@/capabilities/scheduling/infrastructure/schedulingStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/consultation/components/ConsultationRecordsView.tsx",
+    "spec": "@/capabilities/roster/infrastructure/rosterStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/consultation/components/ConsultationRecordsView.tsx",
+    "spec": "@/capabilities/scheduling/infrastructure/schedulingStorage",
     "kind": "capability-cross"
   },
   {
@@ -796,17 +826,7 @@
   },
   {
     "file": "src/capabilities/roster/components/detail/StudentDetailInfoTab.tsx",
-    "spec": "@/capabilities/attendance",
-    "kind": "capability-cross"
-  },
-  {
-    "file": "src/capabilities/roster/components/detail/StudentDetailInfoTab.tsx",
     "spec": "@/capabilities/transport",
-    "kind": "capability-cross"
-  },
-  {
-    "file": "src/capabilities/roster/components/detail/StudentDetailTuitionTab.tsx",
-    "spec": "@/capabilities/finance/paymentMethodLabels",
     "kind": "capability-cross"
   },
   {
@@ -856,17 +876,42 @@
   },
   {
     "file": "src/capabilities/roster/components/StudentFormModal.tsx",
-    "spec": "@/capabilities/attendance/features",
-    "kind": "capability-cross"
-  },
-  {
-    "file": "src/capabilities/roster/components/StudentFormModal.tsx",
     "spec": "@/capabilities/transport",
     "kind": "capability-cross"
   },
   {
     "file": "src/capabilities/roster/components/StudentListView.tsx",
     "spec": "@/capabilities/transport",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/StudentListView.tsx",
+    "spec": "@/capabilities/attendance/infrastructure/attendanceStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/StudentListView.tsx",
+    "spec": "@/capabilities/commerce/infrastructure/commerceStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/useStudentDetailModal.ts",
+    "spec": "@/capabilities/attendance/infrastructure/attendanceStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/useStudentDetailModal.ts",
+    "spec": "@/capabilities/commerce/infrastructure/commerceStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/useStudentDetailModal.ts",
+    "spec": "@/capabilities/parent/infrastructure/parentStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/useStudentDetailModal.ts",
+    "spec": "@/capabilities/scheduling/infrastructure/schedulingStorage",
     "kind": "capability-cross"
   },
   {

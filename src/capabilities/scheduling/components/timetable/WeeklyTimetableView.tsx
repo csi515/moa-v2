@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useStaffScope, useIsDesktop, useStorageRefresh } from '@/hooks';
-import { StorageService } from '@/services/storage';
+import { schedulingStorage } from '@/capabilities/scheduling/infrastructure/schedulingStorage';
 import { PageHeader, UnifiedScheduleCalendar, type CalendarEventItem } from '@/shared/components';
 import { ClassItem, DayOfWeek } from '@/types';
 import {
@@ -60,17 +60,17 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
   const refreshKey = useStorageRefresh();
 
   const classes = useMemo(
-    () => scopeClasses(StorageService.getClasses()),
+    () => scopeClasses(schedulingStorage.getClasses()),
     [scopeClasses, refreshKey]
   );
-  const teachers = StorageService.getTeachers();
+  const teachers = schedulingStorage.getTeachers();
   const students = useMemo(
-    () => scopeStudents(StorageService.getStudents()),
+    () => scopeStudents(schedulingStorage.getStudents()),
     [scopeStudents, refreshKey]
   );
   const scheduledMakeups = useMemo(
     () =>
-      scopeMakeupItems(StorageService.getMakeupItems(), students).filter(
+      scopeMakeupItems(schedulingStorage.getMakeupItems(), students).filter(
         (m) => m.status === 'scheduled' && m.makeUpDate
       ),
     [scopeMakeupItems, students, refreshKey]

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { todayIsoLocal } from '@/shared/utils/localDate';
-import { StorageService } from '@/services/storage';
+import { schedulingStorage } from '@/capabilities/scheduling/infrastructure/schedulingStorage';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import type { Consultation, ConsultationType } from '../types';
 import { Modal } from '@/shared/components/ui/Modal';
@@ -111,7 +111,7 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
     try {
       setIsSubmitting(true);
       const counselor = currentUser;
-      const saved = StorageService.saveConsultation({
+      const saved = schedulingStorage.saveConsultation({
         id: initialData?.id,
         studentId: initialData?.studentId || 'lead_' + Date.now(),
         studentName: studentName.trim() || '신청자',

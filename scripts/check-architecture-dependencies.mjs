@@ -97,34 +97,6 @@ export const LEGACY_ALLOWLIST = {
     kinds: ['layer_import'],
     reason: 'LEGACY piano textbook sale merge in sync',
   },
-  'src/capabilities/billing/ui/PassManagementView.tsx': {
-    kinds: ['storage_service_import'],
-    reason: 'LEGACY academy pass management UI',
-  },
-  'src/capabilities/booking/ui/BookingCalendarView.tsx': {
-    kinds: ['storage_service_import'],
-    reason: 'LEGACY shared booking calendar UI',
-  },
-  'src/capabilities/booking/pages/ScheduleCalendarPage.tsx': {
-    kinds: ['storage_service_import'],
-    reason: 'LEGACY shared booking calendar page',
-  },
-  'src/capabilities/consultation/components/ConsultationRecordModal.tsx': {
-    kinds: ['storage_service_import'],
-    reason: 'LEGACY consultation record modal UI',
-  },
-  'src/capabilities/consultation/components/ConsultationRecordsView.tsx': {
-    kinds: ['storage_service_import'],
-    reason: 'LEGACY academy consultation records UI',
-  },
-  'src/capabilities/scheduling/components/classes/ClassManagementView.tsx': {
-    kinds: ['storage_service_import'],
-    reason: 'LEGACY academy class management UI',
-  },
-  'src/capabilities/scheduling/components/timetable/WeeklyTimetableView.tsx': {
-    kinds: ['storage_service_import'],
-    reason: 'LEGACY academy weekly timetable UI',
-  },
 };
 
 export const PARENT_PORTAL_INDUSTRY_LEGACY_REASON =
