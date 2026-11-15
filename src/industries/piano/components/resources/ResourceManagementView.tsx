@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '@/context/AppContext';
 import { parentStorage } from '@/capabilities/parent/infrastructure/parentStorage';
-import { storageApi } from '@/services/storage/storageApi';
+import { storageCore } from '@/services/storage/storageApi';
 import { PageHeader, FilterBar, SearchField } from '@/shared/components';
 import type { Song } from '@/core/lessons/types';
 import type { PianoStudentLevel } from '@/industries/piano/types/studentLevel';
@@ -108,7 +108,7 @@ export const ResourceManagementView: React.FC = () => {
       setResources(items);
     };
     loadResources();
-    const unsubscribe = storageApi.subscribe(loadResources);
+    const unsubscribe = storageCore.subscribe(loadResources);
     return () => unsubscribe();
   }, []);
 

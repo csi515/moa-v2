@@ -3,16 +3,6 @@ import { showToast } from '@/shared/feedback/uiFeedback';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import { getPrimaryGuardian } from '@/core/parent';
 
-export type StudentConsultationType =
-  | 'trial'
-  | 'regular'
-  | 'exam'
-  | 'learning'
-  | 'entrance'
-  | 'complaint'
-  | 'other'
-  | string;
-
 export interface UseStudentConsultationParams {
   student: {
     id: string;
@@ -44,7 +34,7 @@ export function useStudentConsultation({
   onSaveConsultation,
 }: UseStudentConsultationParams) {
   const [isAddCstOpen, setIsAddCstOpen] = useState(false);
-  const [newCstType, setNewCstType] = useState<StudentConsultationType>('learning');
+  const [newCstType, setNewCstType] = useState<any>('learning');
   const [newCstContent, setNewCstContent] = useState('');
   const [newCstResult, setNewCstResult] = useState('');
   const [newCstNextDate, setNewCstNextDate] = useState('');

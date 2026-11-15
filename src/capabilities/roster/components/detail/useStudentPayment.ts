@@ -1,29 +1,22 @@
 import { useState } from 'react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 
-export type StudentPaymentMethod = 'onsite_card' | 'transfer' | 'cash' | 'auto_transfer' | string;
-
-export interface StudentPaymentInvoice {
-  id: string;
-  unpaidAmount: number;
-}
-
 export interface UseStudentPaymentParams {
   onRecordPayment?: (
     invoiceId: string,
     amount: number,
     method: any,
     memo: string
-  ) => Promise<boolean | undefined>;
+  ) => Promise<any>;
 }
 
 export function useStudentPayment(params?: UseStudentPaymentParams) {
   const [payInvoiceId, setPayInvoiceId] = useState<string | null>(null);
   const [payAmount, setPayAmount] = useState(0);
-  const [payMethod, setPayMethod] = useState<StudentPaymentMethod>('onsite_card');
+  const [payMethod, setPayMethod] = useState<any>('onsite_card');
   const [payMemo, setPayMemo] = useState('');
 
-  const handleOpenPayModal = (inv: StudentPaymentInvoice) => {
+  const handleOpenPayModal = (inv: any) => {
     setPayInvoiceId(inv.id);
     setPayAmount(inv.unpaidAmount);
     setPayMethod('onsite_card');
