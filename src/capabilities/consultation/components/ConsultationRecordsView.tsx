@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useStaffScope } from '@/hooks';
 import { getPrimaryGuardian, studentMatchesGuardianQuery } from '@/core/parent/guardianHelpers';
@@ -37,7 +38,7 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
   const [formData, setFormData] = useState({
     studentId: students[0]?.id || '',
     type: 'parent' as ConsultationType,
-    date: new Date().toISOString().slice(0, 10),
+    date: todayIsoLocal(),
     content: '',
     result: '',
     nextDate: ''
@@ -64,7 +65,7 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
     setFormData({
       studentId: students[0]?.id || '',
       type: 'parent',
-      date: new Date().toISOString().slice(0, 10),
+      date: todayIsoLocal(),
       content: '',
       result: '',
       nextDate: '',

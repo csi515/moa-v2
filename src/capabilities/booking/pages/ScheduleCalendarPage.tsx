@@ -428,7 +428,7 @@ export function ScheduleCalendarPage() {
           <div className="flex items-center gap-2">
             <span className="inline-block w-2.5 h-2.5 rounded-full bg-indigo-600 animate-pulse" />
             <span>
-              <strong>{selectedMember.name}</strong> 원생의 일정만 캘린더에 표시 중입니다.
+              <strong>{selectedMember.name}</strong> 님의 일정만 캘린더에 표시 중입니다.
               (총 {calendarEvents.length}개 일정)
             </span>
           </div>

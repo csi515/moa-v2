@@ -5,6 +5,9 @@ import {
   isSameBusinessDay,
   calculateRemainingDays,
   formatBusinessYmd,
+  toBusinessDateString,
+  getBusinessToday,
+  getBusinessYearMonth,
 } from './businessDate';
 
 const SEOUL_TZ = 'Asia/Seoul';
@@ -75,6 +78,21 @@ const SEOUL_TZ = 'Asia/Seoul';
 
   // 5) 타임존이 다른 환경 (예: UTC)에서도 KST 기준 날짜로 일관되게 계산
   assert.equal(calculateRemainingDays('2026-10-25T15:30:00.000Z', baseNow, SEOUL_TZ), 1); // KST로는 10-26일이므로 1일 남음
+}
+
+// 5. 표준 날짜 문자열 정규화 (toBusinessDateString, getBusinessYearMonth, getBusinessToday)
+{
+  const kstNight = new Date('2026-10-25T14:59:59.000Z'); // KST 2026-10-25 23:59:59
+  assert.equal(toBusinessDateString(kstNight, SEOUL_TZ), '2026-10-25');
+  assert.equal(getBusinessYearMonth(kstNight, SEOUL_TZ), '2026-10');
+
+  const kstNextDay = new Date('2026-10-25T15:00:01.000Z'); // KST 2026-10-26 00:00:01
+  assert.equal(toBusinessDateString(kstNextDay, SEOUL_TZ), '2026-10-26');
+  assert.equal(getBusinessYearMonth(kstNextDay, SEOUL_TZ), '2026-10');
+
+  // getBusinessToday 형식 검증 (YYYY-MM-DD)
+  const todayStr = getBusinessToday(SEOUL_TZ);
+  assert.match(todayStr, /^\d{4}-\d{2}-\d{2}$/);
 }
 
 console.log('businessDate.test.ts: ok (all business day & timezone boundary tests passed)');

@@ -44,7 +44,7 @@ export function notifyParentAbsence(params: NotifyParentAbsenceParams): boolean 
   publishParentAlert({
     type: 'absence',
     title: '결석 안내',
-    message: `${params.studentName} 원생이 ${params.date} ${params.className} 수업에 결석 처리되었습니다.${reason}`,
+    message: `${params.studentName}님이 ${params.date} ${params.className} 수업에 결석 처리되었습니다.${reason}`,
     student: {
       id: params.studentId,
       name: params.studentName,

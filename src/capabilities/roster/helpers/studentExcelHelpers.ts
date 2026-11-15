@@ -77,7 +77,7 @@ export function parseStudentCsvText(content: string): CsvImportResult {
       errorRows.push({
         rowNumber: i + 1,
         raw: rowObj,
-        reason: '이름(원생명)이 누락되었습니다.',
+        reason: '이름이 누락되었습니다.',
       });
       continue;
     }
@@ -127,7 +127,7 @@ function mapHeaders(headers: string[]): Record<string, string> {
   for (const h of headers) {
     const clean = h.replace(/\s+/g, '').toLowerCase();
 
-    if (!map.name && (clean.includes('이름') || clean.includes('성명') || clean.includes('원생') || clean.includes('학생'))) {
+    if (!map.name && (clean.includes('이름') || clean.includes('성명') || clean.includes('원생') || clean.includes('학생') || clean.includes('회원') || clean.includes('고객'))) {
       map.name = h;
     } else if (!map.guardianPhone && (clean.includes('보호자연락') || clean.includes('부모') || clean.includes('엄마') || clean.includes('아빠') || clean.includes('보호자폰'))) {
       map.guardianPhone = h;
@@ -191,11 +191,16 @@ function sanitizePhone(raw?: string): string {
 }
 
 /**
- * 학생 목록을 UTF-8 BOM CSV로 브라우저 다운로드
+ * 학생/회원 목록을 UTF-8 BOM CSV로 브라우저 다운로드
  */
-export function exportStudentsToCsv(students: StudentExportable[], filename = '원생명부_내보내기.csv'): void {
+export function exportStudentsToCsv(
+  students: StudentExportable[],
+  filename?: string,
+  customerLabel = '회원'
+): void {
+  const actualFilename = filename || `${customerLabel}명부_내보내기.csv`;
   const headers = [
-    '원생명',
+    `${customerLabel}명`,
     '상태',
     '본인연락처',
     '주보호자',
@@ -230,7 +235,7 @@ export function exportStudentsToCsv(students: StudentExportable[], filename = '�
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.setAttribute('href', url);
-  link.setAttribute('download', filename);
+  link.setAttribute('download', actualFilename);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -240,9 +245,13 @@ export function exportStudentsToCsv(students: StudentExportable[], filename = '�
 /**
  * 샘플 엑셀/CSV 양식 템플릿 다운로드
  */
-export function downloadSampleCsvTemplate(filename = '원생_대량등록_양식.csv'): void {
+export function downloadSampleCsvTemplate(
+  filename?: string,
+  customerLabel = '회원'
+): void {
+  const actualFilename = filename || `${customerLabel}_대량등록_양식.csv`;
   const sampleHeaders = [
-    '원생명',
+    `${customerLabel}명`,
     '본인연락처',
     '보호자이름',
     '보호자연락처',

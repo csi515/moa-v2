@@ -40,4 +40,17 @@ describe('studentExcelHelpers CSV Parser', () => {
     assert.equal(errorRows[0].rowNumber, 3);
     assert.match(errorRows[0].reason, /이름.*누락/);
   });
+
+  it('correctly maps non-academy headers like 회원명, 고객명 (industry polymorphism)', () => {
+    const csv = `회원명,휴대폰,비용
+홍길동,010-9999-8888,250000`;
+
+    const { validRows, errorRows } = parseStudentCsvText(csv);
+
+    assert.equal(errorRows.length, 0);
+    assert.equal(validRows.length, 1);
+    assert.equal(validRows[0].name, '홍길동');
+    assert.equal(validRows[0].phone, '010-9999-8888');
+    assert.equal(validRows[0].tuitionFee, 250000);
+  });
 });

@@ -199,3 +199,33 @@ export function calculateRemainingDays(
 
   return expireDayIndex - nowDayIndex;
 }
+
+/**
+ * 지정된 타임존 기준 현재 날짜(YYYY-MM-DD) 반환.
+ */
+export function getBusinessToday(timezone: string = DEFAULT_BUSINESS_TIMEZONE): string {
+  return formatBusinessYmd(new Date(), timezone);
+}
+
+/**
+ * 프로젝트 표준 날짜 정규화 함수 (규칙 2_DATA_AND_SECURITY.md 제4조 명세).
+ * 주어진 날짜(또는 현재 시각)를 지정된 사업장 타임존 기준 YYYY-MM-DD 문자열로 정규화.
+ */
+export function toBusinessDateString(
+  date: Date | string = new Date(),
+  timezone: string = DEFAULT_BUSINESS_TIMEZONE
+): string {
+  return formatBusinessYmd(date, timezone);
+}
+
+/**
+ * 지정된 타임존 기준 현재 또는 특정 날짜의 YYYY-MM 반환.
+ */
+export function getBusinessYearMonth(
+  date: Date | string = new Date(),
+  timezone: string = DEFAULT_BUSINESS_TIMEZONE
+): string {
+  const ymd = formatBusinessYmd(date, timezone);
+  return ymd ? ymd.slice(0, 7) : '';
+}
+

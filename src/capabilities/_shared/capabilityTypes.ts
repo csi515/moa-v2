@@ -201,7 +201,7 @@ export const CAPABILITY_DOMAIN_RELATIONS = {
     children: ['consultation_crm', 'treatment_chart', 'safety_consent'],
     description: '상담 CRM, 시술 차트, 안전 동의서는 consultation 도메인의 특화 하위 기능',
   },
-  // 원생 및 회원 명부 도메인
+  // 회원 및 고객 명부 도메인 (Roster)
   roster_lifecycle: {
     parent: 'roster',
     children: ['enrollment'],

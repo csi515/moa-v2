@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { Ticket, Plus } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { useStorageRefresh } from '@/hooks';
@@ -195,7 +196,7 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
         upsertLinkedIncome({
           sourceType: 'session_pass',
           paymentId: savedPass.id,
-          date: new Date().toISOString().slice(0, 10),
+          date: todayIsoLocal(),
           amount: price,
           paymentMethod: 'card',
           description: `${member.name} - ${savedPass.label} 발급 수납`,

@@ -14,7 +14,7 @@ export function notifyParentMakeupScheduled(item: MakeupItem): void {
   publishParentAlert({
     type: 'makeup',
     title: '보강 일정 안내',
-    message: `${item.studentName} 원생 보강이 ${item.makeUpDate}${slot}${room}${teacher}에 예약되었습니다. (결석일 ${item.originalDate})`,
+    message: `${item.studentName}님 보강 일정이 ${item.makeUpDate}${slot}${room}${teacher}에 예약되었습니다. (원 일정: ${item.originalDate})`,
     student: {
       id: item.studentId,
       name: item.studentName,

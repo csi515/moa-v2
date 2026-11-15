@@ -1,4 +1,5 @@
 import type { Expense, PaymentMethod, Teacher, TeacherPayType } from '@/types';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { getIndustryPlugin } from '@/core/industry/pluginHost';
 import { isBlankIndustryInput } from '@/core/industry/types';
 import { formatPayrollFormula } from './labels';
@@ -24,7 +25,7 @@ export function getPayrollExpenseCategory(industry?: string | null): string {
 export function settlementExpenseDate(yearMonth: string): string {
   const [y, m] = yearMonth.split('-').map(Number);
   const lastDay = new Date(y, m, 0).getDate();
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayIsoLocal();
   const endOfMonth = `${yearMonth}-${String(lastDay).padStart(2, '0')}`;
   return today.startsWith(yearMonth) ? today : endOfMonth;
 }

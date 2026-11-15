@@ -228,9 +228,9 @@ export function renderIncidentReportSvg(report: IncidentReportItem): string {
  * 0원 보호자 유선 안내 및 알림톡/SMS 텍스트 템플릿
  */
 export function formatIncidentNotificationText(report: IncidentReportItem): string {
-  const hospitalText = report.hospitalTransported ? '병원 후송 및 진료가 진행되었습니다.' : '원내에서 즉시 응급처치를 완료하였습니다.';
+  const hospitalText = report.hospitalTransported ? '병원 후송 및 진료가 진행되었습니다.' : '원내/시설 내에서 즉시 응급처치를 완료하였습니다.';
   return `[시설 안전사고 경위 및 안내]
-안녕하세요. 원내에서 발생한 상황을 신속하고 투명하게 안내드립니다.
+안녕하세요. 시설 내에서 발생한 상황을 신속하고 투명하게 안내드립니다.
 
 - 일시: ${report.incidentDate.slice(0, 16).replace('T', ' ')}
 - 장소: ${report.locationInFacility}
@@ -239,7 +239,7 @@ export function formatIncidentNotificationText(report: IncidentReportItem): stri
 - 세부내용: ${report.description}
 - 현장조치: ${report.emergencyActionTaken || hospitalText}
 
-원생/고객의 빠른 안정과 회복을 최우선으로 돌보고 있으며, 추가 문의사항은 언제든 원으로 연락 주시기 바랍니다.`;
+고객/회원의 빠른 안정과 회복을 최우선으로 돌보고 있으며, 추가 문의사항은 언제든 운영본부/센터로 연락 주시기 바랍니다.`;
 }
 
 /**

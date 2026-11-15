@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { useList, useCreate } from '@refinedev/core';
 import { useTerminology } from '@/core/terminology';
 import {
@@ -41,7 +42,7 @@ export const DailyCareReportView: React.FC = () => {
     e.preventDefault();
     if (!subjectName.trim()) return;
 
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayStr = todayIsoLocal();
 
     setIsCreating(true);
     createLog(

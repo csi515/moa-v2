@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import type { Booking } from '@/core/types/schedule';
 import type { BookingFormSnapshot } from './validateBookingCreate';
 
-const defaultDate = () => new Date().toISOString().slice(0, 10);
+const defaultDate = () => todayIsoLocal();
 
 export function useBookingForm(opts: {
   isScoped: boolean;

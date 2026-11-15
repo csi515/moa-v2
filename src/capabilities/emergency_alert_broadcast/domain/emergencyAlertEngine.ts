@@ -115,12 +115,12 @@ export function renderEmergencyAlertSvg(broadcast: EmergencyBroadcastItem): stri
   <text x="24" y="220" fill="#dc2626" font-size="13" font-weight="bold" font-family="sans-serif">${safeReason}</text>
 
   <line x1="24" y1="240" x2="436" y2="240" stroke="#f1f5f9" stroke-width="1.5"/>
-  <text x="230" y="262" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="sans-serif">모아 안심 안전 네트워크 • 원생 안전 최우선 긴급 조치</text>
+  <text x="230" y="262" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="sans-serif">모아 안심 안전 네트워크 • 고객 및 회원 안전 최우선 긴급 조치</text>
 </svg>`;
 }
 
 /**
- * 0원 학부모 단톡방/SMS/카카오톡 긴급 공지 텍스트 템플릿
+ * 0원 보호자/고객 단톡방/SMS/카카오톡 긴급 공지 텍스트 템플릿
  */
 export function formatEmergencyBroadcastText(broadcast: EmergencyBroadcastItem, orgName: string): string {
   const style = getSeverityStyle(broadcast.severity);
@@ -131,12 +131,12 @@ export function formatEmergencyBroadcastText(broadcast: EmergencyBroadcastItem, 
   return `[${orgName}] ${style.label} 안내
 
 안녕하세요, ${orgName}입니다.
-원생과 회원의 안전을 위해 아래와 같이 긴급 휴원/휴관 조치를 결정하게 되었습니다.
+고객과 회원의 안전을 위해 아래와 같이 긴급 휴원/휴관 조치를 결정하게 되었습니다.
 
 - 제목: ${broadcast.title}
 - 사유: ${broadcast.closureReason}
 - 적용 일시: ${startPeriod} ${endPeriod}${makeupText}
 - 모바일 수신 확인 링크: https://moa.app/alert/${broadcast.id}
 
-안내를 확인하신 학부모님/회원님께서는 위 링크를 눌러 [확인 완료] 버튼을 눌러주시면 감사하겠습니다. 아이들의 안전을 최우선으로 돌보겠습니다. 감사합니다.`;
+안내를 확인하신 고객/회원/보호자님께서는 위 링크를 눌러 [확인 완료] 버튼을 눌러주시면 감사하겠습니다. 이용자의 안전을 최우선으로 돌보겠습니다. 감사합니다.`;
 }

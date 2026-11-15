@@ -48,7 +48,7 @@ export function inferStudentLevelFromCourse(course?: string, notes?: string): st
 export function mapConsultationToStudentDraft(
   lead: ConsultationLeadData
 ): StudentDraftFromConsultation {
-  const studentName = (lead.studentName || lead.parentName || '신규 원생').trim();
+  const studentName = (lead.studentName || lead.parentName || '신규 고객').trim();
   const parentName = (lead.parentName || lead.studentName || '').trim();
   const phone = (lead.phone || '').trim();
   const level = inferStudentLevelFromCourse(lead.coursePreference, lead.notes || lead.content);

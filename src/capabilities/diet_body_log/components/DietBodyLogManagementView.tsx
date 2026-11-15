@@ -1,4 +1,5 @@
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Activity,
@@ -135,7 +136,7 @@ export function DietBodyLogManagementView() {
   // 인바디 신규 입력 폼 모달 상태
   const [isInbodyModalOpen, setIsInbodyModalOpen] = useState(false);
   const [newInbodyForm, setNewInbodyForm] = useState({
-    measuredDate: new Date().toISOString().slice(0, 10),
+    measuredDate: todayIsoLocal(),
     weightKg: 75.8,
     skeletalMuscleMassKg: 35.1,
     bodyFatPercent: 17.5,

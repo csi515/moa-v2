@@ -1,4 +1,5 @@
 import React, { useEffect,  useState, useMemo } from 'react';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { showToast, openConfirmDialog } from '@/shared/feedback/uiFeedback';
 import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 import { usePermissions } from '@/core/auth/usePermissions';
@@ -38,7 +39,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().slice(0, 10),
+    date: todayIsoLocal(),
     category: categoryOptions[0]?.value || 'other',
     amount: 50000,
     description: '',
@@ -84,7 +85,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
   const handleOpenCreate = () => {
     setEditingExpense(null);
     setFormData({
-      date: new Date().toISOString().slice(0, 10),
+      date: todayIsoLocal(),
       category: categoryOptions[0]?.value || 'other',
       amount: 50000,
       description: '',

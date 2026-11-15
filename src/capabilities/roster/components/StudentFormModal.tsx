@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useOptionalOrganization } from '@/core/organizations/OrganizationProvider';
@@ -113,7 +114,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
     phone: '',
     school: '',
     grade: '',
-    joinDate: new Date().toISOString().slice(0, 10),
+    joinDate: todayIsoLocal(),
     leaveDate: '',
     status: 'active',
     teacherId: '',
@@ -214,7 +215,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         phone: '',
         school: '',
         grade: '',
-        joinDate: new Date().toISOString().slice(0, 10),
+        joinDate: todayIsoLocal(),
         leaveDate: '',
         status: 'active',
         teacherId: teachers[0]?.id || '',

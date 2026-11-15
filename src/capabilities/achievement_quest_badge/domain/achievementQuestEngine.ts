@@ -156,7 +156,7 @@ export function renderAchievementBadgeSvg(
   <text x="180" y="245" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">${quest.badgeTier.toUpperCase()} BADGE</text>
 
   <!-- 수여자 및 퀘스트 명칭 -->
-  <text x="180" y="295" fill="#0f172a" font-size="20" font-weight="bold" text-anchor="middle" font-family="sans-serif">${safeName} 원생</text>
+  <text x="180" y="295" fill="#0f172a" font-size="20" font-weight="bold" text-anchor="middle" font-family="sans-serif">${safeName} 님</text>
   <text x="180" y="325" fill="#334155" font-size="15" font-weight="600" text-anchor="middle" font-family="sans-serif">${safeTitle}</text>
   
   <!-- 달성 정보 -->
@@ -169,13 +169,13 @@ export function renderAchievementBadgeSvg(
 }
 
 /**
- * 0원 학부모 카톡/SNS 축하 공유 텍스트 템플릿
+ * 0원 회원/보호자 카톡/SNS 축하 공유 텍스트 템플릿
  */
 export function formatAchievementShareText(
   quest: AchievementQuestItem,
   member: AchievementQuestMemberItem
 ): string {
-  return `🎉 [축 달성] ${member.memberName} 원생이 '${quest.title}' 퀘스트를 완료했습니다!
+  return `🎉 [축 달성] ${member.memberName} 님이 '${quest.title}' 퀘스트를 완료했습니다!
 
 열심히 땀 흘리며 도전한 끝에 공식 [${quest.badgeTier.toUpperCase()}] 뱃지를 획득하였습니다.
 
@@ -183,5 +183,5 @@ export function formatAchievementShareText(
 - 달성 수치: ${quest.targetCount} ${quest.unit}
 - 획득 보상: 디지털 뱃지 +${quest.rewardPoints} 포인트 적립
 
-앞으로도 ${member.memberName} 원생의 빛나는 성장과 도전을 큰 박수로 응원합니다! 👏`;
+앞으로도 ${member.memberName} 님의 빛나는 성장과 도전을 큰 박수로 응원합니다! 👏`;
 }

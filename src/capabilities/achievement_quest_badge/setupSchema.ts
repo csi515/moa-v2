@@ -2,8 +2,8 @@ import type { CapabilitySetupSchema } from '@/core/presets/types';
 
 export const achievement_quest_badgeSetupSchema: CapabilitySetupSchema = {
   capabilityId: 'achievement_quest_badge',
-  title: '원생 성취 퀘스트 및 디지털 뱃지 설정',
-  description: '퀘스트 달성 시 포인트 자동 지급 및 학부모 포털 노출 설정을 관리합니다.',
+  title: '성취 퀘스트 및 디지털 뱃지 설정',
+  description: '퀘스트 달성 시 포인트 자동 지급 및 고객/회원 포털 노출 설정을 관리합니다.',
   fields: [
     {
       id: 'enableAutoPointReward',

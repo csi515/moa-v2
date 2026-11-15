@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { StorageService } from '@/services/storage';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import type { Consultation, ConsultationType } from '../types';
@@ -87,7 +88,7 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
 
   useEffect(() => {
     if (isOpen) {
-      setDate(initialData?.date || new Date().toISOString().slice(0, 10));
+      setDate(initialData?.date || todayIsoLocal());
       setType(initialData?.type || 'parent');
       setContent(initialData?.content || initialData?.notes || '');
       setResult(initialData?.result || '상담 완료');
@@ -115,7 +116,7 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
         studentId: initialData?.studentId || 'lead_' + Date.now(),
         studentName: studentName.trim() || '신청자',
         parentName: parentName.trim() || '학부모',
-        date: date || new Date().toISOString().slice(0, 10),
+        date: date || todayIsoLocal(),
         type,
         content: content.trim(),
         result: result.trim(),

@@ -1,4 +1,5 @@
 import React, { useEffect,  useState, useMemo } from 'react';
+import { todayIsoLocal, yearMonthLocal } from '@/shared/utils/localDate';
 import { showToast, openConfirmDialog } from '@/shared/feedback/uiFeedback';
 import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 import { usePermissions } from '@/core/auth/usePermissions';
@@ -38,13 +39,13 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
   const refreshKey = useStorageRefresh('finance');
   const categoryOptions = getIncomeCategories(industry);
 
-  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
+  const [selectedMonth, setSelectedMonth] = useState(yearMonthLocal());
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEntry, setEditingEntry] = useState<IncomeEntry | null>(null);
 
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().slice(0, 10),
+    date: todayIsoLocal(),
     category: categoryOptions[0]?.value || 'other',
     amount: 100000,
     description: '',
@@ -76,7 +77,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
   const handleOpenCreate = () => {
     setEditingEntry(null);
     setFormData({
-      date: new Date().toISOString().slice(0, 10),
+      date: todayIsoLocal(),
       category: categoryOptions[0]?.value || 'other',
       amount: 100000,
       description: '',

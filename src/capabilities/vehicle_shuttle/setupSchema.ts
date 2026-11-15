@@ -14,7 +14,7 @@ export const vehicleShuttleSetupSchema: CapabilitySetupSchema = {
     },
     {
       id: 'enableSmsAlertOnBoarding',
-      label: '원생 탑승 시 학부모 실시간 알림톡/문자 발송',
+      label: '탑승 시 보호자 실시간 알림톡/문자 발송',
       type: 'boolean',
       defaultValue: true,
     },

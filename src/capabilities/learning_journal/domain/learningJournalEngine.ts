@@ -44,7 +44,7 @@ export function validateJournalEntry(entry: {
   student_id: string;
 }): JournalValidationResult {
   if (!entry.student_id || entry.student_id.trim() === '') {
-    return { valid: false, error: '수업 대상 원생(학생)을 선택해야 합니다.' };
+    return { valid: false, error: '수업 대상 회원(수강생)을 선택해야 합니다.' };
   }
   if (!entry.title || entry.title.trim().length < 2) {
     return { valid: false, error: '수업 일지 제목을 최소 2자 이상 입력해주세요.' };

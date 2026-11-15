@@ -40,8 +40,8 @@ export function notifyParentPracticeRoomBooked(
 ): void {
   publishParentAlert({
     type: 'announcement',
-    title: '연습실 예약 안내',
-    message: `${booking.studentName} 원생 연습실이 ${booking.date} ${booking.startTime}–${booking.endTime} · ${booking.room}에 예약되었습니다.`,
+    title: '공간/연습실 예약 안내',
+    message: `${booking.studentName}님 이용 공간/연습실이 ${booking.date} ${booking.startTime}–${booking.endTime} · ${booking.room}에 예약되었습니다.`,
     student: {
       id: booking.studentId,
       name: booking.studentName,
@@ -64,8 +64,8 @@ export interface NotifyParentPracticeReviewedParams {
 export function notifyParentPracticeReviewed(params: NotifyParentPracticeReviewedParams): void {
   publishParentAlert({
     type: 'practice',
-    title: '연습 일지 확인',
-    message: `${params.studentName} 원생 ${params.date} 「${params.songTitle}」 연습 일지를 선생님이 확인했습니다.`,
+    title: '연습/활동 일지 확인',
+    message: `${params.studentName}님 ${params.date} 「${params.songTitle}」 활동 일지를 담당자가 확인했습니다.`,
     student: {
       id: params.studentId,
       name: params.studentName,

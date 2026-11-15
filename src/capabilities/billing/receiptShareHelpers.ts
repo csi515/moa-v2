@@ -8,6 +8,7 @@
 export interface ReceiptTextParams {
   academyName?: string;
   studentName: string;
+  customerLabel?: string;
   yearMonth: string; // "2026-11"
   payAmount: number;
   payMethodLabel: string; // "카드", "계좌이체" 등
@@ -16,10 +17,11 @@ export interface ReceiptTextParams {
 }
 
 /**
- * 학부모 전달용 원페이퍼 모바일 수납 영수증 텍스트 생성
+ * 학부모/고객 전달용 원페이퍼 모바일 수납 영수증 텍스트 생성
  */
 export function generateTuitionReceiptText(params: ReceiptTextParams): string {
   const academy = params.academyName?.trim() || '음악학원';
+  const customerWord = params.customerLabel ? `${params.customerLabel}명` : '원생명';
   const formattedAmount = (params.payAmount || 0).toLocaleString('ko-KR');
 
   // "2026-11" -> "2026년 11월"
@@ -32,7 +34,7 @@ export function generateTuitionReceiptText(params: ReceiptTextParams): string {
   const lines = [
     `[${academy}] 수납 확인 영수증`,
     '━━━━━━━━━━━━━━━━━━',
-    `• 원생명: ${params.studentName}`,
+    `• ${customerWord}: ${params.studentName}`,
     `• 수강월: ${formattedMonth}`,
     `• 수납일시: ${params.payDate}`,
     `• 결제수단: ${params.payMethodLabel}`,

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import { useList, useCreate } from '@refinedev/core';
 import {
   renderEntryPassSvgTicket,
@@ -30,7 +31,7 @@ export const EntryPassTicketView: React.FC = () => {
     e.preventDefault();
     if (!customerName.trim()) return;
 
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayStr = todayIsoLocal();
     const dateFormatted = todayStr.replace(/-/g, '');
     const seq = String(tickets.length + 1).padStart(4, '0');
     const ticketNumber = `TICK-${dateFormatted}-${seq}`;

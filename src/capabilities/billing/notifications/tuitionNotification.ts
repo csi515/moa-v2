@@ -13,8 +13,8 @@ export interface NotifyParentTuitionUnpaidParams {
 export function notifyParentTuitionUnpaid(params: NotifyParentTuitionUnpaidParams): void {
   publishParentAlert({
     type: 'tuition_unpaid',
-    title: '수강료 미납 안내',
-    message: `${params.studentName} 원생 ${params.yearMonth} 수강료 ₩${params.amount.toLocaleString()}원이 미납입니다. (납기 ${params.dueDate})`,
+    title: '이용료/수강료 미납 안내',
+    message: `${params.studentName}님 ${params.yearMonth} 이용료/수강료 ₩${params.amount.toLocaleString()}원이 미납입니다. (납기 ${params.dueDate})`,
     student: {
       id: params.studentId,
       name: params.studentName,

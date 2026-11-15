@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { todayIsoLocal } from '@/shared/utils/localDate';
 import type { Booking, SlotRecruitment } from '@/core/types/schedule';
 import { isUnassignedCustomerRequest } from '@/capabilities/booking/domain/bookingRooms';
 import type { FilterTabItem } from '@/shared/components';
@@ -66,7 +67,7 @@ export function useBookingFilters(opts: {
 }) {
   const [filter, setFilter] = useState<BookingFilter>('today');
   const [instructorFilter, setInstructorFilter] = useState<string>('all');
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayIsoLocal();
 
   const instructorTabs: FilterTabItem<string>[] = useMemo(() => {
     const tabs: FilterTabItem<string>[] = [{ id: 'all', label: `전체 ${opts.staffLabel}` }];
