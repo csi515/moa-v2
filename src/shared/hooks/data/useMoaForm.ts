@@ -12,12 +12,14 @@ export interface UseMoaFormOptions<TFormData extends Record<string, any> = Recor
   recordId?: string | number;
   /** 저장 성공 시 콜백 */
   onSuccess?: (savedData: any) => void;
+  /** 커스텀 성공 메시지 */
+  customSuccessMsg?: string;
 }
 
 export function useMoaForm<TFormData extends Record<string, any> = Record<string, any>>(
   options: UseMoaFormOptions<TFormData>
 ) {
-  const { resource, recordId, onSuccess, entityName, schema, disableSuccessToast, disableErrorToast, ...formOptions } =
+  const { resource, recordId, onSuccess, customSuccessMsg, entityName, schema, disableSuccessToast, disableErrorToast, ...formOptions } =
     options;
 
   const { currentOrganization } = useOrganization();
@@ -42,9 +44,9 @@ export function useMoaForm<TFormData extends Record<string, any> = Record<string
 
     let result;
     if (recordId) {
-      result = await updateAsync(recordId, payload);
+      result = await updateAsync(recordId, payload, customSuccessMsg);
     } else {
-      result = await createAsync(payload);
+      result = await createAsync(payload, customSuccessMsg);
     }
 
     if (onSuccess) {
