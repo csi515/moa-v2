@@ -28,6 +28,7 @@ import { commitOptimistic } from '@/core/feedback/optimisticStatus';
 import { celebrateSuccess, pulseError } from '@/core/feedback/sensoryFeedback';
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
 import { todayIsoLocal, yearMonthLocal, shiftDateIso } from '@/shared/utils/localDate';
+import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 import {
   transitionInvoiceStatus,
   filterMonthlyFees,
@@ -821,6 +822,15 @@ const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({ onClose, onCreated })
   const [billingYearMonth, setBillingYearMonth] = useState(yearMonthLocal());
   const [dueDate, setDueDate] = useState(shiftDateIso(todayIsoLocal(), 14));
 
+  const isDirty = Boolean(memberName.trim());
+  const { confirmDiscard } = useDirtyFormGuard({ isDirty });
+
+  const handleSafeClose = async () => {
+    if (await confirmDiscard()) {
+      onClose();
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!memberName.trim()) {
@@ -859,7 +869,7 @@ const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({ onClose, onCreated })
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleSafeClose}
             className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
           >
             ✕
@@ -925,7 +935,7 @@ const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({ onClose, onCreated })
           <div className="flex items-center justify-end gap-2 pt-3">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleSafeClose}
               className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100"
             >
               취소

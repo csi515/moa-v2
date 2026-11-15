@@ -486,7 +486,7 @@
   },
   {
     "file": "src/capabilities/booking/ui/BookingCalendarView.tsx",
-    "spec": "@/capabilities/scheduling/domain/calendarConstraintEngine",
+    "spec": "@/capabilities/scheduling",
     "kind": "capability-cross"
   },
   {
@@ -516,7 +516,7 @@
   },
   {
     "file": "src/capabilities/commission_payroll/ui/InstructorContractModal.tsx",
-    "spec": "@/capabilities/digital_contract/domain/digitalContractEngine",
+    "spec": "@/capabilities/digital_contract",
     "kind": "capability-cross"
   },
   {

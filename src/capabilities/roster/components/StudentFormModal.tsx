@@ -31,6 +31,7 @@ import {
 import { CustomFieldsForm } from '@/core/customer/components/CustomFieldsForm';
 import { Save, RefreshCw, StickyNote, SlidersHorizontal, ChevronDown, ChevronUp, Calendar } from 'lucide-react';
 import { Modal } from '@/shared/components/ui/Modal';
+import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 import { StudentBasicInfoSection } from './form/StudentBasicInfoSection';
 import { GuardianSection } from './form/GuardianSection';
 import { StudentAdvancedSection } from './form/StudentAdvancedSection';
@@ -267,6 +268,8 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
     studentFormSnapshot(formData, guardians, isAdultSelf) + JSON.stringify(customFieldValues) !==
       baseline &&
     !postSaveStudent;
+
+  useDirtyFormGuard({ isDirty });
 
   const confirmUnsavedClose = (proceed: () => void) => {
     openConfirmDialog({

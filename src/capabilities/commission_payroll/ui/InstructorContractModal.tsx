@@ -15,6 +15,7 @@ import {
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { yearMonthLocal } from '@/shared/utils/localDate';
 import { generateInstructorConsignmentClauses } from '@/capabilities/digital_contract';
+import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 
 export interface InstructorContractData {
   id: string;
@@ -182,6 +183,15 @@ export const InstructorContractModal: React.FC<InstructorContractModalProps> = (
     onClose();
   };
 
+  const isDirty = Boolean(instructorName.trim() || courseName.trim() || hasSignature);
+  const { confirmDiscard } = useDirtyFormGuard({ isDirty });
+
+  const handleSafeClose = async () => {
+    if (await confirmDiscard()) {
+      onClose();
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -199,7 +209,7 @@ export const InstructorContractModal: React.FC<InstructorContractModalProps> = (
             </div>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleSafeClose}
             className="p-1.5 rounded-lg text-blue-100 hover:text-white hover:bg-white/10 transition-colors"
           >
             <X className="w-5 h-5" />
@@ -435,7 +445,7 @@ export const InstructorContractModal: React.FC<InstructorContractModalProps> = (
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleSafeClose}
               className="px-4 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
             >
               취소

@@ -1,6 +1,7 @@
 import React, { ReactNode, useCallback, useEffect, useId, useRef } from 'react';
 import { X } from 'lucide-react';
 import { focusInitialElement, trapTabKey } from './modalFocus';
+import { openConfirmDialog } from '@/shared/feedback/uiFeedback';
 
 export type ModalIntent = 'view' | 'form';
 
@@ -64,12 +65,15 @@ export const Modal: React.FC<ModalProps> = ({
         confirmClose(onClose);
         return;
       }
-      if (
-        typeof window !== 'undefined' &&
-        !window.confirm('작성 중인 변경사항이 저장되지 않았습니다. 창을 닫으시겠습니까?')
-      ) {
-        return;
-      }
+      openConfirmDialog({
+        title: '작성 취소 확인',
+        message: '작성 중인 변경사항이 저장되지 않았습니다. 창을 닫으시겠습니까?',
+        confirmText: '닫기',
+        cancelText: '계속 작성',
+        isDestructive: true,
+        onConfirm: onClose,
+      });
+      return;
     }
     onClose();
   }, [confirmClose, dirty, intent, onClose]);

@@ -18,6 +18,8 @@ import {
   type RequisitionItem,
   type PurchaseRequisition,
 } from '../domain/procurementPipelineEngine';
+import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
+import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 
 interface PurchaseRequisitionFormModalProps {
   isOpen: boolean;
@@ -115,6 +117,18 @@ export const PurchaseRequisitionFormModal: React.FC<PurchaseRequisitionFormModal
     },
   ]);
 
+  const isDirty = Boolean(
+    justification.trim() ||
+    items.some((i) => i.itemName.trim() || i.sku.trim() || i.estimatedUnitPrice > 0)
+  );
+  const { confirmDiscard } = useDirtyFormGuard({ isDirty });
+
+  const handleSafeClose = async () => {
+    if (await confirmDiscard()) {
+      onClose();
+    }
+  };
+
   if (!isOpen) return null;
 
   const handleAddItem = () => {
@@ -210,7 +224,7 @@ export const PurchaseRequisitionFormModal: React.FC<PurchaseRequisitionFormModal
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleSafeClose}
             className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
           >
             <X className="w-5 h-5" />
@@ -438,7 +452,7 @@ export const PurchaseRequisitionFormModal: React.FC<PurchaseRequisitionFormModal
           <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleSafeClose}
               className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition"
             >
               취소

@@ -23,6 +23,7 @@ import { showToast } from '@/shared/feedback/uiFeedback';
 import { LocalStorageNoticeBanner } from '@/shared/components';
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
 import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
+import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 import {
   applyStockMovement,
   checkSafetyStockWarning,
@@ -872,6 +873,15 @@ const StockInLotModal: React.FC<StockInLotModalProps> = ({ items, onClose, onCre
   );
   const [quantity, setQuantity] = useState('20');
 
+  const isDirty = quantity !== '20' || lotNumber.trim() !== `LOT-${todayIsoLocal().slice(2).replace(/-/g, '')}-01`;
+  const { confirmDiscard } = useDirtyFormGuard({ isDirty });
+
+  const handleSafeClose = async () => {
+    if (await confirmDiscard()) {
+      onClose();
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const inQty = Number(quantity) || 0;
@@ -906,7 +916,7 @@ const StockInLotModal: React.FC<StockInLotModalProps> = ({ items, onClose, onCre
       <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <h3 className="text-base font-bold text-slate-900">신규 로트 정밀 입고</h3>
-          <button type="button" onClick={onClose} className="text-slate-400 hover:text-slate-600">✕</button>
+          <button type="button" onClick={handleSafeClose} className="text-slate-400 hover:text-slate-600">✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -962,7 +972,7 @@ const StockInLotModal: React.FC<StockInLotModalProps> = ({ items, onClose, onCre
           </div>
 
           <div className="flex items-center justify-end gap-2 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">
+            <button type="button" onClick={handleSafeClose} className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">
               취소
             </button>
             <button

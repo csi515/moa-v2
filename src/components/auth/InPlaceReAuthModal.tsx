@@ -12,7 +12,7 @@ import {
   signInWithApple,
 } from '@/core/auth/services/authService';
 import { requestSignOut } from '@/core/auth/services/signOutCoordinator';
-import { showToast } from '@/shared/feedback/uiFeedback';
+import { showToast, openConfirmDialog } from '@/shared/feedback/uiFeedback';
 import { Modal } from '@/shared/components/ui/Modal';
 import {
   closeReAuthModal,
@@ -131,11 +131,18 @@ export function InPlaceReAuthModal() {
   }
 
   function handleLogout() {
-    if (window.confirm('작성 중인 작업 내용이 저장되지 않을 수 있습니다. 로그아웃하시겠습니까?')) {
-      discardPendingRequests();
-      closeReAuthModal();
-      void requestSignOut({ force: true }).finally(() => navigate('/login'));
-    }
+    openConfirmDialog({
+      title: '로그아웃 확인',
+      message: '작성 중인 작업 내용이 저장되지 않을 수 있습니다. 로그아웃하시겠습니까?',
+      confirmText: '로그아웃',
+      cancelText: '취소',
+      isDestructive: true,
+      onConfirm: () => {
+        discardPendingRequests();
+        closeReAuthModal();
+        void requestSignOut({ force: true }).finally(() => navigate('/login'));
+      },
+    });
   }
 
   return (
