@@ -269,7 +269,7 @@ export const InstructorCommissionSettlementView: React.FC = () => {
             <DollarSign className="w-4 h-4 text-emerald-500" />
           </div>
           <div className="mt-2">
-            <span className="text-2xl font-extrabold text-slate-900">
+            <span className="text-2xl font-extrabold text-slate-900 tabular-nums">
               {summaryKPI.totalGrossSales.toLocaleString()}
             </span>
             <span className="text-xs text-slate-500 ml-0.5">원</span>
@@ -282,12 +282,12 @@ export const InstructorCommissionSettlementView: React.FC = () => {
             <TrendingUp className="w-4 h-4 text-blue-600" />
           </div>
           <div className="mt-2">
-            <span className="text-2xl font-extrabold text-blue-700">
+            <span className="text-2xl font-extrabold text-blue-700 tabular-nums">
               {summaryKPI.totalInstructorNetPayout.toLocaleString()}
             </span>
             <span className="text-xs text-blue-600 ml-0.5">원</span>
           </div>
-          <div className="text-[11px] text-slate-400 mt-1">
+          <div className="text-[11px] text-slate-400 mt-1 tabular-nums">
             원천징수(3.3%): {summaryKPI.totalWithholdingTax.toLocaleString()}원
           </div>
         </div>
@@ -298,12 +298,12 @@ export const InstructorCommissionSettlementView: React.FC = () => {
             <Percent className="w-4 h-4 text-indigo-600" />
           </div>
           <div className="mt-2">
-            <span className="text-2xl font-extrabold text-indigo-700">
+            <span className="text-2xl font-extrabold text-indigo-700 tabular-nums">
               {summaryKPI.totalCenterShare.toLocaleString()}
             </span>
             <span className="text-xs text-indigo-600 ml-0.5">원</span>
           </div>
-          <div className="text-[11px] text-slate-400 mt-1">
+          <div className="text-[11px] text-slate-400 mt-1 tabular-nums">
             재료비 공제: {summaryKPI.totalMaterialCost.toLocaleString()}원
           </div>
         </div>
@@ -396,41 +396,41 @@ export const InstructorCommissionSettlementView: React.FC = () => {
                       </div>
                     </td>
                     <td className="py-3 px-3 text-center">
-                      <span className="font-semibold text-slate-800">{r.totalEnrolled}명</span>
-                      <div className="text-[10px] text-slate-400">
+                      <span className="font-semibold text-slate-800 tabular-nums">{r.totalEnrolled}명</span>
+                      <div className="text-[10px] text-slate-400 tabular-nums">
                         {r.tuitionFeePerPerson.toLocaleString()}원
                       </div>
                     </td>
-                    <td className="py-3 px-3 text-right font-medium text-slate-900">
+                    <td className="py-3 px-3 text-right font-medium text-slate-900 tabular-nums">
                       {r.totalGrossSales.toLocaleString()}원
                     </td>
-                    <td className="py-3 px-3 text-right text-red-500 text-[11px]">
+                    <td className="py-3 px-3 text-right text-red-500 text-[11px] tabular-nums">
                       -{(r.totalMaterialCostDeduction + r.totalCardFeeDeduction).toLocaleString()}원
-                      <div className="text-[10px] text-slate-400">
+                      <div className="text-[10px] text-slate-400 tabular-nums">
                         (재료 {r.totalMaterialCostDeduction.toLocaleString()} + 카드 {r.totalCardFeeDeduction.toLocaleString()})
                       </div>
                     </td>
-                    <td className="py-3 px-3 text-right font-semibold text-slate-800">
+                    <td className="py-3 px-3 text-right font-semibold text-slate-800 tabular-nums">
                       {r.netRevenueToShare.toLocaleString()}원
                     </td>
                     <td className="py-3 px-3 text-center">
-                      <span className="inline-block px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md font-bold text-[11px]">
+                      <span className="inline-block px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md font-bold text-[11px] tabular-nums">
                         {Math.round(r.instructorShareRate * 100)}%
                       </span>
                     </td>
-                    <td className="py-3 px-3 text-right text-slate-700">
+                    <td className="py-3 px-3 text-right text-slate-700 tabular-nums">
                       {r.instructorGrossPay.toLocaleString()}원
                     </td>
-                    <td className="py-3 px-3 text-right text-slate-500 text-[11px]">
+                    <td className="py-3 px-3 text-right text-slate-500 text-[11px] tabular-nums">
                       -{r.totalWithholdingTax.toLocaleString()}원
-                      <div className="text-[10px] text-slate-400">
+                      <div className="text-[10px] text-slate-400 tabular-nums">
                         (소득 {r.incomeTax.toLocaleString()} / 지방 {r.localIncomeTax.toLocaleString()})
                       </div>
                     </td>
-                    <td className="py-3 px-3.5 text-right font-extrabold text-blue-600 bg-blue-50/30">
+                    <td className="py-3 px-3.5 text-right font-extrabold text-blue-600 bg-blue-50/30 tabular-nums">
                       {r.instructorNetPayout.toLocaleString()}원
                     </td>
-                    <td className="py-3 px-3 text-right font-semibold text-indigo-700">
+                    <td className="py-3 px-3 text-right font-semibold text-indigo-700 tabular-nums">
                       {r.centerGrossShare.toLocaleString()}원
                     </td>
                     <td className="py-3 px-3 text-center print:hidden">

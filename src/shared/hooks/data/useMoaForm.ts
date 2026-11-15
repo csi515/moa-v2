@@ -31,7 +31,7 @@ export function useMoaForm<TFormData extends Record<string, any> = Record<string
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    let payload = { ...values };
+    const payload: Record<string, any> = { ...values };
 
     if (currentOrganization?.id && isTenantScopedResource(resource)) {
       const tenantCol = getTenantColumnForResource(resource);

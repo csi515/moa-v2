@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
-import { useList, type useListProps } from '@refinedev/core';
+import { useList, type UseListProps } from '@refinedev/core';
 import type { BaseRecord, CrudFilter, HttpError } from '@refinedev/core';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { getTenantColumnForResource, isTenantScopedResource } from '@/providers/dataProvider';
 import type { ResourceRow } from './types';
 
 export interface UseMoaListOptions<TRecord extends BaseRecord = BaseRecord>
-  extends Omit<useListProps<TRecord, HttpError>, 'resource'> {
+  extends Omit<UseListProps<TRecord, HttpError, TRecord>, 'resource'> {
   /** 수동 리소스 스키마 (예: meta: { schema: 'piano' }) */
   schema?: string;
   /** 테넌트 자동 필터링 비활성화 여부 (기본값: false) */
@@ -68,7 +68,7 @@ export function useMoaList<
     };
   }, [schema, userMeta]);
 
-  const queryResult = useList<TRecord, HttpError>({
+  const { query } = useList<TRecord, HttpError>({
     resource,
     filters,
     meta,
@@ -80,17 +80,17 @@ export function useMoaList<
   });
 
   const records = useMemo(() => {
-    return (queryResult?.data?.data as TRecord[]) || [];
-  }, [queryResult?.data?.data]);
+    return (query?.data?.data as TRecord[]) || [];
+  }, [query?.data?.data]);
 
-  const totalCount = queryResult?.data?.total ?? records.length;
+  const totalCount = query?.data?.total ?? records.length;
 
   return {
     records,
-    isLoading: queryResult?.isLoading ?? false,
-    error: (queryResult?.error as HttpError) ?? null,
+    isLoading: query?.isLoading ?? false,
+    error: (query?.error as HttpError) ?? null,
     refetch: () => {
-      void queryResult?.refetch();
+      void query?.refetch();
     },
     totalCount,
   };

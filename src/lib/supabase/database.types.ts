@@ -76,6 +76,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database['core']['Tables']['academy_data_sharing_consents']['Insert']>;
+        Relationships: [];
       };
       auth_providers: {
         Row: {
@@ -103,6 +104,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['auth_providers']['Insert']>;
+        Relationships: [];
       };
       customer_join_requests: {
         Row: {
@@ -140,6 +142,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['customer_join_requests']['Insert']>;
+        Relationships: [];
       };
       guardian_enrollment_requests: {
         Row: {
@@ -175,6 +178,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['guardian_enrollment_requests']['Insert']>;
+        Relationships: [];
       };
       guardian_link_tokens: {
         Row: {
@@ -206,6 +210,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database['core']['Tables']['guardian_link_tokens']['Insert']>;
+        Relationships: [];
       };
       org_parent_profiles: {
         Row: {
@@ -223,6 +228,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['org_parent_profiles']['Insert']>;
+        Relationships: [];
       };
       organization_join_requests: {
         Row: {
@@ -252,6 +258,7 @@ export interface Database {
           resolved_at?: string | null;
         };
         Update: Partial<Database['core']['Tables']['organization_join_requests']['Insert']>;
+        Relationships: [];
       };
       organization_quotas: {
         Row: {
@@ -277,6 +284,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['organization_quotas']['Insert']>;
+        Relationships: [];
       };
       parent_invitations: {
         Row: {
@@ -302,6 +310,7 @@ export interface Database {
           accepted_at?: string | null;
         };
         Update: Partial<Database['core']['Tables']['parent_invitations']['Insert']>;
+        Relationships: [];
       };
       parent_student_guardians: {
         Row: {
@@ -321,6 +330,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['parent_student_guardians']['Insert']>;
+        Relationships: [];
       };
       parents: {
         Row: {
@@ -342,6 +352,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['parents']['Insert']>;
+        Relationships: [];
       };
       practice_rooms: {
         Row: {
@@ -369,6 +380,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['practice_rooms']['Insert']>;
+        Relationships: [];
       };
       push_device_tokens: {
         Row: {
@@ -390,6 +402,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['push_device_tokens']['Insert']>;
+        Relationships: [];
       };
       rate_limit_configs: {
         Row: {
@@ -413,6 +426,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['rate_limit_configs']['Insert']>;
+        Relationships: [];
       };
       room_reservations: {
         Row: {
@@ -444,6 +458,32 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database['core']['Tables']['room_reservations']['Insert']>;
+        Relationships: [
+          {
+            foreignKeyName: 'room_reservations_organization_id_fkey';
+            columns: ['organization_id'];
+            referencedRelation: 'organizations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'room_reservations_room_id_fkey';
+            columns: ['room_id'];
+            referencedRelation: 'bookable_resources';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'room_reservations_customer_id_fkey';
+            columns: ['customer_id'];
+            referencedRelation: 'customers';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'room_reservations_requested_by_fkey';
+            columns: ['requested_by'];
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       staff_invitations: {
         Row: {
@@ -469,6 +509,7 @@ export interface Database {
           accepted_at?: string | null;
         };
         Update: Partial<Database['core']['Tables']['staff_invitations']['Insert']>;
+        Relationships: [];
       };
       student_enrollments: {
         Row: {
@@ -494,6 +535,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['student_enrollments']['Insert']>;
+        Relationships: [];
       };
       students: {
         Row: {
@@ -511,6 +553,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['students']['Insert']>;
+        Relationships: [];
       };
       anonymous_grievances: {
         Row: {
@@ -550,6 +593,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['anonymous_grievances']['Insert']>;
+        Relationships: [];
       };
       booking_seat_locks: {
         Row: {
@@ -565,6 +609,7 @@ export interface Database {
           deleted_at?: string | null;
         };
         Update: Partial<Database['core']['Tables']['booking_seat_locks']['Insert']>;
+        Relationships: [];
       };
       departments: {
         Row: {
@@ -584,6 +629,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['core']['Tables']['departments']['Insert']>;
+        Relationships: [];
       };
       mbo_cycle_settings: {
         Row: {
@@ -611,6 +657,7 @@ export interface Database {
           updated_by?: string | null;
         };
         Update: Partial<Database['core']['Tables']['mbo_cycle_settings']['Insert']>;
+        Relationships: [];
       };
       promotional_deals: {
         Row: {
@@ -7864,6 +7911,7 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database['piano']['Tables']['song_progress']['Insert']>;
+        Relationships: [];
       };
       customers: {
         Row: {

@@ -58,7 +58,7 @@ export function useMoaMutation<
         });
 
         // 성공 시 Cross-Cache Bridge 통지 (StorageService 미러 갱신)
-        notifyStorageFromRefineResource(resource, 'create');
+        notifyStorageFromRefineResource(resource);
 
         if (!disableSuccessToast) {
           showToast(customSuccessMsg || `${entityName}이(가) 등록되었습니다.`, 'success');
@@ -89,7 +89,7 @@ export function useMoaMutation<
           meta,
         });
 
-        notifyStorageFromRefineResource(resource, 'update');
+        notifyStorageFromRefineResource(resource);
 
         if (!disableSuccessToast) {
           showToast(customSuccessMsg || `${entityName} 정보가 수정되었습니다.`, 'success');
@@ -119,7 +119,7 @@ export function useMoaMutation<
           meta,
         });
 
-        notifyStorageFromRefineResource(resource, 'delete');
+        notifyStorageFromRefineResource(resource);
 
         if (!disableSuccessToast) {
           showToast(customSuccessMsg || `${entityName}이(가) 삭제되었습니다.`, 'info');

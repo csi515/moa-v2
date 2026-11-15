@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
+import { EmptyState } from '@/shared/components/ui';
 import type { FinanceExpense } from '@/capabilities/billing/finance/types';
 
 const PAYROLL_RELATED_CATEGORIES = new Set(['teacher_salary', 'instructor_fee', 'salary']);
@@ -295,29 +296,38 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
         </span>
       </div>
 
-      <div className="space-y-3">
-        <div className="hidden md:block bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
-                <tr>
-                  <th className="py-3.5 px-4">지출 일자</th>
-                  <th className="py-3.5 px-4">분류</th>
-                  <th className="py-3.5 px-4">적요</th>
-                  <th className="py-3.5 px-4">금액</th>
-                  <th className="py-3.5 px-4">결제처/수단</th>
-                  <th className="py-3.5 px-4 text-right">관리</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {filteredExpenses.length === 0 ? (
+      {filteredExpenses.length === 0 ? (
+        <EmptyState
+          icon={<Receipt className="w-8 h-8 text-slate-300" />}
+          title="등록된 지출 내역이 없습니다"
+          description={
+            categoryFilter !== 'ALL'
+              ? '선택하신 지출 분류 조건에 해당하는 내역이 없습니다.'
+              : `${selectedMonth} 월에 기록된 지출 내역이 없습니다. 새 지출을 등록해 보세요.`
+          }
+          action={{
+            label: '신규 지출 등록',
+            onClick: handleOpenCreate,
+          }}
+          className="border-dashed"
+        />
+      ) : (
+        <div className="space-y-3">
+          <div className="hidden md:block bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
                   <tr>
-                    <td colSpan={6} className="py-12 text-center text-slate-400">
-                      지출 내역이 없습니다.
-                    </td>
+                    <th className="py-3.5 px-4">지출 일자</th>
+                    <th className="py-3.5 px-4">분류</th>
+                    <th className="py-3.5 px-4">적요</th>
+                    <th className="py-3.5 px-4">금액</th>
+                    <th className="py-3.5 px-4">결제처/수단</th>
+                    <th className="py-3.5 px-4 text-right">관리</th>
                   </tr>
-                ) : (
-                  filteredExpenses.map((exp) => (
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {filteredExpenses.map((exp) => (
                     <tr key={exp.id} className="hover:bg-slate-50/80 transition-colors">
                       <td className="py-3.5 px-4 font-mono font-bold text-slate-700">{exp.date}</td>
                       <td className="py-3.5 px-4">
@@ -352,20 +362,14 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
                         </div>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div className="md:hidden space-y-3">
-          {filteredExpenses.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center text-slate-400 text-sm">
-              지출 내역이 없습니다.
+                  ))}
+                </tbody>
+              </table>
             </div>
-          ) : (
-            filteredExpenses.map((exp) => (
+          </div>
+
+          <div className="md:hidden space-y-3">
+            {filteredExpenses.map((exp) => (
               <div key={exp.id} className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-4 space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <div>
@@ -392,10 +396,10 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
                   </button>
                 </div>
               </div>
-            ))
-          )}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {isModalOpen && (
         <div onClick={() => setIsModalOpen(false)} className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-xs cursor-pointer">

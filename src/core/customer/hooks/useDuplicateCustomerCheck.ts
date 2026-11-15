@@ -56,12 +56,12 @@ export function useDuplicateCustomerCheck(
       setIsChecking(true);
       try {
         const client = getCoreClient();
-        // students 테이블에서 동일 organization_id 및 phone 또는 parent_phone 검색
+        // customers 테이블에서 동일 organization_id 및 phone 검색
         const { data, error } = await client
-          .from('students')
-          .select('id, name, phone, parent_phone, created_at')
+          .from('customers')
+          .select('id, name, phone, created_at')
           .eq('organization_id', organizationId)
-          .or(`phone.eq.${digits},parent_phone.eq.${digits}`)
+          .eq('phone', digits)
           .limit(1);
 
         if (error) {

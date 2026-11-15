@@ -134,22 +134,22 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
         <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 mb-1">
             <span className="text-xs font-bold">회원 순증 (전월비)</span>
-            <span className="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md flex items-center gap-0.5">
+            <span className="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md flex items-center gap-0.5 tabular-nums">
               <ArrowUpRight className="w-3 h-3" /> +7.7%
             </span>
           </div>
-          <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">56명</p>
-          <p className="text-[11px] text-slate-400 mt-0.5">신규 6명 / 퇴원 2명 (순증 +4명)</p>
+          <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight tabular-nums">56명</p>
+          <p className="text-[11px] text-slate-400 mt-0.5 tabular-nums">신규 6명 / 퇴원 2명 (순증 +4명)</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 mb-1">
             <span className="text-xs font-bold">이번 달 수납률</span>
-            <span className="text-[10px] font-extrabold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
+            <span className="text-[10px] font-extrabold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md tabular-nums">
               목표 95%
             </span>
           </div>
-          <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">92.4%</p>
+          <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight tabular-nums">92.4%</p>
           <div className="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
             <div className="bg-indigo-600 h-full rounded-full transition-all" style={{ width: '92.4%' }} />
           </div>
@@ -162,19 +162,19 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
               수 16시
             </span>
           </div>
-          <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">98.0%</p>
-          <p className="text-[11px] text-slate-400 mt-0.5">주간 평균 가동률 67.4%</p>
+          <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight tabular-nums">98.0%</p>
+          <p className="text-[11px] text-slate-400 mt-0.5 tabular-nums">주간 평균 가동률 67.4%</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 mb-1">
             <span className="text-xs font-bold">월간 총 매출 (11월)</span>
-            <span className="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md flex items-center gap-0.5">
+            <span className="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md flex items-center gap-0.5 tabular-nums">
               <ArrowUpRight className="w-3 h-3" /> +8.6%
             </span>
           </div>
-          <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">1,010만원</p>
-          <p className="text-[11px] text-slate-400 mt-0.5">수강료 920만 + 교재 90만</p>
+          <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight tabular-nums">1,010만원</p>
+          <p className="text-[11px] text-slate-400 mt-0.5 tabular-nums">수강료 920만 + 교재 90만</p>
         </div>
       </div>
 
@@ -263,9 +263,9 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
               </span>
             </div>
             <div className="flex items-center gap-4 text-slate-700">
-              <span>신규 입원: <strong className="text-emerald-700 font-bold">+{SAMPLE_MONTHLY_TREND[selectedBar].newStudents}명</strong></span>
-              <span>퇴원/휴원: <strong className="text-rose-700 font-bold">-{SAMPLE_MONTHLY_TREND[selectedBar].withdrawnStudents}명</strong></span>
-              <span>수납 총액: <strong className="text-indigo-950 font-bold">{SAMPLE_MONTHLY_TREND[selectedBar].revenue.toLocaleString()}만원</strong></span>
+              <span>신규: <strong className="text-emerald-700 font-bold tabular-nums">+{SAMPLE_MONTHLY_TREND[selectedBar].newStudents}명</strong></span>
+              <span>퇴원/휴원: <strong className="text-rose-700 font-bold tabular-nums">-{SAMPLE_MONTHLY_TREND[selectedBar].withdrawnStudents}명</strong></span>
+              <span>수납 총액: <strong className="text-indigo-950 font-bold tabular-nums">{SAMPLE_MONTHLY_TREND[selectedBar].revenue.toLocaleString()}만원</strong></span>
             </div>
           </div>
         )}

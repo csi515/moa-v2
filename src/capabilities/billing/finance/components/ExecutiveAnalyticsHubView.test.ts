@@ -12,7 +12,7 @@ describe('ExecutiveAnalyticsHubView Component', () => {
 
     // KPI text checks
     assert.match(html, /경영 성과 분석/);
-    assert.match(html, /재원생 순증/);
+    assert.match(html, /(회원|재원생) 순증/);
     assert.match(html, /수납률/);
     assert.match(html, /피크타임 연습실 가동률/);
 

@@ -14,6 +14,7 @@ import {
 } from '@/capabilities/billing/finance/categories';
 import { TrendingUp, Plus, Trash2, Edit, X, Save, ShieldAlert } from 'lucide-react';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
+import { EmptyState } from '@/shared/components/ui';
 import type { IncomeEntry } from '@/capabilities/billing/finance/types';
 
 
@@ -242,30 +243,39 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
         </span>
       </div>
 
-      <div className="space-y-3">
-        {/* 데스크톱 테이블 */}
-        <div className="hidden md:block bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
-                <tr>
-                  <th className="py-3.5 px-4">수입 일자</th>
-                  <th className="py-3.5 px-4">분류</th>
-                  <th className="py-3.5 px-4">적요</th>
-                  <th className="py-3.5 px-4">금액</th>
-                  <th className="py-3.5 px-4">입금처/수단</th>
-                  <th className="py-3.5 px-4 text-right">관리</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {filteredEntries.length === 0 ? (
+      {filteredEntries.length === 0 ? (
+        <EmptyState
+          icon={<TrendingUp className="w-8 h-8 text-slate-300" />}
+          title="등록된 수입 내역이 없습니다"
+          description={
+            categoryFilter !== 'ALL'
+              ? '선택하신 수입 분류 조건에 해당하는 내역이 없습니다.'
+              : `${selectedMonth} 월에 기록된 수입 내역이 없습니다. 새 수입을 직접 등록해 보세요.`
+          }
+          action={{
+            label: '신규 수입 등록',
+            onClick: handleOpenCreate,
+          }}
+          className="border-dashed"
+        />
+      ) : (
+        <div className="space-y-3">
+          {/* 데스크톱 테이블 */}
+          <div className="hidden md:block bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
                   <tr>
-                    <td colSpan={6} className="py-12 text-center text-slate-400">
-                      수입 내역이 없습니다.
-                    </td>
+                    <th className="py-3.5 px-4">수입 일자</th>
+                    <th className="py-3.5 px-4">분류</th>
+                    <th className="py-3.5 px-4">적요</th>
+                    <th className="py-3.5 px-4">금액</th>
+                    <th className="py-3.5 px-4">입금처/수단</th>
+                    <th className="py-3.5 px-4 text-right">관리</th>
                   </tr>
-                ) : (
-                  filteredEntries.map((entry) => (
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {filteredEntries.map((entry) => (
                     <tr key={entry.id} className="hover:bg-slate-50/80 transition-colors">
                       <td className="py-3.5 px-4 font-mono font-bold text-slate-700">{entry.date}</td>
                       <td className="py-3.5 px-4">
@@ -309,21 +319,15 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                         </div>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* 모바일 카드 */}
-        <div className="md:hidden space-y-3">
-          {filteredEntries.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center text-slate-400 text-sm">
-              수입 내역이 없습니다.
+                  ))}
+                </tbody>
+              </table>
             </div>
-          ) : (
-            filteredEntries.map((entry) => (
+          </div>
+
+          {/* 모바일 카드 */}
+          <div className="md:hidden space-y-3">
+            {filteredEntries.map((entry) => (
               <div key={entry.id} className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-4 space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <div>
@@ -357,10 +361,10 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                   </button>
                 </div>
               </div>
-            ))
-          )}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {isModalOpen && (
         <div onClick={() => setIsModalOpen(false)} className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-xs cursor-pointer">

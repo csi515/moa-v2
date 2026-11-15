@@ -318,10 +318,10 @@ export const ShiftScheduleManagementView: React.FC = () => {
                     <td className="px-4 py-3 font-bold text-blue-600 font-mono">
                       {Math.floor(wage.actualWorkMinutes / 60)}시간 {wage.actualWorkMinutes % 60}분
                     </td>
-                    <td className="px-4 py-3 font-mono font-bold text-slate-900">
+                    <td className="px-4 py-3 font-mono font-bold text-slate-900 tabular-nums">
                       {wage.totalPay.toLocaleString()}원
                       {wage.nightBonusPay > 0 && (
-                        <span className="text-[10px] text-amber-600 block">
+                        <span className="text-[10px] text-amber-600 block tabular-nums">
                           (야간 가산 {wage.nightBonusPay.toLocaleString()}원 포함)
                         </span>
                       )}

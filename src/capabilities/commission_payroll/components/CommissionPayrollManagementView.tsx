@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { LocalStorageNoticeBanner } from '@/shared/components';
+import { EmptyState } from '@/shared/components/ui';
 import {
   calculateStaffPayroll,
   summarizePayrollBatch,
@@ -356,48 +357,48 @@ export const CommissionPayrollManagementView: React.FC = () => {
             <div className="pt-2 border-t border-slate-100 space-y-2">
               <div className="flex justify-between text-xs text-red-500">
                 <span>카드 결제 수수료 공제 (3%)</span>
-                <span>-{formatKoreanWon(selectedStatement.totalCardFeeDeduction)}</span>
+                <span className="tabular-nums">-{formatKoreanWon(selectedStatement.totalCardFeeDeduction)}</span>
               </div>
               <div className="flex justify-between text-xs text-red-500">
                 <span>재료비 / 부대비용 공제</span>
-                <span>-{formatKoreanWon(selectedStatement.totalMaterialDeduction)}</span>
+                <span className="tabular-nums">-{formatKoreanWon(selectedStatement.totalMaterialDeduction)}</span>
               </div>
               {selectedStatement.totalFixedDeductions > 0 && (
                 <div className="flex justify-between text-xs text-red-500">
                   <span>고정 공제금</span>
-                  <span>-{formatKoreanWon(selectedStatement.totalFixedDeductions)}</span>
+                  <span className="tabular-nums">-{formatKoreanWon(selectedStatement.totalFixedDeductions)}</span>
                 </div>
               )}
             </div>
 
             <div className="pt-2 border-t border-slate-200 flex justify-between font-bold text-slate-900">
               <span>세전 정산 총액</span>
-              <span>{formatKoreanWon(selectedStatement.preTaxEarnings)}</span>
+              <span className="tabular-nums">{formatKoreanWon(selectedStatement.preTaxEarnings)}</span>
             </div>
 
             <div className="bg-slate-50 p-3 rounded-lg space-y-1.5 text-xs text-slate-600">
               <div className="flex justify-between">
                 <span>사업소득세 (3%)</span>
-                <span>{formatKoreanWon(selectedStatement.incomeTax)}</span>
+                <span className="tabular-nums">{formatKoreanWon(selectedStatement.incomeTax)}</span>
               </div>
               <div className="flex justify-between">
                 <span>지방소득세 (0.3%)</span>
-                <span>{formatKoreanWon(selectedStatement.localIncomeTax)}</span>
+                <span className="tabular-nums">{formatKoreanWon(selectedStatement.localIncomeTax)}</span>
               </div>
               <div className="flex justify-between font-semibold text-amber-700 pt-1 border-t border-slate-200">
                 <span>원천징수 합계 (3.3%)</span>
-                <span>{formatKoreanWon(selectedStatement.totalWithholdingTax)}</span>
+                <span className="tabular-nums">{formatKoreanWon(selectedStatement.totalWithholdingTax)}</span>
               </div>
             </div>
 
             <div className="pt-3 border-t-2 border-indigo-100">
               <div className="flex items-center justify-between">
                 <span className="text-base font-bold text-slate-900">세후 실지급액</span>
-                <span className="text-xl font-extrabold text-emerald-600">
+                <span className="text-xl font-extrabold text-emerald-600 tabular-nums">
                   {formatKoreanWon(selectedStatement.netPayout)}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 text-right mt-1">
+              <p className="text-xs text-slate-400 text-right mt-1 tabular-nums">
                 실효 지급율 {selectedStatement.effectiveCommissionRate}%
               </p>
             </div>
@@ -417,10 +418,16 @@ export const CommissionPayrollManagementView: React.FC = () => {
           </div>
 
           {selectedItems.length === 0 ? (
-            <div className="text-center py-12 text-slate-400">
-              <Receipt className="w-10 h-10 mx-auto mb-2 opacity-40" />
-              <p className="text-sm">등록된 실적 내역이 없습니다.</p>
-            </div>
+            <EmptyState
+              icon={<Receipt className="w-8 h-8 text-slate-400" />}
+              title="등록된 수행 실적이 없습니다"
+              description="당월에 발생한 서비스 시술, 레슨, 정비 등의 매출 실적을 등록해 보세요."
+              action={{
+                label: '신규 실적 등록하기',
+                onClick: () => setShowAddModal(true),
+              }}
+              className="my-4 border-dashed"
+            />
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
@@ -454,7 +461,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
                           {item.customerName}
                         </td>
                         <td className="py-3 px-3 text-slate-700">{item.serviceName}</td>
-                        <td className="py-3 px-3 text-right font-semibold text-slate-900 whitespace-nowrap">
+                        <td className="py-3 px-3 text-right font-semibold text-slate-900 whitespace-nowrap tabular-nums">
                           {formatKoreanWon(item.grossSales)}
                         </td>
                         <td className="py-3 px-3 text-center whitespace-nowrap">
@@ -468,13 +475,13 @@ export const CommissionPayrollManagementView: React.FC = () => {
                             {item.paymentMethod === 'card' ? '카드' : '현금/이체'}
                           </span>
                         </td>
-                        <td className="py-3 px-3 text-right text-indigo-600 font-semibold whitespace-nowrap">
+                        <td className="py-3 px-3 text-right text-indigo-600 font-semibold whitespace-nowrap tabular-nums">
                           {formatKoreanWon(commission)}
-                          <span className="text-xs text-slate-400 block font-normal">
+                          <span className="text-xs text-slate-400 block font-normal tabular-nums">
                             ({Math.round(rate * 100)}%)
                           </span>
                         </td>
-                        <td className="py-3 px-3 text-right text-red-500 text-xs whitespace-nowrap">
+                        <td className="py-3 px-3 text-right text-red-500 text-xs whitespace-nowrap tabular-nums">
                           {deduction > 0 ? `-${formatKoreanWon(deduction)}` : '-'}
                         </td>
                       </tr>

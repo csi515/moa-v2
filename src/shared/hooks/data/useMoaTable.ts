@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
-import { useTable, type useTableProps } from '@refinedev/core';
+import { useTable, type useTableProps, type useTableReturnType } from '@refinedev/core';
 import type { BaseRecord, CrudFilter, HttpError } from '@refinedev/core';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { getTenantColumnForResource, isTenantScopedResource } from '@/providers/dataProvider';
 import type { ResourceRow } from './types';
 
 export interface UseMoaTableOptions<TRecord extends BaseRecord = BaseRecord>
-  extends Omit<useTableProps<TRecord, HttpError>, 'resource'> {
+  extends Omit<useTableProps<TRecord, HttpError, TRecord>, 'resource'> {
   /** 수동 리소스 스키마 (예: meta: { schema: 'piano' }) */
   schema?: string;
   /** 테넌트 자동 필터링 비활성화 여부 (기본값: false) */
@@ -29,15 +29,13 @@ export interface UseMoaTableReturn<TRecord extends BaseRecord = BaseRecord> {
   /** 페이지 수 */
   pageCount: number;
   /** 페이지 변경 핸들러 */
-  setCurrentPage: (page: number) => void;
+  setCurrentPage: (page: number | ((prev: number) => number)) => void;
   /** 페이지 크기 변경 핸들러 */
-  setPageSize: (size: number) => void;
+  setPageSize: (size: number | ((prev: number) => number)) => void;
   /** 현재 페이지 크기 */
   pageSize: number;
-  /** 원본 Refine tableProps (Ant Design / Tailwind 테이블 바인딩용) */
-  tableProps: ReturnType<typeof useTable<TRecord, HttpError>>['tableProps'];
   /** 원본 Refine useTable 반환 객체 */
-  tableResult: ReturnType<typeof useTable<TRecord, HttpError>>;
+  tableResult: useTableReturnType<TRecord, HttpError>;
 }
 
 /**
@@ -92,7 +90,7 @@ export function useMoaTable<
     };
   }, [schema, userMeta]);
 
-  const tableResult = useTable<TRecord, HttpError>({
+  const tableResult = useTable<TRecord, HttpError, TRecord>({
     resource,
     filters,
     meta,
@@ -103,7 +101,7 @@ export function useMoaTable<
     ...restOptions,
   });
 
-  const { tableProps, tableQuery, current, setCurrent, pageSize, setPageSize, pageCount } =
+  const { tableQuery, currentPage, setCurrentPage, pageSize, setPageSize, pageCount } =
     tableResult;
 
   const records = useMemo(() => {
@@ -120,12 +118,11 @@ export function useMoaTable<
       void tableQuery?.refetch();
     },
     totalCount,
-    currentPage: current,
+    currentPage,
     pageCount: pageCount || 1,
-    setCurrentPage: setCurrent,
+    setCurrentPage,
     pageSize,
     setPageSize,
-    tableProps,
     tableResult,
   };
 }

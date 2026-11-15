@@ -221,7 +221,7 @@ export const SaleReceiptPrintModal: React.FC<Props> = ({ isOpen, onClose, receip
               {receipt.pointsUsed != null && receipt.pointsUsed > 0 && (
                 <div className="flex justify-between text-teal-700">
                   <span>포인트 사용</span>
-                  <span>-{receipt.pointsUsed.toLocaleString()}P</span>
+                  <span className="tabular-nums">-{receipt.pointsUsed.toLocaleString()}P</span>
                 </div>
               )}
             </div>
