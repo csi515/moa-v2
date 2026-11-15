@@ -202,6 +202,8 @@ export const INVENTORY_OUT_OF_SCOPE = {
   'test:authorization-api': 'UI authorization adapter unit; authorization engine is covered by test:authorization',
   'test:storage-refresh': 'hook unit',
   'test:local-date': 'shared date util',
+  'test:changed': 'Phase 2 smart changed test runner',
+  'test:fast': 'Phase 2 fast incremental check and test chain',
   'test:migration-syntax': 'lint/check:migration-syntax와 중복',
   'test:invoice-dedupe': 'test:finance 자식',
   'test:invoice-textbook-link': 'test:finance 자식',
