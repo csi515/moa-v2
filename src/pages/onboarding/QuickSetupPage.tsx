@@ -301,7 +301,10 @@ export const QuickSetupPage: React.FC = () => {
       (activePreset?.capabilities ?? []).some((c) =>
         ['seat_room', 'booking', 'resources', 'space_turnaround', 'seat_timer_billing'].includes(c)
       ) ||
-      Boolean(activePreset?.resourceTypes && activePreset.resourceTypes.length > 0) ||
+      Boolean(
+        activePreset?.resourceTypes &&
+        activePreset.resourceTypes.some((r) => r.type !== 'equipment')
+      ) ||
       rooms.length > 0
     );
   }, [activePreset, rooms.length]);

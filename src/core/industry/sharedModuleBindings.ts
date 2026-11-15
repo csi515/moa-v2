@@ -5,6 +5,7 @@
 export const SHARED_MODULE_BY_INDUSTRY: Readonly<Record<string, string>> = {
   apparel_store: 'retail',
   convenience_store: 'retail',
+  pet_supplies: 'retail',
 };
 
 export function resolveSharedModuleId(

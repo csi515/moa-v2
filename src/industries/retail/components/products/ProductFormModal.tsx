@@ -4,6 +4,7 @@ import { Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS, SegmentedControl } from '@/shared/components/ui';
 import { useBarcodeScanner, playScannerSound } from '@/capabilities/inventory';
 import { productService } from '../../services/productService';
+import { inventoryService } from '../../services/inventoryService';
 import type {
   ProductCategory,
   ProductListItem,
@@ -22,6 +23,7 @@ type VariantDraft = {
   sku: string;
   price: string;
   cost: string;
+  initialStock?: string;
   isActive: boolean;
 };
 
@@ -32,6 +34,7 @@ function emptyVariant(defaults?: { price?: number }): VariantDraft {
     sku: '',
     price: defaults?.price != null ? String(defaults.price) : '',
     cost: '',
+    initialStock: '',
     isActive: true,
   };
 }
@@ -70,6 +73,7 @@ export const ProductFormModal: FC<Props> = ({
   const [isNoBarcode, setIsNoBarcode] = useState(false);
   const [price, setPrice] = useState('');
   const [cost, setCost] = useState('');
+  const [initialStock, setInitialStock] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [newCategoryName, setNewCategoryName] = useState('');
   const [isActive, setIsActive] = useState(true);
@@ -113,6 +117,7 @@ export const ProductFormModal: FC<Props> = ({
         setIsNoBarcode(false);
         setPrice('');
         setCost('');
+        setInitialStock('');
         setCategoryId('');
         setNewCategoryName('');
         setIsActive(true);
@@ -212,7 +217,7 @@ export const ProductFormModal: FC<Props> = ({
 
     setSaving(true);
     try {
-      await productService.saveProduct(
+      const savedProduct = await productService.saveProduct(
         organizationId,
         {
           name,
@@ -226,6 +231,53 @@ export const ProductFormModal: FC<Props> = ({
         },
         editing?.id
       );
+
+      // 신규 등록 시 기초 입고 재고 자동 반영 (0개 초과 시)
+      if (!editing && savedProduct?.id) {
+        if (optionMode === 'none') {
+          const initQty = Number(initialStock);
+          if (Number.isFinite(initQty) && initQty > 0) {
+            try {
+              await inventoryService.applyInbound({
+                organizationId,
+                productId: savedProduct.id,
+                quantity: initQty,
+                reason: '신규 상품 등록 기초 재고',
+              });
+            } catch (stockErr) {
+              console.error('[ProductFormModal] initial stock inbound error', stockErr);
+            }
+          }
+        } else {
+          // 옵션별 초기 재고 등록
+          const variantsWithStock = variants.filter(
+            (v) => Number(v.initialStock) > 0 && v.name.trim()
+          );
+          if (variantsWithStock.length > 0) {
+            try {
+              const stockRows = await inventoryService.listStockRows(organizationId);
+              for (const vDraft of variantsWithStock) {
+                const qty = Number(vDraft.initialStock);
+                const matched = stockRows.find(
+                  (r) => r.productId === savedProduct.id && r.variantName === vDraft.name.trim()
+                );
+                if (matched?.variantId) {
+                  await inventoryService.applyInbound({
+                    organizationId,
+                    productId: savedProduct.id,
+                    variantId: matched.variantId,
+                    quantity: qty,
+                    reason: `신규 상품 옵션(${vDraft.name.trim()}) 기초 재고`,
+                  });
+                }
+              }
+            } catch (stockErr) {
+              console.error('[ProductFormModal] variant stock inbound error', stockErr);
+            }
+          }
+        }
+      }
+
       onSaved();
       onClose();
     } catch (err) {
@@ -333,6 +385,23 @@ export const ProductFormModal: FC<Props> = ({
             />
           </FormField>
         </div>
+
+        {!editing && optionMode === 'none' && (
+          <FormField
+            label="초기 입고 재고 수량 (개)"
+            hint="상품 등록과 동시에 입력한 수량만큼 즉시 입고 처리되어 POS 판매가 가능해집니다 (선택)"
+          >
+            <input
+              type="number"
+              min={0}
+              step={1}
+              value={initialStock}
+              onChange={(e) => setInitialStock(e.target.value)}
+              className={`${FORM_CONTROL_CLASS} min-h-[44px] font-bold tabular-nums text-teal-700 bg-teal-50/40 border-teal-200 focus:border-teal-500`}
+              placeholder="0 (나중에 재고 탭에서 입고 가능)"
+            />
+          </FormField>
+        )}
 
         <FormField label={COPY.categoryLabel}>
           <select
@@ -463,6 +532,20 @@ export const ProductFormModal: FC<Props> = ({
                     />
                   </FormField>
                 </div>
+
+                {!editing && (
+                  <FormField label="옵션 초기 입고 재고 (개)">
+                    <input
+                      type="number"
+                      min={0}
+                      step={1}
+                      value={row.initialStock || ''}
+                      onChange={(e) => updateVariant(row.key, { initialStock: e.target.value })}
+                      className={`${FORM_CONTROL_CLASS} min-h-[44px] tabular-nums text-teal-700 bg-teal-50/30 border-teal-200`}
+                      placeholder="0 (선택)"
+                    />
+                  </FormField>
+                )}
 
                 <label className="flex items-center gap-2 min-h-[44px] text-sm font-semibold text-slate-700">
                   <input

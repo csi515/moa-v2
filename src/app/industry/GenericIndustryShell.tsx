@@ -30,6 +30,8 @@ import {
   ShieldAlert,
   FileCheck,
   FolderKanban,
+  ShoppingCart,
+  Warehouse,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
@@ -66,6 +68,12 @@ const ConsultationView = lazy(() =>
 );
 const InventoryView = lazy(() =>
   import('@/industries/retail/components/inventory/InventoryListView').then((m) => ({ default: m.InventoryListView }))
+);
+const SalePosView = lazy(() =>
+  import('@/industries/retail/components/sales/SalePosView').then((m) => ({ default: m.SalePosView }))
+);
+const ProductListView = lazy(() =>
+  import('@/industries/retail/components/products/ProductListView').then((m) => ({ default: m.ProductListView }))
 );
 const SafetyConsentView = lazy(() =>
   import('@/capabilities/safety_consent').then((m) => ({ default: m.SafetyConsentManagementView }))
@@ -610,7 +618,9 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
       extendedItems.push({ tab: 'consents', label: '안전 동의서', icon: <FileText className="w-4 h-4" /> });
     }
     if (enabledCaps.includes('inventory') || enabledCaps.includes('commerce')) {
-      extendedItems.push({ tab: 'inventory', label: '재고·상품', icon: <Package className="w-4 h-4" /> });
+      extendedItems.push({ tab: 'sales', label: '판매(POS)', icon: <ShoppingCart className="w-4 h-4" /> });
+      extendedItems.push({ tab: 'retail', label: '상품', icon: <Package className="w-4 h-4" /> });
+      extendedItems.push({ tab: 'inventory', label: '재고', icon: <Warehouse className="w-4 h-4" /> });
     }
     if (enabledCaps.includes('loyalty_stamp')) {
       extendedItems.push({ tab: 'loyalty-stamps', label: '전자 스탬프', icon: <Award className="w-4 h-4" /> });
@@ -853,6 +863,21 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
     wallets: () => (
       <Suspense fallback={<div className="p-8 text-center text-slate-400">크레딧 지갑을 불러오는 중...</div>}>
         {financeViewEntries.finance()}
+      </Suspense>
+    ),
+    sales: () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">판매 화면을 불러오는 중...</div>}>
+        <SalePosView />
+      </Suspense>
+    ),
+    retail: () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">상품 관리 화면을 불러오는 중...</div>}>
+        <ProductListView />
+      </Suspense>
+    ),
+    products: () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">상품 관리 화면을 불러오는 중...</div>}>
+        <ProductListView />
       </Suspense>
     ),
     inventory: () => (

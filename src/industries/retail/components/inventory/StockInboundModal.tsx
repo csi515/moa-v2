@@ -1,6 +1,9 @@
-import { useEffect, useMemo, useState, type FormEvent, type FC } from 'react';
+import { useEffect, useMemo, useState, useCallback, type FormEvent, type FC } from 'react';
+import { Barcode, Sparkles } from 'lucide-react';
 import { Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
+import { useBarcodeScanner, playScannerSound } from '@/capabilities/inventory';
+import { formatCurrency } from '@/utils/formatters';
 import { inventoryService } from '../../services/inventoryService';
 import type { InventoryStockRow } from '../../types/inventory';
 import { INVENTORY_LIST_COPY as COPY } from './inventoryListCopy';
@@ -40,8 +43,43 @@ export const StockInboundModal: FC<Props> = ({
   const [productId, setProductId] = useState('');
   const [variantId, setVariantId] = useState('');
   const [quantity, setQuantity] = useState('');
+  const [unitCost, setUnitCost] = useState('');
   const [memo, setMemo] = useState('');
   const [saving, setSaving] = useState(false);
+  const [scannedFeedback, setScannedFeedback] = useState<string | null>(null);
+
+  // 핸드스캐너(HID) 바코드 입고 자동 매칭
+  const handleBarcodeScan = useCallback(
+    (code: string) => {
+      if (!isOpen) return;
+      const clean = code.trim();
+      if (!clean) return;
+
+      const matched = stockRows.find(
+        (r) => r.productCode === clean || r.productName.toLowerCase() === clean.toLowerCase()
+      );
+      if (matched) {
+        setProductId(matched.productId);
+        if (matched.variantId) {
+          setVariantId(matched.variantId);
+        } else {
+          setVariantId('');
+        }
+        playScannerSound('success');
+        setScannedFeedback(`${matched.productName}${matched.variantName ? ` (${matched.variantName})` : ''}`);
+        setTimeout(() => setScannedFeedback(null), 2500);
+      } else {
+        playScannerSound('error');
+      }
+    },
+    [isOpen, stockRows]
+  );
+
+  useBarcodeScanner({
+    onScan: handleBarcodeScan,
+    enabled: isOpen,
+    feedbackOnScan: false,
+  });
 
   const products = useMemo((): ProductOption[] => {
     const map = new Map<string, ProductOption>();
@@ -95,6 +133,7 @@ export const StockInboundModal: FC<Props> = ({
       setVariantId(first && !first.isSingle ? first.variants[0]?.variantId || '' : '');
     }
     setQuantity('');
+    setUnitCost('');
     setMemo('');
   }, [isOpen, initialRow, products]);
 
@@ -129,12 +168,20 @@ export const StockInboundModal: FC<Props> = ({
 
     setSaving(true);
     try {
+      let reasonText = memo.trim();
+      const costNum = Number(unitCost);
+      if (Number.isFinite(costNum) && costNum > 0) {
+        const totalCost = costNum * qty;
+        const costInfo = `[매입단가: ${formatCurrency(costNum)}, 총매입: ${formatCurrency(totalCost)}]`;
+        reasonText = reasonText ? `${costInfo} ${reasonText}` : costInfo;
+      }
+
       const result = await inventoryService.applyInbound({
         organizationId,
         productId,
         variantId: needsVariant ? variantId : null,
         quantity: qty,
-        reason: memo.trim() || null,
+        reason: reasonText || null,
         stockLocationId: stockLocationId ?? null,
       });
       onCompleted(result.quantityAfter);
@@ -149,7 +196,19 @@ export const StockInboundModal: FC<Props> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={COPY.inboundTitle} maxWidth="md">
       <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
-        <p className="text-xs text-slate-500">{COPY.inboundHint}</p>
+        {/* 바코드 스캐너 안내 및 스캔 성공 피드백 */}
+        <div className="flex items-center justify-between text-xs text-slate-500 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+          <div className="flex items-center gap-2">
+            <Barcode className="w-4 h-4 text-teal-600" />
+            <span>바코드 스캐너를 비추면 해당 품목이 자동 선택됩니다.</span>
+          </div>
+          {scannedFeedback && (
+            <span className="inline-flex items-center gap-1 font-bold text-teal-700 bg-teal-100 px-2 py-0.5 rounded-full animate-pulse">
+              <Sparkles className="w-3 h-3" />
+              {scannedFeedback} 선택됨
+            </span>
+          )}
+        </div>
 
         <FormField label={COPY.inboundProduct} required>
           <select
@@ -197,18 +256,40 @@ export const StockInboundModal: FC<Props> = ({
           </p>
         )}
 
-        <FormField label={COPY.inboundQty} required>
-          <input
-            type="number"
-            min={1}
-            step={1}
-            required
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
-            placeholder="1"
-          />
-        </FormField>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <FormField label={COPY.inboundQty} required>
+            <input
+              type="number"
+              min={1}
+              step={1}
+              required
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              className={`${FORM_CONTROL_CLASS} min-h-[44px] font-bold tabular-nums`}
+              placeholder="1"
+            />
+          </FormField>
+          <FormField label="개당 매입 단가 (원, 선택)">
+            <input
+              type="number"
+              min={0}
+              step={1}
+              value={unitCost}
+              onChange={(e) => setUnitCost(e.target.value)}
+              className={`${FORM_CONTROL_CLASS} min-h-[44px] tabular-nums`}
+              placeholder="예: 5000"
+            />
+          </FormField>
+        </div>
+
+        {Number(quantity) > 0 && Number(unitCost) > 0 && (
+          <div className="p-3 bg-teal-50 border border-teal-200 rounded-lg flex items-center justify-between text-xs text-teal-900">
+            <span className="font-semibold">총 매입 예정 금액:</span>
+            <span className="text-sm font-bold tabular-nums">
+              {formatCurrency(Number(quantity) * Number(unitCost))}
+            </span>
+          </div>
+        )}
 
         <FormField label={COPY.inboundMemo}>
           <textarea
