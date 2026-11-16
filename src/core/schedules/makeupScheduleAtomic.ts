@@ -6,7 +6,7 @@
 import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
 import { getOrganizationId, getStorageAdapter, STORAGE_KEYS } from '@/services/adapters';
 import { StorageService } from '@/services/storage';
-import type { AttendanceRecord, MakeupScheduleInput } from '@/types';
+import type { AttendanceRecord, MakeupScheduleInput } from '@/core/attendance/types';
 import { mapMakeupScheduleError } from './makeupScheduleErrors';
 
 export { mapMakeupScheduleError } from './makeupScheduleErrors';

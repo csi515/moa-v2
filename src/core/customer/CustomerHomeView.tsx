@@ -12,7 +12,6 @@ import {
   formatSessionTime,
   getSessionStatusLabel,
 } from '@/core/attendance/services/attendanceService';
-import type { TuitionInvoice } from '@/types';
 import { CustomerNoticesView } from './CustomerNoticesView';
 import type { getMyPassSummary } from './services/studentPortalService';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
@@ -21,6 +20,7 @@ import { StorageService } from '@/services/storage';
 import { showToast, showErrorToast } from '@/shared/feedback/uiFeedback';
 
 type PassSummary = ReturnType<typeof getMyPassSummary>;
+type CustomerInvoice = ReturnType<typeof TuitionService.getInvoicesByStudent>[number];
 
 export function CustomerHomeView({
   customerId,
@@ -41,7 +41,7 @@ export function CustomerHomeView({
   void customerId;
 
   const { currentOrganization } = useOrganization();
-  const [detailInvoice, setDetailInvoice] = useState<TuitionInvoice | null>(null);
+  const [detailInvoice, setDetailInvoice] = useState<CustomerInvoice | null>(null);
   const [copied, setCopied] = useState(false);
   const [receiptBusy, setReceiptBusy] = useState(false);
 
