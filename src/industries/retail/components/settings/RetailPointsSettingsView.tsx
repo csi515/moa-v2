@@ -4,7 +4,7 @@ import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import * as orgService from '@/core/organizations/services/organizationService';
-import { StorageService } from '@/services/storage';
+import { settingsStorage } from '@/services/storage/settingsStorage';
 import { PageHeader } from '@/shared/components';
 import {
   FormField,
@@ -34,14 +34,14 @@ export const RetailPointsSettingsView: FC<Props> = ({ onBack }) => {
   const org = useOrganization();
   const canEdit = isOwner || isAdmin;
 
-  const initial = getRetailPointsSettings(StorageService.getSettings());
+  const initial = getRetailPointsSettings(settingsStorage.getSettings());
   const [enabled, setEnabled] = useState(initial.enabled);
   const [earnEnabled, setEarnEnabled] = useState(initial.earnEnabled);
   const [rateText, setRateText] = useState(String(initial.earnRatePercent));
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    const next = getRetailPointsSettings(StorageService.getSettings());
+    const next = getRetailPointsSettings(settingsStorage.getSettings());
     setEnabled(next.enabled);
     setEarnEnabled(next.earnEnabled);
     setRateText(String(next.earnRatePercent));
@@ -73,14 +73,14 @@ export const RetailPointsSettingsView: FC<Props> = ({ onBack }) => {
     }
 
     setSaving(true);
-    const previous = StorageService.getSettings();
+    const previous = settingsStorage.getSettings();
     const next = withRetailPointsSettings(previous, {
       enabled: draft.enabled,
       earnEnabled: draft.earnEnabled,
       earnRatePercent: draft.earnRatePercent,
     });
     try {
-      StorageService.saveSettings(next);
+      settingsStorage.saveSettings(next);
       await orgService.updateOrganization(org.currentOrganization.id, {
         settings: { features: next.features },
       });
@@ -91,7 +91,7 @@ export const RetailPointsSettingsView: FC<Props> = ({ onBack }) => {
       triggerRefresh();
       showToast(COPY.saved, 'success');
     } catch (err) {
-      StorageService.saveSettings(previous);
+      settingsStorage.saveSettings(previous);
       const rolled = getRetailPointsSettings(previous);
       setEnabled(rolled.enabled);
       setEarnEnabled(rolled.earnEnabled);

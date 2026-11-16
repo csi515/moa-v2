@@ -9,13 +9,20 @@ import type { ClassItem } from '@/types/classItem';
 import type { Student } from '@/types/customer';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import type { Teacher } from '@/core/staff/teacher';
-import { StorageService } from '@/services/storage';
 import {
   findClassConflicts,
   formatConflictSummary,
   type ClassSlotCandidate,
 } from '../utils/scheduleConflicts';
 import { timeToMinutes } from './calendarConstraintEngine';
+
+export interface TimetablePlacementStore {
+  getStudents?: () => Student[];
+  saveStudent?: (student: Student) => Student;
+  saveClass?: (classItem: Omit<ClassItem, 'id'> & { id?: string }) => ClassItem;
+  getClasses?: () => ClassItem[];
+  getRooms?: () => Array<{ id?: string; name: string }>;
+}
 
 export const TIMETABLE_DAYS: DayOfWeek[] = ['월', '화', '수', '목', '금', '토', '일'];
 
@@ -178,9 +185,9 @@ function resolveTeacher(
   return { id: '', name: '미배정' };
 }
 
-function defaultRoom(): string {
-  const settings = StorageService.getSettings();
-  const room = settings.rooms?.find((r) => r.name)?.name;
+function defaultRoom(store?: TimetablePlacementStore): string {
+  const rooms = store?.getRooms?.();
+  const room = rooms?.find((r) => r.name)?.name;
   return room || '기본공간';
 }
 
@@ -189,12 +196,13 @@ function buildNewSlotClassCandidate(
   startTime: string,
   teachers: Teacher[],
   preferredTeacherId?: string,
-  durationMinutes = 30
+  durationMinutes = 30,
+  store?: TimetablePlacementStore
 ): ClassSlotCandidate {
   const teacher = resolveTeacher(teachers, preferredTeacherId);
   return {
     teacherId: teacher.id,
-    room: defaultRoom(),
+    room: defaultRoom(store),
     daysOfWeek: [day],
     startTime,
     endTime: slotEndTime(startTime, durationMinutes),
@@ -219,6 +227,7 @@ export function ensureEditableSlotClass(params: {
   preferredTeacherId?: string;
   createIfMissing?: boolean;
   durationMinutes?: number;
+  store?: TimetablePlacementStore;
 }): ClassItem | null {
   const existing = findEditableSlotClass(
     params.classes,
@@ -236,7 +245,7 @@ export function ensureEditableSlotClass(params: {
   if (!params.createIfMissing) return null;
 
   const teacher = resolveTeacher(params.teachers, params.preferredTeacherId);
-  return StorageService.saveClass({
+  const candidate = {
     name: `${params.day} ${params.startTime}`,
     teacherId: teacher.id,
     teacherName: teacher.name,
@@ -244,16 +253,33 @@ export function ensureEditableSlotClass(params: {
     startTime: params.startTime,
     endTime: slotEndTime(params.startTime, duration),
     capacity: minCapacity,
-    room: defaultRoom(),
+    room: defaultRoom(params.store),
     color: '#4f46e5',
-  });
+  };
+
+  if (params.store?.saveClass) {
+    return params.store.saveClass(candidate);
+  }
+
+  return {
+    id: `auto_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+    ...candidate,
+  };
 }
 
-function saveStudentClassIds(student: Student, classIds: string[]): Student {
-  return StorageService.saveStudent({
+function saveStudentClassIds(
+  student: Student,
+  classIds: string[],
+  store?: TimetablePlacementStore
+): Student {
+  const updated = {
     ...student,
     classIds,
-  });
+  };
+  if (store?.saveStudent) {
+    return store.saveStudent(updated);
+  }
+  return updated;
 }
 
 export type AssignStudentToSlotResult =
@@ -271,8 +297,9 @@ export function assignStudentToSlot(params: {
   preferredRoom?: string;
   createClassIfMissing?: boolean;
   durationMinutes?: number;
+  store?: TimetablePlacementStore;
 }): AssignStudentToSlotResult {
-  const { student, day, startTime, teachers, preferredTeacherId } = params;
+  const { student, day, startTime, teachers, preferredTeacherId, store } = params;
   const createClassIfMissing = params.createClassIfMissing === true;
   const classes = [...params.classes];
   const duration = params.durationMinutes ?? 30;
@@ -295,8 +322,9 @@ export function assignStudentToSlot(params: {
     nextIds = nextIds.filter((id) => id !== cls.id);
   }
 
+  const existingStudents = store?.getStudents?.() || [];
   const currentInSlot = getPlacementsForSlot(
-    StorageService.getStudents().filter((s) => s.id !== student.id),
+    existingStudents.filter((s) => s.id !== student.id),
     preferredTeacherId
       ? classes.filter((c) => c.teacherId === preferredTeacherId)
       : classes,
@@ -328,7 +356,7 @@ export function assignStudentToSlot(params: {
   if (!existingSlotClass && createClassIfMissing) {
     const conflicts = findClassConflicts(
       classes,
-      buildNewSlotClassCandidate(day, startTime, teachers, preferredTeacherId, duration)
+      buildNewSlotClassCandidate(day, startTime, teachers, preferredTeacherId, duration, store)
     );
     if (conflicts.length > 0) {
       return { ok: false, message: newClassConflictMessage(conflicts) };
@@ -344,6 +372,7 @@ export function assignStudentToSlot(params: {
     preferredTeacherId,
     createIfMissing: createClassIfMissing,
     durationMinutes: duration,
+    store,
   });
 
   if (!slotClass) {
@@ -358,7 +387,7 @@ export function assignStudentToSlot(params: {
     nextIds = [...nextIds, slotClass.id];
   }
 
-  const saved = saveStudentClassIds(student, nextIds);
+  const saved = saveStudentClassIds(student, nextIds, store);
   return {
     ok: true,
     classItem: slotClass,
@@ -372,8 +401,9 @@ export function removeStudentFromSlot(params: {
   classItem: ClassItem;
   day: DayOfWeek;
   startTime: string;
+  store?: TimetablePlacementStore;
 }): { ok: true; student: Student } | { ok: false; message: string } {
-  const { student, classItem, day, startTime } = params;
+  const { student, classItem, day, startTime, store } = params;
   if (!isEditableSlotClass(classItem, day, startTime)) {
     return {
       ok: false,
@@ -381,7 +411,7 @@ export function removeStudentFromSlot(params: {
     };
   }
   const nextIds = (student.classIds || []).filter((id) => id !== classItem.id);
-  const saved = saveStudentClassIds(student, nextIds);
+  const saved = saveStudentClassIds(student, nextIds, store);
   return { ok: true, student: saved };
 }
 
@@ -400,7 +430,9 @@ export function moveStudentToSlot(params: {
   preferredTeacherId?: string;
   createClassIfMissing?: boolean;
   durationMinutes?: number;
+  store?: TimetablePlacementStore;
 }): MoveStudentToSlotResult {
+  const { store } = params;
   const createClassIfMissing = params.createClassIfMissing === true;
   const duration = params.durationMinutes ?? 30;
 
@@ -430,8 +462,9 @@ export function moveStudentToSlot(params: {
     const scopedClasses = params.preferredTeacherId
       ? params.classes.filter((c) => c.teacherId === params.preferredTeacherId)
       : params.classes;
+    const existingStudents = store?.getStudents?.() || [];
     const currentInTarget = getPlacementsForSlot(
-      StorageService.getStudents().filter((s) => s.id !== params.student.id),
+      existingStudents.filter((s) => s.id !== params.student.id),
       scopedClasses,
       params.toDay,
       params.toStartTime
@@ -450,7 +483,8 @@ export function moveStudentToSlot(params: {
         params.toStartTime,
         params.teachers,
         params.preferredTeacherId,
-        duration
+        duration,
+        store
       )
     );
     if (conflicts.length > 0) {
@@ -467,12 +501,13 @@ export function moveStudentToSlot(params: {
       classItem: params.from.classItem,
       day: params.from.day,
       startTime: params.from.startTime,
+      store,
     });
     if (removed.ok === false) {
       return { ok: false, message: removed.message };
     }
     student = removed.student;
-    classes = StorageService.getClasses();
+    classes = store?.getClasses?.() || classes;
   }
 
   const assigned = assignStudentToSlot({
@@ -484,6 +519,7 @@ export function moveStudentToSlot(params: {
     preferredTeacherId: params.preferredTeacherId,
     createClassIfMissing,
     durationMinutes: duration,
+    store,
   });
   if (!assigned.ok) return assigned;
   return { ok: true, student: assigned.student, createdClass: assigned.createdClass };
@@ -499,6 +535,7 @@ export interface AssignWithRecurrenceParams {
   preferredRoom?: string;
   createClassIfMissing?: boolean;
   durationMinutes?: number;
+  store?: TimetablePlacementStore;
 }
 
 export type AssignWithRecurrenceResult =
@@ -567,7 +604,7 @@ export function assignStudentWithRecurrence(
     if (!existingSlotClass && createClassIfMissing) {
       const conflicts = findClassConflicts(
         currentClasses,
-        buildNewSlotClassCandidate(day, startTime, teachers, preferredTeacherId, duration)
+        buildNewSlotClassCandidate(day, startTime, teachers, preferredTeacherId, duration, params.store)
       );
       if (conflicts.length > 0) {
         return {
@@ -585,6 +622,7 @@ export function assignStudentWithRecurrence(
       preferredTeacherId,
       createIfMissing: createClassIfMissing,
       durationMinutes: duration,
+      store: params.store,
     });
 
     if (!slotClass) {
@@ -596,7 +634,7 @@ export function assignStudentWithRecurrence(
 
     if (!existingSlotClass) {
       createdCount++;
-      currentClasses = StorageService.getClasses();
+      currentClasses = params.store?.getClasses?.() || currentClasses;
     }
 
     if (!nextIds.includes(slotClass.id)) {
@@ -605,7 +643,7 @@ export function assignStudentWithRecurrence(
     assignedDays.push(day);
   }
 
-  const updatedStudent = saveStudentClassIds(student, nextIds);
+  const updatedStudent = saveStudentClassIds(student, nextIds, params.store);
 
   return {
     ok: true,

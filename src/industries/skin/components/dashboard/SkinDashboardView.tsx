@@ -5,7 +5,7 @@ import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
 import { useScheduleService } from '@/core/services/useScheduleService';
 import { isUnassignedCustomerRequest } from '@/industries/skin/bookingRooms';
-import { StorageService } from '@/services/storage';
+import { rosterStorage } from '@/capabilities/roster';
 import { PageHeader, SummaryMetricCard, EmptyState } from '@/shared/components';
 import { formatKoreanDate } from '@/utils/formatters';
 import { todayIsoLocal, shiftDateIso } from '@/shared/utils/localDate';
@@ -38,7 +38,7 @@ const SkinStaffDashboard: React.FC = () => {
   const members = useMemo(
     () =>
       scopeMembersForPilates(
-        StorageService.getStudents().filter((s) => s.status === 'active'),
+        rosterStorage.getStudents().filter((s) => s.status === 'active'),
         allBookingsRaw
       ),
     [allBookingsRaw, scopeMembersForPilates, refreshKey]

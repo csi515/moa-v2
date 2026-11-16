@@ -10,6 +10,7 @@ import type { ClassItem } from '@/types/classItem';
 import type { Student } from '@/types/customer';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import type { Teacher } from '@/core/staff/teacher';
+import { StorageService } from '@/services/storage';
 import { resolvePianoLessonMinutes } from '../../config/pianoLessonMinutes';
 import {
   TIMETABLE_DAYS,
@@ -26,7 +27,7 @@ import {
   getPlacementsForSlot,
   ensureEditableSlotClass as baseEnsureEditableSlotClass,
   assignStudentToSlot as baseAssignStudentToSlot,
-  removeStudentFromSlot,
+  removeStudentFromSlot as baseRemoveStudentFromSlot,
   moveStudentToSlot as baseMoveStudentToSlot,
   assignStudentWithRecurrence as baseAssignStudentWithRecurrence,
   type AssignStudentToSlotResult,
@@ -34,6 +35,14 @@ import {
   type AssignWithRecurrenceParams,
   type AssignWithRecurrenceResult,
 } from '@/capabilities/scheduling';
+
+const pianoPlacementStore = {
+  getStudents: () => StorageService.getStudents(),
+  saveStudent: (s: Student) => StorageService.saveStudent(s),
+  saveClass: (c: any) => StorageService.saveClass(c),
+  getClasses: () => StorageService.getClasses(),
+  getRooms: () => StorageService.getSettings()?.rooms || [],
+};
 
 export {
   TIMETABLE_DAYS,
@@ -48,7 +57,6 @@ export {
   findEditableSlotClass,
   classesMatchingSlot,
   getPlacementsForSlot,
-  removeStudentFromSlot,
   type AssignStudentToSlotResult,
   type MoveStudentToSlotResult,
   type AssignWithRecurrenceParams,
@@ -76,6 +84,7 @@ export function ensureEditableSlotClass(params: {
   return baseEnsureEditableSlotClass({
     ...params,
     durationMinutes: resolvePianoLessonMinutes(),
+    store: pianoPlacementStore,
   });
 }
 
@@ -92,6 +101,19 @@ export function assignStudentToSlot(params: {
   return baseAssignStudentToSlot({
     ...params,
     durationMinutes: resolvePianoLessonMinutes(),
+    store: pianoPlacementStore,
+  });
+}
+
+export function removeStudentFromSlot(params: {
+  student: Student;
+  classItem: ClassItem;
+  day: DayOfWeek;
+  startTime: string;
+}): { ok: true; student: Student } | { ok: false; message: string } {
+  return baseRemoveStudentFromSlot({
+    ...params,
+    store: pianoPlacementStore,
   });
 }
 
@@ -108,6 +130,7 @@ export function moveStudentToSlot(params: {
   return baseMoveStudentToSlot({
     ...params,
     durationMinutes: resolvePianoLessonMinutes(),
+    store: pianoPlacementStore,
   });
 }
 
@@ -117,5 +140,6 @@ export function assignStudentWithRecurrence(
   return baseAssignStudentWithRecurrence({
     ...params,
     durationMinutes: resolvePianoLessonMinutes(),
+    store: pianoPlacementStore,
   });
 }

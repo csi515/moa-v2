@@ -3,7 +3,7 @@ import { useApp } from '@/context/AppContext';
 import { IndustryDashboardShell } from '@/core/dashboard/IndustryDashboardShell';
 import { useIndustryDashboardMetrics } from '@/core/dashboard/useIndustryDashboardMetrics';
 import { useModuleLabels } from '@/core/labels';
-import { StorageService } from '@/services/storage';
+import { transportStorage } from '@/capabilities/transport';
 import { useStorageRefresh } from '@/hooks';
 import { Dumbbell } from 'lucide-react';
 
@@ -12,7 +12,7 @@ export const GymDashboardView: FC = () => {
   const labels = useModuleLabels();
   const refreshKey = useStorageRefresh();
   const { today, students, checkedInToday, classes } = useIndustryDashboardMetrics();
-  const pendingRides = StorageService.getShuttleRideRequests().filter(
+  const pendingRides = transportStorage.getShuttleRideRequests().filter(
     (r) => r.rideDate === today && r.status === 'requested'
   ).length;
   void refreshKey;

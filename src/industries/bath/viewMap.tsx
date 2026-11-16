@@ -12,10 +12,9 @@ import {
 } from 'lucide-react';
 import { WorkplaceSettingsView } from '@/core/organizations/components/WorkplaceSettingsView';
 import { accountViewEntry } from '@/core/industry/commonViewEntries';
-import { StudentListView, StudentFormModal } from '@/capabilities/roster';
+import { StudentListView, StudentFormModal, rosterStorage } from '@/capabilities/roster';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { useApp } from '@/context/AppContext';
-import { StorageService } from '@/services/storage';
 
 const BookingView = lazy(() =>
   import('@/capabilities/booking/ui/BookingCalendarView').then((m) => ({ default: m.BookingCalendarView }))
@@ -34,7 +33,7 @@ function BathDashboardView() {
   const { setActiveTab } = useApp();
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const allCustomers = StorageService.getStudents();
+  const allCustomers = rosterStorage.getStudents();
   const activeCustomers = allCustomers.filter((c) => c.status === 'active');
 
   return (
