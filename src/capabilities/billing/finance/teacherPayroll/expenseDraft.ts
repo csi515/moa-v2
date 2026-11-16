@@ -1,4 +1,5 @@
-import type { Expense, PaymentMethod, Teacher, TeacherPayType } from '@/types';
+import type { Expense, PaymentMethod, TeacherPayType } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { Teacher } from '@/types/teacher';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import { getIndustryPlugin } from '@/core/industry/pluginHost';
 import { isBlankIndustryInput } from '@/core/industry/types';

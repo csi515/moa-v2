@@ -5,7 +5,8 @@ import type { Database } from '@/lib/supabase/database.types';
 import { useApp } from '@/context/AppContext';
 import { useStaffScope } from '@/hooks';
 import { PageHeader, SummaryMetricCard, FilterBar, SearchField } from '@/shared/components';
-import { PracticeRecord, Student } from '@/types';
+import type { PracticeRecord } from '@/core/lessons/types';
+import type { Student } from '@/types/customer';
 import { consumeOpenPendingPractice } from '@/core/customer/studentJoinInbox';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import {

@@ -1,5 +1,6 @@
 import React from 'react';
-import { AttendanceRecord, ClassItem } from '@/types';
+import type { AttendanceRecord } from '@/capabilities/attendance';
+import type { ClassItem } from '@/types/classItem';
 import { getAttendanceBadge } from '@/utils/formatters';
 import { Plus } from 'lucide-react';
 

@@ -5,7 +5,7 @@ import { StorageService } from '@/services/storage';
 import { ACADEMY_EVENT_TYPE_LABEL, PERFORMANCE_VIDEO_TYPE_LABEL } from '@/types/education';
 import { getIndustryPlugin } from '@/core/industry/pluginHost';
 import type { IndustryType } from '@/core/industry/types';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { Section } from './shared';
 import { EmptyState } from '@/shared/components';
 

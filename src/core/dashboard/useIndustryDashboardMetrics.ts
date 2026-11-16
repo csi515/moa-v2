@@ -2,7 +2,9 @@ import { useMemo } from 'react';
 import { useStorageRefresh, useStaffScope } from '@/hooks';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import { StorageService } from '@/services/storage';
-import type { ClassItem, Student, Teacher } from '@/types';
+import type { ClassItem } from '@/types/classItem';
+import type { Student } from '@/types/customer';
+import type { Teacher } from '@/types/teacher';
 
 export interface IndustryDashboardMetrics {
   today: string;

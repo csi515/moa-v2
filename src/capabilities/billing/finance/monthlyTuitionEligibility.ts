@@ -1,6 +1,6 @@
 import { isMonthlyBillingStudent } from '../utils/billingMode';
 import { yearMonthLocal } from '@/shared/utils/localDate';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 
 type EligibleStudent = Pick<Student, 'billingMode' | 'status' | 'joinDate'>;
 

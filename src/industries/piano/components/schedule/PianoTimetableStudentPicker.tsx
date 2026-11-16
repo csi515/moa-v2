@@ -1,7 +1,10 @@
 import { useState, useMemo, useEffect, useRef, type FC } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Check, Repeat, Search, Sparkles, UserCheck, UserPlus, X, Calendar } from 'lucide-react';
-import type { DayOfWeek, Student, MakeupItem, Teacher } from '@/types';
+import type { DayOfWeek } from '@/core/staff/workWindow';
+import type { Student } from '@/types/customer';
+import type { MakeupItem } from '@/capabilities/attendance/domain/types';
+import type { Teacher } from '@/types/teacher';
 import { StorageService } from '@/services/storage';
 import { scheduleMakeupAtomic } from '@/core/schedules/makeupScheduleAtomic';
 import { useApp } from '@/context/AppContext';

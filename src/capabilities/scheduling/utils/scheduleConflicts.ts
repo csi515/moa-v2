@@ -1,4 +1,7 @@
-import type { ClassItem, DayOfWeek, MakeupItem, PracticeRoomBooking } from '@/types';
+import type { ClassItem } from '@/types/classItem';
+import type { DayOfWeek } from '@/core/staff/workWindow';
+import type { MakeupItem } from '@/capabilities/attendance';
+import type { PracticeRoomBooking } from '@/capabilities/resources/types';
 import { weekdayFromIsoDate } from '@/shared/utils/weekdayKo';
 
 /** @deprecated 신규 코드는 `@/core/academy/utils/weekdayKo` 직접 import */

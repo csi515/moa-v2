@@ -1,4 +1,5 @@
-import type { Student, TuitionInvoice } from '@/types';
+import type { Student } from '@/types/customer';
+import type { TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { filterMonthlyTuitionAutoGenerateStudents } from './monthlyTuitionEligibility';
 import { findMonthlyTuitionInvoice } from './monthlyTuitionStatus';
 

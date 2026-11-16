@@ -1,7 +1,7 @@
 import { Modal } from '@/shared/components/ui/Modal';
 
 import React, { useMemo, useState, useEffect } from 'react';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { renderGuardianInvite } from '@/core/staff/staffUi';
 import { X, Phone, Edit, UserMinus, UserCheck, CreditCard, ChevronDown, Award } from 'lucide-react';
 import { StudentGrowthReportModal } from './report/StudentGrowthReportModal';

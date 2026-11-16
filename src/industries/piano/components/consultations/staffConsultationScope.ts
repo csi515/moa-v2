@@ -1,4 +1,6 @@
-import type { CustomerJoinRequest, ReservationDetail, Student } from '@/types';
+import type { CustomerJoinRequest } from '@/core/customer/joinTypes';
+import type { ReservationDetail } from '@/core/schedules/types';
+import type { Student } from '@/types/customer';
 
 function digits(value?: string | null): string {
   return (value || '').replace(/\D/g, '');

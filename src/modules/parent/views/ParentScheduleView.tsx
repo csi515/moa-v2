@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { StorageService } from '@/services/storage';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import {
   practiceRoomReservationService,
   seoulDateFromIso,

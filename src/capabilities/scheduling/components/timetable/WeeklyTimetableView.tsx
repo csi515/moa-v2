@@ -3,7 +3,7 @@ import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useStaffScope, useIsDesktop, useStorageRefresh } from '@/hooks';
 import { schedulingStorage } from '@/capabilities/scheduling/infrastructure/schedulingStorage';
 import { PageHeader, UnifiedScheduleCalendar, type CalendarEventItem } from '@/shared/components';
-import type { ClassItem } from '@/types';
+import type { ClassItem } from '@/types/classItem';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import {
   Clock,

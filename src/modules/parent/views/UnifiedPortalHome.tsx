@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import type { ParentPortalTab } from '@/types/education';
 import type { IndustryType } from '@/core/industry/types';
 import { TuitionService } from '@/capabilities/finance';

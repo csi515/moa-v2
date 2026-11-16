@@ -8,7 +8,7 @@ import { TuitionService, type MonthlyTuitionWorkFilter } from '@/capabilities/bi
 import { useTuitionInvoicePayment } from '@/capabilities/billing/finance/application/useTuitionInvoicePayment';
 import type { TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import type { PaymentMethod } from '@/capabilities/billing/finance/paymentMethod';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { useStorageRefresh } from '@/hooks';
 import { buildYearMonthOptions } from '@/capabilities/billing/finance/categories';
 import { CreditCard, Building, AlertCircle, Copy, Check } from 'lucide-react';

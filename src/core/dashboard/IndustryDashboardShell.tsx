@@ -1,5 +1,5 @@
 ﻿import type { ReactNode } from 'react';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { PageHeader, SummaryMetricCard, EmptyState } from '@/shared/components';
 import { formatKoreanDateLocal } from '@/shared/utils/localDate';
 import { CheckSquare, UserPlus, Users } from 'lucide-react';

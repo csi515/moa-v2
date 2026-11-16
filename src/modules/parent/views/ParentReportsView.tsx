@@ -1,6 +1,6 @@
 import React from 'react';
 import { StorageService } from '@/services/storage';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { MiniStat, Section } from './shared';
 import { EmptyState } from '@/shared/components';
 

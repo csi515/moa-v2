@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import type { ParentPortalTab } from '@/types/education';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import type { IndustryType } from '@/core/industry/types';
 import { ParentHomeView } from './views/ParentHomeView';
 import { ParentAttendanceView } from './views/ParentAttendanceView';

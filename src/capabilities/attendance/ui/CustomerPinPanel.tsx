@@ -5,7 +5,7 @@ import { pinRevealHandoff } from '../attendanceIndustryCopy';
 import { useModuleLabels } from '@/core/labels';
 import { useOptionalOrganization } from '@/core/organizations/OrganizationProvider';
 import { attendanceStorage } from '@/capabilities/attendance/infrastructure/attendanceStorage';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { KeyRound, RefreshCw } from 'lucide-react';
 import { PIN_ATTENDANCE_DIRECTOR_COPY } from '../domain/attendanceNotifyCopy';
 

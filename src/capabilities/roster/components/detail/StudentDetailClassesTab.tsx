@@ -1,5 +1,5 @@
 import React from 'react';
-import { ClassItem } from '@/types';
+import type { ClassItem } from '@/types/classItem';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useModuleLabels } from '@/core/labels';
 

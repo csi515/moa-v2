@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from 'react';
 import { ChevronRight, Clock, Users } from 'lucide-react';
 import { EmptyState } from '@/shared/components';
-import type { ClassItem } from '@/types';
+import type { ClassItem } from '@/types/classItem';
 
 export interface TimetableDayClassRow {
   classItem: ClassItem;

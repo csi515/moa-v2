@@ -1,6 +1,6 @@
 import { StorageService } from '@/services/storage';
 import { careStorage } from './careStorage';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 
 export interface TodayCareClose {
   today: string;

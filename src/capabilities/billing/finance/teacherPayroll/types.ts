@@ -1,4 +1,4 @@
-import type { Teacher } from '@/types';
+import type { Teacher } from '@/types/teacher';
 import type { TeacherPayType } from '../billingLedgerTypes';
 
 export type PayrollSettlementStatus = 'pending' | 'confirmed' | 'expensed';

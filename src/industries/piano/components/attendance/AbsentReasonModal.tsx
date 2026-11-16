@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 
-import { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { X, AlertCircle, Check } from 'lucide-react';
 import { useTerminology } from '@/core/terminology';
 

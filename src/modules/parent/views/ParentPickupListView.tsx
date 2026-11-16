@@ -2,7 +2,7 @@ import { useMemo, useState, type FormEvent } from 'react';
 import { StorageService } from '@/services/storage';
 import { useStorageRefresh } from '@/hooks';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import type { AuthorizedPickup } from '@/types/care';
 import { Section } from './shared';
 

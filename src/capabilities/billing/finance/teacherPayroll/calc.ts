@@ -1,4 +1,6 @@
-import type { LessonRecord, Teacher, TeacherPayType } from '@/types';
+import type { LessonRecord } from '@/core/lessons/types';
+import type { Teacher } from '@/types/teacher';
+import type { TeacherPayType } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { payTypeUsesUnitRate } from './labels';
 import type { TeacherPayrollRow, TeacherPayrollTotals } from './types';
 

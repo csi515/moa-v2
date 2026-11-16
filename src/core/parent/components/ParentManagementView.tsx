@@ -20,7 +20,7 @@ import { formatGuardianRelationship, searchParents } from '@/core/parent';
 import type { GuardianRelationship } from '@/core/parent/types';
 import { AccountStatusBadge } from '@/core/accounts/AccountStatusBadge';
 import { StorageService } from '@/services/storage';
-import { Parent } from '@/types';
+import type { Parent } from '@/types/customer';
 import { formatPhone, getLevelColor } from '@/utils/formatters';
 import { PageHeader, FilterBar, SearchField, EmptyState } from '@/shared/components';
 import { Modal } from '@/shared/components/ui/Modal';

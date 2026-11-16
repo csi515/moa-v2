@@ -4,17 +4,11 @@ import { parentStorage } from '@/capabilities/parent/infrastructure/parentStorag
 import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
 import { settingsStorage } from '@/services/storage/settingsStorage';
 import { isSupabaseConfigured } from '@/lib/supabase';
-import type {
-  AcademyEvent,
-  AcademySettings,
-  CombinedPaymentRequest,
-  PaymentMethod,
-  Student,
-  StudentMonthlyBillingSummary,
-  TextbookSale,
-  TuitionInvoice,
-  TuitionPayment,
-} from '@/types';
+import type { AcademyEvent } from '@/core/events';
+import type { AcademySettings } from '@/core/organizations/settingsTypes';
+import type { CombinedPaymentRequest, PaymentMethod, StudentMonthlyBillingSummary, TuitionInvoice, TuitionPayment } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { Student } from '@/types/customer';
+import type { TextbookSale } from '@/capabilities/commerce/textbookTypes';
 import { findExistingStudentMonthInvoice } from '@/capabilities/billing/finance/invoiceDedupe';
 import { filterMonthlyTuitionAutoGenerateStudents } from '@/capabilities/billing/finance/monthlyTuitionEligibility';
 import { listMonthlyTuitionMissingInvoices } from '@/capabilities/billing/finance/monthlyTuitionEnsure';

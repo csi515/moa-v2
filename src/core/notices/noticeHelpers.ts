@@ -1,4 +1,5 @@
-import type { AppNotification, Student } from '@/types';
+import type { AppNotification } from '@/core/notices/notificationTypes';
+import type { Student } from '@/types/customer';
 import { isParentNoticeType, isParentPortalNotificationType } from './types';
 import { parseNoticeTarget } from './noticeTarget';
 

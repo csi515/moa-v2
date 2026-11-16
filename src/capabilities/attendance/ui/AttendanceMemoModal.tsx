@@ -3,7 +3,7 @@ import { Modal } from '@/shared/components';
 import { FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { attendanceMemoCopy } from '../attendanceIndustryCopy';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import type { AttendanceSession } from '../domain/types';
 
 /** 출석(세션) 메모 편집 — 어린이집은 하원·전달 카피 유지 */

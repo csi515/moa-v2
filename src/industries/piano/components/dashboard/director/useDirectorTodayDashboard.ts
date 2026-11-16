@@ -5,7 +5,9 @@ import { useStorageRefresh } from '@/hooks';
 import { reservationService } from '@/core/schedules';
 import { customerJoinService } from '@/core/customer/services/customerJoinService';
 import { getOrgEnrollmentRequests } from '@/core/parent/services/enrollmentRequestService';
-import type { ClassItem, Student, TuitionInvoice } from '@/types';
+import type { ClassItem } from '@/types/classItem';
+import type { Student } from '@/types/customer';
+import type { TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import {
   usePianoExpectedDay,
   type PianoExpectedDay,

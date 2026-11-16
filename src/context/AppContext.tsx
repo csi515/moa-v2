@@ -15,7 +15,7 @@ import { bindUiFeedback, unbindUiFeedback, showToast, type ShowToast } from '@/s
 import { feedbackStore, type ToastMessage } from '@/shared/feedback/feedbackStore';
 import { bindNavigationBridge, unbindNavigationBridge } from '@/shared/navigation/navigationBridge';
 import type { NavTab, StudentDetailTab, CustomerDetailTab } from '@/shared/navigation/navigationTypes';
-import type { User } from '@/types';
+import type { User } from '@/core/auth/types/sessionUser';
 
 export type { NavTab, StudentDetailTab, CustomerDetailTab } from '@/shared/navigation/navigationTypes';
 export type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';

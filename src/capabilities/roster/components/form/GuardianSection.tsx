@@ -7,7 +7,7 @@ import {
   Trash2,
   Search,
 } from 'lucide-react';
-import type { Parent } from '@/types';
+import type { Parent } from '@/types/customer';
 import type { GuardianRelationship } from '@/core/parent/types';
 import {
   getParentChildNames,

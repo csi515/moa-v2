@@ -335,6 +335,11 @@
     "kind": "core-out"
   },
   {
+    "file": "src/core/schedules/attendancePassAtomic.ts",
+    "spec": "@/capabilities/attendance/domain/types",
+    "kind": "core-out"
+  },
+  {
     "file": "src/core/schedules/classAttendanceLedger.ts",
     "spec": "@/capabilities/attendance/domain/classAttendanceLedger",
     "kind": "core-out"
@@ -342,6 +347,11 @@
   {
     "file": "src/core/schedules/makeupScheduleAtomic.test.ts",
     "spec": "@/capabilities/scheduling/utils/scheduleConflicts",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/staff/components/TeacherManagementView.tsx",
+    "spec": "@/capabilities/billing/finance/billingLedgerTypes",
     "kind": "core-out"
   },
   {
@@ -450,6 +460,11 @@
     "kind": "capability-cross"
   },
   {
+    "file": "src/capabilities/billing/finance/services/invoicePaymentService.ts",
+    "spec": "@/capabilities/commerce/textbookTypes",
+    "kind": "capability-cross"
+  },
+  {
     "file": "src/capabilities/billing/finance/services/tuitionService.ts",
     "spec": "@/capabilities/commerce/infrastructure/commerceStorage",
     "kind": "capability-cross"
@@ -462,6 +477,11 @@
   {
     "file": "src/capabilities/billing/finance/services/tuitionService.ts",
     "spec": "@/capabilities/roster/infrastructure/rosterStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/services/tuitionService.ts",
+    "spec": "@/capabilities/commerce/textbookTypes",
     "kind": "capability-cross"
   },
   {
@@ -855,8 +875,23 @@
     "kind": "capability-cross"
   },
   {
+    "file": "src/capabilities/roster/components/detail/StudentDetailAttendanceTab.tsx",
+    "spec": "@/capabilities/attendance",
+    "kind": "capability-cross"
+  },
+  {
     "file": "src/capabilities/roster/components/detail/StudentDetailConsultationsTab.tsx",
     "spec": "@/capabilities/consultation/types",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/detail/studentDetailExtensions.ts",
+    "spec": "@/capabilities/attendance",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/detail/studentDetailExtensions.ts",
+    "spec": "@/capabilities/commerce/textbookTypes",
     "kind": "capability-cross"
   },
   {
@@ -925,6 +960,16 @@
     "kind": "capability-cross"
   },
   {
+    "file": "src/capabilities/roster/components/studentListHelpers.ts",
+    "spec": "@/capabilities/attendance",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/studentListHelpers.ts",
+    "spec": "@/capabilities/billing/finance/billingLedgerTypes",
+    "kind": "capability-cross"
+  },
+  {
     "file": "src/capabilities/roster/components/StudentListView.tsx",
     "spec": "@/capabilities/transport",
     "kind": "capability-cross"
@@ -966,6 +1011,16 @@
   },
   {
     "file": "src/capabilities/roster/components/useStudentDetailModal.ts",
+    "spec": "@/capabilities/commerce/textbookTypes",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/useStudentDetailModal.ts",
+    "spec": "@/capabilities/billing/finance/billingLedgerTypes",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/useStudentDetailModal.ts",
     "spec": "@/capabilities/attendance",
     "kind": "capability-cross"
   },
@@ -987,6 +1042,16 @@
   {
     "file": "src/capabilities/scheduling/notifications/makeupNotification.ts",
     "spec": "@/capabilities/attendance/domain/types",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/scheduling/utils/scheduleConflicts.ts",
+    "spec": "@/capabilities/attendance",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/scheduling/utils/scheduleConflicts.ts",
+    "spec": "@/capabilities/resources/types",
     "kind": "capability-cross"
   },
   {

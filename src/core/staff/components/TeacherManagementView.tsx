@@ -23,7 +23,8 @@ import { Modal } from '@/shared/components/ui/Modal';
 import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { todayIsoLocal } from '@/shared/utils/localDate';
-import { Teacher, type TeacherPayType } from '@/types';
+import type { Teacher } from '@/types/teacher';
+import type { TeacherPayType } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { payTypeLabel, payTypeRateUnitLabel, payTypeUsesUnitRate } from '@/core/finance/teacherPayroll';
 import { normalizeStaffGrants, type StaffGrants } from '@/core/staff/staffGrants';
 import { StaffGrantFields, emptyStaffGrants } from './StaffGrantFields';
@@ -222,7 +223,7 @@ export const TeacherManagementView: React.FC = () => {
     specialty: '클래식 피아노, 기초 테크닉',
     status: 'active' as 'active' | 'inactive',
     color: '#4f46e5',
-    payType: 'hourly' as import('@/types').TeacherPayType,
+    payType: 'hourly' as TeacherPayType,
     hourlyRate: 30000,
     salary: 0,
     grants: emptyStaffGrants(),

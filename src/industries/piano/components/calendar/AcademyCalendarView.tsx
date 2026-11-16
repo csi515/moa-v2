@@ -9,7 +9,7 @@ import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { PageHeader, FilterBar, Modal } from '@/shared/components';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import { AcademyEvent } from '@/core/events';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { visibleStaffCalendarEvents } from './visibleStaffCalendarEvents';
 import {
   CalendarDays,

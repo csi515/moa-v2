@@ -1,5 +1,5 @@
 import React from 'react';
-import { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { useModuleLabels } from '@/core/labels';
 import { getCustomerLabel } from '@/core/industry/industryUi';
 import { usePermissions } from '@/core/auth/usePermissions';

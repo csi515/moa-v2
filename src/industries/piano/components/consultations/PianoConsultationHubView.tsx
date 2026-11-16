@@ -25,7 +25,7 @@ import { ConsultationQrModal } from '@/core/schedules/components/ConsultationQrM
 import { CreateConsultationScheduleModal } from '@/core/schedules/components/CreateConsultationScheduleModal';
 import { ConsultationRecordModal } from '@/capabilities/consultation';
 import { StudentFormModal } from '@/capabilities/roster';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { mapConsultationToStudentDraft } from '@/capabilities/consultation/utils/consultationStudentMapper';
 import {
   usePianoConsultationHub,

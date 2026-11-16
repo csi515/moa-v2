@@ -20,7 +20,8 @@ import {
   attendanceRecordTitle,
   parentAttendanceEmpty,
 } from '@/capabilities/attendance/attendanceIndustryCopy';
-import type { MakeupStatus, Student } from '@/types';
+import type { MakeupStatus } from '@/capabilities/attendance/domain/types';
+import type { Student } from '@/types/customer';
 import { Section } from './shared';
 import { ParentIndustryAdapter } from '@/capabilities/parent/ParentIndustryAdapter';
 

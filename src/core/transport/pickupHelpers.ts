@@ -1,5 +1,5 @@
 import type { PickupAddress, ShuttleDirection } from './types';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 
 export function createPickupAddress(
   partial?: Partial<PickupAddress> & { isDefault?: boolean }

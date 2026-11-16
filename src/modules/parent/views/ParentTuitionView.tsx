@@ -16,7 +16,8 @@ import {
   isInvoiceVisibleToParent,
 } from '@/capabilities/finance/paymentMethodLabels';
 import { normalizeIndustryType, type IndustryType } from '@/core/industry/types';
-import type { Student, TuitionInvoice } from '@/types';
+import type { Student } from '@/types/customer';
+import type { TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { Copy, X } from 'lucide-react';
 import { Section } from './shared';
 import { buildYearMonthOptions } from '@/capabilities/finance/categories';

@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { CheckSquare, Clock, CreditCard, Smartphone, XCircle } from 'lucide-react';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { STATUS_META, type DayStatus } from './pianoAttendanceHelpers';
 import type { AttendanceBillingBadgeInfo } from './pianoAttendanceBillingHelpers';
 

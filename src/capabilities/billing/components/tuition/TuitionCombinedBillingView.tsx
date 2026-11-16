@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import {
   countMonthlyTuitionWorkStatuses,
   filterMonthlyTuitionWorkStudents,

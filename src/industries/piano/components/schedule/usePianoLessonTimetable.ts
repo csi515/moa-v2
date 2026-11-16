@@ -7,7 +7,8 @@ import { useMediaQuery, useStaffScope, useStorageRefresh } from '@/hooks';
 import { STORAGE_REFRESH_DOMAINS } from '@/hooks/useStorageRefresh';
 import { StorageService } from '@/services/storage';
 import { getRoomNames } from '@/core/organizations/utils/academyRooms';
-import type { DayOfWeek, Student } from '@/types';
+import type { DayOfWeek } from '@/core/staff/workWindow';
+import type { Student } from '@/types/customer';
 import type { DragPlacementPayload } from './PianoTimetablePanels';
 import {
   TIMETABLE_DAYS,

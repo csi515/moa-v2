@@ -1,4 +1,5 @@
-import type { AcademyRoom, AcademyRoomKind, AcademySettings, ClassItem } from '@/types';
+import type { AcademyRoom, AcademyRoomKind, AcademySettings } from '@/core/organizations/settingsTypes';
+import type { ClassItem } from '@/types/classItem';
 
 export const ROOM_KIND_LABEL: Record<AcademyRoomKind, string> = {
   classroom: '강의실',

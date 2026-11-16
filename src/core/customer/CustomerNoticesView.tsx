@@ -5,7 +5,7 @@ import {
   type ParentPortalNotificationKind,
 } from '@/core/notices';
 import { StorageService } from '@/services/storage';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 
 function resolveStudent(customerId: string, displayName: string): Student {
   const found = StorageService.getStudents().find((s) => s.id === customerId);

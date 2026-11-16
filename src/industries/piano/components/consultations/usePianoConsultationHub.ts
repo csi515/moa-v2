@@ -11,7 +11,10 @@ import {
 import { useStaffScope } from '@/hooks';
 import { StorageService } from '@/services/storage';
 import { todayIsoLocal } from '@/shared/utils/localDate';
-import type { CustomerJoinRequest, ReservationDetail, Consultation, Student } from '@/types';
+import type { CustomerJoinRequest } from '@/core/customer/joinTypes';
+import type { ReservationDetail } from '@/core/schedules/types';
+import type { Consultation } from '@/capabilities/consultation/types';
+import type { Student } from '@/types/customer';
 import { inquiryBelongsToStaff, reservationBelongsToStaff } from './staffConsultationScope';
 import {
   TODAY_RESERVATION_PAGE_SIZE,

@@ -19,7 +19,7 @@ import { attendanceStorage } from '@/capabilities/attendance/infrastructure/atte
 import { commerceStorage } from '@/capabilities/commerce/infrastructure/commerceStorage';
 import { StudentService } from '@/core/students';
 import { ScheduleService } from '@/core/services/scheduleService';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import { enrollmentModeLabel } from './form/enrollmentFormCopy';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StorageService } from '@/services/storage';
 import { LessonService } from '@/core/lessons';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { CheckCircle2 } from 'lucide-react';
 import { Section } from './shared';
 import { EmptyState } from '@/shared/components';

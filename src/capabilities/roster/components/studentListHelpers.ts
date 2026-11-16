@@ -1,4 +1,7 @@
-import type { AttendanceRecord, ClassItem, Student, StudentMonthlyBillingSummary } from '@/types';
+import type { AttendanceRecord } from '@/capabilities/attendance';
+import type { ClassItem } from '@/types/classItem';
+import type { Student } from '@/types/customer';
+import type { StudentMonthlyBillingSummary } from '@/capabilities/billing/finance/billingLedgerTypes';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import { normalizeBillingMode } from '@/core/students/billingMode';
 import { formatCurrency, getAttendanceBadge, getInvoiceStatusBadge } from '@/utils/formatters';

@@ -6,7 +6,7 @@ import { todayIsoLocal } from '@/shared/utils/localDate';
 import { useApp } from '@/context/AppContext';
 import { Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import type { IndustryType } from '@/core/industry/types';
 import { CheckCircle2, AlertCircle, Award, Plus } from 'lucide-react';
 import { Section } from './shared';

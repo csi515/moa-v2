@@ -1,12 +1,8 @@
-import type {
-  AcademyEvent,
-  AcademySettings,
-  PaymentMethod,
-  Student,
-  TextbookSale,
-  TuitionInvoice,
-  TuitionPayment,
-} from '@/types';
+import type { AcademyEvent } from '@/core/events';
+import type { AcademySettings } from '@/core/organizations/settingsTypes';
+import type { PaymentMethod, TuitionInvoice, TuitionPayment } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { Student } from '@/types/customer';
+import type { TextbookSale } from '@/capabilities/commerce/textbookTypes';
 import type { StorageApi } from '@/services/storage/helpers';
 import { isMonthlyBillingStudent } from '../../utils/billingMode';
 import { todayIsoLocal, yearMonthLocal } from '@/shared/utils/localDate';

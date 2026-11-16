@@ -1,6 +1,8 @@
 import { StorageService } from '@/services/storage';
-import type { ClassItem, Student, TuitionInvoice } from '@/types';
-import type { Textbook, TextbookSale } from '@/types';
+import type { ClassItem } from '@/types/classItem';
+import type { Student } from '@/types/customer';
+import type { TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { Textbook, TextbookSale } from '@/capabilities/commerce/textbookTypes';
 
 export interface DirectorDashboardData {
   stats: ReturnType<typeof StorageService.getDashboardStats>;

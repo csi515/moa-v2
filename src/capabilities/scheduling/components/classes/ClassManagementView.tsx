@@ -8,7 +8,7 @@ import { useTenantTerms } from '@/core/i18n';
 import { schedulingStorage } from '@/capabilities/scheduling/infrastructure/schedulingStorage';
 import { settingsStorage } from '@/services/storage/settingsStorage';
 import { PageHeader } from '@/shared/components';
-import type { ClassItem } from '@/types';
+import type { ClassItem } from '@/types/classItem';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import {
   findClassConflicts,

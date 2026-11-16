@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { AppNotification, Student } from '@/types';
+import type { AppNotification } from '@/core/notices/notificationTypes';
+import type { Student } from '@/types/customer';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { StorageService } from '@/services/storage';
 import { getPortalFeedForStudent } from '@/core/notices/noticeHelpers';

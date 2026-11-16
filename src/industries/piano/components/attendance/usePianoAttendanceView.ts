@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { StorageService } from '@/services/storage';
 import { isAttendanceModuleEnabled, notifyParentAbsence } from '@/capabilities/attendance';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { usePianoExpectedDay } from './usePianoExpectedDay';
 import {
   DAY_ATTENDANCE_CLASS_ID,

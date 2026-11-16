@@ -3,14 +3,12 @@ import { usePermissions } from '@/core/auth/usePermissions';
 import { useActiveUser } from '@/shared/session/useActiveUser';
 import { StorageService } from '@/services/storage';
 import type { Booking } from '@/core/types/schedule';
-import type {
-  AcademyEvent,
-  ClassItem,
-  Consultation,
-  LessonRecord,
-  MakeupItem,
-  Student,
-} from '@/types';
+import type { Student } from '@/types/customer';
+import type { ClassItem } from '@/types/classItem';
+import type { AcademyEvent } from '@/core/events';
+import type { Consultation } from '@/capabilities/consultation/types';
+import type { LessonRecord } from '@/core/lessons/types';
+import type { MakeupItem } from '@/capabilities/attendance/domain/types';
 
 /** 담당 강사: student.teacherId 또는 배정 반의 class.teacherId */
 function isStudentInStaffScope(student: Student, staffId: string, myClassIds: Set<string>): boolean {

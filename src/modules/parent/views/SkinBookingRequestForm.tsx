@@ -8,7 +8,7 @@ import { isOutsideStaffHours } from '@/capabilities/scheduling/availability/wind
 import { findStaffTimeConflict } from '@/capabilities/booking/domain/bookingRooms';
 import { formatBankAccountText } from '@/capabilities/finance/paymentMethodLabels';
 import { todayIsoLocal } from '@/shared/utils/localDate';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 
 /** 피부관리 고객 — 시술 예약 신청 */
 export function SkinBookingRequestForm({ student }: { student: Student }) {

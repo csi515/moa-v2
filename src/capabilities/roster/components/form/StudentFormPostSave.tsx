@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calendar, CheckCircle2, CreditCard } from 'lucide-react';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { ROSTER_TIMETABLE_PLACE_BUTTON } from './rosterFormCopy';
 
 interface Props {

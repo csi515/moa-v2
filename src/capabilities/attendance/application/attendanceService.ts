@@ -1,4 +1,4 @@
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { businessDateInTimezone } from '@/shared/utils/localDate';
 import type { AttendanceSession, CheckInMethod, PinCheckResult } from '../domain/types';
 import { generatePinCode, hashCheckInPin, isValidPinFormat } from './pinService';

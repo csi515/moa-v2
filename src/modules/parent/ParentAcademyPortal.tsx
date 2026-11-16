@@ -15,7 +15,7 @@ import {
 } from '@/core/parent/types/globalParent';
 import { useParentPortal } from '@/core/parent/context/ParentPortalContext';
 import type { IndustryType } from '@/core/industry/types';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import type { ParentPortalTab } from '@/types/education';
 import { ParentPortalTabs } from './ParentPortalTabs';
 import { ParentReadOnlyBanner } from './ParentReadOnlyBanner';

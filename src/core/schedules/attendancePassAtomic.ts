@@ -8,7 +8,8 @@ import { getCoreClient, getPianoClient, isSupabaseConfigured } from '@/lib/supab
 import { getOrganizationId, getStorageAdapter, STORAGE_KEYS } from '@/services/adapters';
 import { StorageService } from '@/services/storage';
 import { isSessionPassBillingStudent } from '@/core/students/billingMode';
-import type { AttendanceRecord, AttendanceStatus, Student } from '@/types';
+import type { AttendanceRecord, AttendanceStatus } from '@/capabilities/attendance/domain/types';
+import type { Student } from '@/types/customer';
 import type { SessionPass } from '@/core/types/schedule';
 import { sessionPassService } from './sessionPassService';
 import { planAttendancePassChange } from './attendancePassPlan';

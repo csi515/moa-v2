@@ -1,5 +1,5 @@
 import React from 'react';
-import { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { formatGuardianRelationship } from '@/core/parent';
 import type { GuardianInfo } from '@/core/parent/types';
 import { ScheduleService } from '@/core/services/scheduleService';

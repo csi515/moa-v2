@@ -1,4 +1,4 @@
-﻿import type { Student, Parent } from '@/types';
+﻿import type { Student, Parent } from '@/types/customer';
 import type { GuardianRelationship } from '@/core/parent/types';
 import { getPrimaryGuardian } from '@/core/parent/guardianHelpers';
 import { StorageService } from '@/services/storage';

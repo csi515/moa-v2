@@ -1,4 +1,5 @@
-import type { AcademyEvent, Student } from '@/types';
+import type { AcademyEvent } from '@/core/events';
+import type { Student } from '@/types/customer';
 
 /** 강사 캘린더: 휴원·조율 공지와 담당 원생 참가 일정만 */
 export function visibleStaffCalendarEvents(

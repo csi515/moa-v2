@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState, type FC } from 'react';
 import { UserCheck } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import {
   mapExpectedWithDayStatus,
   type PianoExpectedDay,

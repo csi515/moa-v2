@@ -3,7 +3,8 @@ import { Filter, Printer, UserPlus, Users, X } from 'lucide-react';
 import { EmptyState, UnifiedScheduleCalendar, type CalendarEventItem } from '@/shared/components';
 import type { CalendarViewMode } from '@/shared/components/calendar';
 import { FORM_CONTROL_CLASS } from '@/shared/components/ui';
-import type { ClassItem, DayOfWeek } from '@/types';
+import type { ClassItem } from '@/types/classItem';
+import type { DayOfWeek } from '@/core/staff/workWindow';
 import { usePianoNavigate } from '@/industries/piano/layout/usePianoNavigate';
 import type { DragPlacementPayload } from './PianoTimetablePanels';
 import {

@@ -1,6 +1,7 @@
 import { useMemo, type FC } from 'react';
 import { Clock } from 'lucide-react';
-import type { ClassItem, Student } from '@/types';
+import type { ClassItem } from '@/types/classItem';
+import type { Student } from '@/types/customer';
 import { DirectorSectionEmpty } from './DirectorSectionEmpty';
 
 interface DirectorTodayScheduleSectionProps {

@@ -1,7 +1,7 @@
 import type { GuardianRelationship } from '@/core/parent/types';
 import type { PickupAddress } from '@/capabilities/transport/types';
 import type { StudentBillingMode } from '@/core/students/billingMode';
-import type { StudentStatus } from '@/types';
+import type { StudentStatus } from '@/types/customer';
 
 export interface GuardianFormEntry {
   key: string;

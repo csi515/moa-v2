@@ -1,5 +1,6 @@
 import { isMonthlyBillingStudent } from '../utils/billingMode';
-import type { Student, TuitionInvoice } from '@/types';
+import type { Student } from '@/types/customer';
+import type { TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { findExistingStudentMonthInvoice } from './invoiceDedupe';
 
 /** 원장 업무용 월회비 납부 판정. 원장 status(partial/overdue)는 유지하고 여기선 묶는다. */

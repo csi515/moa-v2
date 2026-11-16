@@ -7,7 +7,7 @@ import { useStorageRefresh, useStudentNavigation } from '@/hooks';
 import { studentMatchesGuardianQuery } from '@/core/parent/guardianHelpers';
 import { billingStorage } from '@/capabilities/billing/infrastructure/billingStorage';
 import { StudentService } from '@/core/students';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import {
   EmptyState,
   FilterBar,

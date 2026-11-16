@@ -1,4 +1,4 @@
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { registerStudentWithParent } from '../services/studentRegistrationService';
 import { StorageService } from '@/services/storage';
 import type { StudentImportNormalizedRow } from './types';

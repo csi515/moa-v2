@@ -8,7 +8,8 @@ import {
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
 import { getStudentLevelLabel, getStudentLevelOptions } from '@/core/students/levelOptions';
-import type { ClassItem, Teacher } from '@/types';
+import type { ClassItem } from '@/types/classItem';
+import type { Teacher } from '@/types/teacher';
 import {
   rosterAdvancedSectionTitle,
   rosterClassAssignHelper,

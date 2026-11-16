@@ -1,6 +1,8 @@
 import { useState, useMemo, type FC } from 'react';
 import { MoveRight, Plus, X } from 'lucide-react';
-import type { ClassItem, DayOfWeek, Student } from '@/types';
+import type { ClassItem } from '@/types/classItem';
+import type { DayOfWeek } from '@/core/staff/workWindow';
+import type { Student } from '@/types/customer';
 import {
   TIMETABLE_DAYS,
   getPlacementsForSlot,

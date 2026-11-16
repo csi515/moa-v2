@@ -15,7 +15,10 @@ import {
   Ticket,
 } from 'lucide-react';
 import { AttendanceBadge } from '@/shared/components/ui/AttendanceBadge';
-import type { AttendanceRecord, AttendanceStatus, ClassItem, LessonRecord, Student } from '@/types';
+import type { AttendanceRecord, AttendanceStatus } from '@/capabilities/attendance/domain/types';
+import type { ClassItem } from '@/types/classItem';
+import type { LessonRecord } from '@/core/lessons/types';
+import type { Student } from '@/types/customer';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import type { StudentUnpaidBadgeInfo } from '@/capabilities/billing/studentBillingStatusHelpers';
 import type { TemporaryMoveRecord } from '../schedule/studentTemporaryMoveHelpers';

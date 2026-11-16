@@ -5,7 +5,7 @@ import {
   PARENT_PORTAL_NOTIFICATION_LABEL,
 } from '@/core/notices';
 import type { ParentPortalTab } from '@/types/education';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { ChevronRight } from 'lucide-react';
 import { Section } from './shared';
 

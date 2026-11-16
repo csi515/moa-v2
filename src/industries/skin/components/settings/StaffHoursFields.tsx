@@ -1,4 +1,5 @@
-import type { DayOfWeek, StaffWorkWindow, Teacher } from '@/types';
+import type { DayOfWeek, StaffWorkWindow } from '@/core/staff/workWindow';
+import type { Teacher } from '@/types/teacher';
 
 const DAYS: DayOfWeek[] = ['월', '화', '수', '목', '금', '토', '일'];
 

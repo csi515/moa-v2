@@ -24,7 +24,7 @@ import {
 } from '../attendanceIndustryCopy';
 import { useModuleLabels } from '@/core/labels';
 import { todayIsoLocal, formatIsoDateLocal, shiftDateIso } from '@/shared/utils/localDate';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import {
   CheckSquare,
   ChevronLeft,

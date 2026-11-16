@@ -6,7 +6,7 @@ import { useStorageRefresh } from '@/hooks';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import { Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { MEDICATION_STATUS_LABEL, MEDICATION_DEFAULTS, type MedicationRequest } from '@/types/care';
 import { Section } from './shared';
 

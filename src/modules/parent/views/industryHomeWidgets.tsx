@@ -9,7 +9,7 @@ import { useParentAttendanceSessions } from '@/core/parent/hooks/useParentAttend
 import { useStorageRefresh } from '@/hooks';
 import { CARE_JOURNAL_MOOD_LABEL, MEDICATION_STATUS_LABEL, PICKUP_OUTSIDE_LABEL } from '@/types/care';
 import type { ParentPortalTab } from '@/types/education';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { Section } from './shared';
 import { EmptyState } from '@/shared/components';
 import { ChevronRight } from 'lucide-react';

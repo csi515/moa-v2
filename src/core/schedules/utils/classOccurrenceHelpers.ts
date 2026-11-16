@@ -1,4 +1,5 @@
-import type { DayOfWeek, ClassItem } from '@/types';
+import type { DayOfWeek } from '@/core/staff/workWindow';
+import type { ClassItem } from '@/types/classItem';
 import { weekdayFromDate } from '@/shared/utils/weekdayKo';
 
 export function getKoreanDayOfWeek(date: Date = new Date()): DayOfWeek {

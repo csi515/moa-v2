@@ -1,11 +1,6 @@
-﻿import type {
-  PaymentMethod,
-  Student,
-  Textbook,
-  TextbookInventoryTransaction,
-  TextbookPayment,
-  TextbookSale,
-} from '@/types';
+﻿import type { PaymentMethod } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { Student } from '@/types/customer';
+import type { Textbook, TextbookInventoryTransaction, TextbookPayment, TextbookSale } from '@/capabilities/commerce/textbookTypes';
 import { STORAGE_KEYS } from '@/services/adapters';
 import { generateEntityId, getItem, setItem, type StorageApi } from '@/services/storage/helpers';
 import {

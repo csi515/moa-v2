@@ -4,7 +4,7 @@ import {
   PARENT_PORTAL_NOTIFICATION_LABEL,
   type ParentPortalNotificationKind,
 } from '@/core/notices';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import type { IndustryType } from '@/core/industry/types';
 import { Section } from './shared';
 

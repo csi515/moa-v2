@@ -1,4 +1,6 @@
-import type { ClassItem, MakeupItem, Student } from '@/types';
+import type { ClassItem } from '@/types/classItem';
+import type { MakeupItem } from '@/capabilities/attendance/domain/types';
+import type { Student } from '@/types/customer';
 import { weekdayFromIsoDate } from '@/shared/utils/weekdayKo';
 
 export interface ExpectedStudentOnDate {

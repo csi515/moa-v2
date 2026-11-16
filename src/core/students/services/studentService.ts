@@ -1,5 +1,5 @@
 import { StorageService } from '@/services/storage';
-import type { Parent, Student } from '@/types';
+import type { Parent, Student } from '@/types/customer';
 
 /**
  * 원생(고객) 도메인 파사드.

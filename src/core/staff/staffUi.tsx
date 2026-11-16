@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import type { StaffWorkWindow, Teacher } from '@/types';
+import type { StaffWorkWindow } from '@/core/staff/workWindow';
+import type { Teacher } from '@/types/teacher';
 import type { ParentInviteLinkCode } from '@/core/parent/services/parentInviteService';
 
 export type GuardianInviteProps = {

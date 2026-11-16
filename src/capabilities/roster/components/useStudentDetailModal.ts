@@ -10,7 +10,10 @@ import { schedulingStorage } from '@/capabilities/scheduling/infrastructure/sche
 import { StudentService } from '@/core/students';
 import { TuitionService } from '@/capabilities/finance';
 import { LessonService } from '@/core/lessons';
-import type { PerformanceVideo, Student, TextbookSale, TuitionInvoice, PaymentMethod } from '@/types';
+import type { PerformanceVideo } from '@/core/lessons/types';
+import type { Student } from '@/types/customer';
+import type { TextbookSale } from '@/capabilities/commerce/textbookTypes';
+import type { TuitionInvoice, PaymentMethod } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { isValidYouTubeUrl } from '@/utils/youtube';
 import { getGuardiansForStudent, getPrimaryGuardian } from '@/core/parent';
 import { usePermissions } from '@/core/auth/usePermissions';
@@ -26,7 +29,7 @@ import {
   getStudentStatusBadge,
 } from '@/utils/formatters';
 import type { AttendanceStatus } from '@/capabilities/attendance';
-import type { ClassItem } from '@/types';
+import type { ClassItem } from '@/types/classItem';
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import { getStudentExitActionLabel } from './studentExitActionLabel';
 import { useModuleLabels } from '@/core/labels';

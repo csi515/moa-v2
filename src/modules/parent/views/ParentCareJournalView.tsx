@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { StorageService } from '@/services/storage';
 import { useStorageRefresh } from '@/hooks';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import { CARE_JOURNAL_MOOD_LABEL } from '@/types/care';
 import { Section } from './shared';
 import { EmptyState } from '@/shared/components';

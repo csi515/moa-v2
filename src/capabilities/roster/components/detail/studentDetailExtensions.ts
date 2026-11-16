@@ -2,13 +2,11 @@ import React, { type ReactNode } from 'react';
 import { FileText } from 'lucide-react';
 import { getResolvedPreset } from '@/core/presets/presetResolver';
 import { isPianoIndustry } from '@/core/industry/industryUi';
-import type {
-  Student,
-  AttendanceRecord,
-  AttendanceStatus,
-  AcademyEvent,
-  PerformanceVideo,
-} from '@/types';
+import type { Student } from '@/types/customer';
+import type { AttendanceRecord, AttendanceStatus } from '@/capabilities/attendance';
+import type { AcademyEvent } from '@/core/events';
+import type { PerformanceVideo } from '@/core/lessons/types';
+import type { TextbookSale } from '@/capabilities/commerce/textbookTypes';
 import type { DetailTab, DetailTabConfigItem, DetailTabCounts } from './types';
 
 /** 출결 저장 전 업종별 부가 처리 (회차권 차감 등) */
@@ -42,12 +40,12 @@ export interface StudentDetailModalsProps {
     setIsStudentSaleModalOpen: (open: boolean) => void;
     isStudentTbPaymentModalOpen: boolean;
     setIsStudentTbPaymentModalOpen: (open: boolean) => void;
-    selectedStudentSaleForPay: import('@/types').TextbookSale | null;
-    setSelectedStudentSaleForPay: (sale: import('@/types').TextbookSale | null) => void;
+    selectedStudentSaleForPay: TextbookSale | null;
+    setSelectedStudentSaleForPay: (sale: TextbookSale | null) => void;
     isTbReceiptOpen: boolean;
     setIsTbReceiptOpen: (open: boolean) => void;
-    tbReceiptSale: import('@/types').TextbookSale | null;
-    setTbReceiptSale: (sale: import('@/types').TextbookSale | null) => void;
+    tbReceiptSale: TextbookSale | null;
+    setTbReceiptSale: (sale: TextbookSale | null) => void;
   };
   triggerRefresh: () => void;
   onCloseDetail: () => void;

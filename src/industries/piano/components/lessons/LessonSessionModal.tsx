@@ -2,7 +2,10 @@ import { useCallback, useEffect, useMemo, useState, type FC, type FormEvent } fr
 import { ChevronDown, ChevronUp, Music, Sparkles } from 'lucide-react';
 import { Modal, FormField, FORM_CONTROL_CLASS } from '@/shared/components';
 import { useConfirmDialog } from '@/shared/feedback/useConfirmDialog';
-import type { AttendanceStatus, ClassItem, LessonRecord, Student } from '@/types';
+import type { AttendanceStatus } from '@/capabilities/attendance/domain/types';
+import type { ClassItem } from '@/types/classItem';
+import type { LessonRecord } from '@/core/lessons/types';
+import type { Student } from '@/types/customer';
 
 export type LessonSessionForm = {
   status: AttendanceStatus;

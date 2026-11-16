@@ -1,4 +1,5 @@
-import type { AttendanceRecord, AttendanceStatus, Student } from '@/types';
+import type { AttendanceRecord, AttendanceStatus } from '@/capabilities/attendance/domain/types';
+import type { Student } from '@/types/customer';
 import type { AttendanceSession } from '@/capabilities/attendance';
 import { StorageService } from '@/services/storage';
 import { saveAttendanceWithPass } from '@/core/schedules/attendancePassAtomic';

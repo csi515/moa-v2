@@ -3,7 +3,7 @@ import { Calendar, Ticket } from 'lucide-react';
 import { ScheduleService } from '@/core/services/scheduleService';
 import { useStorageRefresh } from '@/hooks';
 import { useApp } from '@/context/AppContext';
-import type { Student } from '@/types';
+import type { Student } from '@/types/customer';
 import type { Booking } from '@/core/types/schedule';
 import { BOOKING_STATUS_LABEL } from '@/core/schedules/bookingStatusLabel';
 import { canCancelBookingAsParent } from '@/core/schedules/parentBookingCancelPolicy';

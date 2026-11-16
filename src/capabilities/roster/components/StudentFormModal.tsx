@@ -21,7 +21,7 @@ import { requestPlaceStudentOnTimetable } from '@/core/customer/studentJoinInbox
 import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
 import { settingsStorage } from '@/services/storage/settingsStorage';
 import { isSupabaseConfigured } from '@/lib/supabase';
-import { Student, Parent } from '@/types';
+import type { Student, Parent } from '@/types/customer';
 import {
   getCustomFieldsForIndustry,
   extractCustomFieldValues,
