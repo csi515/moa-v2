@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
+import { Modal } from '@/shared/components/ui/Modal';
 import type { RevisionRow } from '../services/riskAssessmentApprovalService';
+import { countHazardsInSnapshot } from '../domain/sopStepDocument';
 
 type Props = {
   open: boolean;
@@ -7,8 +9,6 @@ type Props = {
   revisions: RevisionRow[];
   onClose: () => void;
 };
-
-import { countHazardsInSnapshot } from '../domain/sopStepDocument';
 
 function hazardCount(snapshot: Record<string, unknown>): number {
   return countHazardsInSnapshot(snapshot);
@@ -30,27 +30,20 @@ export const RevisionHistoryModal: React.FC<Props> = ({
     };
   }, [revisions]);
 
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-end bg-black/40 sm:items-center sm:justify-center" role="dialog" aria-modal>
-      <div className="max-h-[90vh] w-full overflow-y-auto rounded-t-2xl bg-white p-4 sm:max-w-3xl sm:rounded-2xl">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h2 className="text-lg font-bold text-slate-900">개정 이력 대조</h2>
-            <p className="mt-1 text-sm text-slate-500">
-              현재 v{currentVersion.toFixed(1)} · 총 {Math.max(0, currentVersion - 1)}회 개정
-            </p>
-          </div>
-          <button type="button" className="h-12 px-4 font-semibold text-slate-600" onClick={onClose}>
-            닫기
-          </button>
-        </div>
-
+    <Modal
+      isOpen={open}
+      onClose={onClose}
+      title="개정 이력 대조"
+      description={`현재 v${currentVersion.toFixed(1)} · 총 ${Math.max(0, currentVersion - 1)}회 개정`}
+      maxWidth="2xl"
+      intent="view"
+    >
+      <div>
         {revisions.length === 0 ? (
-          <p className="mt-6 text-sm text-slate-500">승인된 개정 스냅샷이 없습니다.</p>
+          <p className="mt-2 text-sm text-slate-500">승인된 개정 스냅샷이 없습니다.</p>
         ) : (
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="mt-2 grid gap-3 sm:grid-cols-2">
             {[pair.left, pair.right].filter(Boolean).map((rev, idx) => (
               <article key={rev!.id} className="rounded-xl border border-slate-200 p-4">
                 <div className="text-xs font-bold uppercase tracking-wide text-rose-700">
@@ -97,6 +90,6 @@ export const RevisionHistoryModal: React.FC<Props> = ({
           </div>
         ) : null}
       </div>
-    </div>
+    </Modal>
   );
 };

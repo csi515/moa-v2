@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Modal } from '@/shared/components/ui/Modal';
 import { completeRepledge } from '../services/riskAssessmentApprovalService';
 
 type PendingRepledge = {
@@ -82,29 +83,33 @@ export const WorkerRepledgeModal: React.FC<Props> = ({ pending, processName, onC
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end bg-black/50" role="dialog" aria-modal>
-      <div className="w-full rounded-t-2xl bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-        <h2 className="text-lg font-black text-slate-900">개정된 작업표준 확인 및 안전 서약</h2>
-        <p className="mt-2 text-sm text-slate-600">
-          {processName ? `공정: ${processName}` : '해당 공정'} · v{pending.required_version}.0 개정본을
-          확인하고 작업 전 서약해 주세요. 서약 완료 전까지 당일 작업 출결/티켓이 활성화되지 않습니다.
-        </p>
-        <canvas
-          ref={canvasRef}
-          width={360}
-          height={140}
-          className="mt-3 w-full touch-none rounded-xl border border-slate-300 bg-slate-50"
-        />
-        {error ? <p className="mt-2 text-sm text-rose-600">{error}</p> : null}
+    <Modal
+      isOpen={true}
+      onClose={() => {}}
+      title="개정된 작업표준 확인 및 안전 서약"
+      description={`${processName ? `공정: ${processName}` : '해당 공정'} · v${pending.required_version}.0 개정본을 확인하고 작업 전 서약해 주세요. 서약 완료 전까지 당일 작업 출결/티켓이 활성화되지 않습니다.`}
+      maxWidth="md"
+      intent="form"
+      footer={
         <button
           type="button"
-          className="mt-3 h-12 w-full rounded-xl bg-slate-900 font-bold text-white"
+          className="h-12 w-full rounded-xl bg-slate-900 font-bold text-white"
           onClick={() => void submit()}
           disabled={busy}
         >
           {busy ? '저장 중…' : '확인 및 서약 완료'}
         </button>
+      }
+    >
+      <div>
+        <canvas
+          ref={canvasRef}
+          width={360}
+          height={140}
+          className="w-full touch-none rounded-xl border border-slate-300 bg-slate-50"
+        />
+        {error ? <p className="mt-2 text-sm text-rose-600">{error}</p> : null}
       </div>
-    </div>
+    </Modal>
   );
 };

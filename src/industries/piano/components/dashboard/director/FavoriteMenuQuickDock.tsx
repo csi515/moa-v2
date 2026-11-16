@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, type FC } from 'react';
+import { Modal } from '@/shared/components/ui/Modal';
 import {
   Star,
   Settings2,
@@ -155,118 +156,88 @@ export const FavoriteMenuQuickDock: FC<Props> = ({ onNavigate, activeTab }) => {
       </section>
 
       {/* 2. 즐겨찾기 편집 모달 */}
-      {isEditModalOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4"
-          onClick={() => setIsEditModalOpen(false)}
-          role="dialog"
-          aria-modal="true"
-        >
-          <div
-            className="bg-white rounded-3xl w-full max-w-lg shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* 모달 헤더 */}
-            <div className="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/80 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center">
-                  <Star className="w-5 h-5 fill-amber-400 text-amber-500" />
-                </div>
-                <div>
-                  <h4 className="text-base font-black text-slate-900">
-                    나만의 즐겨찾기 메뉴 편집
-                  </h4>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    자주 쓰는 메뉴를 최대 {MAX_FAVORITE_DOCK_ITEMS}개까지 선택하세요 ({tempFavorites.length}/{MAX_FAVORITE_DOCK_ITEMS})
-                  </p>
-                </div>
-              </div>
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        title="나만의 즐겨찾기 메뉴 편집"
+        description={`자주 쓰는 메뉴를 최대 ${MAX_FAVORITE_DOCK_ITEMS}개까지 선택하세요 (${tempFavorites.length}/${MAX_FAVORITE_DOCK_ITEMS})`}
+        maxWidth="lg"
+        footer={
+          <div className="flex items-center justify-between gap-2 w-full">
+            <button
+              type="button"
+              onClick={handleResetDefaults}
+              className="px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 bg-white border border-slate-200 hover:bg-slate-100 transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>기본값 복원</span>
+            </button>
+
+            <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => setIsEditModalOpen(false)}
-                className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-white border border-transparent hover:border-slate-200 transition-colors"
+                className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-200/60 transition-colors cursor-pointer"
               >
-                <X className="w-5 h-5" />
+                취소
               </button>
-            </div>
-
-            {/* 메뉴 선택 그리드 */}
-            <div className="p-4 sm:p-5 overflow-y-auto space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {PIANO_AVAILABLE_MENU_CATALOG.map((item) => {
-                  const isChecked = tempFavorites.includes(item.tab);
-                  return (
-                    <button
-                      key={item.tab}
-                      type="button"
-                      onClick={() => handleToggle(item.tab)}
-                      className={`p-3 rounded-2xl border text-left transition-all flex items-start gap-3 cursor-pointer ${
-                        isChecked
-                          ? 'bg-indigo-50/80 border-indigo-500 ring-2 ring-indigo-500/20'
-                          : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/60'
-                      }`}
-                    >
-                      <div
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${
-                          isChecked
-                            ? 'bg-indigo-600 text-white border-indigo-600'
-                            : 'bg-slate-100 text-slate-500 border-slate-200'
-                        }`}
-                      >
-                        {renderIcon(item.iconType, 'w-4 h-4')}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-black text-slate-900">
-                            {item.label}
-                          </span>
-                          {isChecked && (
-                            <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0">
-                              <Check className="w-3 h-3 stroke-[3]" />
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
-                          {item.description}
-                        </p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* 모달 풋터 */}
-            <div className="p-4 border-t border-slate-100 bg-slate-50/60 flex items-center justify-between gap-2">
               <button
                 type="button"
-                onClick={handleResetDefaults}
-                className="px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 bg-white border border-slate-200 hover:bg-slate-100 transition-colors flex items-center gap-1.5 cursor-pointer"
+                onClick={handleSaveFavorites}
+                className="px-5 py-2.5 rounded-xl text-xs font-black text-white bg-indigo-600 hover:bg-indigo-700 shadow-xs transition-colors cursor-pointer"
               >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>기본값 복원</span>
+                저장하기
               </button>
-
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsEditModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-200/60 transition-colors cursor-pointer"
-                >
-                  취소
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSaveFavorites}
-                  className="px-5 py-2.5 rounded-xl text-xs font-black text-white bg-indigo-600 hover:bg-indigo-700 shadow-xs transition-colors cursor-pointer"
-                >
-                  저장하기
-                </button>
-              </div>
             </div>
           </div>
+        }
+      >
+        {/* 메뉴 선택 그리드 */}
+        <div className="p-1 space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {PIANO_AVAILABLE_MENU_CATALOG.map((item) => {
+              const isChecked = tempFavorites.includes(item.tab);
+              return (
+                <button
+                  key={item.tab}
+                  type="button"
+                  onClick={() => handleToggle(item.tab)}
+                  className={`p-3 rounded-2xl border text-left transition-all flex items-start gap-3 cursor-pointer ${
+                    isChecked
+                      ? 'bg-indigo-50/80 border-indigo-500 ring-2 ring-indigo-500/20'
+                      : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/60'
+                  }`}
+                >
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${
+                      isChecked
+                        ? 'bg-indigo-600 text-white border-indigo-600'
+                        : 'bg-slate-100 text-slate-500 border-slate-200'
+                    }`}
+                  >
+                    {renderIcon(item.iconType, 'w-4 h-4')}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-black text-slate-900">
+                        {item.label}
+                      </span>
+                      {isChecked && (
+                        <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                          <Check className="w-3 h-3 stroke-[3]" />
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
+                      {item.description}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      )}
+      </Modal>
     </>
   );
 };

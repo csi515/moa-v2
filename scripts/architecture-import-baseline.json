@@ -821,7 +821,7 @@
   },
   {
     "file": "src/capabilities/resources/ui/UniversalResourceCalendarView.tsx",
-    "spec": "@/capabilities/approval_workflow/services/approvalWorkflowService",
+    "spec": "@/capabilities/approval_workflow",
     "kind": "capability-cross"
   },
   {

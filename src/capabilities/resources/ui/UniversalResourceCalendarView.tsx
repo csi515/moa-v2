@@ -38,6 +38,7 @@ import {
 } from '../reservationService';
 import { ResourceMasterSettingsModal } from './ResourceMasterSettingsModal';
 import { ResourceReservationRequestModal } from './ResourceReservationRequestModal';
+import { Modal } from '@/shared/components/ui/Modal';
 import { ResourceApprovalInboxView } from './ResourceApprovalInboxView';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { listApprovalOrgMembers } from '@/capabilities/approval_workflow';
@@ -634,14 +635,37 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
 
       {/* 7. 예약 상세·취소 시트 */}
       {selectedBooking ? (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/50 p-4">
-          <div
-            role="dialog"
-            aria-modal="true"
-            className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-5 shadow-xl"
-          >
-            <h3 className="text-base font-bold text-slate-900">예약 상세</h3>
-            <dl className="mt-3 space-y-2 text-sm text-slate-700">
+        <Modal
+          isOpen={true}
+          onClose={() => setSelectedBooking(null)}
+          title="예약 상세"
+          maxWidth="sm"
+          intent="view"
+          footer={
+            <div className="flex w-full flex-col gap-2 sm:flex-row-reverse">
+              {canCancelSelected &&
+              (selectedBooking.status === 'approved' || selectedBooking.status === 'pending') ? (
+                <button
+                  type="button"
+                  disabled={cancelBusy}
+                  onClick={() => void handleCancelBooking()}
+                  className="min-h-12 flex-1 rounded-xl bg-rose-600 px-4 text-sm font-semibold text-white disabled:opacity-60"
+                >
+                  {cancelBusy ? '취소 중…' : '예약 취소'}
+                </button>
+              ) : null}
+              <button
+                type="button"
+                onClick={() => setSelectedBooking(null)}
+                className="min-h-12 flex-1 rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700"
+              >
+                닫기
+              </button>
+            </div>
+          }
+        >
+          <div>
+            <dl className="space-y-2 text-sm text-slate-700">
               <div className="flex justify-between gap-2">
                 <dt className="text-slate-500">예약자</dt>
                 <dd className="font-medium">{displayBookingLabel(selectedBooking)}</dd>
@@ -665,31 +689,11 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                 </div>
               ) : null}
             </dl>
-            <div className="mt-5 flex flex-col gap-2 sm:flex-row-reverse">
-              {canCancelSelected &&
-              (selectedBooking.status === 'approved' || selectedBooking.status === 'pending') ? (
-                <button
-                  type="button"
-                  disabled={cancelBusy}
-                  onClick={() => void handleCancelBooking()}
-                  className="min-h-12 flex-1 rounded-xl bg-rose-600 px-4 text-sm font-semibold text-white disabled:opacity-60"
-                >
-                  {cancelBusy ? '취소 중…' : '예약 취소'}
-                </button>
-              ) : null}
-              <button
-                type="button"
-                onClick={() => setSelectedBooking(null)}
-                className="min-h-12 flex-1 rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-700"
-              >
-                닫기
-              </button>
-            </div>
             {!canCancelSelected ? (
-              <p className="mt-2 text-xs text-slate-500">본인 예약만 취소할 수 있습니다. 총무·사업주는 예외입니다.</p>
+              <p className="mt-4 text-xs text-slate-500">본인 예약만 취소할 수 있습니다. 총무·사업주는 예외입니다.</p>
             ) : null}
           </div>
-        </div>
+        </Modal>
       ) : null}
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Modal } from '@/shared/components/ui/Modal';
 import { validateRejectReason } from '../domain/approvalEngine';
 
 type Mode = 'approve' | 'reject' | null;
@@ -140,19 +141,41 @@ export const ApprovalActionModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end bg-black/40 sm:items-center sm:justify-center" role="dialog" aria-modal>
-      <div className="w-full rounded-t-2xl bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:max-w-lg sm:rounded-2xl">
-        <h2 className="text-lg font-bold text-slate-900">{title}</h2>
-        <p className="mt-1 text-sm text-slate-500">
-          {mode === 'approve'
-            ? stepOrder === 2
-              ? '검토 승인 후 사업자(사업주)에게 상신합니다.'
-              : '최종 승인(사업주) — 문서가 잠기고 개정 이력이 보존됩니다.'
-            : '반려 사유(보완 요청 사항)를 입력해 주세요.'}
-        </p>
-
+    <Modal
+      isOpen={open}
+      onClose={onClose}
+      title={title}
+      description={
+        mode === 'approve'
+          ? stepOrder === 2
+            ? '검토 승인 후 사업자(사업주)에게 상신합니다.'
+            : '최종 승인(사업주) — 문서가 잠기고 개정 이력이 보존됩니다.'
+          : '반려 사유(보완 요청 사항)를 입력해 주세요.'
+      }
+      maxWidth="lg"
+      intent="form"
+      footer={
+        <div className="flex w-full gap-2">
+          <button type="button" className="h-12 flex-1 rounded-xl border border-slate-300 font-bold" onClick={onClose} disabled={busy}>
+            취소
+          </button>
+          <button
+            type="button"
+            className={[
+              'h-12 flex-1 rounded-xl font-bold text-white',
+              mode === 'approve' ? 'bg-emerald-700' : 'bg-rose-700',
+            ].join(' ')}
+            onClick={() => void (mode === 'approve' ? handleApprove() : handleReject())}
+            disabled={busy}
+          >
+            {busy ? '처리 중…' : mode === 'approve' ? (stepOrder === 2 ? '검토 승인 / 상신' : '최종 승인') : '반려'}
+          </button>
+        </div>
+      }
+    >
+      <div>
         {mode === 'approve' ? (
-          <div className="mt-3 space-y-3">
+          <div className="space-y-3">
             {requireNextAssignee ? (
               <label className="block text-sm">
                 <span className="font-semibold text-slate-700">최종 승인자</span>
@@ -205,7 +228,7 @@ export const ApprovalActionModal: React.FC<Props> = ({
             </div>
           </div>
         ) : (
-          <label className="mt-3 block text-sm">
+          <label className="block text-sm">
             <span className="font-semibold text-slate-700">반려 사유(보완 요청 사항)</span>
             <textarea
               className="mt-1 min-h-24 w-full rounded-lg border border-slate-300 p-3"
@@ -217,24 +240,7 @@ export const ApprovalActionModal: React.FC<Props> = ({
         )}
 
         {error ? <p className="mt-2 text-sm text-rose-600">{error}</p> : null}
-
-        <div className="mt-4 flex gap-2">
-          <button type="button" className="h-12 flex-1 rounded-xl border border-slate-300 font-bold" onClick={onClose} disabled={busy}>
-            취소
-          </button>
-          <button
-            type="button"
-            className={[
-              'h-12 flex-1 rounded-xl font-bold text-white',
-              mode === 'approve' ? 'bg-emerald-700' : 'bg-rose-700',
-            ].join(' ')}
-            onClick={() => void (mode === 'approve' ? handleApprove() : handleReject())}
-            disabled={busy}
-          >
-            {busy ? '처리 중…' : mode === 'approve' ? (stepOrder === 2 ? '검토 승인 / 상신' : '최종 승인') : '반려'}
-          </button>
-        </div>
       </div>
-    </div>
+    </Modal>
   );
 };

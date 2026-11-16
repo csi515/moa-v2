@@ -57,21 +57,11 @@ export const ALLOWED_MODAL_FILES = new Set([
 
 /**
  * 기존 레거시 인라인 모달 파일 베이스라인.
- * 점진적으로 공통 Modal로 교체하며 제거해 나감. 신규 추가는 차단됨.
+ * Phase 3에서 12개 대상 파일 전수 공통 Modal로 전환 완료하여 부채 0건 달성.
+ * 신규 인라인 모달 추가는 엄격히 차단됨.
  */
 export const LEGACY_MODAL_BASELINE = new Set([
-  'src/capabilities/mbo/ui/MboRevisionTimelineModal.tsx',
-  'src/capabilities/mbo/ui/ProjectCategoryManager.tsx',
-  'src/capabilities/resources/ui/UniversalResourceCalendarView.tsx',
-  'src/capabilities/sop_risk_assessment/components/ApprovalActionModal.tsx',
-  'src/capabilities/sop_risk_assessment/components/RevisionHistoryModal.tsx',
-  'src/capabilities/sop_risk_assessment/components/SopDocumentModals.tsx',
-  'src/capabilities/sop_risk_assessment/components/WorkerRepledgeModal.tsx',
-  'src/industries/piano/components/dashboard/director/DirectorInteractiveOnboardingWizard.tsx',
-  'src/industries/piano/components/dashboard/director/FavoriteMenuQuickDock.tsx',
-  'src/modules/parent/components/ParentEnrollmentPinEditor.tsx',
-  'src/pages/organization/OrganizationGovernancePanel.tsx',
-  'src/shared/components/PwaInstallPrompt.tsx',
+  // 12개 레거시 모달 전수 전환 완료 (잔여 0건)
 ]);
 
 export function scanUiConsistencyViolations() {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { X } from 'lucide-react';
+import { Modal } from '@/shared/components/ui/Modal';
 import { MboService } from '../services/mboService';
 import { formatRevisionHistory, type FormattedRevisionItem } from '../domain/mboVisibilityEngine';
 
@@ -46,17 +46,15 @@ export const MboRevisionTimelineModal: React.FC<Props> = ({
       });
   }, [open, goalId, currentTargetValue, currentDueDate]);
 
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center">
-      <div role="dialog" aria-modal="true" className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-t-2xl bg-white p-4 sm:rounded-2xl">
-        <header className="mb-3 flex items-center justify-between">
-          <h2 className="text-base font-bold">수정 이력 비교 타임라인</h2>
-          <button type="button" className="min-h-12 min-w-12" aria-label="닫기" onClick={onClose}>
-            <X className="h-5 w-5" />
-          </button>
-        </header>
+    <Modal
+      isOpen={open}
+      onClose={onClose}
+      title="수정 이력 비교 타임라인"
+      maxWidth="lg"
+      intent="view"
+    >
+      <div className="space-y-3">
         {error ? <p className="text-sm text-rose-600">{error}</p> : null}
         {items.length === 0 && !error ? (
           <p className="text-sm text-slate-500">수정 이력이 없습니다.</p>
@@ -75,6 +73,6 @@ export const MboRevisionTimelineModal: React.FC<Props> = ({
           </ol>
         )}
       </div>
-    </div>
+    </Modal>
   );
 };

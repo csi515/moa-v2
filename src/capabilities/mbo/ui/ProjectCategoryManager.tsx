@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Plus, Archive, RotateCcw, Tag } from 'lucide-react';
+import { Plus, Archive, RotateCcw } from 'lucide-react';
+import { Modal } from '@/shared/components/ui/Modal';
 import {
   listActiveCategories,
   validateCategoryDraft,
@@ -68,24 +69,16 @@ export const ProjectCategoryManager: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end bg-black/40 sm:items-center sm:justify-center" role="dialog" aria-modal>
-      <div className="max-h-[90vh] w-full overflow-y-auto rounded-t-2xl bg-white p-4 sm:max-w-lg sm:rounded-2xl">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
-              <Tag className="h-5 w-5 text-indigo-600" />
-              프로젝트 분류 관리
-            </h2>
-            <p className="mt-1 text-xs text-slate-500">
-              연구·품질·기술 등 분류를 사업장에서 자유롭게 추가·이름변경할 수 있습니다. 삭제는 보관(비활성)만 가능합니다.
-            </p>
-          </div>
-          <button type="button" className="h-12 px-3 text-sm font-semibold text-slate-600" onClick={onClose}>
-            닫기
-          </button>
-        </div>
-
-        <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+    <Modal
+      isOpen={true}
+      onClose={onClose}
+      title="프로젝트 분류 관리"
+      description="연구·품질·기술 등 분류를 사업장에서 자유롭게 추가·이름변경할 수 있습니다. 삭제는 보관(비활성)만 가능합니다."
+      maxWidth="lg"
+      intent="form"
+    >
+      <div>
+        <div className="flex flex-col gap-2 sm:flex-row">
           <input
             className="h-12 flex-1 rounded-lg border border-slate-300 px-3 text-sm"
             placeholder="새 분류 이름 (예: 기술대응)"
@@ -198,6 +191,6 @@ export const ProjectCategoryManager: React.FC<Props> = ({
           </ul>
         ) : null}
       </div>
-    </div>
+    </Modal>
   );
 };

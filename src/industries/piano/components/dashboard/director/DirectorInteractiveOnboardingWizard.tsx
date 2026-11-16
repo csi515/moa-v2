@@ -1,6 +1,7 @@
 import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 
-import React, { useEffect,  useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Modal } from '@/shared/components/ui/Modal';
 import {
   type OnboardingOperatingHours,
   type OnboardingStudentDraft,
@@ -163,52 +164,35 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
 
   const timeSlots = generateAvailableLessonTimeSlots(hours.startTime, hours.endTime, 60);
 
-  useEscapeKey(onClose);
-
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(15, 23, 42, 0.7)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 9999,
-        padding: '16px',
-        backdropFilter: 'blur(4px)',
-      }}
-      role="dialog"
-      aria-modal="true"
-      onClick={onClose}
-    >
-      <div
-        style={{
-          backgroundColor: '#ffffff',
-          borderRadius: '20px',
-          width: '100%',
-          maxWidth: '680px',
-          maxHeight: '92vh',
-          display: 'flex',
-          flexDirection: 'column',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.3)',
-          overflow: 'hidden',
-          fontFamily: 'system-ui, -apple-system, sans-serif',
-        }}
-        onClick={(e) => e.stopPropagation()}
+    <>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        title="3분 만에 끝내는 피아노 학원 기본 세팅"
+        maxWidth="2xl"
+        hideHeader={true}
       >
-        {/* 상단 헤더 */}
         <div
           style={{
-            padding: '20px 24px',
-            borderBottom: '1px solid #e2e8f0',
-            background: 'linear-gradient(to right, #4f46e5, #6366f1)',
-            color: '#ffffff',
             display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            fontFamily: 'system-ui, -apple-system, sans-serif',
           }}
         >
+          {/* 상단 헤더 */}
+          <div
+            style={{
+              padding: '20px 24px',
+              borderBottom: '1px solid #e2e8f0',
+              background: 'linear-gradient(to right, #4f46e5, #6366f1)',
+              color: '#ffffff',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ fontSize: '24px' }}>🎹</span>
             <div>
@@ -891,7 +875,8 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
             </button>
           )}
         </div>
-      </div>
+        </div>
+      </Modal>
 
       {/* 엑셀 복사/붙여넣기 대량 등록 모달 연동 */}
       {isBulkImportOpen && (
@@ -919,6 +904,6 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
           }}
         />
       )}
-    </div>
+    </>
   );
 };

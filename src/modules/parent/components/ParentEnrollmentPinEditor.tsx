@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { KeyRound, Loader2, RefreshCw, X } from 'lucide-react';
+import { Modal } from '@/shared/components/ui/Modal';
+import { KeyRound, Loader2, RefreshCw } from 'lucide-react';
 import {
   ENROLLMENT_STATUS_LABELS,
   ACTIVE_ENROLLMENT_STATUSES,
@@ -111,37 +112,14 @@ export const ParentEnrollmentPinEditor: React.FC<ParentEnrollmentPinEditorProps>
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 bg-slate-900/50 flex items-end sm:items-center justify-center p-0 sm:p-4"
-      role="presentation"
-      onClick={onClose}
+    <Modal
+      isOpen={true}
+      onClose={onClose}
+      title={`${childName} 출입 PIN`}
+      description={`${enrollment.organizationName} · 상태: ${ENROLLMENT_STATUS_LABELS[enrollment.status]}`}
+      maxWidth="md"
     >
-      <div
-        className="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-xl max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-labelledby="pin-editor-title"
-      >
-        <div className="flex items-start justify-between gap-3 mb-4">
-          <div className="min-w-0">
-            <p className="text-xs text-slate-500">{enrollment.organizationName}</p>
-            <h2 id="pin-editor-title" className="text-lg font-black text-slate-900 truncate">
-              {childName} 출입 PIN
-            </h2>
-            <p className="text-xs text-slate-500 mt-1">
-              상태: {ENROLLMENT_STATUS_LABELS[enrollment.status]}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-2 rounded-xl hover:bg-slate-100 min-w-[44px] min-h-[44px] flex items-center justify-center"
-            aria-label="닫기"
-          >
-            <X className="w-5 h-5 text-slate-500" />
-          </button>
-        </div>
-
+      <div className="p-1 space-y-4">
         {!canEdit ? (
           <p className="text-sm text-slate-600 bg-slate-50 rounded-xl p-4">
             퇴원·졸업된 기록은 PIN을 변경할 수 없습니다.
@@ -218,6 +196,6 @@ export const ParentEnrollmentPinEditor: React.FC<ParentEnrollmentPinEditorProps>
           </div>
         )}
       </div>
-    </div>
+    </Modal>
   );
 };

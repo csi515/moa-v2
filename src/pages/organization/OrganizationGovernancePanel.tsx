@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Modal } from '@/shared/components/ui/Modal';
 import type { DepartmentScopeType } from '@/core/organizations/departmentScope';
 import type { DynamicMemberRow, DynamicRoleRow } from '@/core/organizations/services/dynamicRoleService';
 import type { DepartmentMemberRow, OrgNode } from './useOrganizationTree';
@@ -262,30 +263,37 @@ export const OrganizationGovernancePanel: React.FC<Props> = ({
         </div>
       ) : null}
 
-      {revokeTarget ? (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center">
-          <div role="dialog" aria-modal="true" className="w-full max-w-md rounded-t-2xl bg-white p-4 sm:rounded-2xl">
-            <p className="text-sm text-slate-800">{ORG_CHART_COPY.revokeWarn}</p>
-            <div className="mt-4 flex justify-end gap-2">
-              <button type="button" className="min-h-11 px-4" onClick={() => setRevokeTarget(null)}>
-                취소
-              </button>
-              <button
-                type="button"
-                className="min-h-11 rounded-lg bg-rose-700 px-4 text-white"
-                disabled={busy}
-                onClick={() => {
-                  const target = revokeTarget;
-                  setRevokeTarget(null);
-                  void run(() => onRevokeRole(target));
-                }}
-              >
-                회수 실행
-              </button>
-            </div>
+      <Modal
+        isOpen={Boolean(revokeTarget)}
+        onClose={() => setRevokeTarget(null)}
+        title="권한 회수 확인"
+        maxWidth="md"
+        footer={
+          <div className="flex justify-end gap-2 w-full">
+            <button
+              type="button"
+              className="min-h-11 px-4 text-sm font-bold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
+              onClick={() => setRevokeTarget(null)}
+            >
+              취소
+            </button>
+            <button
+              type="button"
+              className="min-h-11 rounded-xl bg-rose-700 px-4 text-sm font-bold text-white hover:bg-rose-800 disabled:opacity-50 cursor-pointer"
+              disabled={busy}
+              onClick={() => {
+                const target = revokeTarget;
+                setRevokeTarget(null);
+                if (target) void run(() => onRevokeRole(target));
+              }}
+            >
+              회수 실행
+            </button>
           </div>
-        </div>
-      ) : null}
+        }
+      >
+        <p className="text-sm text-slate-800">{ORG_CHART_COPY.revokeWarn}</p>
+      </Modal>
     </section>
   );
 };
