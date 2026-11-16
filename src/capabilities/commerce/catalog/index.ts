@@ -7,3 +7,4 @@ export type {
   ProductVariantSaveInput,
 } from './types';
 export { productService } from './productService';
+export * from './productBulkImportEngine';

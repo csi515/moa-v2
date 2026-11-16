@@ -13,6 +13,7 @@ export type {
   ProductVariantSaveInput,
 } from './product';
 export { productService } from './product';
+export * from '../catalog/productBulkImportEngine';
 
 export type {
   Inventory,

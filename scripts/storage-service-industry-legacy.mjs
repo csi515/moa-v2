@@ -32,7 +32,6 @@ export const STORAGE_SERVICE_INDUSTRY_LEGACY_FILES = new Set([
   'src/industries/piano/components/dashboard/director/DirectorInteractiveOnboardingWizard.tsx',
   'src/industries/piano/components/schedule/PianoTimetableStudentPicker.tsx',
   'src/industries/piano/components/schedule/usePianoLessonTimetable.ts',
-  'src/industries/piano/components/schedule/pianoTimetablePlacement.ts',
   'src/industries/piano/components/textbooks/NewSaleModal.tsx',
   'src/industries/piano/components/textbooks/StockAdjustModal.tsx',
   'src/industries/piano/components/textbooks/TextbookManagementView.tsx',

@@ -159,7 +159,6 @@ export const TYPES_BARREL_LEGACY_IMPORT_FILES = new Set([
   'src/industries/piano/components/schedule/PianoTimetablePanels.tsx',
   'src/industries/piano/components/schedule/PianoTimetableStudentPicker.tsx',
   'src/industries/piano/components/schedule/pianoTimetablePlacement.test.ts',
-  'src/industries/piano/components/schedule/pianoTimetablePlacement.ts',
   'src/industries/piano/components/schedule/usePianoLessonTimetable.ts',
   'src/industries/piano/components/students/detail/StudentDetailPracticeTab.tsx',
   'src/industries/piano/components/students/detail/StudentDetailTextbooksTab.tsx',

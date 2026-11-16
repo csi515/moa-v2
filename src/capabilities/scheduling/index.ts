@@ -8,3 +8,4 @@ export * from './notifications';
 export * from './domain/calendarConstraintEngine';
 export * from './domain/calendarRecurringEngine';
 export * from './domain/timelineGridEngine';
+export * from './domain/timetablePlacementEngine';
