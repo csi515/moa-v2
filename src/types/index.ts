@@ -1,7 +1,4 @@
-import type { PickupAddress } from '@/capabilities/transport/types';
-import type { StaffGrants } from '@/core/staff/staffGrants';
 import type { StudentBillingMode } from '@/core/students/billingMode';
-import type { TeacherPayType } from '@/capabilities/billing/finance/billingLedgerTypes';
 
 /**
  * Legacy compatibility barrel.
@@ -12,111 +9,22 @@ import type { TeacherPayType } from '@/capabilities/billing/finance/billingLedge
 /** @deprecated 신규 코드는 `@/core/auth/types/sessionUser` */
 export type { User, UserRole } from '@/core/auth/types/sessionUser';
 
-export type StudentStatus = 'active' | 'leave' | 'withdrawn';
-
 /** @deprecated 신규 코드는 `@/core/students/billingMode` */
 export type { StudentBillingMode } from '@/core/students/billingMode';
 /** @deprecated 신규 코드는 `@/core/students/billingMode` */
 export { STUDENT_BILLING_MODE_LABEL, normalizeBillingMode } from '@/core/students/billingMode';
 
-/**
- * @deprecated 전역 union 아님. 저장은 string. 값 검증은 Industry
- * (`PianoStudentLevel`, `DaycareAgeClass`, `GymClassLevel`).
- */
-export type StudentLevel = string;
+/** @deprecated 신규 코드는 `@/types/customer` */
+export * from './customer';
 
-export interface Student {
-  id: string;
-  studentNumber: string;
-  name: string;
-  gender: 'M' | 'F';
-  birthDate: string;
-  school: string;
-  grade: string;
-  /** @deprecated parent_student_links에서 파생 — UI는 getPrimaryGuardian 사용 */
-  parentId?: string;
-  /** @deprecated */
-  parentName?: string;
-  /** @deprecated */
-  parentPhone?: string;
-  phone?: string;
-  emergencyContact?: string;
-  address?: string;
-  usesShuttleService?: boolean;
-  pickupAddresses?: PickupAddress[];
-  joinDate: string;
-  leaveDate?: string;
-  status: StudentStatus;
-  teacherId: string;
-  teacherName: string;
-  classIds: string[];
-  /** Industry 선택지 문자열. union 아님 */
-  level: string;
-  billingMode?: StudentBillingMode;
-  tuitionFee: number;
-  paymentDay: number;
-  specialNotes?: string;
-  memo?: string;
-  avatarColor?: string;
-  checkInPinSet?: boolean;
-  userId?: string | null;
-  metadata?: Record<string, any>;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Parent {
-  id: string;
-  name: string;
-  phone: string;
-  email?: string;
-  address?: string;
-  studentIds: string[];
-  notes?: string;
-  createdAt: string;
-}
-
-export interface Teacher {
-  id: string;
-  name: string;
-  phone: string;
-  email?: string;
-  userId?: string | null;
-  hireDate: string;
-  status: 'active' | 'inactive' | 'resigned';
-  specialty?: string;
-  salary?: number;
-  hourlyRate?: number;
-  payType?: TeacherPayType;
-  color?: string;
-  memo?: string;
-  classIds?: string[];
-  grants?: StaffGrants;
-  defaultScheduleVisibility?: 'PUBLIC' | 'FREE_BUSY_ONLY' | 'PRIVATE';
-  roleTitle?: string;
-  organizationId?: string;
-}
+/** @deprecated 신규 코드는 `@/types/teacher` */
+export * from './teacher';
 
 /** @deprecated 신규 코드는 `@/core/staff/workWindow` */
 export type { DayOfWeek, StaffWorkWindow } from '@/core/staff/workWindow';
 
-export interface ClassItem {
-  id: string;
-  name: string;
-  teacherId: string;
-  teacherName: string;
-  daysOfWeek: import('@/core/staff/workWindow').DayOfWeek[];
-  startTime: string;
-  endTime: string;
-  capacity: number;
-  level?: string;
-  targetLevel?: string;
-  fee?: number;
-  textbook?: string;
-  room: string;
-  memo?: string;
-  color?: string;
-}
+/** @deprecated 신규 코드는 `@/types/classItem` */
+export * from './classItem';
 
 /** @deprecated 신규 코드는 `@/capabilities/attendance` */
 export type {
