@@ -1,4 +1,4 @@
-import type { DayOfWeek } from '@/types';
+import type { DayOfWeek } from '@/core/staff/workWindow';
 
 export const DAYS_OF_WEEK: DayOfWeek[] = ['월', '화', '수', '목', '금', '토', '일'];
 

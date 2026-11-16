@@ -1,4 +1,5 @@
 import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
+import { callRpc } from '@/shared/kernel';
 import {
   computeEarnPoints,
   readOrgPointsEarnConfig,
@@ -213,7 +214,7 @@ export async function applyPointManualAdjust(params: {
   description?: string;
 }) {
   const client = getCoreClient();
-  const { data, error } = await (client.rpc as any)('apply_point_manual_adjust', {
+  const { data, error } = await callRpc<Record<string, unknown>>(client, 'apply_point_manual_adjust', {
     p_organization_id: params.organizationId,
     p_customer_id: params.customerId,
     p_amount: params.amount,

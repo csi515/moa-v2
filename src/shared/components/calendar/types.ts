@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { DayOfWeek } from '@/types';
+import type { DayOfWeek } from '@/core/staff/workWindow';
 
 export type CalendarViewMode = 'month' | 'week' | 'day' | 'timeline';
 export type CalendarEngineMode = 'recurring_timetable' | 'appointment_timeline';

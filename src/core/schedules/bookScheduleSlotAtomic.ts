@@ -147,7 +147,7 @@ export async function bookScheduleSlotAtomic(
   // 2. 데모/오프라인 환경 Fallback
   const bookings = StorageService.getBookings();
   const existingForSlot = bookings.filter(
-    (b) => (b as any).scheduleId === scheduleId || (params.startsAt && b.startsAt === params.startsAt)
+    (b) => (b as unknown as { scheduleId?: string }).scheduleId === scheduleId || (params.startsAt && b.startsAt === params.startsAt)
   );
 
   const fallbackBooking: Booking = StorageService.saveBooking({

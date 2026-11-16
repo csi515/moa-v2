@@ -28,6 +28,7 @@ import {
   Wrench,
 } from 'lucide-react';
 import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
+import { callRpc } from '@/shared/kernel';
 import { createInitialDepartments } from '@/core/organizations/services/organizationService';
 import { useTenant } from '@/core/auth/context/TenantContext';
 import { applyDomainErrorToForm } from '@/core/utils/formErrorAdapter';
@@ -211,7 +212,7 @@ function formatCapabilityLabel(cap: string): string {
   return CAPABILITY_LABEL_MAP[cap] || getCapabilityDisplayName(cap);
 }
 
-const CATEGORY_TABS = [
+const CATEGORY_TABS: Array<{ id: string; label: string; icon?: React.ComponentType<{ className?: string }> }> = [
   { id: 'all', label: '전체' },
   { id: 'education', label: '교육·학원' },
   { id: 'fitness', label: '운동·피트니스' },
@@ -623,20 +624,13 @@ export const QuickSetupPage: React.FC = () => {
         setup_departments: shouldAskDepartmentSetup(selectedIndustry, activePreset?.category) ? setupDepartments : [],
       };
 
-      const { data: rpcResult, error } = await getCoreClient().rpc(
-        'create_organization_with_preset',
-        {
-          p_org_name: trimmedName,
-          p_industry: selectedIndustry,
-          p_custom_config: payload as any,
-        }
-      );
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      const result = rpcResult as any;
+      const { data: rpcResult, error } = await callRpc<{ success?: boolean; organization_id?: string }>(getCoreClient(), 'create_organization_with_preset', {
+        p_org_name: trimmedName,
+        p_industry: selectedIndustry,
+        p_custom_config: payload,
+      });
+      if (error) throw new Error(error.message);
+      const result = rpcResult;
       if (!result?.success || !result?.organization_id) {
         throw new Error('사업장 생성 결과가 올바르지 않습니다.');
       }
@@ -942,7 +936,7 @@ export const QuickSetupPage: React.FC = () => {
                     {/* 카테고리 필터 탭 */}
                     <div className="flex flex-wrap gap-1.5">
                       {CATEGORY_TABS.map((tab) => {
-                        const TabIcon = (tab as any).icon;
+                        const TabIcon = tab.icon;
                         return (
                           <button
                             key={tab.id}

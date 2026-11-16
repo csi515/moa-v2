@@ -1,4 +1,4 @@
-import type { DayOfWeek } from '@/types';
+import type { DayOfWeek } from '@/core/staff/workWindow';
 
 /** JS getDay() 인덱스(0=일) → 한국어 요일 */
 export const DAY_OF_WEEK_BY_JS_INDEX: readonly DayOfWeek[] = [

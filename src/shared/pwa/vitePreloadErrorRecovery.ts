@@ -75,7 +75,7 @@ export function setupVitePreloadErrorRecovery(): () => void {
   const listener = (event: Event) => {
     // 기본 에러 동작 방지 후 복구 바운더리 실행
     event.preventDefault();
-    const payload = (event as any).payload ?? (event as CustomEvent).detail;
+    const payload = (event as unknown as { payload?: unknown }).payload ?? (event as CustomEvent).detail;
     handlePreloadError(payload);
   };
 

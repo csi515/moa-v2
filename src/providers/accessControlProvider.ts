@@ -5,7 +5,7 @@ import { getStoredLocationId, locationService } from "@/core/locations/locationS
 import { createAuthorizationApi } from "@/core/authorization/authorizationApi";
 import { isKnownPermission, isKnownScopeType } from "@/core/authorization/registry";
 import type { AuthorizationGrant, AuthScopeType, Permission } from "@/core/authorization/types";
-import type { User } from "@/types";
+import type { User } from '@/core/auth/types/sessionUser';
 import { evaluateCustomPermission } from "@/core/authorization";
 import { hasStandardPermission, resolveStandardPermissionKey } from "@/core/authorization/standardPermissionKeys";
 import { canManageRoles, canTransferOwnership, evaluateMemberAccess, isRolePermissionMap } from "@/domain/permissions";

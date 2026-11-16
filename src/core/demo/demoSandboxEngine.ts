@@ -134,7 +134,7 @@ export const DemoSandboxEngine = {
           status: p.status,
           joinDate: todayStr,
           notes: `${DEMO_TAG} ${p.course}`,
-        } as any);
+        } as unknown as Parameters<typeof StorageService.saveStudent>[0]);
 
         if (student?.id) {
           count++;
@@ -146,7 +146,7 @@ export const DemoSandboxEngine = {
             status: 'present',
             time: '15:30',
             note: `${DEMO_TAG} 정규 레슨 등원 완료`,
-          } as any);
+          } as unknown as Parameters<typeof StorageService.saveAttendanceRecord>[0]);
         }
       } catch (err) {
         console.error('[DemoSandboxEngine] Failed to inject item', err);

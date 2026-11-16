@@ -3,10 +3,10 @@ import brand from '../../../brand.json';
 /** 앱 표시 이름·슬로건 (스토어·런처·UI 공통) */
 export const appBrand = {
   fullName:
-    ((typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_APP_NAME) as string | undefined)?.trim() ||
+    ((typeof import.meta !== 'undefined' && (import.meta as unknown as { env?: Record<string, string> }).env?.VITE_APP_NAME) as string | undefined)?.trim() ||
     brand.fullName,
   shortName:
-    ((typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_APP_SHORT_NAME) as string | undefined)?.trim() ||
+    ((typeof import.meta !== 'undefined' && (import.meta as unknown as { env?: Record<string, string> }).env?.VITE_APP_SHORT_NAME) as string | undefined)?.trim() ||
     brand.shortName,
   /** MOA 약어 */
   acronym: brand.acronym,

@@ -134,7 +134,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
   const orgName = currentOrganization?.name || '사내 업무 포털';
 
   const userFeaturePermissions = useMemo<Record<string, boolean>>(() => {
-    const raw = (activeUser as any)?.feature_permissions || {};
+    const raw = (activeUser as unknown as { feature_permissions?: Record<string, boolean> })?.feature_permissions || {};
     return typeof raw === 'object' && raw !== null ? raw : {};
   }, [activeUser]);
 
@@ -460,10 +460,10 @@ export const CompanyAppLauncherDashboard: React.FC<{
               <p className="mt-1 text-sm text-slate-500">{todayStr} · 사내 업무 런처</p>
               <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
                 <span className="font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg">
-                  🏢 {(activeUser as any)?.department || '본사'}
+                  🏢 {(activeUser as unknown as { department?: string })?.department || '본사'}
                 </span>
                 <span className="font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg">
-                  👤 {(activeUser as any)?.role || (activeUser as any)?.customRole?.name || '임직원'}
+                  👤 {(activeUser as unknown as { role?: string; customRole?: { name?: string } })?.role || (activeUser as unknown as { customRole?: { name?: string } })?.customRole?.name || '임직원'}
                 </span>
                 {assignedRoleBadges.length > 0 && (
                   <div className="flex flex-wrap items-center gap-1.5 ml-1">

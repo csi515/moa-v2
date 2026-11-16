@@ -50,8 +50,8 @@ export const CounterClaimScanner: React.FC<CounterClaimScannerProps> = ({
       setTokenInput('');
 
       onSuccess?.({
-        customerId: (data as any)?.customer_id,
-        childCustomerIds: (data as any)?.child_customer_ids,
+        customerId: (data as { customer_id?: string })?.customer_id,
+        childCustomerIds: (data as { child_customer_ids?: string[] })?.child_customer_ids,
       });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'QR 토큰 승인 중 오류가 발생했습니다.';

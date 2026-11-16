@@ -131,3 +131,4 @@ export interface AcademySettings extends UnifiedOrganizationSettings {
 export type OrganizationRoomKind = AcademyRoomKind;
 export type OrganizationRoom = AcademyRoom;
 export type OrganizationSettings = AcademySettings;
+export type RetailProduct = SettingsRetailCatalogItem;

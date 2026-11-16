@@ -9,7 +9,7 @@ import {
   bindAccessControlContextResolver,
 } from "./accessControlProvider";
 import type { AuthorizationGrant } from "@/core/authorization/types";
-import type { User } from "@/types";
+import type { User } from '@/core/auth/types/sessionUser';
 
 const ORG_A = "org-111";
 const ORG_B = "org-222";

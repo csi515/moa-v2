@@ -1,9 +1,6 @@
 import { getCoreClient } from '@/lib/supabase';
-import type {
-  CoreSchedule,
-  BookableSchedule,
-  ScheduleFormData,
-} from '@/types';
+import { callRpc } from '@/shared/kernel';
+import type { CoreSchedule, BookableSchedule, ScheduleFormData } from '@/core/schedules/types';
 
 /**
  * Core Schedule Service
@@ -50,8 +47,7 @@ export const coreScheduleService = {
     const from = fromDate ? fromDate.toISOString() : new Date().toISOString();
     const to = toDate ? toDate.toISOString() : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
 
-    const { data, error } = await getCoreClient()
-      .rpc('list_bookable_schedules' as any, {
+    const { data, error } = await callRpc<BookableSchedule[]>(getCoreClient(), 'list_bookable_schedules', {
         p_org_id: organizationId,
         p_from_date: from,
         p_to_date: to,

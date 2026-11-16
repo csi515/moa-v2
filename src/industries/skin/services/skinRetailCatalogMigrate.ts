@@ -2,7 +2,7 @@ import { productService } from '@/capabilities/commerce';
 import { inventoryService } from '@/capabilities/commerce';
 import { StorageService } from '@/services/storage';
 import * as orgService from '@/core/organizations/services/organizationService';
-import type { AcademySettings, RetailProduct } from '@/types';
+import type { AcademySettings, RetailProduct } from '@/core/organizations/settingsTypes';
 import {
   SKIN_RETAIL_LEGACY_INBOUND_REASON,
   isSkinRetailCatalogItemFullyMigrated,

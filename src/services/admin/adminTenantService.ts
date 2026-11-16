@@ -254,7 +254,7 @@ export async function approveManualPayment(
       .eq('id', params.organizationId)
       .single();
 
-    const existingSettings = ((org as any)?.settings || {}) as Record<string, any>;
+    const existingSettings = ((org as unknown as { settings?: Record<string, unknown> } | null)?.settings || {}) as Record<string, unknown>;
     const prevLogs: TenantPaymentLog[] = Array.isArray(existingSettings.payment_logs)
       ? existingSettings.payment_logs
       : [];
@@ -311,7 +311,7 @@ export async function changeSubscriptionPlan(
       .eq('id', organizationId)
       .single();
 
-    const existingSettings = ((org as any)?.settings || {}) as Record<string, any>;
+    const existingSettings = ((org as unknown as { settings?: Record<string, unknown> } | null)?.settings || {}) as Record<string, unknown>;
     const nextSettings = {
       ...existingSettings,
       subscription_plan: newPlan,
@@ -354,8 +354,8 @@ export async function updateTenantAddons(
       .eq('id', organizationId)
       .single();
 
-    const existingSettings = ((org as any)?.settings || {}) as Record<string, any>;
-    plan = existingSettings.subscription_plan || 'Pro';
+    const existingSettings = ((org as unknown as { settings?: Record<string, unknown> } | null)?.settings || {}) as Record<string, unknown>;
+    plan = (existingSettings.subscription_plan as SubscriptionPlan) || 'Pro';
     previousAddons = Array.isArray(existingSettings.custom_addons)
       ? existingSettings.custom_addons
       : [];

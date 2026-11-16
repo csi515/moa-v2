@@ -27,7 +27,7 @@ import {
 /** Web Audio API를 활용한 무과금 즉각 비프음 발생기 */
 function playBeepSound() {
   try {
-    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!AudioContextClass) return;
     const ctx = new AudioContextClass();
     const osc = ctx.createOscillator();
@@ -139,7 +139,7 @@ export const InventoryScannerModal: React.FC<InventoryScannerModalProps> = ({
     if (!isOpen || !hasCamera) return;
 
     let detector: any = null;
-    const BarcodeDetectorClass = (window as any).BarcodeDetector;
+    const BarcodeDetectorClass = (window as unknown as { BarcodeDetector?: new (opts?: unknown) => unknown }).BarcodeDetector;
     if (BarcodeDetectorClass) {
       try {
         detector = new BarcodeDetectorClass({

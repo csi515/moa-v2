@@ -319,7 +319,7 @@ export const DailyCareReportView: React.FC = () => {
               </label>
               <select
                 value={mealStatus}
-                onChange={(e) => setMealStatus(e.target.value as any)}
+                onChange={(e) => setMealStatus(e.target.value as import("../domain/dailyCareReportEngine").DailyCareLog["mealStatus"])}
                 style={{
                   width: '100%',
                   padding: '8px 12px',
@@ -341,7 +341,7 @@ export const DailyCareReportView: React.FC = () => {
               </label>
               <select
                 value={pottyStatus}
-                onChange={(e) => setPottyStatus(e.target.value as any)}
+                onChange={(e) => setPottyStatus(e.target.value as import("../domain/dailyCareReportEngine").DailyCareLog["pottyStatus"])}
                 style={{
                   width: '100%',
                   padding: '8px 12px',

@@ -7,6 +7,7 @@
  */
 
 import { supabase } from '@/lib/supabase/client';
+import { callRpc } from '@/shared/kernel';
 
 export type AuditableEntityType =
   | 'customer'
@@ -56,7 +57,7 @@ export const defaultSupabaseAuditCaller: AuditRpcCaller = async (
   locationId,
   afterData
 ) => {
-  const { data, error } = await (supabase.rpc as any)('append_audit_log', {
+  const { data, error } = await callRpc<string>(supabase, 'append_audit_log', {
     p_organization_id: organizationId,
     p_entity_type: entityType,
     p_entity_id: entityId,

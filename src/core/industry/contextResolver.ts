@@ -38,7 +38,7 @@ export function resolveIndustryContext(
   };
 
   activeContext = context;
-  (globalThis as any).__industryContext = context;
+  (globalThis as unknown as Record<string, unknown>).__industryContext = context;
   return context;
 }
 

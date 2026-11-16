@@ -57,8 +57,11 @@ export function runBillingLinkageValidation(industry = 'default'): BillingValida
         : `고아 연동 수입 ${linkedOrphans.length}건`,
   });
 
-  const summary = (billingStorage as any).getFinanceSummary
-    ? (billingStorage as any).getFinanceSummary(industry)
+  const storageWithSummary = billingStorage as unknown as {
+    getFinanceSummary?: (ind: string) => { currentYearMonth: string; totalIncomeThisMonth: number };
+  };
+  const summary = storageWithSummary.getFinanceSummary
+    ? storageWithSummary.getFinanceSummary(industry)
     : { currentYearMonth: new Date().toISOString().slice(0, 7), totalIncomeThisMonth: 0 };
   const entrySum = incomes
     .filter((e) => e.date.startsWith(summary.currentYearMonth))

@@ -40,7 +40,7 @@ import { ResourceMasterSettingsModal } from './ResourceMasterSettingsModal';
 import { ResourceReservationRequestModal } from './ResourceReservationRequestModal';
 import { ResourceApprovalInboxView } from './ResourceApprovalInboxView';
 import { showToast } from '@/shared/feedback/uiFeedback';
-import { listApprovalOrgMembers } from '@/capabilities/approval_workflow/services/approvalWorkflowService';
+import { listApprovalOrgMembers } from '@/capabilities/approval_workflow';
 import { getResolvedPreset } from '@/core/presets/presetResolver';
 
 export type UniversalResourceCalendarViewProps = {
@@ -202,7 +202,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
   const categoryCountMap = useMemo(() => {
     const counts: Record<string, number> = { all: resources.length };
     resources.forEach((r) => {
-      const cat = (r.metadata as any)?.category || 'other';
+      const cat = ((r.metadata as Record<string, unknown> | undefined)?.category as string) || 'other';
       counts[cat] = (counts[cat] || 0) + 1;
     });
     return counts;

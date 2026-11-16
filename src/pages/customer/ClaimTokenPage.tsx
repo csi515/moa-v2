@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CheckCircle2, AlertTriangle, RefreshCw, ArrowRight, ShieldCheck } from 'lucide-react';
 import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
+import { callRpc } from '@/shared/kernel';
 import { useAuth } from '@/core/auth/AuthProvider';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 
@@ -39,23 +40,13 @@ export const ClaimTokenPage: React.FC = () => {
           throw new Error('데이터베이스 서비스에 연결할 수 없습니다.');
         }
 
-        let res: any = await getCoreClient().rpc('claim_store_token_v2' as never, {
-          p_raw_token: token,
-        } as never);
-
-        if (res.error && (res.error.message.includes('function') || res.error.message.includes('does not exist'))) {
-          res = await getCoreClient().rpc('claim_store_token', {
-            p_token: token,
-          });
+        let rpcRes = await callRpc<{ success?: boolean; error?: string }>(getCoreClient(), 'claim_store_token_v2', { p_raw_token: token });
+        if (rpcRes.error && (rpcRes.error.message.includes('function') || rpcRes.error.message.includes('does not exist'))) {
+          rpcRes = await callRpc<{ success?: boolean; error?: string }>(getCoreClient(), 'claim_store_token', { p_token: token });
         }
-
-        const { data, error } = res;
-
-        if (error) {
-          throw new Error(error.message);
-        }
-
-        if ((data as any)?.success) {
+        const { data, error } = rpcRes;
+        if (error) throw new Error(error.message);
+        if (data?.success) {
           setSuccess(true);
           setTimeout(async () => {
             try {
@@ -66,7 +57,7 @@ export const ClaimTokenPage: React.FC = () => {
             }
           }, 2000);
         } else {
-          throw new Error((data as any)?.error || '토큰 클레임에 실패했습니다.');
+          throw new Error(data?.error || '토큰 클레임에 실패했습니다.');
         }
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : '토큰 등록 중 오류가 발생했습니다.';

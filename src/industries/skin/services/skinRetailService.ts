@@ -7,7 +7,7 @@ import type { CustomerSearchResult } from '@/core/customer/services/customerLink
 import { recordRetailSaleReturnIncomeReversal } from '@/capabilities/finance/billingIncomeLink';
 import { StorageService } from '@/services/storage';
 import { todayIsoLocal } from '@/shared/utils/localDate';
-import type { PaymentMethod } from '@/types';
+import type { PaymentMethod } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { migrateSkinRetailCatalogIfNeeded } from './skinRetailCatalogMigrate';
 
 /** Skin 상품 목록 행 (기존 RetailProduct UX와 동일 필드) */

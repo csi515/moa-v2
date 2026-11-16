@@ -52,10 +52,10 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
             ? (
               <button
                 type="button"
-                onClick={(action as any).onClick}
+                onClick={(action as { onClick: () => void; label: string }).onClick}
                 className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-colors"
               >
-                {(action as any).label}
+                {(action as { onClick: () => void; label: string }).label}
               </button>
             )
             : null}

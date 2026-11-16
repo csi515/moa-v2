@@ -58,7 +58,11 @@ export async function requestTossAuthorizationCode(): Promise<string> {
 
   // 2. 전역 토스 브릿지 객체 호출
   if (typeof window !== 'undefined') {
-    const w = window as any;
+    const w = window as unknown as {
+      Toss?: { auth?: { getAuthorizationCode?: () => Promise<{ code?: string } | string> } };
+      toss?: { requestAuthCode?: () => Promise<{ code?: string } | string> };
+      appsInToss?: { getAuthCode?: () => Promise<{ code?: string } | string> };
+    };
     
     // Toss 공식 SDK / 앱스인토스 브릿지 인터페이스 탐색
     if (w.Toss?.auth?.getAuthorizationCode) {

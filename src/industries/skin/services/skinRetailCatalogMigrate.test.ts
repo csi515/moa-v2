@@ -3,7 +3,7 @@
  * 실행: npm run test:skin-retail-migrate
  */
 import assert from 'node:assert/strict';
-import type { RetailProduct } from '@/types';
+import type { RetailProduct } from '@/core/organizations/settingsTypes';
 import {
   SKIN_RETAIL_LEGACY_INBOUND_REASON,
   isSkinRetailCatalogItemFullyMigrated,

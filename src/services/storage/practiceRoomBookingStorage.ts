@@ -1,4 +1,4 @@
-import type { PracticeRoomBooking } from '@/types';
+import type { PracticeRoomBooking } from '@/capabilities/resources/types';
 import { getItem, setItem, upsertById, generateEntityId, type StorageApi } from './helpers';
 import { STORAGE_KEYS } from '../adapters/storageKeys';
 

@@ -25,6 +25,7 @@ import { ConsultationQrModal } from '@/core/schedules/components/ConsultationQrM
 import { CreateConsultationScheduleModal } from '@/core/schedules/components/CreateConsultationScheduleModal';
 import { ConsultationRecordModal } from '@/capabilities/consultation';
 import { StudentFormModal } from '@/capabilities/roster';
+import type { Student } from '@/types';
 import { mapConsultationToStudentDraft } from '@/capabilities/consultation/utils/consultationStudentMapper';
 import {
   usePianoConsultationHub,
@@ -51,7 +52,7 @@ export const PianoConsultationHubView: FC = () => {
   const [recordModalRow, setRecordModalRow] = useState<UnifiedConsultationRow | null>(null);
 
   // 원생 등록 모달 상태
-  const [registeringRow, setRegisteringRow] = useState<UnifiedConsultationRow | null>(null);
+  const [registeringRow, setRegisteringRow] = useState<UnifiedConsultationRow | Partial<Student> | null>(null);
 
   const {
     currentOrganization,
@@ -641,7 +642,7 @@ export const PianoConsultationHubView: FC = () => {
             void refreshConsultations();
           }}
           onPromoteToStudent={(draft) => {
-            setRegisteringRow(draft as any);
+            setRegisteringRow(draft as Partial<Student>);
           }}
           initialData={{
             id: recordModalRow.consultationRecord?.id,
@@ -664,16 +665,16 @@ export const PianoConsultationHubView: FC = () => {
           isOpen={Boolean(registeringRow)}
           onClose={handleCloseRegister}
           student={
-            (registeringRow as any).specialNotes !== undefined
-              ? (registeringRow as any)
+            'specialNotes' in (registeringRow as object)
+              ? (registeringRow as unknown as Student)
               : (mapConsultationToStudentDraft({
-                  consultationId: registeringRow.id,
-                  studentName: registeringRow.studentName,
-                  parentName: registeringRow.applicantName,
-                  phone: registeringRow.phone,
-                  coursePreference: registeringRow.coursePreference,
-                  notes: registeringRow.notes,
-                }) as any)
+                  consultationId: (registeringRow as UnifiedConsultationRow).id,
+                  studentName: (registeringRow as UnifiedConsultationRow).studentName,
+                  parentName: (registeringRow as UnifiedConsultationRow).applicantName,
+                  phone: (registeringRow as UnifiedConsultationRow).phone,
+                  coursePreference: (registeringRow as UnifiedConsultationRow).coursePreference,
+                  notes: (registeringRow as UnifiedConsultationRow).notes,
+                }) as unknown as Student)
           }
           onSaved={() => {
             void refreshConsultations();

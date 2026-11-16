@@ -1,4 +1,5 @@
 import { getCoreClient } from '@/lib/supabase';
+import { callRpc } from '@/shared/kernel';
 import type {
   DeptAggregateRow,
   ItemAggregateRow,
@@ -223,7 +224,7 @@ export async function upsertCampaign(input: {
   note?: string | null;
 }): Promise<CampaignRow> {
   const client = getCoreClient();
-  const { data, error } = await (client as any).rpc('upsert_office_supply_campaign', {
+  const { data, error } = await callRpc<CampaignRow>(client, 'upsert_office_supply_campaign', {
     p_organization_id: input.organizationId,
     p_year_month: input.yearMonth,
     p_deadline_at: input.deadlineAt,
@@ -244,7 +245,7 @@ export async function upsertCampaign(input: {
 
 export async function closeCampaign(organizationId: string, campaignId: string): Promise<void> {
   const client = getCoreClient();
-  const { error } = await (client as any).rpc('close_office_supply_campaign', {
+  const { error } = await callRpc(client, 'close_office_supply_campaign', {
     p_organization_id: organizationId,
     p_campaign_id: campaignId,
   });
@@ -257,7 +258,7 @@ export async function reopenCampaign(
   deadlineAt?: string | null
 ): Promise<void> {
   const client = getCoreClient();
-  const { error } = await (client as any).rpc('reopen_office_supply_campaign', {
+  const { error } = await callRpc(client, 'reopen_office_supply_campaign', {
     p_organization_id: organizationId,
     p_campaign_id: campaignId,
     p_deadline_at: deadlineAt ?? null,
@@ -287,7 +288,7 @@ export async function upsertMyRequestLines(input: {
   lines: OfficeSupplyRequestLineInput[];
 }): Promise<void> {
   const client = getCoreClient();
-  const { error } = await (client as any).rpc('upsert_office_supply_request_lines', {
+  const { error } = await callRpc(client, 'upsert_office_supply_request_lines', {
     p_organization_id: input.organizationId,
     p_campaign_id: input.campaignId,
     p_lines: input.lines.map((l) => ({
@@ -303,7 +304,7 @@ export async function listDeptAggregate(
   campaignId: string
 ): Promise<DeptAggregatePayload> {
   const client = getCoreClient();
-  const { data, error } = await (client as any).rpc('list_office_supply_dept_aggregate', {
+  const { data, error } = await callRpc<DeptAggregatePayload>(client, 'list_office_supply_dept_aggregate', {
     p_organization_id: organizationId,
     p_campaign_id: campaignId,
   });

@@ -1,4 +1,4 @@
-import type { AcademySettings } from '@/types';
+import type { AcademySettings } from '@/core/organizations/settingsTypes';
 import {
   clampEarnRatePercent,
   computeEarnPoints,

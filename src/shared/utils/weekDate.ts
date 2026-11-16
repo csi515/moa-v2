@@ -1,4 +1,4 @@
-import type { DayOfWeek } from '@/types';
+import type { DayOfWeek } from '@/core/staff/workWindow';
 import { formatIsoDateLocal } from './localDate';
 
 const FROM_MONDAY: Record<Exclude<DayOfWeek, '일'>, number> = {

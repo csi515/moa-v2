@@ -5,7 +5,7 @@
  * InvoicePaymentMetadata = unpack 도메인.
  * InvoicePaymentMetadataJson = persist용 Json (index signature로 generated Json과 호환).
  */
-import type { InvoiceExtraItem, TuitionInvoice } from '@/types';
+import type { InvoiceExtraItem, TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import type { Json } from '@/lib/supabase/database.types';
 
 export type InvoiceExtraItemJson = {

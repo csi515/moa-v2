@@ -35,7 +35,7 @@ export function focusInitialElement(root: HTMLElement): void {
     root.focus();
     return;
   }
-  const autoFocusEl = items.find((el) => el.hasAttribute('autofocus') || (el as any).autofocus);
+  const autoFocusEl = items.find((el) => el.hasAttribute('autofocus') || (el as HTMLElement & { autofocus?: boolean }).autofocus);
   if (autoFocusEl) {
     autoFocusEl.focus();
     return;

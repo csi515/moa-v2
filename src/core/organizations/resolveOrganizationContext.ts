@@ -7,7 +7,7 @@
  * - Portal Mode = parent | customer | none (앱 모드, 선택과 독립)
  */
 import type { MemberRole } from '../../lib/supabase';
-import type { UserRole } from '../../types';
+import type { UserRole } from '@/core/auth/types/sessionUser';
 import type { OrganizationMembership } from './services/organizationService';
 
 export const STAFF_ROLES = new Set<string>([

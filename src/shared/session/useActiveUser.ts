@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { StorageService } from '@/services/storage';
 import { STORAGE_KEYS } from '@/services/adapters/storageKeys';
-import type { User } from '@/types';
+import type { User } from '@/core/auth/types/sessionUser';
 
 /**
  * ACTIVE_USER 미러. AppContext.currentUser와 동일한 StorageService 구독이다.

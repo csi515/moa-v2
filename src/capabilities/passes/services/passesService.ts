@@ -11,6 +11,7 @@ import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
 import { getOrganizationId } from '@/services/adapters';
 import { getResourceLockErrorMessage } from '@/core/resource_locks/resourceLockErrors';
 import { notifyStorageFromRefineResource } from '@/core/query/crossCacheBridge';
+import { callRpc } from '@/shared/kernel';
 import type { PassType, PassStatus } from '../domain/passesEngine';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -124,7 +125,7 @@ export async function fetchPasses(
   }
 
   const client = getCoreClient();
-  const query = (client as any)
+  const query = (client as unknown as { from: (table: string) => any })
     .from('passes')
     .select(
       `id, tenant_id, customer_id, pass_name, pass_type, total_count,
@@ -178,7 +179,7 @@ export async function deductPassAtomic(passId: string, tenantId?: string): Promi
     rpcParams.p_count = 1;
   }
 
-  const { error } = await (client as any).rpc('deduct_pass_atomic', rpcParams);
+  const { error } = await callRpc(client, 'deduct_pass_atomic', rpcParams);
 
   if (error) {
     throw new Error(getResourceLockErrorMessage(error));
@@ -234,7 +235,7 @@ export async function issuePass(input: IssuePassInput): Promise<void> {
   }
 
   // 2. 이용권 생성
-  const { error: passError } = await (client as any).from('passes').insert({
+  const { error: passError } = await (client as unknown as { from: (table: string) => any }).from('passes').insert({
     tenant_id: input.tenantId,
     customer_id: customerId,
     pass_name: input.passName.trim(),

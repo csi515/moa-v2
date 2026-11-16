@@ -5,7 +5,7 @@ import { useApp } from '@/context/AppContext';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { EmptyState, Modal, PageHeader } from '@/shared/components';
 import { formatCurrency } from '@/utils/formatters';
-import type { PaymentMethod } from '@/types';
+import type { PaymentMethod } from '@/capabilities/billing/finance/billingLedgerTypes';
 import type { CustomerSearchResult } from '@/core/customer/services/customerLinkService';
 import {
   skinRetailService,

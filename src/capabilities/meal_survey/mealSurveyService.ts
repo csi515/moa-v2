@@ -1,4 +1,5 @@
 import { getCoreClient } from '@/lib/supabase';
+import { callRpc } from '@/shared/kernel';
 import {
   DEFAULT_MEAL_SURVEY_SETTINGS,
   type MealResponseStatus,
@@ -115,7 +116,7 @@ export async function ensureMealSurveySettings(
   organizationId: string
 ): Promise<MealSurveySettingsRow> {
   const client = getCoreClient();
-  const { data, error } = await (client as any).rpc('ensure_meal_survey_settings', {
+  const { data, error } = await callRpc<MealSurveySettingsRow>(client, 'ensure_meal_survey_settings', {
     p_org: organizationId,
   });
   if (error) throw new Error(error.message);
@@ -127,7 +128,7 @@ export async function upsertMealSurveySettings(
   settings: MealSurveySettings
 ): Promise<MealSurveySettingsRow> {
   const client = getCoreClient();
-  const { data, error } = await (client as any).rpc('upsert_meal_survey_settings', {
+  const { data, error } = await callRpc<MealSurveySettingsRow>(client, 'upsert_meal_survey_settings', {
     p_organization_id: organizationId,
     p_offer_breakfast: settings.offerBreakfast,
     p_offer_lunch: settings.offerLunch,
@@ -170,7 +171,7 @@ export async function upsertMealSurveyResponse(input: {
   status: MealResponseStatus;
 }): Promise<Record<string, unknown>> {
   const client = getCoreClient();
-  const { data, error } = await (client as any).rpc('upsert_meal_survey_response', {
+  const { data, error } = await callRpc<Record<string, unknown>>(client, 'upsert_meal_survey_response', {
     p_organization_id: input.organizationId,
     p_meal_date: input.mealDate,
     p_meal_slot: input.mealSlot,
@@ -186,7 +187,7 @@ export async function clearMealSurveyResponse(input: {
   mealSlot: MealSlot;
 }): Promise<Record<string, unknown>> {
   const client = getCoreClient();
-  const { data, error } = await (client as any).rpc('clear_meal_survey_response', {
+  const { data, error } = await callRpc<Record<string, unknown>>(client, 'clear_meal_survey_response', {
     p_organization_id: input.organizationId,
     p_meal_date: input.mealDate,
     p_meal_slot: input.mealSlot,
@@ -201,7 +202,7 @@ export async function bulkSkipMealSurveyRange(input: {
   to: string;
 }): Promise<{ skipped_cells: number }> {
   const client = getCoreClient();
-  const { data, error } = await (client as any).rpc('bulk_skip_meal_survey_range', {
+  const { data, error } = await callRpc<{ skipped_cells: number }>(client, 'bulk_skip_meal_survey_range', {
     p_organization_id: input.organizationId,
     p_from: input.from,
     p_to: input.to,
@@ -216,7 +217,7 @@ export async function listMealSurveyOverview(
   to: string
 ): Promise<MealSurveyOverview> {
   const client = getCoreClient();
-  const { data, error } = await (client as any).rpc('list_meal_survey_overview', {
+  const { data, error } = await callRpc<MealSurveyOverview>(client, 'list_meal_survey_overview', {
     p_organization_id: organizationId,
     p_from: from,
     p_to: to,

@@ -8,7 +8,8 @@ import { useStaffScope } from '@/hooks';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { PageHeader, FilterBar, Modal } from '@/shared/components';
 import { todayIsoLocal } from '@/shared/utils/localDate';
-import { AcademyEvent } from '@/types';
+import { AcademyEvent } from '@/core/events';
+import type { Student } from '@/types';
 import { visibleStaffCalendarEvents } from './visibleStaffCalendarEvents';
 import {
   CalendarDays,
@@ -42,7 +43,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
     filters: [{ field: 'status', operator: 'eq', value: 'active' }],
     queryOptions: { enabled: !!currentOrganization?.id },
   });
-  const allStudents = (studentsList as any).data?.data || (studentsList as any).query?.data?.data || [];
+  const allStudents = (studentsList as unknown as { data?: { data?: Student[] } }).data?.data ?? [];
   const students = useMemo(
     () => (isScoped ? scopeStudents(allStudents) : allStudents),
     [allStudents, isScoped, scopeStudents]
@@ -54,7 +55,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
     meta: { schema: 'core' },
     queryOptions: { enabled: !!currentOrganization?.id },
   });
-  const rawEvents = (eventsList as any).data?.data || (eventsList as any).query?.data?.data || [];
+  const rawEvents = (eventsList as unknown as { data?: { data?: Record<string, unknown>[] } }).data?.data ?? [];
 
   // Map DB rows to AcademyEvent interface
   const dbEvents = useMemo<AcademyEvent[]>(() =>
@@ -147,7 +148,10 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
     };
   }, [selectedDay, currentYearMonthStr, events, birthdayStudents, publicHolidays]);
 
-  const { mutate: createEvent, isLoading: isCreating } = useCreate() as any;
+  const { mutate: createEvent, isLoading: isCreating } = useCreate() as unknown as {
+    mutate: (args: unknown, opts?: unknown) => void;
+    isLoading: boolean;
+  };
   const { mutate: deleteEvent } = useDelete();
 
   const handleAddEvent = (e: React.FormEvent) => {

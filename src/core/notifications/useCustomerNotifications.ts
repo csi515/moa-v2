@@ -7,6 +7,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase/client';
+import { callRpc } from '@/shared/kernel';
 
 export interface CustomerNotificationItem {
   id: string;
@@ -80,7 +81,7 @@ export function useCustomerNotifications(customerId?: string | null) {
       );
       setUnreadCount((c) => Math.max(0, c - 1));
 
-      await (supabase.rpc as any)('mark_customer_notification_read', {
+      await callRpc(supabase, 'mark_customer_notification_read', {
         p_notification_id: notificationId,
       });
     } catch (err) {

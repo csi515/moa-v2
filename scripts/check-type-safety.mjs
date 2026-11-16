@@ -47,7 +47,10 @@ export function scanTypeSafetyViolations() {
   for (const file of files) {
     const rel = toPosix(file);
     // database.types.ts 자체나 레거시 shim 등은 제외
-    if (rel.includes('database.types.ts') || rel.includes('database.generated.ts')) {
+    if (rel.includes('database.types.ts') || rel.includes('database.generated.ts') || rel.includes('.tmp.')) {
+      continue;
+    }
+    if (!existsSync(file)) {
       continue;
     }
 

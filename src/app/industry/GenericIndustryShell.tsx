@@ -363,7 +363,7 @@ function GenericDashboardView({ onNavigate, enabledCaps = [] }: GenericDashboard
   const showRiskWidget =
     enabledCaps.includes('facility_incident_report') ||
     enabledCaps.includes('sop_risk_assessment') ||
-    Boolean((currentOrganization?.settings as any)?.show_risk_dashboard);
+    Boolean((currentOrganization?.settings as Record<string, unknown> | undefined)?.show_risk_dashboard);
 
   return (
     <div className="max-w-5xl mx-auto space-y-6 pt-2 sm:pt-4" data-testid="director-home">
@@ -531,7 +531,7 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
   const enabledCaps = useMemo(() => {
     const baseCaps = (preset?.capabilities ?? []) as string[];
     const requiredCaps = new Set<string>((preset?.requiredCapabilities ?? []) as string[]);
-    const customAddons = ((currentOrganization?.settings as any)?.custom_addons ?? []) as string[];
+    const customAddons = (((currentOrganization?.settings as Record<string, unknown> | undefined)?.custom_addons ?? []) as string[]);
     const hiddenSet = new Set<string>(hiddenCapabilities);
     const combined = new Set<string>([...baseCaps, ...activeCapabilities, ...customAddons]);
     return Array.from(combined).filter((cap) => requiredCaps.has(cap) || !hiddenSet.has(cap));

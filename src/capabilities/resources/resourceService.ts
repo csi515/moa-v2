@@ -84,10 +84,10 @@ export async function upsertBookableResource(params: UpsertBookableResourceInput
   // metadata가 제공된 경우 DB에 JSONB 메타데이터 반영
   if (params.metadata && resourceId) {
     try {
-      await client()
+      await (client()
         .from('bookable_resources')
-        .update({ metadata: params.metadata } as any)
-        .eq('id', resourceId);
+        .update({ metadata: params.metadata } as never)
+        .eq('id', resourceId));
     } catch (err) {
       console.warn('Failed to update resource metadata in DB:', err);
     }
@@ -113,7 +113,7 @@ export function canUserApproveReservation(
     return true;
   }
 
-  const meta = (resource.metadata || {}) as Record<string, any>;
+  const meta = (resource.metadata || {}) as Record<string, unknown>;
   if (!meta.require_approval) return false;
 
   // 방식 A: 특정 담당자(staff) 지정

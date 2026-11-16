@@ -23,7 +23,7 @@ export interface ResourceLockErrorResult {
 export function parseResourceLockError(error: unknown): ResourceLockErrorResult {
   const rawMsg = typeof error === 'string'
     ? error
-    : (error as any)?.message || (error as any)?.details || '';
+    : (error as { message?: string; details?: string } | null)?.message || (error as { message?: string; details?: string } | null)?.details || '';
 
   if (
     rawMsg.includes('CAPACITY_EXCEEDED') ||

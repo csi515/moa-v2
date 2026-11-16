@@ -13,7 +13,7 @@ import {
   toHhmm,
   type WeekDayInfo,
 } from '../utils/calendarMath';
-import type { DayOfWeek } from '@/types';
+import type { DayOfWeek } from '@/core/staff/workWindow';
 
 export interface CalendarWeekViewProps<T = any> {
   mode: CalendarEngineMode;

@@ -1,4 +1,5 @@
 import { getCoreClient } from '@/lib/supabase';
+import { callRpc } from '@/shared/kernel';
 
 export type VolunteerActivityRow = {
   id: string;
@@ -93,7 +94,7 @@ export async function updateVolunteerActivityStatus(
 
 export async function joinVolunteerActivity(activityId: string): Promise<Record<string, unknown>> {
   const client = getCoreClient();
-  const { data, error } = await (client as any).rpc('join_volunteer_activity', {
+  const { data, error } = await callRpc<Record<string, unknown>>(client, 'join_volunteer_activity', {
     p_activity_id: activityId,
   });
   if (error) throw new Error(error.message);
@@ -102,7 +103,7 @@ export async function joinVolunteerActivity(activityId: string): Promise<Record<
 
 export async function cancelVolunteerSignup(activityId: string): Promise<Record<string, unknown>> {
   const client = getCoreClient();
-  const { data, error } = await (client as any).rpc('cancel_volunteer_signup', {
+  const { data, error } = await callRpc<Record<string, unknown>>(client, 'cancel_volunteer_signup', {
     p_activity_id: activityId,
   });
   if (error) throw new Error(error.message);
@@ -116,7 +117,7 @@ export async function setVolunteerSignupCheckin(input: {
   checkedIn: boolean;
 }): Promise<void> {
   const client = getCoreClient();
-  const { error } = await (client as any).rpc('set_volunteer_signup_checkin', {
+  const { error } = await callRpc(client, 'set_volunteer_signup_checkin', {
     p_organization_id: input.organizationId,
     p_activity_id: input.activityId,
     p_member_id: input.memberId,

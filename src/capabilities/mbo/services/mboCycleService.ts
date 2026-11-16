@@ -30,8 +30,8 @@ function rowToSettings(row: CycleRow | null): MboCycleSettings {
 }
 
 export async function getMboCycleSettings(organizationId: string): Promise<MboCycleSettings> {
-  const client = getCoreClient();
-  const { data, error } = await (client as any)
+  const client = getCoreClient() as unknown as { from: (table: string) => any };
+  const { data, error } = await client
     .from('mbo_cycle_settings')
     .select('*')
     .eq('organization_id', organizationId)
@@ -45,7 +45,7 @@ export async function upsertMboCycleSettings(
   settings: MboCycleSettings,
   updatedBy?: string
 ): Promise<MboCycleSettings> {
-  const client = getCoreClient();
+  const client = getCoreClient() as unknown as { from: (table: string) => any };
   const payload = {
     organization_id: organizationId,
     goal_lock_enabled: settings.goalLockEnabled,
@@ -58,7 +58,7 @@ export async function upsertMboCycleSettings(
     updated_at: new Date().toISOString(),
     updated_by: updatedBy ?? null,
   };
-  const { data, error } = await (client as any)
+  const { data, error } = await client
     .from('mbo_cycle_settings')
     .upsert(payload, { onConflict: 'organization_id' })
     .select('*')

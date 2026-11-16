@@ -51,10 +51,10 @@ export function useGenericEntityRecords<T extends object>(
       if (items.length === 0 && defaultRecords.length > 0) {
         // 기본 레코드가 제공된 경우 초기 데이터로 변환
         const convertedDefaults: GenericEntityRecord<T>[] = defaultRecords.map((d, idx) => ({
-          id: idExtractor ? idExtractor(d) : (d as any).id || `default_${idx}`,
+          id: idExtractor ? idExtractor(d) : (d as unknown as { id?: string }).id || `default_${idx}`,
           organizationId,
           entityType,
-          recordKey: recordKeyExtractor ? recordKeyExtractor(d) : (d as any).menuCode || (d as any).code,
+          recordKey: recordKeyExtractor ? recordKeyExtractor(d) : (d as unknown as { menuCode?: string; code?: string }).menuCode || (d as unknown as { code?: string }).code,
           payload: d,
         }));
         startTransition(() => {
@@ -69,7 +69,7 @@ export function useGenericEntityRecords<T extends object>(
       // 에러 시 기본 레코드 유지
       if (defaultRecords.length > 0) {
         const fallbackDefaults: GenericEntityRecord<T>[] = defaultRecords.map((d, idx) => ({
-          id: idExtractor ? idExtractor(d) : (d as any).id || `fallback_${idx}`,
+          id: idExtractor ? idExtractor(d) : (d as unknown as { id?: string }).id || `fallback_${idx}`,
           organizationId,
           entityType,
           payload: d,
@@ -87,8 +87,8 @@ export function useGenericEntityRecords<T extends object>(
 
   const saveRecord = useCallback(
     async (payload: T, recordKey?: string, id?: string): Promise<GenericEntityRecord<T>> => {
-      const targetId = id || (idExtractor ? idExtractor(payload) : (payload as any).id);
-      const targetKey = recordKey || (recordKeyExtractor ? recordKeyExtractor(payload) : (payload as any).code);
+      const targetId = id || (idExtractor ? idExtractor(payload) : (payload as unknown as { id?: string }).id);
+      const targetKey = recordKey || (recordKeyExtractor ? recordKeyExtractor(payload) : (payload as unknown as { code?: string }).code);
 
       const recordToSave: GenericEntityRecord<T> = {
         id: targetId,

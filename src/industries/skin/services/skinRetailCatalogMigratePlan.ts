@@ -1,4 +1,4 @@
-import type { RetailProduct } from '@/types';
+import type { RetailProduct } from '@/core/organizations/settingsTypes';
 
 /** Core stock_movements.reason — 레거시 카탈로그 이관 입고 식별 */
 export const SKIN_RETAIL_LEGACY_INBOUND_REASON = '레거시 카탈로그 이관';

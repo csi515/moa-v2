@@ -281,7 +281,7 @@ export const ConsultationRecordsView: React.FC<{ embedded?: boolean }> = ({
                   <label className="block text-xs font-semibold text-slate-700 mb-1">상담 유형</label>
                   <select
                     value={formData.type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value as any })}
+                    onChange={(e) => setFormData({ ...formData, type: e.target.value as import('../types').ConsultationType })}
                     className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
                   >
                     <option value="parent">학부모 상담</option>

@@ -30,11 +30,12 @@ export function parseCsvToMatrix(csvText: string): string[][] {
  * 엑셀 바이너리(Blob | ArrayBuffer | Buffer)를 파싱하여 2차원 배열로 변환
  */
 export async function parseXlsxToMatrix(input: Blob | ArrayBuffer | Uint8Array): Promise<unknown[][]> {
-  const blob = input instanceof Blob ? input : new Blob([input as any]);
+  const blob = input instanceof Blob ? input : new Blob([input as BlobPart]);
   const rows = await readXlsxFileUniversal(blob);
   // 만약 다중 시트 객체 형태(SheetData[])로 반환되는 경우 처리
-  if (rows && rows.length > 0 && typeof rows[0] === 'object' && 'data' in rows[0] && Array.isArray((rows[0] as any).data)) {
-    return (rows[0] as any).data as unknown[][];
+  if (rows && rows.length > 0 && typeof rows[0] === "object") {
+    const sheet = rows[0] as { data?: unknown[][] };
+    if (Array.isArray(sheet.data)) return sheet.data;
   }
   return rows as unknown as unknown[][];
 }

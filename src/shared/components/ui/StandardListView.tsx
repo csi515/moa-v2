@@ -117,7 +117,7 @@ export function StandardListView<T>({
     return columns.map((col) => ({
       id: col.key,
       header: typeof col.header === 'string' ? col.header : col.key,
-      accessorFn: (row: T) => (row as any)[col.key],
+      accessorFn: (row: T) => (row as unknown as Record<string, unknown>)[col.key],
       enableSorting: Boolean(col.sortable),
     }));
   }, [columns]);

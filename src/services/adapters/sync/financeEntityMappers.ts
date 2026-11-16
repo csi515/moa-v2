@@ -1,7 +1,7 @@
 ﻿import type { Json } from '@/lib/supabase/database.types';
 import type { FinanceExpense, IncomeEntry } from '@/capabilities/finance/types';
 import type { TeacherPayrollSettlement } from '@/capabilities/finance/teacherPayroll/settlements';
-import type { Expense, TuitionInvoice, TuitionPayment } from '@/types';
+import type { Expense, TuitionInvoice, TuitionPayment } from '@/capabilities/billing/finance/billingLedgerTypes';
 
 type DbPaymentMethod =
   | 'cash'

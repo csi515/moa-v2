@@ -240,7 +240,7 @@ export const MyPassView: React.FC = () => {
                     <span className="text-xs text-slate-400 block">배정 락커</span>
                     <span className="text-sm font-bold text-slate-900">
                       {assignedLocker
-                        ? `${(assignedLocker as any).number || '01'}번 락커`
+                        ? `${(assignedLocker as unknown as { number?: string }).number || '01'}번 락커`
                         : '미배정'}
                     </span>
                   </div>
