@@ -5,13 +5,7 @@ import type {
   OrganizationReservationRpcRow,
   ReservationRow,
 } from '@/lib/supabase/database.types';
-import type {
-  Reservation,
-  ReservationDetail,
-  MyReservation,
-  ReservationRequest,
-  ReservationStatus,
-} from '@/types';
+import type { Reservation, ReservationDetail, MyReservation, ReservationRequest, ReservationStatus } from '@/core/schedules/types';
 import { applyReservationCommand } from '../reservationMachine';
 import { jsonToRecord } from './scheduleJson';
 

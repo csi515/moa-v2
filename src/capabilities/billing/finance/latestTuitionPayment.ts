@@ -2,7 +2,7 @@
  * 마지막 수납 표시의 source of truth.
  * Invoice.paymentMethod / paidAt / paidDate 스냅샷은 읽지 않는다.
  */
-import type { PaymentMethod, TuitionPayment } from '@/types';
+import type { PaymentMethod, TuitionPayment } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { formatPaymentMethodLabel } from '@/capabilities/billing/finance/paymentMethodLabels';
 
 export type LastTuitionPaymentDisplay = {

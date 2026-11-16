@@ -3,7 +3,7 @@
  * toast/모달 닫기는 호출측.
  */
 import type { Booking, ServiceOffering, SlotRecruitment } from '@/core/types/schedule';
-import type { StaffWorkWindow } from '@/types';
+import type { StaffWorkWindow } from '@/core/staff/workWindow';
 import {
   validateBookingCreate,
   validateSlotNotClosed,

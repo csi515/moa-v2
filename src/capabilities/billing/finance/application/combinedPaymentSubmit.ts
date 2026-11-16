@@ -2,7 +2,7 @@
  * 통합 수납 submit 조율: 중복 실행 방지, 결과 해석, toast/refresh.
  * 저장은 recordCombinedPayment / atomic에 맡긴다.
  */
-import type { CombinedPaymentRequest } from '@/types';
+import type { CombinedPaymentRequest } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { formatCurrency } from '@/utils/formatters';
 import {
   CombinedPaymentCommandError,

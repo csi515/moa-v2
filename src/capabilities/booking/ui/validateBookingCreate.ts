@@ -10,7 +10,7 @@ import {
   findStaffTimeConflict,
   findTreatmentRoomConflict,
 } from '@/capabilities/booking/domain/bookingRooms';
-import type { StaffWorkWindow } from '@/types';
+import type { StaffWorkWindow } from '@/core/staff/workWindow';
 
 export type BookingFormLabels = {
   customer: string;

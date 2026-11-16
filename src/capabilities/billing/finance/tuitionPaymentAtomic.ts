@@ -8,7 +8,7 @@ import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
 import { getOrganizationId } from '@/services/adapters';
 import { paymentRowToInvoice } from '@/services/adapters/sync/mappers/invoiceMappers';
 import { transactionRowToTuitionPayment } from '@/services/adapters/sync/financeEntityMappers';
-import type { PaymentMethod, TuitionInvoice } from '@/types';
+import type { PaymentMethod, TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import type { Json } from '@/lib/supabase/database.types';
 import { upsertLinkedIncome } from '@/capabilities/billing/finance/billingIncomeLink';
 import { settleLinkedTextbookSalesOnTuitionPaid } from '@/capabilities/billing/finance/linkedTextbookSettle';

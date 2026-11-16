@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import type { CombinedPaymentRequest } from '@/types';
+import type { CombinedPaymentRequest } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { showToast, triggerRefresh } from '@/shared/feedback/uiFeedback';
 import { recordCombinedPayment } from './recordCombinedPayment';
 import { runCombinedPaymentSubmit } from './combinedPaymentSubmit';

@@ -1,7 +1,7 @@
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { useEffect, useState } from 'react';
 import { Calendar, ChevronRight, Clock, Users } from 'lucide-react';
-import type { BookableSchedule } from '@/types';
+import type { BookableSchedule } from '@/core/schedules/types';
 import { coreScheduleService } from '@/core/schedules';
 import { ReservationModal } from './ReservationModal';
 

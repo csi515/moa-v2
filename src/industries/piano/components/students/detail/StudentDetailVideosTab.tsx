@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import type { AcademyEvent, PerformanceVideo } from '@/types';
+import type { AcademyEvent } from '@/core/events';
+import type { PerformanceVideo } from '@/core/lessons/types';
 import { getYouTubeEmbedUrl, getYouTubeThumbnailUrl, getYouTubeWatchUrl } from '@/utils/youtube';
 import { ExternalLink, Play, Plus, Trash2, Video, Maximize2 } from 'lucide-react';
 import { PianoInlineVideoModal } from './PianoInlineVideoModal';

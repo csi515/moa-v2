@@ -11,7 +11,8 @@ import {
   AlertCircle,
   X,
 } from 'lucide-react';
-import type { PublicOrgInfo, CustomerJoinRequest } from '@/types';
+import type { PublicOrgInfo } from '@/core/public/types';
+import type { CustomerJoinRequest } from '@/core/customer/joinTypes';
 import { publicOrgService } from '@/core/public/services/publicOrgService';
 import { customerJoinService } from './services/customerJoinService';
 import { useAuth } from '@/core/auth/AuthProvider';

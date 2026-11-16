@@ -1,7 +1,7 @@
 import { EmptyState } from '@/shared/components';
 import type { FC } from 'react';
 import { Calendar, Clock, Loader2, Phone, User } from 'lucide-react';
-import type { ReservationDetail } from '@/types';
+import type { ReservationDetail } from '@/core/schedules/types';
 import { consultationStatusLabel, formatConsultationTime } from './usePianoConsultationHub';
 
 /** 상담 허브 「오늘」세그먼트 — loading / error / empty 일관 처리 */

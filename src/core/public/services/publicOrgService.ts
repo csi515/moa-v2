@@ -1,5 +1,5 @@
 import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
-import type { PublicOrgInfo, ConsultationSubmission } from '@/types';
+import type { PublicOrgInfo, ConsultationSubmission } from '@/core/public/types';
 
 function asOrgRows(data: unknown): PublicOrgInfo[] {
   if (Array.isArray(data)) return data as PublicOrgInfo[];
@@ -133,23 +133,23 @@ export const publicOrgService = {
 
     try {
       const client = getCoreClient();
-      const query = (client as any)
+      let query = client
         .from('tenant_operating_hours')
         .select('*')
         .eq('tenant_id', cleanId);
 
       if (signal) {
-        query.abortSignal(signal);
+        query = query.abortSignal(signal);
       }
 
       const { data, error } = await query;
       if (error || !data) return [];
 
-      return (data as any[]).map((row) => ({
+      return (data as Array<Record<string, unknown>>).map((row) => ({
         day_of_week: Number(row.day_of_week ?? 0),
         open_time: String(row.open_time || row.start_time || '09:00'),
         close_time: String(row.close_time || row.end_time || '22:00'),
-        is_closed: Boolean(row.is_closed || !row.is_active),
+        is_closed: Boolean(row.is_closed || (row.is_active !== undefined ? !row.is_active : false)),
       }));
     } catch {
       return [];

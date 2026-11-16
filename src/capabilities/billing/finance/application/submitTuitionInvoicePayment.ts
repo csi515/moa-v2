@@ -2,7 +2,7 @@
  * 단일 청구서 수납 실행.
  * TuitionManagementView 수납 flow만 사용한다. 화면 필터/통계는 두지 않는다.
  */
-import type { PaymentMethod, TuitionInvoice } from '@/types';
+import type { PaymentMethod, TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { formatCurrency } from '@/utils/formatters';
 import { isOnline } from '@/shared/utils/networkGuard';
 

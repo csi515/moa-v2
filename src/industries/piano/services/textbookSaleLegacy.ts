@@ -4,7 +4,7 @@
  * - DB 행과 id가 겹치면 DB 우선(중복 생성 방지)
  * - localStorage 즉시 삭제 금지
  */
-import type { TextbookPayment, TextbookSale } from '@/types';
+import type { TextbookPayment, TextbookSale } from '@/capabilities/commerce/textbookTypes';
 
 /** DB에 없는 local-only 행 (legacy). coreSaleId 있어도 DB 미반영이면 legacy로 취급. */
 export function pickLegacyTextbookSales(

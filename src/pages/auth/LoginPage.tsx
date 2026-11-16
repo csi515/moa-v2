@@ -42,7 +42,7 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const returnUrl = readLoginReturnPath(searchParams);
-  const { mutate: login, isPending: isLoading } = useLogin();
+  const { mutate: login, isPending: isLoading } = useLogin<{ email: string; password: string; rememberMe?: boolean }>();
   const { signInWithGoogle, signInWithApple, signInWithKakao, signInWithNaver } = useAuth();
   const { enterCustomerPortal } = useOrganization();
   const isEn = language === "en";
@@ -152,7 +152,7 @@ export const LoginPage: React.FC = () => {
     e.preventDefault();
     setErrorMessage(null);
     login(
-      { email, password, rememberMe } as any,
+      { email, password, rememberMe },
       {
         onSuccess: (data: any) => {
           // Refine authProvider는 실패 시에도 resolve({ success: false }) 하므로

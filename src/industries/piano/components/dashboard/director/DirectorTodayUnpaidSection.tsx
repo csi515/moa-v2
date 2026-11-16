@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { formatCurrency } from '@/utils/formatters';
-import type { TuitionInvoice } from '@/types';
+import type { TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { DirectorSectionEmpty } from './DirectorSectionEmpty';
 
 interface DirectorTodayUnpaidSectionProps {

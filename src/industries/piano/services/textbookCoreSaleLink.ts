@@ -1,4 +1,4 @@
-import type { PaymentMethod } from '@/types';
+import type { PaymentMethod } from '@/capabilities/billing/finance/billingLedgerTypes';
 import type { SalePaymentMethod } from '@/capabilities/commerce';
 
 /**

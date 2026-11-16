@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-  Textbook,
-  TextbookSale,
-  TextbookPayment,
-  TextbookInventoryTransaction,
-} from '@/types';
+import type { Textbook, TextbookSale, TextbookPayment, TextbookInventoryTransaction } from '@/capabilities/commerce/textbookTypes';
 import { StorageService } from '@/services/storage';
 import { useApp } from '@/context/AppContext';
 import { BookOpen, ShoppingBag, Plus } from 'lucide-react';

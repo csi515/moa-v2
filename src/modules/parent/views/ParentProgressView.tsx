@@ -46,7 +46,8 @@ export function ParentProgressView({
     queryOptions: { enabled: !!student.id },
   });
   
-  const rawPracticeRecords = (practiceRecordsList as any).data?.data || (practiceRecordsList as any).query?.data?.data || [];
+  const pList = practiceRecordsList as { data?: { data?: unknown[] }; query?: { data?: { data?: unknown[] } } };
+  const rawPracticeRecords = (pList?.data?.data || pList?.query?.data?.data || []) as Array<Record<string, unknown>>;
   const practiceRecords = useMemo(() => {
     return rawPracticeRecords.map((r: any) => ({
       id: r.id,
@@ -91,7 +92,7 @@ export function ParentProgressView({
     setIsModalOpen(true);
   };
 
-  const { mutate: createPracticeRecord } = useCreate() as any;
+  const { mutate: createPracticeRecord } = useCreate();
   const handleSave = (e: FormEvent) => {
     e.preventDefault();
     if (!form.songTitle.trim()) {

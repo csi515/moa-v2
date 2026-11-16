@@ -1,7 +1,7 @@
 import { getCoreClient } from '@/lib/supabase';
 import { getOrganizationId, getStorageAdapter, STORAGE_KEYS } from '@/services/adapters';
 import { StorageService } from '@/services/storage';
-import type { AppNotification } from '@/types';
+import type { AppNotification } from '@/core/notices/notificationTypes';
 
 /** 게시 실패 시 로컬을 이전 상태 또는 pending으로 되돌림 */
 function rollbackNotice(

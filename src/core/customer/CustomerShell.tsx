@@ -7,7 +7,7 @@ import { isNativeApp } from '@/core/platform/capacitorPlatform';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { registerAppPush } from '@/core/push';
 import { showsPracticeRoomTab } from '@/core/industry/industryUi';
-import type { CustomerJoinRequest } from '@/types';
+import type { CustomerJoinRequest } from '@/core/customer/joinTypes';
 import { customerJoinService } from './services/customerJoinService';
 import {
   fetchStudentPortalContext,

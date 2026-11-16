@@ -1,7 +1,8 @@
 import { AVAILABILITY_SOURCE } from './types';
 import { chunkSlots, resolveWindowsForDate } from './windows';
 import { getCoreClient } from '@/lib/supabase';
-import type { CoreSchedule } from '@/types';
+import type { Database, Json } from '@/lib/supabase/database.types';
+import type { CoreSchedule } from '@/core/schedules/types';
 import { availabilityService } from './availabilityService';
 import { coreScheduleService } from '@/core/schedules/services/coreScheduleService';
 
@@ -155,8 +156,8 @@ export async function materializeAvailabilitySlots(
           slot_key: slot.key,
           rule_id: slot.ruleId ?? null,
           override_id: slot.overrideId ?? null,
-        },
-      } as any);
+        } as unknown as Json,
+      } as unknown as Database['core']['Tables']['schedules']['Insert']);
 
     if (error) throw error;
     created += 1;
@@ -168,7 +169,7 @@ export async function materializeAvailabilitySlots(
 
     // 예약이 있으면 숨기지 않고 유지 (히스토리)
     const { count, error } = await getCoreClient()
-      .from('reservations' as any)
+      .from('reservations')
       .select('id', { count: 'exact', head: true })
       .eq('schedule_id', schedule.id)
       .in('status', ['requested', 'confirmed']);

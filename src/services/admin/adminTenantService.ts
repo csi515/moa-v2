@@ -1,4 +1,5 @@
 import { getCoreClient } from '@/lib/supabase';
+import type { Json } from '@/lib/supabase/database.types';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
 import { logAdminAuditAction } from './adminAuditLogService';
 import { evictTenantMemoryCache } from '@/core/query/tenantQueryKeys';
@@ -196,7 +197,7 @@ export async function toggleTenantStatus(
     const client = getCoreClient();
     await client
       .from('organizations')
-      .update({ is_active: nextStatus } as any)
+      .update({ is_active: nextStatus })
       .eq('id', organizationId);
   } catch (err) {
     console.warn('Failed to update tenant status in DB, continuing with audit log:', err);
@@ -269,9 +270,9 @@ export async function approveManualPayment(
     await client
       .from('organizations')
       .update({
-        settings: nextSettings,
+        settings: nextSettings as unknown as Json,
         is_active: true,
-      } as any)
+      })
       .eq('id', params.organizationId);
   } catch (err) {
     console.warn('Failed to update manual payment in DB:', err);
@@ -319,7 +320,7 @@ export async function changeSubscriptionPlan(
 
     await client
       .from('organizations')
-      .update({ settings: nextSettings } as any)
+      .update({ settings: nextSettings as unknown as Json })
       .eq('id', organizationId);
   } catch (err) {
     console.warn('Failed to change subscription plan in DB:', err);
@@ -370,7 +371,7 @@ export async function updateTenantAddons(
 
     await client
       .from('organizations')
-      .update({ settings: nextSettings } as any)
+      .update({ settings: nextSettings as unknown as Json })
       .eq('id', organizationId);
 
     // 테넌트 쿼리 캐시 무효화

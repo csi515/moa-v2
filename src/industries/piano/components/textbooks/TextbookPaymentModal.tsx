@@ -1,7 +1,8 @@
 import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 
 import React, { useEffect,  useState } from 'react';
-import { TextbookSale, PaymentMethod } from '@/types';
+import type { TextbookSale } from '@/capabilities/commerce/textbookTypes';
+import type { PaymentMethod } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { StorageService } from '@/services/storage';
 import { useApp } from '@/context/AppContext';
 import { X, CreditCard, CheckCircle2, Calculator, ArrowRight, FileText } from 'lucide-react';

@@ -5,7 +5,7 @@ import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useStorageRefresh } from '@/hooks';
 import { billingStorage } from '@/capabilities/billing/infrastructure/billingStorage';
-import { PaymentMethod, type ExpenseCategory } from '@/types';
+import type { PaymentMethod, ExpenseCategory } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { formatCurrency } from '@/utils/formatters';
 import {
   getExpenseCategories,

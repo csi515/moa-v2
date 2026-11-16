@@ -42,7 +42,7 @@ import {
   PIANO_DEFAULT_LESSON_MINUTES,
   resolvePianoLessonMinutes,
 } from '../../config/pianoLessonMinutes';
-import type { PracticeRoomBooking } from '@/types';
+import type { PracticeRoomBooking } from '@/capabilities/resources/types';
 
 function toConflictBookings(rows: RoomReservationRow[]): PracticeRoomBooking[] {
   return rows.map((row) => ({

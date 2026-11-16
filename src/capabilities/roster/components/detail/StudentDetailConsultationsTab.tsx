@@ -1,5 +1,5 @@
 import React from 'react';
-import { Consultation } from '@/types';
+import type { Consultation } from '@/capabilities/consultation/types';
 import { Plus } from 'lucide-react';
 import { useModuleLabels } from '@/core/labels';
 

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import type { PaymentMethod, TuitionInvoice } from '@/types';
+import type { PaymentMethod, TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { TuitionService } from '@/capabilities/billing/finance/services/tuitionService';
 import { invalidateBillingQueries } from '@/core/query/tenantQueryKeys';

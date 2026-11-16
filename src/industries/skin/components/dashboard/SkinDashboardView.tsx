@@ -142,8 +142,8 @@ const SkinAdminDashboard: React.FC = () => {
     [today, refreshKey]
   );
   const upcoming = useMemo(() => scheduleService.getUpcomingBookings(5), [refreshKey]);
-  const members = StorageService.getStudents().filter((s) => s.status === 'active');
-  const staffCount = StorageService.getTeachers().filter((t) => t.status === 'active').length;
+  const members = rosterStorage.getStudents().filter((s) => s.status === 'active');
+  const staffCount = rosterStorage.getTeachers().filter((t) => t.status === 'active').length;
   const services = scheduleService.getActiveServiceOfferings();
   const confirmedToday = todayBookings.filter(
     (b) => b.status === 'confirmed' || b.status === 'scheduled'

@@ -1,6 +1,6 @@
 import { getCoreClient } from '@/lib/supabase';
 import { notificationRowToApp } from '@/services/adapters/sync/entityMappers';
-import type { AppNotification } from '@/types';
+import type { AppNotification } from '@/core/notices/notificationTypes';
 
 /** 학부모 포털: Supabase RLS로 자녀 관련 알림 조회 (클래스/전체 대상 포함) */
 export async function fetchParentNotificationsForStudent(

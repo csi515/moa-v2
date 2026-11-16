@@ -1,7 +1,7 @@
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { FormEvent, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
-import type { ConsultationSubmission } from '@/types';
+import type { ConsultationSubmission } from '@/core/public/types';
 import { publicOrgService } from './services/publicOrgService';
 
 interface ConsultationFormProps {

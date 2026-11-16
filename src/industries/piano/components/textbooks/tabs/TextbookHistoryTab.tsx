@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { TextbookInventoryTransaction } from '@/types';
+import type { TextbookInventoryTransaction } from '@/capabilities/commerce/textbookTypes';
 import { HistoryFilterType } from '../textbookViewTypes';
 
 interface TextbookHistoryTabProps {

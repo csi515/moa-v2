@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextbookSale, TextbookPayment } from '@/types';
+import type { TextbookSale, TextbookPayment } from '@/capabilities/commerce/textbookTypes';
 import { CreditCard } from 'lucide-react';
 import { formatCurrency } from '@/utils/formatters';
 

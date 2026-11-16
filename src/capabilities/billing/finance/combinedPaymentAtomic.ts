@@ -13,12 +13,8 @@ import {
   textbookSaleRowToEntity as tbRowToSale,
 } from '@/services/adapters/sync/commerceMappers';
 import type { Json } from '@/lib/supabase/database.types';
-import type {
-  CombinedPaymentRequest,
-  TextbookPayment,
-  TextbookSale,
-  TuitionInvoice,
-} from '@/types';
+import type { CombinedPaymentRequest, TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { TextbookPayment, TextbookSale } from '@/capabilities/commerce/textbookTypes';
 import { upsertLinkedIncome } from '@/capabilities/billing/finance/billingIncomeLink';
 import { settleLinkedTextbookSalesOnTuitionPaid } from '@/capabilities/billing/finance/linkedTextbookSettle';
 import {

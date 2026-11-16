@@ -83,8 +83,10 @@ const totalCount = violations.reduce((acc, v) => acc + v.count, 0);
 
 console.log(`📊 [TYPE-SAFETY] 'as any' 현황: 총 ${violations.length}개 파일, ${totalCount}건 감지`);
 
-if (totalCount > 160) {
-  console.error(`❌ [TYPE-SAFETY] 'as any' 캐스팅이 허용 한도(160건)를 초과했습니다 (현재: ${totalCount}건). 신규 'as any' 유입을 멈추고 useMoaTable/Database 타입을 바인딩하세요.`);
+const MAX_ALLOWED_ANY = 40;
+
+if (totalCount > MAX_ALLOWED_ANY) {
+  console.error(`❌ [TYPE-SAFETY] 'as any' 캐스팅이 허용 한도(${MAX_ALLOWED_ANY}건)를 초과했습니다 (현재: ${totalCount}건). 신규 'as any' 유입을 멈추고 useMoaTable/Database 타입을 바인딩하세요.`);
   process.exit(1);
 } else {
   console.log(`✅ [TYPE-SAFETY] check-type-safety: ok (베이스라인 관리 범위 내 유지 중, 점진적 감축 진행)`);

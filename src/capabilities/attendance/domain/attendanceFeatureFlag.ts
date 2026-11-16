@@ -1,4 +1,4 @@
-import type { AcademySettings } from '@/types';
+import type { AcademySettings } from '@/core/organizations/settingsTypes';
 
 /** 명시적 boolean이 있으면 우선, 없으면 업종 기본값. */
 export function resolveAttendanceFeatureEnabled(

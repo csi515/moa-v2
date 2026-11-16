@@ -73,7 +73,7 @@ export async function createVolunteerActivity(input: {
       event_date: input.eventDate || null,
       status: 'open',
       created_by_member_id: input.createdByMemberId ?? null,
-    } as any)
+    })
     .select('*')
     .single();
   if (error) throw new Error(error.message);
@@ -87,7 +87,7 @@ export async function updateVolunteerActivityStatus(
   const client = getCoreClient();
   const { error } = await client
     .from('volunteer_activities')
-    .update({ status, updated_at: new Date().toISOString() } as any)
+    .update({ status, updated_at: new Date().toISOString() })
     .eq('id', activityId);
   if (error) throw new Error(error.message);
 }

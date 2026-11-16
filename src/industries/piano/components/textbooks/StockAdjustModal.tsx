@@ -1,7 +1,7 @@
 import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 
 import React, { useEffect,  useState } from 'react';
-import { Textbook } from '@/types';
+import type { Textbook } from '@/capabilities/commerce/textbookTypes';
 import { StorageService } from '@/services/storage';
 import { useApp } from '@/context/AppContext';
 import { X, PackagePlus, ArrowRight, Save, RotateCcw, SlidersHorizontal } from 'lucide-react';

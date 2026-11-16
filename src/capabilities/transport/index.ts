@@ -22,3 +22,4 @@ export {
   studentUsesShuttleService,
 } from './pickupHelpers';
 export { ShuttleRideRequestView } from './ShuttleRideRequestView';
+export { transportStorage } from './infrastructure/transportStorage';

@@ -1,5 +1,5 @@
 import type { StockMovement, StockMovementType } from '@/capabilities/commerce';
-import type { Textbook, TextbookInventoryTransaction } from '@/types';
+import type { Textbook, TextbookInventoryTransaction } from '@/capabilities/commerce/textbookTypes';
 
 /** Core movement_type → 교재 이력 표시용 transactionType */
 export function mapCoreMovementTypeToTextbookTx(

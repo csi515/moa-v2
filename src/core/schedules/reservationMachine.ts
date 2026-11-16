@@ -7,7 +7,7 @@ import {
   canTransition,
   type StateMachine,
 } from '@/core/domain/stateMachine';
-import type { ReservationStatus } from '@/types';
+import type { ReservationStatus } from '@/core/schedules/types';
 
 export const RESERVATION_STATES = ['requested', 'confirmed', 'cancelled'] as const;
 export type ReservationMachineStatus = (typeof RESERVATION_STATES)[number];

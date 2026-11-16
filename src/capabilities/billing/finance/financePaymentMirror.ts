@@ -3,7 +3,8 @@
  * writeLocalMirror만 사용한다. setItem persist/outbox를 타지 않아 remote를 덮지 않는다.
  */
 import { STORAGE_KEYS } from '@/services/adapters/storageKeys';
-import type { TextbookPayment, TextbookSale, TuitionInvoice, TuitionPayment } from '@/types';
+import type { TextbookPayment, TextbookSale } from '@/capabilities/commerce/textbookTypes';
+import type { TuitionInvoice, TuitionPayment } from '@/capabilities/billing/finance/billingLedgerTypes';
 import {
   emptyFinanceMirrorResult,
   isRemotePaymentApplied,

@@ -1,4 +1,4 @@
-import type { TeacherPayType } from '@/types';
+import type { TeacherPayType } from '@/capabilities/billing/finance/billingLedgerTypes';
 import type { PayrollSettlementStatus } from './types';
 
 export function payTypeUsesUnitRate(payType: TeacherPayType): boolean {

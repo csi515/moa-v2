@@ -31,7 +31,14 @@ export function ParentEventsView({
     filters: [{ field: 'organization_id', operator: 'eq', value: currentOrganization?.id }],
     queryOptions: { enabled: !!currentOrganization?.id },
   });
-  const rawEvents = (data as any).data?.data || (data as any).data || (data as any).query?.data?.data || [];
+  const d = data as { data?: { data?: unknown[] } | unknown[]; query?: { data?: { data?: unknown[] } } };
+  const rawEvents = (Array.isArray(d?.data)
+    ? d.data
+    : Array.isArray(d?.data?.data)
+      ? d.data.data
+      : Array.isArray(d?.query?.data?.data)
+        ? d.query.data.data
+        : []) as Array<Record<string, unknown>>;
 
   const events = useMemo(() => {
     return rawEvents

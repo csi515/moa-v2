@@ -11,7 +11,7 @@ import {
   normalizeCreateOrganizationAddress,
   type OrganizationAddressValue,
 } from '@/core/address';
-import type { AcademySettings } from '@/types';
+import type { AcademySettings } from '@/core/organizations/settingsTypes';
 import { StorageService } from '@/services/storage';
 import { locationService } from '@/core/locations/locationService';
 import { userFacingErrorMessage } from '@/shared/errors/userFacingError';

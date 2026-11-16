@@ -28,7 +28,7 @@ import { StorageService } from '@/services/storage';
 import { StudentService } from '@/core/students';
 import { LessonService } from '@/core/lessons';
 import { PageHeader, FilterBar, SearchField } from '@/shared/components';
-import { LessonRecord } from '@/types';
+import type { LessonRecord } from '@/core/lessons/types';
 import { removeById, upsertById } from '@/shared/utils/listUpdate';
 import {
   Piano,

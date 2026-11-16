@@ -67,7 +67,8 @@ export function resolveAvailableMoveSlots(params: {
   // 1. 해당 요일에 존재하는 클래스들
   const dayClasses = classes.filter((c) => {
     if (Array.isArray(c.daysOfWeek)) return c.daysOfWeek.includes(targetDay);
-    if ((c as any).days) return (c as any).days.includes(targetDay);
+    const legacy = c as { days?: unknown[] };
+    if (Array.isArray(legacy.days)) return legacy.days.includes(targetDay);
     return false;
   });
 

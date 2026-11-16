@@ -1,5 +1,6 @@
 import React from 'react';
-import { TextbookSale, StudentMonthlyBillingSummary } from '@/types';
+import type { TextbookSale } from '@/capabilities/commerce/textbookTypes';
+import type { StudentMonthlyBillingSummary } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { formatCurrency } from '@/utils/formatters';
 import { BookOpen, Plus } from 'lucide-react';
 

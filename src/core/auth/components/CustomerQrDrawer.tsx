@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { X, Plus, Trash2, Clock, CheckCircle2, User, Users, RefreshCw } from 'lucide-react';
 import { supabase, getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
+import type { Json } from '@/lib/supabase/database.types';
 import { buildEnrollmentPayload, type ChildEnrollmentInput } from '../domain/claimEngine';
 import { normalizeToE164 } from '@/shared/utils/phoneValidation';
 
@@ -93,11 +94,13 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
           tenant_id: tenantId,
           issuer_type: 'CUSTOMER',
           claim_token: rawToken,
-          token_hash: tokenHash,
-          payload: normalized as any,
+          payload: {
+            ...normalized,
+            token_hash: tokenHash,
+          } as unknown as Json,
           expires_at: expiresAt,
           is_used: false,
-        } as any)
+        })
         .select('id, claim_token, expires_at')
         .single();
 

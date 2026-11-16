@@ -1,5 +1,5 @@
 import React from 'react';
-import { LessonRecord, PracticeRecord } from '@/types';
+import type { LessonRecord, PracticeRecord } from '@/core/lessons/types';
 import { Plus } from 'lucide-react';
 
 interface StudentDetailPracticeTabProps {

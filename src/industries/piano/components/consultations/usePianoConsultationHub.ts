@@ -11,7 +11,7 @@ import {
 import { useStaffScope } from '@/hooks';
 import { StorageService } from '@/services/storage';
 import { todayIsoLocal } from '@/shared/utils/localDate';
-import type { CustomerJoinRequest, ReservationDetail, Consultation } from '@/types';
+import type { CustomerJoinRequest, ReservationDetail, Consultation, Student } from '@/types';
 import { inquiryBelongsToStaff, reservationBelongsToStaff } from './staffConsultationScope';
 import {
   TODAY_RESERVATION_PAGE_SIZE,
@@ -163,12 +163,12 @@ export function usePianoConsultationHub() {
   const { isScoped, staffId, scopeStudents } = useStaffScope();
 
   /** Refine으로 학생 목록 조회 */
-  const studentsList = useList<any>({
+  const studentsList = useList<Student>({
     resource: 'customers',
     filters: [{ field: 'status', operator: 'eq', value: 'active' }],
     queryOptions: { enabled: !!currentOrganization?.id },
   });
-  const allStudents = (studentsList as any).data?.data || (studentsList as any).query?.data?.data || [];
+  const allStudents = (studentsList.query?.data?.data as Student[]) || [];
   const assignedStudents = useMemo(
     () => scopeStudents(allStudents),
     [scopeStudents, allStudents]

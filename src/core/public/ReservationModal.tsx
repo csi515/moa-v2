@@ -1,7 +1,7 @@
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { FormEvent, useEffect, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
-import type { BookableSchedule, ReservationRequest } from '@/types';
+import type { BookableSchedule, ReservationRequest } from '@/core/schedules/types';
 import { reservationService } from '@/core/schedules';
 import { Modal } from '@/shared/components/ui/Modal';
 import { getPublicMyBookingsView } from './publicMyBookingsSlot';

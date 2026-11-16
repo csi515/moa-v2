@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { TextbookSale } from '@/types';
+import type { TextbookSale } from '@/capabilities/commerce/textbookTypes';
 import { studentMatchesGuardianQuery } from '@/core/parent/guardianHelpers';
 import {
   Search,

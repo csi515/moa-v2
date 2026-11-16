@@ -1,5 +1,5 @@
 import { getCoreClient, supabase } from '@/lib/supabase';
-import type { CustomerJoinRequest, JoinRequestType } from '@/types';
+import type { CustomerJoinRequest, JoinRequestType } from '@/core/customer/joinTypes';
 import type { Json } from '@/lib/supabase/database.types';
 
 export interface SubmitJoinRequestParams {

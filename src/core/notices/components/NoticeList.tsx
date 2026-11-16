@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { EmptyState } from '@/shared/components';
 import { Megaphone, Trash2, Send } from 'lucide-react';
-import type { AppNotification } from '@/types';
+import type { AppNotification } from '@/core/notices/notificationTypes';
 import { PARENT_NOTICE_KIND_LABEL, type ParentNoticeKind } from '../types';
 import { NOTICE_COPY } from '../noticeUi';
 

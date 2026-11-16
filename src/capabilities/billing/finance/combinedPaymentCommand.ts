@@ -2,7 +2,8 @@
  * 통합 수납 command 계약.
  * 결제 금액 계산은 기존 tuition/textbook RPC에 맡긴다.
  */
-import type { CombinedPaymentRequest, TextbookPayment, TuitionInvoice } from '@/types';
+import type { CombinedPaymentRequest, TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { TextbookPayment } from '@/capabilities/commerce/textbookTypes';
 
 export type CombinedPaymentItemKind = 'tuition' | 'textbook';
 

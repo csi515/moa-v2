@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useStorageRefresh, useStudentNavigation, useStaffScope } from '@/hooks';
 import { StorageService } from '@/services/storage';
-import { MakeupItem, MakeupStatus } from '@/types';
+import type { MakeupItem, MakeupStatus } from '@/capabilities/attendance/domain/types';
 import {
   EmptyState,
   FilterBar,

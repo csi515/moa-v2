@@ -183,7 +183,7 @@ export const StudentListPage: React.FC = () => {
       key: "name",
       header: `${customerWord} 이름`,
       sortable: true,
-      sortOrder: sorters?.find((s) => s.field === "name")?.order as any,
+      sortOrder: sorters?.find((s) => s.field === "name")?.order as "asc" | "desc" | undefined,
       onSort: () => handleSortToggle("name"),
       render: (student) => (
         <button
@@ -231,7 +231,7 @@ export const StudentListPage: React.FC = () => {
       key: "created_at",
       header: "등록일자",
       sortable: true,
-      sortOrder: sorters?.find((s) => s.field === "created_at")?.order as any,
+      sortOrder: sorters?.find((s) => s.field === "created_at")?.order as "asc" | "desc" | undefined,
       onSort: () => handleSortToggle("created_at"),
       render: (student) => (
         <span className="text-slate-400 text-xs font-mono tabular-nums">

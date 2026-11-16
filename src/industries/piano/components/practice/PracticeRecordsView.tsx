@@ -5,7 +5,7 @@ import type { Database } from '@/lib/supabase/database.types';
 import { useApp } from '@/context/AppContext';
 import { useStaffScope } from '@/hooks';
 import { PageHeader, SummaryMetricCard, FilterBar, SearchField } from '@/shared/components';
-import { PracticeRecord } from '@/types';
+import { PracticeRecord, Student } from '@/types';
 import { consumeOpenPendingPractice } from '@/core/customer/studentJoinInbox';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import {
@@ -35,7 +35,7 @@ export const PracticeRecordsView: React.FC = () => {
 
   const allStudents = (studentsList.query?.data?.data as CustomerRow[]) || [];
   const isLoadingStudents = studentsList.query?.isLoading ?? false;
-  const students = useMemo(() => scopeStudents(allStudents as unknown as any), [allStudents, scopeStudents]);
+  const students = useMemo(() => scopeStudents(allStudents as unknown as Student[]), [allStudents, scopeStudents]);
 
   // 2. Fetch Practice Records via Refine (piano schema)
   const practiceListQuery = useList<PracticeRecordDbRow>({
@@ -53,7 +53,7 @@ export const PracticeRecordsView: React.FC = () => {
   const practiceList = useMemo(() => {
     const mapped = rawRecords.map((r: PracticeRecordDbRow) => {
       const student = allStudents.find((s) => s.id === r.customer_id);
-      const meta = (r.metadata && typeof r.metadata === 'object' ? r.metadata : {}) as Record<string, any>;
+      const meta = (r.metadata && typeof r.metadata === 'object' ? r.metadata : {}) as Record<string, unknown>;
       return {
         id: r.id,
         studentId: r.customer_id,
@@ -67,13 +67,13 @@ export const PracticeRecordsView: React.FC = () => {
         teacherEvaluation: r.teacher_evaluation || undefined,
         difficultyPart: r.difficulty_part || undefined,
         nextAssignment: r.next_assignment || undefined,
-        source: meta.source,
-        staffReviewed: meta.staffReviewed,
-        staffReviewedAt: meta.staffReviewedAt,
-        staffReviewNote: meta.staffReviewNote,
+        source: meta.source as string | undefined,
+        staffReviewed: meta.staffReviewed as boolean | undefined,
+        staffReviewedAt: meta.staffReviewedAt as string | undefined,
+        staffReviewNote: meta.staffReviewNote as string | undefined,
       } as PracticeRecord;
     });
-    return scopeByStudentIds<PracticeRecord>(mapped, allStudents as unknown as any);
+    return scopeByStudentIds<PracticeRecord>(mapped, allStudents as unknown as Student[]);
   }, [rawRecords, allStudents, scopeByStudentIds]);
 
   const [studentFilter, setStudentFilter] = useState('ALL');

@@ -1,4 +1,5 @@
-﻿import type { PaymentMethod, TextbookPayment, TextbookSale } from '@/types';
+﻿import type { PaymentMethod } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { TextbookPayment, TextbookSale } from '@/capabilities/commerce/textbookTypes';
 import type { IncomeEntry } from '@/capabilities/finance/types';
 
 function buildReceiptNumber(): string {

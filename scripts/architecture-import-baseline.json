@@ -395,6 +395,11 @@
     "kind": "capability-cross"
   },
   {
+    "file": "src/capabilities/billing/finance/billingIncomeLink.ts",
+    "spec": "@/capabilities/commerce/textbookTypes",
+    "kind": "capability-cross"
+  },
+  {
     "file": "src/capabilities/billing/finance/billingLedgerTypes.ts",
     "spec": "@/capabilities/commerce/textbookTypes",
     "kind": "capability-cross"
@@ -406,7 +411,22 @@
   },
   {
     "file": "src/capabilities/billing/finance/combinedPaymentAtomic.ts",
+    "spec": "@/capabilities/commerce/textbookTypes",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/combinedPaymentAtomic.ts",
     "spec": "@/capabilities/commerce/infrastructure/commerceStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/combinedPaymentCommand.ts",
+    "spec": "@/capabilities/commerce/textbookTypes",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/combinedPaymentLocal.ts",
+    "spec": "@/capabilities/commerce/textbookTypes",
     "kind": "capability-cross"
   },
   {
@@ -417,6 +437,16 @@
   {
     "file": "src/capabilities/billing/finance/components/useTeacherPayroll.ts",
     "spec": "@/capabilities/roster/infrastructure/rosterStorage",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/financePaymentMirror.ts",
+    "spec": "@/capabilities/commerce/textbookTypes",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/billing/finance/linkedTextbookSettle.ts",
+    "spec": "@/capabilities/commerce/textbookTypes",
     "kind": "capability-cross"
   },
   {
@@ -825,8 +855,23 @@
     "kind": "capability-cross"
   },
   {
+    "file": "src/capabilities/roster/components/detail/StudentDetailConsultationsTab.tsx",
+    "spec": "@/capabilities/consultation/types",
+    "kind": "capability-cross"
+  },
+  {
     "file": "src/capabilities/roster/components/detail/StudentDetailInfoTab.tsx",
     "spec": "@/capabilities/transport",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/detail/StudentDetailTuitionTab.tsx",
+    "spec": "@/capabilities/billing/finance/billingLedgerTypes",
+    "kind": "capability-cross"
+  },
+  {
+    "file": "src/capabilities/roster/components/detail/StudentDetailTuitionTab.tsx",
+    "spec": "@/capabilities/commerce/textbookTypes",
     "kind": "capability-cross"
   },
   {

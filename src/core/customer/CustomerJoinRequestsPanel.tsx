@@ -12,7 +12,7 @@ import {
   ChevronDown,
   ChevronUp 
 } from 'lucide-react';
-import type { CustomerJoinRequest, JoinRequestType } from '@/types';
+import type { CustomerJoinRequest, JoinRequestType } from '@/core/customer/joinTypes';
 import { customerJoinService } from './services/customerJoinService';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { Modal } from '@/shared/components/ui';

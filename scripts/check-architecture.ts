@@ -1,9 +1,11 @@
 import { readdirSync, readFileSync, statSync, writeFileSync, existsSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { dirname, join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 
-const root = join(import.meta.dirname, '..');
-const baselinePath = join(import.meta.dirname, 'architecture-import-baseline.json');
+const here = typeof __dirname !== 'undefined' ? __dirname : dirname(fileURLToPath(import.meta.url));
+const root = join(here, '..');
+const baselinePath = join(here, 'architecture-import-baseline.json');
 const industryWords = ['piano', 'pilates', 'golf', '학원'];
 
 function filesUnder(dir: string): string[] {

@@ -1,4 +1,5 @@
-import type { CombinedPaymentRequest, TextbookPayment, TuitionInvoice } from '@/types';
+import type { CombinedPaymentRequest, TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { TextbookPayment } from '@/capabilities/commerce/textbookTypes';
 import {
   CombinedPaymentCommandError,
   type CombinedPaymentAtomicResult,

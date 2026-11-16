@@ -3,7 +3,7 @@
  * 런타임 엔티티는 그대로 TuitionInvoice. 여기서는 조회용 부분 타입과 파생 라인만 둔다.
  * DB payments / metadata 컬럼은 변경하지 않는다.
  */
-import type { InvoiceExtraItem, TuitionInvoice } from '@/types';
+import type { InvoiceExtraItem, TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 
 export type InvoiceHeader = Pick<
   TuitionInvoice,

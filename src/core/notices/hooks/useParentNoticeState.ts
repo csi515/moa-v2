@@ -5,7 +5,7 @@ import { useStaffGrants, useStaffScope, useStorageRefresh } from '@/hooks';
 import { StorageService } from '@/services/storage';
 import { useModuleLabels } from '@/core/labels';
 import { getIndustryAccent, usesClassBasedSchedule } from '@/core/industry/industryUi';
-import type { AppNotification } from '@/types';
+import type { AppNotification } from '@/core/notices/notificationTypes';
 import { encodeNoticeTarget, parseNoticeTarget } from '../noticeTarget';
 import { getNoticeTargetModeLabel, noticeAccentClasses } from '../noticeUi';
 import { buildNoticeTemplates, getNoticePlaceWords } from '../noticeTemplates';

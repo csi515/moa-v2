@@ -2,7 +2,7 @@
  * 통합 수납 선택·금액 규칙.
  * UI 입력값을 결제 request로 바꿀 때만 사용한다.
  */
-import type { CombinedPaymentRequest, PaymentMethod } from '@/types';
+import type { CombinedPaymentRequest, PaymentMethod } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { yearMonthLocal } from '@/shared/utils/localDate';
 
 export type PayableLine = { id: string; unpaidAmount: number };

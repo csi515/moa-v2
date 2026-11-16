@@ -2,7 +2,7 @@ import { showToast } from '@/shared/feedback/uiFeedback';
 import type { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserRound } from 'lucide-react';
-import type { CustomerJoinRequest } from '@/types';
+import type { CustomerJoinRequest } from '@/core/customer/joinTypes';
 import { customerJoinService } from './services/customerJoinService';
 
 function getStatusLabel(status: string): { label: string; color: string } {

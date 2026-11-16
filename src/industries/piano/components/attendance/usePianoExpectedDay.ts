@@ -10,7 +10,7 @@ import {
   type DayStatus,
   type ExpectedStudentOnDate,
 } from './pianoAttendanceHelpers';
-import type { AttendanceRecord } from '@/types';
+import type { AttendanceRecord } from '@/capabilities/attendance/domain/types';
 
 export type ExpectedDayStatusRow = {
   student: ExpectedStudentOnDate['student'];

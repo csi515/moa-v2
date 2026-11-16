@@ -5,7 +5,7 @@
 import { getPianoClient } from '@/lib/supabase/pianoClient';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { getOrganizationId } from '@/services/adapters/storageContext';
-import type { Textbook, TextbookPayment, TextbookSale } from '@/types';
+import type { Textbook, TextbookPayment, TextbookSale } from '@/capabilities/commerce/textbookTypes';
 import {
   paymentToPianoRow,
   pianoRowToPayment,

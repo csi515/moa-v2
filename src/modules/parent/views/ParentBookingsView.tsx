@@ -3,7 +3,7 @@ import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { reservationService } from '@/core/schedules';
-import type { MyReservation, ReservationStatus } from '@/types';
+import type { MyReservation, ReservationStatus } from '@/core/schedules/types';
 import { 
   Calendar, 
   Clock,

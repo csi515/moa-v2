@@ -1,6 +1,6 @@
 import type { IndustryType } from '@/core/industry/types';
 import { getIndustryPlugin } from '@/core/industry/registry';
-import type { AcademySettings } from '@/types';
+import type { AcademySettings } from '@/core/organizations/settingsTypes';
 import type { AttendanceModuleSettings } from './types';
 import { resolveAttendanceFeatureEnabled } from './attendanceFeatureFlag';
 

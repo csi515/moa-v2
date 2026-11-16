@@ -1,11 +1,6 @@
 import React, { useMemo } from 'react';
-import type {
-  TuitionInvoice,
-  StudentMonthlyBillingSummary,
-  TextbookSale,
-  PaymentMethod,
-  InvoiceStatus,
-} from '@/types';
+import type { TuitionInvoice, StudentMonthlyBillingSummary, PaymentMethod, InvoiceStatus } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { TextbookSale } from '@/capabilities/commerce/textbookTypes';
 import { formatCurrency, getInvoiceStatusBadge } from '@/utils/formatters';
 import { resolveInvoiceBaseFee } from '@/capabilities/finance/invoiceModel';
 import {

@@ -2,7 +2,7 @@
  * 역할 판정 순수 헬퍼 (UI 플러그인·supabase 비의존).
  * getAllowedTabs 등 UX 가드는 여기 결과를 사용한다.
  */
-import type { UserRole } from '@/types';
+import type { UserRole } from '@/core/auth/types/sessionUser';
 
 /** owner/admin/manager/director/super_admin — 사업장 운영 전체 */
 export function isOrgAdmin(role: UserRole | string | null | undefined): boolean {

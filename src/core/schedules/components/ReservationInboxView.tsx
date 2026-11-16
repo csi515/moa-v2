@@ -4,7 +4,7 @@ import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { reservationService } from '@/core/schedules';
 import { Modal } from '@/shared/components/ui/Modal';
-import type { ReservationDetail, ReservationStatus } from '@/types';
+import type { ReservationDetail, ReservationStatus } from '@/core/schedules/types';
 import { 
   Inbox, 
   CheckCircle2, 

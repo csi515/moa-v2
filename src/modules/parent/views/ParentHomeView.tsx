@@ -24,7 +24,7 @@ export function ParentHomeView({
   if (norm === 'retail') {
     return (
       <RetailCustomerHome
-        onNavigate={onNavigate as any}
+        onNavigate={(tab) => onNavigate(tab as ParentPortalTab)}
       />
     );
   }

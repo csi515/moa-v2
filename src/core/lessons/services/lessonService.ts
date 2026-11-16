@@ -1,5 +1,5 @@
 import { StorageService } from '@/services/storage';
-import type { LessonRecord } from '@/types';
+import type { LessonRecord } from '@/core/lessons/types';
 
 /**
  * 레슨 기록 도메인 파사드.

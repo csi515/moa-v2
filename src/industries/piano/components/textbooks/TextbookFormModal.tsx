@@ -2,7 +2,7 @@ import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '@/context/AppContext';
-import { Textbook } from '@/types';
+import type { Textbook } from '@/capabilities/commerce/textbookTypes';
 import { X, BookOpen, AlertCircle, Save, Check } from 'lucide-react';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 

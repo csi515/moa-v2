@@ -7,7 +7,8 @@ import { getOrganizationId } from '@/services/adapters/storageContext';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { STORAGE_KEYS } from '@/services/adapters';
 import { getItem, setItem } from '@/services/storage/helpers';
-import type { PaymentMethod, Textbook, TextbookInventoryTransaction } from '@/types';
+import type { PaymentMethod } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { Textbook, TextbookInventoryTransaction } from '@/capabilities/commerce/textbookTypes';
 import { resolveTextbookCoreSaleId, toCoreSalePaymentMethod } from './textbookCoreSaleLink';
 import {
   computeDisplayStocksFromCurrent,

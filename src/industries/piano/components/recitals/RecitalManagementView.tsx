@@ -4,7 +4,7 @@ import { useStorageRefresh, useStudentNavigation, useStaffScope, useStaffGrants 
 import { RecitalService } from '@/industries/piano/services/recitalService';
 import { ACADEMY_EVENT_TYPE_LABEL } from '@/industries/piano/config/eventLabels';
 import { studentMatchesGuardianQuery } from '@/core/parent/guardianHelpers';
-import { AcademyEvent } from '@/types';
+import type { AcademyEvent } from '@/core/events';
 import {
   EmptyState,
   FilterTabs,

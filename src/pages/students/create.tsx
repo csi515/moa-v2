@@ -1,11 +1,12 @@
 import React from "react";
 import { useForm } from "@refinedev/react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCan, useNavigation } from "@refinedev/core";
+import { useCan, useNavigation, HttpError } from "@refinedev/core";
 import { ArrowLeft, Save, AlertCircle, ShieldAlert } from "lucide-react";
 import { useTerminology } from "@/core/terminology";
 import { useOrganization } from "@/core/organizations/OrganizationProvider";
-import { applyFormErrors } from "@/core/utils/formErrorAdapter";
+import { applyFormErrors, SetErrorFn } from "@/core/utils/formErrorAdapter";
+import type { Resolver } from "react-hook-form";
 import type { CustomerRecord } from "./list";
 import { customerSchema, type CustomerFormValues } from "./customerSchema";
 
@@ -29,23 +30,23 @@ export const StudentCreatePage: React.FC = () => {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<CustomerRecord, any, CustomerFormValues>({
+  } = useForm<CustomerRecord, HttpError, CustomerFormValues>({
     refineCoreProps: {
       resource: "customers",
       action: "create",
       redirect: "list",
-      onMutationError: (error: any) => {
+      onMutationError: (error: HttpError | (Record<string, unknown> & { message?: string; errors?: Array<{ field?: string; message: string }> }) | null) => {
         applyFormErrors(
           {
             success: false,
             error: error?.message || "등록 중 오류가 발생했습니다.",
-            errors: error?.errors,
+            errors: (error as { errors?: Array<{ field?: string; message: string }> })?.errors,
           },
-          setError as any
+          setError as unknown as SetErrorFn
         );
       },
     },
-    resolver: zodResolver(customerSchema) as any,
+    resolver: zodResolver(customerSchema) as unknown as Resolver<CustomerFormValues>,
     defaultValues: {
       status: "active",
       name: "",

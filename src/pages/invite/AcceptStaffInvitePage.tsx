@@ -57,7 +57,7 @@ export const AcceptStaffInvitePage: React.FC = () => {
           throw new Error(error.message);
         }
 
-        const result = data as any;
+        const result = data as { success?: boolean; role_name?: string; organization_id?: string } | null;
         if (result?.success) {
           setSuccess(true);
           setRoleName(result?.role_name || null);

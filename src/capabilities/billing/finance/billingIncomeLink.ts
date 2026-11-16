@@ -1,4 +1,5 @@
-import type { PaymentMethod, TuitionPayment, TextbookPayment } from '@/types';
+import type { PaymentMethod, TuitionPayment } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { TextbookPayment } from '@/capabilities/commerce/textbookTypes';
 import type { IncomeEntry } from '@/capabilities/billing/finance/types';
 import { STORAGE_KEYS } from '@/services/adapters/storageKeys';
 import { generateEntityId, getItem, setItem } from '@/services/storage/helpers';

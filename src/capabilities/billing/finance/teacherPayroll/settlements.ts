@@ -1,6 +1,6 @@
 import { getItem, setItem, generateEntityId } from '@/services/storage/helpers';
 import { STORAGE_KEYS } from '@/services/adapters/storageKeys';
-import type { TeacherPayType } from '@/types';
+import type { TeacherPayType } from '@/capabilities/billing/finance/billingLedgerTypes';
 
 /** 강사 월별 정산 확정 기록 (SoT: core.teacher_payroll_settlements) */
 export interface TeacherPayrollSettlement {

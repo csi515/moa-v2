@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Textbook } from '@/types';
+import type { Textbook } from '@/capabilities/commerce/textbookTypes';
 import {
   BookOpen,
   Search,

@@ -8,7 +8,8 @@ import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
 import { getOrganizationId } from '@/services/adapters';
 import { pianoRowToPayment } from '@/services/adapters/sync/piano/textbookPaymentMappers';
 import { pianoRowToSale } from '@/services/adapters/sync/piano/textbookSalesMappers';
-import type { PaymentMethod, TextbookPayment, TextbookSale } from '@/types';
+import type { PaymentMethod } from '@/capabilities/billing/finance/billingLedgerTypes';
+import type { TextbookPayment, TextbookSale } from '@/capabilities/commerce/textbookTypes';
 import { upsertLinkedIncome } from '@/capabilities/finance/billingIncomeLink';
 import { createAdapterFinanceMirrorPort } from '@/capabilities/finance/financePaymentMirrorAdapter';
 import {

@@ -1,4 +1,4 @@
-import type { TuitionInvoice } from '@/types';
+import type { TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 
 /**
  * 동일 학생·동일 연월 청구서 조회.

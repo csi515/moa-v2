@@ -1,6 +1,7 @@
 import { parentStorage } from '@/capabilities/parent/infrastructure/parentStorage';
 import { rosterStorage } from '@/capabilities/roster/infrastructure/rosterStorage';
-import { AcademyEvent, EventParticipantSummary, PerformanceVideo } from '@/types';
+import type { AcademyEvent, EventParticipantSummary } from '@/core/events';
+import type { PerformanceVideo } from '@/core/lessons/types';
 import { academyEventTypeToVideoType } from '../config/eventLabels';
 
 /**

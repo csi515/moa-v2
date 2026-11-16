@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { PublicOrgInfo } from '@/types';
+import type { PublicOrgInfo } from '@/core/public/types';
 import { getPlaceLabel, publicLandingAdultFirst } from '@/core/industry/industryUi';
 import { supabase } from '@/lib/supabase/client';
 import { publicOrgService } from './services/publicOrgService';

@@ -24,7 +24,14 @@ export function ParentMedicationView({
   const { currentUser, openConfirmDialog } = useApp();
   const refreshKey = useStorageRefresh();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    requestDate: string;
+    medicineName: string;
+    dosage: string;
+    times: string;
+    reason: string;
+    note: string;
+  }>({
     requestDate: todayIsoLocal(),
     medicineName: '',
     dosage: '',
@@ -202,7 +209,7 @@ export function ParentMedicationView({
             <input
               id="med-times"
               value={form.times}
-              onChange={(e) => setForm((f) => ({ ...f, times: e.target.value as any }))}
+              onChange={(e) => setForm((f) => ({ ...f, times: e.target.value }))}
               className={FORM_CONTROL_CLASS}
               placeholder={MEDICATION_DEFAULTS.times}
             />
