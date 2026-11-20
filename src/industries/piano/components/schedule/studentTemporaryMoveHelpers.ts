@@ -7,6 +7,7 @@
 
 import type { DayOfWeek } from '@/core/staff/workWindow';
 import { todayIsoLocal } from '@/shared/utils/localDate';
+import { resolveStorageKey } from '@/services/adapters';
 
 export interface TemporaryMoveRecord {
   id: string;
@@ -83,14 +84,18 @@ export function createTemporaryMoveRecord(params: {
 }
 
 /**
- * 로컬스토리지에서 임시 이동 목록 조회
+ * 로컬스토리지에서 임시 이동 목록 조회 (테넌트 격리)
  */
 export function loadTemporaryMoves(
-  storageKey = STORAGE_KEY_TEMPORARY_MOVES
+  storageKey = resolveStorageKey(STORAGE_KEY_TEMPORARY_MOVES)
 ): TemporaryMoveRecord[] {
   try {
     if (typeof window === 'undefined' || !window.localStorage) return [];
-    const raw = window.localStorage.getItem(storageKey);
+    let raw = window.localStorage.getItem(storageKey);
+    if (!raw && storageKey !== STORAGE_KEY_TEMPORARY_MOVES) {
+      raw = window.localStorage.getItem(STORAGE_KEY_TEMPORARY_MOVES);
+      if (raw) window.localStorage.setItem(storageKey, raw);
+    }
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
@@ -100,11 +105,11 @@ export function loadTemporaryMoves(
 }
 
 /**
- * 특정 날짜에 유효한 임시 이동 목록 조회 및 만료 데이터 자동 정리 (엣지 8번)
+ * 특정 날짜에 유효한 임시 이동 목록 조회 및 만료 데이터 자동 정리 (엣지 8번, 테넌트 격리)
  */
 export function getActiveTemporaryMovesForDate(
   dateIso: string,
-  storageKey = STORAGE_KEY_TEMPORARY_MOVES
+  storageKey = resolveStorageKey(STORAGE_KEY_TEMPORARY_MOVES)
 ): TemporaryMoveRecord[] {
   const list = loadTemporaryMoves(storageKey);
   // targetDate가 명시된 경우 dateIso와 일치하는 것만, 구버전(targetDate 없음)은 weekStartDate 기준 일치 여부
@@ -122,7 +127,7 @@ export function getActiveTemporaryMovesForDate(
  */
 export function saveTemporaryMove(
   record: TemporaryMoveRecord,
-  storageKey = STORAGE_KEY_TEMPORARY_MOVES
+  storageKey = resolveStorageKey(STORAGE_KEY_TEMPORARY_MOVES)
 ): void {
   try {
     if (typeof window === 'undefined' || !window.localStorage) return;
@@ -221,7 +226,7 @@ export function findTemporaryMoveForSlot(
  */
 export function deleteTemporaryMove(
   moveId: string,
-  storageKey = STORAGE_KEY_TEMPORARY_MOVES
+  storageKey = resolveStorageKey(STORAGE_KEY_TEMPORARY_MOVES)
 ): void {
   try {
     if (typeof window === 'undefined' || !window.localStorage) return;

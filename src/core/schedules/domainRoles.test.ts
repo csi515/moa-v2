@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SCHEDULE_HOLDING_STATUSES } from '@/core/capacity/types';
+import { SCHEDULE_HOLDING_STATUSES } from '@/capabilities/scheduling/capacity/types';
 import {
   APPOINTMENT_BOOKING_LEDGER,
   ATTENDANCE_CHECK_IN_LEDGER,

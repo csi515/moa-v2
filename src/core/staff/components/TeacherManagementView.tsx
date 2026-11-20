@@ -25,7 +25,7 @@ import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import type { Teacher } from '@/types/teacher';
 import type { TeacherPayType } from '@/capabilities/billing/finance/billingLedgerTypes';
-import { payTypeLabel, payTypeRateUnitLabel, payTypeUsesUnitRate } from '@/core/finance/teacherPayroll';
+import { payTypeLabel, payTypeRateUnitLabel, payTypeUsesUnitRate } from '@/capabilities/billing/finance/teacherPayroll';
 import { normalizeStaffGrants, type StaffGrants } from '@/core/staff/staffGrants';
 import { StaffGrantFields, emptyStaffGrants } from './StaffGrantFields';
 import { formatCurrency } from '@/utils/formatters';

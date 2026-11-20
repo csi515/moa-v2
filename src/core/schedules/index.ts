@@ -35,8 +35,8 @@ export {
 export { reservationService, reservationService as scheduleReservationService } from './services/reservationService';
 export { availabilityService } from './services/availabilityService';
 export { materializeAvailabilitySlots } from './services/materializeAvailabilitySlots';
-export { availabilityCapability } from '@/core/availability';
-export { capacityCapability } from '@/core/capacity';
+export { availabilityCapability } from '@/capabilities/scheduling/availability';
+export { capacityCapability } from '@/capabilities/scheduling/capacity';
 export { sessionPassService } from './sessionPassService';
 export { updateBookingStatusAtomic } from './bookingPassAtomic';
 export {

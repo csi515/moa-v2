@@ -6970,6 +6970,450 @@ export interface Database {
     };
     Views: Record<string, never>;
     Functions: {
+      delete_organization: {
+        Args: {
+          p_organization_id: string;
+        };
+        Returns: boolean;
+      };
+      get_user_memberships: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json;
+      };
+      set_active_membership: {
+        Args: {
+          p_membership_id: string;
+        };
+        Returns: boolean;
+      };
+      clear_active_membership: {
+        Args: Record<PropertyKey, never>;
+        Returns: boolean;
+      };
+      search_organizations_for_enrollment: {
+        Args: {
+          p_query?: string;
+          p_limit?: number;
+        };
+        Returns: Json;
+      };
+      find_organization_by_public_code: {
+        Args: {
+          p_code: string;
+        };
+        Returns: Json;
+      };
+      request_guardian_enrollment: {
+        Args: {
+          p_student_id: string;
+          p_organization_id: string;
+          p_consent_fields?: Json;
+          p_notes?: string;
+        };
+        Returns: Json;
+      };
+      cancel_guardian_enrollment_request: {
+        Args: {
+          p_request_id: string;
+        };
+        Returns: Json;
+      };
+      get_my_enrollment_requests: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json;
+      };
+      unlink_parent_enrollment: {
+        Args: {
+          p_enrollment_id: string;
+        };
+        Returns: Json;
+      };
+      staff_unlink_parent_enrollment: {
+        Args: {
+          p_org_id: string;
+          p_enrollment_id: string;
+        };
+        Returns: Json;
+      };
+      get_my_student_portal_context: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json;
+      };
+      request_room_reservation: {
+        Args: {
+          p_org_id: string;
+          p_room_id: string;
+          p_starts_at: string;
+          p_ends_at: string;
+          p_memo?: string;
+        };
+        Returns: string;
+      };
+      cancel_my_room_reservation: {
+        Args: {
+          p_reservation_id: string;
+        };
+        Returns: boolean;
+      };
+      review_room_reservation: {
+        Args: {
+          p_reservation_id: string;
+          p_approve: boolean;
+          p_memo?: string;
+        };
+        Returns: boolean;
+      };
+      upsert_practice_room: {
+        Args: {
+          p_org_id: string;
+          p_name: string;
+          p_capacity?: number;
+          p_open_time?: Json;
+          p_close_time?: Json;
+          p_id?: string;
+        };
+        Returns: string;
+      };
+      create_staff_room_reservation: {
+        Args: {
+          p_org_id: string;
+          p_room_id: string;
+          p_customer_id: string;
+          p_starts_at: string;
+          p_ends_at: string;
+          p_memo?: string;
+        };
+        Returns: string;
+      };
+      list_my_customer_join_requests: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json;
+      };
+      cancel_my_customer_join_request: {
+        Args: {
+          p_request_id: string;
+        };
+        Returns: boolean;
+      };
+      parent_update_child: {
+        Args: {
+          p_student_id: string;
+          p_display_name: string;
+          p_birth_date?: string;
+          p_relationship?: Json;
+          p_gender?: string;
+          p_school?: string;
+          p_grade?: string;
+        };
+        Returns: Json;
+      };
+      update_my_parent_phone: {
+        Args: {
+          p_phone: string;
+        };
+        Returns: Json;
+      };
+      create_sale: {
+        Args: {
+          p_organization_id: string;
+          p_customer_id?: string;
+          p_payment_method?: Json;
+          p_points_used?: number;
+          p_items?: Json;
+        };
+        Returns: Json;
+      };
+      create_sale_return: {
+        Args: {
+          p_organization_id: string;
+          p_sale_id: string;
+          p_reason?: string;
+          p_items?: Json;
+        };
+        Returns: Json;
+      };
+      apply_point_redeem_for_sale: {
+        Args: {
+          p_organization_id: string;
+          p_customer_id: string;
+          p_sale_id: string;
+          p_points_to_use: number;
+          p_sale_total_amount: number;
+        };
+        Returns: Json;
+      };
+      apply_point_earn_for_sale: {
+        Args: {
+          p_organization_id: string;
+          p_customer_id: string;
+          p_sale_id: string;
+          p_points_earned: number;
+          p_earn_rate_percent: number;
+          p_base_amount: number;
+        };
+        Returns: Json;
+      };
+      apply_point_adjust_for_sale_return: {
+        Args: {
+          p_organization_id: string;
+          p_customer_id: string;
+          p_return_id: string;
+          p_amount: number;
+          p_description?: string;
+        };
+        Returns: Json;
+      };
+      apply_stock_movement: {
+        Args: {
+          p_organization_id: string;
+          p_product_id: string;
+          p_variant_id: string;
+          p_movement_type: Json;
+          p_quantity: number;
+          p_reference_type?: string;
+          p_reference_id?: string;
+          p_reason?: string;
+          p_stock_location_id?: string;
+        };
+        Returns: Json;
+      };
+      ensure_monthly_tuition_invoice: {
+        Args: {
+          p_organization_id: string;
+          p_customer_id: string;
+          p_year_month: string;
+          p_title: string;
+          p_billed_amount: number;
+          p_due_date?: string;
+          p_metadata?: Json;
+          p_invoice_id?: string;
+        };
+        Returns: Json;
+      };
+      record_textbook_payment: {
+        Args: {
+          p_organization_id: string;
+          p_sale_id: string;
+          p_amount: number;
+          p_payment_method: Json;
+          p_payment_date?: string;
+          p_memo?: string;
+          p_idempotency_key?: string;
+          p_student_name?: string;
+          p_textbook_title?: string;
+        };
+        Returns: Json;
+      };
+      schedule_makeup: {
+        Args: {
+          p_organization_id: string;
+          p_attendance_id: string;
+          p_makeup_date: string;
+          p_start_time: Json;
+          p_end_time: Json;
+          p_room?: string;
+          p_teacher_id?: string;
+          p_teacher_name?: string;
+        };
+        Returns: Json;
+      };
+      cancel_booking_as_parent: {
+        Args: {
+          p_organization_id: string;
+          p_booking_id: string;
+        };
+        Returns: Json;
+      };
+      update_customer_phone_atomic: {
+        Args: {
+          p_new_phone_e164: string;
+        };
+        Returns: Json;
+      };
+      issue_customer_transfer_token: {
+        Args: {
+          p_organization_id: string;
+          p_phone: string;
+          p_customer_name: string;
+          p_target_customer_id?: string;
+        };
+        Returns: Json;
+      };
+      safe_transfer_customer_identity: {
+        Args: {
+          p_token: string;
+          p_organization_id: string;
+          p_customer_name: string;
+          p_phone: string;
+        };
+        Returns: Json;
+      };
+      revoke_member_token: {
+        Args: {
+          p_organization_id: string;
+          p_user_id: string;
+        };
+        Returns: number;
+      };
+      book_schedule_slot: {
+        Args: {
+          p_schedule_id: string;
+          p_customer_id: string;
+          p_pass_id?: string;
+        };
+        Returns: Json;
+      };
+      process_approval_step_atomic: {
+        Args: {
+          p_request_id: string;
+          p_step_id: string;
+          p_action: string;
+          p_comment?: string;
+          p_signature_url?: string;
+        };
+        Returns: Json;
+      };
+      assign_or_revoke_member_role: {
+        Args: {
+          p_member_id: string;
+          p_role_id: string;
+          p_revoke?: boolean;
+        };
+        Returns: undefined;
+      };
+      transfer_organization_ownership: {
+        Args: {
+          p_organization_id: string;
+          p_next_owner_member_id: string;
+          p_reason: string;
+        };
+        Returns: undefined;
+      };
+      move_department: {
+        Args: {
+          p_department_id: string;
+          p_new_parent_id: string;
+        };
+        Returns: undefined;
+      };
+      revise_mbo_goal: {
+        Args: {
+          p_goal_id: string;
+          p_new_target_value: number;
+          p_new_due_date: string;
+          p_unmet_reason: string;
+          p_revision_reason: string;
+        };
+        Returns: undefined;
+      };
+      replace_mbo_goal_shares: {
+        Args: {
+          p_goal_id: string;
+          p_member_ids: string;
+        };
+        Returns: undefined;
+      };
+      submit_risk_assessment_for_review: {
+        Args: {
+          p_assessment_id: string;
+          p_reviewer_id: string;
+        };
+        Returns: Json;
+      };
+      approve_risk_assessment_step: {
+        Args: {
+          p_assessment_id: string;
+          p_step_order: number;
+          p_comment?: string;
+          p_signature?: string;
+          p_next_assignee_id?: string;
+        };
+        Returns: Json;
+      };
+      reject_risk_assessment_step: {
+        Args: {
+          p_assessment_id: string;
+          p_step_order: number;
+          p_reject_reason: string;
+        };
+        Returns: Json;
+      };
+      revise_risk_assessment: {
+        Args: {
+          p_assessment_id: string;
+          p_revision_type: string;
+          p_revision_reason: string;
+        };
+        Returns: Json;
+      };
+      complete_risk_assessment_repledge: {
+        Args: {
+          p_repledge_id: string;
+          p_signature: string;
+        };
+        Returns: Json;
+      };
+      ensure_default_project_categories: {
+        Args: {
+          p_org: string;
+        };
+        Returns: undefined;
+      };
+      assign_department_member_role: {
+        Args: {
+          p_target_member_id: string;
+          p_department_id: string;
+          p_role_id: string;
+          p_scope_type?: string;
+        };
+        Returns: undefined;
+      };
+      list_org_room_reservations: {
+        Args: {
+          p_org_id: string;
+          p_room_id?: string;
+          p_from?: string;
+          p_to?: string;
+          p_limit?: number;
+        };
+        Returns: Json;
+      };
+      request_member_room_reservation: {
+        Args: {
+          p_org_id: string;
+          p_room_id: string;
+          p_starts_at: string;
+          p_ends_at: string;
+          p_memo?: string;
+        };
+        Returns: string;
+      };
+      transfer_stock_between_locations: {
+        Args: {
+          p_organization_id: string;
+          p_product_id: string;
+          p_variant_id: string;
+          p_from_location_id: string;
+          p_to_location_id: string;
+          p_quantity: number;
+          p_reason?: string;
+        };
+        Returns: Json;
+      };
+      ensure_central_stock_location_id: {
+        Args: {
+          p_organization_id: string;
+        };
+        Returns: string;
+      };
+      grant_member_feature_permission: {
+        Args: {
+          p_target_member_id: string;
+          p_feature_key: string;
+          p_enabled: boolean;
+        };
+        Returns: undefined;
+      };
       approve_guardian_enrollment: {
         Args: {
           p_request_id: string;
@@ -8805,6 +9249,57 @@ export interface Database {
     };
     Views: Record<string, never>;
     Functions: {
+      request_song_completion: {
+        Args: {
+          p_org_id: string;
+          p_customer_id: string;
+          p_book_name: string;
+          p_song_title: string;
+          p_memo?: string;
+        };
+        Returns: string;
+      };
+      approve_song_progress: {
+        Args: {
+          p_progress_id: string;
+          p_stamps?: number;
+        };
+        Returns: boolean;
+      };
+      approve_song_progress_bulk: {
+        Args: {
+          p_progress_ids: string;
+          p_stamps?: number;
+        };
+        Returns: number;
+      };
+      grant_song_stamp_direct: {
+        Args: {
+          p_org_id: string;
+          p_customer_id: string;
+          p_book_name: string;
+          p_song_title: string;
+          p_stamps?: number;
+        };
+        Returns: string;
+      };
+      update_attendance_status_with_pass: {
+        Args: {
+          p_organization_id: string;
+          p_attendance_id: string;
+          p_customer_id: string;
+          p_service_id: string;
+          p_attendance_date: string;
+          p_new_status: string;
+          p_apply_pass?: boolean;
+          p_student_name?: string;
+          p_class_name?: string;
+          p_created_by?: string;
+          p_memo?: string;
+          p_absent_reason?: string;
+        };
+        Returns: Json;
+      };
       check_in_visit: {
         Args: {
           p_organization_id: string;

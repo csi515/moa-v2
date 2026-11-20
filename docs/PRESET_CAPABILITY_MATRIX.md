@@ -1,7 +1,7 @@
 # Moa-v2 사업장 종류별 필요 기능 매트릭스 (Preset Capability Matrix SSOT)
 
 > **불변 원칙 (Constitution)**: Core는 업종을 모르고, Capability는 업종 중립적이며, Preset은 업종별 Capability 조합을 선언적으로 정의합니다.
-> 본 문서는 Moa-v2에 등록된 **총 52개 업종별 프리셋**과 **59개 재사용 기능(Capability)**의 연계 구성을 정의하는 단일 진실 공급원(SSOT)입니다.
+> 본 문서는 Moa-v2에 등록된 **총 53개 업종별 프리셋**과 **61개 재사용 기능(Capability)**의 연계 구성을 정의하는 단일 진실 공급원(SSOT)입니다.
 > 
 > *자동 생성 및 검증: `npm run check:preset-parity`*
 
@@ -25,8 +25,8 @@
 | **3. 뷰티 및 케어** | 8개 | 헤어샵 / 뷰티 살롱, 바버숍, 네일숍 등 | 원생/회원/고객, 연습실/룸/좌석, 강사/디자이너 등 |
 | **4. 공간 및 숙박** | 7개 | 스터디카페 / 공간대여, 공유오피스, 공간대여·대관업 등 | 원생/회원/고객, 연습실/룸/좌석, 강사/디자이너 등 |
 | **5. 리테일 및 F&B** | 6개 | 일반 소매점, 의류매장, 편의점 등 | 원생/회원/고객, 연습실/룸/좌석, 강사/디자이너 등 |
-| **6. 라이프 서비스 및 정비** | 6개 | 자동차 정비소, 청소·방문 서비스 업체, 반려동물 호텔·유치원 등 | 원생/회원/고객, 연습실/룸/좌석, 강사/디자이너 등 |
-| **7. 기업 및 특수 도메인** | 7개 | 일반 기업 / 경영관리, 제조·가공업 (공정/BOM/품질 관리), 도소매 / 자재 유통업 등 | 원생/회원/고객, 연습실/룸/좌석, 강사/디자이너 등 |
+| **6. 라이프 서비스 및 정비** | 6개 | 반려동물 호텔·유치원, 자동차 정비소, 청소·방문 서비스 업체 등 | 원생/회원/고객, 연습실/룸/좌석, 강사/디자이너 등 |
+| **7. 기업 및 특수 도메인** | 8개 | 돌잔치·연회 전문점, 이유식 품앗이 / 공동육아, 일반 기업 / 경영관리 등 | 원생/회원/고객, 연습실/룸/좌석, 강사/디자이너 등 |
 
 ---
 
@@ -112,9 +112,9 @@
 
 | 업종 ID | 국문 명칭 | 완성도 | 고객 호칭 | 공간 호칭 | 필수 기능 (Required) | 기본 활성화 기능 (Capabilities) |
 | :--- | :--- | :---: | :---: | :---: | :--- | :--- |
+| `pet_hotel` | **반려동물 호텔·유치원** | `basic_ui` | 보호자/반려동물 | 호텔룸/플레이존 | `seat_room`, `attendance`, `passes` | **`seat_room`**, **`attendance`**, **`passes`**, `consultation_crm`, `maintenance_checklist` |
 | `auto_repair` | **자동차 정비소** | `basic_ui` | 고객/차주 | 정비베이 | `task_pipeline`, `inventory`, `billing_invoicing` | **`task_pipeline`**, **`inventory`**, **`billing_invoicing`**, `consultation_crm`, `booking`, `commission_payroll`, `work_order_kanban`, `equipment_lifecycle`, `sop_risk_assessment`, `vendor_ap_invoice`, `quality_inspection`, `change_management` |
 | `cleaning_service` | **청소·방문 서비스 업체** | `basic_ui` | 고객/의뢰인 | 서비스현장 | `shift_schedule`, `task_pipeline`, `billing_invoicing` | **`shift_schedule`**, **`task_pipeline`**, **`billing_invoicing`**, `consultation_crm`, `booking` |
-| `pet_hotel` | **반려동물 호텔·유치원** | `basic_ui` | 보호자/반려동물 | 호텔룸/플레이존 | `seat_room`, `attendance`, `passes` | **`seat_room`**, **`attendance`**, **`passes`**, `consultation_crm`, `maintenance_checklist` |
 | `equipment_rental` | **장비·렌탈업** | `basic_ui` | 대여자/고객 | 장비보관소 | `rental_equipment`, `inventory`, `billing_invoicing` | **`rental_equipment`**, **`inventory`**, `passes`, **`billing_invoicing`**, `safety_consent` |
 | `craft_repair` | **맞춤 제작 공방 & 수리점** | `basic_ui` | 수강생/의뢰인 | 작업대/물레 | `task_pipeline`, `inventory` | **`task_pipeline`**, **`inventory`**, `booking`, `ledger_simple`, `sop_risk_assessment`, `pickup_orders`, `quality_inspection`, `change_management`, `loyalty_stamp` |
 | `self_carwash` | **셀프 세차장 & 코인샵** | `basic_ui` | 고객 | 세차베이/드라잉존 | `credit_wallet`, `maintenance_checklist` | **`credit_wallet`**, **`maintenance_checklist`**, `inventory`, `loyalty_stamp` |
@@ -125,13 +125,14 @@
 
 | 업종 ID | 국문 명칭 | 완성도 | 고객 호칭 | 공간 호칭 | 필수 기능 (Required) | 기본 활성화 기능 (Capabilities) |
 | :--- | :--- | :---: | :---: | :---: | :--- | :--- |
+| `first_birthday_party` | **돌잔치·연회 전문점** | `basic_ui` | 혼주/부모님 | 연회홀/파티룸 | `booking`, `seat_room`, `custom_order_craft` | **`booking`**, **`seat_room`**, `space_turnaround`, **`custom_order_craft`**, `task_pipeline`, `deposit_escrow`, `digital_contract`, `consultation_crm` |
+| `baby_food_coop` | **이유식 품앗이 / 공동육아** | `basic_ui` | 참여 가족 (아기) | 모임 거점 (주방/공간) | `baby_food_coop`, `consultation_crm`, `billing_invoicing` | **`baby_food_coop`**, **`consultation_crm`**, `feedbacks`, `daily_care_report`, **`billing_invoicing`**, `booking`, `rental_equipment` |
 | `general_enterprise` | **일반 기업 / 경영관리** | `basic_ui` | 고객사/임직원 | 회의실/집무실 | `approval_workflow`, `task_pipeline` | **`approval_workflow`**, **`task_pipeline`**, `workplace_policy`, `mbo`, `feedbacks`, `billing_invoicing`, `seat_room`, `leave_management`, `supply_restock` |
 | `manufacturing_light` | **제조·가공업 (공정/BOM/품질 관리)** | `basic_ui` | 발주처/고객사 | 가공/조립라인 | `task_pipeline`, `recipe_bom`, `inventory` | **`task_pipeline`**, **`recipe_bom`**, **`inventory`**, `quality_inspection`, `maintenance_checklist`, `sop_risk_assessment`, `facility_incident_report`, `shift_schedule`, `workplace_policy`, `feedbacks`, `supply_restock`, `change_management`, `approval_workflow`, `leave_management`, `vehicle_shuttle`, `shuttle_dispatch`, `seat_room` |
 | `procurement_distribution` | **도소매 / 자재 유통업** | `basic_ui` | 매입/매출처 | 물류창고 | `supply_restock`, `inventory`, `billing_invoicing` | **`supply_restock`**, **`inventory`**, `approval_workflow`, **`billing_invoicing`**, `vendor_ap_invoice`, `credit_wallet` |
 | `iso_ims_enterprise` | **ISO 통합경영시스템 (QEHS)** | `basic_ui` | 이해관계자/심사원 | 회의실/현장 | `quality_inspection`, `sop_risk_assessment`, `facility_incident_report`, `approval_workflow` | **`quality_inspection`**, **`sop_risk_assessment`**, **`facility_incident_report`**, `change_management`, **`approval_workflow`**, `maintenance_checklist`, `workplace_policy`, `mbo`, `inventory`, `seat_room`, `leave_management` |
 | `iso_human_capital` | **ISO 인적자본 경영 (HR & MBO)** | `basic_ui` | 임직원 | 세미나실/회의실 | `mbo`, `work_attendance_payroll`, `workplace_policy` | **`mbo`**, `shift_schedule`, **`work_attendance_payroll`**, **`workplace_policy`**, `feedbacks`, `approval_workflow`, `leave_management` |
 | `rnd_lab_management` | **연구소 & 랩실 관리 (기업 R&D / 대학 연구실)** | `basic_ui` | 연구원/과제담당자 | 실험실/분석기기실 | `task_pipeline`, `seat_room`, `research_project`, `patent_ip_asset`, `sop_risk_assessment` | **`task_pipeline`**, **`seat_room`**, **`research_project`**, **`patent_ip_asset`**, `equipment_lifecycle`, `facility_incident_report`, **`sop_risk_assessment`**, `supply_restock`, `mbo`, `approval_workflow`, `leave_management`, `vehicle_shuttle`, `hazardous_substance_msds`, `electronic_lab_notebook` |
-| `baby_food_coop` | **이유식 품앗이 / 공동육아** | `basic_ui` | 참여 가족 (아기) | 모임 거점 (주방/공간) | `baby_food_coop`, `consultation_crm`, `billing_invoicing` | **`baby_food_coop`**, **`consultation_crm`**, `feedbacks`, `daily_care_report`, **`billing_invoicing`**, `booking`, `rental_equipment` |
 
 ---
 
@@ -162,7 +163,7 @@
 
 ---
 
-## 5. 프리셋 별칭 (Preset Aliases) 매핑 현황 (총 17개)
+## 5. 프리셋 별칭 (Preset Aliases) 매핑 현황 (총 20개)
 
 사용자가 온보딩이나 검색 시 유사 키워드를 입력했을 때 표준 프리셋으로 자동 라우팅되는 별칭 목록입니다:
 
@@ -185,6 +186,9 @@
 | `sauna_jjimjbang` | `sauna_jjimjilbang` (사우나·찜질방) |
 | `preschool` | `daycare` (어린이집·유치원) |
 | `kindergarten` | `daycare` (어린이집·유치원) |
+| `party_venue` | `first_birthday_party` (돌잔치·연회 전문점) |
+| `first_birthday` | `first_birthday_party` (돌잔치·연회 전문점) |
+| `first_birthday_venue` | `first_birthday_party` (돌잔치·연회 전문점) |
 
 ---
 

@@ -15,6 +15,9 @@ import type { AcademySettings } from '@/core/organizations/settingsTypes';
 import { StorageService } from '@/services/storage';
 import { locationService } from '@/core/locations/locationService';
 import { userFacingErrorMessage } from '@/shared/errors/userFacingError';
+import { createLogger } from '@/core/logging';
+
+const logger = createLogger('OrganizationService');
 import { getCoreClient } from '../../../lib/supabase';
 import type { MemberRole, Organization } from '../../../lib/supabase';
 import {
@@ -164,7 +167,7 @@ export async function fetchUserOrganizations(userId: string): Promise<Organizati
       .eq('is_active', true);
 
     if (error) {
-      console.warn('[org] fetchUserOrganizations joined query failed, trying decoupled query:', error.message || error);
+      logger.warn(' fetchUserOrganizations joined query failed, trying decoupled query:', error.message || error);
       const { data: members, error: memError } = await getCoreClient()
         .from('organization_members')
         .select('id, role, organization_id, staff_id, parent_customer_id')
@@ -186,7 +189,7 @@ export async function fetchUserOrganizations(userId: string): Promise<Organizati
         .eq('is_active', true);
 
       if (orgsError || !orgs) {
-        console.warn('[org] fetch organizations by ids failed:', orgsError?.message || orgsError);
+        logger.warn(' fetch organizations by ids failed:', orgsError?.message || orgsError);
         return [];
       }
 
@@ -214,7 +217,7 @@ export async function fetchUserOrganizations(userId: string): Promise<Organizati
         organization: row.organizations as Organization,
       }));
   } catch (err) {
-    console.warn('[org] fetchUserOrganizations exception:', err);
+    logger.warn(' fetchUserOrganizations exception:', err);
     throw err;
   }
 }
@@ -254,14 +257,13 @@ export async function fetchUserMembershipsWithContext(): Promise<OrganizationMem
 
     rpcFailed = true;
     lastError = error;
-    console.warn(
-      '[org] get_user_memberships failed, falling back to direct query',
+    logger.warn(' get_user_memberships failed, falling back to direct query',
       error?.message
     );
   } catch (rpcErr) {
     rpcFailed = true;
     lastError = rpcErr;
-    console.warn('[org] get_user_memberships RPC exception, falling back:', rpcErr);
+    logger.warn(' get_user_memberships RPC exception, falling back:', rpcErr);
   }
 
   try {
@@ -278,7 +280,7 @@ export async function fetchUserMembershipsWithContext(): Promise<OrganizationMem
     }
     return await fetchUserOrganizations(user.id);
   } catch (directErr) {
-    console.warn('[org] fetchUserOrganizations fallback failed:', directErr);
+    logger.warn(' fetchUserOrganizations fallback failed:', directErr);
     if (rpcFailed) {
       throw (directErr instanceof Error ? directErr : new Error(String(lastError?.message || directErr || '사업장 정보를 불러오지 못했습니다.')));
     }

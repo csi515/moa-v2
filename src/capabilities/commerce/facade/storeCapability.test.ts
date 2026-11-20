@@ -101,7 +101,7 @@ console.log('storeCapability.test.ts: ok');
 console.log(
   JSON.stringify(
     {
-      reuse: 'Bath ConvenienceStore → @/core/commerce storeCapability',
+      reuse: 'Bath ConvenienceStore → @/capabilities/commerce/facade storeCapability',
       scenarios: scenarioToApi,
       cancelModel: 'full remaining qty via createReturn; no cancelSale RPC',
       stockDeduct: 'create_sale only; do not call applySaleDeduct from a store UI',

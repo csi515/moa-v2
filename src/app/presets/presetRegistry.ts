@@ -62,6 +62,9 @@ export const PRESET_ALIASES: Record<string, string> = {
   sauna_jjimjbang: 'sauna_jjimjilbang',
   preschool: 'daycare',
   kindergarten: 'daycare',
+  party_venue: 'first_birthday_party',
+  first_birthday: 'first_birthday_party',
+  first_birthday_venue: 'first_birthday_party',
 };
 
 export function getIndustryPreset(presetId: string): IndustryPresetDefinition | undefined {

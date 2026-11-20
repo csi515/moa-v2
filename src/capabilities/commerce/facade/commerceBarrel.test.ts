@@ -130,7 +130,7 @@ for (const rel of retailServiceAndTypeFiles) {
   assert.doesNotMatch(
     src,
     /from '@\/core\/commerce(?:\/[^']*)?'/,
-    `${rel} must use @/capabilities/commerce, not @/core/commerce`
+    `${rel} must use @/capabilities/commerce, not @/capabilities/commerce/facade`
   );
 }
 

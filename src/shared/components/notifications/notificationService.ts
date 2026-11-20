@@ -1,4 +1,5 @@
 import type { MoaNotification } from './notificationTypes';
+import { resolveStorageKey } from '@/services/adapters';
 
 const STORAGE_KEY = 'moa_notifications_v1';
 const NOTIFICATION_EVENT = 'moa_notification_update';
@@ -63,10 +64,15 @@ export const MoaNotificationService = {
   getNotifications(): MoaNotification[] {
     if (typeof window === 'undefined') return [];
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const key = resolveStorageKey(STORAGE_KEY);
+      let raw = localStorage.getItem(key);
+      if (!raw && key !== STORAGE_KEY) {
+        raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) localStorage.setItem(key, raw);
+      }
       if (!raw) {
         const initial = getInitialSampleNotifications();
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));
+        localStorage.setItem(key, JSON.stringify(initial));
         return initial;
       }
       const parsed = JSON.parse(raw);
@@ -89,7 +95,8 @@ export const MoaNotificationService = {
   saveNotifications(list: MoaNotification[]): void {
     if (typeof window === 'undefined') return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      const key = resolveStorageKey(STORAGE_KEY);
+      localStorage.setItem(key, JSON.stringify(list));
       window.dispatchEvent(new CustomEvent(NOTIFICATION_EVENT));
     } catch (e) {
       console.error('[MoaNotificationService] save failed', e);

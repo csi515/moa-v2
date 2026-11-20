@@ -6,6 +6,7 @@
  */
 
 import { formatIsoDateLocal, todayIsoLocal } from '@/shared/utils/localDate';
+import { resolveStorageKey } from '@/services/adapters';
 
 export type PianoInstrumentType = 'grand' | 'upright' | 'digital';
 
@@ -105,12 +106,16 @@ export function calculateTuningDDay(
 }
 
 /**
- * 로컬스토리지에서 연습실별 조율 상태 맵을 로드
+ * 로컬스토리지에서 연습실별 조율 상태 맵을 로드 (테넌트 격리)
  */
-export function loadAllRoomTuningRecords(storageKey = STORAGE_KEY_PIANO_TUNING): Record<string, RoomTuningRecord> {
+export function loadAllRoomTuningRecords(storageKey = resolveStorageKey(STORAGE_KEY_PIANO_TUNING)): Record<string, RoomTuningRecord> {
   try {
     if (typeof window === 'undefined' || !window.localStorage) return {};
-    const raw = window.localStorage.getItem(storageKey);
+    let raw = window.localStorage.getItem(storageKey);
+    if (!raw && storageKey !== STORAGE_KEY_PIANO_TUNING) {
+      raw = window.localStorage.getItem(STORAGE_KEY_PIANO_TUNING);
+      if (raw) window.localStorage.setItem(storageKey, raw);
+    }
     if (!raw) return {};
     const parsed = JSON.parse(raw);
     return typeof parsed === 'object' && parsed !== null ? parsed : {};
@@ -156,11 +161,11 @@ export function getRoomTuningRecord(
 }
 
 /**
- * 연습실 조율 정보 저장
+ * 연습실 조율 정보 저장 (테넌트 격리)
  */
 export function saveRoomTuningRecord(
   record: RoomTuningRecord,
-  storageKey = STORAGE_KEY_PIANO_TUNING
+  storageKey = resolveStorageKey(STORAGE_KEY_PIANO_TUNING)
 ): void {
   try {
     if (typeof window === 'undefined' || !window.localStorage) return;

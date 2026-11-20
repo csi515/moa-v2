@@ -2,8 +2,8 @@
  * 업종 무관 Resource Capability.
  * 카탈로그만 다룬다. 예약은 resourceReservationCapability.
  */
-import { windowsFromResourceHours } from '@/core/availability/windows';
-import { capacityCapability } from '@/core/capacity';
+import { windowsFromResourceHours } from '@/capabilities/scheduling/availability/windows';
+import { capacityCapability } from '@/capabilities/scheduling/capacity';
 import {
   getResourceById,
   listBookableResources,

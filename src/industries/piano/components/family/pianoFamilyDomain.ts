@@ -2,6 +2,7 @@
  * 피아노 학원 가족/형제자매 동시 관리 & 수강료 결제 묶음 처리 도메인 엔진
  */
 import { todayIsoLocal } from '@/shared/utils/localDate';
+import { resolveStorageKey } from '@/services/adapters';
 
 export interface PianoStudentSummary {
   id: string;
@@ -267,12 +268,17 @@ export function findStudentFamilyInfo(
 }
 
 /**
- * 로컬스토리지에서 커스텀 패밀리 그룹 목록을 로드
+ * 로컬스토리지에서 커스텀 패밀리 그룹 목록을 로드 (테넌트 격리)
  */
 export function loadCustomFamilyGroups(): FamilyGroup[] {
   if (typeof window === 'undefined' || !window.localStorage) return [];
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY_CUSTOM_FAMILY_GROUPS);
+    const key = resolveStorageKey(STORAGE_KEY_CUSTOM_FAMILY_GROUPS);
+    let raw = window.localStorage.getItem(key);
+    if (!raw && key !== STORAGE_KEY_CUSTOM_FAMILY_GROUPS) {
+      raw = window.localStorage.getItem(STORAGE_KEY_CUSTOM_FAMILY_GROUPS);
+      if (raw) window.localStorage.setItem(key, raw);
+    }
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
@@ -280,24 +286,30 @@ export function loadCustomFamilyGroups(): FamilyGroup[] {
 }
 
 /**
- * 로컬스토리지에 커스텀 패밀리 그룹 목록 저장
+ * 로컬스토리지에 커스텀 패밀리 그룹 목록 저장 (테넌트 격리)
  */
 export function saveCustomFamilyGroups(groups: FamilyGroup[]): void {
   if (typeof window === 'undefined' || !window.localStorage) return;
   try {
-    window.localStorage.setItem(STORAGE_KEY_CUSTOM_FAMILY_GROUPS, JSON.stringify(groups));
+    const key = resolveStorageKey(STORAGE_KEY_CUSTOM_FAMILY_GROUPS);
+    window.localStorage.setItem(key, JSON.stringify(groups));
   } catch {
     // ignore
   }
 }
 
 /**
- * 로컬스토리지에서 가족 공용 크레딧 맵 로드
+ * 로컬스토리지에서 가족 공용 크레딧 맵 로드 (테넌트 격리)
  */
 export function loadFamilyCredits(): Record<string, number> {
   if (typeof window === 'undefined' || !window.localStorage) return {};
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY_FAMILY_CREDITS);
+    const key = resolveStorageKey(STORAGE_KEY_FAMILY_CREDITS);
+    let raw = window.localStorage.getItem(key);
+    if (!raw && key !== STORAGE_KEY_FAMILY_CREDITS) {
+      raw = window.localStorage.getItem(STORAGE_KEY_FAMILY_CREDITS);
+      if (raw) window.localStorage.setItem(key, raw);
+    }
     return raw ? JSON.parse(raw) : {};
   } catch {
     return {};
@@ -305,14 +317,15 @@ export function loadFamilyCredits(): Record<string, number> {
 }
 
 /**
- * 특정 가족의 공용 크레딧 잔액 저장
+ * 특정 가족의 공용 크레딧 잔액 저장 (테넌트 격리)
  */
 export function updateFamilyCreditBalance(groupId: string, newBalance: number): void {
   if (typeof window === 'undefined' || !window.localStorage) return;
   try {
+    const key = resolveStorageKey(STORAGE_KEY_FAMILY_CREDITS);
     const credits = loadFamilyCredits();
     credits[groupId] = Math.max(0, newBalance);
-    window.localStorage.setItem(STORAGE_KEY_FAMILY_CREDITS, JSON.stringify(credits));
+    window.localStorage.setItem(key, JSON.stringify(credits));
   } catch {
     // ignore
   }

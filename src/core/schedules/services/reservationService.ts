@@ -1,4 +1,4 @@
-import { capacityCapability } from '@/core/capacity';
+import { capacityCapability } from '@/capabilities/scheduling/capacity';
 import { getCoreClient } from '@/lib/supabase';
 import type {
   MyReservationRpcRow,

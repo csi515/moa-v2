@@ -453,6 +453,102 @@ export const spacePresets: Record<string, IndustryPresetDefinition> = {
     readinessLevel: 'basic_ui',
   },
 
+  first_birthday_party: {
+    id: 'first_birthday_party',
+    theme: {
+      accentColor: 'amber',
+      badgeEmoji: '🎂',
+    },
+    starterPassTemplates: [
+      {
+        name: '프리미엄 돌잔치 올인원 패키지 (보증 50인 + 돌상 + 뷔페)',
+        passType: 'COUNT_BASED',
+        totalCount: 1,
+        validityDays: 180,
+        recommendedPrice: 2800000,
+        badge: '인기',
+      },
+      {
+        name: '직계가족 소규모 돌잔치 패키지 (보증 15인 + 전통돌상)',
+        passType: 'COUNT_BASED',
+        totalCount: 1,
+        validityDays: 180,
+        recommendedPrice: 950000,
+        badge: '추천',
+      },
+      {
+        name: '단독홀 대관 & 돌상 베이직 패키지',
+        passType: 'COUNT_BASED',
+        totalCount: 1,
+        validityDays: 180,
+        recommendedPrice: 600000,
+      },
+    ],
+    terms: {
+      customer: '혼주/부모님',
+      instructor: '행사 디렉터',
+      space: '연회홀/파티룸',
+      pass: '행사 패키지권',
+      fee: '대관 및 연회비',
+      lesson: '행사 타임',
+    },
+    operatingHours: {
+      day_type: 'ALL_WEEK',
+      start_time: '10:00',
+      end_time: '21:30',
+      slot_minutes: 150,
+    },
+    facilities: {
+      turnaroundBufferMinutes: 60,
+    },
+    name: '돌잔치·연회 전문점',
+    description: '돌잔치·가족연회 타임별 홀 예약, 최소 보증인원 및 식순 시나리오 관리, 플래너 일정 공유 및 업체 소개자료 공개',
+    category: 'studio',
+    capabilities: [
+      'booking',
+      'seat_room',
+      'space_turnaround',
+      'custom_order_craft',
+      'task_pipeline',
+      'deposit_escrow',
+      'digital_contract',
+      'consultation_crm',
+    ] as const,
+    requiredCapabilities: ['booking', 'seat_room', 'custom_order_craft'] as const,
+    optionalCapabilities: [
+      'space_turnaround',
+      'task_pipeline',
+      'deposit_escrow',
+      'digital_contract',
+      'consultation_crm',
+    ] as const,
+    businessRules: {
+      defaultMinGuaranteedGuests: 20,
+      turnaroundBufferMinutes: 60,
+      allowPlannerPublicSharing: true,
+      supportsCustomTimeline: true,
+    },
+    resourceTypes: [
+      { name: '메인 다이닝홀 (Main Hall)', type: 'room', capacity: 80 },
+      { name: '프라이빗 가든룸 (Garden Room)', type: 'room', capacity: 35 },
+      { name: '전통 한옥룸 (Traditional Room)', type: 'room', capacity: 50 },
+    ],
+    roles: [
+      { name: '대표/총지배인', rank_order: 1, permissions: ['*'] },
+      {
+        name: '돌잔치 전담 플래너',
+        rank_order: 2,
+        permissions: ['booking:*', 'seat_room:*', 'custom_order_craft:*', 'task_pipeline:*', 'consultation_crm:*'],
+      },
+      {
+        name: '홀 서빙/세팅 스태프',
+        rank_order: 3,
+        permissions: ['booking:read', 'seat_room:read', 'task_pipeline:read', 'task_pipeline:update'],
+      },
+    ],
+    readinessLevel: 'basic_ui',
+  },
+
   // ==========================================
   // Group 5: 도소매·외식 (Retail & Food) - 6종
   // ==========================================

@@ -1,7 +1,11 @@
-﻿import type { ReactNode } from 'react';
+﻿import React, { type ReactNode, Suspense } from 'react';
 import { MyAccountView } from '@/core/account';
 import { AttendanceManagementView } from '@/core/attendance';
-import { FinanceHubView } from '@/core/finance';
+
+const LazyFinanceHubView = React.lazy(async () => {
+  const mod = await import('@/capabilities/billing/finance');
+  return { default: mod.FinanceHubView };
+});
 
 /** 동일 허브 화면을 여러 딥링크 탭에 연결 */
 export function hubViewAliases(
@@ -14,14 +18,21 @@ export function hubViewAliases(
 }
 
 /** 재무 허브 — 수입·지출·수납·미납·정산 딥링크 탭도 동일 FinanceHubView */
-export const financeViewEntries = hubViewAliases(() => <FinanceHubView />, [
-  'finance',
-  'income',
-  'expenses',
-  'tuition',
-  'unpaid',
-  'payroll',
-]) as {
+export const financeViewEntries = hubViewAliases(
+  () => (
+    <Suspense fallback={null}>
+      <LazyFinanceHubView />
+    </Suspense>
+  ),
+  [
+    'finance',
+    'income',
+    'expenses',
+    'tuition',
+    'unpaid',
+    'payroll',
+  ]
+) as {
   finance: () => ReactNode;
   income: () => ReactNode;
   expenses: () => ReactNode;

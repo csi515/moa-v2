@@ -47,3 +47,4 @@ export {
   runBillingLinkageValidation,
   BILLING_SCENARIO_CHECKLIST,
 } from './billingLinkageValidation';
+export * from './payableItem';

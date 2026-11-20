@@ -1,6 +1,6 @@
 import { showsCustomerPoints } from '@/core/industry/industryUi';
-import { pointQueryService } from '@/core/loyalty';
-import type { PointTransaction } from '@/core/loyalty';
+import { pointQueryService } from '@/capabilities/commerce/loyalty';
+import type { PointTransaction } from '@/capabilities/commerce/loyalty';
 import { customerLinkService } from './customerLinkService';
 
 export type MyRetailPointsSnapshot = {

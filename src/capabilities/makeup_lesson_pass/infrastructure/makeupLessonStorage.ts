@@ -1,4 +1,5 @@
 import { todayIsoLocal } from '@/shared/utils/localDate';
+import { resolveStorageKey } from '@/services/adapters';
 import {
   issueMakeupToken,
   evaluateTokenValidity,
@@ -32,12 +33,20 @@ function isBrowser(): boolean {
 }
 
 /**
- * 로컬스토리지에서 보강 토큰 전체 목록을 로드합니다.
+ * 로컬스토리지에서 보강 토큰 전체 목록을 로드합니다. (테넌트 격리)
  */
 export function loadMakeupTokens(): MakeupToken[] {
   if (!isBrowser()) return [];
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY_TOKENS);
+    const key = resolveStorageKey(STORAGE_KEY_TOKENS);
+    let raw = window.localStorage.getItem(key);
+    // 레거시 글로벌 키 fallback (데이터 마이그레이션)
+    if (!raw && key !== STORAGE_KEY_TOKENS) {
+      raw = window.localStorage.getItem(STORAGE_KEY_TOKENS);
+      if (raw) {
+        window.localStorage.setItem(key, raw);
+      }
+    }
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
@@ -48,12 +57,13 @@ export function loadMakeupTokens(): MakeupToken[] {
 }
 
 /**
- * 보강 토큰 전체 목록을 로컬스토리지에 저장합니다.
+ * 보강 토큰 전체 목록을 로컬스토리지에 저장합니다. (테넌트 격리)
  */
 export function saveMakeupTokens(tokens: MakeupToken[]): void {
   if (!isBrowser()) return;
   try {
-    window.localStorage.setItem(STORAGE_KEY_TOKENS, JSON.stringify(tokens));
+    const key = resolveStorageKey(STORAGE_KEY_TOKENS);
+    window.localStorage.setItem(key, JSON.stringify(tokens));
   } catch (error) {
     console.error('[makeupLessonStorage] Failed to save makeup tokens:', error);
   }
@@ -141,12 +151,20 @@ export function getAvailableMakeupTokensForStudent(
 // ==========================================
 
 /**
- * 보강 신청 요청 목록 로드
+ * 보강 신청 요청 목록 로드 (테넌트 격리)
  */
 export function loadMakeupRequests(): MakeupRequest[] {
   if (!isBrowser()) return [];
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY_REQUESTS);
+    const key = resolveStorageKey(STORAGE_KEY_REQUESTS);
+    let raw = window.localStorage.getItem(key);
+    // 레거시 글로벌 키 fallback (데이터 마이그레이션)
+    if (!raw && key !== STORAGE_KEY_REQUESTS) {
+      raw = window.localStorage.getItem(STORAGE_KEY_REQUESTS);
+      if (raw) {
+        window.localStorage.setItem(key, raw);
+      }
+    }
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
@@ -157,12 +175,13 @@ export function loadMakeupRequests(): MakeupRequest[] {
 }
 
 /**
- * 보강 신청 요청 목록 저장
+ * 보강 신청 요청 목록 저장 (테넌트 격리)
  */
 export function saveMakeupRequests(requests: MakeupRequest[]): void {
   if (!isBrowser()) return;
   try {
-    window.localStorage.setItem(STORAGE_KEY_REQUESTS, JSON.stringify(requests));
+    const key = resolveStorageKey(STORAGE_KEY_REQUESTS);
+    window.localStorage.setItem(key, JSON.stringify(requests));
   } catch (error) {
     console.error('[makeupLessonStorage] Failed to save makeup requests:', error);
   }

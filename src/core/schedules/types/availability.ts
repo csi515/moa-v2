@@ -3,7 +3,7 @@ export {
   AVAILABILITY_SOURCE,
   AVAILABILITY_WEEKDAY_LABELS,
   DAY_OF_WEEK_LABELS,
-} from '@/core/availability/types';
+} from '@/capabilities/scheduling/availability/types';
 export type {
   AvailabilityDayOfWeek,
   AvailabilityListQuery,
@@ -16,5 +16,5 @@ export type {
   AvailabilityStaffWindow,
   AvailabilityTimeWindow,
   ResolvedAvailabilityWindow,
-} from '@/core/availability/types';
-export { getIntervalMinutes, getOverrideWindows } from '@/core/availability/windows';
+} from '@/capabilities/scheduling/availability/types';
+export { getIntervalMinutes, getOverrideWindows } from '@/capabilities/scheduling/availability/windows';

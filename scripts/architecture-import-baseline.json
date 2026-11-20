@@ -45,6 +45,26 @@
     "kind": "core-out"
   },
   {
+    "file": "src/core/availability/availabilityCapability.ts",
+    "spec": "@/capabilities/scheduling/availability/availabilityCapability",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/availability/index.ts",
+    "spec": "@/capabilities/scheduling/availability/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/availability/types.ts",
+    "spec": "@/capabilities/scheduling/availability/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/availability/windows.ts",
+    "spec": "@/capabilities/scheduling/availability/windows",
+    "kind": "core-out"
+  },
+  {
     "file": "src/core/calendar/fallbackHolidays.ts",
     "spec": "@/capabilities/scheduling/calendar/fallbackHolidays",
     "kind": "core-out"
@@ -77,6 +97,31 @@
   {
     "file": "src/core/capabilities/capabilityDependency.ts",
     "spec": "../presets/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/capacity/capacityCapability.ts",
+    "spec": "@/capabilities/scheduling/capacity/capacityCapability",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/capacity/capacityMath.ts",
+    "spec": "@/capabilities/scheduling/capacity/capacityMath",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/capacity/index.ts",
+    "spec": "@/capabilities/scheduling/capacity/index",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/capacity/resourceOccupancy.ts",
+    "spec": "@/capabilities/scheduling/capacity/resourceOccupancy",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/capacity/types.ts",
+    "spec": "@/capabilities/scheduling/capacity/types",
     "kind": "core-out"
   },
   {
@@ -142,6 +187,31 @@
   {
     "file": "src/core/commerce/storeCapability.ts",
     "spec": "@/capabilities/commerce/facade/storeCapability",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/customer/CustomerHomeView.tsx",
+    "spec": "@/capabilities/billing/finance",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/customer/CustomerHomeView.tsx",
+    "spec": "@/capabilities/billing/finance/paymentMethodLabels",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/customer/CustomerRetailPointsView.tsx",
+    "spec": "@/capabilities/commerce/loyalty",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/customer/services/myCustomerPointsService.ts",
+    "spec": "@/capabilities/commerce/loyalty",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/customer/services/myCustomerPointsService.ts",
+    "spec": "@/capabilities/commerce/loyalty",
     "kind": "core-out"
   },
   {
@@ -305,6 +375,21 @@
     "kind": "core-out"
   },
   {
+    "file": "src/core/resources/resourceCapability.ts",
+    "spec": "@/capabilities/scheduling/availability/windows",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/resources/resourceCapability.ts",
+    "spec": "@/capabilities/scheduling/capacity",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/resources/resourcePolicy.ts",
+    "spec": "@/capabilities/scheduling/availability/windows",
+    "kind": "core-out"
+  },
+  {
     "file": "src/core/sales/index.ts",
     "spec": "@/capabilities/commerce/saleLedger/index",
     "kind": "core-out"
@@ -340,8 +425,48 @@
     "kind": "core-out"
   },
   {
+    "file": "src/core/schedules/bookingCapacity.ts",
+    "spec": "@/capabilities/scheduling/capacity/bookingCapacity",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/bookingCapacity.ts",
+    "spec": "@/capabilities/scheduling/capacity/bookingCapacity",
+    "kind": "core-out"
+  },
+  {
     "file": "src/core/schedules/classAttendanceLedger.ts",
     "spec": "@/capabilities/attendance/domain/classAttendanceLedger",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/components/AvailabilitySettingsView.tsx",
+    "spec": "@/capabilities/scheduling/availability/AvailabilitySettingsView",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/confirmBookingDeposit.ts",
+    "spec": "@/capabilities/billing/finance/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/confirmBookingDeposit.ts",
+    "spec": "@/capabilities/billing/finance/billingIncomeLink",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/domainRoles.test.ts",
+    "spec": "@/capabilities/scheduling/capacity/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/index.ts",
+    "spec": "@/capabilities/scheduling/availability",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/index.ts",
+    "spec": "@/capabilities/scheduling/capacity",
     "kind": "core-out"
   },
   {
@@ -350,8 +475,48 @@
     "kind": "core-out"
   },
   {
+    "file": "src/core/schedules/services/availabilityService.ts",
+    "spec": "@/capabilities/scheduling/availability/availabilityService",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/services/materializeAvailabilitySlots.ts",
+    "spec": "@/capabilities/scheduling/availability/materializeAvailabilitySlots",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/services/materializeAvailabilitySlots.ts",
+    "spec": "@/capabilities/scheduling/availability/materializeAvailabilitySlots",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/services/reservationService.ts",
+    "spec": "@/capabilities/scheduling/capacity",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/types/availability.ts",
+    "spec": "@/capabilities/scheduling/availability/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/types/availability.ts",
+    "spec": "@/capabilities/scheduling/availability/types",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/schedules/types/availability.ts",
+    "spec": "@/capabilities/scheduling/availability/windows",
+    "kind": "core-out"
+  },
+  {
     "file": "src/core/staff/components/TeacherManagementView.tsx",
     "spec": "@/capabilities/billing/finance/billingLedgerTypes",
+    "kind": "core-out"
+  },
+  {
+    "file": "src/core/staff/components/TeacherManagementView.tsx",
+    "spec": "@/capabilities/billing/finance/teacherPayroll",
     "kind": "core-out"
   },
   {

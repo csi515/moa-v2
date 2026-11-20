@@ -3,7 +3,7 @@ import { ArrowLeft, Coins } from 'lucide-react';
 import {
   POINT_TRANSACTION_TYPE_LABELS,
   type PointTransaction,
-} from '@/core/loyalty';
+} from '@/capabilities/commerce/loyalty';
 import { formatKoreanDate } from '@/utils/formatters';
 import { CUSTOMER_RETAIL_POINTS_COPY as COPY } from './customerRetailPointsCopy';
 import type { MyLinkedCustomerOrg } from './services/myLinkedCustomerOrgsService';

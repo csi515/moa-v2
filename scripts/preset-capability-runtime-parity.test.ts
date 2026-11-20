@@ -46,7 +46,7 @@ const mockI18n: MoaI18nProvider = {
 function run(): void {
   console.log('=== [1] Preset Registry & Aliases Coverage ===');
   const presets = listIndustryPresets();
-  assert.equal(presets.length, 52, `프리셋 총 개수는 정확히 52개여야 합니다. 현재: ${presets.length}`);
+  assert.equal(presets.length, 53, `프리셋 총 개수는 정확히 53개여야 합니다. 현재: ${presets.length}`);
 
   for (const preset of presets) {
     assert.ok(preset.id, '프리셋 ID 누락');
@@ -62,7 +62,7 @@ function run(): void {
 
   // 17개 별칭(Alias) 전수 검증
   const aliasKeys = Object.keys(PRESET_ALIASES);
-  assert.equal(aliasKeys.length, 17, `프리셋 별칭은 17개여야 합니다. 현재: ${aliasKeys.length}`);
+  assert.equal(aliasKeys.length, 20, `프리셋 별칭은 20개여야 합니다. 현재: ${aliasKeys.length}`);
 
   for (const [alias, targetPresetId] of Object.entries(PRESET_ALIASES)) {
     assert.ok(INDUSTRY_PRESETS[targetPresetId], `별칭 [${alias}]의 대상 프리셋 [${targetPresetId}]가 미존재`);
@@ -322,6 +322,7 @@ function run(): void {
     'shared_office',
     'space_rental',
     'locker_storage',
+    'first_birthday_party',
     'general_enterprise',
     'manufacturing_light',
     'procurement_distribution',

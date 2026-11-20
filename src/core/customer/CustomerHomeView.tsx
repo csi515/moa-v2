@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import { Copy, KeyRound, Loader2, X } from 'lucide-react';
 import { formatCurrency, getInvoiceStatusBadge } from '@/utils/formatters';
-import { lastTuitionPaymentSummaryText, TuitionService } from '@/core/finance';
+import { lastTuitionPaymentSummaryText, TuitionService } from '@/capabilities/billing/finance';
 import {
   formatBankAccountText,
   isInvoiceVisibleToParent,
-} from '@/core/finance/paymentMethodLabels';
+} from '@/capabilities/billing/finance/paymentMethodLabels';
 import { Modal } from '@/shared/components/ui/Modal';
 import { useParentAttendanceSessions } from '@/core/parent/hooks/useParentAttendanceSessions';
 import {

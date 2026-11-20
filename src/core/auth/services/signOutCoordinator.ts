@@ -4,6 +4,9 @@ import * as orgService from '@/core/organizations/services/organizationService';
 import { clearLocalPushTokensForUser, resetAppPushRegistrationContext } from '@/core/push';
 import { isSupabaseConfigured } from '@/lib/supabase/client';
 import type { ConfirmDialogOptions } from '@/shared/feedback/confirmTypes';
+import { createLogger } from '@/core/logging';
+
+const logger = createLogger('SignOutCoordinator');
 
 export const SIGN_OUT_COPY = {
   unsyncedTitle: '저장되지 않은 변경사항',
@@ -85,26 +88,26 @@ export async function completeSignOut(options?: { discardUnsynced?: boolean }): 
   try {
     resetAppPushRegistrationContext();
   } catch (err) {
-    console.warn('[signOutCoordinator] push registration reset warning:', err);
+    logger.warn('push registration reset warning:', err);
   }
 
   // 2. Organization 컨텍스트 정리
   try {
     StorageService.clearOrganization();
   } catch (err) {
-    console.warn('[signOutCoordinator] storage clearOrganization warning:', err);
+    logger.warn('storage clearOrganization warning:', err);
   }
   try {
     orgService.clearStoredOrganizationId();
   } catch (err) {
-    console.warn('[signOutCoordinator] orgService clearStoredOrganizationId warning:', err);
+    logger.warn('orgService clearStoredOrganizationId warning:', err);
   }
 
   // 3. Business Caches 정리 (단, device-only 설정은 유지)
   try {
     StorageService.clearBusinessCachesOnSignOut();
   } catch (err) {
-    console.warn('[signOutCoordinator] clearBusinessCachesOnSignOut warning:', err);
+    logger.warn('clearBusinessCachesOnSignOut warning:', err);
   }
 
   // 4. QueryClient 캐시 정리
@@ -121,13 +124,13 @@ export async function completeSignOut(options?: { discardUnsynced?: boolean }): 
     try {
       await testAuthSignOutHandler();
     } catch (err) {
-      console.warn('[signOutCoordinator] test auth signOut warning:', err);
+      logger.warn('test auth signOut warning:', err);
     }
   } else if (isSupabaseConfigured()) {
     try {
       await authService.signOut();
     } catch (err) {
-      console.warn('[signOutCoordinator] Supabase signOut warning:', err);
+      logger.warn('Supabase signOut warning:', err);
     }
   }
 

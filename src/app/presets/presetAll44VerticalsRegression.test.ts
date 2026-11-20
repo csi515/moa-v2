@@ -25,7 +25,7 @@ const allPresets = listIndustryPresets();
 const allPresetIds = Object.keys(INDUSTRY_PRESETS);
 
 // 51개 프리셋 전수 정의 확인
-assert.equal(allPresetIds.length, 52, '전체 프리셋 수는 정확히 52개여야 합니다.');
+assert.equal(allPresetIds.length, 53, '전체 프리셋 수는 정확히 53개여야 합니다.');
 
 const EXPECTED_VERTICAL_GROUPS = {
   education: [
@@ -66,6 +66,7 @@ const EXPECTED_VERTICAL_GROUPS = {
     'locker_storage',
     'guesthouse',
     'small_hotel',
+    'first_birthday_party',
   ],
   retail_food: [
     'retail',
@@ -105,8 +106,8 @@ for (const [groupName, ids] of Object.entries(EXPECTED_VERTICAL_GROUPS)) {
     );
   }
 }
-assert.equal(totalGroupCount, 51, '8대 그룹의 총 업종 수는 51개여야 합니다.');
-console.log('✓ [PASS] 51개 전 업종 프리셋 ID 및 8개 그룹 정합성 검증 완료 (51/51)');
+assert.equal(totalGroupCount, 52, '8대 그룹의 총 업종 수는 52개여야 합니다.');
+console.log('✓ [PASS] 52개 전 업종 프리셋 ID 및 8개 그룹 정합성 검증 완료 (52/52)');
 
 // 2. 52개 프리셋 전수 assemblePreset 및 Onboarding 검증
 let assembledCount = 0;
@@ -123,7 +124,7 @@ for (const presetId of allPresetIds) {
 
   assembledCount++;
 }
-console.log(`✓ [PASS] 52개 전 업종 assemblePreset, setupSchemas & 리소스 조립 검증 완료 (${assembledCount}/52)`);
+console.log(`✓ [PASS] 53개 전 업종 assemblePreset, setupSchemas & 리소스 조립 검증 완료 (${assembledCount}/53)`);
 
 // 3. Capability와 Generic 탭 매핑 검증
 // 1단계~3단계에서 구현된 6대 핵심 확장 뷰:
