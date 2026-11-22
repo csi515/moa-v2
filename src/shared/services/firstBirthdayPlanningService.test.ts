@@ -299,14 +299,14 @@ assert.equal(getPartnerVendorCategoryLabel('ATTIRE'), '한복/의상');
 assert.equal(getPartnerVendorCategoryLabel('FAVOR_GIFT'), '답례품/떡');
 console.log('✓ [PASS] 공식 제휴업체(Partner Vendors) 카테고리 필터링 및 혜택 매핑 검증 완료');
 
-// 12. [신규] 지역화폐 시각적 뱃지 및 플래너 세일즈 팁 생성 검증
+// 12. [신규] 지역화폐 시각적 뱃지 및 플래너 세일즈 팁 생성 검증 (구체적 할인율 수치 미언급)
 const paymentOptions = createDefaultPaymentOptions();
 const badgeText = formatPaymentBadgeText(paymentOptions);
-assert.equal(badgeText, '💚 서울페이 10% 결제 가능');
+assert.equal(badgeText, '💚 서울페이 결제 가능');
 
 const salesTip = formatSalesPitchTip(paymentOptions);
-assert.ok(salesTip.includes('서울페이로 결제하시면'));
-assert.ok(salesTip.includes('실질 10% 할인 혜택'));
+assert.ok(salesTip.includes('서울페이 등 지역화폐로 결제하시면'));
+assert.ok(salesTip.includes('구매 할인 혜택'));
 
 // 지역화폐 미지원 시 뱃지 null 검증
 const noLocalCurrency = { ...paymentOptions, localCurrency: { isAccepted: false, currencyName: '' } };

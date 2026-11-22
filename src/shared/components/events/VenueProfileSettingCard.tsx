@@ -369,9 +369,9 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
               </div>
 
               {paymentOptions.localCurrency?.isAccepted && (
-                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+                <div className="space-y-2 pt-2 border-t border-slate-100">
                   <div>
-                    <label className="block text-[11px] text-slate-500 mb-1">화폐 명칭</label>
+                    <label className="block text-[11px] text-slate-500 mb-1">지원 지역화폐 명칭</label>
                     <input
                       type="text"
                       disabled={disabled}
@@ -384,27 +384,13 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
                           },
                         })
                       }
-                      placeholder="예: 서울페이, 경기지역화폐"
+                      placeholder="예: 서울페이, 경기지역화폐, 지역사랑상품권"
                       className="w-full text-xs border rounded p-1.5"
                     />
                   </div>
-                  <div>
-                    <label className="block text-[11px] text-slate-500 mb-1">할인율(%)</label>
-                    <input
-                      type="number"
-                      disabled={disabled}
-                      value={paymentOptions.localCurrency.discountRatePercent || 10}
-                      onChange={(e) =>
-                        handleUpdatePayment({
-                          localCurrency: {
-                            ...paymentOptions.localCurrency!,
-                            discountRatePercent: Number(e.target.value),
-                          },
-                        })
-                      }
-                      className="w-full text-xs border rounded p-1.5 font-bold"
-                    />
-                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    ※ 지자체별 할인율은 예산에 따라 상시 변동되므로 구체적 수치 없이 가맹점 여부 및 지자체 할인 혜택 중심으로 안내됩니다.
+                  </p>
                 </div>
               )}
             </div>

@@ -636,8 +636,7 @@ export function createDefaultPaymentOptions(): VenuePaymentOptions {
     localCurrency: {
       isAccepted: true,
       currencyName: '서울페이',
-      discountRatePercent: 10,
-      notice: '서울페이 10% 할인 구매 결제 가능 (월 발행한도 내)',
+      notice: '서울페이 등 지역화폐 결제 지원 (지자체 구매 할인 혜택 적용 가능)',
     },
     onnuriCertificate: true,
     zeroPayAccepted: true,
@@ -732,15 +731,12 @@ export function filterVendorsByCategory(
 }
 
 /**
- * 지역화폐 시각적 뱃지 텍스트 포맷
+ * 지역화폐 시각적 뱃지 텍스트 포맷 (구체적 할인율 수치 대신 결제 지원 안내)
  */
 export function formatPaymentBadgeText(options?: VenuePaymentOptions): string | null {
   if (!options?.localCurrency?.isAccepted) return null;
   const name = options.localCurrency.currencyName || '지역화폐';
-  const discount = options.localCurrency.discountRatePercent
-    ? ` ${options.localCurrency.discountRatePercent}%`
-    : '';
-  return `💚 ${name}${discount} 결제 가능`;
+  return `💚 ${name} 결제 가능`;
 }
 
 /**
@@ -749,8 +745,7 @@ export function formatPaymentBadgeText(options?: VenuePaymentOptions): string | 
 export function formatSalesPitchTip(options?: VenuePaymentOptions): string {
   if (options?.localCurrency?.isAccepted) {
     const name = options.localCurrency.currencyName || '지역화폐';
-    const rate = options.localCurrency.discountRatePercent || 10;
-    return `혼주 상담 시 "${name}로 결제하시면 정부/지자체 지원으로 실질 ${rate}% 할인 혜택을 받으실 수 있다"고 안내해 계약 성공률을 높여보세요.`;
+    return `혼주 상담 시 "${name} 등 지역화폐로 결제하시면 지자체 구매 할인 혜택으로 실질 행사 비용을 절감하실 수 있다"고 안내해 계약 성공률을 높여보세요.`;
   }
   return '온누리상품권 및 현금영수증 지출증빙 발행 가능 여부를 안내해 신뢰를 더해보세요.';
 }

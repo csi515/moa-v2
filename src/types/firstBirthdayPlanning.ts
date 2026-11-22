@@ -46,9 +46,8 @@ export interface VenuePartnerVendor {
 export interface VenuePaymentOptions {
   localCurrency?: {
     isAccepted: boolean;
-    currencyName: string; // e.g. "서울페이", "경기지역화폐", "제로페이"
-    discountRatePercent?: number; // e.g. 10 (10% 실질 할인 혜택)
-    notice?: string; // e.g. "서울페이 10% 할인 구매 결제 가능 (월 발행한도 내)"
+    currencyName: string; // e.g. "서울페이", "경기지역화폐", "지역사랑상품권"
+    notice?: string; // e.g. "지자체 지역화폐 결제 지원 (구매 할인 혜택 적용 가능)"
   };
   onnuriCertificate?: boolean; // 온누리상품권 사용 가능 여부
   zeroPayAccepted?: boolean; // 제로페이 사용 가능 여부

@@ -216,10 +216,14 @@ assert.ok(
   !directoryHtml.includes('비공개 시크릿 파티룸'),
   '비공개로 선택한 업체는 플래너 디렉토리에 일절 노출되지 않아야 합니다.'
 );
-// [신규 요구사항 1] 지역화폐 시각적 뱃지 노출 검증
+// [신규 요구사항 1] 지역화폐 시각적 뱃지 노출 검증 (구체적 할인율 수치 제외)
 assert.ok(
-  directoryHtml.includes('💚 서울페이 10% 결제 가능'),
-  '베뉴 카드 상단에 [💚 서울페이 10% 결제 가능] 뱃지가 표시되어야 합니다.'
+  directoryHtml.includes('💚 서울페이 결제 가능'),
+  '베뉴 카드 상단에 [💚 서울페이 결제 가능] 뱃지가 표시되어야 합니다.'
+);
+assert.ok(
+  !directoryHtml.includes('10% 결제 가능'),
+  '할인율 변동 가능성을 고려하여 뱃지에 특정 할인율 수치는 노출되지 않아야 합니다.'
 );
 assert.ok(
   directoryHtml.includes('온누리상품권'),
