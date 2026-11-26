@@ -31,6 +31,7 @@ import { StaffGrantFields, emptyStaffGrants } from './StaffGrantFields';
 import { formatCurrency } from '@/utils/formatters';
 import {
   GraduationCap,
+  Search,
   Plus,
   Trash2,
   Edit,
@@ -214,6 +215,38 @@ export const TeacherManagementView: React.FC = () => {
     if (teacher.userId) return 'connected';
     return 'none';
   };
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
+
+  const filteredTeachers = useMemo(() => {
+    return teachers.filter((t) => {
+      if (statusFilter !== 'all' && t.status !== statusFilter) {
+        return false;
+      }
+      if (searchTerm.trim()) {
+        const term = searchTerm.trim().toLowerCase();
+        const matchName = (t.name || '').toLowerCase().includes(term);
+        const matchPhone = (t.phone || '').includes(term);
+        const matchEmail = (t.email || '').toLowerCase().includes(term);
+        const matchSpecialty = (t.specialty || '').toLowerCase().includes(term);
+        if (!matchName && !matchPhone && !matchEmail && !matchSpecialty) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }, [teachers, statusFilter, searchTerm]);
+
+  const counts = useMemo(() => {
+    const active = teachers.filter((t) => t.status === 'active').length;
+    const inactive = teachers.filter((t) => t.status !== 'active').length;
+    return {
+      all: teachers.length,
+      active,
+      inactive,
+    };
+  }, [teachers]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -421,37 +454,45 @@ export const TeacherManagementView: React.FC = () => {
   }
 
   return (
-    <div className="space-y-4 pb-4">
-      <PageHeader
-        icon={<GraduationCap className="w-6 h-6" />}
-        title={labels.staff.management}
-        description={`${labels.staff.singular} 명단과 담당 배정`}
-        actions={
-          <button
-            onClick={handleOpenCreate}
-            className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            신규 {labels.staff.singular} 등록
-          </button>
-        }
-      />
+    <div className="space-y-5 pb-8">
+      {/* 1. 상단 단일 헤더 (중복 헤더 제거) */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            <GraduationCap className="w-6 h-6 text-slate-700" />
+            {labels.staff.management}
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+            {labels.staff.singular} 목록과 담당 배정 및 정산 현황을 관리합니다. (총 <span className="font-semibold text-slate-700 tabular-nums">{teachers.length}</span>명)
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleOpenCreate}
+          className="min-h-[40px] px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+        >
+          <Plus className="w-4 h-4" />
+          신규 {labels.staff.singular} 등록
+        </button>
+      </div>
 
       {canManageAccounts && <JoinRequestsPanel />}
 
+      {/* 초대 시 부여 직급 선택 패널 (톤다운) */}
       {canManageAccounts && tenantRoles.length > 0 && (
         <div
-          className="flex flex-col sm:flex-row sm:items-center gap-2 rounded-2xl border border-indigo-100 bg-indigo-50/50 px-4 py-3"
+          className="flex flex-col sm:flex-row sm:items-center gap-2 rounded-lg border border-slate-200 bg-slate-50/80 px-3.5 py-2.5 text-xs"
           data-testid="staff-invite-role-picker"
         >
-          <label className="text-xs font-bold text-indigo-900 shrink-0" htmlFor="invite-role-select">
-            초대 시 부여 직급
+          <label className="font-semibold text-slate-800 shrink-0" htmlFor="invite-role-select">
+            초대 시 부여 직급:
           </label>
           <select
             id="invite-role-select"
             value={inviteRoleId}
             onChange={(e) => setInviteRoleId(e.target.value)}
-            className="min-h-[44px] flex-1 rounded-xl border border-indigo-200 bg-white px-3 text-sm font-semibold text-slate-800"
+            className="h-8 rounded-md border border-slate-200 bg-white px-2.5 text-xs font-medium text-slate-800 focus:border-slate-400 focus:outline-none"
           >
             {tenantRoles.map((role) => (
               <option key={role.id} value={role.id}>
@@ -459,180 +500,375 @@ export const TeacherManagementView: React.FC = () => {
               </option>
             ))}
           </select>
-          <p className="text-[11px] text-indigo-700 sm:max-w-[220px]">
-            전임/파트 등 직급을 고른 뒤 초대를 보내면 권한이 함께 연결됩니다.
-          </p>
+          <span className="text-[11px] text-slate-500">
+            (선택된 직급으로 초대 코드가 발급되며, 수락 시 직급 권한이 자동 부여됩니다)
+          </span>
         </div>
       )}
 
-      {/* Teachers Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {teachers.map((t) => {
-          const teacherClasses = classes.filter((c) => c.teacherId === t.id);
-          const teacherStudents = students.filter((s) => s.status === 'active' && s.teacherId === t.id);
-          const accountStatus = resolveStatus(t);
-          const isInviting = invitingStaffId === t.id;
+      {/* 2. 압축된 검색 & 필터 바 (Toolbar) */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white p-2.5 sm:p-3 rounded-lg border border-slate-200 shadow-2xs">
+        {/* 상태 필터 탭 */}
+        <div className="flex items-center gap-1 bg-slate-100/80 p-1 rounded-lg">
+          <button
+            type="button"
+            onClick={() => setStatusFilter('all')}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition min-h-[32px] ${
+              statusFilter === 'all'
+                ? 'bg-white text-slate-900 shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            전체 {counts.all}
+          </button>
+          <button
+            type="button"
+            onClick={() => setStatusFilter('active')}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition min-h-[32px] ${
+              statusFilter === 'active'
+                ? 'bg-white text-slate-900 shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            재직 {counts.active}
+          </button>
+          <button
+            type="button"
+            onClick={() => setStatusFilter('inactive')}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition min-h-[32px] ${
+              statusFilter === 'inactive'
+                ? 'bg-white text-slate-900 shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            휴직 {counts.inactive}
+          </button>
+        </div>
 
-          return (
-            <div
-              key={t.id}
-              className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-indigo-200 transition-all flex flex-col justify-between space-y-4"
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-12 h-12 rounded-2xl text-white font-black text-lg flex items-center justify-center shadow-xs"
-                      style={{ backgroundColor: t.color || '#4f46e5' }}
-                    >
-                      {t.name.slice(0, 1)}
+        {/* 검색 인풋 & 결과 요약 */}
+        <div className="flex items-center gap-2.5">
+          <div className="relative w-full sm:w-64">
+            <Search className="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder={`${labels.staff.singular} 이름·연락처·전공 검색...`}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-8 pr-3 py-1.5 text-xs rounded-md border border-slate-200 bg-white text-slate-800 placeholder-slate-400 focus:border-slate-400 focus:outline-none transition-colors"
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+          <span className="text-xs text-slate-400 shrink-0 hidden md:inline">
+            표시: <strong className="text-slate-700">{filteredTeachers.length}</strong>명
+          </span>
+        </div>
+      </div>
+
+      {/* 3. 본문 렌더링: 빈 화면(Empty State) 또는 데이터 목록 */}
+      {filteredTeachers.length === 0 ? (
+        <div className="bg-white rounded-lg border border-slate-200 p-12 text-center shadow-2xs">
+          <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-400">
+            <GraduationCap className="w-6 h-6" />
+          </div>
+          {teachers.length === 0 ? (
+            <>
+              <h3 className="text-base font-bold text-slate-900 mb-1">
+                아직 등록된 {labels.staff.singular}이(가) 없습니다
+              </h3>
+              <p className="text-xs text-slate-500 mb-5 max-w-sm mx-auto">
+                {labels.staff.singular}을(를) 등록하면 수업 배정과 담당 학생 관리, 출결 및 정산 업무를 바로 시작할 수 있습니다.
+              </p>
+              <button
+                type="button"
+                onClick={handleOpenCreate}
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold rounded-lg transition-colors shadow-xs"
+              >
+                <Plus className="w-4 h-4" />
+                첫 {labels.staff.singular} 등록하기
+              </button>
+            </>
+          ) : (
+            <>
+              <h3 className="text-sm font-bold text-slate-900 mb-1">
+                검색 조건과 일치하는 {labels.staff.singular}이(가) 없습니다
+              </h3>
+              <p className="text-xs text-slate-500 mb-3">
+                검색어를 확인하거나 필터 조건을 초기화해 보세요.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchTerm('');
+                  setStatusFilter('all');
+                }}
+                className="text-xs text-slate-700 hover:text-slate-900 underline font-semibold"
+              >
+                필터 초기화
+              </button>
+            </>
+          )}
+        </div>
+      ) : (
+        <>
+          {/* 데스크탑 테이블 뷰 */}
+          <div className="hidden md:block rounded-lg border border-slate-200 bg-white overflow-hidden shadow-2xs">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider">
+                <tr>
+                  <th className="px-4 py-3">성명 / 전공</th>
+                  <th className="px-4 py-3">연락처</th>
+                  <th className="px-4 py-3">담당 현황</th>
+                  <th className="px-4 py-3">정산 방식</th>
+                  {canManageAccounts && <th className="px-4 py-3">계정 연동</th>}
+                  <th className="px-4 py-3 text-right">관리</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filteredTeachers.map((t) => {
+                  const teacherClasses = classes.filter((c) => c.teacherId === t.id);
+                  const teacherStudents = students.filter((s) => s.status === 'active' && s.teacherId === t.id);
+                  const accountStatus = resolveStatus(t);
+                  const isInviting = invitingStaffId === t.id;
+
+                  return (
+                    <tr key={t.id} className="hover:bg-slate-50/70 transition-colors">
+                      {/* 성명 & 전공 */}
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className="w-8 h-8 rounded-md text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs"
+                            style={{ backgroundColor: t.color || '#2563eb' }}
+                          >
+                            {t.name.slice(0, 1)}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-1.5 font-semibold text-slate-900 text-sm">
+                              {t.name}
+                              {t.status === 'active' ? (
+                                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" title="재직" />
+                              ) : (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-500 font-medium">
+                                  휴직
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-[11px] text-slate-500 mt-0.5">
+                              {t.specialty || '전공 미입력'}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* 연락처 */}
+                      <td className="px-4 py-3 text-slate-600">
+                        <div className="flex items-center gap-1 font-mono">{t.phone || '-'}</div>
+                        {t.email && <div className="text-[11px] text-slate-400 mt-0.5">{t.email}</div>}
+                      </td>
+
+                      {/* 담당 현황 */}
+                      <td className="px-4 py-3">
+                        <div className="font-semibold text-slate-800">
+                          담당 {labels.customer?.singular || '원생'} {teacherStudents.length}명
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-0.5">
+                          개설 클래스 {teacherClasses.length}개 반
+                        </div>
+                      </td>
+
+                      {/* 정산 방식 */}
+                      <td className="px-4 py-3 text-slate-700">
+                        {(() => {
+                          const type =
+                            t.payType ||
+                            ((t.hourlyRate || 0) > 0
+                              ? 'hourly'
+                              : (t.salary || 0) > 0
+                                ? 'monthly'
+                                : 'none');
+                          if (type === 'none') return <span className="text-slate-400">미설정</span>;
+                          if (type === 'monthly') return <span className="font-medium text-slate-900">월급 {formatTeacherPay(t.salary)}</span>;
+                          return <span className="font-medium text-slate-900">{payTypeLabel(type)} {formatTeacherPay(t.hourlyRate)}</span>;
+                        })()}
+                      </td>
+
+                      {/* 계정 연동 */}
+                      {canManageAccounts && (
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2">
+                            <AccountStatusBadge status={accountStatus} loading={statusLoading} />
+                            {accountStatus === 'none' && (
+                              <button
+                                type="button"
+                                onClick={() => handleInvite(t)}
+                                disabled={isInviting}
+                                className="px-2 py-1 text-[11px] font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded transition-colors disabled:opacity-50"
+                              >
+                                {isInviting ? <Loader2 className="w-3 h-3 animate-spin" /> : '초대'}
+                              </button>
+                            )}
+                            {accountStatus === 'invited' && (
+                              <div className="flex items-center gap-1">
+                                <button
+                                  type="button"
+                                  onClick={() => handleInvite(t)}
+                                  disabled={isInviting}
+                                  className="text-[11px] text-slate-600 hover:text-slate-900 underline"
+                                >
+                                  재발급
+                                </button>
+                                <span className="text-slate-300">·</span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRevokeInvite(t)}
+                                  className="text-[11px] text-rose-500 hover:text-rose-700 underline"
+                                >
+                                  취소
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      )}
+
+                      {/* 관리 버튼 */}
+                      <td className="px-4 py-3 text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenEdit(t)}
+                            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors"
+                            title="정보 수정"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(t)}
+                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
+                            title="삭제"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* 모바일 카드 뷰 */}
+          <div className="md:hidden space-y-3">
+            {filteredTeachers.map((t) => {
+              const teacherClasses = classes.filter((c) => c.teacherId === t.id);
+              const teacherStudents = students.filter((s) => s.status === 'active' && s.teacherId === t.id);
+              const accountStatus = resolveStatus(t);
+              const isInviting = invitingStaffId === t.id;
+
+              return (
+                <div
+                  key={t.id}
+                  className="rounded-lg border border-slate-200 bg-white p-3.5 space-y-3 shadow-2xs"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <div
+                        className="w-9 h-9 rounded-md text-white font-bold text-xs flex items-center justify-center shrink-0"
+                        style={{ backgroundColor: t.color || '#2563eb' }}
+                      >
+                        {t.name.slice(0, 1)}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+                          {t.name}
+                          {t.status === 'active' ? (
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          ) : (
+                            <span className="text-[10px] text-slate-500 bg-slate-100 px-1 rounded">휴직</span>
+                          )}
+                        </div>
+                        <div className="text-[11px] text-slate-500">{t.specialty || '전공 미입력'}</div>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-base text-slate-900 flex items-center gap-1.5">
-                        {t.name}
-                        {t.status === 'active' ? (
-                          <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        ) : (
-                          <span className="text-[10px] text-slate-400 bg-slate-100 px-1.5 py-0.2 rounded">
-                            휴직
-                          </span>
-                        )}
-                        {canManageAccounts && (
-                          <AccountStatusBadge status={accountStatus} loading={statusLoading} />
-                        )}
-                      </h3>
-                      <p className="text-xs text-slate-500 mt-0.5">{t.specialty}</p>
+
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenEdit(t)}
+                        className="p-1.5 text-slate-400 hover:text-slate-700 rounded-md"
+                      >
+                        <Edit className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(t)}
+                        className="p-1.5 text-slate-400 hover:text-rose-600 rounded-md"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => handleOpenEdit(t)}
-                      className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-100 rounded-lg transition-colors"
-                    >
-                      <Edit className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(t)}
-                      className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-slate-100 rounded-lg transition-colors"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+                  <div className="text-xs text-slate-600 space-y-1 pt-2 border-t border-slate-100">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400">연락처</span>
+                      <span className="font-mono">{t.phone || '-'}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400">담당 현황</span>
+                      <span className="font-medium text-slate-800">
+                        원생 {teacherStudents.length}명 · {teacherClasses.length}개 반
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400">정산</span>
+                      <span className="font-medium text-slate-800">
+                        {(() => {
+                          const type =
+                            t.payType ||
+                            ((t.hourlyRate || 0) > 0
+                              ? 'hourly'
+                              : (t.salary || 0) > 0
+                                ? 'monthly'
+                                : 'none');
+                          if (type === 'none') return '미설정';
+                          if (type === 'monthly') return `월급 ${formatTeacherPay(t.salary)}`;
+                          return `${payTypeLabel(type)} ${formatTeacherPay(t.hourlyRate)}`;
+                        })()}
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="mt-4 pt-4 border-t border-slate-100 space-y-2 text-xs text-slate-600">
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-slate-400" />
-                    <span>{t.phone}</span>
-                  </div>
-                  {t.email && (
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{t.email}</span>
+                  {canManageAccounts && (
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                      <AccountStatusBadge status={accountStatus} loading={statusLoading} />
+                      {accountStatus === 'none' && (
+                        <button
+                          type="button"
+                          onClick={() => handleInvite(t)}
+                          disabled={isInviting}
+                          className="px-2.5 py-1 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded"
+                        >
+                          {isInviting ? <Loader2 className="w-3 h-3 animate-spin" /> : '계정 초대'}
+                        </button>
+                      )}
                     </div>
                   )}
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                    <span>입사일: {t.hireDate}</span>
-                  </div>
                 </div>
-
-                <div className="mt-4 p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1.5 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-slate-500">담당 원생</span>
-                    <strong className="text-indigo-600">{teacherStudents.length}명</strong>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-500">개설 클래스</span>
-                    <strong className="text-slate-800">{teacherClasses.length}개 반</strong>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-500">정산</span>
-                    <strong className="text-slate-800 text-right">
-                      {(() => {
-                        const type =
-                          t.payType ||
-                          ((t.hourlyRate || 0) > 0
-                            ? 'hourly'
-                            : (t.salary || 0) > 0
-                              ? 'monthly'
-                              : 'none');
-                        if (type === 'none') return '미설정';
-                        if (type === 'monthly') return `월급 ${formatTeacherPay(t.salary)}`;
-                        return `${payTypeLabel(type)} ${formatTeacherPay(t.hourlyRate)}`;
-                      })()}
-                    </strong>
-                  </div>
-                </div>
-
-                {canManageAccounts && (
-                  <div className="pt-1">
-                    {accountStatus === 'connected' ? (
-                      <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 font-semibold">
-                        <Link2 className="w-3.5 h-3.5" />
-                        로그인 계정 연결됨
-                      </div>
-                    ) : accountStatus === 'invited' ? (
-                      (() => {
-                        const info = statusMap.get(t.id);
-                        const needsReissue = Boolean(info?.inviteExpired) || info?.inviteHasCode === false;
-                        const expiresLabel = info?.inviteExpiresAt
-                          ? new Date(info.inviteExpiresAt).toLocaleDateString('ko-KR', {
-                              month: 'numeric',
-                              day: 'numeric',
-                            })
-                          : null;
-                        return (
-                          <div className="flex items-center gap-2">
-                            <div
-                              className={`flex items-center gap-1.5 text-[11px] font-semibold flex-1 ${
-                                needsReissue ? 'text-rose-600' : 'text-amber-700'
-                              }`}
-                            >
-                              <Clock className="w-3.5 h-3.5" />
-                              {needsReissue
-                                ? '초대 코드 만료 · 재발급 필요'
-                                : `수락 대기 중${expiresLabel ? ` (~${expiresLabel})` : ''}`}
-                            </div>
-                            <button
-                              onClick={() => handleInvite(t)}
-                              disabled={isInviting}
-                              className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 px-2 py-1 rounded-lg hover:bg-slate-100 disabled:opacity-60"
-                              title="새 코드를 발급하면 이전 코드는 즉시 무효가 됩니다"
-                            >
-                              재발급
-                            </button>
-                            <button
-                              onClick={() => handleRevokeInvite(t)}
-                              className="text-[10px] font-bold text-slate-500 hover:text-rose-600 px-2 py-1 rounded-lg hover:bg-slate-100"
-                            >
-                              취소
-                            </button>
-                          </div>
-                        );
-                      })()
-                    ) : (
-                      <button
-                        onClick={() => handleInvite(t)}
-                        disabled={isInviting}
-                        className="w-full mt-1 px-3 py-2 text-[11px] font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-xl flex items-center justify-center gap-1.5 disabled:opacity-60"
-                      >
-                        {isInviting ? (
-                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                        ) : (
-                          <UserPlus className="w-3.5 h-3.5" />
-                        )}
-                        계정 초대
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       {inviteResult && (
         <StaffInviteResultModal
@@ -656,14 +892,14 @@ export const TeacherManagementView: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2.5 min-h-[44px] text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition cursor-pointer"
+              className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
             >
               취소
             </button>
             <button
               type="submit"
               form="teacher-form"
-              className="px-5 py-2.5 min-h-[44px] text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md transition cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
             >
               저장
             </button>
