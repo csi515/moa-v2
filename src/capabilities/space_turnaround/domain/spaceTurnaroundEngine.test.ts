@@ -3,6 +3,8 @@ import {
   calculateTurnaroundSlot,
   hasTurnaroundConflict,
   transitionTurnaroundState,
+  calculateSetupAndTeardownTimes,
+  checkBufferCollision,
   type TurnaroundChecklistItem,
 } from './spaceTurnaroundEngine';
 
@@ -82,5 +84,34 @@ console.log('✓ 2. 정비 버퍼 포함 중복 예약 충돌 감지 통과');
   assert.equal(checkinSuccess.nextStatus, 'in_service');
 }
 console.log('✓ 3. 룸 턴어라운드 상태 전이 및 체크인 가드 검증 통과');
+
+// 4. 공간 사전 세팅 및 사후 철수 버퍼 분리 계산 검증
+{
+  const buffer = calculateSetupAndTeardownTimes('11:30', '14:00', 60, 30);
+  assert.equal(buffer.setupStartTime, '10:30');
+  assert.equal(buffer.eventStartTime, '11:30');
+  assert.equal(buffer.eventEndTime, '14:00');
+  assert.equal(buffer.teardownEndTime, '14:30');
+}
+console.log('✓ 4. 사전 세팅(60분 전) 및 사후 철수(30분 후) 버퍼 분리 계산 통과');
+
+// 5. 연속 공간 대여 타임슬롯 간 세팅/철수 버퍼 충돌 감지 검증
+{
+  // 충돌 상황: 이전 행사 철수 14:30 vs 다음 행사 세팅 14:00
+  const conflict = checkBufferCollision(
+    { teardownEndTime: '14:30', eventEndTime: '14:00' },
+    { setupStartTime: '14:00', eventStartTime: '15:00' }
+  );
+  assert.equal(conflict.hasCollision, true);
+  assert.ok(conflict.reason?.includes('충돌'));
+
+  // 안전 상황: 이전 행사 철수 14:30 vs 다음 행사 세팅 15:00
+  const safe = checkBufferCollision(
+    { teardownEndTime: '14:30', eventEndTime: '14:00' },
+    { setupStartTime: '15:00', eventStartTime: '16:00' }
+  );
+  assert.equal(safe.hasCollision, false);
+}
+console.log('✓ 5. 연속 대여 타임슬롯 간 버퍼 충돌 감지 통과');
 
 console.log('[test:space-turnaround] ALL TESTS PASSED! (100%)');

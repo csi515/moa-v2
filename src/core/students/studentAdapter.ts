@@ -19,7 +19,7 @@ export interface LegacyStudentLike {
   emergencyContact?: string;
   address?: string;
   usesShuttleService?: boolean;
-  pickupAddresses?: any[];
+  pickupAddresses?: unknown[];
   joinDate?: string;
   leaveDate?: string;
   status: 'active' | 'leave' | 'withdrawn';
@@ -27,7 +27,7 @@ export interface LegacyStudentLike {
   teacherName?: string;
   classIds?: string[];
   level?: string;
-  billingMode?: any;
+  billingMode?: string;
   tuitionFee?: number;
   paymentDay?: number;
   specialNotes?: string;
@@ -35,7 +35,7 @@ export interface LegacyStudentLike {
   avatarColor?: string;
   checkInPinSet?: boolean;
   userId?: string | null;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
 }
@@ -115,7 +115,7 @@ export function customerToStudent(customer: Customer): LegacyStudentLike {
     memo: customer.memo,
     specialNotes: meta.specialNotes as string | undefined,
     usesShuttleService: Boolean(meta.usesShuttleService),
-    pickupAddresses: meta.pickupAddresses as any,
+    pickupAddresses: meta.pickupAddresses as LegacyStudentLike['pickupAddresses'],
     checkInPinSet: Boolean(meta.checkInPinSet),
     metadata: customer.metadata,
     createdAt: customer.createdAt,

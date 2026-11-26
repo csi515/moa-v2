@@ -61,15 +61,15 @@ export async function logAdminAuditAction(params: {
     const client = getCoreClient();
     await client.from('audit_logs').insert({
       organization_id: params.targetOrgId,
-      actor_id: params.adminId,
+      actor_user_id: params.adminId,
       action: params.action,
       entity_type: 'tenant',
       entity_id: params.targetOrgId,
-      metadata: {
-        ...params.details,
+      after_data: {
+        ...(params.details || {}),
         target_org_name: params.targetOrgName,
       },
-    } as any);
+    });
   } catch (err) {
     console.warn('Failed to write to core.audit_logs in Supabase:', err);
   }

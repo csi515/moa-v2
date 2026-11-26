@@ -78,6 +78,82 @@ export interface StateTransitionResult {
   cleanedAt?: string;
 }
 
+export interface EventSetupTeardownBuffer {
+  setupStartTime: string;
+  eventStartTime: string;
+  eventEndTime: string;
+  teardownEndTime: string;
+}
+
+export interface BufferCollisionCheckResult {
+  hasCollision: boolean;
+  reason?: string;
+}
+
+/**
+ * 본 행사 시작/종료 시각에 사전 세팅 시간(기본 60분 전)과
+ * 사후 철수 시간(기본 30분 후)을 계산하여 분리된 타임슬롯 버퍼를 반환합니다.
+ */
+export function calculateSetupAndTeardownTimes(
+  eventStartTime: string,
+  eventEndTime: string,
+  setupMinutesBefore: number = 60,
+  teardownMinutesAfter: number = 30
+): EventSetupTeardownBuffer {
+  const [sH, sM] = eventStartTime.split(':').map(Number);
+  const [eH, eM] = eventEndTime.split(':').map(Number);
+
+  const startTotalMinutes = sH * 60 + sM;
+  const setupTotalMinutes = Math.max(0, startTotalMinutes - setupMinutesBefore);
+  const setupH = Math.floor(setupTotalMinutes / 60);
+  const setupM = setupTotalMinutes % 60;
+  const setupStartTime = `${String(setupH).padStart(2, '0')}:${String(setupM).padStart(2, '0')}`;
+
+  const endTotalMinutes = eH * 60 + eM;
+  const teardownTotalMinutes = endTotalMinutes + teardownMinutesAfter;
+  const teardownH = Math.floor(teardownTotalMinutes / 60);
+  const teardownM = teardownTotalMinutes % 60;
+  const teardownEndTime = `${String(teardownH).padStart(2, '0')}:${String(teardownM).padStart(2, '0')}`;
+
+  return {
+    setupStartTime,
+    eventStartTime,
+    eventEndTime,
+    teardownEndTime,
+  };
+}
+
+/**
+ * 앞뒤 행사 타임슬롯 간 세팅 및 철수 버퍼 충돌 검증
+ * 이전 행사의 최종 철수 완료 시간(teardownEndTime)이 다음 행사의 세팅 시작 시간(setupStartTime)을 침범하는지 검사
+ */
+export function checkBufferCollision(
+  previousEvent: { teardownEndTime?: string; eventEndTime?: string },
+  nextEvent: { setupStartTime?: string; eventStartTime?: string }
+): BufferCollisionCheckResult {
+  const prevEnd = previousEvent.teardownEndTime || previousEvent.eventEndTime;
+  const nextStart = nextEvent.setupStartTime || nextEvent.eventStartTime;
+
+  if (!prevEnd || !nextStart) {
+    return { hasCollision: false };
+  }
+
+  const [pH, pM] = prevEnd.split(':').map(Number);
+  const [nH, nM] = nextStart.split(':').map(Number);
+
+  const prevMinutes = pH * 60 + pM;
+  const nextMinutes = nH * 60 + nM;
+
+  if (prevMinutes > nextMinutes) {
+    return {
+      hasCollision: true,
+      reason: `이전 행사 철수 완료 시간(${prevEnd})이 다음 행사 세팅 시작 시간(${nextStart})보다 늦어 버퍼 충돌이 발생합니다.`,
+    };
+  }
+
+  return { hasCollision: false };
+}
+
 /**
  * 룸 턴어라운드 상태 전이 및 다음 고객 체크인 가능 가드
  */

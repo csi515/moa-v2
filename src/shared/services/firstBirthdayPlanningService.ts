@@ -66,69 +66,21 @@ export interface PublicEventBriefingData {
 }
 
 /**
- * 시간(HH:mm)에 분(minutes)을 가감하는 헬퍼 함수
+ * 공간 대여 및 연회 턴어라운드 버퍼 코어 Capability 단일화 (SSOT)
  */
-export function addMinutesToTimeString(timeStr: string, minutesToAdd: number): string {
-  if (!timeStr || !timeStr.includes(':')) return timeStr;
-  const [h, m] = timeStr.split(':').map(Number);
-  const totalM = h * 60 + m + minutesToAdd;
-  const wrappedM = (totalM + 1440) % 1440;
-  const resH = Math.floor(wrappedM / 60);
-  const resM = wrappedM % 60;
-  return `${String(resH).padStart(2, '0')}:${String(resM).padStart(2, '0')}`;
-}
+import {
+  calculateSetupAndTeardownTimes,
+  checkBufferCollision,
+  type EventSetupTeardownBuffer,
+  type BufferCollisionCheckResult,
+} from '@/capabilities/space_turnaround';
 
-/**
- * 행사 시작/종료 시간에 따른 세팅 시작 시간(60분 전)과 철수 완료 시간(30분 후) 분리 계산
- */
-export function calculateSetupAndTeardownTimes(
-  startTime: string,
-  endTime: string,
-  setupMinutes: number = 60,
-  teardownMinutes: number = 30
-): {
-  setupStartTime: string;
-  teardownEndTime: string;
-} {
-  return {
-    setupStartTime: addMinutesToTimeString(startTime, -setupMinutes),
-    teardownEndTime: addMinutesToTimeString(endTime, teardownMinutes),
-  };
-}
-
-/**
- * 앞뒤 행사 타임슬롯 간 세팅 및 철수 버퍼 충돌 검증
- * 이전 행사의 최종 철수 완료 시간(teardownEndTime)이 다음 행사의 세팅 시작 시간(setupStartTime)을 침범하는지 검사
- */
-export function checkBufferCollision(
-  previousEvent: { teardownEndTime?: string; eventEndTime?: string },
-  nextEvent: { setupStartTime?: string; eventStartTime?: string }
-): {
-  hasCollision: boolean;
-  reason?: string;
-} {
-  const prevEnd = previousEvent.teardownEndTime || previousEvent.eventEndTime;
-  const nextStart = nextEvent.setupStartTime || nextEvent.eventStartTime;
-
-  if (!prevEnd || !nextStart) {
-    return { hasCollision: false };
-  }
-
-  const [pH, pM] = prevEnd.split(':').map(Number);
-  const [nH, nM] = nextStart.split(':').map(Number);
-
-  const prevMinutes = pH * 60 + pM;
-  const nextMinutes = nH * 60 + nM;
-
-  if (prevMinutes > nextMinutes) {
-    return {
-      hasCollision: true,
-      reason: `이전 행사 철수 완료 시간(${prevEnd})이 다음 행사 세팅 시작 시간(${nextStart})보다 늦어 버퍼 충돌이 발생합니다.`,
-    };
-  }
-
-  return { hasCollision: false };
-}
+export {
+  calculateSetupAndTeardownTimes,
+  checkBufferCollision,
+  type EventSetupTeardownBuffer,
+  type BufferCollisionCheckResult,
+};
 
 /**
  * 기본 파티룸 이용 규정 가이드라인 생성

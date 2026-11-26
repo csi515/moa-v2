@@ -71,13 +71,13 @@ export function useDuplicateCustomerCheck(
         }
 
         if (data && data.length > 0) {
-          const match = (data as any[])[0];
+          const match = (data as Array<Record<string, unknown>>)[0];
           setIsDuplicate(true);
           setDuplicateCustomer({
-            id: match.id,
-            name: match.name,
-            phone: match.phone || match.parent_phone || digits,
-            created_at: match.created_at,
+            id: String(match.id || ''),
+            name: String(match.name || ''),
+            phone: String(match.phone || match.parent_phone || digits),
+            created_at: match.created_at ? String(match.created_at) : undefined,
           });
           setIsChecking(false);
           return true;
