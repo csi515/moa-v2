@@ -37,22 +37,73 @@ export const publicOrgService = {
    * Get organization details by public code
    */
   async getOrganizationByCode(code: string): Promise<PublicOrgInfo | null> {
-    if (!isSupabaseConfigured()) {
-      throw new Error('서비스 연결이 설정되지 않았습니다');
-    }
     const normalized = code.trim().toUpperCase();
     if (!normalized) return null;
 
-    const { data, error } = await getCoreClient().rpc('get_public_organization_by_code', {
-      p_code: normalized,
-    });
+    if (isSupabaseConfigured()) {
+      try {
+        const { data, error } = await getCoreClient().rpc('get_public_organization_by_code', {
+          p_code: normalized,
+        });
 
-    if (error) {
-      console.error('Failed to fetch organization:', error);
-      throw new Error('조직 정보를 가져오는데 실패했습니다');
+        if (!error && data) {
+          const rows = asOrgRows(data);
+          if (rows[0]) return rows[0];
+        }
+      } catch (err) {
+        console.warn('RPC get_public_organization_by_code failed, trying local fallback:', err);
+      }
     }
 
-    return asOrgRows(data)[0] || null;
+    // 로컬 스토리지 Fallback: 현재 활성 조직 또는 저장된 조직 목록에서 public_code 매칭
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const savedList = window.localStorage.getItem('moa_organizations_list');
+        if (savedList) {
+          const list = JSON.parse(savedList);
+          if (Array.isArray(list)) {
+            const found = list.find((o) => (o.public_code || o.publicCode || '').toUpperCase() === normalized);
+            if (found) {
+              return {
+                id: found.id,
+                name: found.name,
+                public_code: found.public_code || found.publicCode,
+                industry_type: found.industry_type || found.industry || 'piano',
+                address: found.address || '',
+                phone: found.phone || '',
+                business_hours: found.business_hours || '',
+                description: found.description || '',
+                slug: found.slug || null,
+                is_active: true,
+              };
+            }
+          }
+        }
+
+        const savedSettings = window.localStorage.getItem('moa_settings');
+        if (savedSettings) {
+          const settings = JSON.parse(savedSettings);
+          if ((settings.publicCode || settings.public_code || '').toUpperCase() === normalized) {
+            return {
+              id: settings.id || 'org_local',
+              name: settings.name || '우리 학원',
+              public_code: normalized,
+              industry_type: settings.industry || 'piano',
+              address: settings.address || '',
+              phone: settings.phone || '',
+              business_hours: settings.businessHours || '',
+              description: settings.description || '',
+              slug: null,
+              is_active: true,
+            };
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Local fallback error in getOrganizationByCode:', e);
+    }
+
+    return null;
   },
 
   /**

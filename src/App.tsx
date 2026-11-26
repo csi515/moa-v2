@@ -95,6 +95,7 @@ const WorkspaceSafetyPermitsPage = lazy(() => import("./pages/workspace/Workspac
 const PassesListPage = lazy(() => import("./pages/passes/list").then((m) => ({ default: m.PassesListPage })));
 const LockersGridPage = lazy(() => import("./pages/lockers/grid").then((m) => ({ default: m.LockersGridPage })));
 const PublicStoreLandingPage = lazy(() => import("./pages/public/PublicStoreLandingPage").then((m) => ({ default: m.PublicStoreLandingPage })));
+const PublicOrgLandingPage = lazy(() => import("./pages/public/PublicOrgLandingPage").then((m) => ({ default: m.PublicOrgLandingPage })));
 const WeeklyTimetableView = lazy(() => import("@/capabilities/scheduling").then((m) => ({ default: m.WeeklyTimetableView })));
 const TuitionManagementView = lazy(() => import("@/capabilities/billing").then((m) => ({ default: m.TuitionManagementView })));
 const SuperAdminTenantsPage = lazy(() => import("./pages/admin/SuperAdminTenantsPage").then((m) => ({ default: m.SuperAdminTenantsPage })));
@@ -434,6 +435,8 @@ const RefineApp: React.FC = () => {
             <Route path="/e2e/shuttle-commute" element={<VehicleShuttleCommuteView />} />
           </>
         ) : null}
+        <Route path="/c/:code" element={<PublicOrgLandingPage />} />
+        <Route path="/c/:code/consultation" element={<PublicOrgLandingPage mode="consultation" />} />
         <Route path="/p/:slug" element={<PublicStoreLandingPage />} />
         <Route path="/claim/:token" element={<ClaimTokenPage />} />
         <Route path="/invite/accept" element={<AcceptInviteLandingPage />} />
