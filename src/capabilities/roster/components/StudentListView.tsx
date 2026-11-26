@@ -26,7 +26,7 @@ import { enrollmentModeLabel } from './form/enrollmentFormCopy';
 import { StudentFormModal } from './StudentFormModal';
 import { StudentDetailModal } from './StudentDetailModal';
 import { getStudentStatusBadge } from '@/utils/formatters';
-import { PageHeader, FilterBar, SearchField, EmptyState, PaginationBar, BulkActionToolbar } from '@/shared/components';
+import { PageHeader, FilterBar, SearchField, EmptyState, PaginationBar, BulkActionToolbar, ListToolbar } from '@/shared/components';
 import { exportStudentsToCsv } from '../helpers/studentExcelHelpers';
 import { DENSITY } from '@/shared/styles/density';
 import {
@@ -289,29 +289,30 @@ export const StudentListView: React.FC = () => {
 
   return (
     <div className={DENSITY.pageStack}>
-            <PageHeader
-        icon={<Users className="w-6 h-6 text-indigo-600" />}
-        title={labels.customer.section || '회원 관리'}
-        description={`등록된 ${labels.customer.singular}의 기본 정보, 수강 및 출결 상태를 조회하고 관리합니다`}
+      {/* 1. 상단 단일 헤더: 페이지 제목 + 우측 주요 액션 버튼 일원화 */}
+      <PageHeader
+        icon={<Users className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}
+        title={labels.customer.section || `${labels.customer.singular} 관리`}
+        density="compact"
         actions={
           !isScoped ? (
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1.5 flex-wrap">
               <button
                 type="button"
                 onClick={() => exportStudentsToCsv(filteredStudents, `${labels.customer.singular}명부_${getCurrentYearMonth()}.csv`)}
-                className="px-3.5 py-2 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition-all border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer"
+                className="px-3 py-1.5 min-h-[36px] bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg transition-colors border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer"
                 title="현재 필터된 목록 엑셀 다운로드"
               >
-                <Download className="w-4 h-4" />
-                엑셀 내보내기
+                <Download className="w-3.5 h-3.5 text-slate-500" strokeWidth={1.5} />
+                <span>엑셀 내보내기</span>
               </button>
               <button
                 type="button"
                 onClick={() => setIsBulkImportOpen(true)}
-                className="px-3.5 py-2 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition-all border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer"
+                className="px-3 py-1.5 min-h-[36px] bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg transition-colors border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <FileSpreadsheet className="w-4 h-4" />
-                엑셀/CSV 가져오기
+                <FileSpreadsheet className="w-3.5 h-3.5 text-slate-500" strokeWidth={1.5} />
+                <span>엑셀/CSV 가져오기</span>
               </button>
               <button
                 type="button"
@@ -319,193 +320,155 @@ export const StudentListView: React.FC = () => {
                   setEditingStudent(null);
                   setIsFormModalOpen(true);
                 }}
-                className="px-4 py-2 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                className="px-3.5 py-1.5 min-h-[36px] bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <UserPlus className="w-4 h-4" />
-                {labels.customer.add}
+                <UserPlus className="w-3.5 h-3.5" strokeWidth={1.5} />
+                <span>신규 {labels.customer.singular} 등록</span>
               </button>
             </div>
           ) : undefined
         }
       />
 
-      <FilterBar className="flex-col items-stretch gap-3">
-        {/* 기본: 이름 검색 + 재원/휴원/퇴원(전체)만 노출 */}
-        <SearchField
-          value={searchQuery}
-          onChange={setSearchQuery}
-          placeholder={searchPlaceholder}
-          className="w-full"
-        />
-
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 w-full">
-          {statusChips.map((chip) => {
-            const isActive = statusFilter === chip.value;
-            return (
-              <button
-                key={chip.value}
-                type="button"
-                onClick={() => setStatusFilter(chip.value)}
-                className={`${controlMinClass} px-3 rounded-lg text-xs font-bold transition-colors whitespace-nowrap shrink-0 ${
-                  isActive
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                {chip.label} {chip.count}
-              </button>
-            );
-          })}
-          <button
-            type="button"
-            onClick={() => setShowAdvancedFilters((prev) => !prev)}
-            className={`${controlMinClass} ml-auto px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 ${
-              showAdvancedFilters || advancedFilterCount > 0
-                ? 'bg-slate-800 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-            aria-expanded={showAdvancedFilters}
-            aria-label={rosterList.filterButtonAriaLabel}
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5" />
-            필터
-            {advancedFilterCount > 0 && (
-              <span className="bg-white/20 px-1.5 rounded-md">{advancedFilterCount}</span>
-            )}
-          </button>
-        </div>
-
-        {showAdvancedFilters && (
-          <div
-            className={`grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 border-t border-slate-100 ${
-              rosterList.fitAdvancedFilterGrid
-                ? advancedFilterColumns >= 5
-                  ? 'lg:grid-cols-5'
-                  : advancedFilterColumns === 4
-                    ? 'lg:grid-cols-4'
-                    : 'lg:grid-cols-3'
-                : 'lg:grid-cols-5'
-            }`}
-          >
-            {!isScoped && (
-              <label className="block min-w-0 space-y-1">
-                {rosterList.showFilterFieldLabels ? (
-                  <span className="text-[10px] font-bold text-slate-500 px-0.5">{staffFilterName}</span>
-                ) : null}
-                <select
-                  value={teacherFilter}
-                  onChange={(e) => setTeacherFilter(e.target.value)}
-                  className="w-full px-3 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
-                  aria-label={staffFilterName}
-                >
-                  <option value="ALL">{staffFilterName} 전체</option>
-                  {teachers.map((t) => (
-                    <option key={t.id} value={t.id}>
-                      {t.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
-
-            <label className="block min-w-0 space-y-1">
-              {rosterList.showFilterFieldLabels ? (
-                <span className="text-[10px] font-bold text-slate-500 px-0.5">{labels.service.singular}</span>
-              ) : null}
-              <select
-                value={classFilter}
-                onChange={(e) => setClassFilter(e.target.value)}
-                className="w-full px-3 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
-                aria-label={labels.service.singular}
-              >
-                <option value="ALL">반 전체</option>
-                {classes.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="block min-w-0 space-y-1">
-              {rosterList.showFilterFieldLabels ? (
-                <span className="text-[10px] font-bold text-slate-500 px-0.5">요일</span>
-              ) : null}
-              <select
-                value={weekdayFilter}
-                onChange={(e) => setWeekdayFilter(e.target.value as DayOfWeek | 'ALL')}
-                className="w-full px-3 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
-                aria-label="요일"
-              >
-                <option value="ALL">요일 전체</option>
-                {WEEKDAY_FILTER_OPTIONS.map((d) => (
-                  <option key={d} value={d}>
-                    {d}요일
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            {showPickupFields && (
-              <label className="block min-w-0 space-y-1">
-                <select
-                  value={shuttleFilter}
-                  onChange={(e) => setShuttleFilter(e.target.value as 'ALL' | 'SHUTTLE')}
-                  className="w-full px-3 py-2 min-h-[44px] text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none font-semibold"
-                  aria-label="셔틀"
-                >
-                  <option value="ALL">셔틀 전체</option>
-                  <option value="SHUTTLE">셔틀 이용 ({shuttleCount})</option>
-                </select>
-              </label>
-            )}
-
-            <label className="block min-w-0 space-y-1">
-              {rosterList.showFilterFieldLabels ? (
-                <span className="text-[10px] font-bold text-slate-500 px-0.5">정렬</span>
-              ) : null}
-              <div className="flex items-center gap-1.5 px-3 min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600">
-                <ArrowUpDown className="w-3.5 h-3.5 shrink-0" />
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                  className="bg-transparent w-full font-semibold focus:outline-none cursor-pointer"
-                  aria-label="정렬"
-                >
-                  <option value="joinDateDesc">등록일 최신순</option>
-                  <option value="joinDateAsc">등록일 과거순</option>
-                  <option value="name">이름 가나다순</option>
-                  <option value="paymentDay">수납일순</option>
-                </select>
-              </div>
-            </label>
-          </div>
-        )}
-
-        <div className="flex items-center justify-between text-xs text-slate-500 w-full">
+      {/* 2. 압축된 검색 & 필터 바 (Toolbar): 상태 세그먼트 탭 + 인라인 검색창 + [필터] 버튼 */}
+      <ListToolbar
+        tabs={statusChips.map((c) => ({ key: c.value, label: c.label, count: c.count }))}
+        activeTab={statusFilter}
+        onTabChange={setStatusFilter}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        searchPlaceholder={searchPlaceholder}
+        summaryText={
           <span>
-            표시 중:{' '}
-            <strong className="text-slate-800">{filteredStudents.length}명</strong>
+            표시 중: <strong className="text-slate-900 font-semibold tabular-nums">{filteredStudents.length}명</strong>
             {statusFilter === 'active' && !hasSearchOrExtraFilters ? ` (${activeStatusLabel})` : ''}
           </span>
-          {hasSearchOrExtraFilters && (
+        }
+        filterButton={{
+          isOpen: showAdvancedFilters,
+          onToggle: () => setShowAdvancedFilters((prev) => !prev),
+          activeCount: advancedFilterCount,
+          ariaLabel: rosterList.filterButtonAriaLabel,
+          buttonLabel: '필터',
+        }}
+        extraActions={
+          hasSearchOrExtraFilters ? (
             <button
               type="button"
               onClick={resetFilters}
-              className="font-bold text-indigo-600 hover:text-indigo-700 min-h-[44px]"
+              className="text-xs text-slate-500 hover:text-slate-800 font-medium px-2 py-1 rounded hover:bg-slate-100 transition-colors cursor-pointer"
             >
               초기화
             </button>
+          ) : null
+        }
+      >
+        {/* 확장 상세 필터 패널 */}
+        <div
+          className={`grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 ${
+            rosterList.fitAdvancedFilterGrid
+              ? advancedFilterColumns >= 5
+                ? 'lg:grid-cols-5'
+                : advancedFilterColumns === 4
+                  ? 'lg:grid-cols-4'
+                  : 'lg:grid-cols-3'
+              : 'lg:grid-cols-5'
+          }`}
+        >
+          {!isScoped && (
+            <label className="block min-w-0 space-y-1">
+              <span className="text-[11px] font-medium text-slate-500 px-0.5">{staffFilterName}</span>
+              <select
+                value={teacherFilter}
+                onChange={(e) => setTeacherFilter(e.target.value)}
+                className="w-full px-2.5 py-1.5 min-h-[36px] text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none"
+                aria-label={staffFilterName}
+              >
+                <option value="ALL">{staffFilterName} 전체</option>
+                {teachers.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name}
+                  </option>
+                ))}
+              </select>
+            </label>
           )}
-        </div>
-      </FilterBar>
 
+          <label className="block min-w-0 space-y-1">
+            <span className="text-[11px] font-medium text-slate-500 px-0.5">{labels.service.singular}</span>
+            <select
+              value={classFilter}
+              onChange={(e) => setClassFilter(e.target.value)}
+              className="w-full px-2.5 py-1.5 min-h-[36px] text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none"
+              aria-label={labels.service.singular}
+            >
+              <option value="ALL">반 전체</option>
+              {classes.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block min-w-0 space-y-1">
+            <span className="text-[11px] font-medium text-slate-500 px-0.5">요일</span>
+            <select
+              value={weekdayFilter}
+              onChange={(e) => setWeekdayFilter(e.target.value as DayOfWeek | 'ALL')}
+              className="w-full px-2.5 py-1.5 min-h-[36px] text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none"
+              aria-label="요일"
+            >
+              <option value="ALL">요일 전체</option>
+              {WEEKDAY_FILTER_OPTIONS.map((d) => (
+                <option key={d} value={d}>
+                  {d}요일
+                </option>
+              ))}
+            </select>
+          </label>
+
+          {showPickupFields && (
+            <label className="block min-w-0 space-y-1">
+              <span className="text-[11px] font-medium text-slate-500 px-0.5">셔틀</span>
+              <select
+                value={shuttleFilter}
+                onChange={(e) => setShuttleFilter(e.target.value as 'ALL' | 'SHUTTLE')}
+                className="w-full px-2.5 py-1.5 min-h-[36px] text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none font-medium"
+                aria-label="셔틀"
+              >
+                <option value="ALL">셔틀 전체</option>
+                <option value="SHUTTLE">셔틀 이용 ({shuttleCount})</option>
+              </select>
+            </label>
+          )}
+
+          <label className="block min-w-0 space-y-1">
+            <span className="text-[11px] font-medium text-slate-500 px-0.5">정렬</span>
+            <div className="flex items-center gap-1.5 px-2.5 min-h-[36px] bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700">
+              <ArrowUpDown className="w-3.5 h-3.5 text-slate-400 shrink-0" strokeWidth={1.5} />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                className="bg-transparent w-full text-xs focus:outline-none cursor-pointer"
+                aria-label="정렬"
+              >
+                <option value="joinDateDesc">등록일 최신순</option>
+                <option value="joinDateAsc">등록일 과거순</option>
+                <option value="name">이름 가나다순</option>
+                <option value="paymentDay">수납일순</option>
+              </select>
+            </div>
+          </label>
+        </div>
+      </ListToolbar>
+
+      {/* 3. Empty State (단정하고 컴팩트한 안내) */}
       {isTrulyEmpty ? (
         <EmptyState
-          variant="hero"
-          icon={<Users className="w-8 h-8" />}
-          title={`아직 등록된 ${labels.customer.singular}이 없습니다`}
-          description={`첫 ${labels.customer.singular}을 등록하고 ${termT('lesson', '수업')} 배정, 출결, ${termT('pass', '이용권')} 관리를 시작해보세요.`}
+          icon={<Users className="w-6 h-6 text-slate-500" strokeWidth={1.5} />}
+          title={`등록된 ${labels.customer.singular}이 없습니다`}
+          description={`신규 ${labels.customer.singular}을 등록하고 ${termT('lesson', '수업')} 배정, 출결, ${termT('pass', '이용권')} 관리를 시작하세요.`}
           action={
             !isScoped ? (
               <button
@@ -514,42 +477,24 @@ export const StudentListView: React.FC = () => {
                   setEditingStudent(null);
                   setIsFormModalOpen(true);
                 }}
-                className="px-5 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg transition-colors cursor-pointer"
               >
-                + 첫 {labels.customer.singular} 등록하기
+                <UserPlus className="w-3.5 h-3.5" strokeWidth={1.5} />
+                <span>+ {labels.customer.singular} 등록</span>
               </button>
             ) : undefined
           }
-          guide={{
-            badge: '💡 30초 시작 가이드',
-            title: `첫 ${labels.customer.singular} 등록 추천 순서`,
-            steps: [
-              {
-                title: '기본 인적사항 입력',
-                detail: '이름과 연락처만 먼저 입력해도 바로 등록됩니다.',
-              },
-              {
-                title: '맞춤 특이사항 및 수강 목적 메모',
-                detail: '상담 내용이나 희망 사항, 주의사항을 메모해두면 응대에 큰 도움이 됩니다.',
-              },
-              {
-                title: '이용권 또는 수강반 연결',
-                detail: '등록 후 이용권 탭이나 수강반 탭에서 즉시 연결할 수 있습니다.',
-              },
-            ],
-            tip: `엑셀 파일로 많은 ${labels.customer.plural}을 한 번에 등록하시려면 상단의 '일괄 등록' 버튼을 활용하세요.`,
-          }}
         />
       ) : isFilterEmpty ? (
         <EmptyState
-          icon={<Users className="w-12 h-12" />}
+          icon={<Users className="w-6 h-6 text-slate-400" strokeWidth={1.5} />}
           title={`조건에 맞는 ${labels.customer.singular}이 없습니다`}
           description={rosterFilterEmptyDescription(rosterList, labels.customer.singular)}
           action={
             <button
               type="button"
               onClick={resetFilters}
-              className="px-4 py-2.5 min-h-[44px] bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold rounded-xl"
+              className="px-3.5 py-1.5 min-h-[36px] bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg transition-colors cursor-pointer"
             >
               필터 초기화
             </button>
@@ -558,7 +503,7 @@ export const StudentListView: React.FC = () => {
       ) : (
         <>
           {/* Desktop: compact columns */}
-          <div className="hidden md:block bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+          <div className="hidden md:block bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
@@ -603,7 +548,7 @@ export const StudentListView: React.FC = () => {
                       <tr
                         key={st.id}
                         onClick={() => handleOpenDetail(st)}
-                        className="hover:bg-indigo-50/40 transition-colors cursor-pointer group"
+                        className="hover:bg-slate-50 transition-colors cursor-pointer group"
                       >
                         <td className="py-2.5 px-3 w-10 text-center" onClick={(e) => e.stopPropagation()}>
                           <input
@@ -721,7 +666,7 @@ export const StudentListView: React.FC = () => {
                   key={st.id}
                   type="button"
                   onClick={() => handleOpenDetail(st)}
-                  className="w-full text-left bg-white p-3 rounded-2xl border border-slate-200/80 shadow-xs active:bg-slate-50 transition-all space-y-2 min-h-[44px]"
+                  className="w-full text-left bg-white p-3 rounded-xl border border-slate-200 shadow-2xs active:bg-slate-50 transition-colors space-y-2 min-h-[44px]"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5 min-w-0">

@@ -15,14 +15,16 @@ interface ModuleSidebarProps {
   activeTab: NavTab;
   onNavigate: (tab: NavTab) => void;
   theme: ModuleTheme;
-  user: ModuleSidebarUser;
+  user?: ModuleSidebarUser;
   /** 기본: 모바일에서 숨김 */
   className?: string;
+  /** 사이드바 하단 프로필 박스 노출 여부 (기본: 상단 헤더 프로필로 일원화하여 숨김) */
+  showProfileFooter?: boolean;
   /** 업종별 하이라이트 (미지정 시 core isNavItemActive) */
   isItemActive?: (itemTab: NavTab, activeTab: NavTab) => boolean;
 }
 
-/** 모듈 공통 데스크톱 사이드바 (섹션 + 역할 푸터) */
+/** 모듈 공통 데스크톱 사이드바 (섹션) */
 export function ModuleSidebar({
   sections,
   activeTab,
@@ -30,6 +32,7 @@ export function ModuleSidebar({
   theme,
   user,
   className = 'hidden md:flex',
+  showProfileFooter = false,
   isItemActive = isNavItemActive,
 }: ModuleSidebarProps) {
   const t = MODULE_THEMES[theme];
@@ -59,7 +62,7 @@ export function ModuleSidebar({
                   id={`nav-${item.tab}`}
                   type="button"
                   onClick={() => onNavigate(item.tab)}
-                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-colors duration-150 cursor-pointer ${
+                  className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs transition-colors duration-150 cursor-pointer ${
                     isActive
                       ? t.sidebarActive
                       : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50 font-medium'
@@ -76,19 +79,21 @@ export function ModuleSidebar({
         ))}
       </div>
 
-      <div className="p-3.5 border-t border-slate-100 bg-slate-50/70">
-        <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
-          <div
-            className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 ${t.sidebarBadge}`}
-          >
-            {user.roleBadge}
-          </div>
-          <div className="min-w-0">
-            <p className="text-xs font-bold text-slate-800 truncate">{user.name}</p>
-            <p className="text-[10px] text-slate-400">{user.roleLabel}</p>
+      {showProfileFooter && user && (
+        <div className="p-3.5 border-t border-slate-100 bg-slate-50/70">
+          <div className="flex items-center gap-2.5 p-2 rounded-lg bg-white border border-slate-200/80 shadow-2xs">
+            <div
+              className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 ${t.sidebarBadge}`}
+            >
+              {user.roleBadge}
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-slate-800 truncate">{user.name}</p>
+              <p className="text-[10px] text-slate-400">{user.roleLabel}</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </aside>
   );
 }

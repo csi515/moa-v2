@@ -278,7 +278,7 @@ const WaitlistPage = lazy(() =>
 );
 
 import { PluginErrorBoundary } from '@/shared/components/PluginErrorBoundary';
-import { DirectorFloatingFab, ToastContainer, ConfirmDialog } from '@/shared/components';
+import { ToastContainer, ConfirmDialog } from '@/shared/components';
 import { ExecutiveRiskDashboardWidget } from '@/shared/components/ExecutiveRiskDashboardWidget';
 import { ModuleAppShell } from '@/shared/components/layout/ModuleAppShell';
 import { ModuleSidebar } from '@/shared/components/layout/ModuleSidebar';
@@ -1421,7 +1421,6 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
 
   const body = (
     <>
-      {isOwner && <DirectorFloatingFab />}
       {Overlays && <Overlays />}
       {(enabledCaps.includes('sop_risk_assessment') || enabledCaps.includes('safety_consent')) && (
         <Suspense fallback={null}>

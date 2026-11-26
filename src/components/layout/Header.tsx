@@ -125,35 +125,30 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur-sm sm:px-6">
+      <header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur-sm sm:px-6">
         <div className="flex items-center gap-3">
           <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white shadow-sm">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-900 font-bold text-white shadow-2xs">
               M
             </div>
-            <span className="text-lg font-semibold tracking-tight text-slate-900">
-              MOA <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">v2</span>
+            <span className="text-base font-bold tracking-tight text-slate-900">
+              MOA <span className="text-[11px] font-medium text-slate-500 bg-slate-100 border border-slate-200/70 px-1.5 py-0.5 rounded">v2</span>
             </span>
           </Link>
           {currentOrganization && (
             <div ref={orgSwitcherRef} className="relative flex items-center gap-2 border-l border-slate-200 pl-3 min-w-0">
-              <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 max-w-[120px] truncate sm:max-w-xs">
-                <Building2 className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-slate-100 border border-slate-200/80 px-2 py-1 text-xs font-medium text-slate-700 max-w-[120px] truncate sm:max-w-xs">
+                <Building2 className="h-3.5 w-3.5 text-slate-400 shrink-0" strokeWidth={1.5} />
                 <span className="truncate">{currentOrganization.name}</span>
               </span>
-              <span
-                className={cn(
-                  "hidden sm:inline-flex items-center gap-1.5 text-xs font-bold border px-2.5 py-0.5 rounded-lg shadow-2xs",
-                  THEME_BADGE_STYLES[badgeColor] || THEME_BADGE_STYLES.indigo
-                )}
-              >
+              <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium border border-slate-200/80 bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md">
                 <span>{badgeEmoji}</span>
                 <span>{preset?.name || getIndustryLabel(currentOrganization.industry_type)}</span>
               </span>
               <button
                 type="button"
                 onClick={() => setIsOrgSwitcherOpen((prev) => !prev)}
-                className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 font-medium hover:underline shrink-0 px-1 py-0.5 rounded"
+                className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-slate-800 font-medium hover:underline shrink-0 px-1 py-0.5 rounded"
                 title="사업장 변경 (In-Place)"
               >
                 변경
@@ -161,10 +156,10 @@ export const Header: React.FC = () => {
 
               {/* In-Place 사업장 전환 드롭다운 메뉴 (Zero-Reload) */}
               {isOrgSwitcherOpen && (
-                <div className="absolute top-full left-3 mt-2 w-72 rounded-2xl bg-white p-2 shadow-xl border border-slate-200/90 z-50 animate-in fade-in-50 zoom-in-95 duration-100">
+                <div className="absolute top-full left-3 mt-2 w-72 rounded-xl bg-white p-2 shadow-xl border border-slate-200/90 z-50 animate-in fade-in-50 zoom-in-95 duration-100">
                   <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-500">소속 사업장 전환</span>
-                    <span className="text-[10px] text-indigo-600 font-medium bg-indigo-50 px-1.5 py-0.5 rounded-full">
+                    <span className="text-xs font-bold text-slate-600">소속 사업장 전환</span>
+                    <span className="text-[10px] text-slate-600 font-medium bg-slate-100 px-1.5 py-0.5 rounded">
                       {organizations.length}개 운영 중
                     </span>
                   </div>
@@ -186,9 +181,9 @@ export const Header: React.FC = () => {
                             }
                           }}
                           className={cn(
-                            "w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors",
+                            "w-full text-left px-3 py-2 rounded-lg text-xs flex items-center justify-between transition-colors",
                             isCurrent
-                              ? "bg-indigo-50/80 text-indigo-900 font-bold"
+                              ? "bg-slate-100 text-slate-900 font-bold"
                               : "hover:bg-slate-50 text-slate-700"
                           )}
                         >
@@ -199,7 +194,7 @@ export const Header: React.FC = () => {
                             </p>
                           </div>
                           {isCurrent && (
-                            <span className="h-2 w-2 rounded-full bg-indigo-600 shrink-0" />
+                            <span className="h-2 w-2 rounded-full bg-slate-900 shrink-0" />
                           )}
                         </button>
                       );
@@ -299,14 +294,14 @@ export const Header: React.FC = () => {
       {/* 사업주용 신규 가입 신청 승인 모달 */}
       {isJoinModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="w-full max-w-2xl max-h-[85vh] bg-white rounded-3xl shadow-2xl border border-slate-100 flex flex-col overflow-hidden">
+          <div className="w-full max-w-2xl max-h-[85vh] bg-white rounded-xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                  <UserPlus className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center">
+                  <UserPlus className="w-4 h-4" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <h2 className="text-base font-extrabold text-slate-900">신규 가입 신청 승인</h2>
+                  <h2 className="text-base font-bold text-slate-900">신규 가입 신청 승인</h2>
                   <p className="text-xs text-slate-500">매장 이용을 신청한 고객 목록을 검토하고 승인합니다</p>
                 </div>
               </div>
@@ -316,10 +311,10 @@ export const Header: React.FC = () => {
                   setIsJoinModalOpen(false);
                   void checkPendingRequests();
                 }}
-                className="p-2 rounded-xl hover:bg-slate-200/60 text-slate-400 hover:text-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 rounded-lg hover:bg-slate-200/60 text-slate-400 hover:text-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="닫기"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5" strokeWidth={1.5} />
               </button>
             </div>
             <div className="p-6 overflow-y-auto flex-1">
