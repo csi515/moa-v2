@@ -50,7 +50,7 @@ interface CreateOrganizationWizardProps {
 }
 
 export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> = ({
-  initialIndustryType = 'piano',
+  initialIndustryType,
   onComplete,
   onCancel,
 }) => {
@@ -68,9 +68,12 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
     errorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, [error]);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    industryType: IndustryType;
+  }>({
     name: '',
-    industryType: initialIndustryType,
+    industryType: (initialIndustryType || '') as unknown as IndustryType,
   });
   const [addressParts, setAddressParts] = useState<OrganizationAddressValue>(
     EMPTY_ORGANIZATION_ADDRESS

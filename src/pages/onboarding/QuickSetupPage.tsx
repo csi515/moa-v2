@@ -235,7 +235,7 @@ export const QuickSetupPage: React.FC = () => {
   const navigate = useNavigate();
   const { switchTenant } = useTenant();
 
-  const [selectedIndustry, setSelectedIndustry] = useState<string>('piano');
+  const [selectedIndustry, setSelectedIndustry] = useState<string>('');
   const [setupDepartments, setSetupDepartments] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [generalError, setGeneralError] = useState<string | null>(null);
@@ -394,7 +394,7 @@ export const QuickSetupPage: React.FC = () => {
   } = useForm<QuickSetupFormData>({
     defaultValues: {
       name: '',
-      industry: 'piano',
+      industry: '',
     },
   });
 
@@ -465,8 +465,10 @@ export const QuickSetupPage: React.FC = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const initialPreset = params.get('industry') || params.get('preset') || 'piano';
-    applyIndustryDefaults(initialPreset);
+    const initialPreset = params.get('industry') || params.get('preset');
+    if (initialPreset) {
+      applyIndustryDefaults(initialPreset);
+    }
   }, []);
 
   // 직급 조작
@@ -539,6 +541,10 @@ export const QuickSetupPage: React.FC = () => {
   // 1회 원자적 DB 생성 RPC 호출
   const onSubmit = async (data: QuickSetupFormData) => {
     const trimmedName = data.name?.trim() || '';
+    if (!selectedIndustry) {
+      setGeneralError('사업장 업종을 선택해 주세요.');
+      return;
+    }
     if (!trimmedName || trimmedName.length < 2) {
       setError('name', { message: '사업장 상호명을 공백 제외 2자 이상 입력해 주세요.' });
       return;
