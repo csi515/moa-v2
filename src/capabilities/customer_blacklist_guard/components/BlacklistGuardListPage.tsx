@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useList, useCreate, useUpdate } from '@refinedev/core';
-import { Ban, Plus, ShieldAlert, AlertTriangle, CheckCircle, Search } from 'lucide-react';
+import { Ban, Plus, ShieldAlert, CheckCircle } from 'lucide-react';
 import {
   validateBlacklistInput,
   type BlacklistRecord,
@@ -8,6 +8,14 @@ import {
   type IncidentReason,
 } from '../domain/blacklistGuardEngine';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import {
+  PageHeader,
+  StandardDataTable,
+  type StandardColumn,
+  StatusBadge,
+  FormModal,
+  Button,
+} from '@/shared/components';
 
 export const BlacklistGuardListPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,219 +72,227 @@ export const BlacklistGuardListPage: React.FC = () => {
           setRestrictedUntil('');
           refetch();
         },
-        onError: (err) => {
-          showToast.error(err, '출입제한 등록 실패');
+        onError: (err: any) => {
+          showToast(`등록 실패: ${err?.message || 'DB 에러'}`, 'error');
         },
       }
     );
   };
 
-  const handleToggleActive = (rec: BlacklistRecord) => {
+  const handleDeactivate = (id: string, name: string) => {
+    if (!window.confirm(`[${name}] 님의 출입 제한 조치를 해제하시겠습니까?`)) return;
+
     updateRecord(
       {
         resource: 'blacklist_records',
-        id: rec.id,
-        values: { is_active: !rec.is_active },
+        id,
+        values: {
+          is_active: false,
+          lifted_at: new Date().toISOString(),
+          lifted_by: '원장/관리자',
+        },
       },
       {
         onSuccess: () => {
-          showToast(`출입 제한이 ${!rec.is_active ? '다시 적용' : '해제'}되었습니다.`, 'success');
+          showToast(`[${name}] 출입 제한 해제 완료`, 'info');
           refetch();
+        },
+        onError: (err: any) => {
+          showToast(`해제 실패: ${err?.message}`, 'error');
         },
       }
     );
   };
 
-  return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2 text-slate-800 dark:text-slate-100">
-            <Ban className="w-7 h-7 text-rose-600" />
-            악성 민원 및 출입제한 통제
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            폭언, 기물 파손, 상습 미납 등 규정 위반 고객에 대한 현장 예약 및 입장 차단을 관리합니다.
-          </p>
-        </div>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 font-medium"
-        >
-          <Plus className="w-4 h-4" />
-          신규 출입 제한 대상 등록
-        </button>
-      </div>
-
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow border border-slate-200 dark:border-slate-700 overflow-hidden">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 font-semibold border-b">
-            <tr>
-              <th className="p-3">대상자 성명</th>
-              <th className="p-3">연락처 식별값</th>
-              <th className="p-3">제한 수위</th>
-              <th className="p-3">제한 사유 및 경위</th>
-              <th className="p-3">제한 기한</th>
-              <th className="p-3">상태</th>
-              <th className="p-3 text-right">관리</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-            {isLoading ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-400">불러오는 중...</td>
-              </tr>
-            ) : records.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-400">등록된 출입 제한 대상자가 없습니다.</td>
-              </tr>
+  const columns: StandardColumn<BlacklistRecord>[] = useMemo(
+    () => [
+      {
+        key: 'target_name',
+        header: '대상자 성명',
+        className: 'font-semibold text-rose-600',
+        render: (r) => r.target_name,
+      },
+      {
+        key: 'target_phone',
+        header: '연락처 식별값',
+        className: 'font-mono text-slate-700',
+        render: (r) => r.target_phone,
+      },
+      {
+        key: 'severity',
+        header: '제한 수위',
+        render: (r) => {
+          if (r.severity === 'PERMANENT_EXPULSION') {
+            return <StatusBadge status="danger" dot>영구 제명</StatusBadge>;
+          }
+          if (r.severity === 'TEMPORARY_SUSPENSION') {
+            return <StatusBadge status="warning" dot>기한부 정지</StatusBadge>;
+          }
+          return <StatusBadge status="info" dot>주의 관찰</StatusBadge>;
+        },
+      },
+      {
+        key: 'incident_summary',
+        header: '제한 사유 및 경위',
+        className: 'text-slate-600 max-w-sm',
+        render: (r) => r.incident_summary,
+      },
+      {
+        key: 'restricted_until',
+        header: '제한 기한',
+        className: 'text-slate-500 font-mono text-xs',
+        render: (r) => (r.restricted_until ? `${r.restricted_until}까지` : '무기한'),
+      },
+      {
+        key: 'status',
+        header: '상태',
+        render: (r) =>
+          r.is_active ? (
+            <StatusBadge status="danger">차단중</StatusBadge>
+          ) : (
+            <StatusBadge status="neutral">해제됨</StatusBadge>
+          ),
+      },
+      {
+        key: 'actions',
+        header: '관리',
+        align: 'right',
+        render: (r) => (
+          <div className="flex items-center justify-end gap-1.5">
+            {r.is_active ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleDeactivate(r.id, r.target_name)}
+              >
+                제한 해제
+              </Button>
             ) : (
-              records.map((r) => (
-                <tr key={r.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30">
-                  <td className="p-3 font-semibold text-rose-600">{r.target_name}</td>
-                  <td className="p-3 font-mono">{r.target_phone}</td>
-                  <td className="p-3">
-                    {r.severity === 'PERMANENT_EXPULSION' && (
-                      <span className="px-2 py-0.5 rounded text-xs bg-rose-100 text-rose-800 font-bold">영구 제명</span>
-                    )}
-                    {r.severity === 'TEMPORARY_SUSPENSION' && (
-                      <span className="px-2 py-0.5 rounded text-xs bg-amber-100 text-amber-800 font-semibold">기한부 정지</span>
-                    )}
-                    {r.severity === 'CAUTION_MONITORING' && (
-                      <span className="px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-800">주의 관찰</span>
-                    )}
-                  </td>
-                  <td className="p-3 text-slate-600 max-w-sm">{r.incident_summary}</td>
-                  <td className="p-3 text-slate-400 text-xs">
-                    {r.restricted_until ? `${r.restricted_until}까지` : '무기한'}
-                  </td>
-                  <td className="p-3">
-                    {r.is_active ? (
-                      <span className="px-2 py-0.5 rounded text-xs bg-rose-50 text-rose-700 border border-rose-200 font-medium">차단중</span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-500">해제됨</span>
-                    )}
-                  </td>
-                  <td className="p-3 text-right">
-                    <button
-                      onClick={() => handleToggleActive(r)}
-                      className={`px-2.5 py-1 text-xs rounded border font-medium ${
-                        r.is_active
-                          ? 'border-slate-300 text-slate-600 hover:bg-slate-50'
-                          : 'border-rose-300 text-rose-600 hover:bg-rose-50'
-                      }`}
-                    >
-                      {r.is_active ? '제한 해제' : '다시 적용'}
-                    </button>
-                  </td>
-                </tr>
-              ))
+              <span className="text-xs text-slate-400">해제완료</span>
             )}
-          </tbody>
-        </table>
-      </div>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
+
+  return (
+    <div className="space-y-4 pb-6">
+      <PageHeader
+        density="compact"
+        icon={<ShieldAlert className="w-5 h-5 text-rose-600" />}
+        title="고객 안전 & 출입제한 가드 (Blacklist)"
+        description="상습 악성 민원, 폭언/기물파손 이력자의 출입 및 키오스크 셀프 체크인을 사전 방어합니다."
+        actions={
+          <Button
+            variant="destructive"
+            size="md"
+            onClick={() => setIsModalOpen(true)}
+            leftIcon={<Plus className="w-4 h-4" />}
+          >
+            신규 출입 제한 대상 등록
+          </Button>
+        }
+      />
+
+      <StandardDataTable
+        data={records}
+        columns={columns}
+        keyExtractor={(r) => r.id}
+        isLoading={isLoading}
+        emptyTitle="등록된 출입 제한 대상자가 없습니다."
+        emptyDescription="안전한 사업장 환경이 유지되고 있습니다."
+      />
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-xl max-w-md w-full p-6 space-y-4">
-            <h2 className="text-xl font-bold flex items-center gap-2 text-rose-600">
-              <Ban className="w-5 h-5" />
-              신규 출입 제한 대상 등록
-            </h2>
-            <form onSubmit={handleCreate} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">성명 *</label>
-                  <input
-                    type="text"
-                    value={targetName}
-                    onChange={(e) => setTargetName(e.target.value)}
-                    placeholder="예: 김악성"
-                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">연락처 식별값 *</label>
-                  <input
-                    type="text"
-                    value={targetPhone}
-                    onChange={(e) => setTargetPhone(e.target.value)}
-                    placeholder="예: 010-1234-5678"
-                    className="w-full px-3 py-2 border rounded-lg text-sm font-mono"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">제한 수위 *</label>
-                  <select
-                    value={severity}
-                    onChange={(e) => setSeverity(e.target.value as RestrictionSeverity)}
-                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                  >
-                    <option value="PERMANENT_EXPULSION">영구 제명 (입장 금지)</option>
-                    <option value="TEMPORARY_SUSPENSION">기한부 이용 정지</option>
-                    <option value="CAUTION_MONITORING">주의 관찰 (경고 팝업)</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">사유 분류 *</label>
-                  <select
-                    value={reason}
-                    onChange={(e) => setReason(e.target.value as IncidentReason)}
-                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                  >
-                    <option value="VIOLENCE_VERBAL">폭언/욕설/폭행</option>
-                    <option value="PROPERTY_DAMAGE">기물 파손</option>
-                    <option value="SEXUAL_HARASSMENT">성희롱</option>
-                    <option value="NON_PAYMENT">상습 미납</option>
-                    <option value="OTHER">기타 규정 위반</option>
-                  </select>
-                </div>
-              </div>
-              {severity === 'TEMPORARY_SUSPENSION' && (
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">정지 만료일자 *</label>
-                  <input
-                    type="date"
-                    value={restrictedUntil}
-                    onChange={(e) => setRestrictedUntil(e.target.value)}
-                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                    required
-                  />
-                </div>
-              )}
+        <FormModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title="신규 출입 제한 대상 등록"
+          description="출입 제한 대상으로 등록 시, 키오스크 셀프 출결 및 회원 가입이 사전 차단됩니다."
+          onSubmit={handleCreate}
+          submitLabel="등록 및 차단"
+          maxWidth="lg"
+        >
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">발생 경위 및 증빙 요약 *</label>
-                <textarea
-                  value={incidentSummary}
-                  onChange={(e) => setIncidentSummary(e.target.value)}
-                  placeholder="예: 데스크 기물 파손 및 직원에 대한 폭언으로 경찰 출동, 즉시 퇴실 조치됨."
-                  className="w-full px-3 py-2 border rounded-lg text-sm"
-                  rows={3}
+                <label className="block text-xs font-semibold text-slate-700 mb-1">대상자 성명 *</label>
+                <input
+                  type="text"
+                  value={targetName}
+                  onChange={(e) => setTargetName(e.target.value)}
+                  placeholder="예: 김악성"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-900"
                   required
                 />
               </div>
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border rounded-lg text-sm font-medium"
-                >
-                  취소
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-rose-600 text-white rounded-lg text-sm font-medium hover:bg-rose-700"
-                >
-                  등록 및 차단
-                </button>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">연락처 식별값 *</label>
+                <input
+                  type="text"
+                  value={targetPhone}
+                  onChange={(e) => setTargetPhone(e.target.value)}
+                  placeholder="예: 010-1234-5678"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm font-mono text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-900"
+                  required
+                />
               </div>
-            </form>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">제한 수위 *</label>
+                <select
+                  value={severity}
+                  onChange={(e) => setSeverity(e.target.value as RestrictionSeverity)}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-900"
+                >
+                  <option value="PERMANENT_EXPULSION">영구 제명 (입장 금지)</option>
+                  <option value="TEMPORARY_SUSPENSION">기한부 이용 정지</option>
+                  <option value="CAUTION_MONITORING">주의 관찰 (경고 팝업)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">사유 분류 *</label>
+                <select
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value as IncidentReason)}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-900"
+                >
+                  <option value="VIOLENCE_VERBAL">폭언/욕설/폭행</option>
+                  <option value="PROPERTY_DAMAGE">기물 파손</option>
+                  <option value="SEXUAL_HARASSMENT">성희롱</option>
+                  <option value="NON_PAYMENT">상습 미납</option>
+                  <option value="OTHER">기타 규정 위반</option>
+                </select>
+              </div>
+            </div>
+            {severity === 'TEMPORARY_SUSPENSION' && (
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">정지 만료일자 *</label>
+                <input
+                  type="date"
+                  value={restrictedUntil}
+                  onChange={(e) => setRestrictedUntil(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-900"
+                  required
+                />
+              </div>
+            )}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">발생 경위 및 증빙 요약 *</label>
+              <textarea
+                value={incidentSummary}
+                onChange={(e) => setIncidentSummary(e.target.value)}
+                placeholder="예: 데스크 기물 파손 및 직원에 대한 폭언으로 즉시 퇴실 조치됨."
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-900 resize-none"
+                rows={3}
+                required
+              />
+            </div>
           </div>
-        </div>
+        </FormModal>
       )}
     </div>
   );

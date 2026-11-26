@@ -3,7 +3,7 @@
  * POS 매출과 장부는 분리되어 있으며, 여기서는 수기 시재 대조만 담당한다.
  */
 import { useCallback, useMemo, useState, type FC } from 'react';
-import { BookOpenCheck, Lock, Unlock, ShoppingCart, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
+import { BookOpenCheck, Lock, Unlock, ShoppingCart, CheckCircle2, ArrowRight } from 'lucide-react';
 import { PageHeader } from '@/shared/components';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
@@ -179,15 +179,15 @@ export const LedgerClosingView: FC<LedgerClosingViewProps> = ({
 
       {/* 당일 POS 매출 실시간 연동 현황 카드 (Retail 등 POS 활성 업종) */}
       {posDailySummary && (
-        <div className="rounded-2xl border border-teal-200 bg-gradient-to-r from-teal-50/80 via-white to-teal-50/50 p-4 space-y-3 shadow-xs">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3 shadow-2xs">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <ShoppingCart className="w-5 h-5 text-teal-600" />
-              <h3 className="text-sm font-bold text-slate-800">
+              <ShoppingCart className="w-5 h-5 text-slate-700" />
+              <h3 className="text-sm font-bold text-slate-900">
                 오늘의 POS 판매 실적 (실시간 연동)
               </h3>
               {posDailySummary.count > 0 && (
-                <span className="text-xs bg-teal-100 text-teal-800 font-bold px-2 py-0.5 rounded-full">
+                <span className="text-xs bg-slate-100 text-slate-700 font-bold px-2 py-0.5 rounded-md">
                   {posDailySummary.count}건 완료
                 </span>
               )}
@@ -196,15 +196,14 @@ export const LedgerClosingView: FC<LedgerClosingViewProps> = ({
               <button
                 type="button"
                 onClick={onImportPosCash}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-lg shadow-xs transition-colors min-h-[36px]"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow-xs transition-colors min-h-[36px]"
               >
-                <Sparkles className="w-3.5 h-3.5" />
                 <span>POS 현금 매출({formatCurrency(posDailySummary.cashNet)}) 장부 자동 반영</span>
               </button>
             )}
             {isPosCashImported && (
-              <span className="inline-flex items-center gap-1 text-xs text-teal-700 font-semibold bg-teal-100/70 px-2.5 py-1 rounded-md">
-                <CheckCircle2 className="w-3.5 h-3.5 text-teal-600" />
+              <span className="inline-flex items-center gap-1 text-xs text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                 POS 현금 반영 완료
               </span>
             )}

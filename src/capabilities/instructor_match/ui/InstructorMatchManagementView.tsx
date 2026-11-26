@@ -5,7 +5,7 @@ import {
   Printer,
   Edit,
   GraduationCap,
-  Sparkles,
+  Star,
   BookOpen,
   Award,
   Calendar,
@@ -175,7 +175,7 @@ export const InstructorMatchManagementView: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
                 <div className="absolute bottom-3 left-4 right-4 text-white">
                   <div className="flex items-center gap-1.5 text-xs text-amber-300 font-bold mb-0.5">
-                    <Sparkles className="w-3.5 h-3.5" />
+                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                     <span>평점 {inst.rating} (수강후기 {inst.totalReviews}개)</span>
                   </div>
                   <h3 className="text-lg font-black">{inst.staffName}</h3>
@@ -184,7 +184,7 @@ export const InstructorMatchManagementView: React.FC = () => {
 
               {/* 본문 정보 */}
               <div className="p-5 space-y-3">
-                <div className="text-xs font-bold text-indigo-700 line-clamp-1">
+                <div className="text-xs font-bold text-slate-900 line-clamp-1">
                   {inst.headlineTitle}
                 </div>
 

@@ -6,22 +6,25 @@ import { useModuleLabels } from '@/core/labels';
 import { useStorageRefresh, useStudentNavigation } from '@/hooks';
 import { studentMatchesGuardianQuery } from '@/core/parent/guardianHelpers';
 import { billingStorage } from '@/capabilities/billing/infrastructure/billingStorage';
+import type { StudentUnpaidSummary } from '@/types';
 import { StudentService } from '@/core/students';
 import type { Student } from '@/types/customer';
 import {
-  EmptyState,
   FilterBar,
   FilterTabs,
   PageHeader,
   SearchField,
   SummaryMetricCard,
+  StandardDataTable,
+  type StandardColumn,
+  StatusBadge,
+  Button,
   type FilterTabItem,
 } from '@/shared/components';
 import { formatCurrency, formatPhone } from '@/utils/formatters';
 import { CombinedPaymentModal } from '../tuition/CombinedPaymentModal';
 import {
   AlertCircle,
-  CheckCircle,
   CreditCard,
   BookOpen,
   Phone,
@@ -35,7 +38,6 @@ const FILTER_TABS: FilterTabItem<UnpaidFilter>[] = [
 ];
 
 export const UnpaidManagementView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
-  const { showToast } = useApp();
   const { industry } = usePermissions();
   const labels = useModuleLabels();
   const customerLabel = labels.customer.singular || getCustomerLabel(industry);
@@ -72,232 +74,243 @@ export const UnpaidManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
     if (st) setPayStudent(st);
   };
 
+  const columns: StandardColumn<StudentUnpaidSummary>[] = useMemo(
+    () => [
+      {
+        key: 'studentName',
+        header: `${customerLabel}명`,
+        render: (s) => (
+          <button
+            type="button"
+            onClick={() => openStudent(s.studentId, 'tuition')}
+            className="font-bold text-slate-900 hover:underline text-left"
+          >
+            {s.studentName}
+          </button>
+        ),
+      },
+      {
+        key: 'parentInfo',
+        header: '학부모 / 연락처',
+        render: (s) => (
+          <div>
+            <span className="font-medium text-slate-700 block">{s.parentName}</span>
+            <span className="text-[11px] text-slate-400">{formatPhone(s.parentPhone)}</span>
+          </div>
+        ),
+      },
+      {
+        key: 'tuitionUnpaid',
+        header: '수강료 미납',
+        align: 'right',
+        className: 'font-semibold text-slate-900 tabular-nums',
+        render: (s) => formatCurrency(s.tuitionUnpaid),
+      },
+      {
+        key: 'textbookUnpaid',
+        header: '교재비 미납',
+        align: 'right',
+        className: 'font-semibold text-amber-700 tabular-nums',
+        render: (s) => (s.textbookUnpaid > 0 ? formatCurrency(s.textbookUnpaid) : '-'),
+      },
+      {
+        key: 'totalUnpaid',
+        header: '합계',
+        align: 'right',
+        className: 'font-black text-rose-600 tabular-nums',
+        render: (s) => formatCurrency(s.totalUnpaid),
+      },
+      {
+        key: 'overdue',
+        header: '연체',
+        align: 'center',
+        render: (s) =>
+          s.overdueCount > 0 ? (
+            <StatusBadge status="danger" size="sm" dot>
+              {s.overdueCount}건 · {s.oldestOverdueDays}일
+            </StatusBadge>
+          ) : (
+            <span className="text-slate-400">-</span>
+          ),
+      },
+      {
+        key: 'actions',
+        header: '액션',
+        align: 'right',
+        render: (s) => (
+          <div className="flex items-center justify-end gap-1.5">
+            {s.parentPhone && (
+              <a
+                href={`tel:${s.parentPhone}`}
+                className="inline-flex items-center justify-center p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+                title="전화 연결"
+              >
+                <Phone className="w-3.5 h-3.5" />
+              </a>
+            )}
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => openPayment(s.studentId)}
+            >
+              통합 수납
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    [customerLabel, openStudent]
+  );
+
+  const renderMobileCard = (s: StudentUnpaidSummary) => (
+    <div className="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-4 sm:p-5 space-y-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              type="button"
+              onClick={() => openStudent(s.studentId, 'tuition')}
+              className="font-bold text-slate-900 hover:underline text-sm"
+            >
+              {s.studentName}
+            </button>
+            {s.overdueCount > 0 && (
+              <StatusBadge status="danger" size="sm" dot>
+                연체 {s.overdueCount}건 · {s.oldestOverdueDays}일
+              </StatusBadge>
+            )}
+          </div>
+          <p className="text-xs text-slate-500 mt-0.5">
+            {s.parentName} · {formatPhone(s.parentPhone)}
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2.5 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+          <div className="text-left sm:text-right min-w-[140px]">
+            <p className="text-base sm:text-lg font-black text-rose-600 tabular-nums">
+              {formatCurrency(s.totalUnpaid)}
+            </p>
+            <p className="text-[10px] sm:text-[11px] text-slate-400">
+              수강료 {formatCurrency(s.tuitionUnpaid)} + 교재 {formatCurrency(s.textbookUnpaid)}
+            </p>
+          </div>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => openPayment(s.studentId)}
+          >
+            통합 수납
+          </Button>
+        </div>
+      </div>
+
+      <div className="mt-3 pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+        {s.tuitionItems.length > 0 && (
+          <div className="space-y-1">
+            <p className="font-bold text-slate-800 flex items-center gap-1">
+              <CreditCard className="w-3.5 h-3.5 text-slate-600" /> 수강료
+            </p>
+            {s.tuitionItems.map((inv) => (
+              <div key={inv.id} className="flex justify-between text-slate-600 pl-5">
+                <span>{inv.yearMonth} (기한 {inv.dueDate.slice(5)})</span>
+                <span className="font-bold text-rose-600">{formatCurrency(inv.unpaidAmount)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        {s.textbookItems.length > 0 && (
+          <div className="space-y-1">
+            <p className="font-bold text-amber-700 flex items-center gap-1">
+              <BookOpen className="w-3.5 h-3.5" /> 교재비
+            </p>
+            {s.textbookItems.map((sale) => (
+              <div key={sale.id} className="flex justify-between text-slate-600 pl-5">
+                <span>{sale.textbookTitle}</span>
+                <span className="font-bold text-rose-600">{formatCurrency(sale.unpaidAmount)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {s.parentPhone && (
+        <a
+          href={`tel:${s.parentPhone}`}
+          className="mt-2 inline-flex items-center gap-1 text-[11px] text-slate-700 font-semibold hover:underline"
+        >
+          <Phone className="w-3 h-3" /> 전화 연결
+        </a>
+      )}
+    </div>
+  );
+
   return (
     <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
       {!embedded && (
         <PageHeader
-          icon={<AlertCircle className="w-6 h-6 text-slate-700" />}
+          density="compact"
+          icon={<AlertCircle className="w-5 h-5 text-slate-700" />}
           title="미납 통합 관리"
-          description={`수강료·교재비 미납을 ${customerLabel}별로 한눈에 확인하고 수납 처리합니다`}
+          description="수강료 및 교재비 미납 내역을 합산하여 한 번에 수납 처리합니다."
         />
       )}
 
-      {/* 4열 1행 KPI 요약 카드 (B2B 표준 톤앤매너) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="p-3.5 sm:p-4 rounded-lg border border-slate-200 bg-white shadow-2xs flex flex-col justify-between">
-          <span className="text-xs font-semibold text-slate-500">미납 {customerLabel}</span>
-          <div className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 tabular-nums my-1">
-            {stats.studentCount}명
-          </div>
-          <span className="text-[11px] text-slate-400">당월 미수 발생 대상</span>
-        </div>
-
-        <div className="p-3.5 sm:p-4 rounded-lg border border-slate-200 bg-white shadow-2xs flex flex-col justify-between">
-          <span className="text-xs font-semibold text-slate-500">총 미납액</span>
-          <div className="text-xl sm:text-2xl font-bold tracking-tight text-rose-600 tabular-nums my-1">
-            {formatCurrency(stats.grandTotal)}
-          </div>
-          <span className="text-[11px] text-rose-600/80 font-medium">전체 미수 합계</span>
-        </div>
-
-        <div className="p-3.5 sm:p-4 rounded-lg border border-slate-200 bg-white shadow-2xs flex flex-col justify-between">
-          <span className="text-xs font-semibold text-slate-500">수강료 미납</span>
-          <div className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 tabular-nums my-1">
-            {formatCurrency(stats.tuitionTotal)}
-          </div>
-          <span className="text-[11px] text-slate-400">정규 수강료 항목</span>
-        </div>
-
-        <div className="p-3.5 sm:p-4 rounded-lg border border-slate-200 bg-white shadow-2xs flex flex-col justify-between">
-          <span className="text-xs font-semibold text-slate-500">교재·부대비 미납</span>
-          <div className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 tabular-nums my-1">
-            {formatCurrency(stats.textbookTotal)}
-          </div>
-          <span className="text-[11px] text-slate-400">교재 및 기타 항목</span>
-        </div>
+      {/* KPI 카드 (4열 1행 그리드 통일) */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <SummaryMetricCard
+          label={`미납 ${customerLabel}`}
+          value={`${stats.studentCount}명`}
+          subtitle={stats.studentCount > 0 ? '납부 안내 필요' : '모두 완납'}
+          variant={stats.studentCount > 0 ? 'rose' : 'default'}
+        />
+        <SummaryMetricCard
+          label="총 미납액"
+          value={formatCurrency(stats.grandTotal)}
+          variant={stats.grandTotal > 0 ? 'rose' : 'default'}
+          subtitle={`수강료 ${formatCurrency(stats.tuitionTotal)}`}
+        />
+        <SummaryMetricCard
+          label="교재비 미납"
+          value={formatCurrency(stats.textbookTotal)}
+          subtitle="교재·교구 포함"
+        />
+        <SummaryMetricCard
+          label="연체 건수"
+          value={`${stats.overdueInvoices}건`}
+          variant={stats.overdueInvoices > 0 ? 'rose' : 'default'}
+          subtitle={stats.overdueStudents > 0 ? `${stats.overdueStudents}명 연체` : '연체 없음'}
+        />
       </div>
 
+      {/* 필터 툴바 */}
       <FilterBar>
-        <FilterTabs tabs={filterTabs} active={filterMode} onChange={(id) => setFilterMode(id as UnpaidFilter)} />
-        <SearchField
-          value={searchQuery}
-          onChange={setSearchQuery}
-          placeholder={`${customerLabel}명, 학부모, 연락처 검색...`}
-          className="flex-1 min-w-[200px]"
+        <FilterTabs
+          tabs={filterTabs}
+          active={filterMode}
+          activeClassName="bg-slate-900 text-white shadow-xs"
+          onChange={(tabId) => setFilterMode(tabId as UnpaidFilter)}
         />
+        <div className="w-full sm:w-64">
+          <SearchField
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder={`${customerLabel}명 또는 학부모 연락처`}
+          />
+        </div>
       </FilterBar>
 
-      {filtered.length === 0 ? (
-        <div className="bg-white rounded-lg border border-slate-200 p-12 text-center shadow-2xs">
-          <div className="w-12 h-12 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <CheckCircle className="w-6 h-6 text-emerald-600" />
-          </div>
-          <h3 className="text-base font-bold text-slate-900 mb-1">미납 내역이 없습니다</h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto">
-            청구서를 발행하고 입금을 처리하면 내역이 표시됩니다.
-          </p>
-        </div>
-      ) : (
-        <>
-          {/* 데스크톱 테이블 */}
-          <div className="hidden md:block bg-white rounded-lg border border-slate-200/80 shadow-xs overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
-                  <tr>
-                    <th className="py-3.5 px-4">{customerLabel}명</th>
-                    <th className="py-3.5 px-4">학부모 / 연락처</th>
-                    <th className="py-3.5 px-4 text-right">수강료 미납</th>
-                    <th className="py-3.5 px-4 text-right">교재비 미납</th>
-                    <th className="py-3.5 px-4 text-right">합계</th>
-                    <th className="py-3.5 px-4 text-center">연체</th>
-                    <th className="py-3.5 px-4 text-right">액션</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {filtered.map((s) => (
-                    <tr key={s.studentId} className="hover:bg-indigo-50/30 transition-colors">
-                      <td className="py-3.5 px-4">
-                        <button
-                          onClick={() => openStudent(s.studentId, 'tuition')}
-                          className="font-bold text-slate-900 hover:text-indigo-600 text-left"
-                        >
-                          {s.studentName}
-                        </button>
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <span className="font-medium text-slate-700 block">{s.parentName}</span>
-                        <span className="text-[11px] text-slate-400">{formatPhone(s.parentPhone)}</span>
-                      </td>
-                      <td className="py-3.5 px-4 text-right font-semibold text-indigo-700">
-                        {formatCurrency(s.tuitionUnpaid)}
-                      </td>
-                      <td className="py-3.5 px-4 text-right font-semibold text-amber-700">
-                        {formatCurrency(s.textbookUnpaid)}
-                      </td>
-                      <td className="py-3.5 px-4 text-right font-black text-rose-600">
-                        {formatCurrency(s.totalUnpaid)}
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        {s.overdueCount > 0 ? (
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-rose-100 text-rose-700">
-                            {s.overdueCount}건 · {s.oldestOverdueDays}일
-                          </span>
-                        ) : (
-                          <span className="text-slate-400">-</span>
-                        )}
-                      </td>
-                      <td className="py-3.5 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          {s.parentPhone && (
-                            <a
-                              href={`tel:${s.parentPhone}`}
-                              className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-colors"
-                              title="전화 연결"
-                            >
-                              <Phone className="w-3.5 h-3.5" />
-                            </a>
-                          )}
-                          <button
-                            onClick={() => openPayment(s.studentId)}
-                            className="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl"
-                          >
-                            통합 수납
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* 모바일 카드 */}
-          <div className="md:hidden space-y-3">
-          {filtered.map((s) => (
-            <div
-              key={s.studentId}
-              className="bg-white rounded-lg border border-slate-200/80 shadow-xs p-4 sm:p-5"
-            >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <button
-                      onClick={() => openStudent(s.studentId, 'tuition')}
-                      className="font-bold text-slate-900 hover:text-indigo-600 text-sm"
-                    >
-                      {s.studentName}
-                    </button>
-                    {s.overdueCount > 0 && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-rose-100 text-rose-700">
-                        연체 {s.overdueCount}건 · {s.oldestOverdueDays}일
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    {s.parentName} · {formatPhone(s.parentPhone)}
-                  </p>
-                </div>
-                <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2.5 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-                  <div className="text-left sm:text-right min-w-[140px]">
-                    <p className="text-base sm:text-lg font-black text-rose-600 tabular-nums">{formatCurrency(s.totalUnpaid)}</p>
-                    <p className="text-[10px] sm:text-[11px] text-slate-400">
-                      수강료 {formatCurrency(s.tuitionUnpaid)} + 교재 {formatCurrency(s.textbookUnpaid)}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => openPayment(s.studentId)}
-                    className="px-3.5 py-2.5 min-h-[44px] bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors shrink-0"
-                  >
-                    통합 수납
-                  </button>
-                </div>
-              </div>
-
-              <div className="mt-3 pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                {s.tuitionItems.length > 0 && (
-                  <div className="space-y-1">
-                    <p className="font-bold text-indigo-700 flex items-center gap-1">
-                      <CreditCard className="w-3.5 h-3.5" /> 수강료
-                    </p>
-                    {s.tuitionItems.map((inv) => (
-                      <div key={inv.id} className="flex justify-between text-slate-600 pl-5">
-                        <span>{inv.yearMonth} (기한 {inv.dueDate.slice(5)})</span>
-                        <span className="font-bold text-rose-600">{formatCurrency(inv.unpaidAmount)}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {s.textbookItems.length > 0 && (
-                  <div className="space-y-1">
-                    <p className="font-bold text-amber-700 flex items-center gap-1">
-                      <BookOpen className="w-3.5 h-3.5" /> 교재비
-                    </p>
-                    {s.textbookItems.map((sale) => (
-                      <div key={sale.id} className="flex justify-between text-slate-600 pl-5">
-                        <span>{sale.textbookTitle}</span>
-                        <span className="font-bold text-rose-600">{formatCurrency(sale.unpaidAmount)}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {s.parentPhone && (
-                <a
-                  href={`tel:${s.parentPhone}`}
-                  className="mt-2 inline-flex items-center gap-1 text-[11px] text-indigo-600 font-semibold hover:underline"
-                >
-                  <Phone className="w-3 h-3" /> 전화 연결
-                </a>
-              )}
-            </div>
-          ))}
-          </div>
-        </>
-      )}
+      {/* 데이터 테이블 */}
+      <StandardDataTable
+        data={filtered}
+        columns={columns}
+        keyExtractor={(s) => s.studentId}
+        emptyTitle="미납 내역이 없습니다."
+        emptyDescription={
+          searchQuery
+            ? `검색어와 일치하는 미납 ${customerLabel}이(가) 없습니다.`
+            : `현재 모든 ${customerLabel}이(가) 정상 완납 상태입니다.`
+        }
+        renderMobileCard={renderMobileCard}
+      />
 
       {payStudent && (
         <CombinedPaymentModal

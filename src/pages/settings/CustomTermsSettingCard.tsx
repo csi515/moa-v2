@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, RotateCcw, Save, CheckCircle2, Sparkles } from 'lucide-react';
+import { BookOpen, RotateCcw, Save, CheckCircle2 } from 'lucide-react';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import {
   STANDARD_TERM_KEYS,
@@ -152,17 +152,17 @@ export const CustomTermsSettingCard: React.FC = () => {
       </div>
 
       {/* 실시간 문장 미리보기 */}
-      <div className="bg-gradient-to-r from-indigo-50/70 via-purple-50/50 to-pink-50/40 rounded-xl p-4 border border-indigo-100/80">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-900 mb-1.5">
-          <Sparkles className="w-4 h-4 text-indigo-600" />
+      <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+        <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800 mb-1.5">
+          <BookOpen className="w-4 h-4 text-slate-600" />
           <span>실시간 화면 문구 미리보기</span>
         </div>
         <p className="text-sm text-slate-700 leading-relaxed font-medium">
-          &quot;<span className="text-indigo-700 font-bold underline underline-offset-2">{sampleCustomer}</span>님이{' '}
-          <span className="text-purple-700 font-bold underline underline-offset-2">{sampleSpace}</span>에서{' '}
-          <span className="text-blue-700 font-bold underline underline-offset-2">{samplePass}</span>(으)로{' '}
-          <span className="text-emerald-700 font-bold underline underline-offset-2">{sampleInstructor}</span>의{' '}
-          <span className="text-pink-700 font-bold underline underline-offset-2">{sampleLesson}</span>을(를) 예약했습니다.&quot;
+          &quot;<span className="text-slate-900 font-bold underline underline-offset-2">{sampleCustomer}</span>님이{' '}
+          <span className="text-slate-900 font-bold underline underline-offset-2">{sampleSpace}</span>에서{' '}
+          <span className="text-slate-900 font-bold underline underline-offset-2">{samplePass}</span>(으)로{' '}
+          <span className="text-slate-900 font-bold underline underline-offset-2">{sampleInstructor}</span>의{' '}
+          <span className="text-slate-900 font-bold underline underline-offset-2">{sampleLesson}</span>을(를) 예약했습니다.&quot;
         </p>
       </div>
 

@@ -214,7 +214,7 @@ export const PinCheckInKioskView: React.FC<PinCheckInKioskViewProps> = ({
   if (!moduleEnabled) {
     return (
       <div className={shellClass}>
-        <div className="bg-white rounded-3xl border border-amber-200 p-8 sm:p-10 text-center shadow-sm max-w-md w-full">
+        <div className="bg-white rounded-2xl border border-amber-200 p-8 sm:p-10 text-center shadow-xs max-w-md w-full">
           <div className="w-16 h-16 mx-auto bg-amber-50 rounded-2xl flex items-center justify-center mb-4">
             <Settings className="w-8 h-8 text-amber-600" />
           </div>
@@ -237,7 +237,7 @@ export const PinCheckInKioskView: React.FC<PinCheckInKioskViewProps> = ({
   if (!hasPinsConfigured) {
     return (
       <div className={shellClass}>
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 max-w-md w-full">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 max-w-md w-full">
           <div className="text-center mb-6">
             <p className="text-xs text-slate-500 font-semibold">{kioskEyebrow(industry)}</p>
             <h3 className="text-2xl font-black text-slate-900 mt-1">PIN 입력</h3>
@@ -272,7 +272,7 @@ export const PinCheckInKioskView: React.FC<PinCheckInKioskViewProps> = ({
         />
       )}
 
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 max-w-md w-full relative">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 max-w-md w-full relative">
         <div className="text-center mb-6">
           <p className="text-xs text-slate-500 font-semibold">{kioskEyebrow(industry)}</p>
           <h3 className="text-2xl font-black text-slate-900 mt-1">PIN 번호를 입력해주세요</h3>

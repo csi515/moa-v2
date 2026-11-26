@@ -12,7 +12,17 @@ import {
 } from '../application/attendanceService';
 import type { AttendanceSession } from '../domain/types';
 import { PinCheckInKioskView } from './PinCheckInKioskView';
-import { PageHeader, SummaryMetricCard, FilterBar, SearchField, EmptyState } from '@/shared/components';
+import {
+  PageHeader,
+  SummaryMetricCard,
+  FilterBar,
+  SearchField,
+  EmptyState,
+  StandardDataTable,
+  type StandardColumn,
+  StatusBadge,
+  Button,
+} from '@/shared/components';
 import { SegmentedControl } from '@/shared/components/ui/SegmentedControl';
 import { getAttendanceSummaryMetric, getCustomerListTab, getIndustryAccent } from '@/core/industry/industryUi';
 import {
@@ -298,157 +308,170 @@ export const AttendanceManagementView: React.FC = () => {
                 className="border-0 shadow-none rounded-none"
               />
             ) : (
-              <>
-                <div className="hidden md:block overflow-x-auto">
-                  <table className="w-full text-xs sm:text-sm">
-                    <thead>
-                      <tr className="bg-slate-50 text-slate-500">
-                        <th className="text-left px-4 py-3 font-bold">이름</th>
-                        <th className="text-left px-4 py-3 font-bold">상태</th>
-                        <th className="text-left px-4 py-3 font-bold">{attendancePresentTimeLabel(industry)}</th>
-                        <th className="text-left px-4 py-3 font-bold">PIN</th>
-                        <th className="text-left px-4 py-3 font-bold">메모</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {activeStudents.map((student) => {
-                        const session = sessionMap.get(student.id);
-                        const status = getSessionStatusLabel(session);
-                        const pinSet = attendanceStorage.hasCustomerPin(student.id);
-                        const toneBg =
-                          status.tone === 'success'
-                            ? 'bg-emerald-50 text-emerald-700'
-                            : status.tone === 'warning'
-                              ? 'bg-amber-50 text-amber-700'
-                              : status.tone === 'error'
-                                ? 'bg-rose-50 text-rose-700'
-                                : 'bg-slate-100 text-slate-600';
-
-                        return (
-                          <tr key={student.id} className="border-t border-slate-100 hover:bg-slate-50/50">
-                            <td className="px-4 py-3">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setSelectedStudentId(student.id);
-                                  setActiveTab(customerTab);
-                                }}
-                                className={`font-bold text-slate-900 ${linkHover}`}
-                              >
-                                {student.name}
-                              </button>
-                              <p className="text-[10px] text-slate-400">{student.grade}</p>
-                              {student.specialNotes && (
-                                <p className="mt-1 text-[10px] font-semibold text-amber-800 bg-amber-50 rounded-lg px-1.5 py-0.5 inline-block max-w-[14rem] truncate">
-                                  주의 · {student.specialNotes}
-                                </p>
-                              )}
-                            </td>
-                            <td className="px-4 py-3">
-                              <span className={`px-2 py-1 rounded-lg text-[10px] font-bold ${toneBg}`}>
-                                {status.label}
-                              </span>
-                            </td>
-                            <td className="px-4 py-3 font-mono text-slate-700">
-                              {formatSessionTime(session?.checkInAt)}
-                            </td>
-                            <td className="px-4 py-3">
-                              <span
-                                className={`text-[10px] font-bold ${pinSet ? 'text-emerald-600' : 'text-rose-500'}`}
-                              >
-                                {pinSet ? '설정됨' : '미설정'}
-                              </span>
-                            </td>
-                            <td className="px-4 py-3">
-                              <button
-                                type="button"
-                                onClick={() => openMemoEditor(student, session)}
-                                className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 hover:text-indigo-600 min-h-[44px]"
-                              >
-                                <MessageSquare className="w-3.5 h-3.5" />
-                                {session?.memo ? '수정' : '작성'}
-                              </button>
-                              {session?.memo && (
-                                <p className="text-[10px] text-slate-400 mt-0.5 max-w-[10rem] truncate">
-                                  {session.memo}
-                                </p>
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="md:hidden divide-y divide-slate-100">
-                  {activeStudents.map((student) => {
-                    const session = sessionMap.get(student.id);
-                    const status = getSessionStatusLabel(session);
-                    const pinSet = attendanceStorage.hasCustomerPin(student.id);
-                    const toneBg =
-                      status.tone === 'success'
-                        ? 'bg-emerald-50 text-emerald-700'
-                        : status.tone === 'warning'
-                          ? 'bg-amber-50 text-amber-700'
-                          : status.tone === 'error'
-                            ? 'bg-rose-50 text-rose-700'
-                            : 'bg-slate-100 text-slate-600';
-
-                    return (
-                      <div key={student.id} className="p-3 space-y-1.5">
-                        <div className="flex items-start justify-between gap-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSelectedStudentId(student.id);
-                              setActiveTab(customerTab);
-                            }}
-                            className={`font-bold text-slate-900 ${linkHover} text-sm text-left min-h-[44px]`}
-                          >
-                            {student.name}
-                          </button>
-                          <span className={`px-2 py-1 rounded-lg text-[10px] font-bold shrink-0 ${toneBg}`}>
-                            {status.label}
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-slate-400">{student.grade}</p>
+              <StandardDataTable
+                data={activeStudents}
+                keyExtractor={(student) => student.id}
+                columns={[
+                  {
+                    key: 'name',
+                    header: '이름',
+                    render: (student) => (
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedStudentId(student.id);
+                            setActiveTab(customerTab);
+                          }}
+                          className="font-bold text-slate-900 hover:underline text-left block"
+                        >
+                          {student.name}
+                        </button>
+                        <p className="text-[10px] text-slate-400">{student.grade}</p>
                         {student.specialNotes && (
-                          <p className="text-[11px] font-semibold text-amber-800 bg-amber-50 rounded-xl px-2 py-1">
+                          <p className="mt-1 text-[10px] font-semibold text-amber-800 bg-amber-50 rounded-md px-1.5 py-0.5 inline-block max-w-[14rem] truncate">
                             주의 · {student.specialNotes}
                           </p>
                         )}
-                        <div className="grid grid-cols-1 gap-1.5 text-xs">
-                          <div className="bg-slate-50 rounded-lg px-2 py-1.5">
-                            <p className="text-slate-400 font-semibold text-[10px]">
-                              {attendancePresentTimeLabel(industry)}
-                            </p>
-                            <p className="font-mono font-bold text-slate-700">
-                              {formatSessionTime(session?.checkInAt)}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between gap-2">
-                          <p className={`text-[11px] font-bold ${pinSet ? 'text-emerald-600' : 'text-rose-500'}`}>
-                            PIN {pinSet ? '설정됨' : '미설정'}
-                          </p>
-                          <button
-                            type="button"
-                            onClick={() => openMemoEditor(student, session)}
-                            className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 min-h-[44px]"
-                          >
-                            <MessageSquare className="w-3.5 h-3.5" />
-                            {session?.memo ? '메모 수정' : '메모'}
-                          </button>
-                        </div>
-                        {session?.memo && (
-                          <p className="text-[11px] text-slate-500">메모 · {session.memo}</p>
-                        )}
                       </div>
-                    );
-                  })}
-                </div>
-              </>
+                    ),
+                  },
+                  {
+                    key: 'status',
+                    header: '상태',
+                    render: (student) => {
+                      const session = sessionMap.get(student.id);
+                      const status = getSessionStatusLabel(session);
+                      return (
+                        <StatusBadge
+                          status={
+                            status.tone === 'success'
+                              ? 'success'
+                              : status.tone === 'warning'
+                              ? 'warning'
+                              : status.tone === 'error'
+                              ? 'danger'
+                              : 'neutral'
+                          }
+                          dot
+                        >
+                          {status.label}
+                        </StatusBadge>
+                      );
+                    },
+                  },
+                  {
+                    key: 'presentTime',
+                    header: attendancePresentTimeLabel(industry),
+                    className: 'font-mono text-slate-700 tabular-nums',
+                    render: (student) => {
+                      const session = sessionMap.get(student.id);
+                      return formatSessionTime(session?.checkInAt);
+                    },
+                  },
+                  {
+                    key: 'pin',
+                    header: 'PIN',
+                    render: (student) => {
+                      const pinSet = attendanceStorage.hasCustomerPin(student.id);
+                      return (
+                        <StatusBadge status={pinSet ? 'success' : 'neutral'} size="sm">
+                          {pinSet ? '설정됨' : '미설정'}
+                        </StatusBadge>
+                      );
+                    },
+                  },
+                  {
+                    key: 'memo',
+                    header: '메모',
+                    render: (student) => {
+                      const session = sessionMap.get(student.id);
+                      return (
+                        <div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => openMemoEditor(student, session)}
+                            leftIcon={<MessageSquare className="w-3.5 h-3.5" />}
+                          >
+                            {session?.memo ? '수정' : '작성'}
+                          </Button>
+                          {session?.memo && (
+                            <p className="text-[10px] text-slate-400 mt-0.5 max-w-[10rem] truncate">
+                              {session.memo}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    },
+                  },
+                ]}
+                renderMobileCard={(student) => {
+                  const session = sessionMap.get(student.id);
+                  const status = getSessionStatusLabel(session);
+                  const pinSet = attendanceStorage.hasCustomerPin(student.id);
+                  return (
+                    <div className="p-3.5 bg-white rounded-xl border border-slate-200/90 shadow-2xs space-y-2">
+                      <div className="flex items-start justify-between gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedStudentId(student.id);
+                            setActiveTab(customerTab);
+                          }}
+                          className="font-bold text-slate-900 hover:underline text-sm text-left"
+                        >
+                          {student.name}
+                        </button>
+                        <StatusBadge
+                          status={
+                            status.tone === 'success'
+                              ? 'success'
+                              : status.tone === 'warning'
+                              ? 'warning'
+                              : status.tone === 'error'
+                              ? 'danger'
+                              : 'neutral'
+                          }
+                          dot
+                        >
+                          {status.label}
+                        </StatusBadge>
+                      </div>
+                      <p className="text-[11px] text-slate-400">{student.grade}</p>
+                      {student.specialNotes && (
+                        <p className="text-[11px] font-semibold text-amber-800 bg-amber-50 rounded-lg px-2 py-1">
+                          주의 · {student.specialNotes}
+                        </p>
+                      )}
+                      <div className="bg-slate-50 rounded-lg px-2.5 py-1.5 text-xs flex justify-between items-center">
+                        <span className="text-slate-400 text-[11px]">
+                          {attendancePresentTimeLabel(industry)}
+                        </span>
+                        <span className="font-mono font-bold text-slate-700">
+                          {formatSessionTime(session?.checkInAt)}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100">
+                        <StatusBadge status={pinSet ? 'success' : 'neutral'} size="sm">
+                          PIN {pinSet ? '설정됨' : '미설정'}
+                        </StatusBadge>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => openMemoEditor(student, session)}
+                          leftIcon={<MessageSquare className="w-3.5 h-3.5" />}
+                        >
+                          {session?.memo ? '메모 수정' : '메모 작성'}
+                        </Button>
+                      </div>
+                      {session?.memo && (
+                        <p className="text-[11px] text-slate-500">메모 · {session.memo}</p>
+                      )}
+                    </div>
+                  );
+                }}
+              />
             )}
           </div>
         </div>

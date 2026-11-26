@@ -13,7 +13,6 @@ import {
   ChevronRight,
   User,
   Check,
-  Sparkles,
   BookOpen,
 } from 'lucide-react';
 import {
@@ -563,7 +562,7 @@ export function ScheduleCalendarPage() {
             }`}
           >
             <span className="flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <CalendarIcon className="w-3.5 h-3.5 text-slate-400" />
               전체 일정 보기
             </span>
             <span className="text-[11px] opacity-80">전체</span>

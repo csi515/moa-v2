@@ -7,7 +7,7 @@ import { ScheduleService } from '@/core/services/scheduleService';
 import type { ServiceOffering } from '@/core/types/schedule';
 import { EmptyState, Modal, PageHeader } from '@/shared/components';
 import { formatCurrency } from '@/utils/formatters';
-import { Calendar, Dumbbell, Sparkles, Trash2 } from 'lucide-react';
+import { Calendar, Clock, Dumbbell, Trash2 } from 'lucide-react';
 import { resolveBookingUi } from './bookingIndustryAdapter';
 
 export const ServiceManagementView: React.FC = () => {
@@ -17,7 +17,7 @@ export const ServiceManagementView: React.FC = () => {
   const categoryLabel = bookingUi.categoryLabels;
   const serviceName = labels.service.management;
   const ServiceIcon =
-    bookingUi.flow === 'appointmentCards' ? Sparkles : bookingUi.flow === 'classSlots' ? Dumbbell : Calendar;
+    bookingUi.flow === 'appointmentCards' ? Clock : bookingUi.flow === 'classSlots' ? Dumbbell : Calendar;
   useStorageRefresh();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editing, setEditing] = useState<ServiceOffering | null>(null);
