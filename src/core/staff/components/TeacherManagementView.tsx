@@ -455,27 +455,23 @@ export const TeacherManagementView: React.FC = () => {
 
   return (
     <div className="space-y-5 pb-8">
-      {/* 1. 상단 단일 헤더 (중복 헤더 제거) */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
-            <GraduationCap className="w-6 h-6 text-slate-700" />
-            {labels.staff.management}
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            {labels.staff.singular} 목록과 담당 배정 및 정산 현황을 관리합니다. (총 <span className="font-semibold text-slate-700 tabular-nums">{teachers.length}</span>명)
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={handleOpenCreate}
-          className="min-h-[40px] px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-xs"
-        >
-          <Plus className="w-4 h-4" />
-          신규 {labels.staff.singular} 등록
-        </button>
-      </div>
+      {/* 1. 상단 단일 헤더 (표준 PageHeader) */}
+      <PageHeader
+        icon={<GraduationCap className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}
+        title={labels.staff.management}
+        badge={`${teachers.length}명`}
+        description={`${labels.staff.singular} 목록과 담당 배정 및 정산 현황을 관리합니다.`}
+        actions={
+          <button
+            type="button"
+            onClick={handleOpenCreate}
+            className="min-h-[36px] px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>신규 {labels.staff.singular} 등록</span>
+          </button>
+        }
+      />
 
       {canManageAccounts && <JoinRequestsPanel />}
 

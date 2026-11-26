@@ -293,6 +293,8 @@ export const StudentListView: React.FC = () => {
       <PageHeader
         icon={<Users className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}
         title={labels.customer.section || `${labels.customer.singular} 관리`}
+        badge={`${filteredStudents.length}명`}
+        description={`${labels.customer.singular} 명부 및 등록·출결·수강 현황을 관리합니다.`}
         density="compact"
         actions={
           !isScoped ? (

@@ -207,12 +207,15 @@ export const PracticeRecordsView: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        icon={<BookOpenCheck className="w-6 h-6 text-indigo-600" />}
+        icon={<BookOpenCheck className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}
         title="연습 기록"
-        description="원생들의 일일 연습 시간과 연습 곡 진도 기록 관리"
+        description="원생들의 일일 연습 시간과 연습 곡 진도 기록을 관리합니다."
         actions={
-          <button onClick={handleOpenCreate} className="btn-primary flex items-center space-x-2">
-            <Plus className="w-4 h-4" />
+          <button
+            onClick={handleOpenCreate}
+            className="px-3.5 py-1.5 min-h-[36px] bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs flex items-center gap-1.5 cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5" />
             <span>기록 추가</span>
           </button>
         }

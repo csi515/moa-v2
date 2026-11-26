@@ -218,7 +218,7 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
       ) : (
         <>
           <PageHeader
-            icon={<CreditCard className="w-6 h-6" />}
+            icon={<CreditCard className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}
             title="수강료 수납 및 청구"
             description={`${customerLabel}별 수강료 납부 현황 조회와 즉시 수납 처리`}
           />

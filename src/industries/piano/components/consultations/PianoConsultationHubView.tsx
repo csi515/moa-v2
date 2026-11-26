@@ -106,38 +106,38 @@ export const PianoConsultationHubView: FC = () => {
       {/* 1. 페이지 헤더 */}
       <PageHeader
         density="compact"
-        icon={<MessageSquareText className="w-6 h-6" />}
+        icon={<MessageSquareText className="w-5 h-5 text-slate-700" />}
         title="상담 관리"
         description="상담 문의 접수, 예약 일정, 대기/확정 관리 및 상담 일지 원스톱 대장"
         actions={
           showOwnerTools && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 type="button"
                 onClick={() => setShowAvailabilityModal(true)}
-                className="min-h-[44px] px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-bold inline-flex items-center gap-1.5 hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
+                className="min-h-[36px] px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 text-xs font-semibold inline-flex items-center gap-1.5 hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
                 title="학부모가 온라인으로 예약할 수 있는 요일과 시간대를 설정합니다."
               >
-                <Clock className="w-4 h-4 text-indigo-600" />
+                <Clock className="w-3.5 h-3.5 text-slate-500" />
                 <span className="hidden sm:inline">예약 가능 시간대</span>
                 <span className="sm:hidden">가능시간</span>
               </button>
               <button
                 type="button"
                 onClick={() => setShowQr(true)}
-                className="min-h-[44px] px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-bold inline-flex items-center gap-1.5 hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
+                className="min-h-[36px] px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 text-xs font-semibold inline-flex items-center gap-1.5 hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
                 title="학부모에게 전송하거나 블로그/인스타에 올리는 예약 링크 및 QR 코드"
               >
-                <QrCode className="w-4 h-4 text-indigo-600" />
+                <QrCode className="w-3.5 h-3.5 text-slate-500" />
                 <span className="hidden sm:inline">학부모 예약 링크·QR</span>
                 <span className="sm:hidden">예약 링크·QR</span>
               </button>
               <button
                 type="button"
                 onClick={() => setShowCreateSchedule(true)}
-                className="min-h-[44px] px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
+                className="min-h-[36px] px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
               >
-                <CalendarPlus className="w-4 h-4" />
+                <CalendarPlus className="w-3.5 h-3.5" />
                 <span>직접 상담 등록</span>
               </button>
             </div>

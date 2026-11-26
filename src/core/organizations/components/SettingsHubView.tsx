@@ -80,7 +80,7 @@ export const SettingsHubView: FC<SettingsHubViewProps> = ({
     <div className="space-y-4 pb-4">
       <PageHeader
         density="compact"
-        icon={<Settings className="w-6 h-6" />}
+        icon={<Settings className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}
         title={`${workplaceLabel} 운영 설정`}
         description="사업장 기본 정보, 공간 및 연습실 등록, 수납 정책 및 데이터 관리"
         actions={

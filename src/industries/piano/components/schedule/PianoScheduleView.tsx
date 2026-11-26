@@ -5,7 +5,7 @@ import { usePermissions } from '@/core/auth/usePermissions';
 import { getPlaceLabel } from '@/core/industry/industryUi';
 import { useStaffGrants, useStaffScope } from '@/hooks';
 import { AcademyCalendarView } from '../calendar/AcademyCalendarView';
-import { SegmentedControl, Modal } from '@/shared/components';
+import { PageHeader, SegmentedControl, Modal } from '@/shared/components';
 import { MakeupManagementView } from '../makeup/MakeupManagementView';
 import { PracticeRoomBookingView } from '../practiceRooms/PracticeRoomBookingView';
 import { PianoLessonTimetableView } from './PianoLessonTimetableView';
@@ -76,39 +76,31 @@ export const PianoScheduleView: FC = () => {
 
   return (
     <div className="space-y-4 pb-4">
-      <div className="sticky top-0 z-10 -mx-1 px-1 py-1 bg-slate-50/90 backdrop-blur-sm space-y-2.5">
-        <div className="flex items-center justify-between gap-3 px-0.5">
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-slate-100 text-slate-700 border border-slate-200/80">
-              <TitleIcon className="w-4 h-4 text-slate-700" strokeWidth={1.5} />
-            </span>
-            <h2 className="text-base font-bold text-slate-900 tracking-tight">
-              {title}
-            </h2>
+      <PageHeader
+        icon={<TitleIcon className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}
+        title={title}
+        actions={
+          <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
+            <SegmentedControl
+              value={segment}
+              options={segmentOptions}
+              onChange={handleSegmentChange}
+              aria-label="일정 보기 전환"
+              className="w-full sm:w-auto min-w-[280px]"
+            />
+            {segment === 'timetable' && (
+              <button
+                type="button"
+                onClick={() => setShowMakeupModal(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold transition shadow-2xs min-h-[36px] cursor-pointer shrink-0"
+                title="결석 원생의 보강 레슨을 배정하거나 관리합니다"
+              >
+                <span>보강 일정 관리</span>
+              </button>
+            )}
           </div>
-
-          {/* 시간표 모드일 때 보강 레슨 관리 버튼 */}
-          {segment === 'timetable' && (
-            <button
-              type="button"
-              onClick={() => setShowMakeupModal(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium transition shadow-2xs min-h-[36px] cursor-pointer"
-              title="결석 원생의 보강 레슨을 배정하거나 관리합니다"
-            >
-              <span>보강 일정 관리</span>
-            </button>
-          )}
-        </div>
-
-        <SegmentedControl
-          value={segment}
-          options={segmentOptions}
-          onChange={handleSegmentChange}
-          aria-label="일정 보기 전환"
-          fullWidth
-          className="w-full shadow-2xs"
-        />
-      </div>
+        }
+      />
 
       {segment === 'timetable' && <PianoLessonTimetableView />}
       {segment === 'calendar' && <AcademyCalendarView embedded />}

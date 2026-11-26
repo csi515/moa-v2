@@ -206,16 +206,17 @@ export const ClassManagementView: React.FC = () => {
   return (
     <div className="space-y-4 pb-4">
       <PageHeader
-        icon={<GraduationCap className="w-6 h-6" />}
+        icon={<GraduationCap className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}
         title={labels.service.management}
-        description={`등록된 ${serviceLabel} ${classes.length}개 · 요일·시간에 맞춰 오늘 일정에 자동 표시됩니다`}
+        badge={`${classes.length}개`}
+        description={`요일 및 시간대별 ${serviceLabel} 편성 및 정원을 관리합니다.`}
         actions={
           <button
             onClick={handleOpenCreate}
-            className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
+            className="px-3.5 py-1.5 min-h-[36px] bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs flex items-center gap-1.5 cursor-pointer"
           >
-            <Plus className="w-4 h-4" />
-            {serviceLabel} 추가
+            <Plus className="w-3.5 h-3.5" />
+            <span>신규 {serviceLabel} 추가</span>
           </button>
         }
       />
