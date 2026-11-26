@@ -63,10 +63,18 @@ export function getPracticeRoomNames(params: {
   settings?: AcademySettings | null;
   classes?: ClassItem[];
   extraRooms?: string[];
+  filterKind?: AcademyRoomKind | 'all';
 }): string[] {
-  const configured = getConfiguredRooms(params.settings).filter((r) => r.kind === 'practice');
-  if (configured.length > 0) {
-    return Array.from(new Set(configured.map((r) => r.name)));
+  const allConfigured = getConfiguredRooms(params.settings);
+  if (allConfigured.length > 0) {
+    if (params.filterKind && params.filterKind !== 'all') {
+      const filtered = allConfigured.filter((r) => r.kind === params.filterKind);
+      if (filtered.length > 0) {
+        return Array.from(new Set(filtered.map((r) => r.name)));
+      }
+    }
+    // 기본값: 강의실, 연습실 등 구분 없이 사업장에 등록된 모든 공간을 누락 없이 반환
+    return Array.from(new Set(allConfigured.map((r) => r.name)));
   }
   return getRoomNames(params);
 }

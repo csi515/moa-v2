@@ -213,12 +213,32 @@ export const PracticeRoomLiveBoard: FC<PracticeRoomLiveBoardProps> = ({
         </div>
       </div>
 
-      {/* 2. 연습실 공간 카드 그리드 */}
-      {rooms.length === 0 ? (
+      {/* 2. 공간 카드 그리드 (로딩 스켈레톤 분기 -> 깜빡임 완전 방지) */}
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          {[1, 2, 3, 4].map((idx) => (
+            <div
+              key={idx}
+              className="rounded-lg border border-slate-200 bg-white p-3.5 space-y-3 animate-pulse shadow-2xs"
+            >
+              <div className="flex items-center justify-between">
+                <div className="h-4 w-24 bg-slate-200 rounded" />
+                <div className="h-4 w-16 bg-slate-200 rounded-md" />
+              </div>
+              <div className="h-2.5 w-16 bg-slate-100 rounded" />
+              <div className="py-6 flex flex-col items-center justify-center space-y-2">
+                <div className="w-8 h-8 rounded-lg bg-slate-100" />
+                <div className="h-3 w-20 bg-slate-100 rounded" />
+              </div>
+              <div className="h-8 bg-slate-50 rounded-lg border border-slate-100" />
+            </div>
+          ))}
+        </div>
+      ) : rooms.length === 0 ? (
         <EmptyState
           icon={<DoorOpen className="w-8 h-8 text-slate-400" strokeWidth={1.5} />}
           title="등록된 공간이 없습니다"
-          description="설정 또는 공간 관리에서 연습실 및 룸을 추가해 주세요."
+          description="설정 > 공간 관리에서 강의실 또는 연습실을 추가해 주세요."
         />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">

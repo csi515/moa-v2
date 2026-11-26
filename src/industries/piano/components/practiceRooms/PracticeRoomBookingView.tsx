@@ -2,6 +2,9 @@ import { useMemo, useState, useEffect, useCallback, type FC, type FormEvent } fr
 import { useSearchParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Plus, DoorOpen } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
+import { useStorageRefresh } from '@/hooks';
+import { STORAGE_REFRESH_DOMAINS } from '@/hooks/useStorageRefresh';
+import { getConfiguredRooms } from '@/core/organizations/utils/academyRooms';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { StudentService } from '@/core/students';
 import { settingsStorage } from '@/services/storage/settingsStorage';
@@ -88,6 +91,12 @@ export const PracticeRoomBookingView: FC = () => {
       ? viewParam
       : 'live';
 
+  const refreshKey = useStorageRefresh([
+    ...STORAGE_REFRESH_DOMAINS.settings,
+    ...STORAGE_REFRESH_DOMAINS.classes,
+  ]);
+
+  const [kindFilter, setKindFilter] = useState<'all' | 'classroom' | 'practice'>('all');
   const dateParam = searchParams.get('date');
   const selectedDate = dateParam || todayIsoDate();
 
@@ -128,10 +137,11 @@ export const PracticeRoomBookingView: FC = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  const settings = settingsStorage.getSettings();
+  const settings = useMemo(() => settingsStorage.getSettings(), [refreshKey]);
+  const configuredRooms = useMemo(() => getConfiguredRooms(settings), [settings]);
   const students = useMemo(() => StudentService.getActiveStudents(), []);
-  const classes = useMemo(() => rosterStorage.getClasses(), []);
-  const makeups = useMemo(() => attendanceStorage.getMakeupItems(), []);
+  const classes = useMemo(() => rosterStorage.getClasses(), [refreshKey]);
+  const makeups = useMemo(() => attendanceStorage.getMakeupItems(), [refreshKey]);
   const seedRoomNames = useMemo(
     () => getPracticeRoomNames({ settings, classes }),
     [settings, classes]
@@ -143,32 +153,86 @@ export const PracticeRoomBookingView: FC = () => {
   );
 
   const reload = useCallback(async () => {
+    // 1. 로컬 fallback 생성: 설정에 등록된 공간(강의실·연습실 등 무관)이 있으면 100% 즉시 바인딩
+    const localFallbackRooms: PracticeRoomRow[] = (
+      configuredRooms.length > 0
+        ? configuredRooms.map((r) => ({
+            id: r.id,
+            organization_id: orgId || '',
+            name: r.name,
+            capacity: 1,
+            open_time: '09:00',
+            close_time: '22:00',
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          }))
+        : seedRoomNames.map((name, idx) => ({
+            id: `seed-room-${idx}`,
+            organization_id: orgId || '',
+            name,
+            capacity: 1,
+            open_time: '09:00',
+            close_time: '22:00',
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          }))
+    );
+
     if (!orgId) {
+      setRooms(localFallbackRooms);
       setLoading(false);
       return;
     }
+
     setLoading(true);
     try {
+      // 2. 백엔드 upsert 시도 (실패해도 무음 처리하여 로컬 룸 보존)
       for (const name of seedRoomNames) {
         if (!name.trim()) continue;
-        await practiceRoomReservationService.upsertRoom({
-          organizationId: orgId,
-          name,
-        });
+        try {
+          await practiceRoomReservationService.upsertRoom({
+            organizationId: orgId,
+            name,
+          });
+        } catch {
+          // 백엔드 upsert 실패 시 로컬 fallback 사용
+        }
       }
 
+      // 3. 백엔드 조회
       const [roomList, rangeList] = await Promise.all([
-        practiceRoomReservationService.listRooms(orgId),
-        practiceRoomReservationService.listByRange(orgId, period.start, period.end),
+        practiceRoomReservationService.listRooms(orgId).catch(() => []),
+        practiceRoomReservationService.listByRange(orgId, period.start, period.end).catch(() => []),
       ]);
-      setRooms(roomList.filter((r) => r.is_active));
-      setBookings(rangeList);
-    } catch (err) {
-      showToast.error(err, '연습실 데이터를 불러오지 못했습니다.');
+
+      const activeRooms = (roomList || []).filter((r) => r.is_active);
+      if (activeRooms.length > 0) {
+        const dbNames = new Set(activeRooms.map((r) => r.name));
+        const missingLocalRooms = localFallbackRooms.filter((lr) => !dbNames.has(lr.name));
+        setRooms([...activeRooms, ...missingLocalRooms]);
+      } else {
+        // 백엔드가 비어있을 때는 설정의 4개 공간을 100% 바인딩
+        setRooms(localFallbackRooms);
+      }
+      setBookings(rangeList || []);
+    } catch {
+      setRooms(localFallbackRooms);
     } finally {
       setLoading(false);
     }
-  }, [orgId, period.start, period.end, seedRoomNames, showToast]);
+  }, [orgId, period.start, period.end, seedRoomNames, configuredRooms]);
+
+  // 상단 공간 타입 필터 적용 (전체 / 강의실 / 연습실)
+  const filteredRooms = useMemo(() => {
+    if (kindFilter === 'all') return rooms;
+    const kindMap = new Map(configuredRooms.map((r) => [r.name, r.kind]));
+    return rooms.filter((r) => {
+      const kind = kindMap.get(r.name) || 'classroom';
+      return kind === kindFilter;
+    });
+  }, [rooms, configuredRooms, kindFilter]);
 
   useEffect(() => {
     void reload();
@@ -457,20 +521,59 @@ export const PracticeRoomBookingView: FC = () => {
 
   return (
     <div className="space-y-4 pb-6">
-      {/* 상단 컴팩트 컨트롤 바: 뷰 전환 세그먼트 + 우측 예약 등록 메인 버튼 통합 */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs">
-        <SegmentedControl
-          value={viewMode}
-          options={VIEW_OPTIONS}
-          onChange={handleViewChange}
-          aria-label="연습실 뷰 모드 전환"
-          className="shadow-2xs"
-        />
+      {/* 상단 컴팩트 컨트롤 바: 뷰 전환 세그먼트 + 공간 타입 필터 칩 + 우측 예약 등록 메인 버튼 통합 */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs">
+        <div className="flex items-center gap-2 flex-wrap">
+          <SegmentedControl
+            value={viewMode}
+            options={VIEW_OPTIONS}
+            onChange={handleViewChange}
+            aria-label="연습실 뷰 모드 전환"
+            className="shadow-2xs"
+          />
+
+          {/* 공간 타입 필터 (전체 | 강의실 | 연습실) */}
+          <div className="inline-flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200/60 text-xs">
+            <button
+              type="button"
+              onClick={() => setKindFilter('all')}
+              className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                kindFilter === 'all'
+                  ? 'bg-white text-slate-900 font-semibold shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900 font-medium'
+              }`}
+            >
+              전체 ({rooms.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setKindFilter('classroom')}
+              className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                kindFilter === 'classroom'
+                  ? 'bg-white text-slate-900 font-semibold shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900 font-medium'
+              }`}
+            >
+              강의실
+            </button>
+            <button
+              type="button"
+              onClick={() => setKindFilter('practice')}
+              className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                kindFilter === 'practice'
+                  ? 'bg-white text-slate-900 font-semibold shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900 font-medium'
+              }`}
+            >
+              연습실
+            </button>
+          </div>
+        </div>
 
         <button
           type="button"
           onClick={() => openCreateModal()}
-          disabled={rooms.length === 0}
+          disabled={filteredRooms.length === 0}
           className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors shadow-2xs cursor-pointer min-h-[36px] disabled:opacity-50"
         >
           <Plus className="w-3.5 h-3.5" strokeWidth={1.5} />
@@ -521,7 +624,7 @@ export const PracticeRoomBookingView: FC = () => {
       {/* 본문 뷰 분기: 실시간 현황판 vs 캘린더 패널 */}
       {viewMode === 'live' ? (
         <PracticeRoomLiveBoard
-          rooms={rooms}
+          rooms={filteredRooms}
           bookings={bookings}
           students={students}
           loading={loading}

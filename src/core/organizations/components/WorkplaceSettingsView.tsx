@@ -208,6 +208,9 @@ export const WorkplaceSettingsView: FC = () => {
       setSettings(nextSettings);
       setInitialSnapshot(JSON.stringify({ settings: nextSettings, addressParts }));
       triggerRefresh();
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('storage'));
+      }
       showToast(`${placeLabel} 기본 정보가 저장되었습니다.`, 'success');
     } catch (err) {
       showToast.error(err, '설정 저장 중 오류가 발생했습니다.');
