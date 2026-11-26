@@ -8,7 +8,6 @@ import {
   SettingsCard,
 } from '@/shared/components/ui';
 import type { AcademySettings, AcademyRoomKind } from '../settingsTypes';
-import { IndustryFeatureGuidePanel } from '@/core/help';
 import {
   Building,
   Save,
@@ -39,13 +38,7 @@ import {
   formatOrganizationAddress,
   type OrganizationAddressValue,
 } from '@/core/address';
-import {
-  OrganizationProfileFields,
-  DataExportCenterCard,
-  OrganizationBackupCard,
-  OrganizationDangerZoneCard,
-} from './OrganizationSettingsCards';
-import { LegalLinks } from '@/core/legal';
+import { OrganizationProfileFields } from './OrganizationSettingsCards';
 import { buildWorkplaceSettingsSavePayload } from '../workplaceSettingsSave';
 
 export const WorkplaceSettingsView: FC = () => {
@@ -224,12 +217,12 @@ export const WorkplaceSettingsView: FC = () => {
     <div className="space-y-6 max-w-4xl">
       <SettingsCard
         className="sm:p-8"
-        title={`${placeLabel} 기본 정보 및 시설(연습실) 관리`}
+        title={`${placeLabel} 기본 정보 및 공간 관리`}
         icon={<Building className={`w-4 h-4 ${accentIcon}`} />}
       >
         <div className="mb-6 pb-4 border-b border-slate-100">
           <p className="text-xs text-slate-500 leading-relaxed">
-            {placeLabel} 상호명, 대표자, 연락처, 주소 및 시설 내 강의실·피아노 연습실(공실)을 등록하고 관리합니다.
+            {placeLabel} 상호명, 대표자, 연락처, 소재지 주소 및 시설 내 운영 공간(강의실·연습실 등)을 등록하고 관리합니다.
           </p>
         </div>
 
@@ -344,26 +337,7 @@ export const WorkplaceSettingsView: FC = () => {
         </form>
       </SettingsCard>
 
-      {/* 2. 원생·출결·수납 엑셀(CSV) 통합 다운로드 센터 */}
-      <DataExportCenterCard
-        placeLabel={placeLabel}
-        customerLabel={customerLabel}
-        feeLabel={feeLabel}
-      />
-
-      {/* 3. 데이터 안전 백업 및 복원 */}
-      <OrganizationBackupCard
-        placeLabel={placeLabel}
-        customerLabel={customerLabel}
-        feeLabel={feeLabel}
-        accentIcon={accentIcon}
-        accentHover={accentHover}
-      />
-
-      {/* 4. 업종별 가이드 패널 */}
-      <IndustryFeatureGuidePanel industry={industry} />
-
-{/* 변경 사항 감지 시 떠오르는 모던 스티키 플로팅 저장 바 */}
+      {/* 변경 사항 감지 시 떠오르는 모던 스티키 플로팅 저장 바 */}
       {isDirty && (
         <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-2xl bg-slate-900/95 text-white backdrop-blur-md rounded-lg shadow-2xl p-3 sm:p-4 border border-slate-700/80 flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-4 duration-200">
           <div className="flex items-center gap-2.5 min-w-0">
@@ -398,23 +372,6 @@ export const WorkplaceSettingsView: FC = () => {
           </div>
         </div>
       )}
-
-      {/* 5. 학원 데이터 초기화 위험 구역 및 법적 안내 */}
-      <div className="pt-2">
-        <OrganizationDangerZoneCard
-          customerLabel={customerLabel}
-          contactLabel={contactLabel}
-          feeLabel={feeLabel}
-          staffLabel={staffLabel}
-        />
-
-        <div className="pt-4 pb-2">
-          <p className="text-xs text-slate-400 text-center mb-2">
-            계정 탈퇴는 <strong>내 계정</strong> 메뉴에서 진행할 수 있습니다.
-          </p>
-          <LegalLinks className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs text-slate-400" />
-        </div>
-      </div>
     </div>
   );
 };

@@ -229,7 +229,7 @@ export const OrganizationBackupCard: FC<OrganizationBackupCardProps> = ({
 
   return (
     <SettingsCard
-      title="데이터 안전 백업 및 복원"
+      title="데이터 백업 및 복원"
       icon={<ShieldCheck className="w-4 h-4 text-emerald-600" />}
     >
       <p className="text-xs text-slate-500 leading-relaxed">
@@ -339,7 +339,7 @@ export const OrganizationDangerZoneCard: FC<OrganizationDangerZoneCardProps> = (
   return (
     <>
       <SettingsCard
-        title="사업장 데이터 삭제"
+        title="사업장 데이터 영구 삭제"
         icon={<AlertTriangle className="w-4 h-4 text-rose-600" />}
       >
         <div className="space-y-3">

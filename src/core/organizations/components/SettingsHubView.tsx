@@ -6,8 +6,9 @@ import { PageHeader, SegmentedControl } from '@/shared/components';
 import { WorkplaceSettingsView } from './WorkplaceSettingsView';
 import { BillingSettingsView } from './BillingSettingsView';
 import { LessonToolsSettingsView } from './LessonToolsSettingsView';
+import { OrganizationDataSettingsView } from './OrganizationDataSettingsView';
 
-export type SettingsHubSegment = 'workplace' | 'billing' | 'lessons';
+export type SettingsHubSegment = 'workplace' | 'billing' | 'lessons' | 'data';
 
 export interface SettingsHubViewProps {
   staffView?: FC;
@@ -20,6 +21,7 @@ export interface SettingsHubViewProps {
 
 function tabToSegment(tab: string): SettingsHubSegment {
   if (tab === 'billing' || tab === 'tuition' || tab === 'unpaid') return 'billing';
+  if (tab === 'data' || tab === 'export' || tab === 'backup') return 'data';
   if (
     tab === 'practice-rooms' ||
     tab === 'practice' ||
@@ -40,8 +42,8 @@ function tabToSegment(tab: string): SettingsHubSegment {
 }
 
 /**
- * 3대 핵심 카테고리화 설정 허브:
- * [학원 기본·시설] - [수강료·수납] - [수업·레슨 도구]
+ * 4대 핵심 카테고리 운영 설정 허브:
+ * [기본 정보·공간] - [수강료·수납] - [수업·운영 도구] - [데이터 관리·기타]
  */
 export const SettingsHubView: FC<SettingsHubViewProps> = ({
   extras = [],
@@ -57,9 +59,10 @@ export const SettingsHubView: FC<SettingsHubViewProps> = ({
   }, [tabSegment]);
 
   const options = useMemo(() => [
-    { value: 'workplace' as const, label: `${workplaceLabel} 기본·시설` },
+    { value: 'workplace' as const, label: `${workplaceLabel} 기본·공간` },
     { value: 'billing' as const, label: `${feeLabel}·수납` },
-    { value: 'lessons' as const, label: '수업·레슨 도구' },
+    { value: 'lessons' as const, label: '수업·운영 도구' },
+    { value: 'data' as const, label: '데이터 관리·기타' },
   ], [workplaceLabel, feeLabel]);
 
   let body: ReactNode = null;
@@ -67,8 +70,10 @@ export const SettingsHubView: FC<SettingsHubViewProps> = ({
     body = <WorkplaceSettingsView />;
   } else if (uiSegment === 'billing') {
     body = <BillingSettingsView />;
-  } else {
+  } else if (uiSegment === 'lessons') {
     body = <LessonToolsSettingsView extras={extras} />;
+  } else {
+    body = <OrganizationDataSettingsView />;
   }
 
   return (
@@ -77,7 +82,7 @@ export const SettingsHubView: FC<SettingsHubViewProps> = ({
         density="compact"
         icon={<Settings className="w-6 h-6" />}
         title={`${workplaceLabel} 운영 설정`}
-        description="학원 기본 정보, 시설 및 연습실 등록, 수납 정책 및 권한 환경설정"
+        description="사업장 기본 정보, 공간 및 연습실 등록, 수납 정책 및 데이터 관리"
         actions={
           <div className="w-full sm:w-auto overflow-x-auto no-scrollbar -mx-1 px-1 py-0.5">
             <SegmentedControl
@@ -86,7 +91,7 @@ export const SettingsHubView: FC<SettingsHubViewProps> = ({
               onChange={(next) => setUiSegment(next as SettingsHubSegment)}
               aria-label="설정 카테고리 메뉴"
               fullWidth
-              className="w-full sm:w-auto min-w-[320px]"
+              className="w-full sm:w-auto min-w-[360px]"
             />
           </div>
         }

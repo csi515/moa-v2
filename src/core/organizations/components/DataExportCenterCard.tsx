@@ -281,23 +281,21 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
 
   return (
     <SettingsCard
-      title={`${placeLabel} 데이터 엑셀(CSV) 통합 내보내기 센터`}
+      title={`${placeLabel} 데이터 엑셀(CSV) 내보내기`}
       icon={<FileSpreadsheet className="w-4 h-4 text-emerald-600" />}
     >
       <div className="space-y-4">
         <p className="text-xs text-slate-500 leading-relaxed">
-          {customerLabel} 명부, 출결 기록, {feeLabel} 수납 장부, 상담 일지를 엑셀(CSV) 파일로 내보냅니다.
-          <strong>UTF-8 with BOM</strong>이 적용되어 마이크로소프트 엑셀(Excel)에서 한글 깨짐 없이 즉시 열람할 수 있으며,
-          개인정보 보호를 위해 보안 감사 로그(Audit Log)가 안전하게 기록됩니다.
+          {customerLabel} 명부, 출결 기록, {feeLabel} 수납 장부, 상담 일지 데이터를 엑셀에서 바로 열어볼 수 있는 CSV 파일로 내보냅니다.
         </p>
 
         {/* 원클릭 일괄 다운로드 배너 */}
-        <div className="rounded-2xl border border-indigo-200 bg-gradient-to-r from-indigo-50/90 via-indigo-50/50 to-white p-4 shadow-2xs">
+        <div className="rounded-lg border border-slate-200 bg-slate-50/80 p-4 shadow-2xs">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
-                <span className="p-1 rounded-lg bg-indigo-600 text-white">
-                  <Zap className="w-3.5 h-3.5" />
+                <span className="p-1.5 rounded-lg bg-slate-900 text-white">
+                  <Download className="w-3.5 h-3.5" />
                 </span>
                 <h4 className="text-xs sm:text-sm font-bold text-slate-900">
                   {placeLabel} 전체 기록 한 번에 일괄 다운로드
@@ -311,7 +309,7 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
               type="button"
               onClick={handleExportAll}
               disabled={isExportingAll || exportingKey !== null}
-              className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer shrink-0"
+              className="px-4 py-2 min-h-[40px] bg-white hover:bg-slate-100 disabled:opacity-60 text-slate-800 text-xs sm:text-sm font-semibold rounded-lg border border-slate-300 transition-colors shadow-2xs flex items-center justify-center gap-2 cursor-pointer shrink-0"
             >
               {isExportingAll ? (
                 <>
@@ -321,7 +319,7 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
               ) : (
                 <>
                   <Download className="w-4 h-4" />
-                  <span>⚡ 4대 대장 일괄 다운로드</span>
+                  <span>전체 데이터 일괄 다운로드</span>
                 </>
               )}
             </button>
@@ -331,9 +329,9 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
         {/* 개별 대장 다운로드 그리드 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
           {/* 1. 원생 명부 대장 */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-3.5 flex items-center justify-between gap-3 hover:border-slate-300 transition-colors">
+          <div className="bg-white border border-slate-200/80 rounded-lg p-3.5 flex items-center justify-between gap-3 hover:border-slate-300 transition-colors">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold">
+              <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center font-bold">
                 <Users className="w-4 h-4" />
               </div>
               <div>
@@ -345,7 +343,7 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
               type="button"
               onClick={() => handleSingleExport('students', `${customerLabel} 명부 대장`, exportStudents)}
               disabled={isExportingAll || exportingKey !== null}
-              className="px-3 py-2 min-h-[38px] bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="px-3 py-2 min-h-[38px] bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               {exportingKey === 'students' ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -357,9 +355,9 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
           </div>
 
           {/* 2. 출결 기록 대장 */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-3.5 flex items-center justify-between gap-3 hover:border-slate-300 transition-colors">
+          <div className="bg-white border border-slate-200/80 rounded-lg p-3.5 flex items-center justify-between gap-3 hover:border-slate-300 transition-colors">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+              <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
                 <CheckSquare className="w-4 h-4" />
               </div>
               <div>
@@ -371,7 +369,7 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
               type="button"
               onClick={() => handleSingleExport('attendance', '출결 기록 대장', exportAttendance)}
               disabled={isExportingAll || exportingKey !== null}
-              className="px-3 py-2 min-h-[38px] bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="px-3 py-2 min-h-[38px] bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               {exportingKey === 'attendance' ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -383,9 +381,9 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
           </div>
 
           {/* 3. 수강료 수납·미납 장부 */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-3.5 flex items-center justify-between gap-3 hover:border-slate-300 transition-colors">
+          <div className="bg-white border border-slate-200/80 rounded-lg p-3.5 flex items-center justify-between gap-3 hover:border-slate-300 transition-colors">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
+              <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
                 <CreditCard className="w-4 h-4" />
               </div>
               <div>
@@ -397,7 +395,7 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
               type="button"
               onClick={() => handleSingleExport('invoices', `${feeLabel} 수납·미납 장부`, exportInvoices)}
               disabled={isExportingAll || exportingKey !== null}
-              className="px-3 py-2 min-h-[38px] bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="px-3 py-2 min-h-[38px] bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               {exportingKey === 'invoices' ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -409,9 +407,9 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
           </div>
 
           {/* 4. 상담 기록 대장 */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-3.5 flex items-center justify-between gap-3 hover:border-slate-300 transition-colors">
+          <div className="bg-white border border-slate-200/80 rounded-lg p-3.5 flex items-center justify-between gap-3 hover:border-slate-300 transition-colors">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
+              <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
                 <MessageSquareText className="w-4 h-4" />
               </div>
               <div>
@@ -423,7 +421,7 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
               type="button"
               onClick={() => handleSingleExport('consultations', '상담 기록 대장', exportConsultations)}
               disabled={isExportingAll || exportingKey !== null}
-              className="px-3 py-2 min-h-[38px] bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="px-3 py-2 min-h-[38px] bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               {exportingKey === 'consultations' ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
