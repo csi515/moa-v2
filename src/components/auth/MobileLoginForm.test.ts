@@ -67,11 +67,11 @@ async function runTests() {
     'Apple login button must be removed'
   );
 
-  // 4. SNS OAuth login activated
+  // 4. SNS OAuth login disabled until activation
   assert.match(
     code,
-    /SNS_LOGIN_ENABLED\s*=\s*true/,
-    'SNS_LOGIN_ENABLED must be true now that OAuth is wired'
+    /SNS_LOGIN_ENABLED\s*=\s*false/,
+    'SNS_LOGIN_ENABLED must be false until OAuth providers are fully ready'
   );
 
   // 5. Signup / forgot entry points on login form

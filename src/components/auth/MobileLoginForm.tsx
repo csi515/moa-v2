@@ -12,8 +12,8 @@ import {
   } from "lucide-react";
 import { isAppsInToss } from "@/core/auth/domain/platformDetector";
 
-/** SNS(OAuth) 로그인 — 연동 완료 전까지 클릭 비활성화 */
-const SNS_LOGIN_ENABLED = true;
+/** SNS(OAuth) 로그인 — 아직 활성화할 수 없으므로 비활성화 유지 */
+const SNS_LOGIN_ENABLED = false;
 
 export type LoginTargetGroup = 'workplace' | 'customer';
 export type WorkplaceRole = 'owner' | 'staff';
@@ -153,9 +153,9 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
     <div data-testid="login-container" className="w-full space-y-4">
 
 
-      {/* 3. 소셜 / 간편 로그인 버튼 순서 (테스트 불변식 준수) */}
-      <div className="pt-1">
-        {SNS_LOGIN_ENABLED ? (
+      {/* 3. 소셜 / 간편 로그인 버튼 순서 (현재 비활성화 - 활성화 전까지 숨김) */}
+      {SNS_LOGIN_ENABLED ? (
+        <div className="pt-1">
           <div className="grid grid-cols-2 gap-2.5">
             <button
               type="button"
@@ -178,8 +178,8 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
               <span>네이버 로그인</span>
             </button>
           </div>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
 
       {/* 4. 메인 이메일 / 비밀번호 폼 */}
       <form onSubmit={onSubmit} className="space-y-3">
