@@ -168,7 +168,7 @@ export const ApprovalWorkflowManagementView: React.FC<Props> = ({
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
           <div className="flex items-center gap-2">
-            <div className="rounded-lg bg-indigo-50 p-2 text-indigo-600">
+            <div className="rounded-lg bg-slate-50 p-2 text-slate-800">
               <FileCheck className="h-5 w-5" />
             </div>
             <h1 className="text-2xl font-bold text-slate-900">전사 전자결재함</h1>
@@ -178,7 +178,7 @@ export const ApprovalWorkflowManagementView: React.FC<Props> = ({
         <button
           type="button"
           onClick={() => setCreateOpen(true)}
-          className="flex h-12 items-center gap-2 rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white"
+          className="flex h-12 items-center gap-2 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white"
         >
           <Plus className="h-4 w-4" />
           신규 결재 기안
@@ -215,7 +215,7 @@ export const ApprovalWorkflowManagementView: React.FC<Props> = ({
               type="button"
               onClick={() => setSelectedStatus(value)}
               className={`rounded-lg px-3 py-1.5 text-xs font-medium ${
-                selectedStatus === value ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-100'
+                selectedStatus === value ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
               {label}

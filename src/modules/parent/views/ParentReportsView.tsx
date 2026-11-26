@@ -16,7 +16,7 @@ export function ParentReportsView({ student }: { student: Student }) {
       ) : (
         reports.map((r) => (
           <div key={r.id} className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs">
-            <p className="text-xs text-indigo-600 font-bold">{r.yearMonth} 월간 리포트</p>
+            <p className="text-xs text-slate-800 font-bold">{r.yearMonth} 월간 리포트</p>
             <h3 className="font-black text-lg mt-1">{student.name}</h3>
             {r.summary && <p className="text-sm text-slate-600 mt-2">{r.summary}</p>}
             <div className="grid grid-cols-2 gap-2 mt-4">

@@ -4,8 +4,8 @@ import { useAuth } from '@/core/auth/AuthProvider';
 import type { SandboxRole, SandboxRoleOption, SandboxIndustryOption } from './types';
 
 export const SANDBOX_ROLES: SandboxRoleOption[] = [
-  { role: 'owner', label: '원장/사업주', badgeColor: 'bg-purple-100 text-purple-800 border-purple-200' },
-  { role: 'admin', label: '운영관리자', badgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-200' },
+  { role: 'owner', label: '원장/사업주', badgeColor: 'bg-slate-100 text-purple-800 border-slate-200' },
+  { role: 'admin', label: '운영관리자', badgeColor: 'bg-slate-100 text-indigo-800 border-slate-200' },
   { role: 'staff', label: '강사/직원', badgeColor: 'bg-blue-100 text-blue-800 border-blue-200' },
   { role: 'customer', label: '고객/수강생', badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
   { role: 'parent', label: '학부모 포털', badgeColor: 'bg-amber-100 text-amber-800 border-amber-200' },
@@ -181,7 +181,7 @@ export function DevToolsSandboxBar() {
                     onClick={() => handleRoleChange(r.role)}
                     className={`py-1.5 px-2 rounded-lg text-center font-medium transition-all ${
                       isSelected
-                        ? 'bg-indigo-600 text-white font-bold ring-2 ring-indigo-400/50 shadow-sm'
+                        ? 'bg-slate-900 text-white font-bold ring-2 ring-indigo-400/50 shadow-sm'
                         : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white'
                     }`}
                   >
@@ -203,7 +203,7 @@ export function DevToolsSandboxBar() {
             <select
               value={currentIndustryObj.code}
               onChange={(e) => handleIndustryChange(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 text-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+              className="w-full bg-slate-800 border border-slate-700 text-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-slate-900 focus:outline-none"
             >
               {SANDBOX_INDUSTRIES.map((ind) => (
                 <option key={ind.code} value={ind.code}>

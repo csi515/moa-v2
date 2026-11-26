@@ -132,7 +132,7 @@ export const InstructorMatchManagementView: React.FC = () => {
       {/* 상단 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <div className="flex items-center gap-2 text-indigo-700 font-bold text-xs uppercase tracking-wider mb-1">
+          <div className="flex items-center gap-2 text-slate-700 font-bold text-xs uppercase tracking-wider mb-1">
             <UserCheck className="w-4 h-4" />
             <span>Culture Center Instructor Roster</span>
           </div>
@@ -150,7 +150,7 @@ export const InstructorMatchManagementView: React.FC = () => {
             setEditingInstructor(null);
             setIsModalOpen(true);
           }}
-          className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-colors shrink-0"
+          className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-colors shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>신규 강사 스펙 등록</span>
@@ -215,7 +215,7 @@ export const InstructorMatchManagementView: React.FC = () => {
                 {/* 개설 강좌 요약 */}
                 <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
                   <div className="text-[11px] font-bold text-slate-800 flex items-center gap-1 mb-1">
-                    <BookOpen className="w-3 h-3 text-indigo-600" />
+                    <BookOpen className="w-3 h-3 text-slate-800" />
                     <span>대표 개설 강좌 ({inst.majorCourses.length}개)</span>
                   </div>
                   <div className="text-xs text-slate-600 font-medium truncate">
@@ -242,7 +242,7 @@ export const InstructorMatchManagementView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSelectedInstructorForLeaflet(inst)}
-                className="flex-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1 shadow-xs transition-colors"
+                className="flex-1 py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1 shadow-xs transition-colors"
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span>A4 인쇄 / 모바일</span>

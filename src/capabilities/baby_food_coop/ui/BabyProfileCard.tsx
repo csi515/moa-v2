@@ -105,9 +105,9 @@ export const BabyProfileCard: React.FC<BabyProfileCardProps> = ({
       case 'middle':
         return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'late':
-        return 'bg-indigo-100 text-indigo-800 border-indigo-200';
+        return 'bg-slate-100 text-indigo-800 border-slate-200';
       case 'complete':
-        return 'bg-purple-100 text-purple-800 border-purple-200';
+        return 'bg-slate-100 text-purple-800 border-slate-200';
       default:
         return 'bg-slate-100 text-slate-800 border-slate-200';
     }
@@ -117,7 +117,7 @@ export const BabyProfileCard: React.FC<BabyProfileCardProps> = ({
     <div
       className={`relative rounded-xl border p-4 transition-all duration-200 shadow-sm ${
         isSelected
-          ? 'border-indigo-500 bg-indigo-50/20 ring-2 ring-indigo-500/20'
+          ? 'border-indigo-500 bg-slate-50/20 ring-2 ring-indigo-500/20'
           : 'border-slate-200 bg-white hover:border-slate-300'
       }`}
     >
@@ -158,7 +158,7 @@ export const BabyProfileCard: React.FC<BabyProfileCardProps> = ({
             onClick={() => onToggleSelect(baby.id)}
             className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
               isSelected
-                ? 'bg-indigo-600 text-white'
+                ? 'bg-slate-900 text-white'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
             title="품앗이 정산 참여 여부 토글"
@@ -238,7 +238,7 @@ export const BabyProfileCard: React.FC<BabyProfileCardProps> = ({
             <button
               type="button"
               onClick={() => showWeaningGuideModal(guide, baby.name)}
-              className="text-indigo-600 hover:text-indigo-700 underline text-[11px]"
+              className="text-slate-800 hover:text-slate-700 underline text-[11px]"
             >
               단계별 가이드 상세
             </button>

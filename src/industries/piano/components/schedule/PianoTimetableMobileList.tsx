@@ -58,13 +58,13 @@ export const PianoTimetableMobileList: FC<PianoTimetableMobileListProps> = ({
               onClick={() => onSelectDay(day)}
               className={`px-3 py-2 rounded-xl text-xs font-bold shrink-0 min-h-[44px] ${
                 selected
-                  ? 'bg-indigo-600 text-white shadow-md'
+                  ? 'bg-slate-900 text-white shadow-md'
                   : 'bg-white text-slate-700 border border-slate-200'
               }`}
             >
               {day}요일
               {day === todayDay && (
-                <span className={`ml-1 text-[10px] ${selected ? 'text-indigo-100' : 'text-indigo-600'}`}>
+                <span className={`ml-1 text-[10px] ${selected ? 'text-indigo-100' : 'text-slate-800'}`}>
                   오늘
                 </span>
               )}
@@ -81,7 +81,7 @@ export const PianoTimetableMobileList: FC<PianoTimetableMobileListProps> = ({
       </div>
 
       {pending && (
-        <div className="rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-2.5 text-xs font-bold text-indigo-800">
+        <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-bold text-indigo-800">
           {pending.name} 학생을 배치할 시간대를 탭하세요
         </div>
       )}
@@ -95,7 +95,7 @@ export const PianoTimetableMobileList: FC<PianoTimetableMobileListProps> = ({
               className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden"
             >
               <div className="flex items-center justify-between gap-2 px-3 py-2.5 border-b border-slate-100 bg-slate-50/60">
-                <span className="font-mono text-sm font-bold text-indigo-700">{slot}</span>
+                <span className="font-mono text-sm font-bold text-slate-700">{slot}</span>
                 <button
                   type="button"
                   onClick={() =>
@@ -103,7 +103,7 @@ export const PianoTimetableMobileList: FC<PianoTimetableMobileListProps> = ({
                       ? onPlacePending(selectedDay, slot)
                       : onPickSlotForAdd(selectedDay, slot)
                   }
-                  className="inline-flex items-center gap-1 px-3 py-2 min-h-[44px] rounded-xl bg-indigo-600 text-white text-[11px] font-bold"
+                  className="inline-flex items-center gap-1 px-3 py-2 min-h-[44px] rounded-xl bg-slate-900 text-white text-[11px] font-bold"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   {pendingStudentId ? '여기에 배치' : '학생 추가'}
@@ -131,11 +131,11 @@ export const PianoTimetableMobileList: FC<PianoTimetableMobileListProps> = ({
                         className="flex-1 text-left min-w-0 group"
                       >
                         <div className="flex items-center gap-1.5">
-                          <p className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors truncate">
+                          <p className="text-sm font-bold text-slate-900 group-hover:text-slate-800 transition-colors truncate">
                             {p.student.name}
                           </p>
                           {p.editable && (
-                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-600 border border-indigo-100">
+                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-50 text-slate-800 border border-slate-200">
                               <MoveRight className="w-2.5 h-2.5" />
                               이동
                             </span>

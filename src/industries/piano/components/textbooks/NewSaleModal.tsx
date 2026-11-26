@@ -137,7 +137,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center">
               <ShoppingBag className="w-5 h-5" />
             </div>
             <div>
@@ -177,7 +177,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
               <select
                 value={selectedStudentId}
                 onChange={(e) => setSelectedStudentId(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 font-medium focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 font-medium focus:outline-hidden focus:ring-2 focus:ring-slate-900"
               >
                 {filteredStudents.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -201,13 +201,13 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
                 type="date"
                 value={saleDate}
                 onChange={(e) => setSaleDate(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
               />
             </div>
           </div>
 
           {/* 2. 교재 선택 및 재고 알림 */}
-          <div className="bg-indigo-50/40 p-4 rounded-xl border border-indigo-100/70 space-y-3">
+          <div className="bg-slate-50/40 p-4 rounded-xl border border-slate-200/70 space-y-3">
             {textbooks.length === 0 ? (
               <div className="text-center space-y-3 py-4">
                 <BookOpen className="w-8 h-8 text-indigo-300 mx-auto" />
@@ -224,7 +224,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
                     if (onRegisterTextbooks) onRegisterTextbooks();
                     else setActiveTab('textbooks');
                   }}
-                  className="inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl"
+                  className="inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl"
                 >
                   교재 등록하기
                 </button>
@@ -242,14 +242,14 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
                     placeholder="교재명/출판사 검색..."
                     value={textbookSearch}
                     onChange={(e) => setTextbookSearch(e.target.value)}
-                    className="text-[11px] px-2 py-0.5 border border-indigo-200 bg-white rounded-md w-36"
+                    className="text-[11px] px-2 py-0.5 border border-slate-200 bg-white rounded-md w-36"
                   />
                 )}
               </div>
               <select
                 value={selectedTextbookId}
                 onChange={(e) => setSelectedTextbookId(e.target.value)}
-                className="w-full px-3 py-2.5 min-h-[44px] rounded-xl border border-indigo-200 bg-white text-slate-900 font-semibold focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2.5 min-h-[44px] rounded-xl border border-slate-200 bg-white text-slate-900 font-semibold focus:outline-hidden focus:ring-2 focus:ring-slate-900"
               >
                 {filteredTextbooks.map((t) => (
                   <option key={t.id} value={t.id}>
@@ -262,7 +262,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
             {selectedTextbook && (
               <div className="flex items-center justify-between text-xs pt-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded-md bg-white border border-indigo-100 text-indigo-700 font-medium">
+                  <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 font-medium">
                     {selectedTextbook.level}
                   </span>
                   <span className="text-slate-500">보유 재고:</span>
@@ -291,7 +291,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
                 min="1"
                 value={quantity}
                 onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 font-bold focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 font-bold focus:outline-hidden focus:ring-2 focus:ring-slate-900"
               />
             </div>
 
@@ -313,7 +313,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
 
             <div>
               <label className="block text-slate-700 font-semibold mb-1">청구 금액</label>
-              <div className="w-full px-3 py-2 rounded-xl bg-indigo-50/80 border border-indigo-100 text-indigo-700 font-black text-sm flex items-center h-[42px]">
+              <div className="w-full px-3 py-2 rounded-xl bg-slate-50/80 border border-slate-200 text-slate-700 font-black text-sm flex items-center h-[42px]">
                 ₩{calculatedTotal.toLocaleString()}
               </div>
             </div>
@@ -397,7 +397,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
                       onClick={() => setPaymentMethod(method)}
                       className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-medium border transition-colors ${
                         paymentMethod === method
-                          ? 'bg-indigo-600 text-white border-indigo-600'
+                          ? 'bg-slate-900 text-white border-indigo-600'
                           : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'
                       }`}
                     >
@@ -417,7 +417,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
               placeholder="예: 신학기 진도 교재 지급, 수강료 납부일에 잔액 합산 요청 등"
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -450,7 +450,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
             <button
               type="submit"
               disabled={textbooks.length === 0}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 min-h-[44px] text-xs font-semibold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs disabled:opacity-50 disabled:pointer-events-none"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 min-h-[44px] text-xs font-semibold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-xs disabled:opacity-50 disabled:pointer-events-none"
             >
               <ShoppingBag className="w-4 h-4" />
               교재 지급 및 수납 처리

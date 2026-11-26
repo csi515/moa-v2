@@ -55,7 +55,7 @@ export const SopNewDocumentModal: React.FC<NewDocProps> = ({ open, existingDocNo
             ))}
           </select>
         </label>
-        <p className="rounded-xl bg-indigo-50 px-3 py-2 text-sm font-black text-indigo-700">
+        <p className="rounded-xl bg-slate-50 px-3 py-2 text-sm font-black text-slate-700">
           {docNoPreview} (최초 제정 Rev.00)
         </p>
         <label className="block text-xs font-bold text-slate-600">
@@ -71,7 +71,7 @@ export const SopNewDocumentModal: React.FC<NewDocProps> = ({ open, existingDocNo
           <button type="button" className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" onClick={onClose}>
             취소
           </button>
-          <button type="submit" className="h-11 rounded-xl bg-indigo-600 px-4 text-sm font-bold text-white">
+          <button type="submit" className="h-11 rounded-xl bg-slate-900 px-4 text-sm font-bold text-white">
             초안 만들기
           </button>
         </div>
@@ -133,7 +133,7 @@ export const SopReviseModal: React.FC<ReviseProps> = ({
           <button type="button" className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" onClick={onClose}>
             취소
           </button>
-          <button type="submit" className="h-11 rounded-xl bg-indigo-600 px-4 text-sm font-bold text-white">
+          <button type="submit" className="h-11 rounded-xl bg-slate-900 px-4 text-sm font-bold text-white">
             개정 초안 만들기
           </button>
         </div>
@@ -180,7 +180,7 @@ export const SopHistoryModal: React.FC<HistoryProps> = ({
           return (
             <article key={revision.id} className="rounded-2xl border border-slate-200 p-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-black text-indigo-700">
+                <span className="text-sm font-black text-slate-700">
                   v{revision.version} · {formatRevisionNo(revision.version - 1)}
                 </span>
                 <span className="text-xs text-slate-400">{revision.revision_type}</span>
@@ -189,7 +189,7 @@ export const SopHistoryModal: React.FC<HistoryProps> = ({
               <p className="mt-1 text-xs text-slate-500">작업 단계 {snapshot.steps.length}개</p>
               <button
                 type="button"
-                className="mt-3 h-11 rounded-lg bg-indigo-600 px-3 text-xs font-bold text-white"
+                className="mt-3 h-11 rounded-lg bg-slate-900 px-3 text-xs font-bold text-white"
                 onClick={() => {
                   onOpen(revision.version);
                   onClose();

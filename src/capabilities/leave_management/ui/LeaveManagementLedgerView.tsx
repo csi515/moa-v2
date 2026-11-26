@@ -77,7 +77,7 @@ export const LeaveManagementLedgerView: React.FC<LeaveManagementLedgerViewProps>
             <Clock className="h-4 w-4 text-indigo-500" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+            <span className="text-2xl font-bold text-slate-800 dark:text-indigo-400">
               {balances.reduce((acc, cur) => acc + cur.usedHours, 0)}시간
             </span>
             <span className="text-xs text-slate-400">
@@ -138,7 +138,7 @@ export const LeaveManagementLedgerView: React.FC<LeaveManagementLedgerViewProps>
                       <button
                         type="button"
                         onClick={() => setSelectedStaffForTimeline(staff)}
-                        className="text-left hover:text-indigo-600 hover:underline flex items-center gap-1.5"
+                        className="text-left hover:text-slate-800 hover:underline flex items-center gap-1.5"
                       >
                         <User className="h-3.5 w-3.5 text-slate-400" />
                         <span>{staff.staffName}</span>
@@ -171,7 +171,7 @@ export const LeaveManagementLedgerView: React.FC<LeaveManagementLedgerViewProps>
                       <button
                         type="button"
                         onClick={() => setGrantModalStaff(staff)}
-                        className="rounded-lg bg-indigo-50 px-2.5 py-1 text-xs font-bold text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-950 dark:text-indigo-300"
+                        className="rounded-lg bg-slate-50 px-2.5 py-1 text-xs font-bold text-slate-700 hover:bg-slate-100 dark:bg-indigo-950 dark:text-indigo-300"
                       >
                         <Plus className="inline h-3 w-3 mr-0.5" />
                         연차 부여
@@ -180,7 +180,7 @@ export const LeaveManagementLedgerView: React.FC<LeaveManagementLedgerViewProps>
                         <button
                           type="button"
                           onClick={() => onOpenRequestModal(staff)}
-                          className="rounded-lg bg-indigo-600 px-2.5 py-1 text-xs font-bold text-white hover:bg-indigo-700"
+                          className="rounded-lg bg-slate-900 px-2.5 py-1 text-xs font-bold text-white hover:bg-slate-800"
                         >
                           대리 신청
                         </button>
@@ -229,7 +229,7 @@ export const LeaveManagementLedgerView: React.FC<LeaveManagementLedgerViewProps>
                       {item.requestDate}
                       {item.startTime && item.endTime && ` (${item.startTime} ~ ${item.endTime})`}
                     </span>
-                    <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300">
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300">
                       -{item.deductionHours}시간 차감
                     </span>
                   </div>
@@ -291,7 +291,7 @@ export const LeaveManagementLedgerView: React.FC<LeaveManagementLedgerViewProps>
                 />
               </div>
 
-              <div className="rounded-xl bg-indigo-50 p-3 text-xs text-indigo-900 dark:bg-indigo-950/40 dark:text-indigo-300">
+              <div className="rounded-xl bg-slate-50 p-3 text-xs text-slate-900 dark:bg-indigo-950/40 dark:text-indigo-300">
                 부여 후 총 발생 시간: <strong>{grantModalStaff.totalAccruedHours + hoursToGrant}시간</strong>
                 <br />
                 부여 후 잔여 시간: <strong>{grantModalStaff.remainingHours + hoursToGrant}시간</strong>
@@ -307,7 +307,7 @@ export const LeaveManagementLedgerView: React.FC<LeaveManagementLedgerViewProps>
                 </button>
                 <button
                   type="submit"
-                  className="flex items-center gap-1 rounded-xl bg-indigo-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-indigo-700 shadow-xs"
+                  className="flex items-center gap-1 rounded-xl bg-slate-900 px-4 py-1.5 text-xs font-bold text-white hover:bg-slate-800 shadow-xs"
                 >
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   부여 완료

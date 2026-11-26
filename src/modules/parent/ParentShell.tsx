@@ -130,14 +130,14 @@ function ParentShellContent() {
             <button
               type="button"
               onClick={() => setAddChildRequest((n) => n + 1)}
-              className="w-full py-2.5 bg-white border border-indigo-200 text-indigo-700 text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px]"
+              className="w-full py-2.5 bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px]"
             >
               <UserPlus className="w-4 h-4" />
               내 자녀 등록
             </button>
 
-            <div className="bg-white rounded-2xl p-4 border border-indigo-200 shadow-sm">
-              <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm mb-3">
+            <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
+              <div className="flex items-center gap-2 text-slate-700 font-bold text-sm mb-3">
                 <Link2 className="w-4 h-4" />
                 학원 연결
               </div>
@@ -146,7 +146,7 @@ function ParentShellContent() {
                   <button
                     type="button"
                     onClick={() => setShowQrScanner(true)}
-                    className="w-full py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px] flex items-center justify-center gap-2 hover:bg-indigo-700 transition-colors"
+                    className="w-full py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl min-h-[44px] flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors"
                   >
                     <Camera className="w-4 h-4" />
                     QR 코드 스캔
@@ -154,7 +154,7 @@ function ParentShellContent() {
                   <button
                     type="button"
                     onClick={() => setShowLinkForm(true)}
-                    className="w-full py-2.5 bg-white border-2 border-indigo-200 text-indigo-700 text-sm font-bold rounded-xl min-h-[44px] hover:bg-indigo-50 transition-colors"
+                    className="w-full py-2.5 bg-white border-2 border-slate-200 text-slate-700 text-sm font-bold rounded-xl min-h-[44px] hover:bg-slate-50 transition-colors"
                   >
                     연결 코드 입력
                   </button>
@@ -175,14 +175,14 @@ function ParentShellContent() {
                       autoCapitalize="characters"
                       autoCorrect="off"
                       spellCheck={false}
-                      className="flex-1 px-3 py-2.5 text-sm font-mono uppercase border-2 border-slate-300 rounded-xl tracking-widest focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                      className="flex-1 px-3 py-2.5 text-sm font-mono uppercase border-2 border-slate-300 rounded-xl tracking-widest focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-indigo-100"
                       autoFocus
                     />
                     <button
                       type="button"
                       onClick={handleManualRedeem}
                       disabled={redeeming || !isValidGuardianLinkCode(normalizeGuardianLinkCode(linkInput))}
-                      className="px-4 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-indigo-700 transition-colors"
+                      className="px-4 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl min-h-[44px] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-800 transition-colors"
                     >
                       {redeeming ? (
                         <span className="inline-flex items-center gap-1.5">
@@ -237,7 +237,7 @@ function ParentShellContent() {
 
       {loading && portalTree && (
         <div className="fixed bottom-4 right-4 bg-white shadow-lg rounded-full p-2">
-          <Loader2 className="w-5 h-5 text-indigo-600 animate-spin" />
+          <Loader2 className="w-5 h-5 text-slate-800 animate-spin" />
         </div>
       )}
 
@@ -338,7 +338,7 @@ function ParentPortalWithStudent({
         <button
           type="button"
           onClick={onBack}
-          className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl min-h-[44px] transition-colors"
+          className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl min-h-[44px] transition-colors"
         >
           뒤로 가기
         </button>

@@ -88,7 +88,7 @@ export const ProfitShareListPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2 text-slate-800 dark:text-slate-100">
-            <PieChart className="w-7 h-7 text-indigo-600" />
+            <PieChart className="w-7 h-7 text-slate-800" />
             동업자·파트너 지분별 손익 안분 계산기
           </h1>
           <p className="text-sm text-slate-500 mt-1">
@@ -97,7 +97,7 @@ export const ProfitShareListPage: React.FC = () => {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-medium"
         >
           <Plus className="w-4 h-4" />
           신규 월간 손익 배당안 산출
@@ -129,7 +129,7 @@ export const ProfitShareListPage: React.FC = () => {
             ) : (
               distributions.map((d) => (
                 <tr key={d.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30">
-                  <td className="p-3 font-mono font-bold text-indigo-600">{d.settlement_month}</td>
+                  <td className="p-3 font-mono font-bold text-slate-800">{d.settlement_month}</td>
                   <td className="p-3 text-right font-medium">{d.total_revenue.toLocaleString()}원</td>
                   <td className="p-3 text-right text-slate-500">{d.total_expenses.toLocaleString()}원</td>
                   <td className="p-3 text-right font-bold text-slate-900 dark:text-slate-100">
@@ -145,7 +145,7 @@ export const ProfitShareListPage: React.FC = () => {
                           <span className="font-semibold text-slate-700 dark:text-slate-300">
                             {dist.partner_name} ({dist.equity_ratio_percent}%)
                           </span>
-                          <span className="font-bold text-indigo-600">
+                          <span className="font-bold text-slate-800">
                             {dist.dividend_amount.toLocaleString()}원
                           </span>
                         </div>
@@ -158,7 +158,7 @@ export const ProfitShareListPage: React.FC = () => {
                     ) : (
                       <button
                         onClick={() => handleConfirm(d)}
-                        className="px-2.5 py-1 text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 rounded hover:bg-indigo-100 font-semibold"
+                        className="px-2.5 py-1 text-xs bg-slate-50 text-slate-700 border border-slate-200 rounded hover:bg-slate-100 font-semibold"
                       >
                         배당 확정 서명
                       </button>
@@ -174,7 +174,7 @@ export const ProfitShareListPage: React.FC = () => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-800 rounded-xl max-w-md w-full p-6 space-y-4">
-            <h2 className="text-xl font-bold flex items-center gap-2 text-indigo-700">
+            <h2 className="text-xl font-bold flex items-center gap-2 text-slate-700">
               <PieChart className="w-5 h-5" />
               당월 파트너 손익 배당안 산출
             </h2>
@@ -223,7 +223,7 @@ export const ProfitShareListPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-3 bg-indigo-50 dark:bg-indigo-950/40 rounded-lg space-y-1.5 text-xs">
+              <div className="p-3 bg-slate-50 dark:bg-indigo-950/40 rounded-lg space-y-1.5 text-xs">
                 <div className="flex justify-between">
                   <span>당월 순이익:</span>
                   <span className="font-bold text-slate-800 dark:text-slate-200">{preview.netProfit.toLocaleString()}원</span>
@@ -232,7 +232,7 @@ export const ProfitShareListPage: React.FC = () => {
                   <span>사내 유보금 ({reserveRate}%):</span>
                   <span className="font-semibold text-slate-500">-{preview.reserveAmount.toLocaleString()}원</span>
                 </div>
-                <div className="flex justify-between font-bold text-indigo-700">
+                <div className="flex justify-between font-bold text-slate-700">
                   <span>배당 대상 순익:</span>
                   <span>{preview.distributableProfit.toLocaleString()}원</span>
                 </div>
@@ -256,7 +256,7 @@ export const ProfitShareListPage: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700"
+                  className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800"
                 >
                   배당안 등록
                 </button>

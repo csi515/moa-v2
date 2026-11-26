@@ -190,7 +190,7 @@ export function InPlaceReAuthModal() {
               type="button"
               disabled={busy}
               onClick={() => void handleRefreshSession()}
-              className="flex items-center justify-center gap-2 min-h-12 w-full rounded-xl bg-indigo-600 hover:bg-indigo-700 text-sm font-bold text-white transition-colors disabled:opacity-50"
+              className="flex items-center justify-center gap-2 min-h-12 w-full rounded-xl bg-slate-900 hover:bg-slate-800 text-sm font-bold text-white transition-colors disabled:opacity-50"
             >
               {busy ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -231,7 +231,7 @@ export function InPlaceReAuthModal() {
               placeholder="비밀번호 입력"
               value={secret}
               onChange={(event) => setSecret(event.target.value)}
-              className="mt-3 min-h-12 w-full rounded-xl border border-slate-200 px-3.5 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+              className="mt-3 min-h-12 w-full rounded-xl border border-slate-200 px-3.5 text-sm focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-100"
               autoFocus
             />
             <div className="mt-3 flex gap-2">

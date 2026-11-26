@@ -139,8 +139,8 @@ function IssuePassModal({
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           {starterTemplates.length > 0 && (
-            <div className="rounded-xl border border-indigo-100 bg-indigo-50/50 p-3">
-              <label className="block text-[11px] font-bold text-indigo-900 mb-1.5">
+            <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-3">
+              <label className="block text-[11px] font-bold text-slate-900 mb-1.5">
                 💡 업종 추천 템플릿 원클릭 적용
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -152,8 +152,8 @@ function IssuePassModal({
                     className={cn(
                       'rounded-lg px-2.5 py-1 text-xs font-semibold transition-all',
                       passName === tpl.name
-                        ? 'bg-indigo-600 text-white shadow-xs'
-                        : 'bg-white text-slate-700 border border-slate-200 hover:border-indigo-300 hover:text-indigo-600'
+                        ? 'bg-slate-900 text-white shadow-xs'
+                        : 'bg-white text-slate-700 border border-slate-200 hover:border-indigo-300 hover:text-slate-800'
                     )}
                   >
                     {tpl.badge ? `[${tpl.badge}] ` : ''}{tpl.name}
@@ -170,7 +170,7 @@ function IssuePassModal({
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
               data-testid="input-pass-customer-name" placeholder="예: 홍길동"
-              className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+              className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/20 transition-all"
             />
           </div>
 
@@ -182,7 +182,7 @@ function IssuePassModal({
               value={customerPhone}
               onChange={(e) => setCustomerPhone(e.target.value)}
               data-testid="input-pass-customer-phone" placeholder="010-0000-0000"
-              className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+              className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/20 transition-all"
             />
           </div>
 
@@ -194,7 +194,7 @@ function IssuePassModal({
               value={passName}
               onChange={(e) => setPassName(e.target.value)}
               data-testid="input-pass-name" placeholder={`예: 10회권, 1개월 자유권`}
-              className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+              className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/20 transition-all"
             />
           </div>
 
@@ -206,7 +206,7 @@ function IssuePassModal({
                 min="1"
                 value={totalCount}
                 onChange={(e) => setTotalCount(Number(e.target.value))}
-                className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/20 transition-all"
               />
             </div>
 
@@ -217,7 +217,7 @@ function IssuePassModal({
                 min="1"
                 value={validityDays}
                 onChange={(e) => setValidityDays(Number(e.target.value))}
-                className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                className="mt-1.5 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:bg-white focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/20 transition-all"
               />
             </div>
           </div>
@@ -234,7 +234,7 @@ function IssuePassModal({
               type="submit"
               disabled={isSubmitting}
               data-testid="btn-submit-issue-pass"
-              className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-indigo-600 px-5 text-sm font-bold text-white shadow-xs hover:bg-indigo-700 disabled:opacity-50 min-w-[90px] transition-all"
+              className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-slate-900 px-5 text-sm font-bold text-white shadow-xs hover:bg-slate-800 disabled:opacity-50 min-w-[90px] transition-all"
             >
               {isSubmitting ? '발급 중...' : '발급 완료'}
             </button>
@@ -424,12 +424,12 @@ export const PassesManagementView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="flex items-center gap-2 text-indigo-600">
+          <div className="flex items-center gap-2 text-slate-800">
             <Ticket className="h-6 w-6 shrink-0" />
             <h1 className="text-xl font-black text-slate-900 sm:text-2xl truncate">{passTerm} 관리</h1>
             <span
               data-testid="badge-passes-count"
-              className="ml-2 inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-bold text-indigo-700 shrink-0"
+              className="ml-2 inline-flex items-center rounded-full bg-slate-50 px-2.5 py-0.5 text-xs font-bold text-slate-700 shrink-0"
             >
               {filteredPasses.length}건
             </span>
@@ -442,7 +442,7 @@ export const PassesManagementView: React.FC = () => {
         <button
           onClick={() => setIsIssueModalOpen(true)}
           data-testid="btn-open-issue-pass-modal"
-          className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 text-xs font-bold text-white shadow-md shadow-indigo-100 transition hover:bg-indigo-700 active:scale-95 min-w-[120px]"
+          className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 text-xs font-bold text-white shadow-md shadow-indigo-100 transition hover:bg-slate-800 active:scale-95 min-w-[120px]"
         >
           <Plus className="h-4 w-4 shrink-0" />
           + {passTerm} 발급
@@ -458,7 +458,7 @@ export const PassesManagementView: React.FC = () => {
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder={`${customerTerm}명, ${passTerm}, 뒷번호 검색`}
-            className="h-10 w-full rounded-xl border border-slate-200 pl-10 pr-4 text-xs text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="h-10 w-full rounded-xl border border-slate-200 pl-10 pr-4 text-xs text-slate-900 shadow-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
           />
         </div>
 
@@ -532,7 +532,7 @@ export const PassesManagementView: React.FC = () => {
             data-testid="filter-select-status"
             value={statusFilter}
             onChange={(e) => handleStatusChange(e.target.value as PassesStatusFilter)}
-            className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 shadow-sm focus:border-indigo-500 focus:outline-none"
+            className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 shadow-sm focus:border-slate-900 focus:outline-none"
           >
             <option value="ALL">전체 상태</option>
             <option value="ACTIVE">이용 가능</option>
@@ -553,7 +553,7 @@ export const PassesManagementView: React.FC = () => {
         ) : filteredPasses.length === 0 ? (
           <div className="p-4 sm:p-8 space-y-6">
             {starterTemplates.length > 0 && (
-              <div className="rounded-2xl border border-indigo-100 bg-linear-to-r from-indigo-50/70 via-white to-purple-50/50 p-5 shadow-xs">
+              <div className="rounded-2xl border border-slate-200 bg-linear-to-r from-indigo-50/70 via-white to-purple-50/50 p-5 shadow-xs">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{badgeEmoji}</span>
@@ -561,7 +561,7 @@ export const PassesManagementView: React.FC = () => {
                       {presetName} 전용 {passTerm} 스타터 팩 (추천 템플릿)
                     </h4>
                   </div>
-                  <span className="text-xs font-semibold text-indigo-600">클릭 시 즉시 발급</span>
+                  <span className="text-xs font-semibold text-slate-800">클릭 시 즉시 발급</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {starterTemplates.map((tpl, idx) => (
@@ -575,7 +575,7 @@ export const PassesManagementView: React.FC = () => {
                       className="group flex flex-col justify-between rounded-xl border border-slate-200/90 bg-white p-4 text-left shadow-2xs hover:border-indigo-400 hover:shadow-sm transition-all"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="rounded-md bg-indigo-50 px-2 py-0.5 text-[11px] font-bold text-indigo-700">
+                        <span className="rounded-md bg-slate-50 px-2 py-0.5 text-[11px] font-bold text-slate-700">
                           {tpl.badge || (tpl.passType === 'PERIOD_BASED' ? '기간제' : '횟수제')}
                         </span>
                         {tpl.recommendedPrice ? (
@@ -585,7 +585,7 @@ export const PassesManagementView: React.FC = () => {
                         ) : null}
                       </div>
                       <div className="mt-2.5">
-                        <div className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                        <div className="text-sm font-bold text-slate-900 group-hover:text-slate-800 transition-colors">
                           {tpl.name}
                         </div>
                         <div className="mt-1 text-xs text-slate-500">
@@ -594,7 +594,7 @@ export const PassesManagementView: React.FC = () => {
                             : `기본 ${tpl.totalCount}회 (유효기간 ${tpl.validityDays}일)`}
                         </div>
                       </div>
-                      <div className="mt-3 flex items-center gap-1 text-xs font-bold text-indigo-600">
+                      <div className="mt-3 flex items-center gap-1 text-xs font-bold text-slate-800">
                         <span>이 템플릿으로 발급하기</span>
                         <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                       </div>
@@ -604,7 +604,7 @@ export const PassesManagementView: React.FC = () => {
               </div>
             )}
             <EmptyStateHero
-              icon={<Ticket className="w-8 h-8 text-indigo-600" />}
+              icon={<Ticket className="w-8 h-8 text-slate-800" />}
               title={`발급된 ${passTerm}이 없습니다`}
               description={`${customerTerm}에게 ${passTerm}을 발급하고 편리하게 관리하세요.`}
               action={{
@@ -639,7 +639,7 @@ export const PassesManagementView: React.FC = () => {
                 >
                   {/* Left Info */}
                   <div className="flex items-start gap-3.5 min-w-0">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-800">
                       <User className="h-5 w-5" />
                     </div>
                     <div className="min-w-0">
@@ -666,7 +666,7 @@ export const PassesManagementView: React.FC = () => {
                   <div className="flex items-center justify-between gap-4 sm:justify-end shrink-0">
                     <div className="text-right">
                       <div className="text-xs text-slate-400">잔여 횟수</div>
-                      <div className="text-xl font-black text-indigo-600">
+                      <div className="text-xl font-black text-slate-800">
                         {pass.remaining_count}{' '}
                         <span className="text-xs font-normal text-slate-500">
                           / {pass.total_count}회
@@ -678,7 +678,7 @@ export const PassesManagementView: React.FC = () => {
                       onClick={() => handleDeductPass(pass)}
                       disabled={!canDeduct || isDeducting}
                       aria-label={`${pass.customer_name || customerTerm} 입장 처리 (-1회)`}
-                      className="inline-flex h-12 min-h-[48px] items-center justify-center gap-1.5 rounded-xl bg-indigo-600 px-5 text-xs font-bold text-white shadow-md shadow-indigo-100 transition hover:bg-indigo-700 active:scale-95 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none min-w-[90px]"
+                      className="inline-flex h-12 min-h-[48px] items-center justify-center gap-1.5 rounded-xl bg-slate-900 px-5 text-xs font-bold text-white shadow-md shadow-indigo-100 transition hover:bg-slate-800 active:scale-95 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none min-w-[90px]"
                     >
                       <CheckCircle2 className="h-4 w-4" />
                       {isDeducting ? '처리 중...' : '입장 -1'}

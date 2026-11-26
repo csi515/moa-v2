@@ -19,12 +19,12 @@ function stepsFor(platform: WebInstallPlatform): { title: string; steps: readonl
 
 function GuideIcon({ platform }: { platform: WebInstallPlatform }) {
   if (platform === 'ios-safari') {
-    return <Share className="w-4 h-4 text-indigo-600" aria-hidden />;
+    return <Share className="w-4 h-4 text-slate-800" aria-hidden />;
   }
   if (platform === 'android-chrome') {
-    return <MoreVertical className="w-4 h-4 text-indigo-600" aria-hidden />;
+    return <MoreVertical className="w-4 h-4 text-slate-800" aria-hidden />;
   }
-  return <PlusSquare className="w-4 h-4 text-indigo-600" aria-hidden />;
+  return <PlusSquare className="w-4 h-4 text-slate-800" aria-hidden />;
 }
 
 interface PwaInstallGuideProps {
@@ -40,7 +40,7 @@ export const PwaInstallGuide: React.FC<PwaInstallGuideProps> = ({ platform: forc
   return (
     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3">
       <div className="flex items-center gap-2">
-        <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
           <GuideIcon platform={platform} />
         </div>
         <p className="text-sm font-bold text-slate-800">{title}</p>
@@ -48,7 +48,7 @@ export const PwaInstallGuide: React.FC<PwaInstallGuideProps> = ({ platform: forc
       <ol className="space-y-2.5 list-none m-0 p-0">
         {steps.map((step, index) => (
           <li key={step} className="flex gap-3 text-sm text-slate-600 leading-snug">
-            <span className="shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">
+            <span className="shrink-0 w-6 h-6 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center">
               {index + 1}
             </span>
             <span className="pt-0.5">{step}</span>

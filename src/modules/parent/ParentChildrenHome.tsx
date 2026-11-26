@@ -188,27 +188,27 @@ export const ParentChildrenHome: React.FC<{ addRequest?: number }> = ({ addReque
             학원에서 받은 QR·연결 코드로 바로 연결할 수 있습니다
           </p>
           {selectedOrg && (
-            <p className="text-xs text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-xl p-3 mb-4">
+            <p className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-xl p-3 mb-4">
               {selectedOrg.name} 연결이 대기 중입니다. 먼저 자녀를 등록해 주세요.
             </p>
           )}
           <button
             type="button"
             onClick={openAddChild}
-            className="w-full py-2.5 mb-2 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px]"
+            className="w-full py-2.5 mb-2 bg-slate-900 text-white text-sm font-bold rounded-xl min-h-[44px]"
           >
             자녀 등록하기
           </button>
           <button
             type="button"
             onClick={startEnrollmentRequest}
-            className="w-full py-2.5 mb-4 border border-indigo-200 text-indigo-700 text-sm font-bold rounded-xl min-h-[44px]"
+            className="w-full py-2.5 mb-4 border border-slate-200 text-slate-700 text-sm font-bold rounded-xl min-h-[44px]"
           >
             학원 연결하기
           </button>
-          <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-left">
-            <p className="text-xs font-bold text-indigo-900 mb-2">학원 연결 방법</p>
-            <ul className="text-xs text-indigo-700 space-y-1">
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-left">
+            <p className="text-xs font-bold text-slate-900 mb-2">학원 연결 방법</p>
+            <ul className="text-xs text-slate-700 space-y-1">
               <li>1. 학원 QR을 스캔합니다 (가장 빠름)</li>
               <li>2. 또는 사업장에서 받은 연결 코드를 입력합니다</li>
               <li>3. QR·코드가 없으면 학원 이름·공개코드로 연결 요청합니다</li>
@@ -222,7 +222,7 @@ export const ParentChildrenHome: React.FC<{ addRequest?: number }> = ({ addReque
           <button
             type="button"
             onClick={startEnrollmentRequest}
-            className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors min-h-[44px]"
+            className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold text-slate-800 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors min-h-[44px]"
           >
             <Plus className="w-3.5 h-3.5" />
             학원 연결하기

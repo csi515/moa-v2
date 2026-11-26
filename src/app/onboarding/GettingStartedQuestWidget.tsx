@@ -43,11 +43,11 @@ interface GettingStartedQuestWidgetProps {
 }
 
 const ICON_MAP: Record<QuestIconType, React.ReactNode> = {
-  user: <UserPlus className="w-5 h-5 text-indigo-600" />,
+  user: <UserPlus className="w-5 h-5 text-slate-800" />,
   ticket: <Ticket className="w-5 h-5 text-emerald-600" />,
   calendar: <Calendar className="w-5 h-5 text-amber-600" />,
   building: <Building2 className="w-5 h-5 text-blue-600" />,
-  package: <Package className="w-5 h-5 text-purple-600" />,
+  package: <Package className="w-5 h-5 text-slate-800" />,
   clock: <Clock className="w-5 h-5 text-orange-600" />,
   file: <FileText className="w-5 h-5 text-teal-600" />,
   sparkles: <CheckSquare className="w-4 h-4 text-slate-600" strokeWidth={1.5} />,
@@ -209,7 +209,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
           <div className="bg-slate-50 px-3.5 py-2 rounded-lg border border-slate-200 min-w-[140px]">
             <div className="flex justify-between items-center text-xs font-black mb-1.5">
               <span className="text-slate-600">진척도</span>
-              <span className={progress.isAllCompleted ? 'text-emerald-600' : 'text-indigo-600'}>
+              <span className={progress.isAllCompleted ? 'text-emerald-600' : 'text-slate-800'}>
                 {progress.completedCount}/{progress.totalQuests} 완료 ({progress.progressPercent}%)
               </span>
             </div>
@@ -293,7 +293,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
                 className={`relative rounded-2xl p-4 transition-all duration-200 border flex flex-col justify-between ${
                   isDone
                     ? 'bg-emerald-50/40 border-emerald-200/60 shadow-2xs'
-                    : 'bg-white border-slate-200/90 hover:border-indigo-200 hover:shadow-xs'
+                    : 'bg-white border-slate-200/90 hover:border-slate-200 hover:shadow-xs'
                 }`}
               >
                 <div>
@@ -302,7 +302,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
                       className={`text-[11px] font-black px-2 py-0.5 rounded-md ${
                         isDone
                           ? 'bg-emerald-100 text-emerald-800'
-                          : 'bg-indigo-50 text-indigo-700'
+                          : 'bg-slate-50 text-slate-700'
                       }`}
                     >
                       {quest.stepNumber}단계
@@ -344,7 +344,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
                   </div>
 
                   {quest.helpTip && !isDone && (
-                    <div className="mt-2.5 p-2 bg-indigo-50/60 rounded-xl text-[11px] text-indigo-800 leading-relaxed border border-indigo-100/50">
+                    <div className="mt-2.5 p-2 bg-slate-50/60 rounded-xl text-[11px] text-indigo-800 leading-relaxed border border-slate-200/50">
                       팁: {quest.helpTip}
                     </div>
                   )}
@@ -357,7 +357,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
                     className={`inline-flex items-center gap-1.5 text-xs font-bold transition-colors cursor-pointer ${
                       isDone
                         ? 'text-slate-400 hover:text-slate-600'
-                        : 'text-indigo-600 hover:text-indigo-800'
+                        : 'text-slate-800 hover:text-indigo-800'
                     }`}
                   >
                     <span>{quest.actionText}</span>

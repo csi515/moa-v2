@@ -613,7 +613,7 @@ export const MboManagementView: React.FC = () => {
       {/* 최상단 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-semibold mb-1.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-50 text-slate-700 rounded-full text-xs font-semibold mb-1.5">
             <Target className="w-3.5 h-3.5" />
             <span>조직 목표 및 성과 관리 (MBO)</span>
           </div>
@@ -630,7 +630,7 @@ export const MboManagementView: React.FC = () => {
             onClick={() => setActiveTab('objectives')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'objectives'
-                ? 'bg-white text-indigo-700 shadow-xs'
+                ? 'bg-white text-slate-700 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -645,7 +645,7 @@ export const MboManagementView: React.FC = () => {
             }}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'projects'
-                ? 'bg-white text-indigo-700 shadow-xs'
+                ? 'bg-white text-slate-700 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -657,7 +657,7 @@ export const MboManagementView: React.FC = () => {
             onClick={() => setActiveTab('evaluations')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'evaluations'
-                ? 'bg-white text-indigo-700 shadow-xs'
+                ? 'bg-white text-slate-700 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -669,7 +669,7 @@ export const MboManagementView: React.FC = () => {
             onClick={() => setActiveTab('workload')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'workload'
-                ? 'bg-white text-indigo-700 shadow-xs'
+                ? 'bg-white text-slate-700 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -681,7 +681,7 @@ export const MboManagementView: React.FC = () => {
             onClick={() => setActiveTab('forecast')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'forecast'
-                ? 'bg-white text-indigo-700 shadow-xs'
+                ? 'bg-white text-slate-700 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -1023,7 +1023,7 @@ export const MboManagementView: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="min-h-12 rounded-xl bg-indigo-600 px-4 text-xs font-bold text-white shadow-xs hover:bg-indigo-700"
+                  className="min-h-12 rounded-xl bg-slate-900 px-4 text-xs font-bold text-white shadow-xs hover:bg-slate-800"
                 >
                   등록 완료
                 </button>

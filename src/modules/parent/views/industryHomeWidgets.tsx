@@ -60,9 +60,9 @@ export function DaycareHomeWidget({ student, onNavigate }: ParentHomeWidgetSlotP
           <button
             type="button"
             onClick={() => onNavigate('journals')}
-            className="w-full text-left rounded-xl p-3 bg-indigo-50/50 hover:bg-indigo-50 border border-indigo-100 min-h-[52px]"
+            className="w-full text-left rounded-xl p-3 bg-slate-50/50 hover:bg-slate-50 border border-slate-200 min-h-[52px]"
           >
-            <div className="flex items-center justify-between text-xs text-indigo-700 font-semibold mb-1">
+            <div className="flex items-center justify-between text-xs text-slate-700 font-semibold mb-1">
               <span>{latestJournal.journalDate}</span>
               {latestJournal.mood && (
                 <span>기분: {CARE_JOURNAL_MOOD_LABEL[latestJournal.mood]}</span>
@@ -138,12 +138,12 @@ export function PianoHomeWidget({ student, onNavigate }: ParentHomeWidgetSlotPro
         <Section title="오늘의 레슨">
           <div className="space-y-2">
             {todayClasses.map((c) => (
-              <div key={c.id} className="p-3 rounded-xl bg-indigo-50/50 border border-indigo-100 flex items-center justify-between">
+              <div key={c.id} className="p-3 rounded-xl bg-slate-50/50 border border-slate-200 flex items-center justify-between">
                 <div>
                   <p className="text-sm font-bold text-slate-800">{c.name}</p>
-                  <p className="text-xs text-indigo-600 font-medium">{c.startTime} ~ {c.endTime}</p>
+                  <p className="text-xs text-slate-800 font-medium">{c.startTime} ~ {c.endTime}</p>
                 </div>
-                <span className="text-xs font-semibold px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-md">오늘</span>
+                <span className="text-xs font-semibold px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md">오늘</span>
               </div>
             ))}
           </div>
@@ -157,7 +157,7 @@ export function PianoHomeWidget({ student, onNavigate }: ParentHomeWidgetSlotPro
             <button
               type="button"
               onClick={() => onNavigate('assignments')}
-              className="text-[11px] font-bold text-indigo-600 min-h-[44px] px-1 flex items-center"
+              className="text-[11px] font-bold text-slate-800 min-h-[44px] px-1 flex items-center"
             >
               전체 <ChevronRight className="w-3.5 h-3.5 inline" />
             </button>
@@ -222,7 +222,7 @@ export function PilatesHomeWidget({ student, onNavigate }: ParentHomeWidgetSlotP
         <button
           type="button"
           onClick={() => onNavigate('bookings')}
-          className="text-[11px] font-bold text-indigo-600 min-h-[44px] px-1 flex items-center"
+          className="text-[11px] font-bold text-slate-800 min-h-[44px] px-1 flex items-center"
         >
           예약관리 <ChevronRight className="w-3.5 h-3.5 inline" />
         </button>

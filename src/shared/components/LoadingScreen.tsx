@@ -51,7 +51,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
       aria-live="polite"
     >
       <div className="flex flex-col items-center gap-3 max-w-sm w-full text-center">
-        <Loader2 className="w-10 h-10 text-indigo-600 animate-spin" />
+        <Loader2 className="w-10 h-10 text-slate-800 animate-spin" />
         <p className="text-base font-semibold text-slate-800">{message}</p>
         <p className="text-xs text-slate-400">잠시만 기다려 주세요</p>
 

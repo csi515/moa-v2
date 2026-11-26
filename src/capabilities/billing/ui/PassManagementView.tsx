@@ -391,13 +391,13 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
             />
           </div>
 
-          <div className="rounded-xl border border-indigo-100 bg-indigo-50/60 p-3">
+          <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-3">
             <label className="flex items-start gap-2.5 cursor-pointer">
               <input
                 type="checkbox"
                 checked={linkIncome}
                 onChange={(e) => setLinkIncome(e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                className="mt-0.5 w-4 h-4 rounded border-slate-300 text-slate-800 focus:ring-slate-900"
               />
               <span>
                 <span className="block text-xs font-bold text-slate-800">

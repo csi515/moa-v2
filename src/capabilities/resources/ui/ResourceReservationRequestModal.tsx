@@ -199,7 +199,7 @@ export const ResourceReservationRequestModal: React.FC<ResourceReservationReques
         {/* 모달 헤더 */}
         <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-b border-slate-200">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-indigo-100 text-indigo-700 rounded-xl">
+            <div className="p-2 bg-slate-100 text-slate-700 rounded-xl">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
@@ -325,7 +325,7 @@ export const ResourceReservationRequestModal: React.FC<ResourceReservationReques
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900"
                 required
               />
             </div>
@@ -337,7 +337,7 @@ export const ResourceReservationRequestModal: React.FC<ResourceReservationReques
                 type="time"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900"
                 required
               />
             </div>
@@ -349,7 +349,7 @@ export const ResourceReservationRequestModal: React.FC<ResourceReservationReques
                 type="time"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900"
                 required
               />
             </div>
@@ -365,7 +365,7 @@ export const ResourceReservationRequestModal: React.FC<ResourceReservationReques
               value={purpose}
               onChange={(e) => setPurpose(e.target.value)}
               placeholder="예: 고객사 외근 미팅, 4분기 부서 주간회의, 임직원 건강상담"
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900"
               required
             />
           </div>
@@ -380,7 +380,7 @@ export const ResourceReservationRequestModal: React.FC<ResourceReservationReques
               value={attendees}
               onChange={(e) => setAttendees(e.target.value)}
               placeholder="예: 김철수 팀장, 박영희 주임 (외 2명)"
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -394,7 +394,7 @@ export const ResourceReservationRequestModal: React.FC<ResourceReservationReques
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
               placeholder="예: 다과 준비 필요, 유류카드 수령 요청"
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -411,7 +411,7 @@ export const ResourceReservationRequestModal: React.FC<ResourceReservationReques
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 transition-all shadow-sm flex items-center gap-1.5"
+              className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 active:bg-slate-950 transition-all shadow-sm flex items-center gap-1.5"
             >
               {isSubmitting ? '신청 처리 중...' : (
                 <>

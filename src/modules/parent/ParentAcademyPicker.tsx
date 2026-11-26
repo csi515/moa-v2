@@ -74,13 +74,13 @@ function EnrollmentSection({
           className={`w-full flex items-center justify-between p-4 rounded-2xl border text-left min-h-[44px] transition-colors ${
             muted
               ? 'bg-slate-50 border-slate-200 hover:border-slate-300'
-              : 'bg-white border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/40'
+              : 'bg-white border-slate-200 hover:border-indigo-300 hover:bg-slate-50/40'
           }`}
         >
           <div className="flex items-center gap-3 min-w-0">
             <div
               className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                muted ? 'bg-slate-200 text-slate-600' : 'bg-indigo-100 text-indigo-700'
+                muted ? 'bg-slate-200 text-slate-600' : 'bg-slate-100 text-slate-700'
               }`}
             >
               <Building2 className="w-5 h-5" />

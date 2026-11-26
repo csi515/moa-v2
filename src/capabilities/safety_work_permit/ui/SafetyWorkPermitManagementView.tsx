@@ -132,7 +132,7 @@ const WORK_TYPE_INFO: Record<
   electrical: {
     label: '정전/고압전기',
     icon: <Zap className="w-4 h-4 text-purple-500" />,
-    color: 'border-purple-200 bg-purple-50 text-purple-700',
+    color: 'border-slate-200 bg-slate-50 text-slate-700',
   },
   excavation: {
     label: '굴착/토공사',
@@ -394,7 +394,7 @@ export const SafetyWorkPermitManagementView: React.FC = () => {
         <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 text-xs font-bold">
             <span>누적 허가 발급 이력</span>
-            <FileCheck className="w-4 h-4 text-indigo-600" />
+            <FileCheck className="w-4 h-4 text-slate-800" />
           </div>
           <p className="mt-3 text-2xl font-black text-slate-900">
             {permits.length} <span className="text-sm font-semibold text-slate-500">건</span>
@@ -437,7 +437,7 @@ export const SafetyWorkPermitManagementView: React.FC = () => {
                       permit.status === 'approved'
                         ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                         : permit.status === 'in_progress'
-                        ? 'bg-indigo-50 text-indigo-700 border border-indigo-200 animate-pulse'
+                        ? 'bg-slate-50 text-slate-700 border border-slate-200 animate-pulse'
                         : permit.status === 'closed'
                         ? 'bg-slate-100 text-slate-500'
                         : 'bg-amber-50 text-amber-700 border border-amber-200'
@@ -476,7 +476,7 @@ export const SafetyWorkPermitManagementView: React.FC = () => {
                   <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1.5">
                     <div className="flex items-center justify-between font-bold text-slate-700">
                       <span className="flex items-center gap-1">
-                        <Activity className="w-3.5 h-3.5 text-indigo-600" />
+                        <Activity className="w-3.5 h-3.5 text-slate-800" />
                         가스 농도 실시간 측정치
                       </span>
                       <span
@@ -516,7 +516,7 @@ export const SafetyWorkPermitManagementView: React.FC = () => {
                     신청자: <span className="text-slate-700 font-semibold">{permit.requesterName}</span>
                     {permit.safetyManagerName && (
                       <span className="ml-2">
-                        · 안전승인자: <span className="text-indigo-700 font-semibold">{permit.safetyManagerName}</span>
+                        · 안전승인자: <span className="text-slate-700 font-semibold">{permit.safetyManagerName}</span>
                       </span>
                     )}
                   </div>

@@ -87,7 +87,7 @@ export const PresetCapabilityCatalogModal: React.FC<PresetCapabilityCatalogModal
               placeholder="업종명, 영문 식별자, 기능 이름으로 검색..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-4 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-4 text-sm text-slate-800 placeholder-slate-400 focus:border-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900"
             />
           </div>
 
@@ -99,7 +99,7 @@ export const PresetCapabilityCatalogModal: React.FC<PresetCapabilityCatalogModal
                 onClick={() => setActiveTab(tab.id)}
                 className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
                   activeTab === tab.id
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-slate-900 text-white'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -112,7 +112,7 @@ export const PresetCapabilityCatalogModal: React.FC<PresetCapabilityCatalogModal
         {/* 결과 통계 */}
         <div className="flex items-center justify-between text-xs text-slate-500">
           <span>총 <strong>{filteredPresets.length}</strong>개의 업종 프리셋이 검색되었습니다.</span>
-          <span className="flex items-center gap-1 text-indigo-600">
+          <span className="flex items-center gap-1 text-slate-800">
             <Sparkles className="h-3.5 w-3.5" />
             단일화된 Capability 재사용
           </span>
@@ -128,7 +128,7 @@ export const PresetCapabilityCatalogModal: React.FC<PresetCapabilityCatalogModal
                 onClick={() => setSelectedPreset(isSelected ? null : preset)}
                 className={`cursor-pointer rounded-2xl border p-4 transition-all ${
                   isSelected
-                    ? 'border-indigo-500 bg-indigo-50/40 ring-1 ring-indigo-500'
+                    ? 'border-indigo-500 bg-slate-50/40 ring-1 ring-indigo-500'
                     : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
                 }`}
               >
@@ -148,19 +148,19 @@ export const PresetCapabilityCatalogModal: React.FC<PresetCapabilityCatalogModal
 
                 {/* 필수 기능 태그 */}
                 <div className="mt-3">
-                  <div className="text-[10px] font-semibold text-indigo-700">필수 운영 도구</div>
+                  <div className="text-[10px] font-semibold text-slate-700">필수 운영 도구</div>
                   <div className="mt-1 flex flex-wrap gap-1">
                     {(preset.requiredCapabilities || []).slice(0, 5).map((cap) => (
                       <span
                         key={cap}
-                        className="inline-flex items-center gap-0.5 rounded-md bg-indigo-50 px-1.5 py-0.5 text-[10px] font-medium text-indigo-700"
+                        className="inline-flex items-center gap-0.5 rounded-md bg-slate-50 px-1.5 py-0.5 text-[10px] font-medium text-slate-700"
                       >
                         <CheckCircle className="h-2.5 w-2.5" />
                         {cap}
                       </span>
                     ))}
                     {(preset.requiredCapabilities?.length ?? 0) > 5 && (
-                      <span className="rounded-md bg-indigo-50 px-1.5 py-0.5 text-[10px] text-indigo-700">
+                      <span className="rounded-md bg-slate-50 px-1.5 py-0.5 text-[10px] text-slate-700">
                         +{(preset.requiredCapabilities?.length ?? 0) - 5}
                       </span>
                     )}
@@ -192,7 +192,7 @@ export const PresetCapabilityCatalogModal: React.FC<PresetCapabilityCatalogModal
 
                 {/* 선택된 상태 세부정보 */}
                 {isSelected && preset.terms && (
-                  <div className="mt-3 border-t border-indigo-100 pt-2 text-[11px] text-slate-600">
+                  <div className="mt-3 border-t border-slate-200 pt-2 text-[11px] text-slate-600">
                     <div className="font-semibold text-slate-700">맞춤 호칭 다형성:</div>
                     <div className="mt-0.5 flex flex-wrap gap-2 text-slate-500">
                       {preset.terms.customer && <span>고객 ➔ <strong>{preset.terms.customer}</strong></span>}

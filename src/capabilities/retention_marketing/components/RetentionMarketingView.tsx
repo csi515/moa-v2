@@ -235,7 +235,7 @@ export function RetentionMarketingView() {
                 const badgeLabel = isPass ? '수강권 만료 D-Day' : '시술 주기 맞춤 케어';
                 const badgeColor = isPass
                   ? 'bg-amber-50 text-amber-700 border-amber-200'
-                  : 'bg-indigo-50 text-indigo-700 border-indigo-200';
+                  : 'bg-slate-50 text-slate-700 border-slate-200';
 
                 return (
                   <div

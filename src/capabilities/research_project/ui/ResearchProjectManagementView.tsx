@@ -107,7 +107,7 @@ export const ResearchProjectManagementView: React.FC = () => {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="flex items-center gap-2 text-xl font-semibold text-slate-900">
-            <FolderKanban className="h-5 w-5 text-indigo-600" />
+            <FolderKanban className="h-5 w-5 text-slate-800" />
             연구과제 관리
           </h1>
           <p className="mt-1 text-sm text-slate-500">
@@ -134,7 +134,7 @@ export const ResearchProjectManagementView: React.FC = () => {
           <button
             type="button"
             onClick={() => setCreateOpen(true)}
-            className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white hover:bg-indigo-700"
+            className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800"
           >
             <Plus className="h-4 w-4" />
             과제 등록
@@ -194,7 +194,7 @@ export const ResearchProjectManagementView: React.FC = () => {
                       onClick={() => ws.setSelectedId(p.id)}
                       className={`w-full rounded-lg border p-3 text-left text-sm ${
                         ws.selectedId === p.id
-                          ? 'border-indigo-500 bg-indigo-50'
+                          ? 'border-indigo-500 bg-slate-50'
                           : 'border-slate-200 bg-white'
                       }`}
                     >
@@ -225,7 +225,7 @@ export const ResearchProjectManagementView: React.FC = () => {
                 onClick={() => ws.setSelectedId(p.id)}
                 className={`w-full rounded-xl border p-4 text-left transition ${
                   ws.selectedId === p.id
-                    ? 'border-indigo-500 bg-indigo-50/60'
+                    ? 'border-indigo-500 bg-slate-50/60'
                     : 'border-slate-200 bg-white hover:border-slate-300'
                 }`}
               >
@@ -354,7 +354,7 @@ export const ResearchProjectManagementView: React.FC = () => {
                 type="button"
                 disabled={saving}
                 onClick={() => void handleCreate()}
-                className="min-h-[44px] rounded-lg bg-indigo-600 px-4 text-sm text-white disabled:opacity-60"
+                className="min-h-[44px] rounded-lg bg-slate-900 px-4 text-sm text-white disabled:opacity-60"
               >
                 {saving ? '저장 중…' : '등록'}
               </button>

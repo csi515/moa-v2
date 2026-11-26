@@ -32,12 +32,12 @@ export const RetailCustomerListPanel: FC<Props> = ({
     <PageHeader 
       title={COPY.listTitle} 
       description={COPY.listDescription}
-      icon={<Users className="w-5 h-5 text-indigo-600" />}
+      icon={<Users className="w-5 h-5 text-slate-800" />}
       actions={
         onOpenManualPoint ? (
           <button
             onClick={onOpenManualPoint}
-            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-indigo-50 text-indigo-700 text-sm font-bold rounded-xl hover:bg-indigo-100 min-h-[44px]"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-50 text-slate-700 text-sm font-bold rounded-xl hover:bg-slate-100 min-h-[44px]"
           >
             <Coins className="w-4 h-4" />
             수동 적립/차감
@@ -79,7 +79,7 @@ export const RetailCustomerListPanel: FC<Props> = ({
                     {customer.phone || '-'}
                   </p>
                 </div>
-                <span className="font-bold text-indigo-600 tabular-nums text-sm shrink-0">
+                <span className="font-bold text-slate-800 tabular-nums text-sm shrink-0">
                   {balance.toLocaleString('ko-KR')}
                   {COPY.pointsUnit}
                 </span>

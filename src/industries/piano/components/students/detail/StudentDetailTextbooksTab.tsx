@@ -30,7 +30,7 @@ export const StudentDetailTextbooksTab: React.FC<StudentDetailTextbooksTabProps>
       </div>
       <button
         onClick={onOpenSaleModal}
-        className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer shadow-xs"
+        className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer shadow-xs"
       >
         <Plus className="w-3.5 h-3.5" /> 교재 지급/배부
       </button>
@@ -57,7 +57,7 @@ export const StudentDetailTextbooksTab: React.FC<StudentDetailTextbooksTabProps>
       </div>
       <div>
         <span className="text-slate-400 block">전체 총 청구합계</span>
-        <span className="font-bold text-indigo-700 text-sm">
+        <span className="font-bold text-slate-700 text-sm">
           {formatCurrency(billingSummary.totalBilled || 0)}
         </span>
       </div>
@@ -69,7 +69,7 @@ export const StudentDetailTextbooksTab: React.FC<StudentDetailTextbooksTabProps>
         <p className="font-medium">지급한 교재가 없습니다.</p>
         <button
           onClick={onOpenSaleModal}
-          className="mt-2 text-indigo-600 font-bold hover:underline inline-block"
+          className="mt-2 text-slate-800 font-bold hover:underline inline-block"
         >
           + 첫 교재 지급/배부하기
         </button>

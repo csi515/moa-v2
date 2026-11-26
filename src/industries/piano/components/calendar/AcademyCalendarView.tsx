@@ -278,7 +278,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
             <button
               type="button"
               onClick={openCreateModal}
-              className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
+              className="px-4 py-2.5 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               {scheduleLabel} 등록
@@ -291,7 +291,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
           <button
             type="button"
             onClick={openCreateModal}
-            className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
+            className="px-4 py-2.5 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             {scheduleLabel} 등록
@@ -346,11 +346,11 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
                 onClick={() => setSelectedDay(dayNum)}
                 className={`shrink-0 min-w-[44px] min-h-[44px] rounded-2xl flex flex-col items-center justify-center text-xs font-bold transition-all ${
                   isSelected
-                    ? 'bg-indigo-600 text-white shadow-md'
+                    ? 'bg-slate-900 text-white shadow-md'
                     : hasItems
                       ? isHoliday
                         ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                        : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
+                        : 'bg-slate-50 text-slate-700 border border-slate-200'
                       : isSunday || isHoliday
                         ? 'bg-white text-rose-600 border border-slate-200'
                         : 'bg-white text-slate-700 border border-slate-200'
@@ -393,7 +393,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
             <span>수</span>
             <span>목</span>
             <span>금</span>
-            <span className="text-indigo-600">토</span>
+            <span className="text-slate-800">토</span>
           </div>
 
           <div className="grid grid-cols-7 divide-x divide-y divide-slate-100 text-xs flex-1 auto-rows-fr">
@@ -417,8 +417,8 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
                 <div
                   key={dayNum}
                   onClick={() => setSelectedDay(dayNum)}
-                  className={`min-h-[72px] p-1.5 hover:bg-indigo-50/30 transition-colors cursor-pointer space-y-0.5 ${
-                    selectedDay === dayNum ? 'bg-indigo-50/50 ring-2 ring-indigo-600 ring-inset' : ''
+                  className={`min-h-[72px] p-1.5 hover:bg-slate-50/30 transition-colors cursor-pointer space-y-0.5 ${
+                    selectedDay === dayNum ? 'bg-slate-50/50 ring-2 ring-indigo-600 ring-inset' : ''
                   }`}
                 >
                   <span
@@ -468,7 +468,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
         <aside className="w-72 lg:w-80 shrink-0 bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs flex flex-col gap-4 overflow-hidden">
           <div className="space-y-3 min-h-0 flex-1 overflow-y-auto">
             <h4 className="font-bold text-sm text-slate-900 flex items-center gap-2 sticky top-0 bg-white pb-1">
-              <Clock className="w-4 h-4 text-indigo-600" />
+              <Clock className="w-4 h-4 text-slate-800" />
               {selectedDay
                 ? `${currentMonth}월 ${selectedDay}일`
                 : `${currentMonth}월 일정`}
@@ -521,14 +521,14 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
                     const day = parseInt(ev.startDate.split('-')[2], 10);
                     setSelectedDay(day);
                   }}
-                  className="w-full text-left p-2 rounded-xl border border-slate-100 bg-slate-50 hover:bg-indigo-50/50 flex items-center gap-2 min-h-[44px]"
+                  className="w-full text-left p-2 rounded-xl border border-slate-100 bg-slate-50 hover:bg-slate-50/50 flex items-center gap-2 min-h-[44px]"
                 >
                   <div
                     className="w-1.5 h-8 rounded-full shrink-0"
                     style={{ backgroundColor: ev.color || '#4f46e5' }}
                   />
                   <div className="min-w-0">
-                    <span className="text-[10px] font-mono font-bold text-indigo-700">
+                    <span className="text-[10px] font-mono font-bold text-slate-700">
                       {ev.startDate.slice(8)}일
                     </span>
                     <p className="font-bold text-xs text-slate-900 truncate">{ev.title}</p>
@@ -647,7 +647,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md"
+                  className="px-5 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl shadow-md"
                 >
                   저장
                 </button>

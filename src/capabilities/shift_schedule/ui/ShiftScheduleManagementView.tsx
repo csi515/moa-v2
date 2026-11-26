@@ -162,7 +162,7 @@ export const ShiftScheduleManagementView: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsCycleTemplateModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold transition-colors"
           >
             <Sparkles className="w-4 h-4" />
             <span>교대조 템플릿 생성</span>
@@ -535,7 +535,7 @@ const NewShiftModal: React.FC<NewShiftModalProps> = ({
               validation.alertLevel === 'BLOCKED_52H'
                 ? 'bg-rose-50 border-rose-300 text-rose-900'
                 : validation.alertLevel === 'SPECIAL_APPROVED'
-                ? 'bg-purple-50 border-purple-300 text-purple-900'
+                ? 'bg-slate-50 border-purple-300 text-slate-900'
                 : validation.alertLevel === 'WARNING_OVERTIME'
                 ? 'bg-amber-50 border-amber-300 text-amber-900'
                 : 'bg-slate-50 border-slate-200 text-slate-700'
@@ -650,7 +650,7 @@ const CycleTemplateModal: React.FC<CycleTemplateModalProps> = ({ onClose, onGene
           <button
             type="button"
             onClick={handleGenerate}
-            className="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs"
+            className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white shadow-xs"
           >
             1개월 스케줄 일괄 자동 생성
           </button>

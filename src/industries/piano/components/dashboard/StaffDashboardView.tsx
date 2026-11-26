@@ -68,13 +68,13 @@ export const StaffDashboardView: React.FC = () => {
       <section className="bg-white rounded-2xl border border-slate-200 p-3.5 shadow-xs space-y-2">
         <div className="flex items-center justify-between gap-2">
           <h3 className="font-bold text-slate-900 flex items-center gap-2 text-sm">
-            <CalendarDays className="w-4 h-4 text-indigo-600" />
+            <CalendarDays className="w-4 h-4 text-slate-800" />
             오늘 예정
           </h3>
           <button
             type="button"
             onClick={() => setActiveTab('timetable')}
-            className="text-xs font-bold text-indigo-600 min-h-[44px] px-1"
+            className="text-xs font-bold text-slate-800 min-h-[44px] px-1"
           >
             시간표
           </button>
@@ -115,7 +115,7 @@ export const StaffDashboardView: React.FC = () => {
         <button
           type="button"
           onClick={() => setActiveTab('timetable')}
-          className="w-full min-h-[48px] px-4 py-2.5 rounded-xl border bg-indigo-600 border-indigo-600 text-white text-sm font-bold flex items-center justify-center gap-2 hover:bg-indigo-700 shadow-2xs"
+          className="w-full min-h-[48px] px-4 py-2.5 rounded-xl border bg-slate-900 border-indigo-600 text-white text-sm font-bold flex items-center justify-center gap-2 hover:bg-slate-800 shadow-2xs"
         >
           <CalendarDays className="w-4 h-4" />
           오늘 수업 시간표 확인
@@ -127,7 +127,7 @@ export const StaffDashboardView: React.FC = () => {
         <div className="bg-white rounded-2xl border border-slate-200 p-3.5">
           <div className="flex items-center justify-between mb-2.5">
             <h3 className="font-bold text-slate-900 flex items-center gap-2 text-sm">
-              <Users className="w-4 h-4 text-indigo-600" />
+              <Users className="w-4 h-4 text-slate-800" />
               담당 학생
             </h3>
             <button
@@ -136,7 +136,7 @@ export const StaffDashboardView: React.FC = () => {
                 setSelectedStudentId(null);
                 setActiveTab('students');
               }}
-              className="text-xs font-bold text-indigo-600 hover:underline min-h-[44px] px-1"
+              className="text-xs font-bold text-slate-800 hover:underline min-h-[44px] px-1"
             >
               전체
             </button>
@@ -155,10 +155,10 @@ export const StaffDashboardView: React.FC = () => {
                     setSelectedStudentId(s.id);
                     setActiveTab('students');
                   }}
-                  className="w-full flex items-center justify-between px-2.5 py-2 rounded-xl bg-indigo-50/50 border border-indigo-100 text-sm hover:bg-indigo-50 min-h-[44px]"
+                  className="w-full flex items-center justify-between px-2.5 py-2 rounded-xl bg-slate-50/50 border border-slate-200 text-sm hover:bg-slate-50 min-h-[44px]"
                 >
                   <span className="font-bold text-slate-900">{s.name}</span>
-                  <span className="text-xs text-indigo-600">{s.level}</span>
+                  <span className="text-xs text-slate-800">{s.level}</span>
                 </button>
               ))}
             </div>
@@ -181,7 +181,7 @@ export const StaffDashboardView: React.FC = () => {
                 onClick={() => setActiveTab(tab)}
                 className="min-h-[44px] px-2.5 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 hover:border-indigo-300 flex items-center gap-1.5"
               >
-                <Icon className="w-3.5 h-3.5 text-indigo-600" />
+                <Icon className="w-3.5 h-3.5 text-slate-800" />
                 {label}
               </button>
             ))}

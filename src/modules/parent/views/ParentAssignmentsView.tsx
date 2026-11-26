@@ -55,7 +55,7 @@ export function ParentAssignmentsView({
                   <p className="font-bold text-sm text-slate-900">{it.songTitle}</p>
                   <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{it.instructions}</p>
                   {it.targetMinutes && (
-                    <p className="text-xs text-indigo-600 font-semibold mt-2">
+                    <p className="text-xs text-slate-800 font-semibold mt-2">
                       목표 연습 · {it.targetMinutes}분/일
                     </p>
                   )}
@@ -71,7 +71,7 @@ export function ParentAssignmentsView({
                     <button
                       type="button"
                       onClick={() => handleConfirm(a.id, it.id)}
-                      className="mt-3 w-full min-h-[44px] px-3 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl"
+                      className="mt-3 w-full min-h-[44px] px-3 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl"
                     >
                       연습 완료 확인
                     </button>
@@ -98,7 +98,7 @@ export function ParentAssignmentsView({
                   <p className="text-[11px] text-slate-400 font-mono shrink-0">{l.date}</p>
                 </div>
                 {l.progress && (
-                  <p className="text-xs text-indigo-700 font-semibold">진도 · {l.progress}</p>
+                  <p className="text-xs text-slate-700 font-semibold">진도 · {l.progress}</p>
                 )}
                 {l.strengths && (
                   <div className="rounded-xl bg-emerald-50 px-3 py-2">
@@ -113,7 +113,7 @@ export function ParentAssignmentsView({
                   </div>
                 )}
                 {l.homework && (
-                  <p className="text-sm text-indigo-900 bg-indigo-50 rounded-xl px-3 py-2 leading-relaxed">
+                  <p className="text-sm text-slate-900 bg-slate-50 rounded-xl px-3 py-2 leading-relaxed">
                     <span className="font-bold">과제</span> · {l.homework}
                   </p>
                 )}

@@ -57,7 +57,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
         {/* 모달 툴바 (인쇄 시 숨김) */}
         <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0 print:hidden">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center">
               <Award className="w-4 h-4" />
             </div>
             <div>
@@ -71,7 +71,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
             <button
               type="button"
               onClick={handlePrint}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+              className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>A4 인쇄 / PDF 저장</span>
@@ -94,7 +94,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
             {/* 리포트 헤더 */}
             <header className="border-b-2 border-indigo-600 pb-4 flex items-end justify-between">
               <div>
-                <p className="text-xs font-extrabold text-indigo-600 tracking-wider uppercase flex items-center gap-1">
+                <p className="text-xs font-extrabold text-slate-800 tracking-wider uppercase flex items-center gap-1">
                   <Sparkles className="w-3.5 h-3.5" /> MONTHLY GROWTH REPORT
                 </p>
                 <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5 tracking-tight">
@@ -120,16 +120,16 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
               </div>
               <div className="text-center border-x border-slate-200">
                 <span className="text-xs font-bold text-slate-500 flex items-center justify-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-indigo-600" /> 자율 연습 시간
+                  <Clock className="w-3.5 h-3.5 text-slate-800" /> 자율 연습 시간
                 </span>
-                <p className="text-xl font-black text-indigo-600 mt-1">{report.practiceHours}시간</p>
+                <p className="text-xl font-black text-slate-800 mt-1">{report.practiceHours}시간</p>
                 <span className="text-[10px] text-slate-400">연습실/시설 이용 총계</span>
               </div>
               <div className="text-center">
                 <span className="text-xs font-bold text-slate-500 flex items-center justify-center gap-1">
-                  <BookOpen className="w-3.5 h-3.5 text-purple-600" /> 현재 레슨 진도
+                  <BookOpen className="w-3.5 h-3.5 text-slate-800" /> 현재 레슨 진도
                 </span>
-                <p className="text-base sm:text-lg font-black text-purple-700 mt-1 truncate">
+                <p className="text-base sm:text-lg font-black text-slate-700 mt-1 truncate">
                   {report.currentLevel}
                 </p>
                 <span className="text-[10px] text-slate-400">맞춤 커리큘럼</span>
@@ -156,12 +156,12 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
 
               <div className="border border-slate-200 rounded-2xl p-4 space-y-2.5">
                 <h4 className="text-xs font-extrabold text-slate-900 uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-100 pb-2">
-                  <Music className="w-4 h-4 text-indigo-600" /> 현재 연습 중인 곡
+                  <Music className="w-4 h-4 text-slate-800" /> 현재 연습 중인 곡
                 </h4>
                 <ul className="space-y-1.5 text-xs">
                   {report.practicingSongs.map((song, i) => (
                     <li key={i} className="flex items-center gap-2 text-slate-700">
-                      <span className="w-4 h-4 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-bold flex items-center justify-center shrink-0">
+                      <span className="w-4 h-4 rounded-full bg-slate-100 text-indigo-800 text-[10px] font-bold flex items-center justify-center shrink-0">
                         {i + 1}
                       </span>
                       <span className="font-semibold">{song}</span>
@@ -172,17 +172,17 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
             </section>
 
             {/* 3. 담당 강사 종합 총평 */}
-            <section className="border border-indigo-100 bg-gradient-to-br from-indigo-50/50 to-purple-50/30 rounded-2xl p-5 space-y-2">
+            <section className="border border-slate-200 bg-gradient-to-br from-indigo-50/50 to-purple-50/30 rounded-2xl p-5 space-y-2">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-slate-800" />
                   <span>담당 강사 지도 총평 & 격려 말씀</span>
                 </h4>
                 {!isEditingComment && (
                   <button
                     type="button"
                     onClick={() => setIsEditingComment(true)}
-                    className="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 print:hidden cursor-pointer"
+                    className="text-[11px] font-bold text-slate-800 hover:text-indigo-800 flex items-center gap-1 print:hidden cursor-pointer"
                   >
                     <Edit3 className="w-3 h-3" />
                     총평 수정
@@ -196,7 +196,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
                     value={commentDraft}
                     onChange={(e) => setCommentDraft(e.target.value)}
                     rows={4}
-                    className="w-full text-xs p-3 rounded-xl border border-indigo-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 leading-relaxed font-sans"
+                    className="w-full text-xs p-3 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 leading-relaxed font-sans"
                   />
                   <div className="flex justify-end gap-2">
                     <button
@@ -209,7 +209,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
                     <button
                       type="button"
                       onClick={handleSaveComment}
-                      className="px-3 py-1 text-xs text-white font-bold bg-indigo-600 rounded-lg cursor-pointer"
+                      className="px-3 py-1 text-xs text-white font-bold bg-slate-900 rounded-lg cursor-pointer"
                     >
                       저장
                     </button>

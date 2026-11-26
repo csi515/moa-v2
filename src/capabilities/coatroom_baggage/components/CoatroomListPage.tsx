@@ -100,7 +100,7 @@ export const CoatroomListPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2 text-slate-800 dark:text-slate-100">
-            <Briefcase className="w-7 h-7 text-purple-600" />
+            <Briefcase className="w-7 h-7 text-slate-800" />
             외투 및 단기 수하물 보관 번호표 대장
           </h1>
           <p className="text-sm text-slate-500 mt-1">
@@ -109,7 +109,7 @@ export const CoatroomListPage: React.FC = () => {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-medium"
         >
           <Plus className="w-4 h-4" />
           신규 물품 보관 접수
@@ -141,9 +141,9 @@ export const CoatroomListPage: React.FC = () => {
             ) : (
               claims.map((c) => (
                 <tr key={c.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30">
-                  <td className="p-3 font-bold text-purple-600">No. {c.tag_number}</td>
+                  <td className="p-3 font-bold text-slate-800">No. {c.tag_number}</td>
                   <td className="p-3">
-                    <span className="px-2 py-0.5 rounded text-xs bg-purple-50 text-purple-700 font-medium border border-purple-200">
+                    <span className="px-2 py-0.5 rounded text-xs bg-slate-50 text-slate-700 font-medium border border-slate-200">
                       {getBaggageTypeLabel(c.baggage_type)}
                     </span>
                   </td>
@@ -178,7 +178,7 @@ export const CoatroomListPage: React.FC = () => {
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-800 rounded-xl max-w-md w-full p-6 space-y-4">
             <h2 className="text-xl font-bold flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-purple-600" />
+              <Briefcase className="w-5 h-5 text-slate-800" />
               외투 및 수하물 보관 접수
             </h2>
             <form onSubmit={handleCreate} className="space-y-4">
@@ -189,7 +189,7 @@ export const CoatroomListPage: React.FC = () => {
                     type="number"
                     value={tagNumber}
                     onChange={(e) => setTagNumber(Number(e.target.value))}
-                    className="w-full px-3 py-2 border rounded-lg text-sm font-bold text-purple-700"
+                    className="w-full px-3 py-2 border rounded-lg text-sm font-bold text-slate-700"
                     required
                   />
                 </div>
@@ -238,7 +238,7 @@ export const CoatroomListPage: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700"
+                  className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800"
                 >
                   접수 완료
                 </button>

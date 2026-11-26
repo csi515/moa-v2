@@ -78,7 +78,7 @@ export const DepartmentTreeView: React.FC<Props> = ({
           }}
           className={`mt-1 flex min-h-12 items-center gap-2 rounded-xl border px-3 text-sm transition-colors ${
             selectedId === node.id
-              ? 'border-indigo-500 bg-indigo-50'
+              ? 'border-indigo-500 bg-slate-50'
               : 'border-slate-200 bg-white hover:bg-slate-50'
           }`}
           style={{ marginLeft: depth * 12 }}
@@ -86,7 +86,7 @@ export const DepartmentTreeView: React.FC<Props> = ({
           <div className="min-h-12 flex-1 flex items-center justify-between gap-2">
             <button
               type="button"
-              className="text-left font-medium text-slate-900 hover:text-indigo-600 transition-colors flex items-center gap-2"
+              className="text-left font-medium text-slate-900 hover:text-slate-800 transition-colors flex items-center gap-2"
               onClick={() => onSelect(node.id)}
             >
               <span>{node.name}</span>

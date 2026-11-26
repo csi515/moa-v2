@@ -51,13 +51,13 @@ export interface CalendarWeekViewProps<T = any> {
 const DND_EVENT_MIME = 'application/x-moa-calendar-event';
 
 const COLOR_MAP: Record<string, { bg: string; text: string; border: string }> = {
-  indigo: { bg: 'bg-indigo-50/95', text: 'text-indigo-900', border: 'border-indigo-200' },
+  indigo: { bg: 'bg-slate-50/95', text: 'text-slate-900', border: 'border-slate-200' },
   teal: { bg: 'bg-teal-50/95', text: 'text-teal-900', border: 'border-teal-200' },
   rose: { bg: 'bg-rose-50/95', text: 'text-rose-900', border: 'border-rose-200' },
   amber: { bg: 'bg-amber-50/95', text: 'text-amber-900', border: 'border-amber-200' },
   emerald: { bg: 'bg-emerald-50/95', text: 'text-emerald-900', border: 'border-emerald-200' },
   slate: { bg: 'bg-slate-50/95', text: 'text-slate-900', border: 'border-slate-200' },
-  purple: { bg: 'bg-purple-50/95', text: 'text-purple-900', border: 'border-purple-200' },
+  purple: { bg: 'bg-slate-50/95', text: 'text-slate-900', border: 'border-slate-200' },
   blue: { bg: 'bg-blue-50/95', text: 'text-blue-900', border: 'border-blue-200' },
 };
 
@@ -338,7 +338,7 @@ export const CalendarWeekView: FC<CalendarWeekViewProps> = ({
                   <div
                     key={w.date}
                     className={`py-2 px-2 border-r border-slate-200 last:border-r-0 ${
-                      w.isToday ? 'bg-indigo-50/80 text-indigo-700 font-black' : ''
+                      w.isToday ? 'bg-slate-50/80 text-slate-700 font-black' : ''
                     }`}
                   >
                     <div className="text-[11px] text-slate-500 font-semibold">{w.dayOfWeek}</div>

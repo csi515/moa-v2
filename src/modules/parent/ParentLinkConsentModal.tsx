@@ -46,7 +46,7 @@ export const ParentLinkConsentModal: React.FC<ParentLinkConsentModalProps> = ({
           <button
             type="button"
             onClick={onConfirm}
-            className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl min-h-[44px] transition-colors"
+            className="flex-1 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl min-h-[44px] transition-colors"
           >
             동의하고 연결
           </button>

@@ -81,7 +81,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
                 <button
                   type="button"
                   onClick={onOpenGuardianLink}
-                  className="text-[10px] font-bold text-indigo-600 hover:underline min-h-[44px] px-2 flex items-center gap-1"
+                  className="text-[10px] font-bold text-slate-800 hover:underline min-h-[44px] px-2 flex items-center gap-1"
                 >
                   <Link2 className="w-3 h-3" />
                   {contactLabel}에게 MOA 연결 안내
@@ -92,7 +92,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
               <button
                 type="button"
                 onClick={() => onEdit(student)}
-                className="text-[10px] font-bold text-indigo-600 hover:underline min-h-[44px] px-2"
+                className="text-[10px] font-bold text-slate-800 hover:underline min-h-[44px] px-2"
               >
                 {contactLabel} 추가/수정
               </button>
@@ -111,7 +111,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
                   <div>
                     <div className="flex items-center gap-1.5">
                       <span className="font-bold text-slate-800">{g.parentName}</span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 font-bold">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-700 font-bold">
                         {formatGuardianRelationship(g.relationship)}
                       </span>
                       {g.isPrimary && (
@@ -127,7 +127,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
                   {showGuardianContact && g.parentPhone && (
                     <a
                       href={`tel:${g.parentPhone}`}
-                      className="font-mono text-xs font-bold text-indigo-600 hover:underline shrink-0"
+                      className="font-mono text-xs font-bold text-slate-800 hover:underline shrink-0"
                     >
                       {formatPhone(g.parentPhone)}
                     </a>
@@ -240,7 +240,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
         {showTuition && student.billingMode === 'session_pass' ? (
           <div className="flex justify-between py-1.5 border-b border-slate-200/60">
             <span className="text-slate-500">{passTerm}</span>
-            <span className="font-bold text-indigo-700 text-sm">
+            <span className="font-bold text-slate-700 text-sm">
               {(() => {
                 const passes = ScheduleService.getCustomerSessionPasses(student.id).filter(
                   (p) => p.status !== 'cancelled'
@@ -254,7 +254,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
           <>
             <div className="flex justify-between py-1.5 border-b border-slate-200/60">
               <span className="text-slate-500">월 정규 수강료</span>
-              <span className="font-bold text-indigo-700 text-sm">
+              <span className="font-bold text-slate-700 text-sm">
                 {formatCurrency(student.tuitionFee)}
               </span>
             </div>

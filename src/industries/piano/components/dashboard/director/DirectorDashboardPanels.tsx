@@ -38,7 +38,7 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
       <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-800 flex items-center justify-center">
               <Clock className="w-4 h-4" />
             </div>
             <h4 className="font-bold text-slate-800 text-base">
@@ -47,7 +47,7 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
           </div>
           <button
             onClick={() => setActiveTab('timetable')}
-            className="text-xs text-indigo-600 font-semibold hover:underline flex items-center gap-1"
+            className="text-xs text-slate-800 font-semibold hover:underline flex items-center gap-1"
           >
             주간 시간표 보기 <ArrowRight className="w-3.5 h-3.5" />
           </button>
@@ -70,7 +70,7 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
                   key={cls.id}
                   className={`p-4 border rounded-xl flex flex-col gap-2 transition-all ${
                     isCurrent
-                      ? 'border-indigo-600 bg-indigo-50/60 ring-1 ring-indigo-600 ring-offset-2'
+                      ? 'border-indigo-600 bg-slate-50/60 ring-1 ring-indigo-600 ring-offset-2'
                       : 'border-slate-100 bg-slate-50'
                   }`}
                 >
@@ -78,8 +78,8 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
                     <span
                       className={`text-[10px] px-2 py-0.5 rounded-md font-bold uppercase tracking-wider ${
                         isCurrent
-                          ? 'bg-indigo-600 text-white'
-                          : 'bg-indigo-100 text-indigo-700'
+                          ? 'bg-slate-900 text-white'
+                          : 'bg-slate-100 text-slate-700'
                       }`}
                     >
                       {cls.startTime} - {cls.endTime}
@@ -96,7 +96,7 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
                     <button
                       onClick={() => setActiveTab('attendance')}
                       className={`text-[11px] font-bold px-2 py-0.5 rounded-md transition-colors ${
-                        isCurrent ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-700 border border-slate-200 hover:bg-indigo-50'
+                        isCurrent ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'
                       }`}
                     >
                       출결
@@ -118,7 +118,7 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
             </h4>
             <button
               onClick={() => setActiveTab('unpaid')}
-              className="text-xs text-indigo-600 font-semibold hover:underline"
+              className="text-xs text-slate-800 font-semibold hover:underline"
             >
               전체보기
             </button>
@@ -162,7 +162,7 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
 
         <button
           onClick={() => setActiveTab('unpaid')}
-          className="w-full py-2.5 mt-4 text-xs font-semibold text-slate-500 bg-slate-50 rounded-lg hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200/80 transition-colors"
+          className="w-full py-2.5 mt-4 text-xs font-semibold text-slate-500 bg-slate-50 rounded-lg hover:text-slate-800 hover:bg-slate-50 border border-slate-200/80 transition-colors"
         >
           미납 통합 관리로 이동
         </button>
@@ -189,7 +189,7 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
           <div className="flex items-center gap-2">
             <button
               onClick={() => setActiveTab('textbooks')}
-              className="text-xs text-indigo-600 font-semibold hover:underline flex items-center gap-1"
+              className="text-xs text-slate-800 font-semibold hover:underline flex items-center gap-1"
             >
               교재 관리 전체 <ArrowRight className="w-3.5 h-3.5" />
             </button>
@@ -330,7 +330,7 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
 
         <button
           onClick={() => setActiveTab('textbooks')}
-          className="w-full py-2.5 mt-4 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors flex items-center justify-center gap-1 cursor-pointer"
+          className="w-full py-2.5 mt-4 text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors flex items-center justify-center gap-1 cursor-pointer"
         >
           <Package className="w-3.5 h-3.5" />
           교재 입고 및 재고 조정하기

@@ -204,7 +204,7 @@ export const ApprovalDraftModal: React.FC<Props> = ({
             <button
               type="submit"
               disabled={busy || isLocked}
-              className="h-12 flex-1 rounded-xl bg-indigo-600 text-sm font-medium text-white disabled:opacity-50"
+              className="h-12 flex-1 rounded-xl bg-slate-900 text-sm font-medium text-white disabled:opacity-50"
             >
               {mode === 'resubmit' ? '다시 상신' : '상신'}
             </button>

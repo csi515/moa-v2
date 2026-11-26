@@ -88,7 +88,7 @@ export const ParentInviteResultModal: React.FC<ParentInviteResultModalProps> = (
             <button
               type="button"
               onClick={() => void handleCopy('link', buildParentInviteUrl(primary.token))}
-              className="w-full py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px]"
+              className="w-full py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px]"
             >
               {copiedKey === 'link' ? (
                 <Check className="w-4 h-4" />
@@ -110,7 +110,7 @@ export const ParentInviteResultModal: React.FC<ParentInviteResultModalProps> = (
               >
                 <div className="min-w-0">
                   <p className="text-sm font-bold text-slate-800 truncate">{code.studentName}</p>
-                  <p className="text-base font-black font-mono tracking-wide text-indigo-700 break-all">
+                  <p className="text-base font-black font-mono tracking-wide text-slate-700 break-all">
                     {formatGuardianLinkCode(code.token)}
                   </p>
                 </div>

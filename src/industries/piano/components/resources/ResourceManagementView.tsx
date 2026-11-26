@@ -151,7 +151,7 @@ export const ResourceManagementView: React.FC = () => {
               setFormData(EMPTY_FORM);
               setIsModalOpen(true);
             }}
-            className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
+            className="px-4 py-2.5 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             교재/곡 추가
@@ -191,7 +191,7 @@ export const ResourceManagementView: React.FC = () => {
           className="flex-1 min-w-[200px]"
         />
         <span className="text-xs text-slate-500 font-medium shrink-0">
-          <strong className="text-indigo-600">{filtered.length}개</strong>
+          <strong className="text-slate-800">{filtered.length}개</strong>
         </span>
       </FilterBar>
 
@@ -205,7 +205,7 @@ export const ResourceManagementView: React.FC = () => {
           {filtered.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:border-indigo-200 transition-all flex flex-col justify-between space-y-4"
+              className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:border-slate-200 transition-all flex flex-col justify-between space-y-4"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -238,7 +238,7 @@ export const ResourceManagementView: React.FC = () => {
                 <span className="font-semibold text-slate-500">
                   난이도: {'⭐'.repeat(item.difficultyStars)}
                 </span>
-                <span className="text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded-md">
+                <span className="text-slate-800 font-bold bg-slate-50 px-2 py-0.5 rounded-md">
                   {item.type === 'textbook' ? '정규교재' : item.type === 'competition' ? '콩쿠르곡' : '명곡'}
                 </span>
               </div>
@@ -351,7 +351,7 @@ export const ResourceManagementView: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md"
+                  className="px-5 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl shadow-md"
                 >
                   등록
                 </button>

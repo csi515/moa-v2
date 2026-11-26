@@ -61,7 +61,7 @@ export const RndPortalPage: React.FC = () => {
         <p className="mt-3 text-center text-sm text-slate-600">
           연구소 포털은 권한이 부여된 담당자만 이용할 수 있습니다.
         </p>
-        <Link to="/workspace/intranet" className="mt-4 block text-center text-sm font-medium text-indigo-600">
+        <Link to="/workspace/intranet" className="mt-4 block text-center text-sm font-medium text-slate-800">
           사내 업무 허브로 이동
         </Link>
       </main>
@@ -72,7 +72,7 @@ export const RndPortalPage: React.FC = () => {
     return (
       <main className="mx-auto max-w-lg p-6 text-center">
         <p className="text-sm text-slate-600">연구소 포털 모듈이 활성화되지 않았습니다.</p>
-        <Link to="/workspace/intranet" className="mt-4 inline-block text-sm font-medium text-indigo-600">
+        <Link to="/workspace/intranet" className="mt-4 inline-block text-sm font-medium text-slate-800">
           사내 업무 허브로 이동
         </Link>
       </main>
@@ -85,7 +85,7 @@ export const RndPortalPage: React.FC = () => {
         <div className="mb-2">
           <Link
             to="/workspace/intranet"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-800 hover:text-indigo-800 transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             <span>사내 앱 런처로 돌아가기</span>
@@ -108,7 +108,7 @@ export const RndPortalPage: React.FC = () => {
               key={id}
               type="button"
               className={`min-h-12 shrink-0 rounded-xl px-4 text-sm font-medium ${
-                tab === id ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700'
+                tab === id ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700'
               }`}
               onClick={() => setTab(id)}
             >

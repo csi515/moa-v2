@@ -39,7 +39,7 @@ export const DirectorDashboardStats: React.FC<DirectorDashboardStatsProps> = ({
 }) => (
   <div>
     <h3 className="text-base font-bold text-slate-800 mb-3 flex items-center gap-2">
-      <TrendingUp className="w-4 h-4 text-indigo-600" />
+      <TrendingUp className="w-4 h-4 text-slate-800" />
       학원 핵심 운영 지표
     </h3>
 
@@ -48,8 +48,8 @@ export const DirectorDashboardStats: React.FC<DirectorDashboardStatsProps> = ({
         title="전체 학생"
         value={`${stats.totalStudents}명`}
         subtitle={`재원 ${stats.activeStudents} / 휴원 ${stats.leaveStudents}`}
-        icon={<Users className="w-5 h-5 text-indigo-600" />}
-        iconBg="bg-indigo-50"
+        icon={<Users className="w-5 h-5 text-slate-800" />}
+        iconBg="bg-slate-50"
         onClick={() => setActiveTab('students')}
       />
       <StatCard
@@ -91,8 +91,8 @@ export const DirectorDashboardStats: React.FC<DirectorDashboardStatsProps> = ({
         title="오늘 수업"
         value={`${stats.todayClassesCount}개`}
         subtitle="개설된 정규 클래스"
-        icon={<Clock className="w-5 h-5 text-purple-600" />}
-        iconBg="bg-purple-50"
+        icon={<Clock className="w-5 h-5 text-slate-800" />}
+        iconBg="bg-slate-50"
         onClick={() => setActiveTab('timetable')}
       />
       <StatCard

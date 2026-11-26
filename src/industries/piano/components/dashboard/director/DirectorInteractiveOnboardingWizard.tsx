@@ -422,7 +422,7 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
                     cursor: 'pointer',
                   }}
                 >
-                  <FileSpreadsheet className="w-4 h-4 text-indigo-600" />
+                  <FileSpreadsheet className="w-4 h-4 text-slate-800" />
                   <span>기존 엑셀 복사 붙여넣기(Ctrl+V)</span>
                 </button>
               </div>

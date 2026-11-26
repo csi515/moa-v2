@@ -82,9 +82,9 @@ export function WeekStripBar({
               aria-label={`${day.weekdayLabel}요일 ${day.dayOfMonth}일`}
               className={`flex min-h-[58px] flex-col items-center justify-center rounded-xl px-1 py-2 transition-all ${
                 selected
-                  ? 'bg-indigo-600 text-white shadow-sm ring-2 ring-indigo-600/30'
+                  ? 'bg-slate-900 text-white shadow-sm ring-2 ring-indigo-600/30'
                   : isToday
-                    ? 'border border-indigo-200 bg-indigo-50/80 text-indigo-900'
+                    ? 'border border-slate-200 bg-slate-50/80 text-slate-900'
                     : 'border border-slate-100 bg-slate-50/60 text-slate-700 hover:bg-slate-100'
               }`}
             >

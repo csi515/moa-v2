@@ -73,7 +73,7 @@ export const ApprovalRequestTable: React.FC<Props> = ({
                 <td className="px-4 py-3.5 font-medium text-slate-900">
                   <div>{req.title}</div>
                   {isResearchGateApprovalEntity(req.entity_type) ? (
-                    <span className="mt-1 inline-block rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-medium text-indigo-700">
+                    <span className="mt-1 inline-block rounded bg-slate-50 px-1.5 py-0.5 text-[10px] font-medium text-slate-700">
                       연구 게이트
                     </span>
                   ) : null}
@@ -129,7 +129,7 @@ export const ApprovalRequestTable: React.FC<Props> = ({
                       <button
                         type="button"
                         onClick={() => onResubmit(req)}
-                        className="rounded bg-indigo-50 px-2 py-1 text-xs font-semibold text-indigo-700"
+                        className="rounded bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-700"
                       >
                         수정·재상신
                       </button>

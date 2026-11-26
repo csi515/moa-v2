@@ -21,7 +21,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   value,
   subtitle,
   icon,
-  iconBg = 'bg-indigo-50 text-indigo-600',
+  iconBg = 'bg-slate-50 text-slate-800',
   trend,
   onClick,
   highlight = false,

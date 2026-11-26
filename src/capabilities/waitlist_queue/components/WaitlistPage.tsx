@@ -134,7 +134,7 @@ export const WaitlistPage: React.FC = () => {
         </div>
         <button
           onClick={handleOpenModal}
-          className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition"
+          className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 transition"
         >
           + 대기자 수동 등록
         </button>
@@ -283,7 +283,7 @@ export const WaitlistPage: React.FC = () => {
                   placeholder="예: slot-studio-20261019-10"
                   value={slotId}
                   onChange={(e) => setSlotId(e.target.value)}
-                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-slate-900 focus:outline-none"
                 />
               </div>
 
@@ -297,7 +297,7 @@ export const WaitlistPage: React.FC = () => {
                   placeholder="고객 UUID 또는 회원 ID"
                   value={customerId}
                   onChange={(e) => setCustomerId(e.target.value)}
-                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-slate-900 focus:outline-none"
                 />
               </div>
 
@@ -309,7 +309,7 @@ export const WaitlistPage: React.FC = () => {
                   required
                   value={queueOrder}
                   onChange={(e) => setQueueOrder(Number(e.target.value))}
-                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-slate-900 focus:outline-none"
                 />
               </div>
 
@@ -323,7 +323,7 @@ export const WaitlistPage: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700"
+                  className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800"
                 >
                   등록
                 </button>

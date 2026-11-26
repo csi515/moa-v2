@@ -105,7 +105,7 @@ export const DesktopSopRiskMatrixView: React.FC = () => {
             ))}
           </select>
           {canCreate ? (
-          <button type="button" className="inline-flex h-11 items-center gap-1 rounded-xl border border-dashed border-indigo-300 bg-indigo-50 px-3 text-xs font-bold text-indigo-700" onClick={() => setShowNew(true)}>
+          <button type="button" className="inline-flex h-11 items-center gap-1 rounded-xl border border-dashed border-indigo-300 bg-slate-50 px-3 text-xs font-bold text-slate-700" onClick={() => setShowNew(true)}>
             <Plus className="h-3.5 w-3.5" />
             신규 공정 표준 등록
           </button>
@@ -141,7 +141,7 @@ export const DesktopSopRiskMatrixView: React.FC = () => {
             현장 인쇄/PDF
           </button>
           {doc && (doc.status === 'APPROVED' || doc.status === 'LOCKED') && live ? (
-            <button type="button" className="inline-flex h-11 items-center gap-1 rounded-xl bg-indigo-600 px-4 text-xs font-bold text-white" onClick={() => setShowRevise(true)}>
+            <button type="button" className="inline-flex h-11 items-center gap-1 rounded-xl bg-slate-900 px-4 text-xs font-bold text-white" onClick={() => setShowRevise(true)}>
               <Send className="h-3.5 w-3.5" />
               개정 기안
             </button>
@@ -169,7 +169,7 @@ export const DesktopSopRiskMatrixView: React.FC = () => {
       {doc ? (
         <>
           <section className="rounded-3xl border border-slate-200 bg-white p-6">
-            <p className="text-xs font-bold text-indigo-700">
+            <p className="text-xs font-bold text-slate-700">
               {workspace.body.deptCode} {workspace.body.deptName} · {doc.document_no}_{formatRevisionNo(doc.current_version - 1)}
             </p>
             <h1 className="mt-2 text-2xl font-black text-slate-900 sm:text-3xl">{doc.process_name}</h1>

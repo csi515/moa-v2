@@ -115,7 +115,7 @@ export const ServiceManagementView: React.FC = () => {
             <div key={o.id} className="bg-white rounded-2xl border border-slate-200 p-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-100 text-purple-700">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700">
                     {categoryLabel[o.category]}
                   </span>
                   <p className="font-bold text-slate-900 mt-2">{o.name}</p>

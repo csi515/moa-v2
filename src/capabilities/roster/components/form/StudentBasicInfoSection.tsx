@@ -75,7 +75,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
               type="date"
               value={formData.joinDate}
               onChange={(e) => onChange({ joinDate: e.target.value })}
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[44px]"
             />
           </div>
           <div>
@@ -90,7 +90,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
             <select
               value={formData.gender}
               onChange={(e) => onChange({ gender: e.target.value as StudentFormData['gender'] })}
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[44px]"
             >
               <option value="">선택 안 함</option>
               <option value="M">남</option>
@@ -106,7 +106,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
                   placeholder="예: 서울초등학교"
                   value={formData.school}
                   onChange={(e) => onChange({ school: e.target.value })}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[44px]"
                 />
               </div>
               <div>
@@ -116,7 +116,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
                   placeholder="예: 3학년"
                   value={formData.grade}
                   onChange={(e) => onChange({ grade: e.target.value })}
-                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[44px]"
                 />
               </div>
             </>
@@ -132,7 +132,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
               onChange={(e) => onChange({ phone: formatSmartPhoneInput(e.target.value) })}
               placeholder="010-0000-0000"
               autoComplete="tel"
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[44px]"
             />
           </div>
         </div>
@@ -143,7 +143,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
   // 3. 전체 렌더링 ('all' - 레거시 호환 및 단일 폼 모드)
   return (
     <section>
-      <h4 className="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+      <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
         <User className="w-3.5 h-3.5" /> {customerLabel} 기본정보
       </h4>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -172,7 +172,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
             type="date"
             value={formData.joinDate}
             onChange={(e) => onChange({ joinDate: e.target.value })}
-            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[44px]"
           />
         </div>
         <div>
@@ -187,7 +187,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
           <select
             value={formData.gender}
             onChange={(e) => onChange({ gender: e.target.value as StudentFormData['gender'] })}
-            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[44px]"
           >
             <option value="">선택 안 함</option>
             <option value="M">남</option>
@@ -203,7 +203,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
                 placeholder="예: 서울초등학교"
                 value={formData.school}
                 onChange={(e) => onChange({ school: e.target.value })}
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[44px]"
               />
             </div>
             <div>
@@ -213,7 +213,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
                 placeholder="예: 3학년"
                 value={formData.grade}
                 onChange={(e) => onChange({ grade: e.target.value })}
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[44px]"
               />
             </div>
           </>
@@ -229,7 +229,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
             onChange={(e) => onChange({ phone: formatSmartPhoneInput(e.target.value) })}
             placeholder="010-0000-0000"
             autoComplete="tel"
-            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[44px]"
           />
         </div>
       </div>

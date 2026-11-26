@@ -83,7 +83,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
               onClick={() => setViewMode('a4_poster')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 viewMode === 'a4_poster'
-                  ? 'bg-white text-indigo-700 shadow-xs'
+                  ? 'bg-white text-slate-700 shadow-xs'
                   : 'text-slate-500 hover:text-slate-900'
               }`}
             >
@@ -94,7 +94,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
               onClick={() => setViewMode('mobile_card')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 viewMode === 'mobile_card'
-                  ? 'bg-white text-indigo-700 shadow-xs'
+                  ? 'bg-white text-slate-700 shadow-xs'
                   : 'text-slate-500 hover:text-slate-900'
               }`}
             >
@@ -114,7 +114,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
           <button
             type="button"
             onClick={handlePrint}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-colors"
+            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-colors"
           >
             <Printer className="w-4 h-4" />
             <span>A4 포스터 인쇄하기</span>
@@ -154,14 +154,14 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
           {/* 상단 브랜드 & 타이틀 바 */}
           <div className="flex items-center justify-between border-b-2 border-indigo-600 pb-4 mb-6">
             <div>
-              <span className="text-[11px] font-extrabold tracking-widest text-indigo-700 uppercase">
+              <span className="text-[11px] font-extrabold tracking-widest text-slate-700 uppercase">
                 {leafletData.footer.centerName}
               </span>
               <h1 className="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">
                 {leafletData.header.headlineTitle}
               </h1>
             </div>
-            <div className="flex items-center gap-1 text-xs font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200">
+            <div className="flex items-center gap-1 text-xs font-semibold text-slate-700 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200">
               <Sparkles className="w-3.5 h-3.5" />
               <span>전문 강사진 특강</span>
             </div>
@@ -213,7 +213,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
             {/* 학력 */}
             <div>
               <div className="font-bold text-slate-800 flex items-center gap-1.5 mb-2 border-b border-slate-200 pb-1">
-                <GraduationCap className="w-4 h-4 text-indigo-600" />
+                <GraduationCap className="w-4 h-4 text-slate-800" />
                 <span>학력 사항</span>
               </div>
               <div className="text-slate-600 leading-snug">
@@ -224,7 +224,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
             {/* 주요 경력 */}
             <div>
               <div className="font-bold text-slate-800 flex items-center gap-1.5 mb-2 border-b border-slate-200 pb-1">
-                <Briefcase className="w-4 h-4 text-indigo-600" />
+                <Briefcase className="w-4 h-4 text-slate-800" />
                 <span>주요 경력</span>
               </div>
               <ul className="space-y-1 text-slate-600">
@@ -237,7 +237,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
             {/* 자격 및 면허 */}
             <div>
               <div className="font-bold text-slate-800 flex items-center gap-1.5 mb-2 border-b border-slate-200 pb-1">
-                <Award className="w-4 h-4 text-indigo-600" />
+                <Award className="w-4 h-4 text-slate-800" />
                 <span>자격 및 수상</span>
               </div>
               <ul className="space-y-1 text-slate-600">
@@ -251,7 +251,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
           {/* 개설 강좌 및 시간표 섹션 */}
           <div className="mb-6">
             <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5 mb-3">
-              <Calendar className="w-4 h-4 text-indigo-600" />
+              <Calendar className="w-4 h-4 text-slate-800" />
               <span>개설 강좌 & 수강 일정</span>
             </h3>
 
@@ -259,12 +259,12 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
               {leafletData.courses.map((course, idx) => (
                 <div
                   key={idx}
-                  className="p-3.5 bg-white rounded-xl border border-indigo-100 shadow-xs flex items-center justify-between"
+                  className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs flex items-center justify-between"
                 >
                   <div>
                     <div className="text-sm font-bold text-slate-900 flex items-center gap-2">
                       <span>{course.courseName}</span>
-                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200">
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-50 text-slate-700 font-semibold border border-slate-200">
                         {course.targetAudience}
                       </span>
                     </div>
@@ -277,7 +277,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
                   </div>
 
                   <div className="text-right shrink-0 pl-4 border-l border-slate-100">
-                    <span className="text-xs font-bold text-indigo-600 block">수강 신청 접수 중</span>
+                    <span className="text-xs font-bold text-slate-800 block">수강 신청 접수 중</span>
                     <span className="text-[11px] text-slate-400">선착순 마감</span>
                   </div>
                 </div>
@@ -344,7 +344,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
             <div className="absolute bottom-4 left-4 right-4 text-white">
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-indigo-600/90 text-white mb-1.5 inline-block">
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-slate-900/90 text-white mb-1.5 inline-block">
                 {leafletData.footer.centerName}
               </span>
               <h2 className="text-xl font-black">{leafletData.header.instructorName} 강사</h2>
@@ -360,7 +360,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
               {leafletData.header.specialtiesBadge.map((spec, i) => (
                 <span
                   key={i}
-                  className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-xs font-semibold rounded-md"
+                  className="px-2 py-0.5 bg-slate-50 text-slate-700 text-xs font-semibold rounded-md"
                 >
                   #{spec}
                 </span>
@@ -387,10 +387,10 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
             <div className="space-y-2 pt-2 border-t border-slate-100">
               <div className="font-bold text-slate-800 text-xs">수강 신청 가능 강좌</div>
               {leafletData.courses.map((course, idx) => (
-                <div key={idx} className="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100">
+                <div key={idx} className="p-3 bg-slate-50/50 rounded-xl border border-slate-200">
                   <div className="text-xs font-bold text-slate-900">{course.courseName}</div>
                   <div className="text-[11px] text-slate-500 mt-1">{course.scheduleSummary}</div>
-                  <div className="text-[11px] font-semibold text-indigo-700 mt-1">
+                  <div className="text-[11px] font-semibold text-slate-700 mt-1">
                     정원 및 대상: {course.targetAudience}
                   </div>
                 </div>
@@ -402,7 +402,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
               <button
                 type="button"
                 onClick={() => showToast(`[수강 신청 안내] ${leafletData.footer.contactPhone}으로 전화 연결하거나 안내데스크를 방문해주세요.`, 'info')}
-                className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-md transition-colors flex items-center justify-center gap-1.5"
+                className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs shadow-md transition-colors flex items-center justify-center gap-1.5"
               >
                 <Phone className="w-4 h-4" />
                 <span>수강 신청 및 상담 문의</span>

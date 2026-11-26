@@ -166,7 +166,7 @@ export const TextbookSalesTab: React.FC<TextbookSalesTabProps> = ({
               placeholder={`${customerWord}명, 학부모명, 교재명 검색...`}
               value={salesSearch}
               onChange={(e) => setSalesSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 min-h-[44px] text-xs rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 bg-white text-slate-900 font-medium"
+              className="w-full pl-9 pr-4 py-2 min-h-[44px] text-xs rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-slate-900/20 bg-white text-slate-900 font-medium"
             />
           </div>
 
@@ -185,7 +185,7 @@ export const TextbookSalesTab: React.FC<TextbookSalesTabProps> = ({
                 onClick={() => setSalesStatusFilter(st)}
                 className={`px-3 py-2 min-h-[44px] sm:min-h-[38px] rounded-xl border font-bold transition-colors whitespace-nowrap cursor-pointer ${
                   salesStatusFilter === st
-                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                    ? 'bg-slate-900 text-white border-indigo-600 shadow-xs'
                     : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -289,7 +289,7 @@ export const TextbookSalesTab: React.FC<TextbookSalesTabProps> = ({
                               <button
                                 type="button"
                                 onClick={() => onOpenReceiptModal(sale)}
-                                className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+                                className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
                                 title="영수증 보기"
                               >
                                 <FileText className="w-4 h-4" />

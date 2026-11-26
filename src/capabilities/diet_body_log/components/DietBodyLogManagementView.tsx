@@ -266,10 +266,10 @@ export function DietBodyLogManagementView() {
             </div>
             <div className="p-3 bg-slate-50 rounded-xl">
               <span className="text-[11px] font-bold text-slate-400">골격근량</span>
-              <p className="text-xl font-black text-indigo-600 mt-0.5">
+              <p className="text-xl font-black text-slate-800 mt-0.5">
                 {inbodyTrend.latestRecord.skeletalMuscleMassKg} <span className="text-xs font-medium">kg</span>
               </p>
-              <span className="text-[10px] font-bold text-indigo-600">
+              <span className="text-[10px] font-bold text-slate-800">
                 직전 대비 +{inbodyTrend.muscleDeltaKg}kg
               </span>
             </div>
@@ -343,7 +343,7 @@ export function DietBodyLogManagementView() {
                   <tr key={rec.id} className="hover:bg-slate-50/60 transition-all">
                     <td className="py-3.5 px-4 font-bold text-slate-800">{rec.measuredDate}</td>
                     <td className="py-3.5 px-4 font-semibold text-slate-900">{rec.weightKg} kg</td>
-                    <td className="py-3.5 px-4 font-bold text-indigo-600">{rec.skeletalMuscleMassKg} kg</td>
+                    <td className="py-3.5 px-4 font-bold text-slate-800">{rec.skeletalMuscleMassKg} kg</td>
                     <td className="py-3.5 px-4 font-bold text-rose-500">{rec.bodyFatPercent} %</td>
                     <td className="py-3.5 px-4 text-xs text-slate-500">{rec.note || '-'}</td>
                   </tr>
@@ -380,7 +380,7 @@ export function DietBodyLogManagementView() {
                     </span>
                     <h3 className="font-bold text-slate-900 text-base">{ex.exerciseName}</h3>
                   </div>
-                  <span className="text-xs font-bold text-indigo-600">
+                  <span className="text-xs font-bold text-slate-800">
                     종목 볼륨: {ex.totalVolumeKg.toLocaleString()} kg
                   </span>
                 </div>
@@ -514,7 +514,7 @@ export function DietBodyLogManagementView() {
                     step="0.1"
                     value={newInbodyForm.skeletalMuscleMassKg}
                     onChange={(e) => setNewInbodyForm({ ...newInbodyForm, skeletalMuscleMassKg: Number(e.target.value) })}
-                    className="w-full mt-1 p-2 rounded-xl border border-slate-200 text-sm font-bold text-indigo-600"
+                    className="w-full mt-1 p-2 rounded-xl border border-slate-200 text-sm font-bold text-slate-800"
                   />
                 </div>
                 <div>

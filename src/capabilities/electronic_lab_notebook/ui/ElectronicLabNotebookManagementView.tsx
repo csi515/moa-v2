@@ -189,7 +189,7 @@ export const ElectronicLabNotebookManagementView: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <BookOpen className="h-6 w-6 text-indigo-600" />
+            <BookOpen className="h-6 w-6 text-slate-800" />
             <h1 className="text-xl font-bold text-slate-900">전자 연구노트 (Electronic Lab Notebook)</h1>
           </div>
           <p className="mt-1 text-xs sm:text-sm text-slate-500">
@@ -200,7 +200,7 @@ export const ElectronicLabNotebookManagementView: React.FC = () => {
           <button
             type="button"
             onClick={() => setCreateOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-indigo-700 shadow-sm"
+            className="flex items-center gap-1.5 rounded-lg bg-slate-900 px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-800 shadow-sm"
           >
             <Plus className="h-4 w-4" /> 연구노트 작성
           </button>
@@ -232,12 +232,12 @@ export const ElectronicLabNotebookManagementView: React.FC = () => {
                   onClick={() => setSelectedNote(n)}
                   className={`w-full text-left rounded-xl p-3 border transition-all ${
                     isSelected
-                      ? 'border-indigo-500 bg-indigo-50/40 shadow-sm'
+                      ? 'border-indigo-500 bg-slate-50/40 shadow-sm'
                       : 'border-slate-200 bg-white hover:border-slate-300'
                   }`}
                 >
                   <div className="flex items-center justify-between text-xs text-slate-500">
-                    <span className="font-mono font-bold text-indigo-700">{n.experimentNumber}</span>
+                    <span className="font-mono font-bold text-slate-700">{n.experimentNumber}</span>
                     <span
                       className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
                         n.status === 'witnessed'
@@ -269,7 +269,7 @@ export const ElectronicLabNotebookManagementView: React.FC = () => {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-4">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded">
+                    <span className="font-mono text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded">
                       {selectedNote.experimentNumber}
                     </span>
                     <span className="text-xs text-slate-500">{selectedNote.projectName}</span>
@@ -328,7 +328,7 @@ export const ElectronicLabNotebookManagementView: React.FC = () => {
                 <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 space-y-2">
                   <div className="flex items-center justify-between text-xs font-bold text-slate-700">
                     <span className="flex items-center gap-1.5">
-                      <PenTool className="h-4 w-4 text-indigo-600" /> 작성자 전자서명
+                      <PenTool className="h-4 w-4 text-slate-800" /> 작성자 전자서명
                     </span>
                     {selectedNote.authorSignedAt ? (
                       <span className="text-emerald-700 flex items-center gap-1 text-[11px]">
@@ -347,7 +347,7 @@ export const ElectronicLabNotebookManagementView: React.FC = () => {
                     <button
                       type="button"
                       onClick={handleAuthorSign}
-                      className="w-full rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700 mt-2"
+                      className="w-full rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800 mt-2"
                     >
                       작성자 전자서명 실행
                     </button>
@@ -358,7 +358,7 @@ export const ElectronicLabNotebookManagementView: React.FC = () => {
                 <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 space-y-2">
                   <div className="flex items-center justify-between text-xs font-bold text-slate-700">
                     <span className="flex items-center gap-1.5">
-                      <UserCheck className="h-4 w-4 text-purple-600" /> 목격자 (Witness) 검증
+                      <UserCheck className="h-4 w-4 text-slate-800" /> 목격자 (Witness) 검증
                     </span>
                     {selectedNote.witnessSignedAt ? (
                       <span className="text-emerald-700 flex items-center gap-1 text-[11px]">
@@ -387,7 +387,7 @@ export const ElectronicLabNotebookManagementView: React.FC = () => {
                       type="button"
                       disabled={selectedNote.status !== 'submitted'}
                       onClick={() => setWitnessOpen(true)}
-                      className="w-full rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-purple-700 disabled:opacity-40 mt-2"
+                      className="w-full rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800 disabled:opacity-40 mt-2"
                     >
                       목격자 검증 서명 실행
                     </button>
@@ -465,7 +465,7 @@ export const ElectronicLabNotebookManagementView: React.FC = () => {
               <button
                 type="button"
                 onClick={handleCreateNote}
-                className="rounded-lg bg-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700"
+                className="rounded-lg bg-slate-900 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
               >
                 생성
               </button>
@@ -479,7 +479,7 @@ export const ElectronicLabNotebookManagementView: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-md rounded-2xl bg-white p-5 shadow-xl space-y-3">
             <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <UserCheck className="h-5 w-5 text-purple-600" /> 제3자 동료 목격자(Witness) 서명
+              <UserCheck className="h-5 w-5 text-slate-800" /> 제3자 동료 목격자(Witness) 서명
             </h2>
             <p className="text-xs text-slate-500">
               연구윤리 규정에 따라 작성자 본인은 목격자가 될 수 없습니다. 동료 연구원 또는 지도교수로서 실험 과정과 원본 데이터를 검증하고 전자서명합니다.
@@ -511,7 +511,7 @@ export const ElectronicLabNotebookManagementView: React.FC = () => {
               <button
                 type="button"
                 onClick={handleWitnessSign}
-                className="rounded-lg bg-purple-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-purple-700"
+                className="rounded-lg bg-slate-900 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
               >
                 목격 서명 완료
               </button>

@@ -434,7 +434,7 @@ export function ShuttleRouteScheduleManagerView({
                                 className={`text-[10px] font-semibold px-1.5 py-0.2 rounded-sm ${
                                   staff.rideType === 'regular'
                                     ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
-                                    : 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300'
+                                    : 'bg-slate-100 text-slate-700 dark:bg-purple-900/40 dark:text-purple-300'
                                 }`}
                               >
                                 {staff.rideType === 'regular' ? '매일정기' : '1회탑승'}

@@ -133,7 +133,7 @@ export const PurchaseOrderDocumentView: React.FC<PurchaseOrderDocumentViewProps>
               </div>
               <div>
                 <span className="text-slate-400">납기희망일:</span>{' '}
-                <strong className="text-indigo-600">{po.deliveryDueDate}</strong>
+                <strong className="text-slate-800">{po.deliveryDueDate}</strong>
               </div>
             </div>
           </div>

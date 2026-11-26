@@ -28,7 +28,7 @@ import type { GateApprovalAssignee } from '../domain/researchProjectApproval';
 import {
   listApprovalOrgMembers,
   type ApprovalMemberOption,
-} from '@/capabilities/approval_workflow/services/approvalWorkflowService';
+} from '@/capabilities/approval_workflow';
 import { showToast } from '@/shared/feedback/uiFeedback';
 
 function formatKrw(value: number): string {
@@ -41,9 +41,9 @@ function formatKrw(value: number): string {
 
 const TYPE_BADGE_STYLES: Record<DeliverableType, string> = {
   paper: 'bg-blue-50 text-blue-700 border-blue-200',
-  conference: 'bg-purple-50 text-purple-700 border-purple-200',
+  conference: 'bg-slate-50 text-slate-700 border-slate-200',
   thesis: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  report: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+  report: 'bg-slate-50 text-slate-700 border-slate-200',
   patent: 'bg-amber-50 text-amber-700 border-amber-200',
   code: 'bg-cyan-50 text-cyan-700 border-cyan-200',
   other: 'bg-slate-50 text-slate-700 border-slate-200',
@@ -223,7 +223,7 @@ export const ResearchProjectDetailPanel: React.FC<ResearchProjectDetailPanelProp
             <button
               type="button"
               onClick={() => setShowAddDeliverable((prev) => !prev)}
-              className="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 font-medium"
+              className="flex items-center gap-1 text-xs text-slate-800 hover:text-indigo-800 font-medium"
             >
               <Plus className="h-3.5 w-3.5" /> 산출물 추가
             </button>
@@ -231,8 +231,8 @@ export const ResearchProjectDetailPanel: React.FC<ResearchProjectDetailPanelProp
         </div>
 
         {showAddDeliverable && (
-          <div className="rounded-lg border border-indigo-100 bg-indigo-50/50 p-3 space-y-2">
-            <div className="text-xs font-semibold text-indigo-900">신규 산출물 등록</div>
+          <div className="rounded-lg border border-slate-200 bg-slate-50/50 p-3 space-y-2">
+            <div className="text-xs font-semibold text-slate-900">신규 산출물 등록</div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <select
                 value={newType}
@@ -274,7 +274,7 @@ export const ResearchProjectDetailPanel: React.FC<ResearchProjectDetailPanelProp
                 <button
                   type="button"
                   onClick={handleCreateDeliverable}
-                  className="rounded bg-indigo-600 px-3 py-1 text-xs font-medium text-white hover:bg-indigo-700"
+                  className="rounded bg-slate-900 px-3 py-1 text-xs font-medium text-white hover:bg-slate-800"
                 >
                   등록
                 </button>
@@ -309,7 +309,7 @@ export const ResearchProjectDetailPanel: React.FC<ResearchProjectDetailPanelProp
                       href={d.evidenceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-slate-400 hover:text-indigo-600 shrink-0"
+                      className="text-slate-400 hover:text-slate-800 shrink-0"
                     >
                       <ExternalLink className="h-3.5 w-3.5" />
                     </a>
@@ -443,7 +443,7 @@ export const ResearchProjectDetailPanel: React.FC<ResearchProjectDetailPanelProp
                   type="button"
                   disabled={submittingApproval}
                   onClick={() => void handleSubmitApproval()}
-                  className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+                  className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800 disabled:opacity-50"
                 >
                   {submittingApproval ? '상신 중...' : '전자결재 상신'}
                 </button>

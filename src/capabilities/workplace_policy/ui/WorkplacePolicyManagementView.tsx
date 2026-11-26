@@ -349,7 +349,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2.5 bg-indigo-50 border border-indigo-100 rounded-2xl text-indigo-600">
+            <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800">
               <BookOpen className="w-6 h-6" />
             </div>
             <div>
@@ -365,7 +365,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveModal('create')}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-sm transition-all"
+            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-sm transition-all"
           >
             <Plus className="w-4 h-4" />
             <span>새 사규 등록</span>
@@ -434,7 +434,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                 selectedCategory === cat.id
-                  ? 'bg-indigo-600 text-white shadow-xs'
+                  ? 'bg-slate-900 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -450,7 +450,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
             placeholder="사규 명칭 또는 본문 검색..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
           />
         </div>
       </div>
@@ -491,7 +491,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
                     type="button"
                     title="사규 개정 (새 버전 등록 시 기존 직원 재서약 요구)"
                     onClick={() => handleRevisePolicy(pol)}
-                    className="text-xs text-slate-500 hover:text-indigo-600 font-semibold flex items-center gap-1 p-1"
+                    className="text-xs text-slate-500 hover:text-slate-800 font-semibold flex items-center gap-1 p-1"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     <span>개정(v{pol.version + 1})</span>
@@ -518,7 +518,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
                       setSelectedPolicy(pol);
                       setActiveModal('sign');
                     }}
-                    className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg transition-all flex items-center gap-1"
+                    className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold rounded-lg transition-all flex items-center gap-1"
                   >
                     <FileSignature className="w-3.5 h-3.5" />
                     <span>전자 서약하기</span>
@@ -554,7 +554,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
                   placeholder="예: 고객 서비스 복무 수칙"
                   value={formTitle}
                   onChange={(e) => setFormTitle(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                 />
               </div>
 
@@ -563,7 +563,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
                 <select
                   value={formCategory}
                   onChange={(e) => setFormCategory(e.target.value as PolicyCategory)}
-                  className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold"
+                  className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 font-semibold"
                 >
                   <option value="service_code">복무 및 서비스 수칙</option>
                   <option value="safety_rule">매장 안전 및 비상 대피</option>
@@ -581,7 +581,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
                   placeholder="조항별 구체적인 수칙 내용을 입력하세요..."
                   value={formContent}
                   onChange={(e) => setFormContent(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                 />
               </div>
 
@@ -591,7 +591,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
                   id="mandatoryCheck"
                   checked={formIsMandatory}
                   onChange={(e) => setFormIsMandatory(e.target.checked)}
-                  className="w-4 h-4 rounded text-indigo-600 border-slate-300"
+                  className="w-4 h-4 rounded text-slate-800 border-slate-300"
                 />
                 <label htmlFor="mandatoryCheck" className="text-xs font-semibold text-slate-700 cursor-pointer">
                   직원 필수 서약 항목으로 지정 (미서약 시 알림 및 시스템 제한)
@@ -608,7 +608,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-xs"
+                  className="px-4 py-2 text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow-xs"
                 >
                   등록하기
                 </button>
@@ -624,7 +624,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
           <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl animate-in fade-in">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
-                <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-slate-800 uppercase tracking-wider">
                   모바일 전자 서약
                 </span>
                 <h3 className="text-base font-bold text-slate-900">{selectedPolicy.title} (v{selectedPolicy.version})</h3>
@@ -694,7 +694,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
                 type="button"
                 disabled={!hasSignature}
                 onClick={handleSignSubmit}
-                className="px-5 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-50 text-white rounded-xl shadow-xs transition-all"
+                className="px-5 py-2 text-xs font-bold bg-slate-900 hover:bg-slate-800 active:bg-slate-950 disabled:opacity-50 text-white rounded-xl shadow-xs transition-all"
               >
                 서약 완료
               </button>

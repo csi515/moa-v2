@@ -145,7 +145,7 @@ export const TextbookPaymentsTab: React.FC<TextbookPaymentsTabProps> = ({
                         {relatedSale && (
                           <button
                             onClick={() => onOpenReceiptModal(relatedSale, p)}
-                            className="px-2 py-0.5 text-[11px] rounded-md bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
+                            className="px-2 py-0.5 text-[11px] rounded-md bg-slate-50 text-slate-700 hover:bg-slate-100 transition-colors"
                           >
                             인쇄
                           </button>
@@ -188,7 +188,7 @@ export const TextbookPaymentsTab: React.FC<TextbookPaymentsTabProps> = ({
                   {relatedSale && (
                     <button
                       onClick={() => onOpenReceiptModal(relatedSale, p)}
-                      className="w-full py-2.5 min-h-[44px] text-xs font-bold rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
+                      className="w-full py-2.5 min-h-[44px] text-xs font-bold rounded-xl bg-slate-50 text-slate-700 hover:bg-slate-100 transition-colors"
                     >
                       영수증 인쇄
                     </button>

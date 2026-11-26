@@ -89,7 +89,7 @@ export const ParentRequestEnrollmentModal: React.FC<ParentRequestEnrollmentModal
             onClick={() => setMode('code')}
             className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-colors min-h-[44px] ${
               mode === 'code'
-                ? 'bg-indigo-600 text-white'
+                ? 'bg-slate-900 text-white'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
@@ -100,7 +100,7 @@ export const ParentRequestEnrollmentModal: React.FC<ParentRequestEnrollmentModal
             onClick={() => setMode('search')}
             className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-colors min-h-[44px] ${
               mode === 'search'
-                ? 'bg-indigo-600 text-white'
+                ? 'bg-slate-900 text-white'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
@@ -125,7 +125,7 @@ export const ParentRequestEnrollmentModal: React.FC<ParentRequestEnrollmentModal
                 type="button"
                 onClick={() => void handleSearch()}
                 disabled={loading}
-                className="px-4 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl flex items-center gap-2 min-h-[44px] disabled:opacity-50"
+                className="px-4 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl flex items-center gap-2 min-h-[44px] disabled:opacity-50"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
                 검색
@@ -143,7 +143,7 @@ export const ParentRequestEnrollmentModal: React.FC<ParentRequestEnrollmentModal
                     key={org.id}
                     type="button"
                     onClick={() => onSelectOrg(org)}
-                    className="w-full text-left p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/40 transition-colors"
+                    className="w-full text-left p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-slate-50/40 transition-colors"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
@@ -198,16 +198,16 @@ export const ParentRequestEnrollmentModal: React.FC<ParentRequestEnrollmentModal
                 type="button"
                 onClick={() => void handleFindByCode()}
                 disabled={loading}
-                className="px-4 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl flex items-center gap-2 min-h-[44px] disabled:opacity-50"
+                className="px-4 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl flex items-center gap-2 min-h-[44px] disabled:opacity-50"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
                 찾기
               </button>
             </div>
 
-            <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-xl">
-              <p className="text-xs font-bold text-indigo-900 mb-1">💡 공개 코드란?</p>
-              <p className="text-xs text-indigo-700 leading-relaxed">
+            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+              <p className="text-xs font-bold text-slate-900 mb-1">💡 공개 코드란?</p>
+              <p className="text-xs text-slate-700 leading-relaxed">
                 발급한 고유 코드입니다. 해당 곳에 문의하여 코드를 받으세요.
               </p>
             </div>

@@ -78,7 +78,7 @@ export const LeaveManagementDashboardView: React.FC = () => {
       {/* 최상단 타이틀 & 탭 네비게이션 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-semibold mb-1.5 dark:bg-indigo-950 dark:text-indigo-300">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-50 text-slate-700 rounded-full text-xs font-semibold mb-1.5 dark:bg-indigo-950 dark:text-indigo-300">
             <Clock className="w-3.5 h-3.5" />
             <span>유연근무 맞춤형 시간(Hour) 단위 휴가 관리</span>
           </div>
@@ -98,7 +98,7 @@ export const LeaveManagementDashboardView: React.FC = () => {
               onClick={() => setActiveTab('ledger')}
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
                 activeTab === 'ledger'
-                  ? 'bg-white text-indigo-700 shadow-xs dark:bg-slate-700 dark:text-white'
+                  ? 'bg-white text-slate-700 shadow-xs dark:bg-slate-700 dark:text-white'
                   : 'text-slate-600 hover:text-slate-900 dark:text-slate-400'
               }`}
             >
@@ -110,7 +110,7 @@ export const LeaveManagementDashboardView: React.FC = () => {
               onClick={() => setActiveTab('inbox')}
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
                 activeTab === 'inbox'
-                  ? 'bg-white text-indigo-700 shadow-xs dark:bg-slate-700 dark:text-white'
+                  ? 'bg-white text-slate-700 shadow-xs dark:bg-slate-700 dark:text-white'
                   : 'text-slate-600 hover:text-slate-900 dark:text-slate-400'
               }`}
             >
@@ -128,7 +128,7 @@ export const LeaveManagementDashboardView: React.FC = () => {
           <button
             type="button"
             onClick={() => handleOpenModal()}
-            className="flex items-center gap-1.5 rounded-2xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-indigo-700 transition-all shrink-0"
+            className="flex items-center gap-1.5 rounded-2xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-slate-800 transition-all shrink-0"
           >
             <Plus className="w-4 h-4" />
             휴가 신청

@@ -49,7 +49,7 @@ export function ParentNoticesView({
                   className={`text-[10px] font-bold px-2 py-0.5 rounded-lg ${
                     n.type === 'attendance'
                       ? 'bg-emerald-50 text-emerald-700'
-                      : 'bg-indigo-50 text-indigo-700'
+                      : 'bg-slate-50 text-slate-700'
                   }`}
                 >
                   {PARENT_PORTAL_NOTIFICATION_LABEL[n.type as ParentPortalNotificationKind] ||

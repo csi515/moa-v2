@@ -259,7 +259,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
         {/* 모달 헤더 */}
         <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-b border-slate-200 shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-indigo-100 text-indigo-700 rounded-xl">
+            <div className="p-2 bg-slate-100 text-slate-700 rounded-xl">
               <Building2 className="w-5 h-5" />
             </div>
             <div>
@@ -307,11 +307,11 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                     onClick={() => setCategory(cat.id)}
                     className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all ${
                       isSelected
-                        ? 'border-indigo-600 bg-indigo-50/60 text-indigo-900 font-bold shadow-2xs ring-1 ring-indigo-500'
+                        ? 'border-indigo-600 bg-slate-50/60 text-slate-900 font-bold shadow-2xs ring-1 ring-indigo-500'
                         : 'border-slate-200 hover:border-slate-300 text-slate-600 bg-white'
                     }`}
                   >
-                    <Icon className={`w-5 h-5 mb-1.5 ${isSelected ? 'text-indigo-600' : 'text-slate-400'}`} />
+                    <Icon className={`w-5 h-5 mb-1.5 ${isSelected ? 'text-slate-800' : 'text-slate-400'}`} />
                     <span className="text-[11px] leading-tight">{cat.label}</span>
                   </button>
                 );
@@ -336,7 +336,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                     ? '예: 본관 3층 대회의실'
                     : '예: 중앙 건강상담실'
                 }
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
                 required
               />
             </div>
@@ -352,7 +352,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                   min={1}
                   value={capacity}
                   onChange={(e) => setCapacity(Number(e.target.value) || 1)}
-                  className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
                 />
               </div>
             </div>
@@ -366,24 +366,24 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                   type="time"
                   value={openTime}
                   onChange={(e) => setOpenTime(e.target.value)}
-                  className="w-1/2 px-2.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-1/2 px-2.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900"
                 />
                 <span className="text-slate-400 text-xs">~</span>
                 <input
                   type="time"
                   value={closeTime}
                   onChange={(e) => setCloseTime(e.target.value)}
-                  className="w-1/2 px-2.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-1/2 px-2.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900"
                 />
               </div>
             </div>
           </div>
 
           {/* 3. 승인 거버넌스 설정 (핵심 요구사항) */}
-          <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 space-y-4">
+          <div className="p-4 rounded-2xl bg-slate-50/50 border border-slate-200 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-indigo-600" />
+                <ShieldCheck className="w-5 h-5 text-slate-800" />
                 <div>
                   <h4 className="text-xs font-bold text-indigo-950">예약 승인권자 거버넌스</h4>
                   <p className="text-[11px] text-slate-500">
@@ -399,7 +399,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                   onChange={(e) => setRequireApproval(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-900"></div>
                 <span className="ml-2 text-xs font-bold text-slate-700">
                   {requireApproval ? '승인 필요 (On)' : '즉시 확정 (Off)'}
                 </span>
@@ -408,10 +408,10 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
 
             {/* 승인 필요 On 선택 시 필수 노출되는 승인권자 지정 카드 */}
             {requireApproval && (
-              <div className="p-3.5 bg-white rounded-xl border border-indigo-200 space-y-3 animate-in fade-in duration-150">
+              <div className="p-3.5 bg-white rounded-xl border border-slate-200 space-y-3 animate-in fade-in duration-150">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                    <UserCheck className="w-4 h-4 text-indigo-600" />
+                    <UserCheck className="w-4 h-4 text-slate-800" />
                     승인권자 필수 지정 <span className="text-rose-500">*</span>
                   </span>
                   <div className="flex items-center gap-3 text-xs text-slate-600">
@@ -424,7 +424,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                           setApproverType('staff');
                           setApproverId('');
                         }}
-                        className="text-indigo-600"
+                        className="text-slate-800"
                       />
                       특정 담당자 지정
                     </label>
@@ -437,7 +437,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                           setApproverType('role');
                           setApproverId('');
                         }}
-                        className="text-indigo-600"
+                        className="text-slate-800"
                       />
                       직급/역할 지정
                     </label>
@@ -452,7 +452,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                     <select
                       value={approverId}
                       onChange={(e) => setApproverId(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900 bg-white"
                       required={requireApproval}
                     >
                       <option value="">-- 승인 담당 직원 선택 --</option>
@@ -479,7 +479,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                     <select
                       value={approverId}
                       onChange={(e) => setApproverId(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900 bg-white"
                       required={requireApproval}
                     >
                       <option value="">-- 직급/역할 선택 --</option>
@@ -499,7 +499,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
           {category === 'vehicle' && (
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
               <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                <Car className="w-4 h-4 text-indigo-600" />
+                <Car className="w-4 h-4 text-slate-800" />
                 차량 상세 제원
               </h4>
               <div className="grid grid-cols-2 gap-3">
@@ -573,7 +573,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
           {category === 'meeting_room' && (
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
               <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                <DoorOpen className="w-4 h-4 text-indigo-600" />
+                <DoorOpen className="w-4 h-4 text-slate-800" />
                 회의실 및 IT 장비 설비
               </h4>
               <div className="grid grid-cols-2 gap-3 mb-2">
@@ -604,7 +604,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                     type="checkbox"
                     checked={hasProjector}
                     onChange={(e) => setHasProjector(e.target.checked)}
-                    className="rounded text-indigo-600"
+                    className="rounded text-slate-800"
                   />
                   빔프로젝터 / 대형 스크린
                 </label>
@@ -613,7 +613,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                     type="checkbox"
                     checked={hasVideoConference}
                     onChange={(e) => setHasVideoConference(e.target.checked)}
-                    className="rounded text-indigo-600"
+                    className="rounded text-slate-800"
                   />
                   화상회의 카메라·마이크
                 </label>
@@ -622,7 +622,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                     type="checkbox"
                     checked={hasPowerAdapter}
                     onChange={(e) => setHasPowerAdapter(e.target.checked)}
-                    className="rounded text-indigo-600"
+                    className="rounded text-slate-800"
                   />
                   전원 어댑터 구비
                 </label>
@@ -631,7 +631,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                     type="checkbox"
                     checked={hasRemoteController}
                     onChange={(e) => setHasRemoteController(e.target.checked)}
-                    className="rounded text-indigo-600"
+                    className="rounded text-slate-800"
                   />
                   리모컨 구비
                 </label>
@@ -640,7 +640,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                     type="checkbox"
                     checked={hasHdmiCable}
                     onChange={(e) => setHasHdmiCable(e.target.checked)}
-                    className="rounded text-indigo-600"
+                    className="rounded text-slate-800"
                   />
                   HDMI 케이블 구비
                 </label>
@@ -651,7 +651,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
           {category === 'health_room' && (
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
               <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                <HeartPulse className="w-4 h-4 text-indigo-600" />
+                <HeartPulse className="w-4 h-4 text-slate-800" />
                 보건실 상담 정책
               </h4>
               <div className="grid grid-cols-2 gap-3 text-xs">
@@ -673,7 +673,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                       type="checkbox"
                       checked={isPrivateConsultation}
                       onChange={(e) => setIsPrivateConsultation(e.target.checked)}
-                      className="rounded text-indigo-600"
+                      className="rounded text-slate-800"
                     />
                     비공개 비밀보장 상담
                   </label>
@@ -685,7 +685,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
           {category === 'display' && (
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
               <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                <Tv className="w-4 h-4 text-indigo-600" />
+                <Tv className="w-4 h-4 text-slate-800" />
                 디스플레이 전광판 스펙
               </h4>
               <div className="grid grid-cols-2 gap-3 text-xs">
@@ -723,7 +723,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
               placeholder="예: 이용 후 정리정돈 필수, 야간 운행 시 사전 결재 필요"
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -740,7 +740,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 transition-all shadow-sm flex items-center gap-1.5"
+              className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 active:bg-slate-950 transition-all shadow-sm flex items-center gap-1.5"
             >
               {isSubmitting ? '저장 중...' : (
                 <>

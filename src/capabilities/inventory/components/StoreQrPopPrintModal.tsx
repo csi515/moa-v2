@@ -43,7 +43,7 @@ export const StoreQrPopPrintModal: React.FC<StoreQrPopPrintModalProps> = ({
                   onClick={() => setPopPaperSize('A4')}
                   className={`px-3 py-1 rounded-lg transition-all ${
                     popPaperSize === 'A4'
-                      ? 'bg-indigo-600 text-white shadow-2xs'
+                      ? 'bg-slate-900 text-white shadow-2xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -54,7 +54,7 @@ export const StoreQrPopPrintModal: React.FC<StoreQrPopPrintModalProps> = ({
                   onClick={() => setPopPaperSize('A5')}
                   className={`px-3 py-1 rounded-lg transition-all ${
                     popPaperSize === 'A5'
-                      ? 'bg-indigo-600 text-white shadow-2xs'
+                      ? 'bg-slate-900 text-white shadow-2xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -66,7 +66,7 @@ export const StoreQrPopPrintModal: React.FC<StoreQrPopPrintModalProps> = ({
             <button
               type="button"
               onClick={handlePrint}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+              className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
             >
               <Printer className="w-4 h-4" />
               POP 서식 인쇄하기
@@ -126,7 +126,7 @@ export const StoreQrPopPrintModal: React.FC<StoreQrPopPrintModalProps> = ({
           >
             {/* 상단 헤더 */}
             <div className="space-y-3 w-full">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-full text-xs font-extrabold tracking-wide">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-full text-xs font-extrabold tracking-wide">
                 <Sparkles className="w-4 h-4" />
                 <span>{industryLabel} 스마트 체크인 & 주문</span>
               </div>
@@ -139,7 +139,7 @@ export const StoreQrPopPrintModal: React.FC<StoreQrPopPrintModalProps> = ({
             </div>
 
             {/* 중앙 대형 QR 코드 영역 */}
-            <div className="my-8 p-6 bg-slate-50 border-2 border-indigo-100 rounded-3xl flex flex-col items-center shadow-xs">
+            <div className="my-8 p-6 bg-slate-50 border-2 border-slate-200 rounded-3xl flex flex-col items-center shadow-xs">
               <QrCodeSvg value={qrTargetUrl} size={popPaperSize === 'A4' ? 200 : 160} />
               <div className="mt-4 flex items-center gap-1.5 text-xs font-mono font-bold text-slate-500">
                 <QrCode className="w-3.5 h-3.5" />
@@ -150,7 +150,7 @@ export const StoreQrPopPrintModal: React.FC<StoreQrPopPrintModalProps> = ({
             {/* 하단 3단계 안내 가이드 */}
             <div className="w-full max-w-lg grid grid-cols-3 gap-3 text-left pt-6 border-t-2 border-slate-100">
               <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/70">
-                <div className="w-6 h-6 rounded-lg bg-indigo-600 text-white font-black text-xs flex items-center justify-center mb-1.5">
+                <div className="w-6 h-6 rounded-lg bg-slate-900 text-white font-black text-xs flex items-center justify-center mb-1.5">
                   1
                 </div>
                 <p className="font-bold text-xs text-slate-900">카메라 스캔</p>
@@ -160,7 +160,7 @@ export const StoreQrPopPrintModal: React.FC<StoreQrPopPrintModalProps> = ({
               </div>
 
               <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/70">
-                <div className="w-6 h-6 rounded-lg bg-indigo-600 text-white font-black text-xs flex items-center justify-center mb-1.5">
+                <div className="w-6 h-6 rounded-lg bg-slate-900 text-white font-black text-xs flex items-center justify-center mb-1.5">
                   2
                 </div>
                 <p className="font-bold text-xs text-slate-900">간편 체크인</p>
@@ -170,7 +170,7 @@ export const StoreQrPopPrintModal: React.FC<StoreQrPopPrintModalProps> = ({
               </div>
 
               <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/70">
-                <div className="w-6 h-6 rounded-lg bg-indigo-600 text-white font-black text-xs flex items-center justify-center mb-1.5">
+                <div className="w-6 h-6 rounded-lg bg-slate-900 text-white font-black text-xs flex items-center justify-center mb-1.5">
                   3
                 </div>
                 <p className="font-bold text-xs text-slate-900">원터치 완료</p>

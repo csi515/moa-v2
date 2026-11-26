@@ -110,7 +110,7 @@ export function ParentEventsView({
                       href={v.youtubeUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex mt-2 text-xs font-bold text-indigo-600 min-h-[48px] items-center"
+                      className="inline-flex mt-2 text-xs font-bold text-slate-800 min-h-[48px] items-center"
                     >
                       YouTube에서 보기
                     </a>

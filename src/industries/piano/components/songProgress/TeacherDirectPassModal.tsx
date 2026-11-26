@@ -121,7 +121,7 @@ export const TeacherDirectPassModal: FC<TeacherDirectPassModalProps> = ({
             <button
               type="button"
               onClick={() => void handleShare()}
-              className="w-full min-h-[48px] rounded-xl bg-indigo-600 text-white text-sm font-bold inline-flex items-center justify-center gap-2 hover:bg-indigo-700"
+              className="w-full min-h-[48px] rounded-xl bg-slate-900 text-white text-sm font-bold inline-flex items-center justify-center gap-2 hover:bg-slate-800"
             >
               <Share2 className="w-4 h-4" />
               {SONG_PROGRESS_COPY.shareParentCta}
@@ -152,7 +152,7 @@ export const TeacherDirectPassModal: FC<TeacherDirectPassModalProps> = ({
                       onClick={() => setBookName(b)}
                       className={`min-h-[40px] px-2.5 rounded-xl text-xs font-bold border ${
                         selected
-                          ? 'bg-indigo-600 text-white border-indigo-600'
+                          ? 'bg-slate-900 text-white border-indigo-600'
                           : 'bg-white text-slate-700 border-slate-200 hover:border-indigo-300'
                       }`}
                     >

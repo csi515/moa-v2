@@ -151,7 +151,7 @@ export const QualityInspectionManagementView: React.FC = () => {
       case 'in_process':
         return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700">공정 검사</span>;
       case 'final':
-        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700">최종 검사</span>;
+        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-50 text-slate-700">최종 검사</span>;
       case 'outgoing':
         return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700">출하 검사</span>;
     }
@@ -326,7 +326,7 @@ export const QualityInspectionManagementView: React.FC = () => {
                       <td className="p-3 text-slate-700">
                         {std.target_value !== null ? `${std.target_value} ${std.unit}` : '-'}
                       </td>
-                      <td className="p-3 font-mono font-bold text-indigo-700">
+                      <td className="p-3 font-mono font-bold text-slate-700">
                         {std.min_threshold ?? '-'} ~ {std.max_threshold ?? '-'} {std.unit}
                       </td>
                       <td className="p-3 text-slate-500">{std.sample_size}개</td>

@@ -88,7 +88,7 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
         {/* 모달 헤더 */}
         <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-b border-slate-200">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-indigo-100 text-indigo-700 rounded-xl">
+            <div className="p-2 bg-slate-100 text-slate-700 rounded-xl">
               <CreditCard className="w-5 h-5" />
             </div>
             <div>
@@ -115,7 +115,7 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
           )}
 
           {/* 현재 구독 상태 안내 */}
-          <div className="p-3.5 bg-indigo-50/60 border border-indigo-100 rounded-xl flex items-center justify-between text-xs">
+          <div className="p-3.5 bg-slate-50/60 border border-slate-200 rounded-xl flex items-center justify-between text-xs">
             <div>
               <span className="text-slate-500 block">현재 만료일</span>
               <span className="font-bold text-indigo-950 text-sm">
@@ -143,7 +143,7 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
                   onClick={() => handleSelectMonths(opt)}
                   className={`py-2 px-3 rounded-xl border text-left transition-all ${
                     selectedMonths === opt.value
-                      ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-bold shadow-2xs'
+                      ? 'border-indigo-600 bg-slate-50/50 text-slate-900 font-bold shadow-2xs'
                       : 'border-slate-200 hover:border-slate-300 text-slate-700'
                   }`}
                 >
@@ -168,7 +168,7 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
                 step={1000}
                 value={amount}
                 onChange={(e) => setAmount(Number(e.target.value) || 0)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
                 placeholder="예: 30000"
                 required
               />
@@ -181,7 +181,7 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
                 type="text"
                 value={depositorName}
                 onChange={(e) => setDepositorName(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
                 placeholder="예: 홍길동 / (주)대성"
                 required
               />
@@ -194,7 +194,7 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
               type="checkbox"
               checked={isTaxInvoiceIssued}
               onChange={(e) => setIsTaxInvoiceIssued(e.target.checked)}
-              className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300"
+              className="w-4 h-4 rounded text-slate-800 focus:ring-slate-900 border-slate-300"
             />
             <div>
               <span className="text-xs font-bold text-slate-800">
@@ -215,7 +215,7 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
               type="text"
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-900"
               placeholder="예: 기업은행 입금 확인, 1년 선납 특별 할인 적용"
             />
           </div>
@@ -258,7 +258,7 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 transition-all shadow-sm flex items-center gap-1.5"
+              className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 active:bg-slate-950 transition-all shadow-sm flex items-center gap-1.5"
             >
               {submitting ? '처리 중...' : (
                 <>

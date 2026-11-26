@@ -115,7 +115,7 @@ export const TextbookPaymentModal: React.FC<TextbookPaymentModalProps> = ({
               <button
                 type="button"
                 onClick={() => setPayAmount(sale.unpaidAmount)}
-                className="text-[11px] font-semibold text-indigo-600 hover:text-indigo-700 hover:underline cursor-pointer"
+                className="text-[11px] font-semibold text-slate-800 hover:text-slate-700 hover:underline cursor-pointer"
               >
                 전액 완납(₩{sale.unpaidAmount.toLocaleString()}) 적용
               </button>

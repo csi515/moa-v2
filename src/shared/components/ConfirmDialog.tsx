@@ -31,7 +31,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ options, onDismiss
         <div className="flex items-start gap-3">
           <div
             className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
-              confirmDialog.isDestructive ? 'bg-rose-50 text-rose-600' : 'bg-indigo-50 text-indigo-600'
+              confirmDialog.isDestructive ? 'bg-rose-50 text-rose-600' : 'bg-slate-50 text-slate-800'
             }`}
           >
             <AlertTriangle className="w-6 h-6" aria-hidden />
@@ -69,7 +69,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ options, onDismiss
             className={`px-5 py-2.5 min-h-[44px] text-sm font-bold text-white rounded-xl transition-colors shadow-sm ${
               confirmDialog.isDestructive
                 ? 'bg-rose-600 hover:bg-rose-700'
-                : 'bg-indigo-600 hover:bg-indigo-700'
+                : 'bg-slate-900 hover:bg-slate-800'
             }`}
           >
             {confirmDialog.confirmText || '확인'}

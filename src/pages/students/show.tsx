@@ -116,7 +116,7 @@ export const StudentShowPage: React.FC = () => {
         <button
           type="button"
           onClick={() => list("customers")}
-          className="mt-5 inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700"
+          className="mt-5 inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800"
         >
           <ArrowLeft className="h-4 w-4" />
           목록으로 돌아가기
@@ -162,7 +162,7 @@ export const StudentShowPage: React.FC = () => {
             <button
               type="button"
               onClick={() => edit("customers", student.id)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-xl text-sm font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-50 text-slate-700 hover:bg-slate-100 rounded-xl text-sm font-semibold transition-colors"
             >
               <Edit2 className="h-4 w-4" />
               수정하기

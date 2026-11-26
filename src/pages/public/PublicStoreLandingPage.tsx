@@ -203,7 +203,7 @@ export const PublicStoreLandingPage: React.FC = () => {
           <p className="mt-2 text-sm text-slate-600">{error || "존재하지 않거나 비활성화된 매장 주소입니다."}</p>
           <Link
             to="/login"
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
           >
             MOA 홈으로 이동
           </Link>
@@ -225,7 +225,7 @@ export const PublicStoreLandingPage: React.FC = () => {
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4 sm:px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-600 font-black text-white shadow-md shadow-indigo-100">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-900 font-black text-white shadow-md shadow-indigo-100">
               M
             </div>
             <div>
@@ -252,7 +252,7 @@ export const PublicStoreLandingPage: React.FC = () => {
           <div className="space-y-6 md:col-span-2">
             {/* Store Card */}
             <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex items-center gap-2 text-indigo-600">
+              <div className="flex items-center gap-2 text-slate-800">
                 <Building2 className="h-5 w-5" />
                 <span className="text-xs font-bold uppercase tracking-wider">매장 소개</span>
               </div>
@@ -262,8 +262,8 @@ export const PublicStoreLandingPage: React.FC = () => {
               </p>
 
               {store.settings?.notice && (
-                <div className="mt-4 rounded-xl border border-indigo-100 bg-indigo-50/50 p-4 text-xs font-medium text-indigo-900">
-                  <div className="flex items-center gap-1.5 font-bold text-indigo-700">
+                <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50/50 p-4 text-xs font-medium text-slate-900">
+                  <div className="flex items-center gap-1.5 font-bold text-slate-700">
                     <Sparkles className="h-3.5 w-3.5" />
                     공지사항
                   </div>
@@ -284,7 +284,7 @@ export const PublicStoreLandingPage: React.FC = () => {
                     <Phone className="h-4 w-4 shrink-0 text-slate-400" />
                     <a
                       href={`tel:${store.settings.phone}`}
-                      className="font-medium text-indigo-600 hover:underline"
+                      className="font-medium text-slate-800 hover:underline"
                     >
                       {store.settings.phone}
                     </a>
@@ -298,7 +298,7 @@ export const PublicStoreLandingPage: React.FC = () => {
 
             {/* Operating Hours */}
             <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex items-center gap-2 text-indigo-600">
+              <div className="flex items-center gap-2 text-slate-800">
                 <Clock className="h-5 w-5" />
                 <h3 className="text-sm font-bold tracking-tight text-slate-900">운영 시간 안내</h3>
               </div>
@@ -333,8 +333,8 @@ export const PublicStoreLandingPage: React.FC = () => {
 
           {/* Right Column: 1-Click Consultation Form */}
           <div className="md:col-span-1">
-            <section className="sticky top-6 rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm">
-              <div className="flex items-center gap-2 text-indigo-600">
+            <section className="sticky top-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="flex items-center gap-2 text-slate-800">
                 <Calendar className="h-5 w-5" />
                 <h3 className="text-sm font-bold text-slate-900">체험 / 1:1 상담 신청</h3>
               </div>
@@ -366,7 +366,7 @@ export const PublicStoreLandingPage: React.FC = () => {
                       value={applicantName}
                       onChange={(e) => setApplicantName(e.target.value)}
                       placeholder="홍길동"
-                      className="mt-1 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="mt-1 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs text-slate-900 shadow-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
                     />
                   </div>
 
@@ -378,7 +378,7 @@ export const PublicStoreLandingPage: React.FC = () => {
                       value={applicantPhone}
                       onChange={(e) => setApplicantPhone(e.target.value)}
                       placeholder="010-1234-5678"
-                      className="mt-1 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="mt-1 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs text-slate-900 shadow-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
                     />
                   </div>
 
@@ -389,14 +389,14 @@ export const PublicStoreLandingPage: React.FC = () => {
                       value={inquiryText}
                       onChange={(e) => setInquiryText(e.target.value)}
                       placeholder="희망 요일, 시간대 또는 궁금한 점을 적어주세요."
-                      className="mt-1 w-full resize-none rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="mt-1 w-full resize-none rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs text-slate-900 shadow-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 text-xs font-bold text-white shadow-md shadow-indigo-100 transition hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-50"
+                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 text-xs font-bold text-white shadow-md shadow-indigo-100 transition hover:bg-slate-800 active:scale-[0.98] disabled:opacity-50"
                   >
                     <Send className="h-4 w-4" />
                     {submitting ? "접수 중..." : "간편 신청하기"}
@@ -408,7 +408,7 @@ export const PublicStoreLandingPage: React.FC = () => {
             {/* 수강생/회원 등록 신청 (사업주 승인 필요 안내 포함) */}
             <section className="mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <div className="flex items-center gap-2 text-slate-800">
-                <UserPlus className="h-5 w-5 text-indigo-600" />
+                <UserPlus className="h-5 w-5 text-slate-800" />
                 <h3 className="text-sm font-bold">수강생 / 회원 등록 신청</h3>
               </div>
               <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
@@ -425,7 +425,7 @@ export const PublicStoreLandingPage: React.FC = () => {
                     },
                   })
                 }
-                className="mt-4 inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-indigo-200 bg-indigo-50/70 px-4 text-xs font-bold text-indigo-700 transition hover:bg-indigo-100 active:scale-[0.98]"
+                className="mt-4 inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-4 text-xs font-bold text-slate-700 transition hover:bg-slate-100 active:scale-[0.98]"
               >
                 <UserPlus className="h-4 w-4" />
                 이용 신청서 작성하기
@@ -444,7 +444,7 @@ export const PublicStoreLandingPage: React.FC = () => {
           <div className="flex flex-col items-center justify-between gap-3 text-xs text-slate-500 sm:flex-row">
             <p>© {new Date().getFullYear()} {store.name}. Powered by MOA.</p>
             <div className="flex items-center gap-4">
-              <Link to="/login" className="hover:text-indigo-600">
+              <Link to="/login" className="hover:text-slate-800">
                 관리자/직원 로그인
               </Link>
             </div>

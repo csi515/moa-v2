@@ -102,7 +102,7 @@ export const OrganizationMemberPickerModal: React.FC<Props> = ({
               <li key={member.id}>
                 <button
                   type="button"
-                  className="min-h-9 rounded-full bg-indigo-50 border border-indigo-100 px-3 text-xs font-semibold text-indigo-700 flex items-center gap-1 hover:bg-indigo-100 transition-colors"
+                  className="min-h-9 rounded-full bg-slate-50 border border-slate-200 px-3 text-xs font-semibold text-slate-700 flex items-center gap-1 hover:bg-slate-100 transition-colors"
                   onClick={() => onChange(selectedIds.filter((id) => id !== member.id))}
                 >
                   {member.displayName} ×
@@ -120,7 +120,7 @@ export const OrganizationMemberPickerModal: React.FC<Props> = ({
                 <label className="flex min-h-11 items-center gap-3 px-3 py-2 text-sm cursor-pointer">
                   <input
                     type="checkbox"
-                    className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                    className="w-4 h-4 rounded text-slate-800 focus:ring-slate-900 border-slate-300"
                     checked={checked}
                     onChange={() => {
                       onChange(

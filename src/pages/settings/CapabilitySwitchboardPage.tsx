@@ -52,7 +52,7 @@ export const CapabilitySwitchboardPage: React.FC = () => {
         <button
           type="button"
           onClick={() => setIsCatalogOpen(true)}
-          className="inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-3.5 py-2 text-xs font-bold text-indigo-700 hover:bg-indigo-100 transition-colors"
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors"
         >
           <BookOpen className="h-4 w-4" />
           52개 업종 권장 카탈로그 둘러보기

@@ -69,7 +69,7 @@ export const MobileEventBriefingView: React.FC<MobileEventBriefingViewProps> = (
               </>
             ) : (
               <>
-                <Share2 className="w-4 h-4 text-indigo-600" /> 카카오톡 브리핑 링크 복사
+                <Share2 className="w-4 h-4 text-slate-800" /> 카카오톡 브리핑 링크 복사
               </>
             )}
           </Button>
@@ -94,14 +94,14 @@ export const MobileEventBriefingView: React.FC<MobileEventBriefingViewProps> = (
               <span className="text-[10px] text-amber-800">{data.eventDate}</span>
             </div>
 
-            <div className="bg-indigo-50/60 p-2.5 rounded-lg border border-indigo-200/60">
-              <span className="text-[11px] font-semibold text-indigo-900 block flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5 text-indigo-700" /> 스태프/플래너 세팅
+            <div className="bg-slate-50/60 p-2.5 rounded-lg border border-slate-200/60">
+              <span className="text-[11px] font-semibold text-slate-900 block flex items-center gap-1">
+                <Sparkles className="w-3.5 h-3.5 text-slate-700" /> 스태프/플래너 세팅
               </span>
               <span className="text-sm font-black text-indigo-950 mt-0.5 block">
                 {data.setupStartTime} 입실 가능
               </span>
-              <span className="text-[10px] text-indigo-700">철수 완료: {data.teardownEndTime}까지</span>
+              <span className="text-[10px] text-slate-700">철수 완료: {data.teardownEndTime}까지</span>
             </div>
           </div>
 
@@ -116,7 +116,7 @@ export const MobileEventBriefingView: React.FC<MobileEventBriefingViewProps> = (
         {/* 3. 5단계 식순 진행 시나리오 타임라인 */}
         <Card className="p-4 border-slate-200 bg-white shadow-sm space-y-3">
           <h3 className="font-bold text-slate-900 text-sm flex items-center gap-1.5 border-b border-slate-100 pb-2">
-            <Clock className="w-4 h-4 text-indigo-600" /> 돌잔치 진행 식순 (5단계 타임라인)
+            <Clock className="w-4 h-4 text-slate-800" /> 돌잔치 진행 식순 (5단계 타임라인)
           </h3>
 
           <div className="space-y-2.5">
@@ -125,13 +125,13 @@ export const MobileEventBriefingView: React.FC<MobileEventBriefingViewProps> = (
                 key={step.stepOrder}
                 className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-50 border border-slate-100"
               >
-                <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                <div className="w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                   {step.stepOrder}
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-slate-800 text-xs">{step.title}</span>
-                    <span className="text-[11px] font-mono font-semibold text-indigo-600">
+                    <span className="text-[11px] font-mono font-semibold text-slate-800">
                       {step.time}
                     </span>
                   </div>

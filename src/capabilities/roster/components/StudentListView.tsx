@@ -524,7 +524,7 @@ export const StudentListView: React.FC = () => {
                             setSelectedIds(selectedIds.filter((id) => !pageSet.has(id)));
                           }
                         }}
-                        className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer align-middle"
+                        className="rounded border-slate-300 text-slate-800 focus:ring-slate-900 w-4 h-4 cursor-pointer align-middle"
                       />
                     </th>
                     <th className="py-2.5 px-3">{labels.customer.singular}</th>
@@ -563,7 +563,7 @@ export const StudentListView: React.FC = () => {
                                 prev.includes(st.id) ? prev.filter((id) => id !== st.id) : [...prev, st.id]
                               );
                             }}
-                            className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer align-middle"
+                            className="rounded border-slate-300 text-slate-800 focus:ring-slate-900 w-4 h-4 cursor-pointer align-middle"
                           />
                         </td>
                         <td className="py-2.5 px-3">
@@ -576,7 +576,7 @@ export const StudentListView: React.FC = () => {
                             </div>
                             <div className="min-w-0">
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="font-bold text-slate-900 group-hover:text-indigo-600">
+                                <span className="font-bold text-slate-900 group-hover:text-slate-800">
                                   {st.name}
                                 </span>
                                 {st.status !== 'active' && (
@@ -618,7 +618,7 @@ export const StudentListView: React.FC = () => {
                         {showSessionColumns && (
                           <td
                             className={`py-2.5 px-3 font-bold ${
-                              passLabel === '해당 없음' ? 'text-slate-400' : 'text-indigo-700'
+                              passLabel === '해당 없음' ? 'text-slate-400' : 'text-slate-700'
                             }`}
                           >
                             {passLabel}
@@ -635,13 +635,13 @@ export const StudentListView: React.FC = () => {
                             <button
                               type="button"
                               onClick={(e) => handleOpenInviteShare(st, e)}
-                              className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition cursor-pointer"
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-50 transition cursor-pointer"
                               title="학부모 앱 초대장 복사/공유"
                               aria-label="학부모 초대"
                             >
                               <Share2 className="w-3.5 h-3.5" />
                             </button>
-                            <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 inline-block" />
+                            <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-800 inline-block" />
                           </div>
                         </td>
                       </tr>
@@ -710,7 +710,7 @@ export const StudentListView: React.FC = () => {
                         <button
                           type="button"
                           onClick={(e) => handleOpenInviteShare(st, e)}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition cursor-pointer"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-50 transition cursor-pointer"
                           title="학부모 앱 초대장 복사/공유"
                           aria-label="학부모 초대"
                         >
@@ -725,7 +725,7 @@ export const StudentListView: React.FC = () => {
                     {showSessionColumns && (
                       <span
                         className={
-                          passLabel === '해당 없음' ? 'text-slate-400' : 'text-indigo-700'
+                          passLabel === '해당 없음' ? 'text-slate-400' : 'text-slate-700'
                         }
                       >
                         {passLabel}

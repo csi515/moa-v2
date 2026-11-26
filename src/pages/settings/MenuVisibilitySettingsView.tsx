@@ -92,7 +92,7 @@ export const MenuVisibilitySettingsView: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
+            <div className="p-2 bg-slate-50 text-slate-800 rounded-xl">
               <Settings2 className="w-6 h-6" />
             </div>
             <div>
@@ -120,14 +120,14 @@ export const MenuVisibilitySettingsView: React.FC = () => {
       </div>
 
       {/* 현재 업종 프리셋 화이트리스트 안내 배너 */}
-      <div className="bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-indigo-500/5 rounded-2xl p-5 border border-indigo-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-indigo-500/5 rounded-2xl p-5 border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
-          <div className="p-2.5 bg-indigo-600 text-white rounded-xl shadow-sm mt-0.5 sm:mt-0">
+          <div className="p-2.5 bg-slate-900 text-white rounded-xl shadow-sm mt-0.5 sm:mt-0">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700">
+              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700">
                 현재 적용 업종
               </span>
               <h2 className="text-base font-bold text-slate-900">{presetName}</h2>
@@ -203,7 +203,7 @@ export const MenuVisibilitySettingsView: React.FC = () => {
       <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-indigo-600" />
+            <Layers className="w-5 h-5 text-slate-800" />
             <h3 className="text-base font-bold text-slate-900">선택 메뉴 (숨김/표시 관리)</h3>
           </div>
           <span className="text-xs text-slate-400">
@@ -236,7 +236,7 @@ export const MenuVisibilitySettingsView: React.FC = () => {
                       checked={item.isVisible}
                       disabled={saving}
                       onChange={() => handleToggle(item.id)}
-                      className="w-4 h-4 rounded text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer"
+                      className="w-4 h-4 rounded text-slate-800 border-slate-300 focus:ring-slate-900 cursor-pointer"
                     />
                   </div>
                   <div>

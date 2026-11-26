@@ -202,7 +202,7 @@ export const TextbookManagementView: React.FC = () => {
   return (
     <div className="space-y-4 pb-6">
       <PageHeader
-        icon={<BookOpen className="w-6 h-6 text-indigo-600" />}
+        icon={<BookOpen className="w-6 h-6 text-slate-800" />}
         title="교재 관리"
         description={`교재 입고·재고 현황 파악 및 ${customerWord}별 교재 배부와 수납 내역을 통합 관리합니다`}
         actions={
@@ -210,7 +210,7 @@ export const TextbookManagementView: React.FC = () => {
             <button
               type="button"
               onClick={() => openSaleModal()}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs font-bold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs font-bold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-xs cursor-pointer active:scale-95"
             >
               <ShoppingBag className="w-4 h-4" />
               <span>{customerWord} 교재 배부</span>

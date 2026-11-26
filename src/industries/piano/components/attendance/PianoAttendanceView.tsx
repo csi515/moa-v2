@@ -81,7 +81,7 @@ export const PianoAttendanceView: FC = () => {
       value: 'ALL',
       label: isToday ? '오늘 예정' : '예정',
       count: stats.expected,
-      activeClass: 'bg-indigo-600 text-white border-indigo-600',
+      activeClass: 'bg-slate-900 text-white border-indigo-600',
     },
     {
       value: 'unchecked',
@@ -161,7 +161,7 @@ export const PianoAttendanceView: FC = () => {
     <div className="space-y-3.5 sm:space-y-4 pb-6">
       <PageHeader
         density="compact"
-        icon={<CheckSquare className="w-6 h-6 text-indigo-600" />}
+        icon={<CheckSquare className="w-6 h-6 text-slate-800" />}
         title="출결"
         description={`오늘 출결 현황 체크 및 ${customerWord}별 등하원 기록을 관리합니다`}
       />
@@ -236,7 +236,7 @@ export const PianoAttendanceView: FC = () => {
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="flex-1 sm:flex-none min-w-0 px-3 py-2 min-h-[44px] text-sm font-bold border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20"
+              className="flex-1 sm:flex-none min-w-0 px-3 py-2 min-h-[44px] text-sm font-bold border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-slate-900/20"
             />
             <button
               type="button"
@@ -250,7 +250,7 @@ export const PianoAttendanceView: FC = () => {
               <button
                 type="button"
                 onClick={() => setSelectedDate(todayIsoLocal())}
-                className="px-3 py-2 min-h-[44px] rounded-xl text-xs font-bold text-indigo-600 border border-indigo-100 bg-indigo-50 hover:bg-indigo-100 shrink-0 transition-colors"
+                className="px-3 py-2 min-h-[44px] rounded-xl text-xs font-bold text-slate-800 border border-slate-200 bg-slate-50 hover:bg-slate-100 shrink-0 transition-colors"
               >
                 오늘
               </button>

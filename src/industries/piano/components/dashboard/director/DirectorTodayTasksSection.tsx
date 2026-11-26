@@ -17,7 +17,7 @@ interface DirectorTodayTasksSectionProps {
 }
 
 const TONE: Record<NonNullable<DirectorTodayTaskItem['tone']>, string> = {
-  indigo: 'bg-indigo-50 text-indigo-700 border-indigo-100',
+  indigo: 'bg-slate-50 text-slate-700 border-slate-200',
   amber: 'bg-amber-50 text-amber-800 border-amber-100',
   rose: 'bg-rose-50 text-rose-700 border-rose-100',
   emerald: 'bg-emerald-50 text-emerald-700 border-emerald-100',
@@ -35,7 +35,7 @@ export const DirectorTodayTasksSection: FC<DirectorTodayTasksSectionProps> = ({
     <section className="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs space-y-3">
       <div>
         <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
-          <ClipboardList className="w-4 h-4 text-indigo-600 shrink-0" />
+          <ClipboardList className="w-4 h-4 text-slate-800 shrink-0" />
           처리할 업무
         </h3>
         <p className="text-[11px] text-slate-500 mt-0.5">

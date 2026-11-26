@@ -54,7 +54,7 @@ export const DirectorDashboardCharts: React.FC<DirectorDashboardChartsProps> = (
         </div>
         <button
           onClick={() => setActiveTab('tuition')}
-          className="text-xs text-indigo-600 font-semibold flex items-center hover:underline"
+          className="text-xs text-slate-800 font-semibold flex items-center hover:underline"
         >
           상세 <ChevronRight className="w-3.5 h-3.5" />
         </button>
@@ -87,7 +87,7 @@ export const DirectorDashboardCharts: React.FC<DirectorDashboardChartsProps> = (
             <p className="text-xs text-slate-400 mt-1">학생 등록 후 수강료 청구·수납을 시작하면 추이가 표시됩니다.</p>
             <button
               onClick={() => setActiveTab('tuition')}
-              className="mt-3 text-xs font-bold text-indigo-600 hover:underline"
+              className="mt-3 text-xs font-bold text-slate-800 hover:underline"
             >
               수강료 관리로 이동
             </button>
@@ -107,7 +107,7 @@ export const DirectorDashboardCharts: React.FC<DirectorDashboardChartsProps> = (
         </div>
         <button
           onClick={() => setActiveTab('students')}
-          className="text-xs text-indigo-600 font-semibold flex items-center hover:underline"
+          className="text-xs text-slate-800 font-semibold flex items-center hover:underline"
         >
           학생목록 <ChevronRight className="w-3.5 h-3.5" />
         </button>
@@ -141,7 +141,7 @@ export const DirectorDashboardCharts: React.FC<DirectorDashboardChartsProps> = (
             <p className="text-xs text-slate-400 mt-1">첫 학생을 등록하면 성장 추이가 표시됩니다.</p>
             <button
               onClick={() => setActiveTab('students')}
-              className="mt-3 text-xs font-bold text-indigo-600 hover:underline"
+              className="mt-3 text-xs font-bold text-slate-800 hover:underline"
             >
               학생 등록하러 가기
             </button>
@@ -159,7 +159,7 @@ export const DirectorDashboardCharts: React.FC<DirectorDashboardChartsProps> = (
           </h4>
           <p className="text-xs text-slate-400">총 청구액 대비 수납 완료 및 미납 현황</p>
         </div>
-        <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-100">
+        <span className="text-xs font-bold text-slate-700 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200">
           수납률 {stats.collectionRate}%
         </span>
       </div>
@@ -209,7 +209,7 @@ export const DirectorDashboardCharts: React.FC<DirectorDashboardChartsProps> = (
         </div>
         <button
           onClick={() => setActiveTab('classes')}
-          className="text-xs text-indigo-600 font-semibold flex items-center hover:underline"
+          className="text-xs text-slate-800 font-semibold flex items-center hover:underline"
         >
           반 관리 <ChevronRight className="w-3.5 h-3.5" />
         </button>
@@ -241,7 +241,7 @@ export const DirectorDashboardCharts: React.FC<DirectorDashboardChartsProps> = (
             <p className="text-xs text-slate-400 mt-1">반을 개설하고 학생을 배정해 보세요.</p>
             <button
               onClick={() => setActiveTab('classes')}
-              className="mt-3 text-xs font-bold text-indigo-600 hover:underline"
+              className="mt-3 text-xs font-bold text-slate-800 hover:underline"
             >
               반 관리로 이동
             </button>

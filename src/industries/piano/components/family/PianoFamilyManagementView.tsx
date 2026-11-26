@@ -188,14 +188,14 @@ export const PianoFamilyManagementView: React.FC = () => {
     <div className="space-y-6 pb-8">
       {/* 1. 상단 타이틀 & 액션 헤더 */}
       <PageHeader
-        icon={<Users className="w-6 h-6 text-indigo-600" />}
+        icon={<Users className="w-6 h-6 text-slate-800" />}
         title="피아노 패밀리 및 형제자매 관리"
         description="학부모 연락처 기반 형제자매 자동 감지, 2인 이상 결합 할인(10%~15%), 선불 크레딧 및 원클릭 통합 수납"
         actions={
           <button
             type="button"
             onClick={() => setIsCreateModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs sm:text-sm font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white transition-all shadow-xs cursor-pointer active:scale-95"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] text-xs sm:text-sm font-bold rounded-xl bg-slate-900 hover:bg-slate-800 text-white transition-all shadow-xs cursor-pointer active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span>새 패밀리 그룹 묶기</span>
@@ -223,7 +223,7 @@ export const PianoFamilyManagementView: React.FC = () => {
             <span>형제 자동 결합 할인</span>
             <Sparkles className="w-4 h-4 text-indigo-500" />
           </div>
-          <div className="text-2xl font-extrabold text-indigo-600">
+          <div className="text-2xl font-extrabold text-slate-800">
             2인 10% / 3인 15%
           </div>
           <div className="text-xs text-slate-500 mt-1 font-medium">
@@ -261,7 +261,7 @@ export const PianoFamilyManagementView: React.FC = () => {
       {/* 3. 패밀리 그룹 카드 그리드 */}
       {groupDetails.length === 0 ? (
         <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-8 sm:p-12 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3">
+          <div className="w-12 h-12 rounded-2xl bg-slate-50 text-slate-800 flex items-center justify-center mx-auto mb-3">
             <Users className="w-6 h-6" />
           </div>
           <h3 className="text-base font-bold text-slate-800 mb-1.5">
@@ -273,7 +273,7 @@ export const PianoFamilyManagementView: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsCreateModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-xs cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-xs cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>수동으로 형제자매 묶기</span>
@@ -299,7 +299,7 @@ export const PianoFamilyManagementView: React.FC = () => {
                           {detail.group.familyName}
                         </span>
                         {detail.group.isAutoDetected ? (
-                          <span className="text-[10px] bg-indigo-50 text-indigo-700 border border-indigo-100 px-2 py-0.5 rounded-md font-bold shrink-0">
+                          <span className="text-[10px] bg-slate-50 text-slate-700 border border-slate-200 px-2 py-0.5 rounded-md font-bold shrink-0">
                             연락처 자동감지
                           </span>
                         ) : (
@@ -401,7 +401,7 @@ export const PianoFamilyManagementView: React.FC = () => {
                     onClick={() => setPaymentTargetGroup(detail)}
                     className={`w-full min-h-[40px] px-3 py-2 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 ${
                       hasUnpaid
-                        ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                        ? 'bg-slate-900 hover:bg-slate-800 text-white'
                         : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
                     }`}
                   >
@@ -446,7 +446,7 @@ export const PianoFamilyManagementView: React.FC = () => {
               <button
                 type="button"
                 onClick={handleCreateCustomFamily}
-                className="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-colors shadow-xs cursor-pointer"
+                className="px-5 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-colors shadow-xs cursor-pointer"
               >
                 가족 묶기 등록
               </button>
@@ -463,7 +463,7 @@ export const PianoFamilyManagementView: React.FC = () => {
                 placeholder="예: 김민준 & 김서아 가족"
                 value={newFamilyName}
                 onChange={(e) => setNewFamilyName(e.target.value)}
-                className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
 
@@ -477,7 +477,7 @@ export const PianoFamilyManagementView: React.FC = () => {
                   placeholder="예: 김철수"
                   value={newRepName}
                   onChange={(e) => setNewRepName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
                 />
               </div>
               <div>
@@ -489,7 +489,7 @@ export const PianoFamilyManagementView: React.FC = () => {
                   placeholder="010-0000-0000"
                   value={newRepPhone}
                   onChange={(e) => setNewRepPhone(e.target.value)}
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
                 />
               </div>
             </div>
@@ -505,7 +505,7 @@ export const PianoFamilyManagementView: React.FC = () => {
                     <label
                       key={student.id}
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-xs transition-colors ${
-                        isChecked ? 'bg-indigo-50 text-indigo-900 font-bold' : 'hover:bg-slate-100 text-slate-700'
+                        isChecked ? 'bg-slate-50 text-slate-900 font-bold' : 'hover:bg-slate-100 text-slate-700'
                       }`}
                     >
                       <input
@@ -518,7 +518,7 @@ export const PianoFamilyManagementView: React.FC = () => {
                               : [...prev, student.id]
                           );
                         }}
-                        className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                        className="w-4 h-4 rounded border-slate-300 text-slate-800 focus:ring-slate-900"
                       />
                       <span className="font-semibold">{student.name}</span>
                       {student.grade && <span className="text-[11px] text-slate-500">({student.grade})</span>}
@@ -583,7 +583,7 @@ export const PianoFamilyManagementView: React.FC = () => {
                 step={10000}
                 value={creditChangeAmount}
                 onChange={(e) => setCreditChangeAmount(Number(e.target.value))}
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold"
+                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 font-semibold"
               />
             </div>
           </div>

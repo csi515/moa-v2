@@ -123,7 +123,7 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
       {!embedded && (
         <PageHeader
           density="compact"
-          icon={<TrendingUp className="w-6 h-6 text-indigo-600" />}
+          icon={<TrendingUp className="w-6 h-6 text-slate-800" />}
           title="경영 성과 분석"
           description="회원 증감 추이, 결제 수단 점유율 및 공간 가동률 분석"
         />
@@ -145,13 +145,13 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
         <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 mb-1">
             <span className="text-xs font-bold">이번 달 수납률</span>
-            <span className="text-[10px] font-extrabold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md tabular-nums">
+            <span className="text-[10px] font-extrabold text-slate-800 bg-slate-50 px-2 py-0.5 rounded-md tabular-nums">
               목표 95%
             </span>
           </div>
           <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight tabular-nums">92.4%</p>
           <div className="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
-            <div className="bg-indigo-600 h-full rounded-full transition-all" style={{ width: '92.4%' }} />
+            <div className="bg-slate-900 h-full rounded-full transition-all" style={{ width: '92.4%' }} />
           </div>
         </div>
 
@@ -183,7 +183,7 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-indigo-600" />
+              <TrendingUp className="w-4 h-4 text-slate-800" />
               <span>최근 6개월 성장 트렌드</span>
             </h3>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -219,7 +219,7 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
                   {/* 상단 값 뱃지 */}
                   <span
                     className={`text-[10px] sm:text-xs font-bold transition-all mb-1.5 ${
-                      isSelected ? 'text-indigo-600 scale-110 font-extrabold' : 'text-slate-400 group-hover:text-slate-700'
+                      isSelected ? 'text-slate-800 scale-110 font-extrabold' : 'text-slate-400 group-hover:text-slate-700'
                     }`}
                   >
                     {trendMetric === 'students' ? `${val}명` : `${val}만`}
@@ -240,7 +240,7 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
                   {/* 월 라벨 */}
                   <span
                     className={`text-xs font-bold mt-2.5 transition-colors ${
-                      isSelected ? 'text-indigo-900 font-extrabold' : 'text-slate-500'
+                      isSelected ? 'text-slate-900 font-extrabold' : 'text-slate-500'
                     }`}
                   >
                     {item.month}
@@ -253,12 +253,12 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
 
         {/* 선택된 월 세부 브레이크다운 */}
         {selectedBar !== null && (
-          <div className="bg-indigo-50/60 rounded-xl p-3 sm:p-4 border border-indigo-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="bg-slate-50/60 rounded-xl p-3 sm:p-4 border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-indigo-950 text-sm">
                 {SAMPLE_MONTHLY_TREND[selectedBar].month} 세부 지표
               </span>
-              <span className="text-[11px] bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-md font-bold">
+              <span className="text-[11px] bg-slate-100 text-indigo-800 px-2 py-0.5 rounded-md font-bold">
                 총 {SAMPLE_MONTHLY_TREND[selectedBar].totalStudents}명 재원
               </span>
             </div>
@@ -277,7 +277,7 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
         <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-2xs space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <PieChartIcon className="w-4 h-4 text-indigo-600" />
+              <PieChartIcon className="w-4 h-4 text-slate-800" />
               <span>수강료 결제 수단 비율</span>
             </h3>
             <span className="text-xs text-slate-400">당월 기준</span>
@@ -342,7 +342,7 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <Clock className="w-4 h-4 text-indigo-600" />
+                <Clock className="w-4 h-4 text-slate-800" />
                 <span>요일·시간대별 연습실 가동률</span>
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">색상이 진할수록 혼잡한 시간대입니다.</p>
@@ -353,7 +353,7 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
                 <span className="w-2.5 h-2.5 rounded-xs bg-slate-100" />
                 <span className="w-2.5 h-2.5 rounded-xs bg-indigo-200" />
                 <span className="w-2.5 h-2.5 rounded-xs bg-indigo-400" />
-                <span className="w-2.5 h-2.5 rounded-xs bg-indigo-600" />
+                <span className="w-2.5 h-2.5 rounded-xs bg-slate-900" />
               </div>
               <span>혼잡</span>
             </div>
@@ -378,10 +378,10 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
                       const rate = cell?.utilization ?? 0;
 
                       let bgClass = 'bg-slate-100 text-slate-400';
-                      if (rate >= 90) bgClass = 'bg-indigo-600 text-white font-extrabold';
+                      if (rate >= 90) bgClass = 'bg-slate-900 text-white font-extrabold';
                       else if (rate >= 75) bgClass = 'bg-indigo-400 text-white font-bold';
-                      else if (rate >= 50) bgClass = 'bg-indigo-200 text-indigo-900 font-semibold';
-                      else if (rate >= 25) bgClass = 'bg-indigo-50 text-indigo-700';
+                      else if (rate >= 50) bgClass = 'bg-indigo-200 text-slate-900 font-semibold';
+                      else if (rate >= 25) bgClass = 'bg-slate-50 text-slate-700';
 
                       return (
                         <td key={d} className="p-1">

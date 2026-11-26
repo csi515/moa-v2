@@ -117,7 +117,7 @@ export const PianoRecitalQuickBoard: React.FC<PianoRecitalQuickBoardProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="p-1.5 bg-indigo-600 text-white rounded-lg shadow-xs">
+              <span className="p-1.5 bg-slate-900 text-white rounded-lg shadow-xs">
                 <Sparkles className="w-4 h-4" />
               </span>
               <h3 className="font-bold text-slate-900 text-sm sm:text-base">
@@ -134,8 +134,8 @@ export const PianoRecitalQuickBoard: React.FC<PianoRecitalQuickBoardProps> = ({
             onClick={handleSyncToEvent}
             className={`min-h-[40px] px-3.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-xs ${
               hasUnsyncedChanges
-                ? 'bg-indigo-600 hover:bg-indigo-700 text-white ring-2 ring-indigo-300 animate-pulse'
-                : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200'
+                ? 'bg-slate-900 hover:bg-slate-800 text-white ring-2 ring-indigo-300 animate-pulse'
+                : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200'
             }`}
           >
             <RefreshCw className="w-3.5 h-3.5" />
@@ -147,10 +147,10 @@ export const PianoRecitalQuickBoard: React.FC<PianoRecitalQuickBoardProps> = ({
         <div className="space-y-2.5">
           <div className="flex items-center justify-between text-xs">
             <span className="font-bold text-slate-700 flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-indigo-600" />
+              <Users className="w-3.5 h-3.5 text-slate-800" />
               전체 재원생 참가 신청률
             </span>
-            <span className="font-black text-indigo-700 text-sm">
+            <span className="font-black text-slate-700 text-sm">
               {stats.participationRate}%{' '}
               <span className="text-xs font-normal text-slate-500">
                 ({stats.participatingCount}/{stats.totalCount}명 확정)
@@ -197,12 +197,12 @@ export const PianoRecitalQuickBoard: React.FC<PianoRecitalQuickBoardProps> = ({
               </span>
               <span className="text-xs font-black text-slate-600">{stats.declinedCount}명</span>
             </div>
-            <div className="p-2 rounded-xl bg-white/80 border border-indigo-100 flex items-center justify-between">
+            <div className="p-2 rounded-xl bg-white/80 border border-slate-200 flex items-center justify-between">
               <span className="text-[11px] text-indigo-800 font-semibold flex items-center gap-1">
-                <Coins className="w-3.5 h-3.5 text-indigo-600" />
+                <Coins className="w-3.5 h-3.5 text-slate-800" />
                 참가비 완납
               </span>
-              <span className="text-xs font-black text-indigo-700">
+              <span className="text-xs font-black text-slate-700">
                 {stats.feePaidCount}/{stats.participatingCount}명
               </span>
             </div>
@@ -266,7 +266,7 @@ export const PianoRecitalQuickBoard: React.FC<PianoRecitalQuickBoardProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="학생명, 곡명, 학년 검색..."
-            className="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-slate-900 focus:border-transparent"
           />
         </div>
       </div>
@@ -298,7 +298,7 @@ export const PianoRecitalQuickBoard: React.FC<PianoRecitalQuickBoardProps> = ({
                         </span>
                       )}
                       {entry.level && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-600 border border-indigo-100 font-medium">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-50 text-slate-800 border border-slate-200 font-medium">
                           {entry.level}
                         </span>
                       )}
@@ -361,7 +361,7 @@ export const PianoRecitalQuickBoard: React.FC<PianoRecitalQuickBoardProps> = ({
                       placeholder={
                         isParticipating ? '연주곡명 입력 (예: 쇼팽 녹턴 9-2)' : '희망곡 또는 비고'
                       }
-                      className="w-full pl-7 pr-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-indigo-500"
+                      className="w-full pl-7 pr-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-900"
                     />
                   </div>
 
@@ -373,8 +373,8 @@ export const PianoRecitalQuickBoard: React.FC<PianoRecitalQuickBoardProps> = ({
                       !isParticipating
                         ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
                         : entry.feePaid
-                        ? 'bg-indigo-600 text-white shadow-xs ring-1 ring-indigo-700'
-                        : 'bg-white text-slate-600 border border-slate-200 hover:bg-indigo-50 hover:text-indigo-600'
+                        ? 'bg-slate-900 text-white shadow-xs ring-1 ring-indigo-700'
+                        : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-slate-800'
                     }`}
                   >
                     <Coins className="w-3.5 h-3.5" />

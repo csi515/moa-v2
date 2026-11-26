@@ -101,7 +101,7 @@ export const AcceptStaffInvitePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50/70 via-white to-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-slate-100 p-8 text-center animate-in fade-in duration-200">
-        <div className="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl text-white shadow-lg shadow-indigo-100 mb-6">
+        <div className="inline-flex items-center justify-center w-14 h-14 bg-slate-900 rounded-2xl text-white shadow-lg shadow-indigo-100 mb-6">
           <UserCheck className="w-7 h-7" />
         </div>
 
@@ -111,7 +111,7 @@ export const AcceptStaffInvitePage: React.FC = () => {
 
         {authLoading || loading ? (
           <div className="py-8 flex flex-col items-center">
-            <RefreshCw className="w-8 h-8 text-indigo-600 animate-spin mb-3" />
+            <RefreshCw className="w-8 h-8 text-slate-800 animate-spin mb-3" />
             <p className="text-sm font-semibold text-slate-700">
               초대 정보를 확인하고 권한을 연결하는 중입니다...
             </p>
@@ -128,7 +128,7 @@ export const AcceptStaffInvitePage: React.FC = () => {
               onClick={() =>
                 navigate(`/login?returnUrl=/invite/staff/${encodeURIComponent(token || "")}`)
               }
-              className="w-full h-12 flex items-center justify-center space-x-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition shadow-md shadow-indigo-100"
+              className="w-full h-12 flex items-center justify-center space-x-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition shadow-md shadow-indigo-100"
             >
               <span>로그인하고 초대 수락하기</span>
               <ArrowRight className="w-4 h-4" />
@@ -144,20 +144,20 @@ export const AcceptStaffInvitePage: React.FC = () => {
                 직원 합류가 완료되었습니다!
               </h2>
               {roleName && (
-                <div className="inline-block mt-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700">
+                <div className="inline-block mt-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700">
                   직급: {roleName}
                 </div>
               )}
             </div>
             <div
-              className="text-left rounded-2xl border border-indigo-100 bg-indigo-50/60 p-3 space-y-2"
+              className="text-left rounded-2xl border border-slate-200 bg-slate-50/60 p-3 space-y-2"
               data-testid="staff-invite-aftercare"
             >
               <p className="text-xs font-bold text-indigo-800">{STAFF_INVITE_AFTERCARE.title}</p>
               <ol className="space-y-1.5">
                 {STAFF_INVITE_AFTERCARE.steps.map((step, idx) => (
                   <li key={idx} className="flex items-start gap-2 text-[11px] text-slate-600">
-                    <span className="w-4 h-4 rounded-full bg-indigo-600 text-white text-[9px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-4 h-4 rounded-full bg-slate-900 text-white text-[9px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                       {idx + 1}
                     </span>
                     <span>{step}</span>

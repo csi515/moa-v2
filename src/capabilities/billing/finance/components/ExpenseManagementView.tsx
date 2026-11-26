@@ -192,7 +192,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
         {!embedded && (
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-              <Receipt className="w-6 h-6 text-indigo-600" />
+              <Receipt className="w-6 h-6 text-slate-800" />
               지출 관리
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
@@ -211,7 +211,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
         )}
         <button
           onClick={handleOpenCreate}
-          className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-lg transition-all shadow-md flex items-center gap-2 cursor-pointer self-start sm:self-auto sm:ml-auto shrink-0"
+          className="px-4 py-2.5 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-lg transition-all shadow-md flex items-center gap-2 cursor-pointer self-start sm:self-auto sm:ml-auto shrink-0"
         >
           <Plus className="w-4 h-4" />
           신규 지출 등록
@@ -349,7 +349,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => handleOpenEdit(exp)}
-                            className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg"
+                            className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-slate-800 hover:bg-slate-50 rounded-lg"
                           >
                             <Edit className="w-4 h-4" />
                           </button>
@@ -508,7 +508,7 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2.5 min-h-[44px] text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-md flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                  className="px-5 py-2.5 min-h-[44px] text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-lg shadow-md flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
                 >
                   <Save className="w-3.5 h-3.5" />
                   {isSubmitting ? '저장 중…' : '저장'}

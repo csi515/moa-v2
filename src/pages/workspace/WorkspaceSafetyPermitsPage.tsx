@@ -15,7 +15,7 @@ export const WorkspaceSafetyPermitsPage: React.FC = () => {
       <div className="mb-3">
         <Link
           to="/workspace/intranet"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-800 hover:text-indigo-800 transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>사내 앱 런처로 돌아가기</span>

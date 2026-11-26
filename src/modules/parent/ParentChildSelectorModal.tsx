@@ -32,7 +32,7 @@ export const ParentChildSelectorModal: React.FC<ParentChildSelectorModalProps> =
           <button
             type="button"
             onClick={onRegisterChild}
-            className="w-full py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px] hover:bg-indigo-700 transition-colors"
+            className="w-full py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl min-h-[44px] hover:bg-slate-800 transition-colors"
           >
             {childList.length === 0 ? '내 자녀 등록' : '자녀 추가'}
           </button>
@@ -51,7 +51,7 @@ export const ParentChildSelectorModal: React.FC<ParentChildSelectorModalProps> =
               key={child.studentId}
               type="button"
               onClick={() => onSelect(child)}
-              className="w-full flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/40 transition-colors text-left min-h-[44px]"
+              className="w-full flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-slate-50/40 transition-colors text-left min-h-[44px]"
             >
               <div className="min-w-0">
                 <p className="font-bold text-slate-900 truncate">{child.displayName}</p>
@@ -66,7 +66,7 @@ export const ParentChildSelectorModal: React.FC<ParentChildSelectorModalProps> =
                   {child.isPrimary && (
                     <>
                       <span>·</span>
-                      <span className="text-indigo-600 font-bold">대표</span>
+                      <span className="text-slate-800 font-bold">대표</span>
                     </>
                   )}
                 </div>

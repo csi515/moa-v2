@@ -64,7 +64,7 @@ export const WorkloadThresholdSettingsModal: React.FC<WorkloadThresholdSettingsM
         {/* 헤더 */}
         <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50 text-slate-800 dark:bg-indigo-950 dark:text-indigo-400">
               <Sliders className="h-5 w-5" />
             </div>
             <div>
@@ -216,7 +216,7 @@ export const WorkloadThresholdSettingsModal: React.FC<WorkloadThresholdSettingsM
               <button
                 type="submit"
                 disabled={Boolean(validationError)}
-                className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50"
+                className="flex items-center gap-1.5 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-slate-800 disabled:opacity-50"
               >
                 <Check className="h-4 w-4" />
                 설정 저장

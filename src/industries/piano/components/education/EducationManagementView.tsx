@@ -252,7 +252,7 @@ function AssignmentsPanel({
           </div>
           <button
             onClick={handleCreate}
-            className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl flex items-center gap-1"
+            className="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl flex items-center gap-1"
           >
             <Plus className="w-4 h-4" /> 과제 추가
           </button>
@@ -316,7 +316,7 @@ function AchievementsPanel({
         <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="제목 (예: ABRSM Grade 3 Piano)" className="w-full px-3 py-2 text-sm border rounded-xl" />
         <input value={result} onChange={(e) => setResult(e.target.value)} placeholder="결과 (예: Distinction, 2등)" className="w-full px-3 py-2 text-sm border rounded-xl" />
         <input type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} className="w-full px-3 py-2 text-sm border rounded-xl" />
-        <button onClick={handleAdd} className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl">추가</button>
+        <button onClick={handleAdd} className="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl">추가</button>
       </div>
       <div className="bg-white rounded-2xl border border-slate-200 p-4">
         {achievements.map((a) => (
@@ -374,7 +374,7 @@ function ReportsPanel({
         <textarea value={strengths} onChange={(e) => setStrengths(e.target.value)} placeholder="잘한 점" className="w-full px-3 py-2 text-sm border rounded-xl h-16" />
         <textarea value={improvements} onChange={(e) => setImprovements(e.target.value)} placeholder="보완점" className="w-full px-3 py-2 text-sm border rounded-xl h-16" />
         <textarea value={goals} onChange={(e) => setGoals(e.target.value)} placeholder="다음 달 목표" className="w-full px-3 py-2 text-sm border rounded-xl h-16" />
-        <button onClick={handleGenerate} className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl flex items-center gap-1">
+        <button onClick={handleGenerate} className="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl flex items-center gap-1">
           <Plus className="w-4 h-4" /> 리포트 생성
         </button>
       </div>

@@ -95,7 +95,7 @@ export const ParentOrganizationPortal: React.FC<ParentOrganizationPortalProps> =
     ? 'bg-slate-100 text-slate-600'
     : enrollmentStatus === 'leave'
       ? 'bg-amber-50 text-amber-700'
-      : 'bg-indigo-50 text-indigo-700';
+      : 'bg-slate-50 text-slate-700';
 
   const handleSelectChild = (child: GlobalStudent) => {
     setChildMenuOpen(false);
@@ -174,7 +174,7 @@ export const ParentOrganizationPortal: React.FC<ParentOrganizationPortalProps> =
                         onClick={() => handleSelectChild(child)}
                         className={`w-full text-left px-3 py-2.5 text-sm min-h-[44px] ${
                           child.studentId === selectedStudent?.studentId
-                            ? 'font-bold text-indigo-700 bg-indigo-50'
+                            ? 'font-bold text-slate-700 bg-slate-50'
                             : 'text-slate-800 hover:bg-slate-50'
                         }`}
                       >
@@ -228,7 +228,7 @@ export const ParentOrganizationPortal: React.FC<ParentOrganizationPortalProps> =
                         onClick={() => handleSelectEnrollment(enr)}
                         className={`w-full text-left px-3 py-2.5 text-sm min-h-[44px] ${
                           enr.organizationId === organizationId
-                            ? 'font-bold text-indigo-700 bg-indigo-50'
+                            ? 'font-bold text-slate-700 bg-slate-50'
                             : 'text-slate-800 hover:bg-slate-50'
                         }`}
                       >
@@ -290,7 +290,7 @@ export const ParentOrganizationPortal: React.FC<ParentOrganizationPortalProps> =
               setActiveTab(t.id);
             }}
             className={`flex flex-col items-center py-1 px-1.5 text-[10px] min-w-0 min-h-[44px] flex-1 max-w-[5.5rem] ${
-              activeTab === t.id ? 'text-indigo-600 font-bold' : 'text-slate-500'
+              activeTab === t.id ? 'text-slate-800 font-bold' : 'text-slate-500'
             }`}
           >
             {t.icon}

@@ -169,7 +169,7 @@ export const VolunteerListView: React.FC = () => {
                   <button
                     type="button"
                     disabled={!canJoin || !memberId || busyId === act.id}
-                    className="min-h-11 rounded-xl bg-indigo-600 px-4 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
+                    className="min-h-11 rounded-xl bg-slate-900 px-4 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
                     onClick={() => void handleJoin(act.id)}
                   >
                     {!canJoin

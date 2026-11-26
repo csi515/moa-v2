@@ -84,7 +84,7 @@ export const MoaRichEditor: React.FC<MoaRichEditorProps> = ({
             disabled={!editor.can().chain().focus().toggleBold().run()}
             className={cn(
               'p-2 rounded-lg text-slate-600 hover:bg-white hover:text-slate-900 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center',
-              editor.isActive('bold') && 'bg-white text-indigo-600 shadow-2xs font-bold'
+              editor.isActive('bold') && 'bg-white text-slate-800 shadow-2xs font-bold'
             )}
             title="굵게 (Ctrl+B)"
           >
@@ -96,7 +96,7 @@ export const MoaRichEditor: React.FC<MoaRichEditorProps> = ({
             disabled={!editor.can().chain().focus().toggleItalic().run()}
             className={cn(
               'p-2 rounded-lg text-slate-600 hover:bg-white hover:text-slate-900 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center',
-              editor.isActive('italic') && 'bg-white text-indigo-600 shadow-2xs'
+              editor.isActive('italic') && 'bg-white text-slate-800 shadow-2xs'
             )}
             title="기울임 (Ctrl+I)"
           >
@@ -108,7 +108,7 @@ export const MoaRichEditor: React.FC<MoaRichEditorProps> = ({
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
             className={cn(
               'p-2 rounded-lg text-slate-600 hover:bg-white hover:text-slate-900 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center',
-              editor.isActive('heading', { level: 2 }) && 'bg-white text-indigo-600 shadow-2xs font-bold'
+              editor.isActive('heading', { level: 2 }) && 'bg-white text-slate-800 shadow-2xs font-bold'
             )}
             title="소제목"
           >
@@ -119,7 +119,7 @@ export const MoaRichEditor: React.FC<MoaRichEditorProps> = ({
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             className={cn(
               'p-2 rounded-lg text-slate-600 hover:bg-white hover:text-slate-900 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center',
-              editor.isActive('bulletList') && 'bg-white text-indigo-600 shadow-2xs'
+              editor.isActive('bulletList') && 'bg-white text-slate-800 shadow-2xs'
             )}
             title="글머리 기호 목록"
           >
@@ -130,7 +130,7 @@ export const MoaRichEditor: React.FC<MoaRichEditorProps> = ({
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
             className={cn(
               'p-2 rounded-lg text-slate-600 hover:bg-white hover:text-slate-900 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center',
-              editor.isActive('orderedList') && 'bg-white text-indigo-600 shadow-2xs'
+              editor.isActive('orderedList') && 'bg-white text-slate-800 shadow-2xs'
             )}
             title="번호 매기기 목록"
           >
@@ -141,7 +141,7 @@ export const MoaRichEditor: React.FC<MoaRichEditorProps> = ({
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
             className={cn(
               'p-2 rounded-lg text-slate-600 hover:bg-white hover:text-slate-900 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center',
-              editor.isActive('blockquote') && 'bg-white text-indigo-600 shadow-2xs'
+              editor.isActive('blockquote') && 'bg-white text-slate-800 shadow-2xs'
             )}
             title="인용구"
           >

@@ -416,10 +416,10 @@ export const InventoryScannerModal: React.FC<InventoryScannerModalProps> = ({
         )}
 
         {matchedBundle && (
-          <div className="p-4 bg-purple-50 border border-purple-200 rounded-2xl space-y-3 animate-fadeIn">
+          <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3 animate-fadeIn">
             <div className="flex items-start justify-between gap-2">
               <div className="space-y-0.5">
-                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold bg-purple-200 text-purple-900">
+                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold bg-purple-200 text-slate-900">
                   <Layers className="w-3 h-3" />
                   번들 세트 상품
                 </div>
@@ -429,16 +429,16 @@ export const InventoryScannerModal: React.FC<InventoryScannerModalProps> = ({
                 </p>
               </div>
 
-              <span className="text-sm font-black text-purple-900">
+              <span className="text-sm font-black text-slate-900">
                 {matchedBundle.sellingPrice.toLocaleString('ko-KR')}원
               </span>
             </div>
 
-            <div className="pt-2 border-t border-purple-100">
+            <div className="pt-2 border-t border-slate-200">
               <button
                 type="button"
                 onClick={() => handleBundleSell(matchedBundle)}
-                className="w-full py-2.5 px-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                className="w-full py-2.5 px-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer"
               >
                 <ArrowRight className="w-4 h-4" />
                 번들 1세트 판매 및 하위 부품 자동 출고

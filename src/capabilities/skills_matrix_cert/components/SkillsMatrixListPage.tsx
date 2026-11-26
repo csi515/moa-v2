@@ -81,7 +81,7 @@ export const SkillsMatrixListPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2 text-slate-800 dark:text-slate-100">
-            <GraduationCap className="w-7 h-7 text-indigo-600" />
+            <GraduationCap className="w-7 h-7 text-slate-800" />
             직원 법정 자격증 갱신 및 직무 스킬 매트릭스
           </h1>
           <p className="text-sm text-slate-500 mt-1">
@@ -90,7 +90,7 @@ export const SkillsMatrixListPage: React.FC = () => {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-medium"
         >
           <Plus className="w-4 h-4" />
           신규 직원 자격/스킬 등록
@@ -116,7 +116,7 @@ export const SkillsMatrixListPage: React.FC = () => {
               {/* 자격증 리스트 */}
               <div>
                 <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1">
-                  <Award className="w-3.5 h-3.5 text-indigo-600" /> 보유 자격증 및 갱신 현황
+                  <Award className="w-3.5 h-3.5 text-slate-800" /> 보유 자격증 및 갱신 현황
                 </h4>
                 <div className="space-y-1.5">
                   {r.certifications.map((c) => {
@@ -158,10 +158,10 @@ export const SkillsMatrixListPage: React.FC = () => {
                   {r.skills.map((s, idx) => (
                     <span
                       key={idx}
-                      className="px-2.5 py-1 rounded-lg text-xs bg-indigo-50 text-indigo-800 font-semibold border border-indigo-200 flex items-center gap-1.5"
+                      className="px-2.5 py-1 rounded-lg text-xs bg-slate-50 text-indigo-800 font-semibold border border-slate-200 flex items-center gap-1.5"
                     >
                       {s.skill_name}
-                      <span className="bg-indigo-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px]">
+                      <span className="bg-slate-900 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px]">
                         L{s.proficiency_level}
                       </span>
                     </span>
@@ -176,7 +176,7 @@ export const SkillsMatrixListPage: React.FC = () => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-800 rounded-xl max-w-md w-full p-6 space-y-4">
-            <h2 className="text-xl font-bold flex items-center gap-2 text-indigo-700">
+            <h2 className="text-xl font-bold flex items-center gap-2 text-slate-700">
               <GraduationCap className="w-5 h-5" />
               신규 직원 자격증 및 스킬 등록
             </h2>
@@ -260,7 +260,7 @@ export const SkillsMatrixListPage: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700"
+                  className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800"
                 >
                   등록 완료
                 </button>

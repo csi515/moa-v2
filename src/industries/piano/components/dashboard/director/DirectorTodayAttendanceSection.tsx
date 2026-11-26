@@ -124,7 +124,7 @@ export const DirectorTodayAttendanceSection: FC<DirectorTodayAttendanceSectionPr
           <button
             type="button"
             onClick={onOpenAttendance}
-            className="text-xs font-bold text-indigo-600 min-h-[44px] px-1 shrink-0"
+            className="text-xs font-bold text-slate-800 min-h-[44px] px-1 shrink-0"
           >
             출결 전체
           </button>
@@ -179,7 +179,7 @@ export const DirectorTodayAttendanceSection: FC<DirectorTodayAttendanceSectionPr
               <button
                 type="button"
                 onClick={onOpenAttendance}
-                className="w-full text-center text-xs font-bold text-indigo-600 py-2 min-h-[44px]"
+                className="w-full text-center text-xs font-bold text-slate-800 py-2 min-h-[44px]"
               >
                 미등원 {counts.unchecked - uncheckedRows.length}명 더보기
               </button>

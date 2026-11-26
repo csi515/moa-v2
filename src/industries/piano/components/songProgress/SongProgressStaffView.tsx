@@ -111,7 +111,7 @@ export const SongProgressStaffView: FC = () => {
               {students.length}명
             </span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center shrink-0">
             <Users className="w-5 h-5" />
           </div>
         </div>
@@ -173,7 +173,7 @@ export const SongProgressStaffView: FC = () => {
               value={studentQuery}
               onChange={(e) => setStudentQuery(e.target.value)}
               placeholder="학생 이름 검색"
-              className="w-full pl-9 pr-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full pl-9 pr-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
@@ -185,7 +185,7 @@ export const SongProgressStaffView: FC = () => {
               onClick={() => setSelectedLevel('ALL')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
                 selectedLevel === 'ALL'
-                  ? 'bg-indigo-600 text-white'
+                  ? 'bg-slate-900 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
               }`}
             >
@@ -198,7 +198,7 @@ export const SongProgressStaffView: FC = () => {
                 onClick={() => setSelectedLevel(lvl)}
                 className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
                   selectedLevel === lvl
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-slate-900 text-white'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
                 }`}
               >
@@ -226,7 +226,7 @@ export const SongProgressStaffView: FC = () => {
                 {/* 상단 학생 기본 정보 */}
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <span className="w-9 h-9 rounded-xl bg-indigo-50 group-hover:bg-indigo-600 group-hover:text-white text-indigo-700 font-black text-sm flex items-center justify-center shrink-0 transition-colors">
+                    <span className="w-9 h-9 rounded-xl bg-slate-50 group-hover:bg-slate-900 group-hover:text-white text-slate-700 font-black text-sm flex items-center justify-center shrink-0 transition-colors">
                       {student.name.slice(0, 1)}
                     </span>
                     <div className="min-w-0">
@@ -235,7 +235,7 @@ export const SongProgressStaffView: FC = () => {
                       </h4>
                       <p className="text-[11px] text-slate-500 truncate mt-0.5">
                         {student.level ? (
-                          <span className="font-semibold text-indigo-600">{student.level}</span>
+                          <span className="font-semibold text-slate-800">{student.level}</span>
                         ) : (
                           '레벨 미지정'
                         )}
@@ -246,7 +246,7 @@ export const SongProgressStaffView: FC = () => {
                   <button
                     type="button"
                     onClick={() => setStampBoardStudent(student)}
-                    className="p-1.5 text-slate-400 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition cursor-pointer"
+                    className="p-1.5 text-slate-400 hover:text-slate-800 rounded-lg hover:bg-slate-50 transition cursor-pointer"
                     title="스탬프판 열기"
                     aria-label="스탬프판 열기"
                   >

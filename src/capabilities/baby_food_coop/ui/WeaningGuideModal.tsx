@@ -16,7 +16,7 @@ export function WeaningGuideModal({ babyName, guide, onClose }: WeaningGuideModa
       <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-indigo-600" />
+            <Sparkles className="h-5 w-5 text-slate-800" />
             <h3 className="text-lg font-bold text-slate-900">
               {babyName} 아기 맞춤 {guide.stageLabel} 가이드
             </h3>
@@ -35,7 +35,7 @@ export function WeaningGuideModal({ babyName, guide, onClose }: WeaningGuideModa
           <div>
             <span className="block text-xs font-semibold text-slate-600">단계 설명 & 식사 빈도</span>
             <p className="mt-1 font-medium text-slate-800">{guide.description}</p>
-            <p className="mt-0.5 text-xs font-semibold text-indigo-600">
+            <p className="mt-0.5 text-xs font-semibold text-slate-800">
               섭취 주기: {guide.feedingFrequency} (권장 질감: {guide.textureGuide})
             </p>
           </div>

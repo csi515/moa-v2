@@ -59,7 +59,7 @@ export const PianoFloatingActionMenu: React.FC<PianoFloatingActionMenuProps> = (
               className="flex items-center gap-2 pl-3.5 pr-2.5 py-2 rounded-full bg-white text-slate-800 shadow-lg border border-slate-200/90 hover:bg-slate-50 active:scale-95 transition-all cursor-pointer"
             >
               <span className="text-xs font-bold">수업 노트 기록</span>
-              <span className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0">
+              <span className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center shrink-0">
                 <Edit3 className="w-4 h-4" />
               </span>
             </button>
@@ -85,7 +85,7 @@ export const PianoFloatingActionMenu: React.FC<PianoFloatingActionMenuProps> = (
           className={`w-13 h-13 rounded-full flex items-center justify-center text-white shadow-xl transition-all duration-200 cursor-pointer active:scale-90 ${
             isOpen
               ? 'bg-slate-800 rotate-45 ring-4 ring-slate-300'
-              : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/30'
+              : 'bg-slate-900 hover:bg-slate-800 shadow-indigo-600/30'
           }`}
           aria-label="빠른 레슨 액션 메뉴"
         >

@@ -105,7 +105,7 @@ export const LevelAssessmentView: React.FC = () => {
           </button>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium text-sm shadow-sm transition"
+            className="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-medium text-sm shadow-sm transition"
           >
             + 새 심사 회차 개설
           </button>
@@ -126,7 +126,7 @@ export const LevelAssessmentView: React.FC = () => {
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700">
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-50 text-slate-700">
                     {item.target_program}
                   </span>
                   <h3 className="text-base font-bold text-slate-900 mt-1">{item.title}</h3>
@@ -211,7 +211,7 @@ export const LevelAssessmentView: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium"
+                  className="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 text-sm font-medium"
                 >
                   개설 완료
                 </button>
@@ -249,7 +249,7 @@ export const LevelAssessmentView: React.FC = () => {
                   a.click();
                   URL.revokeObjectURL(url);
                 }}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-xs font-semibold"
+                className="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 text-xs font-semibold"
               >
                 SVG 파일로 다운로드
               </button>

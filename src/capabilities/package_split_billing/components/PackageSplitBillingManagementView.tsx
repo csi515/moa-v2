@@ -89,7 +89,7 @@ export function PackageSplitBillingManagementView() {
       <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
-            <PieChart className="w-5 h-5 text-indigo-600" />
+            <PieChart className="w-5 h-5 text-slate-800" />
             복합 패키지 분할 매출 귀속 & 선수금 부채 관리
           </h1>
           <p className="text-xs text-slate-500 mt-1">
@@ -130,7 +130,7 @@ export function PackageSplitBillingManagementView() {
 
         <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
           <div className="text-xs font-medium text-slate-500">전체 매출 실현율</div>
-          <div className="text-2xl font-black text-indigo-600 mt-1">
+          <div className="text-2xl font-black text-slate-800 mt-1">
             {portfolioSummary.overallRealizationRatePercent}<span className="text-xs font-semibold text-slate-400">%</span>
           </div>
           <div className="text-[11px] text-slate-400 mt-0.5">소진 진행 지수</div>
@@ -154,7 +154,7 @@ export function PackageSplitBillingManagementView() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-black text-slate-800 text-sm">{pkg.customerName} 회원</span>
-                      <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full">
+                      <span className="text-xs font-bold text-slate-700 bg-slate-50 px-2.5 py-0.5 rounded-full">
                         {pkg.packageName}
                       </span>
                       <span className="text-xs font-mono text-slate-400">
@@ -196,7 +196,7 @@ export function PackageSplitBillingManagementView() {
                         {/* 진행 바 */}
                         <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
                           <div
-                            className="bg-indigo-600 h-full rounded-full transition-all"
+                            className="bg-slate-900 h-full rounded-full transition-all"
                             style={{ width: `${percent}%` }}
                           />
                         </div>
@@ -207,7 +207,7 @@ export function PackageSplitBillingManagementView() {
                             <button
                               type="button"
                               onClick={() => handleConsume(pkg.id, item.id)}
-                              className="px-2 py-0.5 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 shadow-2xs"
+                              className="px-2 py-0.5 bg-slate-900 text-white rounded-lg font-bold hover:bg-slate-800 shadow-2xs"
                             >
                               +1회 이용 차감
                             </button>

@@ -13,7 +13,7 @@ export interface CalendarMonthViewProps<T = any> {
 const WEEK_HEADER = ['일', '월', '화', '수', '목', '금', '토'];
 
 const COLOR_MAP: Record<string, { bg: string; text: string; dot: string }> = {
-  indigo: { bg: 'bg-indigo-50 border-indigo-200', text: 'text-indigo-700', dot: 'bg-indigo-500' },
+  indigo: { bg: 'bg-slate-50 border-slate-200', text: 'text-slate-700', dot: 'bg-indigo-500' },
   teal: { bg: 'bg-teal-50 border-teal-200', text: 'text-teal-700', dot: 'bg-teal-500' },
   rose: { bg: 'bg-rose-50 border-rose-200', text: 'text-rose-700', dot: 'bg-rose-500' },
   amber: { bg: 'bg-amber-50 border-amber-200', text: 'text-amber-700', dot: 'bg-amber-500' },
@@ -60,7 +60,7 @@ export const CalendarMonthView: FC<CalendarMonthViewProps> = ({
         {WEEK_HEADER.map((label, idx) => (
           <div
             key={label}
-            className={`${idx === 0 ? 'text-rose-600' : idx === 6 ? 'text-indigo-600' : ''}`}
+            className={`${idx === 0 ? 'text-rose-600' : idx === 6 ? 'text-slate-800' : ''}`}
           >
             {label}
           </div>
@@ -78,20 +78,20 @@ export const CalendarMonthView: FC<CalendarMonthViewProps> = ({
             <div
               key={day.date}
               onClick={() => handleCellClick(day)}
-              className={`min-h-[88px] sm:min-h-[105px] p-1.5 flex flex-col transition-colors cursor-pointer group hover:bg-indigo-50/20 ${
+              className={`min-h-[88px] sm:min-h-[105px] p-1.5 flex flex-col transition-colors cursor-pointer group hover:bg-slate-50/20 ${
                 !day.isCurrentMonth ? 'bg-slate-50/50 text-slate-300' : 'bg-white'
-              } ${day.isToday ? 'bg-indigo-50/40 ring-1 ring-indigo-500 ring-inset' : ''}`}
+              } ${day.isToday ? 'bg-slate-50/40 ring-1 ring-indigo-500 ring-inset' : ''}`}
             >
               {/* 상단 날짜 번호 및 도트 */}
               <div className="flex items-center justify-between mb-1">
                 <span
                   className={`text-xs font-black inline-flex items-center justify-center w-6 h-6 rounded-full transition-transform group-hover:scale-105 ${
                     day.isToday
-                      ? 'bg-indigo-600 text-white shadow-xs'
+                      ? 'bg-slate-900 text-white shadow-xs'
                       : isSun
                         ? 'text-rose-600'
                         : isSat
-                          ? 'text-indigo-600'
+                          ? 'text-slate-800'
                           : day.isCurrentMonth
                             ? 'text-slate-800'
                             : 'text-slate-300'

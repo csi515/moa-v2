@@ -105,7 +105,7 @@ export const GuardianLinkQrScanner: React.FC<GuardianLinkQrScannerProps> = ({
       <div className="bg-white rounded-2xl p-4 w-full max-w-sm shadow-2xl">
         <div className="flex justify-between items-center mb-3">
           <h3 className="font-bold flex items-center gap-2 text-sm">
-            <Camera className="w-4 h-4 text-indigo-600" />
+            <Camera className="w-4 h-4 text-slate-800" />
             QR 코드 스캔
           </h3>
           <button

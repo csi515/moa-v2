@@ -516,7 +516,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         type="submit"
         form="student-form"
         disabled={saveDisabled}
-        className="px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 rounded-xl flex items-center gap-2 disabled:opacity-50 min-h-[44px] cursor-pointer hover:bg-indigo-700 transition-colors shadow-xs"
+        className="px-6 py-2.5 text-sm font-bold text-white bg-slate-900 rounded-xl flex items-center gap-2 disabled:opacity-50 min-h-[44px] cursor-pointer hover:bg-slate-800 transition-colors shadow-xs"
       >
         {isSubmitting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
         {isSubmitting ? '저장 중…' : isEdit ? '수정 저장' : `${customerLabel} 등록`}
@@ -592,7 +592,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
             <label className="flex items-center gap-2.5 rounded-xl border border-slate-200/80 bg-slate-50/80 px-3.5 py-2.5 cursor-pointer hover:bg-slate-100/80 transition-colors">
               <input
                 type="checkbox"
-                className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                className="w-4 h-4 rounded border-slate-300 text-slate-800 focus:ring-slate-900"
                 checked={isAdultSelf}
                 onChange={(e) => {
                   setIsAdultSelf(e.target.checked);
@@ -616,8 +616,8 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
             </label>
 
             {isAdultSelf ? (
-              <div className="p-3.5 rounded-xl border border-indigo-100 bg-indigo-50/50 space-y-2">
-                <label className="block text-xs font-bold text-indigo-900">
+              <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                <label className="block text-xs font-bold text-slate-900">
                   {customerLabel} 본인 휴대폰 번호 <span className="text-rose-500">*</span>
                   <span className="text-slate-500 font-normal text-[11px] ml-1.5">
                     출결 체크 및 안내 알림 수신 번호
@@ -630,7 +630,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
                   onChange={(e) => updateFormData({ phone: e.target.value })}
                   placeholder="010-0000-0000"
                   autoComplete="tel"
-                  className="w-full px-3 py-2 text-sm bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px]"
+                  className="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[44px]"
                 />
               </div>
             ) : (
@@ -653,13 +653,13 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
 
           {/* 2.5 신규 등록 시 수업 시간표 바로 배정 (원스톱 연동) */}
           {!isEdit && classes.length > 0 && !showDetails && (
-            <div className="p-4 rounded-2xl border border-indigo-100 bg-indigo-50/35 space-y-2.5">
+            <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/35 space-y-2.5">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-indigo-600" />
+                  <Calendar className="w-4 h-4 text-slate-800" />
                   {serviceLabel} 시간표 바로 배정 (선택)
                 </label>
-                <span className="text-[11px] text-indigo-700 font-bold">
+                <span className="text-[11px] text-slate-700 font-bold">
                   {formData.classIds.length > 0
                     ? `${formData.classIds.length}개 시간대 선택됨`
                     : '등록과 동시에 시간표 배치'}
@@ -688,10 +688,10 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
               <button
                 type="button"
                 onClick={() => setShowDetails((v) => !v)}
-                className="w-full py-3 px-4 rounded-2xl border border-dashed border-indigo-200 bg-indigo-50/40 hover:bg-indigo-50/80 hover:border-indigo-300 transition-all flex items-center justify-between text-left group cursor-pointer"
+                className="w-full py-3 px-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50/40 hover:bg-slate-50/80 hover:border-indigo-300 transition-all flex items-center justify-between text-left group cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-indigo-100 group-hover:bg-indigo-200 text-indigo-700 flex items-center justify-center shrink-0 transition-colors">
+                  <div className="w-7 h-7 rounded-lg bg-slate-100 group-hover:bg-indigo-200 text-slate-700 flex items-center justify-center shrink-0 transition-colors">
                     {showDetails ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </div>
                   <div>
@@ -699,13 +699,13 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
                       {showDetails ? '상세 정보 접기' : '학교, 수업, 수강료 등 상세 정보 입력하기'}
                     </p>
                     {!showDetails && (
-                      <p className="text-[11px] text-indigo-600/80 mt-0.5">
+                      <p className="text-[11px] text-slate-800/80 mt-0.5">
                         기본 설정 적용: 일반(매월 {formData.paymentDay}일 · {Number(formData.tuitionFee).toLocaleString()}원) · 오늘 등록
                       </p>
                     )}
                   </div>
                 </div>
-                <span className="text-xs font-semibold text-indigo-600 shrink-0 ml-2">
+                <span className="text-xs font-semibold text-slate-800 shrink-0 ml-2">
                   {showDetails ? '접기' : '선택 입력'}
                 </span>
               </button>
@@ -739,7 +739,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
               {customFieldsDef.length > 0 && (
                 <section className="p-4 bg-slate-50/70 border border-slate-200/80 rounded-2xl space-y-3">
                   <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                    <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-600" /> {placeLabel} 맞춤 항목
+                    <SlidersHorizontal className="w-3.5 h-3.5 text-slate-800" /> {placeLabel} 맞춤 항목
                   </h4>
                   <CustomFieldsForm
                     fields={customFieldsDef}
@@ -763,7 +763,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
                   value={formData.specialNotes}
                   onChange={(e) => updateFormData({ specialNotes: e.target.value, memo: '' })}
                   placeholder={rosterNotesPlaceholder(contactLabel)}
-                  className="w-full px-3 py-2.5 text-sm bg-amber-50/60 border border-amber-100 rounded-xl resize-none focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[88px]"
+                  className="w-full px-3 py-2.5 text-sm bg-amber-50/60 border border-amber-100 rounded-xl resize-none focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[88px]"
                 />
               </section>
 

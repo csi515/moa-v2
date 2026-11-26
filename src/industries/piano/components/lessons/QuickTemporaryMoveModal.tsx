@@ -181,7 +181,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
             className={`min-h-[44px] px-6 py-2.5 rounded-xl text-white text-xs font-black shadow-md transition-all cursor-pointer flex items-center gap-1.5 ${
               !selectedTargetTime || (isShuttleStudent && !shuttleConfirmed)
                 ? 'bg-slate-300 cursor-not-allowed text-slate-500 shadow-none'
-                : 'bg-purple-600 hover:bg-purple-700 shadow-purple-600/20'
+                : 'bg-slate-900 hover:bg-slate-800 shadow-purple-600/20'
             }`}
           >
             <Check className="w-4 h-4" />
@@ -200,7 +200,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
             </div>
             <div className="text-right">
               <span className="text-[11px] font-bold text-slate-400">현재 정규 수업</span>
-              <p className="text-sm font-mono font-bold text-indigo-700">
+              <p className="text-sm font-mono font-bold text-slate-700">
                 {fromClass.startTime} ({fromClass.name})
               </p>
               {fromClass.teacherName && (
@@ -238,7 +238,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
           {/* 1. 오늘 개설된 다른 반 슬롯 원클릭 칩 */}
           <div>
             <label className="text-xs font-black text-slate-700 flex items-center gap-1.5 mb-2.5">
-              <Clock className="w-3.5 h-3.5 text-purple-600" />
+              <Clock className="w-3.5 h-3.5 text-slate-800" />
               오늘 개설된 다른 수업 슬롯 (추천)
             </label>
             {availableClassSlots.length === 0 ? (
@@ -260,12 +260,12 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
                         isBreak
                           ? 'opacity-40 bg-slate-100 border-slate-200 cursor-not-allowed'
                           : isSelected
-                            ? 'border-purple-600 bg-purple-50 ring-2 ring-purple-500'
-                            : 'border-slate-200 hover:border-purple-200 hover:bg-slate-50'
+                            ? 'border-purple-600 bg-slate-50 ring-2 ring-purple-500'
+                            : 'border-slate-200 hover:border-slate-200 hover:bg-slate-50'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-mono text-sm font-black text-purple-700">
+                        <span className="font-mono text-sm font-black text-slate-700">
                           {cls.time}
                         </span>
                         {isBreak && (
@@ -289,12 +289,12 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
 
           {/* 엣지 5번: 타 강사 반 배정 시 [선생님 인수인계 카드] 자동 노출 */}
           {isDifferentTeacher && (
-            <div className="p-3.5 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-950 text-xs space-y-2.5 animate-in fade-in duration-200">
-              <div className="flex items-center gap-2 font-bold text-indigo-900">
-                <UserCheck className="w-4 h-4 text-indigo-600" />
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-indigo-950 text-xs space-y-2.5 animate-in fade-in duration-200">
+              <div className="flex items-center gap-2 font-bold text-slate-900">
+                <UserCheck className="w-4 h-4 text-slate-800" />
                 <span>선생님 인수인계 (담당 강사 변경)</span>
               </div>
-              <p className="text-[11px] text-indigo-700">
+              <p className="text-[11px] text-slate-700">
                 담당 강사가 <strong>{fromClass.teacherName}</strong> 선생님에서 <strong>{targetClassMatch?.teacherName}</strong> 선생님으로 변경됩니다. 오늘 지도할 교재와 진도를 남겨주세요.
               </p>
               <div className="grid grid-cols-2 gap-2">
@@ -305,7 +305,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
                     value={handoverSong}
                     onChange={(e) => setHandoverSong(e.target.value)}
                     placeholder="예: 체르니 30번 5번"
-                    className="w-full text-xs border border-indigo-200 rounded-xl px-2.5 py-1.5 bg-white focus:outline-hidden focus:ring-1 focus:ring-indigo-500"
+                    className="w-full text-xs border border-slate-200 rounded-xl px-2.5 py-1.5 bg-white focus:outline-hidden focus:ring-1 focus:ring-slate-900"
                   />
                 </div>
                 <div>
@@ -315,7 +315,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
                     value={handoverProgress}
                     onChange={(e) => setHandoverProgress(e.target.value)}
                     placeholder="예: 8마디 손목 릴랙스"
-                    className="w-full text-xs border border-indigo-200 rounded-xl px-2.5 py-1.5 bg-white focus:outline-hidden focus:ring-1 focus:ring-indigo-500"
+                    className="w-full text-xs border border-slate-200 rounded-xl px-2.5 py-1.5 bg-white focus:outline-hidden focus:ring-1 focus:ring-slate-900"
                   />
                 </div>
               </div>
@@ -326,7 +326,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
                   value={handoverTeacherMemo}
                   onChange={(e) => setHandoverTeacherMemo(e.target.value)}
                   placeholder="예: 오늘 스타카토 위주로 점검 부탁드립니다."
-                  className="w-full text-xs border border-indigo-200 rounded-xl px-2.5 py-1.5 bg-white focus:outline-hidden focus:ring-1 focus:ring-indigo-500"
+                  className="w-full text-xs border border-slate-200 rounded-xl px-2.5 py-1.5 bg-white focus:outline-hidden focus:ring-1 focus:ring-slate-900"
                 />
               </div>
             </div>
@@ -356,8 +356,8 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
                         : isCurrent
                           ? 'opacity-30 bg-slate-100 text-slate-400 cursor-not-allowed'
                           : isSelected
-                            ? 'bg-purple-600 text-white shadow-xs'
-                            : 'bg-slate-50 text-slate-700 hover:bg-purple-50'
+                            ? 'bg-slate-900 text-white shadow-xs'
+                            : 'bg-slate-50 text-slate-700 hover:bg-slate-50'
                     }`}
                     title={isBreak ? '원내 휴게/소독 시간' : isCurrent ? '현재 수업 시간' : undefined}
                   >
@@ -378,7 +378,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
               placeholder="예: 병원 진료로 1시간 늦게 등원, 학교 행사 등"
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
-              className="w-full text-xs border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-hidden focus:ring-2 focus:ring-purple-500"
+              className="w-full text-xs border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
             />
           </div>
         </div>

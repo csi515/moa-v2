@@ -22,7 +22,7 @@ export const DirectorDashboardWelcome: React.FC<DirectorDashboardWelcomeProps> =
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[11px] font-semibold rounded-full flex items-center gap-1">
+            <span className="px-2 py-0.5 bg-slate-50 text-slate-700 text-[11px] font-semibold rounded-full flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               오늘의 학원 브리핑
             </span>
@@ -40,7 +40,7 @@ export const DirectorDashboardWelcome: React.FC<DirectorDashboardWelcomeProps> =
             </p>
           ) : (
             <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-snug max-w-2xl">
-              오늘 예정된 수업은 <strong className="text-indigo-600 font-semibold">{stats.todayClassesCount}개 반</strong>이며,
+              오늘 예정된 수업은 <strong className="text-slate-800 font-semibold">{stats.todayClassesCount}개 반</strong>이며,
               재학생 <strong className="text-slate-900 font-semibold">{stats.activeStudents}명</strong>이 함께하고 있습니다.
             </p>
           )}
@@ -53,7 +53,7 @@ export const DirectorDashboardWelcome: React.FC<DirectorDashboardWelcomeProps> =
               <button
                 type="button"
                 onClick={() => setActiveTab('students')}
-                className="px-3 sm:px-3.5 py-1.5 min-h-[38px] bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
+                className="px-3 sm:px-3.5 py-1.5 min-h-[38px] bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
               >
                 <UserPlus className="w-4 h-4" />
                 첫 학생 등록하기
@@ -72,7 +72,7 @@ export const DirectorDashboardWelcome: React.FC<DirectorDashboardWelcomeProps> =
               <button
                 type="button"
                 onClick={() => setActiveTab('attendance')}
-                className="px-3 sm:px-3.5 py-1.5 min-h-[38px] bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
+                className="px-3 sm:px-3.5 py-1.5 min-h-[38px] bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
               >
                 <CalendarCheck className="w-4 h-4" />
                 오늘 출결 체크

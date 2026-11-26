@@ -64,7 +64,7 @@ export const PianoAttendanceTimelineGroup: FC<PianoAttendanceTimelineGroupProps>
       <div
         className={`px-4 py-3 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 ${
           isCurrentSlot
-            ? 'bg-gradient-to-r from-indigo-50/80 via-white to-indigo-50/40 border-indigo-100'
+            ? 'bg-gradient-to-r from-indigo-50/80 via-white to-indigo-50/40 border-slate-200'
             : isAllCompleted
               ? 'bg-slate-50/60 border-slate-100'
               : 'bg-slate-50/90 border-slate-150'
@@ -74,7 +74,7 @@ export const PianoAttendanceTimelineGroup: FC<PianoAttendanceTimelineGroupProps>
           <div
             className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
               isCurrentSlot
-                ? 'bg-indigo-600 text-white shadow-xs'
+                ? 'bg-slate-900 text-white shadow-xs'
                 : isAllCompleted
                   ? 'bg-emerald-100 text-emerald-700'
                   : 'bg-slate-200 text-slate-700'
@@ -100,7 +100,7 @@ export const PianoAttendanceTimelineGroup: FC<PianoAttendanceTimelineGroupProps>
 
           {/* 현재 시간대 펄스 배지 */}
           {isCurrentSlot && (
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-extrabold bg-indigo-600 text-white shadow-xs animate-pulse">
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-extrabold bg-slate-900 text-white shadow-xs animate-pulse">
               <span className="w-1.5 h-1.5 rounded-full bg-white" />
               현재 수업
             </span>

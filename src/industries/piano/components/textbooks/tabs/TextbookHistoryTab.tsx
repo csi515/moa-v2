@@ -8,7 +8,7 @@ interface TextbookHistoryTabProps {
 
 function TypeBadge({ type }: { type: TextbookInventoryTransaction['transactionType'] }) {
   if (type === 'inbound') {
-    return <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-bold text-[11px]">신규입고</span>;
+    return <span className="px-2 py-0.5 rounded-full bg-slate-50 text-slate-700 font-bold text-[11px]">신규입고</span>;
   }
   if (type === 'sale') {
     return <span className="px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 font-bold text-[11px]">판매출고</span>;
@@ -39,7 +39,7 @@ export const TextbookHistoryTab: React.FC<TextbookHistoryTabProps> = ({ transact
                 onClick={() => setHistoryFilterType(t)}
                 className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors ${
                   historyFilterType === t
-                    ? 'bg-indigo-600 text-white border-indigo-600'
+                    ? 'bg-slate-900 text-white border-indigo-600'
                     : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -82,7 +82,7 @@ export const TextbookHistoryTab: React.FC<TextbookHistoryTabProps> = ({ transact
                     <TypeBadge type={tx.transactionType} />
                   </td>
                   <td className="py-3 px-3 text-center font-bold">
-                    <span className={tx.quantity > 0 ? 'text-indigo-600' : 'text-rose-600'}>
+                    <span className={tx.quantity > 0 ? 'text-slate-800' : 'text-rose-600'}>
                       {tx.quantity > 0 ? `+${tx.quantity}` : tx.quantity}권
                     </span>
                   </td>
@@ -115,7 +115,7 @@ export const TextbookHistoryTab: React.FC<TextbookHistoryTabProps> = ({ transact
               <div className="grid grid-cols-3 gap-2 text-center text-xs pt-2 border-t border-slate-100">
                 <div>
                   <p className="text-slate-400 font-semibold">변동</p>
-                  <p className={`font-bold ${tx.quantity > 0 ? 'text-indigo-600' : 'text-rose-600'}`}>
+                  <p className={`font-bold ${tx.quantity > 0 ? 'text-slate-800' : 'text-rose-600'}`}>
                     {tx.quantity > 0 ? `+${tx.quantity}` : tx.quantity}권
                   </p>
                 </div>

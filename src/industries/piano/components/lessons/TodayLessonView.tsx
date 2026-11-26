@@ -424,7 +424,7 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
   const headerBlock = compactHeader || embedded ? (
     <div className="flex items-end justify-between gap-3 px-0.5">
       <div>
-        <p className="text-[11px] font-semibold text-indigo-600">
+        <p className="text-[11px] font-semibold text-slate-800">
           {todayKorean}요일 · {today}
         </p>
         <h2 className={`font-extrabold text-slate-900 tracking-tight ${embedded ? 'text-sm' : 'text-lg'}`}>
@@ -458,10 +458,10 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
       {headerBlock}
 
       {!embedded && (
-        <div className="rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-white p-4">
+        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-indigo-50 to-white p-4">
           <div className="flex items-center justify-between gap-3 mb-2.5">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0">
                 <Clock className="w-5 h-5" />
               </div>
               <div>
@@ -471,11 +471,11 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
                 </p>
               </div>
             </div>
-            <p className="text-2xl font-black text-indigo-700 tabular-nums">{progressPct}%</p>
+            <p className="text-2xl font-black text-slate-700 tabular-nums">{progressPct}%</p>
           </div>
-          <div className="h-2 rounded-full bg-indigo-100 overflow-hidden">
+          <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
             <div
-              className="h-full rounded-full bg-indigo-600 transition-all duration-500"
+              className="h-full rounded-full bg-slate-900 transition-all duration-500"
               style={{ width: `${progressPct}%` }}
             />
           </div>
@@ -501,7 +501,7 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
             <button
               type="button"
               onClick={() => setActiveTab('classes')}
-              className="text-xs font-bold text-indigo-600 min-h-[44px]"
+              className="text-xs font-bold text-slate-800 min-h-[44px]"
             >
               반·일정 관리로 이동
             </button>

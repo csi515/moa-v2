@@ -53,8 +53,8 @@ export const DashboardPage: React.FC = () => {
       onClick: () => navigate("/customers/create"),
       icon: Users,
       badge: "기본",
-      color: "border-indigo-100 bg-indigo-50/50 hover:bg-indigo-100/60 text-indigo-700",
-      iconColor: "text-indigo-600 bg-indigo-100",
+      color: "border-slate-200 bg-slate-50/50 hover:bg-slate-100/60 text-slate-700",
+      iconColor: "text-slate-800 bg-slate-100",
     });
 
     // 2. 예약 또는 일정 접수
@@ -122,8 +122,8 @@ export const DashboardPage: React.FC = () => {
         onClick: () => navigate("/passes"),
         icon: Ticket,
         badge: passTerm,
-        color: "border-purple-100 bg-purple-50/50 hover:bg-purple-100/60 text-purple-700",
-        iconColor: "text-purple-600 bg-purple-100",
+        color: "border-slate-200 bg-slate-50/50 hover:bg-slate-100/60 text-slate-700",
+        iconColor: "text-slate-800 bg-slate-100",
       });
     }
 
@@ -139,7 +139,7 @@ export const DashboardPage: React.FC = () => {
       value: "-- 명",
       subtext: "실시간 장부 동기화",
       icon: Users,
-      iconColor: "text-indigo-600",
+      iconColor: "text-slate-800",
       accent: "text-emerald-600",
     };
 
@@ -200,8 +200,8 @@ export const DashboardPage: React.FC = () => {
         value: "-- 건",
         subtext: "잔여 횟수/일수 모니터링",
         icon: Ticket,
-        iconColor: "text-purple-600",
-        accent: "text-purple-600",
+        iconColor: "text-slate-800",
+        accent: "text-slate-800",
       };
     } else {
       card3 = {
@@ -222,7 +222,7 @@ export const DashboardPage: React.FC = () => {
         value: "-- 원",
         subtext: "원장 자동 정산 연동",
         icon: CreditCard,
-        iconColor: "text-purple-600",
+        iconColor: "text-slate-800",
         accent: "text-slate-500",
       };
     } else {
@@ -245,7 +245,7 @@ export const DashboardPage: React.FC = () => {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200/80 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-lg shadow-xs">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-lg shadow-xs">
               {badgeEmoji}
             </span>
             <span className="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-700">
@@ -266,7 +266,7 @@ export const DashboardPage: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate("/customers/create")}
-            className="inline-flex items-center gap-1.5 min-h-[44px] rounded-xl bg-indigo-600 px-4 py-2 text-xs sm:text-sm font-bold text-white shadow-xs hover:bg-indigo-500 transition-colors"
+            className="inline-flex items-center gap-1.5 min-h-[44px] rounded-xl bg-slate-900 px-4 py-2 text-xs sm:text-sm font-bold text-white shadow-xs hover:bg-indigo-500 transition-colors"
           >
             <Users className="h-4 w-4" />
             + {customerTerm} 등록
@@ -304,14 +304,14 @@ export const DashboardPage: React.FC = () => {
                   </span>
                 </div>
                 <div className="mt-3">
-                  <div className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                  <div className="text-sm font-bold text-slate-900 group-hover:text-slate-800 transition-colors">
                     {action.label}
                   </div>
                   <p className="mt-0.5 text-xs text-slate-500 line-clamp-1">
                     {action.desc}
                   </p>
                 </div>
-                <div className="mt-2 flex items-center gap-1 text-xs font-semibold text-slate-600 group-hover:text-indigo-600 transition-colors">
+                <div className="mt-2 flex items-center gap-1 text-xs font-semibold text-slate-600 group-hover:text-slate-800 transition-colors">
                   <span>바로가기</span>
                   <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                 </div>

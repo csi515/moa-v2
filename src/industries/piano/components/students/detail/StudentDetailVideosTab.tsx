@@ -71,15 +71,15 @@ export const StudentDetailVideosTab: React.FC<StudentDetailVideosTabProps> = ({
         <button
           type="button"
           onClick={() => setIsAddVideoOpen(true)}
-          className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
+          className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" /> 영상 추가
         </button>
       </div>
 
       {isAddVideoOpen && (
-        <form onSubmit={onSaveVideo} className="p-4 bg-indigo-50/70 rounded-2xl border border-indigo-200 space-y-3">
-          <h5 className="text-xs font-bold text-indigo-900">새 연주 영상 등록</h5>
+        <form onSubmit={onSaveVideo} className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+          <h5 className="text-xs font-bold text-slate-900">새 연주 영상 등록</h5>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div className="sm:col-span-2">
               <label className="text-[11px] font-semibold text-slate-700 block mb-1">영상 제목 *</label>
@@ -172,7 +172,7 @@ export const StudentDetailVideosTab: React.FC<StudentDetailVideosTabProps> = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-1 text-xs font-bold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
+              className="px-4 py-1 text-xs font-bold text-white bg-slate-900 rounded-lg hover:bg-slate-800"
             >
               저장
             </button>
@@ -230,7 +230,7 @@ export const StudentDetailVideosTab: React.FC<StudentDetailVideosTabProps> = ({
                     title="인라인 팝업으로 영상 재생"
                   >
                     <div className="w-12 h-12 rounded-full bg-white/95 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                      <Play className="w-5 h-5 text-indigo-600 ml-0.5" />
+                      <Play className="w-5 h-5 text-slate-800 ml-0.5" />
                     </div>
                   </button>
 
@@ -250,10 +250,10 @@ export const StudentDetailVideosTab: React.FC<StudentDetailVideosTabProps> = ({
                 <div className="p-3 space-y-1">
                   <h5 className="text-sm font-bold text-slate-900 leading-snug">{video.title}</h5>
                   {video.eventTitle && (
-                    <p className="text-[11px] text-purple-700 font-semibold">📅 {video.eventTitle}</p>
+                    <p className="text-[11px] text-slate-700 font-semibold">📅 {video.eventTitle}</p>
                   )}
                   {video.songTitle && (
-                    <p className="text-xs text-indigo-700 font-semibold">🎵 {video.songTitle}</p>
+                    <p className="text-xs text-slate-700 font-semibold">🎵 {video.songTitle}</p>
                   )}
                   <div className="flex items-center justify-between pt-1">
                     <span className="text-[11px] text-slate-400">
@@ -265,7 +265,7 @@ export const StudentDetailVideosTab: React.FC<StudentDetailVideosTabProps> = ({
                           href={watchUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 text-slate-400 hover:text-indigo-600 rounded-lg"
+                          className="p-1.5 text-slate-400 hover:text-slate-800 rounded-lg"
                           aria-label="YouTube에서 보기"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />

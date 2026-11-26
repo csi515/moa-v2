@@ -72,7 +72,7 @@ export class AppErrorBoundary extends Component<Props, State> {
             <button
               type="button"
               onClick={this.handleRetry}
-              className="w-full py-3 min-h-12 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700"
+              className="w-full py-3 min-h-12 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800"
             >
               {COPY.retry}
             </button>

@@ -56,7 +56,7 @@ export function BabyRegisterModal({ open, onClose, onSubmit }: BabyRegisterModal
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
-            <Baby className="h-5 w-5 text-indigo-600" />
+            <Baby className="h-5 w-5 text-slate-800" />
             <h3 className="text-lg font-bold text-slate-900">
               {BABY_FOOD_COOP_COPY.registerModalTitle}
             </h3>
@@ -80,7 +80,7 @@ export function BabyRegisterModal({ open, onClose, onSubmit }: BabyRegisterModal
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="예: 이로운"
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-slate-900 focus:outline-none"
             />
           </div>
           <div>
@@ -90,7 +90,7 @@ export function BabyRegisterModal({ open, onClose, onSubmit }: BabyRegisterModal
               required
               value={newBirthDate}
               onChange={(e) => setNewBirthDate(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-slate-900 focus:outline-none"
             />
           </div>
           <div>
@@ -100,7 +100,7 @@ export function BabyRegisterModal({ open, onClose, onSubmit }: BabyRegisterModal
               value={newGuardianName}
               onChange={(e) => setNewGuardianName(e.target.value)}
               placeholder="예: 김보호"
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-slate-900 focus:outline-none"
             />
           </div>
           <div>
@@ -120,7 +120,7 @@ export function BabyRegisterModal({ open, onClose, onSubmit }: BabyRegisterModal
               value={newTagsInput}
               onChange={(e) => setNewTagsInput(e.target.value)}
               placeholder="예: 중기이유식, 소고기선호"
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-slate-900 focus:outline-none"
             />
           </div>
           <div className="mt-5 flex items-center justify-end gap-2 border-t border-slate-100 pt-3">

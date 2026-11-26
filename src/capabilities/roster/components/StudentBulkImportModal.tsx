@@ -261,7 +261,7 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
               step="10000"
               value={defaultFee}
               onChange={(e) => setDefaultFee(Math.max(0, Number(e.target.value) || 0))}
-              className="w-28 px-2.5 py-1.5 text-right font-mono bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs font-bold"
+              className="w-28 px-2.5 py-1.5 text-right font-mono bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 text-xs font-bold"
             />
             <span className="text-slate-600">원</span>
           </div>
@@ -278,11 +278,11 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
               onClick={() => setImportMode('paste')}
               className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${
                 importMode === 'paste'
-                  ? 'bg-white text-indigo-700 shadow-2xs'
+                  ? 'bg-white text-slate-700 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+              <Sparkles className="w-3.5 h-3.5 text-slate-800" />
               <span>표 복사·붙여넣기 (Ctrl+V)</span>
             </button>
             <button
@@ -290,7 +290,7 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
               onClick={() => setImportMode('file')}
               className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${
                 importMode === 'file'
-                  ? 'bg-white text-indigo-700 shadow-2xs'
+                  ? 'bg-white text-slate-700 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -303,8 +303,8 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
         {/* 모드 1: 엑셀 표 복사·붙여넣기 (Ctrl+V) */}
         {importMode === 'paste' ? (
           <div className="space-y-3">
-            <div className="bg-indigo-50/70 border border-indigo-100 rounded-xl p-3 text-xs text-indigo-900 flex items-start gap-2">
-              <Sparkles className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 flex items-start gap-2">
+              <Sparkles className="w-4 h-4 text-slate-800 shrink-0 mt-0.5" />
               <div className="leading-relaxed">
                 <strong>간편 복사 팁:</strong> 엑셀이나 구글 시트에서 표 영역을 마우스로 긁어 <strong>Ctrl+C</strong>(복사)한 뒤, 아래 상자에 클릭하고 <strong>Ctrl+V</strong>(붙여넣기)하세요. 열 순서가 달라도 <strong>이름, 연락처, 생년월일, 과목</strong>을 지능형 패턴 매칭으로 자동 인식합니다.
               </div>
@@ -371,12 +371,12 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
               onDrop={onDrop}
               className={`w-full min-h-[110px] rounded-2xl border-2 border-dashed px-4 py-5 text-center transition-colors disabled:opacity-50 ${
                 dragOver
-                  ? 'border-indigo-400 bg-indigo-50'
-                  : 'border-slate-200 bg-slate-50 hover:border-indigo-300 hover:bg-indigo-50/40'
+                  ? 'border-indigo-400 bg-slate-50'
+                  : 'border-slate-200 bg-slate-50 hover:border-indigo-300 hover:bg-slate-50/40'
               }`}
             >
               <Upload
-                className={`w-7 h-7 mx-auto mb-1.5 ${dragOver ? 'text-indigo-600' : 'text-slate-400'}`}
+                className={`w-7 h-7 mx-auto mb-1.5 ${dragOver ? 'text-slate-800' : 'text-slate-400'}`}
               />
               <p className="text-xs font-bold text-slate-800">
                 {dragOver ? STUDENT_IMPORT_UI.dropActive : STUDENT_IMPORT_UI.dropHint}
@@ -397,11 +397,11 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
         {fileName && (
           <div className="flex items-center justify-between bg-slate-100 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700">
             <span className="inline-flex items-center gap-1.5">
-              <ClipboardCheck className="w-3.5 h-3.5 text-indigo-600" />
+              <ClipboardCheck className="w-3.5 h-3.5 text-slate-800" />
               {fileName}
             </span>
             {validRows.length > 0 && (
-              <span className="text-indigo-600 font-bold">
+              <span className="text-slate-800 font-bold">
                 유효 {validRows.length}명
               </span>
             )}
@@ -478,7 +478,7 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
         )}
 
         {progress && (
-          <p className="text-sm text-indigo-700 font-semibold flex items-center gap-2">
+          <p className="text-sm text-slate-700 font-semibold flex items-center gap-2">
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>
               {STUDENT_IMPORT_UI.importing} {progress.completed}/{progress.total}
@@ -500,7 +500,7 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
             type="button"
             onClick={() => void handleImport()}
             disabled={importing || validRows.length === 0}
-            className="min-h-[44px] px-5 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl disabled:opacity-50 inline-flex items-center gap-2 shadow-2xs"
+            className="min-h-[44px] px-5 py-2 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl disabled:opacity-50 inline-flex items-center gap-2 shadow-2xs"
           >
             {importing && <Loader2 className="w-4 h-4 animate-spin" />}
             <span>

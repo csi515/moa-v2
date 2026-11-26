@@ -303,7 +303,7 @@ export const InventoryListView: FC = () => {
                     }}
                     className="w-full px-3.5 py-2.5 text-left text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 cursor-pointer"
                   >
-                    <Camera className="w-4 h-4 text-indigo-600" />
+                    <Camera className="w-4 h-4 text-slate-800" />
                     <span>실시간 카메라 스캔</span>
                   </button>
                   <button
@@ -463,7 +463,7 @@ export const InventoryListView: FC = () => {
                         <button
                           type="button"
                           onClick={() => openLabelPrint(row)}
-                          className="text-xs font-bold text-indigo-600 min-h-[44px] px-1 flex items-center gap-1"
+                          className="text-xs font-bold text-slate-800 min-h-[44px] px-1 flex items-center gap-1"
                         >
                           <Printer className="w-3.5 h-3.5" />
                           라벨
@@ -538,7 +538,7 @@ export const InventoryListView: FC = () => {
                       <button
                         type="button"
                         onClick={() => openLabelPrint(row)}
-                        className="text-xs font-bold text-indigo-600 hover:text-indigo-800 min-h-[44px] px-2 inline-flex items-center gap-1"
+                        className="text-xs font-bold text-slate-800 hover:text-indigo-800 min-h-[44px] px-2 inline-flex items-center gap-1"
                       >
                         <Printer className="w-3.5 h-3.5" />
                         라벨

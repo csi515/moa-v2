@@ -209,13 +209,13 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
     >
       <div className="p-5 sm:p-6 space-y-5">
         {/* 상단 안내 배너 */}
-        <div className="p-3.5 rounded-2xl bg-indigo-50/70 border border-indigo-100 flex items-start gap-3">
-          <Sparkles className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
+        <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+          <Sparkles className="w-5 h-5 text-slate-800 shrink-0 mt-0.5" />
           <div className="text-xs text-indigo-950 leading-relaxed">
-            <p className="font-bold text-indigo-900">
+            <p className="font-bold text-slate-900">
               학부모님이 간편하게 출결·시간표·알림장을 확인할 수 있는 모바일 전용 초대장입니다.
             </p>
-            <p className="text-indigo-700/80 mt-0.5">
+            <p className="text-slate-700/80 mt-0.5">
               별도의 회원가입 승인 대기 없이, 아래 초대 링크를 누르면 즉시 자녀와 안전하게 연결됩니다.
             </p>
           </div>
@@ -223,7 +223,7 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
 
         {loading ? (
           <div className="py-12 flex flex-col items-center justify-center gap-3 text-slate-500">
-            <RefreshCw className="w-7 h-7 text-indigo-600 animate-spin" />
+            <RefreshCw className="w-7 h-7 text-slate-800 animate-spin" />
             <p className="text-xs font-bold text-slate-600">초대 링크를 생성하는 중입니다...</p>
           </div>
         ) : isSingle && inviteItems[0] ? (
@@ -246,7 +246,7 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                  <MessageSquare className="w-3.5 h-3.5 text-indigo-600" />
+                  <MessageSquare className="w-3.5 h-3.5 text-slate-800" />
                   <span>카카오톡 / 문자 발송 문구</span>
                 </label>
                 <span className="text-[10px] text-slate-400">필요 시 수정하여 복사할 수 있습니다</span>
@@ -255,7 +255,7 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
                 value={editableMessage}
                 onChange={(e) => setEditableMessage(e.target.value)}
                 rows={7}
-                className="w-full p-3 text-xs bg-slate-50 border border-slate-200 rounded-xl font-mono leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full p-3 text-xs bg-slate-50 border border-slate-200 rounded-xl font-mono leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
 
@@ -286,7 +286,7 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
               <button
                 type="button"
                 onClick={() => void handleCopy('main_message', editableMessage)}
-                className="flex-1 min-h-[44px] py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="flex-1 min-h-[44px] py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 {copiedKey === 'main_message' ? (
                   <>
@@ -321,7 +321,7 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
                 onClick={() => setActiveTab('individual')}
                 className={`pb-2.5 px-3 border-b-2 transition-colors cursor-pointer ${
                   activeTab === 'individual'
-                    ? 'border-indigo-600 text-indigo-600'
+                    ? 'border-indigo-600 text-slate-800'
                     : 'border-transparent text-slate-500 hover:text-slate-700'
                 }`}
               >
@@ -332,7 +332,7 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
                 onClick={() => setActiveTab('bulk')}
                 className={`pb-2.5 px-3 border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${
                   activeTab === 'bulk'
-                    ? 'border-indigo-600 text-indigo-600'
+                    ? 'border-indigo-600 text-slate-800'
                     : 'border-transparent text-slate-500 hover:text-slate-700'
                 }`}
               >
@@ -366,7 +366,7 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
                       <button
                         type="button"
                         onClick={() => void handleCopy(item.student.id, item.shareMessage)}
-                        className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                        className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer"
                       >
                         {copiedKey === item.student.id ? (
                           <>
@@ -408,7 +408,7 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
                   onClick={() =>
                     void handleCopy('bulk_all', buildBulkInviteCopyText(inviteItems))
                   }
-                  className="w-full min-h-[44px] py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full min-h-[44px] py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {copiedKey === 'bulk_all' ? (
                     <>

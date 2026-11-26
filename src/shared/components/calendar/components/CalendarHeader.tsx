@@ -85,7 +85,7 @@ export const CalendarHeader: FC<CalendarHeaderProps> = ({
         )}
 
         <div className="flex items-center gap-2">
-          {isTimetable && <CalendarIcon className="w-5 h-5 text-indigo-600" />}
+          {isTimetable && <CalendarIcon className="w-5 h-5 text-slate-800" />}
           <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
             {titleLabel}
           </h3>
@@ -104,7 +104,7 @@ export const CalendarHeader: FC<CalendarHeaderProps> = ({
                 onClick={() => onViewChange(v)}
                 className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all min-h-[36px] cursor-pointer ${
                   isActive
-                    ? 'bg-white text-indigo-700 shadow-2xs font-extrabold'
+                    ? 'bg-white text-slate-700 shadow-2xs font-extrabold'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >

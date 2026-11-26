@@ -202,7 +202,7 @@ export const StudentDetailTuitionTab: React.FC<StudentDetailTuitionTabProps> = (
       <div className="flex items-center justify-between gap-2 pt-1">
         <div>
           <h4 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-            <Receipt className="w-4 h-4 text-indigo-600" />
+            <Receipt className="w-4 h-4 text-slate-800" />
             수납 내역 영수증
           </h4>
           <p className="text-[11px] text-slate-500">개인의 월회비 및 교재비 납부 히스토리입니다.</p>
@@ -211,7 +211,7 @@ export const StudentDetailTuitionTab: React.FC<StudentDetailTuitionTabProps> = (
           <button
             type="button"
             onClick={onOpenTextbookSale}
-            className="px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-50 rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer min-h-[38px]"
+            className="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer min-h-[38px]"
           >
             <Plus className="w-3.5 h-3.5" /> 교재 수납
           </button>
@@ -280,7 +280,7 @@ export const StudentDetailTuitionTab: React.FC<StudentDetailTuitionTabProps> = (
                     </p>
                   )}
                   {item.detailNote && (
-                    <p className="text-[11px] text-indigo-600 font-medium">
+                    <p className="text-[11px] text-slate-800 font-medium">
                       {item.detailNote}
                     </p>
                   )}

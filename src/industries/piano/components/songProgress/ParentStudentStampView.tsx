@@ -131,7 +131,7 @@ export const ParentStudentStampView: FC<ParentStudentStampViewProps> = ({
     <div className="space-y-4">
       <section className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0">
             <Music2 className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -160,7 +160,7 @@ export const ParentStudentStampView: FC<ParentStudentStampViewProps> = ({
         ) : (
           <>
             <p className="text-xs text-slate-500">
-              모은 스탬프 <span className="font-bold text-indigo-700">{stampCount}</span>개
+              모은 스탬프 <span className="font-bold text-slate-700">{stampCount}</span>개
             </p>
             <div
               className="grid gap-1.5 sm:gap-2"
@@ -175,7 +175,7 @@ export const ParentStudentStampView: FC<ParentStudentStampViewProps> = ({
                     key={i}
                     className={`aspect-square rounded-xl border flex items-center justify-center text-lg ${
                       filled
-                        ? 'bg-indigo-50 border-indigo-200'
+                        ? 'bg-slate-50 border-slate-200'
                         : 'bg-slate-50 border-slate-100 text-slate-200'
                     }`}
                     aria-label={filled ? `스탬프 ${i + 1}` : `빈 칸 ${i + 1}`}

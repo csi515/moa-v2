@@ -679,7 +679,7 @@ export const QuickSetupPage: React.FC = () => {
       <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
         {/* 상단 타이틀 */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-semibold text-indigo-700">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">
             <Sparkles className="w-3.5 h-3.5" />
             <span>10초 만에 끝나는 원자적 셋업</span>
           </div>
@@ -701,16 +701,16 @@ export const QuickSetupPage: React.FC = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           {/* AI 기반 사업장 맞춤 추천 섹션 (경량화 & 접이식 컴팩트 카드) */}
-          <div className="bg-gradient-to-r from-indigo-50/90 via-white to-indigo-50/90 text-slate-800 rounded-3xl shadow-xs border border-indigo-100 overflow-hidden transition-all">
+          <div className="bg-gradient-to-r from-indigo-50/90 via-white to-indigo-50/90 text-slate-800 rounded-3xl shadow-xs border border-slate-200 overflow-hidden transition-all">
             <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-xs">
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
                   <h2 className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
                     <span>내 매장에 딱 맞는 업종이 고민되시나요?</span>
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
                       AI 스마트 추천
                     </span>
                   </h2>
@@ -722,7 +722,7 @@ export const QuickSetupPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsAiPanelOpen(!isAiPanelOpen)}
-                className="self-start sm:self-center px-3.5 py-2 rounded-xl bg-white hover:bg-indigo-50 border border-indigo-200 text-xs font-bold text-indigo-600 transition flex items-center gap-1.5 shrink-0 shadow-2xs"
+                className="self-start sm:self-center px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 transition flex items-center gap-1.5 shrink-0 shadow-2xs"
               >
                 <span>{isAiPanelOpen ? '추천창 닫기' : '✨ AI에게 추천받기'}</span>
                 {isAiPanelOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -731,7 +731,7 @@ export const QuickSetupPage: React.FC = () => {
 
             {/* 펼쳐졌을 때만 입력창 및 결과 표시 */}
             {isAiPanelOpen && (
-              <div className="px-4 pb-5 sm:px-5 space-y-4 border-t border-indigo-100 pt-4 animate-in fade-in duration-200">
+              <div className="px-4 pb-5 sm:px-5 space-y-4 border-t border-slate-200 pt-4 animate-in fade-in duration-200">
                 <div className="flex flex-col sm:flex-row gap-2.5">
                   <div className="relative flex-1">
                     <input
@@ -745,7 +745,7 @@ export const QuickSetupPage: React.FC = () => {
                         }
                       }}
                       placeholder="예: 판교에서 20명 규모 성인 피아노 학원을 운영하고 연습실 대여와 주차 등록이 필요해요"
-                      className="w-full h-11 pl-4 pr-10 rounded-xl bg-white border border-indigo-200 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 transition shadow-2xs"
+                      className="w-full h-11 pl-4 pr-10 rounded-xl bg-white border border-slate-200 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-slate-900 transition shadow-2xs"
                     />
                     {aiQuery && (
                       <button
@@ -764,7 +764,7 @@ export const QuickSetupPage: React.FC = () => {
                     type="button"
                     onClick={() => handleRunAiRecommendation()}
                     disabled={isAiAnalyzing || !aiQuery.trim()}
-                    className="h-11 px-5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 shrink-0 min-h-[44px]"
+                    className="h-11 px-5 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 shrink-0 min-h-[44px]"
                   >
                     {isAiAnalyzing ? (
                       <RefreshCw className="w-4 h-4 animate-spin" />
@@ -777,8 +777,8 @@ export const QuickSetupPage: React.FC = () => {
 
                 {/* AI 추천 결과 카드 */}
                 {aiResult?.topRecommendation && (
-                  <div className="bg-indigo-50/70 border border-indigo-200/80 p-4 rounded-2xl space-y-3 animate-in fade-in">
-                    <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-indigo-100">
+                  <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl space-y-3 animate-in fade-in">
+                    <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-200">
                       <div className="flex items-center gap-2">
                         <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                         <span className="text-xs text-slate-500">추천 1순위:</span>
@@ -789,7 +789,7 @@ export const QuickSetupPage: React.FC = () => {
                           일치도 {aiResult.topRecommendation.score}%
                         </span>
                       </div>
-                      <span className="text-xs text-indigo-700 font-medium">
+                      <span className="text-xs text-slate-700 font-medium">
                         ✓ 추천 설정이 아래 폼에 자동 적용되었습니다
                       </span>
                     </div>
@@ -807,7 +807,7 @@ export const QuickSetupPage: React.FC = () => {
                         {aiResult.topRecommendation.recommendedAddons.map((addon) => (
                           <span
                             key={addon.capabilityId}
-                            className="text-xs px-2.5 py-1 rounded-lg bg-white text-indigo-700 border border-indigo-200 flex items-center gap-1.5 shadow-2xs"
+                            className="text-xs px-2.5 py-1 rounded-lg bg-white text-slate-700 border border-slate-200 flex items-center gap-1.5 shadow-2xs"
                             title={addon.reason}
                           >
                             <Tag className="w-3 h-3 text-indigo-500" />
@@ -826,7 +826,7 @@ export const QuickSetupPage: React.FC = () => {
                             key={alt.presetId}
                             type="button"
                             onClick={() => applyIndustryDefaults(alt.presetId)}
-                            className="underline text-indigo-600 hover:text-indigo-800 font-medium"
+                            className="underline text-slate-800 hover:text-indigo-800 font-medium"
                           >
                             {alt.presetName} ({alt.score}%)
                           </button>
@@ -879,7 +879,7 @@ export const QuickSetupPage: React.FC = () => {
                       onClick={() => applyIndustryDefaults(card.id)}
                       className={`relative p-5 text-left rounded-2xl border-2 transition-all flex flex-col justify-between ${
                         isSelected
-                          ? 'border-indigo-600 bg-indigo-50/40 shadow-sm'
+                          ? 'border-indigo-600 bg-slate-50/40 shadow-sm'
                           : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'
                       }`}
                     >
@@ -887,7 +887,7 @@ export const QuickSetupPage: React.FC = () => {
                         <div
                           className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                             isSelected
-                              ? 'bg-indigo-600 text-white shadow-xs'
+                              ? 'bg-slate-900 text-white shadow-xs'
                               : 'bg-slate-100 text-slate-600'
                           }`}
                         >
@@ -896,7 +896,7 @@ export const QuickSetupPage: React.FC = () => {
                         <span
                           className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
                             isSelected
-                              ? 'bg-indigo-600 text-white'
+                              ? 'bg-slate-900 text-white'
                               : 'bg-slate-100 text-slate-600'
                           }`}
                         >
@@ -924,7 +924,7 @@ export const QuickSetupPage: React.FC = () => {
                   className="w-full flex items-center justify-between p-3.5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-slate-100/80 transition text-sm font-semibold text-slate-700"
                 >
                   <div className="flex items-center gap-2">
-                    <SlidersHorizontal className="w-4 h-4 text-indigo-600" />
+                    <SlidersHorizontal className="w-4 h-4 text-slate-800" />
                     <span>전체 업종 프리셋 카탈로그 ({allPresets.length}개 업종)</span>
                   </div>
                   {isCatalogOpen ? (
@@ -959,7 +959,7 @@ export const QuickSetupPage: React.FC = () => {
                             onClick={() => setSelectedCategory(tab.id)}
                             className={`text-xs px-3 py-1 rounded-full font-medium transition inline-flex items-center gap-1.5 ${
                               selectedCategory === tab.id
-                                ? 'bg-indigo-600 text-white shadow-2xs'
+                                ? 'bg-slate-900 text-white shadow-2xs'
                                 : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
                             }`}
                           >
@@ -984,13 +984,13 @@ export const QuickSetupPage: React.FC = () => {
                             }}
                             className={`p-3 text-left rounded-xl border transition flex flex-col justify-between ${
                               isSelected
-                                ? 'border-indigo-600 bg-indigo-50 shadow-xs'
+                                ? 'border-indigo-600 bg-slate-50 shadow-xs'
                                 : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
                             }`}
                           >
                             <div className="flex items-start justify-between gap-1 mb-1">
                               <span className="text-xs font-bold text-slate-900 inline-flex items-center gap-1.5">
-                                {isManufacturing && <Factory className="w-3.5 h-3.5 text-indigo-600 shrink-0" />}
+                                {isManufacturing && <Factory className="w-3.5 h-3.5 text-slate-800 shrink-0" />}
                                 {preset.name}
                               </span>
                               <span
@@ -1036,10 +1036,10 @@ export const QuickSetupPage: React.FC = () => {
               />
 
               {/* 선택된 업종 및 활성화 Capability 요약 배너 */}
-              <div className="mt-4 p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="mt-4 p-4 rounded-2xl bg-slate-50/60 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-indigo-700 bg-white px-2 py-0.5 rounded-md border border-indigo-200">
+                    <span className="text-xs font-bold text-slate-700 bg-white px-2 py-0.5 rounded-md border border-slate-200">
                       현재 선택: {activePreset?.name || (selectedIndustry === 'custom' ? '직접 설정' : selectedIndustry)}
                     </span>
                     {activePreset?.readinessLevel && (
@@ -1073,11 +1073,11 @@ export const QuickSetupPage: React.FC = () => {
 
               {/* [자유 커스텀 모드] 카테고리별 매장 운영 도구 직접 선택 체크박스 리스트 */}
               {selectedIndustry === 'custom' && (
-                <div className="mt-4 p-6 rounded-2xl bg-white border-2 border-indigo-200 shadow-sm space-y-6">
+                <div className="mt-4 p-6 rounded-2xl bg-white border-2 border-slate-200 shadow-sm space-y-6">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
                     <div>
                       <div className="flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-indigo-600" />
+                        <Sparkles className="w-5 h-5 text-slate-800" />
                         <h3 className="text-base font-bold text-slate-900">
                           운영 도구 직접 선택
                         </h3>
@@ -1086,7 +1086,7 @@ export const QuickSetupPage: React.FC = () => {
                         매장 운영에 필요한 기능을 카테고리별로 선택하세요.
                       </p>
                     </div>
-                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0">
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-50 text-slate-700 border border-slate-200 shrink-0">
                       {customCapabilities.length}개 도구 선택됨
                     </span>
                   </div>
@@ -1096,7 +1096,7 @@ export const QuickSetupPage: React.FC = () => {
                       <div key={cat.categoryName} className="space-y-2.5">
                         <div className="flex items-center justify-between">
                           <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-slate-900"></span>
                             <span>{cat.categoryName}</span>
                           </h4>
                           <span className="text-[11px] text-slate-400">{cat.description}</span>
@@ -1109,7 +1109,7 @@ export const QuickSetupPage: React.FC = () => {
                                 key={tool.id}
                                 className={`p-3 rounded-xl border transition-all cursor-pointer flex items-start gap-2.5 ${
                                   checked
-                                    ? 'border-indigo-600 bg-indigo-50/40 shadow-xs'
+                                    ? 'border-indigo-600 bg-slate-50/40 shadow-xs'
                                     : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100/60'
                                 }`}
                               >
@@ -1125,7 +1125,7 @@ export const QuickSetupPage: React.FC = () => {
                                       );
                                     }
                                   }}
-                                  className="mt-0.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                                  className="mt-0.5 rounded border-slate-300 text-slate-800 focus:ring-slate-900"
                                 />
                                 <div className="min-w-0 flex-1">
                                   <div className="text-xs font-bold text-slate-900 flex items-center justify-between">
@@ -1152,17 +1152,17 @@ export const QuickSetupPage: React.FC = () => {
           {isEnterpriseOrManufacturing && (
             <div
               data-testid="department-setup-card"
-              className="bg-white p-6 sm:p-8 rounded-3xl border border-indigo-200/80 shadow-xs space-y-5 animate-in fade-in"
+              className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xs space-y-5 animate-in fade-in"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-50 pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+                  <div className="w-10 h-10 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center font-bold">
                     <Factory className="w-5 h-5" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
                       <h2 className="text-base font-bold text-slate-900">다중 부서/현장 분리 (Department Scope)</h2>
-                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
                         기업/제조 전용
                       </span>
                     </div>
@@ -1177,7 +1177,7 @@ export const QuickSetupPage: React.FC = () => {
                     type="checkbox"
                     checked={enableDepartments}
                     onChange={(e) => setEnableDepartments(e.target.checked)}
-                    className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500"
+                    className="w-4 h-4 rounded text-slate-800 focus:ring-slate-900"
                   />
                   <span className="text-xs font-semibold text-slate-700">부서 격리 활성화</span>
                 </label>
@@ -1189,7 +1189,7 @@ export const QuickSetupPage: React.FC = () => {
                     {departments.map((dept, index) => (
                       <span
                         key={index}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 text-xs font-semibold text-indigo-800 border border-indigo-100"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 text-xs font-semibold text-indigo-800 border border-slate-200"
                       >
                         <span>{dept.name}</span>
                         {dept.code && <span className="text-[10px] text-indigo-500 font-mono">({dept.code})</span>}
@@ -1197,7 +1197,7 @@ export const QuickSetupPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => handleRemoveDepartment(index)}
-                            className="p-0.5 hover:bg-indigo-100 rounded-full text-indigo-500 hover:text-indigo-800"
+                            className="p-0.5 hover:bg-slate-100 rounded-full text-indigo-500 hover:text-indigo-800"
                           >
                             <X className="w-3.5 h-3.5" />
                           </button>
@@ -1232,7 +1232,7 @@ export const QuickSetupPage: React.FC = () => {
               )}
 
               {/* 인사팀 CEO 소유권 이전 권한 위임 초기 질문 */}
-              <div className="pt-3 border-t border-indigo-100">
+              <div className="pt-3 border-t border-slate-200">
                 <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-4 space-y-2">
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
@@ -1295,7 +1295,7 @@ export const QuickSetupPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
                 <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                  <Shield className="w-3.5 h-3.5 text-indigo-600" />
+                  <Shield className="w-3.5 h-3.5 text-slate-800" />
                   <span>직급 ({roles.length}개)</span>
                 </div>
                 <p className="text-xs text-slate-500 truncate">
@@ -1305,7 +1305,7 @@ export const QuickSetupPage: React.FC = () => {
 
               <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
                 <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                  <Building2 className="w-3.5 h-3.5 text-indigo-600" />
+                  <Building2 className="w-3.5 h-3.5 text-slate-800" />
                   <span>{needsLocker && !needsSpace ? '사물함' : spaceTerm}</span>
                 </div>
                 <p className="text-xs text-slate-500 truncate">
@@ -1321,7 +1321,7 @@ export const QuickSetupPage: React.FC = () => {
 
               <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
                 <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                  <Clock className="w-3.5 h-3.5 text-indigo-600" />
+                  <Clock className="w-3.5 h-3.5 text-slate-800" />
                   <span>운영 시간</span>
                 </div>
                 <p className="text-xs text-slate-500">
@@ -1335,7 +1335,7 @@ export const QuickSetupPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full h-14 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base shadow-lg shadow-indigo-100 flex items-center justify-center space-x-2 transition disabled:opacity-50 min-h-[44px]"
+                className="w-full h-14 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-base shadow-lg shadow-indigo-100 flex items-center justify-center space-x-2 transition disabled:opacity-50 min-h-[44px]"
               >
                 {submitting ? (
                   <>
@@ -1362,7 +1362,7 @@ export const QuickSetupPage: React.FC = () => {
                 className="w-full flex items-center justify-between p-3.5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-slate-100/80 transition text-xs sm:text-sm font-semibold text-slate-700"
               >
                 <div className="flex items-center gap-2">
-                  <Settings2 className="w-4 h-4 text-indigo-600" />
+                  <Settings2 className="w-4 h-4 text-slate-800" />
                   <span>매장 세부 설정 직접 조정하기 (직급·공간·운영시간·도구)</span>
                 </div>
                 {isAdvancedCustomOpen ? (
@@ -1381,7 +1381,7 @@ export const QuickSetupPage: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-indigo-600" />
+                        <Sparkles className="w-4 h-4 text-slate-800" />
                         <h3 className="text-sm font-bold text-slate-900">
                           [추천 운영 기능] 세트 선택
                         </h3>
@@ -1390,7 +1390,7 @@ export const QuickSetupPage: React.FC = () => {
                         필요한 도구 세트를 자유롭게 추가·해제하세요.
                       </p>
                     </div>
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-50 text-slate-700 border border-slate-200">
                       {selectedToolSetIds.length}개 세트 선택됨
                     </span>
                   </div>
@@ -1407,7 +1407,7 @@ export const QuickSetupPage: React.FC = () => {
                           onClick={() => handleToggleToolSetOption(set.id)}
                           className={`p-3.5 text-left rounded-2xl border-2 transition-all flex flex-col justify-between ${
                             isSelected
-                              ? 'border-indigo-600 bg-indigo-50/30 shadow-2xs'
+                              ? 'border-indigo-600 bg-slate-50/30 shadow-2xs'
                               : 'border-slate-200 bg-slate-50/50 hover:border-slate-300'
                           }`}
                         >
@@ -1419,7 +1419,7 @@ export const QuickSetupPage: React.FC = () => {
                               <div
                                 className={`w-5 h-5 rounded-md flex items-center justify-center border transition shrink-0 ${
                                   isSelected
-                                    ? 'bg-indigo-600 border-indigo-600 text-white'
+                                    ? 'bg-slate-900 border-indigo-600 text-white'
                                     : 'bg-white border-slate-300'
                                 }`}
                               >
@@ -1470,14 +1470,14 @@ export const QuickSetupPage: React.FC = () => {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
-                  <Shield className="w-3.5 h-3.5 text-indigo-600" />
+                  <Shield className="w-3.5 h-3.5 text-slate-800" />
                   <span>직급 및 계급도 ({roles.length}개)</span>
                 </label>
                 {!addingRole && (
                   <button
                     type="button"
                     onClick={() => setAddingRole(true)}
-                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 flex items-center space-x-1"
+                    className="text-xs font-semibold text-slate-800 hover:text-slate-700 flex items-center space-x-1"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>직급 추가</span>
@@ -1491,12 +1491,12 @@ export const QuickSetupPage: React.FC = () => {
                     key={`${r.name}-${idx}`}
                     className="h-9 pl-2.5 pr-2 rounded-xl bg-slate-100 text-slate-800 text-xs font-semibold flex items-center space-x-1.5 border border-slate-200/60"
                   >
-                    <span className="text-[10px] font-bold text-indigo-600 bg-white px-1.5 py-0.5 rounded shadow-2xs">
+                    <span className="text-[10px] font-bold text-slate-800 bg-white px-1.5 py-0.5 rounded shadow-2xs">
                       #{idx + 1}
                     </span>
                     <span>{r.name}</span>
                     {idx === 0 && (
-                      <span className="text-[9px] font-medium bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-100">
+                      <span className="text-[9px] font-medium bg-slate-50 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200">
                         최종결재
                       </span>
                     )}
@@ -1549,7 +1549,7 @@ export const QuickSetupPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={handleAddRole}
-                      className="h-9 px-3 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition"
+                      className="h-9 px-3 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition"
                     >
                       추가
                     </button>
@@ -1570,14 +1570,14 @@ export const QuickSetupPage: React.FC = () => {
               <div className="pt-2">
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
-                    <Layers className="w-3.5 h-3.5 text-indigo-600" />
+                    <Layers className="w-3.5 h-3.5 text-slate-800" />
                     <span>{spaceTerm} 목록 ({rooms.length}개)</span>
                   </label>
                   {!addingRoom && (
                     <button
                       type="button"
                       onClick={() => setAddingRoom(true)}
-                      className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 flex items-center space-x-1"
+                      className="text-xs font-semibold text-slate-800 hover:text-slate-700 flex items-center space-x-1"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>{spaceTerm} 추가</span>
@@ -1589,7 +1589,7 @@ export const QuickSetupPage: React.FC = () => {
                   {rooms.map((rm, idx) => (
                     <div
                       key={`${rm.name}-${idx}`}
-                      className="h-9 pl-3 pr-2 rounded-xl bg-indigo-50/70 text-indigo-900 text-xs font-semibold flex items-center space-x-1.5 border border-indigo-200/60"
+                      className="h-9 pl-3 pr-2 rounded-xl bg-slate-50 text-slate-900 text-xs font-semibold flex items-center space-x-1.5 border border-slate-200/60"
                     >
                       <span>{rm.name}</span>
                       {rm.capacity && (
@@ -1600,7 +1600,7 @@ export const QuickSetupPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleRemoveRoom(idx)}
-                        className="w-5 h-5 rounded-md hover:bg-indigo-100 text-indigo-400 hover:text-indigo-700 flex items-center justify-center transition"
+                        className="w-5 h-5 rounded-md hover:bg-slate-100 text-indigo-400 hover:text-slate-700 flex items-center justify-center transition"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -1628,7 +1628,7 @@ export const QuickSetupPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={handleAddRoom}
-                        className="h-9 px-3 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition"
+                        className="h-9 px-3 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition"
                       >
                         추가
                       </button>
@@ -1672,7 +1672,7 @@ export const QuickSetupPage: React.FC = () => {
             {/* D. 운영 및 상담 시간 */}
             <div className="pt-2">
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center space-x-1.5">
-                <Clock className="w-3.5 h-3.5 text-indigo-600" />
+                <Clock className="w-3.5 h-3.5 text-slate-800" />
                 <span>운영 / 상담 시간대</span>
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1723,7 +1723,7 @@ export const QuickSetupPage: React.FC = () => {
             {dynamicQuestions.length > 0 && (
               <div className="pt-4 border-t border-slate-100 space-y-4">
                 <div className="flex items-center space-x-1.5 text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  <Settings2 className="w-3.5 h-3.5 text-indigo-600" />
+                  <Settings2 className="w-3.5 h-3.5 text-slate-800" />
                   <span>세부 Capability 정책 (선택 조정)</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1749,7 +1749,7 @@ export const QuickSetupPage: React.FC = () => {
                             type="checkbox"
                             id={q.id}
                             {...register(q.id)}
-                            className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                            className="w-4 h-4 rounded text-slate-800 focus:ring-slate-900 border-slate-300"
                           />
                           <label htmlFor={q.id} className="text-xs text-slate-600 cursor-pointer">
                             {q.description || '활성화'}
@@ -1787,7 +1787,7 @@ export const QuickSetupPage: React.FC = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full h-14 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base shadow-lg shadow-indigo-100 flex items-center justify-center space-x-2 transition disabled:opacity-50"
+              className="w-full h-14 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-base shadow-lg shadow-indigo-100 flex items-center justify-center space-x-2 transition disabled:opacity-50"
             >
               {submitting ? (
                 <>

@@ -18,8 +18,8 @@ interface Props {
 export const AttendanceFeatureToggle: FC<Props> = ({
   enabled,
   onChange,
-  activeClassName = 'bg-indigo-600',
-  iconClassName = 'text-indigo-600',
+  activeClassName = 'bg-slate-900',
+  iconClassName = 'text-slate-800',
   canEdit = true,
 }) => (
   <div className="flex items-start justify-between gap-4">

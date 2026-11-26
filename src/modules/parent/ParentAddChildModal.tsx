@@ -219,7 +219,7 @@ export const ParentAddChildModal: React.FC<ParentAddChildModalProps> = ({
           type="button"
           onClick={() => void handleSubmit()}
           disabled={loading}
-          className="mt-5 w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px] disabled:opacity-50 transition-colors cursor-pointer"
+          className="mt-5 w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px] disabled:opacity-50 transition-colors cursor-pointer"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : isEdit ? <Pencil className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
           {isEdit ? '저장' : '등록하기'}

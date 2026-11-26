@@ -203,7 +203,7 @@ export function ParentProgressView({
             <button
               type="button"
               onClick={openCreate}
-              className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-xl bg-indigo-600 text-white text-xs font-bold"
+              className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-xl bg-slate-900 text-white text-xs font-bold"
             >
               <Plus className="w-4 h-4" />
               연습 기록
@@ -234,7 +234,7 @@ export function ParentProgressView({
               </div>
               <p className="font-semibold text-slate-800">{p.songTitle || p.homework || '연습'}</p>
               {p.staffReviewNote && (
-                <p className="text-xs text-indigo-700">피드백: {p.staffReviewNote}</p>
+                <p className="text-xs text-slate-700">피드백: {p.staffReviewNote}</p>
               )}
               {p.teacherEvaluation && p.staffReviewed && (
                 <p className="text-xs text-amber-600">{p.teacherEvaluation}</p>
@@ -303,7 +303,7 @@ export function ParentProgressView({
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 min-h-[44px] rounded-xl bg-indigo-600 text-white text-xs font-bold"
+              className="px-5 py-2.5 min-h-[44px] rounded-xl bg-slate-900 text-white text-xs font-bold"
             >
               등록
             </button>

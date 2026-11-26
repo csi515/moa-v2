@@ -204,7 +204,7 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
         <div className="p-4 border-b border-slate-100 flex items-start justify-between gap-3 bg-slate-50/50">
           <div>
             <h3 className="font-bold text-slate-900 text-base">{title}</h3>
-            {subtitle && <p className="text-xs text-indigo-600 font-semibold mt-0.5">{subtitle}</p>}
+            {subtitle && <p className="text-xs text-slate-800 font-semibold mt-0.5">{subtitle}</p>}
           </div>
           <button
             type="button"
@@ -223,7 +223,7 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
             onClick={() => setPickerMode('regular')}
             className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 min-h-[40px] cursor-pointer ${
               pickerMode === 'regular'
-                ? 'bg-white text-indigo-600 shadow-xs'
+                ? 'bg-white text-slate-800 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -235,14 +235,14 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
             onClick={() => setPickerMode('makeup')}
             className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 min-h-[40px] cursor-pointer ${
               pickerMode === 'makeup'
-                ? 'bg-white text-purple-700 shadow-xs'
+                ? 'bg-white text-slate-700 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+            <Sparkles className="w-3.5 h-3.5 text-slate-800" />
             <span>결석 보강 배정</span>
             {pendingMakeups.length > 0 && (
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-purple-100 text-purple-700 font-extrabold">
+              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-100 text-slate-700 font-extrabold">
                 {pendingMakeups.length}
               </span>
             )}
@@ -263,7 +263,7 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
                 {pendingMakeups.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-purple-50/60 border border-slate-200 hover:border-purple-200 rounded-2xl transition"
+                    className="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-50/60 border border-slate-200 hover:border-slate-200 rounded-2xl transition"
                   >
                     <div>
                       <h4 className="font-bold text-sm text-slate-900">{item.studentName}</h4>
@@ -271,13 +271,13 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
                         결석일: {item.date} {item.className ? `· ${item.className}` : ''}
                       </p>
                       {item.reason && (
-                        <p className="text-[11px] text-purple-700 mt-1 font-medium">사유: {item.reason}</p>
+                        <p className="text-[11px] text-slate-700 mt-1 font-medium">사유: {item.reason}</p>
                       )}
                     </div>
                     <button
                       type="button"
                       onClick={() => handleScheduleMakeup(item)}
-                      className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow-xs transition shrink-0 min-h-[40px]"
+                      className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-xs transition shrink-0 min-h-[40px]"
                     >
                       이 시간에 배정
                     </button>
@@ -297,7 +297,7 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="학생 이름, 초성(ㄱㅁㅈ), 학교, 학년 검색"
-              className="w-full pl-9 pr-3 py-2.5 min-h-[44px] text-sm border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full pl-9 pr-3 py-2.5 min-h-[44px] text-sm border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
               autoFocus
             />
           </div>
@@ -337,7 +337,7 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
                       onClick={() => setSelectedStudent(student)}
                       className={`w-full h-full text-left px-4 py-2.5 min-h-[56px] flex items-center justify-between gap-3 transition-colors border-b border-slate-100 ${
                         isSelected
-                          ? 'bg-indigo-50/90 text-indigo-950 font-bold border-l-4 border-indigo-600'
+                          ? 'bg-slate-50/90 text-indigo-950 font-bold border-l-4 border-indigo-600'
                           : 'hover:bg-slate-50 text-slate-800'
                       }`}
                     >
@@ -345,8 +345,8 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
                         <span
                           className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
                             isSelected
-                              ? 'bg-indigo-600 text-white'
-                              : 'bg-indigo-50 text-indigo-700'
+                              ? 'bg-slate-900 text-white'
+                              : 'bg-slate-50 text-slate-700'
                           }`}
                         >
                           {isSelected ? (
@@ -371,7 +371,7 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
                       </div>
 
                       {isSelected && (
-                        <span className="text-xs text-indigo-600 font-bold shrink-0 flex items-center gap-1">
+                        <span className="text-xs text-slate-800 font-bold shrink-0 flex items-center gap-1">
                           <UserCheck className="w-4 h-4" />
                           선택됨
                         </span>
@@ -392,10 +392,10 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
                 type="checkbox"
                 checked={isRecurring}
                 onChange={(e) => setIsRecurring(e.target.checked)}
-                className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                className="w-4 h-4 rounded text-slate-800 focus:ring-slate-900 border-slate-300"
               />
               <span className="flex items-center gap-1.5">
-                <Repeat className="w-3.5 h-3.5 text-indigo-600" />
+                <Repeat className="w-3.5 h-3.5 text-slate-800" />
                 매주 반복 (정규 시간표 등록)
               </span>
             </label>
@@ -416,7 +416,7 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
                     onClick={() => toggleDay(day)}
                     className={`flex-1 py-1.5 min-h-[36px] rounded-lg text-xs font-bold transition-all ${
                       checked
-                        ? 'bg-indigo-600 text-white shadow-xs'
+                        ? 'bg-slate-900 text-white shadow-xs'
                         : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
                     }`}
                   >
@@ -436,7 +436,7 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
               <select
                 value={selectedTeacherId}
                 onChange={(e) => setSelectedTeacherId(e.target.value)}
-                className="w-full px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl min-h-[38px] focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+                className="w-full px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl min-h-[38px] focus:outline-none focus:ring-2 focus:ring-slate-900 font-medium"
               >
                 <option value="">선생님 미지정</option>
                 {teachers.map((t) => (
@@ -454,7 +454,7 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
               <select
                 value={selectedRoom}
                 onChange={(e) => setSelectedRoom(e.target.value)}
-                className="w-full px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl min-h-[38px] focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+                className="w-full px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl min-h-[38px] focus:outline-none focus:ring-2 focus:ring-slate-900 font-medium"
               >
                 <option value="">강의실 미지정 (선택 안 함)</option>
                 {rooms.map((roomName) => (
@@ -473,7 +473,7 @@ export const PianoTimetableStudentPicker: FC<PianoTimetableStudentPickerProps> =
             onClick={handleConfirm}
             className={`w-full py-3 min-h-[48px] rounded-xl text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-2 ${
               selectedStudent
-                ? 'bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer active:scale-[0.99]'
+                ? 'bg-slate-900 hover:bg-slate-800 text-white cursor-pointer active:scale-[0.99]'
                 : 'bg-slate-200 text-slate-400 cursor-not-allowed'
             }`}
           >

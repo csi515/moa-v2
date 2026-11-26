@@ -75,7 +75,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
         aria-expanded={showAdvanced}
       >
         <div className="flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-indigo-600" />
+          <BookOpen className="w-4 h-4 text-slate-800" />
           <span className="text-sm font-bold text-slate-800">{sectionTitle}</span>
           <span className="text-[11px] text-slate-400">
             · {levelLabel}, 담당 {labels.staff.singular}, 시간표, {regularFeeLabel}
@@ -152,7 +152,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
               <div className="sm:col-span-2 space-y-2 pt-2 border-t border-slate-100">
                 <div className="flex items-center justify-between">
                   <label className="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
-                    <Music2 className="w-3.5 h-3.5 text-indigo-600" />
+                    <Music2 className="w-3.5 h-3.5 text-slate-800" />
                     <span>관심 음악 장르 & 배우고 싶은 곡 (레슨 맞춤)</span>
                   </label>
                   <span className="text-[10px] text-slate-400">다중 선택 가능</span>
@@ -170,7 +170,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                         }}
                         className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                           isSelected
-                            ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs'
+                            ? 'bg-slate-900 text-white border-indigo-600 shadow-2xs'
                             : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
                         }`}
                       >
@@ -185,7 +185,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                     value={formData.wishlistSongs || ''}
                     onChange={(e) => onChange({ wishlistSongs: e.target.value })}
                     placeholder="배우고 싶은 곡명 입력 (예: 인생의 회전목마, 작은 별 변주곡)"
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[40px] placeholder:text-slate-400"
+                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[40px] placeholder:text-slate-400"
                   />
                 </div>
               </div>
@@ -217,7 +217,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                         onClick={() => onChange({ billingMode: opt.value })}
                         className={`min-h-[52px] rounded-xl border px-3 py-2 text-left transition-colors cursor-pointer ${
                           active
-                            ? 'bg-indigo-600 text-white border-indigo-600'
+                            ? 'bg-slate-900 text-white border-indigo-600'
                             : 'bg-white text-slate-700 border-slate-200 hover:border-indigo-300'
                         }`}
                       >
@@ -256,7 +256,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                             const nextFee = applyTuitionStep(formData.tuitionFee, step.value);
                             onChange({ tuitionFee: nextFee });
                           }}
-                          className="px-2 py-0.5 rounded-lg text-[10px] font-extrabold border border-slate-200 bg-slate-50 text-slate-700 hover:bg-indigo-50 hover:border-indigo-300 hover:text-indigo-600 transition-colors cursor-pointer"
+                          className="px-2 py-0.5 rounded-lg text-[10px] font-extrabold border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-50 hover:border-indigo-300 hover:text-slate-800 transition-colors cursor-pointer"
                         >
                           {step.label}
                         </button>
@@ -309,7 +309,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                           onClick={() => onChange({ paymentDay: day })}
                           className={`px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition-colors cursor-pointer ${
                             formData.paymentDay === day
-                              ? 'bg-indigo-50 border-indigo-400 text-indigo-700'
+                              ? 'bg-slate-50 border-indigo-400 text-slate-700'
                               : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                           }`}
                         >
@@ -322,12 +322,12 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                   {/* 신규 등록 시 첫 달 수강료 청구서 자동 생성 체크박스 */}
                   {!isEdit && (
                     <div className="sm:col-span-2 pt-1">
-                      <label className="flex items-center gap-2.5 p-3 rounded-xl bg-indigo-50/70 border border-indigo-200/70 cursor-pointer hover:bg-indigo-50 transition-colors">
+                      <label className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/70 cursor-pointer hover:bg-slate-50 transition-colors">
                         <input
                           type="checkbox"
                           checked={formData.autoCreateInvoice ?? true}
                           onChange={(e) => onChange({ autoCreateInvoice: e.target.checked })}
-                          className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 shrink-0"
+                          className="w-4 h-4 text-slate-800 rounded border-slate-300 focus:ring-slate-900 shrink-0"
                         />
                         <div className="text-xs">
                           <span className="font-bold text-indigo-950 inline-flex items-center">

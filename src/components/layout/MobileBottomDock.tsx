@@ -30,9 +30,9 @@ const THEME_ACTIVE_TEXT_COLORS: Record<string, string> = {
   amber: 'text-amber-600',
   sky: 'text-sky-600',
   teal: 'text-teal-600',
-  purple: 'text-purple-600',
+  purple: 'text-slate-800',
   slate: 'text-slate-900',
-  indigo: 'text-indigo-600',
+  indigo: 'text-slate-800',
 };
 
 export function MobileBottomDock() {

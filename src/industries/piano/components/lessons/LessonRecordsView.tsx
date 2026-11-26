@@ -209,7 +209,7 @@ export const LessonRecordsView: React.FC = () => {
         actions={
           <button
             onClick={handleOpenCreate}
-            className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
+            className="px-4 py-2.5 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             수업 일지 작성
@@ -237,7 +237,7 @@ export const LessonRecordsView: React.FC = () => {
           className="flex-1 min-w-[200px]"
         />
         <span className="text-xs text-slate-500 font-medium shrink-0">
-          총 <strong className="text-indigo-600">{filteredLessons.length}개</strong>
+          총 <strong className="text-slate-800">{filteredLessons.length}개</strong>
         </span>
       </FilterBar>
 
@@ -246,12 +246,12 @@ export const LessonRecordsView: React.FC = () => {
         {filteredLessons.map((l) => (
           <div
             key={l.id}
-            className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:border-indigo-200 transition-all flex flex-col justify-between space-y-4"
+            className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:border-slate-200 transition-all flex flex-col justify-between space-y-4"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-black text-sm">
+                  <div className="w-10 h-10 rounded-2xl bg-slate-50 text-slate-700 flex items-center justify-center font-black text-sm">
                     {l.studentName.slice(0, 1)}
                   </div>
                   <div>
@@ -260,7 +260,7 @@ export const LessonRecordsView: React.FC = () => {
                         setSelectedStudentId(l.studentId);
                         setActiveTab('students');
                       }}
-                      className="font-bold text-slate-900 text-sm hover:text-indigo-600 cursor-pointer"
+                      className="font-bold text-slate-900 text-sm hover:text-slate-800 cursor-pointer"
                     >
                       {l.studentName}
                     </h4>
@@ -271,7 +271,7 @@ export const LessonRecordsView: React.FC = () => {
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => handleOpenEdit(l)}
-                    className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-100 rounded-lg transition-colors"
+                    className="p-1.5 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
                   >
                     <Edit className="w-3.5 h-3.5" />
                   </button>
@@ -284,12 +284,12 @@ export const LessonRecordsView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-3 bg-indigo-50/50 rounded-2xl border border-indigo-100 text-xs">
-                <p className="font-bold text-indigo-900 flex items-center gap-1.5">
-                  <MusicIcon className="w-3.5 h-3.5 text-indigo-600" />
+              <div className="p-3 bg-slate-50/50 rounded-2xl border border-slate-200 text-xs">
+                <p className="font-bold text-slate-900 flex items-center gap-1.5">
+                  <MusicIcon className="w-3.5 h-3.5 text-slate-800" />
                   {l.songTitle}
                 </p>
-                <p className="text-indigo-700 font-medium mt-0.5">진도 상태: {l.progress}</p>
+                <p className="text-slate-700 font-medium mt-0.5">진도 상태: {l.progress}</p>
               </div>
 
               <div className="text-xs text-slate-700 space-y-2 leading-relaxed">
@@ -311,7 +311,7 @@ export const LessonRecordsView: React.FC = () => {
                 </div>
 
                 {l.homework && (
-                  <div className="p-2.5 bg-purple-50 rounded-xl text-purple-900 text-xs">
+                  <div className="p-2.5 bg-slate-50 rounded-xl text-slate-900 text-xs">
                     <strong>📝 숙제:</strong> {l.homework}
                   </div>
                 )}
@@ -417,7 +417,7 @@ export const LessonRecordsView: React.FC = () => {
                         key={tag}
                         type="button"
                         onClick={() => appendTag("strengths", tag)}
-                        className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 font-medium transition-colors cursor-pointer"
+                        className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-50 hover:text-slate-800 font-medium transition-colors cursor-pointer"
                       >
                         +{tag}
                       </button>
@@ -463,7 +463,7 @@ export const LessonRecordsView: React.FC = () => {
                       key={tag}
                       type="button"
                       onClick={() => appendTag("homework", tag)}
-                      className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-medium transition-colors cursor-pointer"
+                      className="text-[10px] px-2 py-0.5 rounded-full bg-slate-50 text-slate-700 hover:bg-slate-100 font-medium transition-colors cursor-pointer"
                     >
                       +{tag}
                     </button>
@@ -481,7 +481,7 @@ export const LessonRecordsView: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md flex items-center gap-1.5"
+                  className="px-5 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl shadow-md flex items-center gap-1.5"
                 >
                   <Save className="w-3.5 h-3.5" />
                   일지 저장

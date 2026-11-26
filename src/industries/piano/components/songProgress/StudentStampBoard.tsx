@@ -138,13 +138,13 @@ export const StudentStampBoard: FC<StudentStampBoardProps> = ({
       <section className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0">
               <Music2 className="w-5 h-5" />
             </div>
             <div className="min-w-0">
               <h3 className="text-sm font-black text-slate-900">{SONG_PROGRESS_COPY.stampTitle}</h3>
               <p className="text-[11px] text-slate-500">
-                모은 스탬프 <span className="font-bold text-indigo-700">{stampCount}</span>개
+                모은 스탬프 <span className="font-bold text-slate-700">{stampCount}</span>개
                 {pendingCount > 0 ? ` · 승인 대기 ${pendingCount}` : ''}
               </p>
             </div>
@@ -153,7 +153,7 @@ export const StudentStampBoard: FC<StudentStampBoardProps> = ({
             <button
               type="button"
               onClick={() => void handleShare()}
-              className="shrink-0 min-h-[44px] px-3 rounded-xl text-xs font-bold border border-indigo-200 text-indigo-700 hover:bg-indigo-50 inline-flex items-center gap-1"
+              className="shrink-0 min-h-[44px] px-3 rounded-xl text-xs font-bold border border-slate-200 text-slate-700 hover:bg-slate-50 inline-flex items-center gap-1"
             >
               <Sparkles className="w-3.5 h-3.5" />
               {SONG_PROGRESS_COPY.shareCta}
@@ -172,7 +172,7 @@ export const StudentStampBoard: FC<StudentStampBoardProps> = ({
                 key={i}
                 className={`aspect-square rounded-xl border flex items-center justify-center text-lg transition-transform ${
                   filled
-                    ? 'bg-indigo-50 border-indigo-200 scale-[1.02]'
+                    ? 'bg-slate-50 border-slate-200 scale-[1.02]'
                     : 'bg-slate-50 border-slate-100 text-slate-200'
                 }`}
                 aria-label={filled ? `스탬프 ${i + 1}` : `빈 칸 ${i + 1}`}
@@ -215,7 +215,7 @@ export const StudentStampBoard: FC<StudentStampBoardProps> = ({
           <button
             type="submit"
             disabled={submitting}
-            className="w-full min-h-[48px] rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white text-sm font-bold"
+            className="w-full min-h-[48px] rounded-xl bg-slate-900 hover:bg-slate-800 disabled:bg-indigo-300 text-white text-sm font-bold"
           >
             {submitting ? '신청 중...' : SONG_PROGRESS_COPY.requestCta}
           </button>

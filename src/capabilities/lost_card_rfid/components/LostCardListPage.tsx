@@ -115,7 +115,7 @@ export const LostCardListPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2 text-slate-800 dark:text-slate-100">
-            <CreditCard className="w-7 h-7 text-indigo-600" />
+            <CreditCard className="w-7 h-7 text-slate-800" />
             RF/NFC 출입카드 및 실물 발급 대장
           </h1>
           <p className="text-sm text-slate-500 mt-1">
@@ -124,7 +124,7 @@ export const LostCardListPage: React.FC = () => {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-medium"
         >
           <Plus className="w-4 h-4" />
           신규 카드 등록
@@ -195,7 +195,7 @@ export const LostCardListPage: React.FC = () => {
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-800 rounded-xl max-w-md w-full p-6 space-y-4">
             <h2 className="text-xl font-bold flex items-center gap-2">
-              <CreditCard className="w-5 h-5 text-indigo-600" />
+              <CreditCard className="w-5 h-5 text-slate-800" />
               신규 실물 카드 등록
             </h2>
             <form onSubmit={handleCreate} className="space-y-4">
@@ -240,7 +240,7 @@ export const LostCardListPage: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700"
+                  className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800"
                 >
                   등록
                 </button>

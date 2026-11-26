@@ -79,7 +79,7 @@ export const GuardianEnrollmentRequestsView: React.FC = () => {
             onClick={() => setFilter('pending')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
               filter === 'pending'
-                ? 'bg-white text-indigo-600 shadow-xs'
+                ? 'bg-white text-slate-800 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -90,7 +90,7 @@ export const GuardianEnrollmentRequestsView: React.FC = () => {
             onClick={() => setFilter('approved')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
               filter === 'approved'
-                ? 'bg-white text-indigo-600 shadow-xs'
+                ? 'bg-white text-slate-800 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -101,7 +101,7 @@ export const GuardianEnrollmentRequestsView: React.FC = () => {
             onClick={() => setFilter('rejected')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
               filter === 'rejected'
-                ? 'bg-white text-indigo-600 shadow-xs'
+                ? 'bg-white text-slate-800 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -112,7 +112,7 @@ export const GuardianEnrollmentRequestsView: React.FC = () => {
 
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-slate-800" />
         </div>
       ) : requests.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-2xl border border-slate-200">

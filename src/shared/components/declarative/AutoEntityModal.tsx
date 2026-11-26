@@ -108,7 +108,7 @@ export function AutoEntityModal<TFormData extends Record<string, any> = Record<s
                   } ${
                     errorMsg
                       ? 'border-rose-400 focus:border-rose-500 focus:ring-1 focus:ring-rose-500'
-                      : 'border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'
+                      : 'border-slate-300 focus:border-slate-900 focus:ring-1 focus:ring-slate-900'
                   }`}
                   {...register(fieldPath, {
                     required: field.required ? `${field.label}은(는) 필수입니다` : false,
@@ -121,7 +121,7 @@ export function AutoEntityModal<TFormData extends Record<string, any> = Record<s
               {field.type === 'select' && (
                 <select
                   disabled={field.disabled || isSubmitting}
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm bg-white min-h-[44px] focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm bg-white min-h-[44px] focus:border-slate-900 focus:ring-1 focus:ring-slate-900"
                   {...register(fieldPath, {
                     required: field.required ? `${field.label}을(를) 선택하세요` : false,
                   })}
@@ -141,7 +141,7 @@ export function AutoEntityModal<TFormData extends Record<string, any> = Record<s
                   rows={3}
                   placeholder={field.placeholder}
                   disabled={field.disabled || isSubmitting}
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm resize-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm resize-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900"
                   {...register(fieldPath, {
                     required: field.required ? `${field.label}은(는) 필수입니다` : false,
                   })}
@@ -155,7 +155,7 @@ export function AutoEntityModal<TFormData extends Record<string, any> = Record<s
                     type="checkbox"
                     id={field.name}
                     disabled={field.disabled || isSubmitting}
-                    className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 cursor-pointer"
+                    className="w-4 h-4 rounded text-slate-800 focus:ring-slate-900 border-slate-300 cursor-pointer"
                     {...register(fieldPath)}
                   />
                   <label htmlFor={field.name} className="text-xs text-slate-600 cursor-pointer">

@@ -250,7 +250,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
     <div className="min-h-screen bg-slate-900 text-slate-100 p-4 sm:p-8">
       {/* 토스트 알림 */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-indigo-600 text-white px-4 py-3 rounded-xl shadow-xl border border-indigo-400 animate-in fade-in slide-in-from-bottom-2">
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl border border-indigo-400 animate-in fade-in slide-in-from-bottom-2">
           <CheckCircle2 className="w-5 h-5" />
           <span className="text-sm font-semibold">{toastMessage}</span>
         </div>
@@ -289,7 +289,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
             </button>
             <button
               onClick={() => navigate('/workspace')}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-md shadow-indigo-600/30"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-md shadow-indigo-600/30"
             >
               내 워크스페이스
             </button>
@@ -329,7 +329,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="사업장 상호명, 대표자 이메일, 공개코드 검색..."
-              className="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-900 transition-colors"
             />
           </div>
 
@@ -338,7 +338,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
             <select
               value={industryFilter}
               onChange={(e) => setIndustryFilter(e.target.value)}
-              className="px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-indigo-500"
+              className="px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-slate-900"
             >
               <option value="all">전체 업종 ({availableIndustries.length})</option>
               {availableIndustries.map((ind) => (
@@ -352,7 +352,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-indigo-500"
+              className="px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-slate-900"
             >
               <option value="all">운영 상태 전체</option>
               <option value="active">정상 운영 (Active)</option>

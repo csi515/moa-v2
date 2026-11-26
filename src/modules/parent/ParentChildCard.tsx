@@ -28,7 +28,7 @@ export const ParentChildCard: React.FC<{
     <button
       type="button"
       onClick={onSelect}
-      className="w-full flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/40 transition-colors text-left min-h-[44px]"
+      className="w-full flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200 hover:border-indigo-300 hover:bg-slate-50/40 transition-colors text-left min-h-[44px]"
     >
       <div className="min-w-0">
         <p className="font-black text-slate-900 truncate">{child.displayName}</p>
@@ -36,7 +36,7 @@ export const ParentChildCard: React.FC<{
           {GUARDIAN_RELATIONSHIP_LABELS[child.relationship]}
           {child.isPrimary && ' · 대표 보호자'}
         </p>
-        <p className="text-xs text-indigo-600 mt-1 flex items-center gap-1">
+        <p className="text-xs text-slate-800 mt-1 flex items-center gap-1">
           <Building2 className="w-3 h-3" />
           {unlinked
             ? '미연결 · 눌러서 연결 요청'

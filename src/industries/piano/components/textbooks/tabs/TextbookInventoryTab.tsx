@@ -100,7 +100,7 @@ export const TextbookInventoryTab: React.FC<TextbookInventoryTabProps> = ({
             placeholder="교재명, 저자, 출판사, ISBN 검색..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 min-h-[44px] text-xs rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 bg-white text-slate-900 font-medium"
+            className="w-full pl-9 pr-4 py-2 min-h-[44px] text-xs rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-slate-900/20 bg-white text-slate-900 font-medium"
           />
         </div>
 
@@ -223,7 +223,7 @@ export const TextbookInventoryTab: React.FC<TextbookInventoryTabProps> = ({
                         {isActive ? '사용중' : '사용안함'}
                       </span>
                       {tb.level && (
-                        <span className="px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 font-bold text-[11px] border border-indigo-100">
+                        <span className="px-2 py-0.5 rounded-md bg-slate-50 text-slate-700 font-bold text-[11px] border border-slate-200">
                           {tb.level}
                         </span>
                       )}
@@ -304,7 +304,7 @@ export const TextbookInventoryTab: React.FC<TextbookInventoryTabProps> = ({
                       className="px-2.5 py-1.5 min-h-[40px] text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors flex items-center gap-1 cursor-pointer"
                       title="입고 및 재고 조정"
                     >
-                      <PackagePlus className="w-3.5 h-3.5 text-indigo-600" />
+                      <PackagePlus className="w-3.5 h-3.5 text-slate-800" />
                       입고/조정
                     </button>
                     <button
@@ -340,7 +340,7 @@ export const TextbookInventoryTab: React.FC<TextbookInventoryTabProps> = ({
                     <button
                       type="button"
                       onClick={() => onOpenSaleModal(tb.id)}
-                      className="px-3 py-1.5 min-h-[40px] text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95"
+                      className="px-3 py-1.5 min-h-[40px] text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95"
                     >
                       <ShoppingBag className="w-3.5 h-3.5" />
                       교재 배부

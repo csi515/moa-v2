@@ -95,7 +95,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center">
               <BookOpen className="w-5 h-5" />
             </div>
             <div>
@@ -130,7 +130,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
               placeholder="예: 피아노 기초 1권, 체르니 100번"
               className={`w-full px-3.5 py-2.5 rounded-xl border ${
                 errors.title ? 'border-rose-500 bg-rose-50/30' : 'border-slate-200 bg-white'
-              } text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 text-sm`}
+              } text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900 text-sm`}
             />
             {errors.title && <p className="text-rose-500 text-[11px] mt-1">{errors.title}</p>}
           </div>
@@ -142,7 +142,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
               <select
                 value={publisher}
                 onChange={(e) => setPublisher(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
               >
                 {COMMON_PUBLISHERS.map((pub) => (
                   <option key={pub} value={pub}>
@@ -158,7 +158,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
                   value={customPublisher}
                   onChange={(e) => setCustomPublisher(e.target.value)}
                   placeholder="출판사명 직접 입력 (미입력 시 '기타출판')"
-                  className="w-full mt-1.5 px-3 py-1.5 rounded-lg border border-indigo-200 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 text-xs bg-indigo-50/20"
+                  className="w-full mt-1.5 px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-hidden focus:ring-1 focus:ring-slate-900 text-xs bg-slate-50/20"
                 />
               )}
             </div>
@@ -170,7 +170,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
                 placeholder="예: C. 체르니, 음악교육연구회"
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
               />
             </div>
           </div>
@@ -184,7 +184,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
                 value={isbn}
                 onChange={(e) => setIsbn(e.target.value)}
                 placeholder="예: 978-89-03-12001-4"
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 font-mono"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900 font-mono"
               />
             </div>
 
@@ -193,7 +193,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
               <select
                 value={level}
                 onChange={(e) => setLevel(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
               >
                 {COMMON_LEVELS.map((lvl) => (
                   <option key={lvl} value={lvl}>
@@ -244,7 +244,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
                 min="0"
                 value={stock}
                 onChange={(e) => setStock(Number(e.target.value))}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 font-bold focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 font-bold focus:outline-hidden focus:ring-2 focus:ring-slate-900"
               />
             </div>
 
@@ -257,7 +257,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
                 min="0"
                 value={minStock}
                 onChange={(e) => setMinStock(Number(e.target.value))}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
               />
               <p className="text-[10px] text-slate-400 mt-1">이하 도달 시 재고 부족 알림</p>
             </div>
@@ -272,7 +272,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
                     onChange={(e) => setIsForSale(e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-slate-200 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                  <div className="w-11 h-6 bg-slate-200 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-900"></div>
                   <span className="ml-2 text-xs font-medium text-slate-700">
                     {isForSale ? '지급 가능' : '지급 중단'}
                   </span>
@@ -289,7 +289,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
               placeholder="예: 초등 저학년 추천, 바이엘 후반 필수 진도"
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 resize-none"
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900 resize-none"
             />
           </div>
 
@@ -304,7 +304,7 @@ export const TextbookFormModal: React.FC<TextbookFormModalProps> = ({
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-semibold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-semibold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-xs"
             >
               <Save className="w-4 h-4" />
               {isEditing ? '변경사항 저장' : '교재 등록 완료'}

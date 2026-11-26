@@ -143,7 +143,7 @@ export const OrganizationGovernancePanel: React.FC<Props> = ({
           <label className="block text-sm">
             <span className="font-medium text-slate-800">{ORG_CHART_COPY.scope}</span>
             <select
-              className="mt-1 min-h-11 w-full rounded-lg border border-slate-300 px-3 text-sm focus:border-indigo-500 focus:outline-none"
+              className="mt-1 min-h-11 w-full rounded-lg border border-slate-300 px-3 text-sm focus:border-slate-900 focus:outline-none"
               value={scopeType}
               onChange={(event) => setScopeType(event.target.value as DepartmentScopeType)}
             >
@@ -153,7 +153,7 @@ export const OrganizationGovernancePanel: React.FC<Props> = ({
                 </option>
               ))}
             </select>
-            <p className="mt-1 text-[11px] text-indigo-600">
+            <p className="mt-1 text-[11px] text-slate-800">
               💡 {SCOPE_LABELS[scopeType].hint}
             </p>
           </label>

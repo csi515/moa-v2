@@ -28,7 +28,7 @@ import {
   createApprovalWithChosenLine,
   listApprovalOrgMembers,
   type ApprovalMemberOption,
-} from '@/capabilities/approval_workflow/services/approvalWorkflowService';
+} from '@/capabilities/approval_workflow';
 
 type Identity = { id?: string; name?: string };
 
@@ -281,7 +281,7 @@ export const SupplyRestockView: React.FC = () => {
               onClick={() => setActiveTab('pr_quotes')}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 activeTab === 'pr_quotes'
-                  ? 'bg-white text-indigo-700 shadow-xs'
+                  ? 'bg-white text-slate-700 shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -303,7 +303,7 @@ export const SupplyRestockView: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsPrModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>신규 PR 기안</span>
@@ -486,7 +486,7 @@ export const SupplyRestockView: React.FC = () => {
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-extrabold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">
+                            <span className="font-mono text-xs font-extrabold text-slate-800 bg-slate-50 px-2 py-0.5 rounded">
                               {pr.pr_number}
                             </span>
                             <h3 className="text-sm font-black text-slate-900">{pr.title}</h3>
@@ -503,7 +503,7 @@ export const SupplyRestockView: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => handleLinkToApproval(pr)}
-                            className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-xs"
+                            className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-xs"
                           >
                             <FileCheck className="w-3.5 h-3.5" />
                             <span>전자결재 상신</span>
@@ -657,7 +657,7 @@ export const SupplyRestockView: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-xs"
+                  className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs shadow-xs"
                 >
                   요청서 등록
                 </button>
@@ -717,7 +717,7 @@ export const SupplyRestockView: React.FC = () => {
               </button>
               <button
                 type="button"
-                className="h-12 flex-1 rounded-xl bg-indigo-600 text-sm font-bold text-white disabled:opacity-50"
+                className="h-12 flex-1 rounded-xl bg-slate-900 text-sm font-bold text-white disabled:opacity-50"
                 onClick={() => void confirmPurchaseApproval()}
                 disabled={approvalBusy}
               >

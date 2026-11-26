@@ -218,7 +218,7 @@ export function KitchenDisplaySystemView() {
             let statusBg = 'bg-blue-50 text-blue-700 border-blue-200';
             let statusText = '접수 대기';
             if (ticket.status === 'RECEIVED') {
-              statusBg = 'bg-indigo-50 text-indigo-700 border-indigo-200';
+              statusBg = 'bg-slate-50 text-slate-700 border-slate-200';
               statusText = '접수 완료';
             } else if (ticket.status === 'COOKING') {
               statusBg = 'bg-amber-50 text-amber-700 border-amber-200';

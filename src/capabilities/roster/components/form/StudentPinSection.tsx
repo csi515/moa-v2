@@ -9,7 +9,7 @@ interface Props {
 
 export const StudentPinSection: React.FC<Props> = ({ formData, onChange }) => (
   <section>
-    <h4 className="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+    <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
       <KeyRound className="w-3.5 h-3.5" /> 출입 PIN
     </h4>
     <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">

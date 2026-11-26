@@ -195,7 +195,7 @@ export const EpZeroSetupWizard: React.FC = () => {
     <div className="mx-auto max-w-4xl px-4 py-8">
       {/* 상단 프로그레스 헤더 */}
       <div className="mb-8 text-center">
-        <div className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">
+        <div className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
           <Sparkles className="h-3.5 w-3.5" />
           <span>10분 즉시 가동 Zero-Setup 마법사</span>
         </div>
@@ -218,7 +218,7 @@ export const EpZeroSetupWizard: React.FC = () => {
               <div
                 className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-colors ${
                   step === s.num
-                    ? 'bg-indigo-600 text-white shadow-md'
+                    ? 'bg-slate-900 text-white shadow-md'
                     : step > s.num
                     ? 'bg-emerald-500 text-white'
                     : 'bg-slate-100 text-slate-400'
@@ -226,7 +226,7 @@ export const EpZeroSetupWizard: React.FC = () => {
               >
                 {step > s.num ? '✓' : s.num}
               </div>
-              <span className={`text-xs font-semibold ${step === s.num ? 'text-indigo-600' : 'text-slate-500'}`}>
+              <span className={`text-xs font-semibold ${step === s.num ? 'text-slate-800' : 'text-slate-500'}`}>
                 {s.label}
               </span>
               {s.num < 4 && <span className="text-slate-300 mx-1">―</span>}
@@ -239,7 +239,7 @@ export const EpZeroSetupWizard: React.FC = () => {
       <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
         {step === 1 && (
           <div className="space-y-5">
-            <div className="flex items-center gap-2 text-indigo-600 font-bold border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2 text-slate-800 font-bold border-b border-slate-100 pb-3">
               <Building2 className="w-5 h-5" />
               <h2 className="text-lg text-slate-900">Step 1. 사업장 기본 정보</h2>
             </div>
@@ -295,7 +295,7 @@ export const EpZeroSetupWizard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-md hover:bg-indigo-700 transition"
+                className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-6 py-3 text-sm font-bold text-white shadow-md hover:bg-slate-800 transition"
               >
                 <span>다음: 조직도 일괄 파싱</span>
                 <ArrowRight className="w-4 h-4" />
@@ -306,7 +306,7 @@ export const EpZeroSetupWizard: React.FC = () => {
 
         {step === 2 && (
           <div className="space-y-5">
-            <div className="flex items-center gap-2 text-indigo-600 font-bold border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2 text-slate-800 font-bold border-b border-slate-100 pb-3">
               <Users className="w-5 h-5" />
               <h2 className="text-lg text-slate-900">Step 2. 조직도 및 직급 체계 엑셀 일괄 파싱</h2>
             </div>
@@ -319,7 +319,7 @@ export const EpZeroSetupWizard: React.FC = () => {
               <div className="space-y-2">
                 <div className="flex items-center justify-between font-bold text-slate-700">
                   <span>부서 계층 구조 (1줄당 1개 경로)</span>
-                  <span className="text-indigo-600 text-[11px] font-semibold">{parsedDepartments.length}개 부서 감지</span>
+                  <span className="text-slate-800 text-[11px] font-semibold">{parsedDepartments.length}개 부서 감지</span>
                 </div>
                 <textarea
                   rows={8}
@@ -344,7 +344,7 @@ export const EpZeroSetupWizard: React.FC = () => {
               <div className="space-y-2">
                 <div className="flex items-center justify-between font-bold text-slate-700">
                   <span>직급 체계 (상위자 순서대로 1줄당 1개)</span>
-                  <span className="text-indigo-600 text-[11px] font-semibold">{parsedRoles.length}단계 위계 감지</span>
+                  <span className="text-slate-800 text-[11px] font-semibold">{parsedRoles.length}단계 위계 감지</span>
                 </div>
                 <textarea
                   rows={8}
@@ -358,7 +358,7 @@ export const EpZeroSetupWizard: React.FC = () => {
                   {parsedRoles.map((r, i) => (
                     <div key={r.name} className="text-[11px] flex justify-between items-center text-slate-700">
                       <span className="font-semibold">{i + 1}. {r.name}</span>
-                      <span className="text-indigo-600 font-mono font-bold text-[10px]">#{r.rankOrder}</span>
+                      <span className="text-slate-800 font-mono font-bold text-[10px]">#{r.rankOrder}</span>
                     </div>
                   ))}
                 </div>
@@ -377,7 +377,7 @@ export const EpZeroSetupWizard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setStep(3)}
-                className="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-md hover:bg-indigo-700 transition"
+                className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-6 py-3 text-sm font-bold text-white shadow-md hover:bg-slate-800 transition"
               >
                 <span>다음: 공용 자원 등록</span>
                 <ArrowRight className="w-4 h-4" />
@@ -388,7 +388,7 @@ export const EpZeroSetupWizard: React.FC = () => {
 
         {step === 3 && (
           <div className="space-y-5">
-            <div className="flex items-center gap-2 text-indigo-600 font-bold border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2 text-slate-800 font-bold border-b border-slate-100 pb-3">
               <Car className="w-5 h-5" />
               <h2 className="text-lg text-slate-900">Step 3. 공용 차량 및 회의실 등록</h2>
             </div>
@@ -418,8 +418,8 @@ export const EpZeroSetupWizard: React.FC = () => {
                   ))}
                 </div>
 
-                <div className="p-3 bg-indigo-50/50 rounded-2xl border border-indigo-150 space-y-2">
-                  <span className="font-bold text-indigo-900 block text-[11px]">+ 차량 바로 등록</span>
+                <div className="p-3 bg-slate-50/50 rounded-2xl border border-indigo-150 space-y-2">
+                  <span className="font-bold text-slate-900 block text-[11px]">+ 차량 바로 등록</span>
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="text"
@@ -439,7 +439,7 @@ export const EpZeroSetupWizard: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleAddVehicle}
-                    className="w-full py-1.5 rounded-lg bg-indigo-600 text-white font-bold text-xs hover:bg-indigo-700"
+                    className="w-full py-1.5 rounded-lg bg-slate-900 text-white font-bold text-xs hover:bg-slate-800"
                   >
                     차량 추가
                   </button>
@@ -467,8 +467,8 @@ export const EpZeroSetupWizard: React.FC = () => {
                   ))}
                 </div>
 
-                <div className="p-3 bg-indigo-50/50 rounded-2xl border border-indigo-150 space-y-2">
-                  <span className="font-bold text-indigo-900 block text-[11px]">+ 회의실 바로 등록</span>
+                <div className="p-3 bg-slate-50/50 rounded-2xl border border-indigo-150 space-y-2">
+                  <span className="font-bold text-slate-900 block text-[11px]">+ 회의실 바로 등록</span>
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="text"
@@ -488,7 +488,7 @@ export const EpZeroSetupWizard: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleAddRoom}
-                    className="w-full py-1.5 rounded-lg bg-indigo-600 text-white font-bold text-xs hover:bg-indigo-700"
+                    className="w-full py-1.5 rounded-lg bg-slate-900 text-white font-bold text-xs hover:bg-slate-800"
                   >
                     회의실 추가
                   </button>
@@ -508,7 +508,7 @@ export const EpZeroSetupWizard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setStep(4)}
-                className="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-md hover:bg-indigo-700 transition"
+                className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-6 py-3 text-sm font-bold text-white shadow-md hover:bg-slate-800 transition"
               >
                 <span>최종 검토 및 완료</span>
                 <ArrowRight className="w-4 h-4" />
@@ -537,11 +537,11 @@ export const EpZeroSetupWizard: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">생성 부서:</span>
-                <span className="font-bold text-indigo-700">{parsedDepartments.length}개 부서</span>
+                <span className="font-bold text-slate-700">{parsedDepartments.length}개 부서</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">설정 직급:</span>
-                <span className="font-bold text-indigo-700">{parsedRoles.length}개 직급</span>
+                <span className="font-bold text-slate-700">{parsedRoles.length}개 직급</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">등록 법인차량:</span>
@@ -557,7 +557,7 @@ export const EpZeroSetupWizard: React.FC = () => {
               <button
                 type="button"
                 onClick={handleFinishWizard}
-                className="w-full max-w-md rounded-2xl bg-indigo-600 py-3.5 text-sm font-bold text-white shadow-lg hover:bg-indigo-700 transition active:scale-95"
+                className="w-full max-w-md rounded-2xl bg-slate-900 py-3.5 text-sm font-bold text-white shadow-lg hover:bg-slate-800 transition active:scale-95"
               >
                 사내 포털 바로 시작하기 (Launch)
               </button>

@@ -122,7 +122,7 @@ export const PianoRoomTuningModal: FC<PianoRoomTuningModalProps> = ({
                   onClick={() => setCurrentRecord({ ...currentRecord, pianoType: type })}
                   className={`py-2 px-3 rounded-xl border text-center font-bold text-xs transition-all cursor-pointer ${
                     active
-                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs'
+                      ? 'bg-slate-900 text-white border-indigo-600 shadow-2xs'
                       : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                   }`}
                 >
@@ -193,7 +193,7 @@ export const PianoRoomTuningModal: FC<PianoRoomTuningModalProps> = ({
             value={currentRecord.issueNotes || ''}
             onChange={(e) => setCurrentRecord({ ...currentRecord, issueNotes: e.target.value })}
             placeholder="예: 3옥타브 솔 건반 뻑뻑함, 서스테인 페달 삐걱거림"
-            className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder:text-slate-400"
+            className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none placeholder:text-slate-400"
           />
         </div>
 
@@ -208,7 +208,7 @@ export const PianoRoomTuningModal: FC<PianoRoomTuningModalProps> = ({
           </button>
           <button
             type="submit"
-            className="px-5 py-2 rounded-xl text-xs font-black text-white bg-indigo-600 hover:bg-indigo-700 shadow-xs transition-colors cursor-pointer"
+            className="px-5 py-2 rounded-xl text-xs font-black text-white bg-slate-900 hover:bg-slate-800 shadow-xs transition-colors cursor-pointer"
           >
             저장하기
           </button>

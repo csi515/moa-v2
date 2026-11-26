@@ -287,7 +287,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                         <span className="inline-flex flex-wrap items-center gap-1.5">
                           {entry.description}
                           {getLinkedSourceBadge(entry.sourceType) && (
-                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-50 text-slate-700">
                               {getLinkedSourceBadge(entry.sourceType)}
                             </span>
                           )}
@@ -306,7 +306,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => handleOpenEdit(entry)}
-                            className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg"
+                            className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-slate-800 hover:bg-slate-50 rounded-lg"
                           >
                             <Edit className="w-4 h-4" />
                           </button>
@@ -334,7 +334,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                     <p className="font-bold text-slate-900 text-sm">
                       {entry.description}
                       {getLinkedSourceShort(entry.sourceType) && (
-                        <span className="ml-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">
+                        <span className="ml-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-50 text-slate-700">
                           {getLinkedSourceShort(entry.sourceType)}
                         </span>
                       )}

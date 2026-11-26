@@ -36,7 +36,7 @@ export const PianoInlineVideoModal: React.FC<PianoInlineVideoModalProps> = ({
         {/* 헤더 */}
         <div className="px-5 py-3.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
-            <span className="p-1.5 bg-indigo-600 text-white rounded-lg">
+            <span className="p-1.5 bg-slate-900 text-white rounded-lg">
               <Play className="w-4 h-4 fill-current ml-0.5" />
             </span>
             <div className="min-w-0">
@@ -54,7 +54,7 @@ export const PianoInlineVideoModal: React.FC<PianoInlineVideoModalProps> = ({
                 href={watchUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded-xl transition-colors"
+                className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors"
                 title="YouTube에서 새 창으로 열기"
               >
                 <ExternalLink className="w-4 h-4" />
@@ -88,7 +88,7 @@ export const PianoInlineVideoModal: React.FC<PianoInlineVideoModalProps> = ({
                   href={watchUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold"
+                  className="mt-3 px-3 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-bold"
                 >
                   외부 링크로 열기
                 </a>
@@ -101,7 +101,7 @@ export const PianoInlineVideoModal: React.FC<PianoInlineVideoModalProps> = ({
         {(video.songTitle || video.memo) && (
           <div className="p-4 bg-slate-50/70 border-t border-slate-100 space-y-1">
             {video.songTitle && (
-              <p className="text-xs font-bold text-indigo-700 flex items-center gap-1.5">
+              <p className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
                 <Music className="w-3.5 h-3.5" />
                 곡명: {video.songTitle}
               </p>

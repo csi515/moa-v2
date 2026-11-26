@@ -163,7 +163,7 @@ export function DynamicRoleSettingsPage() {
         <button
           type="button"
           onClick={handleGoBack}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-800 hover:text-indigo-800 transition-colors cursor-pointer"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>{placeLabel ? `${placeLabel} 설정으로 돌아가기` : '설정으로 돌아가기'}</span>
@@ -176,7 +176,7 @@ export function DynamicRoleSettingsPage() {
           onClick={() => setSettingTab('roles')}
           className={`min-h-11 rounded-xl px-4 text-sm font-bold transition-all cursor-pointer ${
             settingTab === 'roles'
-              ? 'bg-indigo-600 text-white shadow-xs'
+              ? 'bg-slate-900 text-white shadow-xs'
               : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
         >
@@ -187,7 +187,7 @@ export function DynamicRoleSettingsPage() {
           onClick={() => setSettingTab('org')}
           className={`min-h-11 rounded-xl px-4 text-sm font-bold transition-all cursor-pointer ${
             settingTab === 'org'
-              ? 'bg-indigo-600 text-white shadow-xs'
+              ? 'bg-slate-900 text-white shadow-xs'
               : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
         >
@@ -315,7 +315,7 @@ export function DynamicRoleSettingsPage() {
                         <span
                           key={item.key}
                           title={item.key}
-                          className="rounded-full bg-indigo-50 px-2 py-0.5 text-[11px] font-medium text-indigo-800"
+                          className="rounded-full bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-indigo-800"
                         >
                           {item.label}
                         </span>

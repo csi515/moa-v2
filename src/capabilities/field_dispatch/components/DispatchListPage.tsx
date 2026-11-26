@@ -26,7 +26,7 @@ interface DispatchOrderRow {
 
 const STATUS_BADGES: Record<DispatchStatus, { label: string; color: string }> = {
   BOOKED: { label: '예약 접수', color: 'bg-blue-50 text-blue-700 border-blue-200' },
-  ASSIGNED: { label: '담당자 배정', color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
+  ASSIGNED: { label: '담당자 배정', color: 'bg-slate-50 text-slate-700 border-slate-200' },
   EN_ROUTE: { label: '출발/이동 중', color: 'bg-amber-50 text-amber-700 border-amber-200' },
   WORKING: { label: '현장 작업 중', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
   COMPLETED: { label: '파견 완료', color: 'bg-slate-100 text-slate-700 border-slate-200' },
@@ -143,7 +143,7 @@ export const DispatchListPage: React.FC = () => {
         </div>
         <button
           onClick={handleOpenModal}
-          className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition"
+          className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 transition"
         >
           + 새 출장 파견 등록
         </button>
@@ -253,7 +253,7 @@ export const DispatchListPage: React.FC = () => {
                           onChange={(e) =>
                             handleStatusChange(order.id, e.target.value as DispatchStatus)
                           }
-                          className="text-xs border border-slate-300 rounded px-2 py-1 bg-white text-slate-700 shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                          className="text-xs border border-slate-300 rounded px-2 py-1 bg-white text-slate-700 shadow-sm focus:outline-none focus:ring-1 focus:ring-slate-900"
                         >
                           <option value="BOOKED">예약 접수</option>
                           <option value="ASSIGNED">담당자 배정</option>
@@ -286,7 +286,7 @@ export const DispatchListPage: React.FC = () => {
                   placeholder="예: 에어컨 분해 세척, 출장 세차 등"
                   value={serviceName}
                   onChange={(e) => setServiceName(e.target.value)}
-                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-slate-900 focus:outline-none"
                 />
               </div>
 
@@ -298,7 +298,7 @@ export const DispatchListPage: React.FC = () => {
                   placeholder="예: 서울시 강남구 테헤란로 123"
                   value={serviceAddress}
                   onChange={(e) => setServiceAddress(e.target.value)}
-                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-slate-900 focus:outline-none"
                 />
               </div>
 
@@ -309,7 +309,7 @@ export const DispatchListPage: React.FC = () => {
                   placeholder="예: 101동 1204호"
                   value={addressDetail}
                   onChange={(e) => setAddressDetail(e.target.value)}
-                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-slate-900 focus:outline-none"
                 />
               </div>
 
@@ -321,7 +321,7 @@ export const DispatchListPage: React.FC = () => {
                     required
                     value={scheduledAt}
                     onChange={(e) => setScheduledAt(e.target.value)}
-                    className="w-full text-sm border border-slate-300 rounded-lg px-2 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    className="w-full text-sm border border-slate-300 rounded-lg px-2 py-2 focus:ring-2 focus:ring-slate-900 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -332,7 +332,7 @@ export const DispatchListPage: React.FC = () => {
                     step="10"
                     value={durationMin}
                     onChange={(e) => setDurationMin(Number(e.target.value))}
-                    className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-slate-900 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -343,7 +343,7 @@ export const DispatchListPage: React.FC = () => {
                     step="5"
                     value={bufferMin}
                     onChange={(e) => setBufferMin(Number(e.target.value))}
-                    className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-slate-900 focus:outline-none"
                   />
                 </div>
               </div>
@@ -355,7 +355,7 @@ export const DispatchListPage: React.FC = () => {
                   placeholder="방문 전 연락 요청 등"
                   value={memo}
                   onChange={(e) => setMemo(e.target.value)}
-                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-slate-900 focus:outline-none"
                 />
               </div>
 
@@ -375,7 +375,7 @@ export const DispatchListPage: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700"
+                  className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800"
                 >
                   {conflictWarning ? '충돌 무시하고 등록' : '등록 완료'}
                 </button>

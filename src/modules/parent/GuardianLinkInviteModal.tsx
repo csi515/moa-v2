@@ -122,7 +122,7 @@ export const GuardianLinkInviteModal: React.FC<GuardianLinkInviteModalProps> = (
       <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-bold flex items-center gap-2">
-            <Link2 className="w-4 h-4 text-indigo-600" />
+            <Link2 className="w-4 h-4 text-slate-800" />
             {contactLabel}에게 MOA 연결 안내
           </h3>
           <button type="button" onClick={handleClose} aria-label="닫기">
@@ -178,8 +178,8 @@ export const GuardianLinkInviteModal: React.FC<GuardianLinkInviteModalProps> = (
 
         {!token ? (
           <div className="space-y-3">
-            <div className="p-3 bg-indigo-50 rounded-xl border border-indigo-100">
-              <p className="text-xs text-indigo-900 leading-relaxed">
+            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <p className="text-xs text-slate-900 leading-relaxed">
                 <strong>전달 방법:</strong>
                 <br />
                 1. 생성 후 QR을 보여주거나 링크·코드를 공유
@@ -193,7 +193,7 @@ export const GuardianLinkInviteModal: React.FC<GuardianLinkInviteModalProps> = (
               type="button"
               onClick={() => void handleGenerate()}
               disabled={loading}
-              className="w-full py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px] disabled:opacity-50 hover:bg-indigo-700 active:scale-[0.98] transition-all"
+              className="w-full py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px] disabled:opacity-50 hover:bg-slate-800 active:scale-[0.98] transition-all"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -212,9 +212,9 @@ export const GuardianLinkInviteModal: React.FC<GuardianLinkInviteModalProps> = (
         ) : (
           <div className="space-y-3">
             <GuardianLinkQrDisplay url={buildParentInviteUrl(token)} />
-            <div className="text-center p-4 bg-indigo-50 rounded-xl border border-indigo-100">
-              <p className="text-[10px] text-indigo-600 font-bold uppercase mb-1">연결 코드</p>
-              <p className="text-xl font-black font-mono tracking-wider text-indigo-900 break-all">
+            <div className="text-center p-4 bg-slate-50 rounded-xl border border-slate-200">
+              <p className="text-[10px] text-slate-800 font-bold uppercase mb-1">연결 코드</p>
+              <p className="text-xl font-black font-mono tracking-wider text-slate-900 break-all">
                 {formatGuardianLinkCode(token)}
               </p>
               {expiresAt && (
@@ -244,7 +244,7 @@ export const GuardianLinkInviteModal: React.FC<GuardianLinkInviteModalProps> = (
               <button
                 type="button"
                 onClick={() => void handleCopy()}
-                className="flex-1 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1 min-h-[44px] hover:bg-indigo-700 active:scale-[0.98] transition-all"
+                className="flex-1 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1 min-h-[44px] hover:bg-slate-800 active:scale-[0.98] transition-all"
               >
                 {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                 {copied ? '복사 완료!' : '링크 복사'}

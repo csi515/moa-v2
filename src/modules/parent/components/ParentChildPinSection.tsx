@@ -40,7 +40,7 @@ export const ParentChildPinSection: React.FC<ParentChildPinSectionProps> = ({
     <>
       <div className="space-y-3">
         <div className="flex items-center gap-2">
-          <KeyRound className="w-4 h-4 text-indigo-600" />
+          <KeyRound className="w-4 h-4 text-slate-800" />
           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">출입 PIN</p>
         </div>
         <p className="text-xs text-slate-500 -mt-1 leading-relaxed">
@@ -67,7 +67,7 @@ export const ParentChildPinSection: React.FC<ParentChildPinSectionProps> = ({
                     <button
                       type="button"
                       onClick={() => setEditing({ child, enrollment })}
-                      className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-indigo-50/50 min-h-[44px]"
+                      className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-slate-50/50 min-h-[44px]"
                     >
                       <div className="min-w-0">
                         <p className="text-sm font-bold text-slate-800 truncate">

@@ -188,7 +188,7 @@ export const PurchaseContractPackageModal: React.FC<PurchaseContractPackageModal
                 type="text"
                 value={packageTitle}
                 onChange={(e) => setPackageTitle(e.target.value)}
-                className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-indigo-500 font-medium"
+                className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-slate-900 font-medium"
               />
             </div>
 
@@ -218,7 +218,7 @@ export const PurchaseContractPackageModal: React.FC<PurchaseContractPackageModal
               <label
                 className={`p-3.5 rounded-xl border cursor-pointer transition flex items-start gap-3 ${
                   contractType === 'bidding'
-                    ? 'border-indigo-600 bg-indigo-50/50 shadow-xs'
+                    ? 'border-indigo-600 bg-slate-50/50 shadow-xs'
                     : 'border-slate-200 bg-white hover:border-slate-300'
                 }`}
               >
@@ -228,11 +228,11 @@ export const PurchaseContractPackageModal: React.FC<PurchaseContractPackageModal
                   value="bidding"
                   checked={contractType === 'bidding'}
                   onChange={() => setContractType('bidding')}
-                  className="mt-0.5 text-indigo-600 focus:ring-indigo-500"
+                  className="mt-0.5 text-slate-800 focus:ring-slate-900"
                 />
                 <div>
                   <div className="flex items-center gap-1.5 font-bold text-xs text-slate-900">
-                    <Scale className="w-3.5 h-3.5 text-indigo-600" />
+                    <Scale className="w-3.5 h-3.5 text-slate-800" />
                     <span>옵션 A: 경쟁 입찰 (Bidding)</span>
                   </div>
                   <p className="text-[11px] text-slate-500 mt-1">
@@ -271,21 +271,21 @@ export const PurchaseContractPackageModal: React.FC<PurchaseContractPackageModal
 
           {/* 3-A. 경쟁 입찰 세부 화면 */}
           {contractType === 'bidding' && (
-            <div className="p-4 bg-indigo-50/40 rounded-xl border border-indigo-200/80 space-y-3">
+            <div className="p-4 bg-slate-50/40 rounded-xl border border-slate-200/80 space-y-3">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
-                    <Scale className="w-3.5 h-3.5 text-indigo-600" />
+                    <Scale className="w-3.5 h-3.5 text-slate-800" />
                     복수 공급사 견적 비교 대사표 (최소 2개사 이상)
                   </h3>
-                  <p className="text-[11px] text-indigo-700/80">
+                  <p className="text-[11px] text-slate-700/80">
                     단가 및 납기일을 대조하여 최종 낙찰 업체를 지정합니다.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={handleAddQuote}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-bold transition"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-bold transition"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   업체 추가
@@ -309,8 +309,8 @@ export const PurchaseContractPackageModal: React.FC<PurchaseContractPackageModal
                           onClick={() => handleSelectWinner(idx)}
                           className={`p-1.5 rounded-lg text-xs font-bold transition ${
                             q.isSelectedWinner
-                              ? 'bg-indigo-600 text-white'
-                              : 'bg-slate-100 text-slate-400 hover:text-indigo-600'
+                              ? 'bg-slate-900 text-white'
+                              : 'bg-slate-100 text-slate-400 hover:text-slate-800'
                           }`}
                           title="낙찰 업체로 지정"
                         >
@@ -359,14 +359,14 @@ export const PurchaseContractPackageModal: React.FC<PurchaseContractPackageModal
 
                       <div className="md:col-span-2 text-right">
                         {q.isSelectedWinner ? (
-                          <span className="px-2 py-1 bg-indigo-100 text-indigo-700 font-bold text-[11px] rounded-md">
+                          <span className="px-2 py-1 bg-slate-100 text-slate-700 font-bold text-[11px] rounded-md">
                             최종 낙찰
                           </span>
                         ) : (
                           <button
                             type="button"
                             onClick={() => handleSelectWinner(idx)}
-                            className="text-[11px] text-indigo-600 hover:underline"
+                            className="text-[11px] text-slate-800 hover:underline"
                           >
                             선택
                           </button>

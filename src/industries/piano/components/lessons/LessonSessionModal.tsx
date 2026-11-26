@@ -164,7 +164,7 @@ export const LessonSessionModal: FC<LessonSessionModalProps> = ({
         {/* 상단 학생 요약 카드 */}
         <div className="flex items-center justify-between rounded-xl bg-slate-50 border border-slate-100 px-3.5 py-2.5">
           <div className="flex items-center gap-2 min-w-0">
-            <span className="w-8 h-8 rounded-lg bg-indigo-600 text-white font-black text-sm flex items-center justify-center shrink-0">
+            <span className="w-8 h-8 rounded-lg bg-slate-900 text-white font-black text-sm flex items-center justify-center shrink-0">
               {student.name.slice(0, 1)}
             </span>
             <div className="min-w-0">
@@ -177,7 +177,7 @@ export const LessonSessionModal: FC<LessonSessionModalProps> = ({
             </div>
           </div>
           {classItem?.room && (
-            <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md shrink-0">
+            <span className="text-[11px] font-semibold text-slate-700 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md shrink-0">
               {classItem.room}
             </span>
           )}
@@ -199,7 +199,7 @@ export const LessonSessionModal: FC<LessonSessionModalProps> = ({
                     active
                       ? isOptAbsent
                         ? 'bg-rose-600 text-white border-rose-600 shadow-xs'
-                        : 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                        : 'bg-slate-900 text-white border-indigo-600 shadow-xs'
                       : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'
                   }`}
                 >
@@ -254,7 +254,7 @@ export const LessonSessionModal: FC<LessonSessionModalProps> = ({
                       key={s}
                       type="button"
                       onClick={() => setForm((prev) => ({ ...prev, songTitle: s }))}
-                      className="px-2 py-1 rounded-lg text-[11px] font-medium bg-slate-100 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 border border-slate-200 transition-colors cursor-pointer"
+                      className="px-2 py-1 rounded-lg text-[11px] font-medium bg-slate-100 text-slate-700 hover:bg-slate-50 hover:text-slate-700 border border-slate-200 transition-colors cursor-pointer"
                     >
                       {s}
                     </button>
@@ -294,7 +294,7 @@ export const LessonSessionModal: FC<LessonSessionModalProps> = ({
               <button
                 type="button"
                 onClick={() => setShowDetails((prev) => !prev)}
-                className="w-full py-2 px-3 text-xs font-bold text-slate-500 hover:text-indigo-600 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 transition-colors flex items-center justify-between cursor-pointer"
+                className="w-full py-2 px-3 text-xs font-bold text-slate-500 hover:text-slate-800 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 transition-colors flex items-center justify-between cursor-pointer"
               >
                 <span>상세 기록 (보완점, 다음 시간 곡, 내부 메모)</span>
                 {showDetails ? (
@@ -357,7 +357,7 @@ export const LessonSessionModal: FC<LessonSessionModalProps> = ({
           <button
             type="submit"
             className={`flex-[1.5] min-h-[46px] rounded-xl text-white text-sm font-bold shadow-xs transition-colors cursor-pointer ${
-              isAbsent ? 'bg-rose-600 hover:bg-rose-700' : 'bg-indigo-600 hover:bg-indigo-700'
+              isAbsent ? 'bg-rose-600 hover:bg-rose-700' : 'bg-slate-900 hover:bg-slate-800'
             }`}
           >
             {isAbsent ? '결석 저장' : '수업 노트 저장'}

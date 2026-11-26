@@ -129,7 +129,7 @@ export const TuitionInvoiceShareModal: React.FC<TuitionInvoiceShareModalProps> =
             <span>문구 복사</span>
           </Button>
           {typeof navigator !== 'undefined' && 'share' in navigator && (
-            <Button variant="primary" onClick={handleNativeShare} className="gap-1.5 bg-indigo-600 hover:bg-indigo-700">
+            <Button variant="primary" onClick={handleNativeShare} className="gap-1.5 bg-slate-900 hover:bg-slate-800">
               <Share2 className="w-4 h-4" />
               <span>외부 앱으로 바로 공유</span>
             </Button>
@@ -150,7 +150,7 @@ export const TuitionInvoiceShareModal: React.FC<TuitionInvoiceShareModalProps> =
           </div>
           <div className="flex justify-between items-center pt-1 border-t border-slate-200">
             <span className="text-slate-500 font-medium">납부 요청 금액</span>
-            <span className="font-extrabold text-indigo-600 text-sm">
+            <span className="font-extrabold text-slate-800 text-sm">
               {formatCurrency(invoice.unpaidAmount > 0 ? invoice.unpaidAmount : invoice.totalAmount)}
             </span>
           </div>
@@ -167,7 +167,7 @@ export const TuitionInvoiceShareModal: React.FC<TuitionInvoiceShareModalProps> =
         <div>
           <div className="flex items-center justify-between mb-1.5">
             <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <MessageSquare className="w-3.5 h-3.5 text-indigo-600" />
+              <MessageSquare className="w-3.5 h-3.5 text-slate-800" />
               <span>카카오톡 / 문자 발송 문구</span>
             </label>
             <span className="text-[10px] text-slate-400">필요 시 수정하여 전송할 수 있습니다</span>
@@ -176,7 +176,7 @@ export const TuitionInvoiceShareModal: React.FC<TuitionInvoiceShareModalProps> =
             rows={10}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className="w-full text-xs font-mono p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-800 leading-relaxed shadow-inner"
+            className="w-full text-xs font-mono p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none text-slate-800 leading-relaxed shadow-inner"
           />
         </div>
       </div>

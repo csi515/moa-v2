@@ -44,9 +44,9 @@ const KANBAN_STAGES: { stage: PipelineStage; label: string; color: string }[] = 
   { stage: 'RECEIVED', label: '의뢰 접수', color: 'border-slate-300 bg-slate-50/50' },
   { stage: 'IN_PROGRESS', label: '작업 진행 중', color: 'border-blue-200 bg-blue-50/20' },
   { stage: 'PARTS_WAITING', label: '부품·자재 대기', color: 'border-amber-200 bg-amber-50/20' },
-  { stage: 'INSPECTION', label: '품질 검수', color: 'border-indigo-200 bg-indigo-50/20' },
+  { stage: 'INSPECTION', label: '품질 검수', color: 'border-slate-200 bg-slate-50/20' },
   { stage: 'READY_FOR_PICKUP', label: '출고·픽업 대기', color: 'border-emerald-200 bg-emerald-50/20' },
-  { stage: 'COMPLETED', label: '최종 완료', color: 'border-purple-200 bg-purple-50/20' },
+  { stage: 'COMPLETED', label: '최종 완료', color: 'border-slate-200 bg-slate-50/20' },
 ];
 
 export const TaskPipelineKanbanView: React.FC<TaskPipelineKanbanViewProps> = ({
@@ -439,7 +439,7 @@ export const TaskPipelineKanbanView: React.FC<TaskPipelineKanbanViewProps> = ({
                                 <button
                                   type="button"
                                   onClick={() => handleStageTransition(order, 'INSPECTION')}
-                                  className="py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[10px] font-bold flex items-center justify-center gap-0.5"
+                                  className="py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 text-[10px] font-bold flex items-center justify-center gap-0.5"
                                 >
                                   <span>검수 요청</span>
                                   <ChevronRight className="w-2.5 h-2.5" />
@@ -483,7 +483,7 @@ export const TaskPipelineKanbanView: React.FC<TaskPipelineKanbanViewProps> = ({
                               <button
                                 type="button"
                                 onClick={() => handleStageTransition(order, 'COMPLETED')}
-                                className="w-full py-1.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-[11px] font-bold flex items-center justify-center gap-1"
+                                className="w-full py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-bold flex items-center justify-center gap-1"
                               >
                                 <CheckCircle2 className="w-3 h-3" />
                                 <span>고객 인도 완료</span>
@@ -544,9 +544,9 @@ export const TaskPipelineKanbanView: React.FC<TaskPipelineKanbanViewProps> = ({
                   RECEIVED: { pct: 15, label: '접수', color: 'bg-slate-400' },
                   IN_PROGRESS: { pct: 40, label: '작업 중', color: 'bg-blue-600' },
                   PARTS_WAITING: { pct: 55, label: '부품 대기', color: 'bg-amber-500' },
-                  INSPECTION: { pct: 75, label: '검수', color: 'bg-indigo-600' },
+                  INSPECTION: { pct: 75, label: '검수', color: 'bg-slate-900' },
                   READY_FOR_PICKUP: { pct: 90, label: '출고 대기', color: 'bg-emerald-600' },
-                  COMPLETED: { pct: 100, label: '완료', color: 'bg-purple-600' },
+                  COMPLETED: { pct: 100, label: '완료', color: 'bg-slate-900' },
                   ON_HOLD: { pct: 50, label: '보류', color: 'bg-amber-600' },
                   CANCELLED: { pct: 0, label: '취소', color: 'bg-rose-600' },
                 };

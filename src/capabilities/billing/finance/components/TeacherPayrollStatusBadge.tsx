@@ -7,7 +7,7 @@ import {
 
 const STATUS_CLASS: Record<PayrollSettlementStatus, string> = {
   expensed: 'text-emerald-700 bg-emerald-50',
-  confirmed: 'text-indigo-700 bg-indigo-50',
+  confirmed: 'text-slate-700 bg-slate-50',
   pending: 'text-amber-700 bg-amber-50',
 };
 

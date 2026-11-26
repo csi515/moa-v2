@@ -53,7 +53,7 @@ export const RetailCustomerPointsView: FC<Props> = ({ student }) => {
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
-      <div className="bg-indigo-600 rounded-2xl p-6 text-white shadow-md flex items-center justify-between">
+      <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-md flex items-center justify-between">
         <div>
           <p className="text-indigo-200 text-sm font-medium mb-1">사용 가능 포인트</p>
           <h2 className="text-3xl font-black">{balance.toLocaleString("ko-KR")} <span className="text-base font-bold">P</span></h2>
@@ -71,7 +71,7 @@ export const RetailCustomerPointsView: FC<Props> = ({ student }) => {
         ) : (
           <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden divide-y divide-slate-100">
             {txs.map((tx) => {
-              const amountClass = tx.amount > 0 ? "text-indigo-600" : "text-slate-900";
+              const amountClass = tx.amount > 0 ? "text-slate-800" : "text-slate-900";
               const typeLabel = tx.type === "earn" ? "포인트 적립" : tx.type === "redeem" ? "포인트 사용" : "포인트 수동 지급/차감";
               return (
                 <div key={tx.id} className="p-4 flex items-center justify-between">

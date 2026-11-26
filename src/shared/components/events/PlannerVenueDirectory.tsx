@@ -105,7 +105,7 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-3 gap-3">
         <div>
           <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-            <Building2 className="w-6 h-6 text-indigo-600" /> 제휴 돌잔치 연회장 안내 및 가용 일정
+            <Building2 className="w-6 h-6 text-slate-800" /> 제휴 돌잔치 연회장 안내 및 가용 일정
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             소개자료 공개에 동의한 제휴 업체의 베뉴 정보와 실시간 일정표, 수수료 정책, 공식 제휴업체를 확인합니다.
@@ -125,7 +125,7 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
             variant={viewMode === 'vendors' ? 'primary' : 'outline'}
             onClick={() => handleOpenVendors()}
           >
-            <Handshake className="w-3.5 h-3.5 mr-1 text-indigo-600" /> 공식 제휴업체 리스트
+            <Handshake className="w-3.5 h-3.5 mr-1 text-slate-800" /> 공식 제휴업체 리스트
           </Button>
           {currentVenue && (
             <Button
@@ -196,7 +196,7 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
                         variant="outline"
                         onClick={() => handleOpenCalendar(venue.venueId)}
                       >
-                        <Calendar className="w-3.5 h-3.5 mr-1 text-indigo-600" /> 빈 일정
+                        <Calendar className="w-3.5 h-3.5 mr-1 text-slate-800" /> 빈 일정
                       </Button>
                       <Button
                         size="sm"
@@ -258,7 +258,7 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
                       <button
                         type="button"
                         onClick={() => handleOpenVendors(venue.venueId)}
-                        className="text-[11px] text-indigo-600 font-medium hover:underline flex items-center gap-1"
+                        className="text-[11px] text-slate-800 font-medium hover:underline flex items-center gap-1"
                       >
                         <Tag className="w-3 h-3 text-indigo-500" />
                         공식 제휴업체 {vendorCount}곳 확인 &gt;
@@ -268,7 +268,7 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
                       {venue.halls.map((hall) => (
                         <div
                           key={hall.id}
-                          className="text-[11px] bg-indigo-50/60 text-indigo-800 px-2.5 py-1 rounded border border-indigo-100"
+                          className="text-[11px] bg-slate-50/60 text-indigo-800 px-2.5 py-1 rounded border border-slate-200"
                         >
                           <span className="font-bold">{hall.name}</span> (수용 {hall.capacity}석 / 최소 {hall.minGuaranteed}명)
                         </div>
@@ -313,11 +313,11 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
       {/* 모드 2: 공식 제휴업체 목록 디렉토리 뷰 (Partner Vendor Directory) */}
       {viewMode === 'vendors' && (
         <div className="space-y-4">
-          <Card className="p-4 border-indigo-100 bg-gradient-to-r from-indigo-50/70 to-white space-y-3">
+          <Card className="p-4 border-slate-200 bg-gradient-to-r from-indigo-50/70 to-white space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <Handshake className="w-5 h-5 text-indigo-600" />
+                  <Handshake className="w-5 h-5 text-slate-800" />
                   <h3 className="font-bold text-slate-900 text-base">
                     {currentVenue ? currentVenue.venueName : '파티룸'} 공식 제휴업체 목록
                   </h3>
@@ -348,7 +348,7 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
             </div>
 
             {/* 카테고리 필터 탭 */}
-            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-indigo-100/60">
+            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-200/60">
               {(
                 [
                   { key: 'ALL', label: '전체 보기' },
@@ -365,7 +365,7 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
                   onClick={() => setSelectedCategory(key)}
                   className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-colors ${
                     selectedCategory === key
-                      ? 'bg-indigo-600 text-white shadow-sm'
+                      ? 'bg-slate-900 text-white shadow-sm'
                       : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
                   }`}
                 >
@@ -392,7 +392,7 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
                         href={vendor.instagramUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-xs text-slate-500 hover:text-indigo-600 flex items-center gap-1"
+                        className="text-xs text-slate-500 hover:text-slate-800 flex items-center gap-1"
                       >
                         포트폴리오 <ExternalLink className="w-3 h-3" />
                       </a>
@@ -444,7 +444,7 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
                     </Button>
                     <a
                       href={`tel:${vendor.contactNumber}`}
-                      className="inline-flex items-center text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded font-medium hover:bg-indigo-100 border border-indigo-200"
+                      className="inline-flex items-center text-xs bg-slate-50 text-slate-700 px-2.5 py-1 rounded font-medium hover:bg-slate-100 border border-slate-200"
                     >
                       전화 연결
                     </a>

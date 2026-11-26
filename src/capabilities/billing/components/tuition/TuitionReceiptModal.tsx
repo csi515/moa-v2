@@ -99,7 +99,7 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
         {/* 상단 툴바 (인쇄 시 숨김) */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 no-print">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center font-bold">
               <FileText className="w-4 h-4" />
             </div>
             <div>
@@ -121,7 +121,7 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
             <button
               type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs cursor-pointer min-h-[36px]"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-xs cursor-pointer min-h-[36px]"
             >
               <Printer className="w-3.5 h-3.5" />
               인쇄
@@ -140,7 +140,7 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
         <div className="p-6 sm:p-8 overflow-y-auto space-y-6 text-slate-700 printable-area print:p-6">
           {/* 헤더 타이틀 */}
           <div className="text-center pb-4 border-b-2 border-slate-900">
-            <span className="text-[11px] font-bold tracking-widest text-indigo-600 uppercase">
+            <span className="text-[11px] font-bold tracking-widest text-slate-800 uppercase">
               Official Tuition Receipt
             </span>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
@@ -169,7 +169,7 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
             </div>
             <div>
               <span className="text-slate-400">결제 수단:</span>{' '}
-              <span className="font-semibold text-indigo-700">{methodText}</span>
+              <span className="font-semibold text-slate-700">{methodText}</span>
             </div>
             <div>
               <span className="text-slate-400">납부 상태:</span>{' '}
@@ -223,9 +223,9 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
               <span>총 청구 금액</span>
               <span className="font-bold text-slate-800">{formatCurrency(invoice.totalAmount)}</span>
             </div>
-            <div className="flex justify-between items-center text-indigo-700 font-bold">
+            <div className="flex justify-between items-center text-slate-700 font-bold">
               <span className="flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-slate-800" />
                 실제 수납 납입액 (금회)
               </span>
               <span className="text-sm font-black text-indigo-800">

@@ -48,10 +48,10 @@ export const BusinessHealthWidget: React.FC<BusinessHealthWidgetProps> = ({
       progress: 'bg-emerald-500',
     },
     indigo: {
-      bg: 'bg-indigo-50',
-      border: 'border-indigo-200',
-      badge: 'bg-indigo-600 text-white',
-      text: 'text-indigo-700',
+      bg: 'bg-slate-50',
+      border: 'border-slate-200',
+      badge: 'bg-slate-900 text-white',
+      text: 'text-slate-700',
       progress: 'bg-indigo-500',
     },
     amber: {
@@ -102,7 +102,7 @@ export const BusinessHealthWidget: React.FC<BusinessHealthWidgetProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
+            <div className="p-2 bg-slate-50 text-slate-800 rounded-xl">
               <Activity className="w-4 h-4" />
             </div>
             <h2 className="text-base font-bold text-slate-900">
@@ -150,9 +150,9 @@ export const BusinessHealthWidget: React.FC<BusinessHealthWidgetProps> = ({
 
       {/* 3. 사장님을 위한 맞춤 처방 액션 */}
       {report.prescriptions.length > 0 && (
-        <div className="rounded-2xl bg-indigo-50/50 border border-indigo-100 p-4 sm:p-5 space-y-3">
-          <div className="flex items-center gap-2 text-indigo-900 font-bold text-xs uppercase tracking-wide">
-            <Zap className="w-3.5 h-3.5 text-indigo-600" />
+        <div className="rounded-2xl bg-slate-50/50 border border-slate-200 p-4 sm:p-5 space-y-3">
+          <div className="flex items-center gap-2 text-slate-900 font-bold text-xs uppercase tracking-wide">
+            <Zap className="w-3.5 h-3.5 text-slate-800" />
             <span>오늘의 자동 처방 피드백 (Action Tip)</span>
           </div>
 
@@ -160,7 +160,7 @@ export const BusinessHealthWidget: React.FC<BusinessHealthWidgetProps> = ({
             {report.prescriptions.map((prescription, idx) => (
               <div
                 key={idx}
-                className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 bg-white rounded-xl border border-indigo-100/70 text-xs shadow-2xs"
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 bg-white rounded-xl border border-slate-200/70 text-xs shadow-2xs"
               >
                 <div>
                   <div className="font-bold text-slate-900 flex items-center gap-1.5">
@@ -180,7 +180,7 @@ export const BusinessHealthWidget: React.FC<BusinessHealthWidgetProps> = ({
                   <button
                     type="button"
                     onClick={() => onNavigate(prescription.actionTargetTab!)}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors shrink-0 self-start sm:self-center"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors shrink-0 self-start sm:self-center"
                   >
                     <span>{prescription.actionLabel}</span>
                     <ArrowRight className="w-3 h-3" />

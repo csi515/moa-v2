@@ -309,7 +309,7 @@ const PilatesAdminDashboard: React.FC = () => {
 
         <div className="bg-white rounded-2xl border border-slate-200 p-3.5">
           <h3 className="font-bold text-slate-900 flex items-center gap-2 mb-2.5 text-sm">
-            <Dumbbell className="w-4 h-4 text-purple-600" />
+            <Dumbbell className="w-4 h-4 text-slate-800" />
             다가오는 예약
           </h3>
           {upcoming.length === 0 ? (

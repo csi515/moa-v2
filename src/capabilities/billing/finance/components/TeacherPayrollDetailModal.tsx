@@ -43,7 +43,7 @@ function statusGuide(status: TeacherPayrollRow['settlementStatus']): {
     return {
       title: '정산 확정됨 · 지출 대기',
       body: '금액은 확정되었습니다. 다음 단계로만 「지출 등록」을 진행하세요. (정산 확정과 별개)',
-      tone: 'border-indigo-200 bg-indigo-50 text-indigo-900',
+      tone: 'border-slate-200 bg-slate-50 text-slate-900',
     };
   }
   return {
@@ -220,7 +220,7 @@ export const TeacherPayrollDetailModal: React.FC<TeacherPayrollDetailProps> = ({
                 type="button"
                 onClick={onConfirm}
                 disabled={finalAmount <= 0 || row.payType === 'none'}
-                className="flex-1 min-h-[44px] px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white text-xs font-bold rounded-xl inline-flex items-center justify-center gap-1.5"
+                className="flex-1 min-h-[44px] px-4 py-2.5 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 text-white text-xs font-bold rounded-xl inline-flex items-center justify-center gap-1.5"
               >
                 <ClipboardCheck className="w-4 h-4" />
                 정산 확정 (금액 확정)
@@ -278,7 +278,7 @@ function SummaryChip({
       <p className="text-[10px] font-bold text-slate-400">{label}</p>
       <p
         className={`text-xs font-black mt-0.5 truncate ${
-          emphasize ? 'text-indigo-700 tabular-nums' : 'text-slate-900'
+          emphasize ? 'text-slate-700 tabular-nums' : 'text-slate-900'
         }`}
         title={value}
       >

@@ -27,7 +27,7 @@ const SharedProfilePreview: React.FC<{ request: GuardianEnrollmentRequest }> = (
   );
 
   return (
-    <div className="p-3 bg-indigo-50/70 rounded-lg mb-3">
+    <div className="p-3 bg-slate-50 rounded-lg mb-3">
       <p className="text-xs font-bold text-slate-500 mb-2">제공 동의 정보</p>
       <ul className="space-y-1">
         {fields.map((field) => {
@@ -88,8 +88,8 @@ export const GuardianEnrollmentRequestCard: React.FC<{
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center shrink-0">
-              <User className="w-6 h-6 text-indigo-600" />
+            <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center shrink-0">
+              <User className="w-6 h-6 text-slate-800" />
             </div>
             <div className="min-w-0">
               <p className="font-bold text-lg text-slate-900 truncate">{request.studentName}</p>
@@ -187,7 +187,7 @@ export const GuardianEnrollmentRequestCard: React.FC<{
             type="button"
             onClick={() => void handleApprove()}
             disabled={processing}
-            className="flex-1 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-colors min-h-[44px] flex items-center justify-center gap-2 disabled:opacity-50"
+            className="flex-1 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition-colors min-h-[44px] flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {processing ? (
               <Loader2 className="w-4 h-4 animate-spin" />

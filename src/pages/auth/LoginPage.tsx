@@ -180,13 +180,13 @@ export const LoginPage: React.FC = () => {
         className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white p-12 lg:p-16 flex-col justify-between relative overflow-hidden"
       >
         {/* 장식용 글로우 효과 */}
-        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-slate-900/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-10 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* 브랜드 헤더 */}
         <div className="relative z-10">
           <div className="flex items-center space-x-3 mb-6">
-            <div className="w-11 h-11 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
+            <div className="w-11 h-11 rounded-2xl bg-slate-900 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
               <Layers className="w-6 h-6" />
             </div>
             <div>
@@ -279,7 +279,7 @@ export const LoginPage: React.FC = () => {
         <div className="w-full max-w-[420px] lg:max-w-md bg-white rounded-3xl shadow-xl lg:shadow-none border border-slate-100 lg:border-none p-6 sm:p-10">
           {/* 모바일 전용 로고 헤더 (< lg) */}
           <div className="lg:hidden text-center mb-8">
-            <div className="inline-flex items-center justify-center w-13 h-13 bg-indigo-600 rounded-2xl text-white shadow-lg shadow-indigo-100 mb-3">
+            <div className="inline-flex items-center justify-center w-13 h-13 bg-slate-900 rounded-2xl text-white shadow-lg shadow-indigo-100 mb-3">
               <Layers className="w-7 h-7" />
             </div>
             <h1 className="text-2xl font-bold text-slate-900">모아</h1>
@@ -325,7 +325,7 @@ export const LoginPage: React.FC = () => {
                 type="button"
                 onClick={() => void handleResendConfirmation()}
                 disabled={resendLoading}
-                className="w-full py-2.5 rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700 text-xs font-bold min-h-[44px] disabled:opacity-50"
+                className="w-full py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-bold min-h-[44px] disabled:opacity-50"
               >
                 {resendLoading ? "재발송 중..." : "확인 메일 다시 받기"}
               </button>

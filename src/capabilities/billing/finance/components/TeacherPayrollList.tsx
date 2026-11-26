@@ -110,7 +110,7 @@ export function TeacherPayrollList({
                   <button
                     type="button"
                     onClick={() => onOpenDetail(row)}
-                    className="text-indigo-600 font-bold hover:underline min-h-[44px] px-2"
+                    className="text-slate-800 font-bold hover:underline min-h-[44px] px-2"
                   >
                     {actionLabel(row.settlementStatus)}
                   </button>
@@ -162,7 +162,7 @@ export function TeacherPayrollList({
               <span className="text-slate-500 font-medium">
                 {statusDetailLabel(row.settlementStatus)} · {nextStepLabel(row.settlementStatus)}
               </span>
-              <span className="font-bold text-indigo-600">{actionLabel(row.settlementStatus)}</span>
+              <span className="font-bold text-slate-800">{actionLabel(row.settlementStatus)}</span>
             </div>
           </button>
         ))}

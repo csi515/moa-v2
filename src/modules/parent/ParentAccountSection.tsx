@@ -62,7 +62,7 @@ export const ParentAccountSection: FC<{ industryType?: IndustryType | string }> 
         <button
           type="submit"
           disabled={saving}
-          className="w-full py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px] disabled:opacity-50"
+          className="w-full py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl min-h-[44px] disabled:opacity-50"
         >
           {saving ? '저장 중...' : '연락처 저장'}
         </button>

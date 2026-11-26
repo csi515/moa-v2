@@ -15,7 +15,7 @@ export const SuperAdminGuard: React.FC<SuperAdminGuardProps> = ({ children }) =>
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-slate-800" />
           <p className="text-sm font-medium text-slate-500">관리자 인증 권한 확인 중...</p>
         </div>
       </div>

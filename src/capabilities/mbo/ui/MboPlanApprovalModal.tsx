@@ -4,7 +4,7 @@ import {
   createApprovalWithChosenLine,
   listApprovalOrgMembers,
   type ApprovalMemberOption,
-} from '@/capabilities/approval_workflow/services/approvalWorkflowService';
+} from '@/capabilities/approval_workflow';
 import {
   buildMboPlanApprovalContent,
   canSubmitMboPlanToApprovalWorkflow,
@@ -177,7 +177,7 @@ export const MboPlanApprovalModal: React.FC<Props> = ({
             type="button"
             disabled={busy}
             onClick={() => void handleConfirm()}
-            className="h-11 rounded-xl bg-indigo-600 px-4 text-sm font-semibold text-white disabled:opacity-50"
+            className="h-11 rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white disabled:opacity-50"
           >
             {busy ? '상신 중…' : '상신'}
           </button>

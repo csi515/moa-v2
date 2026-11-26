@@ -40,12 +40,12 @@ export const TimetableDayTimeline: FC<TimetableDayTimelineProps> = ({
   }
 
   return (
-    <ol className="relative space-y-0 border-l-2 border-indigo-100 ml-3 pl-0" aria-label={`${dayLabel} 수업 일정`}>
+    <ol className="relative space-y-0 border-l-2 border-slate-200 ml-3 pl-0" aria-label={`${dayLabel} 수업 일정`}>
       {rows.map(({ classItem: cls, enrolledCount, highlight }) => {
         const isFull = enrolledCount >= cls.capacity;
         const highlightClass =
           highlight === 'now'
-            ? 'border-indigo-400 bg-indigo-50/80 ring-1 ring-indigo-200'
+            ? 'border-indigo-400 bg-slate-50/80 ring-1 ring-indigo-200'
             : highlight === 'next'
               ? 'border-emerald-300 bg-emerald-50/50'
               : 'border-slate-200/90 bg-white hover:border-indigo-300';
@@ -55,7 +55,7 @@ export const TimetableDayTimeline: FC<TimetableDayTimelineProps> = ({
             <span
               className={`absolute -left-[9px] top-4 w-4 h-4 rounded-full border-2 border-white shadow-sm ${
                 highlight === 'now'
-                  ? 'bg-indigo-600'
+                  ? 'bg-slate-900'
                   : highlight === 'next'
                     ? 'bg-emerald-500'
                     : 'bg-indigo-300'
@@ -71,12 +71,12 @@ export const TimetableDayTimeline: FC<TimetableDayTimelineProps> = ({
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                    <span className="font-mono text-sm font-bold text-indigo-700 tabular-nums">
+                    <span className="font-mono text-sm font-bold text-slate-700 tabular-nums">
                       {cls.startTime}
                     </span>
                     <span className="text-xs text-slate-400">~ {cls.endTime}</span>
                     {highlight === 'now' && (
-                      <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-indigo-600 text-white">
+                      <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-slate-900 text-white">
                         진행 중
                       </span>
                     )}

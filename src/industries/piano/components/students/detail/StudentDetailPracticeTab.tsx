@@ -44,7 +44,7 @@ export const StudentDetailPracticeTab: React.FC<StudentDetailPracticeTabProps> =
         </div>
         <button
           onClick={() => setIsAddPrOpen(true)}
-          className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
+          className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" /> 연습 기록 추가
         </button>
@@ -121,7 +121,7 @@ export const StudentDetailPracticeTab: React.FC<StudentDetailPracticeTabProps> =
                 <span className="font-bold text-slate-900">{pr.date} ({pr.minutes}분 연습)</span>
                 <span className="text-amber-600 font-bold">{pr.teacherEvaluation || '평가 완료'}</span>
               </div>
-              <p className="text-indigo-700 font-semibold mt-1">🎵 {pr.songTitle}</p>
+              <p className="text-slate-700 font-semibold mt-1">🎵 {pr.songTitle}</p>
               {pr.difficultyPart && (
                 <p className="text-slate-600 text-[11px] mt-1">포인트: {pr.difficultyPart}</p>
               )}
@@ -143,7 +143,7 @@ export const StudentDetailPracticeTab: React.FC<StudentDetailPracticeTabProps> =
                 <span className="font-bold text-slate-900">{ls.date} 수업</span>
                 <span className="text-slate-500">{ls.teacherName}</span>
               </div>
-              <p className="font-bold text-indigo-700">진도: {ls.songTitle} ({ls.progress})</p>
+              <p className="font-bold text-slate-700">진도: {ls.songTitle} ({ls.progress})</p>
               <p className="text-slate-700 leading-relaxed">{ls.lessonContent}</p>
               <div className="grid grid-cols-2 gap-2 text-[11px] bg-white p-2.5 rounded-xl border border-slate-200/60 mt-2">
                 <div>
@@ -154,7 +154,7 @@ export const StudentDetailPracticeTab: React.FC<StudentDetailPracticeTabProps> =
                 </div>
               </div>
               {ls.homework && (
-                <p className="text-[11px] text-purple-700 font-semibold mt-1">
+                <p className="text-[11px] text-slate-700 font-semibold mt-1">
                   📝 숙제: {ls.homework}
                 </p>
               )}

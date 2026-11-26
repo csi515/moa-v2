@@ -75,7 +75,7 @@ export const LearningJournalFeedView: React.FC = () => {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium text-sm shadow-sm transition"
+          className="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-medium text-sm shadow-sm transition"
         >
           + 새 수업 일지 작성
         </button>
@@ -92,8 +92,8 @@ export const LearningJournalFeedView: React.FC = () => {
           <div className="text-2xl font-bold text-emerald-700 mt-1">{stats.acknowledgedCount}건</div>
         </div>
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <div className="text-xs font-semibold text-indigo-600">학부모 피드 확인율</div>
-          <div className="text-2xl font-bold text-indigo-700 mt-1">{stats.acknowledgementRate}%</div>
+          <div className="text-xs font-semibold text-slate-800">학부모 피드 확인율</div>
+          <div className="text-2xl font-bold text-slate-700 mt-1">{stats.acknowledgementRate}%</div>
         </div>
       </div>
 
@@ -134,8 +134,8 @@ export const LearningJournalFeedView: React.FC = () => {
               </div>
 
               {journal.practice_homework && (
-                <div className="bg-indigo-50/60 border border-indigo-100 rounded-xl p-3 text-xs text-indigo-900 space-y-1">
-                  <span className="font-bold text-indigo-700">📌 오늘의 보충 연습 과제:</span>
+                <div className="bg-slate-50/60 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 space-y-1">
+                  <span className="font-bold text-slate-700">📌 오늘의 보충 연습 과제:</span>
                   <div>{journal.practice_homework}</div>
                 </div>
               )}
@@ -219,7 +219,7 @@ export const LearningJournalFeedView: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium"
+                  className="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 text-sm font-medium"
                 >
                   발행 및 피드 전송
                 </button>

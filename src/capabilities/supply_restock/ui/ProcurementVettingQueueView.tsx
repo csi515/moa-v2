@@ -168,7 +168,7 @@ export const ProcurementVettingQueueView: React.FC<ProcurementVettingQueueViewPr
             <button
               type="button"
               onClick={handleStartContractPackage}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-xs rounded-xl shadow-xs transition"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-indigo-500 hover:bg-slate-900 text-white font-bold text-xs rounded-xl shadow-xs transition"
             >
               <FileCheck2 className="w-4 h-4" />
               선택 건 계약 묶음 진행 ({selectedForContractIds.length}건)
@@ -210,7 +210,7 @@ export const ProcurementVettingQueueView: React.FC<ProcurementVettingQueueViewPr
                         type="checkbox"
                         checked={selectedForContractIds.includes(pr.id)}
                         onChange={() => handleToggleSelectContract(pr.id)}
-                        className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500"
+                        className="w-4 h-4 rounded text-slate-800 focus:ring-slate-900"
                         title="계약 묶음 패키지 선택"
                       />
                     )}
@@ -316,7 +316,7 @@ export const ProcurementVettingQueueView: React.FC<ProcurementVettingQueueViewPr
                                   창고 내 대체 재고 충분 ({check.inStockQuantity}개 보유)
                                 </span>
                               ) : check.hasPartialStock ? (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-50 text-indigo-800 text-[11px] rounded-lg border border-indigo-200">
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-50 text-indigo-800 text-[11px] rounded-lg border border-slate-200">
                                   일부 재고 보유 ({check.inStockQuantity}개 보유)
                                 </span>
                               ) : (

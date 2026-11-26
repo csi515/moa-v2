@@ -57,15 +57,15 @@ export const StudentDetailAttendanceTab: React.FC<StudentDetailAttendanceTabProp
       </div>
       <button
         onClick={() => setIsAddAttOpen(true)}
-        className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
+        className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
       >
         <Plus className="w-3.5 h-3.5" /> 출결 기록 추가
       </button>
     </div>
 
     {isAddAttOpen && (
-      <form onSubmit={onSaveAttendance} className="p-4 bg-indigo-50/60 rounded-2xl border border-indigo-200 space-y-3">
-        <h5 className="text-xs font-bold text-indigo-900">새 출결 기록 등록</h5>
+      <form onSubmit={onSaveAttendance} className="p-4 bg-slate-50/60 rounded-2xl border border-slate-200 space-y-3">
+        <h5 className="text-xs font-bold text-slate-900">새 출결 기록 등록</h5>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           <div>
             <label className="text-[11px] font-semibold text-slate-700 block mb-1">날짜</label>
@@ -139,7 +139,7 @@ export const StudentDetailAttendanceTab: React.FC<StudentDetailAttendanceTabProp
           </button>
           <button
             type="submit"
-            className="px-4 py-1 text-xs font-bold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
+            className="px-4 py-1 text-xs font-bold text-white bg-slate-900 rounded-lg hover:bg-slate-800"
           >
             저장
           </button>

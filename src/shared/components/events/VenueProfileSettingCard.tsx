@@ -143,7 +143,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
           <div>
             <div className="flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-indigo-600" />
+              <Building2 className="w-5 h-5 text-slate-800" />
               <h3 className="text-lg font-bold text-slate-800">{profile.venueName}</h3>
               <Badge variant={profile.isProfilePublic ? 'success' : 'neutral'}>
                 {profile.isProfilePublic ? '플래너에 공개 중' : '비공개 (업체 전용)'}
@@ -183,10 +183,10 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
         </div>
 
         {/* 1. 플래너 제휴 수수료 정책 설정 */}
-        <div className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 space-y-4">
+        <div className="bg-slate-50/50 border border-slate-200 rounded-xl p-4 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Coins className="w-5 h-5 text-indigo-600" />
+              <Coins className="w-5 h-5 text-slate-800" />
               <h4 className="font-bold text-slate-800 text-sm">플래너 제휴 수수료 정책 설정</h4>
             </div>
             <Badge variant="brand">제휴 플래너 유치 혜택</Badge>
@@ -205,7 +205,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
                   }
                   className={`flex-1 py-2 px-3 text-xs rounded-lg font-medium border transition-colors ${
                     currentPolicy.type === 'FIXED_PER_BOOKING'
-                      ? 'bg-indigo-600 text-white border-indigo-600'
+                      ? 'bg-slate-900 text-white border-indigo-600'
                       : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
                   }`}
                 >
@@ -219,7 +219,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
                   }
                   className={`flex-1 py-2 px-3 text-xs rounded-lg font-medium border transition-colors ${
                     currentPolicy.type === 'PERCENTAGE'
-                      ? 'bg-indigo-600 text-white border-indigo-600'
+                      ? 'bg-slate-900 text-white border-indigo-600'
                       : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
                   }`}
                 >
@@ -252,7 +252,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
           </div>
 
           {/* 정산 기준 및 지급 주기 */}
-          <div className="border-t border-indigo-100 pt-3 space-y-2">
+          <div className="border-t border-slate-200 pt-3 space-y-2">
             <label className="block text-xs font-semibold text-slate-700 flex items-center gap-1.5">
               <Award className="w-4 h-4 text-emerald-600" />
               업계 표준 정산 지급 주기 (D-Day 행사 완료 후 기준)
@@ -264,7 +264,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
                 onClick={() => handleUpdatePolicy({ settlementRule: 'NEXT_MONTH_10TH' })}
                 className={`py-2 px-2.5 text-xs rounded-lg font-medium border text-left transition-colors ${
                   (currentPolicy.settlementRule || 'NEXT_MONTH_10TH') === 'NEXT_MONTH_10TH'
-                    ? 'bg-indigo-600 text-white border-indigo-600'
+                    ? 'bg-slate-900 text-white border-indigo-600'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -277,7 +277,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
                 onClick={() => handleUpdatePolicy({ settlementRule: 'NEXT_MONTH_25TH' })}
                 className={`py-2 px-2.5 text-xs rounded-lg font-medium border text-left transition-colors ${
                   currentPolicy.settlementRule === 'NEXT_MONTH_25TH'
-                    ? 'bg-indigo-600 text-white border-indigo-600'
+                    ? 'bg-slate-900 text-white border-indigo-600'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -290,7 +290,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
                 onClick={() => handleUpdatePolicy({ settlementRule: 'AFTER_14_DAYS' })}
                 className={`py-2 px-2.5 text-xs rounded-lg font-medium border text-left transition-colors ${
                   currentPolicy.settlementRule === 'AFTER_14_DAYS'
-                    ? 'bg-indigo-600 text-white border-indigo-600'
+                    ? 'bg-slate-900 text-white border-indigo-600'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -301,7 +301,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
           </div>
 
           {/* 비선호 타임 추가 보너스 티어 */}
-          <div className="border-t border-indigo-100 pt-3 flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-3">
+          <div className="border-t border-slate-200 pt-3 flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-3">
             <div>
               <span className="font-semibold text-slate-800 flex items-center gap-1">
                 <Gift className="w-3.5 h-3.5 text-amber-500" /> 비선호 타임 성사 보너스 (3부 저녁/평일)

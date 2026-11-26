@@ -78,7 +78,7 @@ export const PlannerAvailabilityCalendar: React.FC<PlannerAvailabilityCalendarPr
       <Card className="p-4 border-slate-200">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-indigo-600" />
+            <Calendar className="w-5 h-5 text-slate-800" />
             <h3 className="font-bold text-slate-800 text-base">
               {venue.venueName} 타임슬롯 일정표
             </h3>
@@ -155,7 +155,7 @@ export const PlannerAvailabilityCalendar: React.FC<PlannerAvailabilityCalendarPr
 
                     {/* 1. 세팅 및 철수 버퍼 시간 시각화 */}
                     <div className="text-[10px] text-slate-500 flex items-center gap-2 bg-white/60 px-2 py-1 rounded border border-slate-200/50 my-1">
-                      <span className="text-indigo-700 font-semibold flex items-center gap-0.5">
+                      <span className="text-slate-700 font-semibold flex items-center gap-0.5">
                         <Sparkles className="w-3 h-3" /> 세팅: {slot.setupStartTime || '10:30'}부터
                       </span>
                       <span>|</span>
@@ -175,20 +175,20 @@ export const PlannerAvailabilityCalendar: React.FC<PlannerAvailabilityCalendarPr
                         {/* 담당 플래너 및 귀속 수수료 뱃지 시각화 */}
                         <div className="flex items-center justify-between pt-1 border-t border-amber-200/50 text-[10px]">
                           <span className="flex items-center gap-1 text-slate-700 font-medium truncate">
-                            <UserCheck className="w-3 h-3 text-indigo-600 shrink-0" />
+                            <UserCheck className="w-3 h-3 text-slate-800 shrink-0" />
                             {slot.eventSummary.plannerName
                               ? `${slot.eventSummary.plannerName} (${slot.eventSummary.plannerId || '미등록'})`
                               : '플래너 미배정'}
                           </span>
                           {slot.eventSummary.commissionAmount !== undefined && (
-                            <span className="font-bold text-indigo-700 flex items-center gap-0.5 shrink-0">
+                            <span className="font-bold text-slate-700 flex items-center gap-0.5 shrink-0">
                               <Coins className="w-3 h-3" />
                               ₩{slot.eventSummary.commissionAmount.toLocaleString()}
                             </span>
                           )}
                         </div>
 
-                        <p className="text-[10px] text-indigo-600 font-medium">
+                        <p className="text-[10px] text-slate-800 font-medium">
                           👉 클릭하여 플래너 배정 및 식순 상세 열람
                         </p>
                       </div>

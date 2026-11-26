@@ -108,7 +108,7 @@ export const PendingMakeupRequestsModal: React.FC<PendingMakeupRequestsModalProp
           requests.map((req) => (
             <div
               key={req.id}
-              className="p-4 rounded-xl border border-slate-200 bg-white hover:border-indigo-200 transition-all space-y-3 shadow-2xs"
+              className="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-200 transition-all space-y-3 shadow-2xs"
             >
               <div className="flex items-start justify-between gap-2">
                 <div>
@@ -118,8 +118,8 @@ export const PendingMakeupRequestsModal: React.FC<PendingMakeupRequestsModalProp
                       결석일: {req.originDate}
                     </span>
                   </div>
-                  <div className="mt-1.5 flex items-center gap-2 text-xs font-semibold text-indigo-900 bg-indigo-50/70 px-2.5 py-1 rounded-lg">
-                    <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+                  <div className="mt-1.5 flex items-center gap-2 text-xs font-semibold text-slate-900 bg-slate-50 px-2.5 py-1 rounded-lg">
+                    <Calendar className="w-3.5 h-3.5 text-slate-800" />
                     <span>희망 일시: <strong>{req.preferredDate} {req.preferredTime}</strong></span>
                   </div>
                 </div>

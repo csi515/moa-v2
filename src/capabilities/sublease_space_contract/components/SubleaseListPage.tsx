@@ -85,7 +85,7 @@ export const SubleaseListPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2 text-slate-800 dark:text-slate-100">
-            <Store className="w-7 h-7 text-indigo-600" />
+            <Store className="w-7 h-7 text-slate-800" />
             샵인샵 전대차 계약 및 매출 쉐어 정산
           </h1>
           <p className="text-sm text-slate-500 mt-1">
@@ -94,7 +94,7 @@ export const SubleaseListPage: React.FC = () => {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-medium"
         >
           <Plus className="w-4 h-4" />
           신규 전대차 계약 등록
@@ -126,7 +126,7 @@ export const SubleaseListPage: React.FC = () => {
             ) : (
               contracts.map((c) => (
                 <tr key={c.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30">
-                  <td className="p-3 font-semibold text-indigo-600">{c.subtenant_name}</td>
+                  <td className="p-3 font-semibold text-slate-800">{c.subtenant_name}</td>
                   <td className="p-3 text-slate-600">{c.space_description}</td>
                   <td className="p-3">
                     <span className="px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-700 font-medium">
@@ -152,7 +152,7 @@ export const SubleaseListPage: React.FC = () => {
                         setSelectedContract(c);
                         setSimulationRevenue(5000000);
                       }}
-                      className="px-2.5 py-1 text-xs border rounded hover:bg-slate-100 font-medium inline-flex items-center gap-1 text-indigo-600 border-indigo-200"
+                      className="px-2.5 py-1 text-xs border rounded hover:bg-slate-100 font-medium inline-flex items-center gap-1 text-slate-800 border-slate-200"
                     >
                       <Calculator className="w-3.5 h-3.5" /> 월 정산 계산
                     </button>
@@ -168,7 +168,7 @@ export const SubleaseListPage: React.FC = () => {
       {selectedContract && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-800 rounded-xl max-w-sm w-full p-6 space-y-4">
-            <h2 className="text-lg font-bold flex items-center gap-2 text-indigo-700">
+            <h2 className="text-lg font-bold flex items-center gap-2 text-slate-700">
               <Calculator className="w-5 h-5" />
               [{selectedContract.subtenant_name}] 월 정산 산출
             </h2>
@@ -188,7 +188,7 @@ export const SubleaseListPage: React.FC = () => {
               {(() => {
                 const res = computeMonthlySubleaseSettlement(selectedContract, simulationRevenue);
                 return (
-                  <div className="p-3 bg-indigo-50 dark:bg-indigo-950/40 rounded-lg space-y-1.5 text-xs">
+                  <div className="p-3 bg-slate-50 dark:bg-indigo-950/40 rounded-lg space-y-1.5 text-xs">
                     <div className="flex justify-between">
                       <span className="text-slate-500">기본 임대료:</span>
                       <span className="font-semibold">{res.baseRent.toLocaleString()}원</span>
@@ -201,7 +201,7 @@ export const SubleaseListPage: React.FC = () => {
                       <span className="text-slate-500">공과금/관리비:</span>
                       <span className="font-semibold">{res.utilityFee.toLocaleString()}원</span>
                     </div>
-                    <div className="pt-2 border-t flex justify-between text-sm font-bold text-indigo-900 dark:text-indigo-200">
+                    <div className="pt-2 border-t flex justify-between text-sm font-bold text-slate-900 dark:text-indigo-200">
                       <span>최종 청구 총액:</span>
                       <span>{res.totalSettlementAmount.toLocaleString()}원</span>
                     </div>
@@ -227,7 +227,7 @@ export const SubleaseListPage: React.FC = () => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-800 rounded-xl max-w-md w-full p-6 space-y-4">
-            <h2 className="text-xl font-bold flex items-center gap-2 text-indigo-700">
+            <h2 className="text-xl font-bold flex items-center gap-2 text-slate-700">
               <Store className="w-5 h-5" />
               신규 샵인샵 전대차 계약 등록
             </h2>
@@ -335,7 +335,7 @@ export const SubleaseListPage: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700"
+                  className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800"
                 >
                   계약 저장
                 </button>

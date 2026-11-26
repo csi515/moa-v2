@@ -124,7 +124,7 @@ export const DirectorApprovalModal: FC<DirectorApprovalModalProps> = ({
                 type="button"
                 disabled={bulkBusy || selected.size === 0}
                 onClick={() => void approveSelected()}
-                className="min-h-[44px] px-3 rounded-xl text-xs font-bold bg-indigo-600 text-white disabled:opacity-40 inline-flex items-center gap-1.5"
+                className="min-h-[44px] px-3 rounded-xl text-xs font-bold bg-slate-900 text-white disabled:opacity-40 inline-flex items-center gap-1.5"
               >
                 {bulkBusy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
                 {SONG_PROGRESS_COPY.approveBulkCta} ({selected.size})
@@ -151,7 +151,7 @@ export const DirectorApprovalModal: FC<DirectorApprovalModalProps> = ({
                           type="checkbox"
                           checked={selected.has(r.id)}
                           onChange={() => toggle(r.id)}
-                          className="rounded border-slate-300 text-indigo-600 min-h-[20px] min-w-[20px]"
+                          className="rounded border-slate-300 text-slate-800 min-h-[20px] min-w-[20px]"
                           aria-label="선택"
                         />
                       </td>

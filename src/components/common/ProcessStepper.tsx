@@ -32,9 +32,9 @@ export function ProcessStepper({
         const isDone = index < safeIndex;
         const isCurrent = index === safeIndex;
         const circleClass = isDone
-          ? 'bg-indigo-600 text-white border-indigo-600'
+          ? 'bg-slate-900 text-white border-indigo-600'
           : isCurrent
-            ? 'bg-white text-indigo-700 border-indigo-600 ring-2 ring-indigo-200'
+            ? 'bg-white text-slate-700 border-indigo-600 ring-2 ring-indigo-200'
             : 'bg-slate-50 text-slate-400 border-slate-200';
 
         return (

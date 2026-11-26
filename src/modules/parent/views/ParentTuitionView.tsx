@@ -104,13 +104,13 @@ function ParentInvoiceDetailModal({
           </div>
 
           {bankAccountText ? (
-            <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4 space-y-2">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 space-y-2">
               <p className="text-xs font-bold text-indigo-800">{placeLabel} 계좌번호</p>
               <p className="text-sm font-semibold text-slate-900 break-all">{bankAccountText}</p>
               <button
                 type="button"
                 onClick={handleCopy}
-                className="inline-flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-xl bg-white border border-indigo-200 text-xs font-bold text-indigo-700"
+                className="inline-flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700"
               >
                 <Copy className="w-3.5 h-3.5" />
                 {copied ? '복사됨' : '계좌번호 복사'}
@@ -212,8 +212,8 @@ export function ParentTuitionView({
 
       {isPassStudent && (
         <Section title="회차권">
-          <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4 mb-3">
-            <p className="text-xs text-indigo-600 font-bold">잔여 합계</p>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50/50 p-4 mb-3">
+            <p className="text-xs text-slate-800 font-bold">잔여 합계</p>
             <p className="text-2xl font-black text-slate-900 mt-0.5">{passRemaining}회</p>
           </div>
           {sessionPasses.length === 0 ? (
@@ -226,7 +226,7 @@ export function ParentTuitionView({
                   className="rounded-xl border border-slate-100 bg-white p-3"
                 >
                   <p className="text-sm font-bold text-slate-900">{pass.label}</p>
-                  <p className="text-xs text-indigo-700 font-semibold mt-1">
+                  <p className="text-xs text-slate-700 font-semibold mt-1">
                     잔여 {getPassRemaining(pass)}회 / 전체 {pass.totalSessions}회
                   </p>
                   {pass.expiresAt && (
@@ -381,7 +381,7 @@ export function ParentTuitionView({
                   {formatCurrency(inv.unpaidAmount)}
                 </p>
                 {((inv.textbookFee || 0) > 0 || (inv.extraFee || 0) > 0) && (
-                  <p className="text-[10px] text-indigo-600 mt-0.5">
+                  <p className="text-[10px] text-slate-800 mt-0.5">
                     {(inv.textbookFee || 0) > 0 && `교재 ${formatCurrency(inv.textbookFee || 0)}`}
                     {(inv.textbookFee || 0) > 0 && (inv.extraFee || 0) > 0 ? ' · ' : ''}
                     {(inv.extraFee || 0) > 0 &&

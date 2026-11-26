@@ -342,15 +342,15 @@ export const InventoryManagementView: React.FC<InventoryManagementViewProps> = (
           <p className="text-[11px] text-rose-600 font-bold">만료 및 7일 이내 (폐기/할인)</p>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white border border-indigo-200 shadow-xs space-y-1">
-          <div className="flex items-center justify-between text-xs text-indigo-700 font-semibold">
+        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
+          <div className="flex items-center justify-between text-xs text-slate-700 font-semibold">
             <span>실사 감모손실액</span>
-            <SlidersHorizontal className="w-4 h-4 text-indigo-600" />
+            <SlidersHorizontal className="w-4 h-4 text-slate-800" />
           </div>
           <div className="text-2xl font-black text-indigo-950">
             {auditAnalysis.totalShortageAmount.toLocaleString('ko-KR')}원
           </div>
-          <p className="text-[11px] text-indigo-600 font-medium">
+          <p className="text-[11px] text-slate-800 font-medium">
             전산 대비 {auditAnalysis.discrepancies.filter((d) => d.status === 'SHORTAGE').length}건 차이 발생
           </p>
         </div>
@@ -469,7 +469,7 @@ export const InventoryManagementView: React.FC<InventoryManagementViewProps> = (
                           <div className="flex items-center gap-1.5 flex-wrap">
                             <span>{it.name}</span>
                             {it.itemType === 'textbook' && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 font-semibold">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-700 font-semibold">
                                 {it.metadata?.level ? String(it.metadata.level) : '교재'}
                               </span>
                             )}
@@ -623,7 +623,7 @@ export const InventoryManagementView: React.FC<InventoryManagementViewProps> = (
               <button
                 type="button"
                 onClick={handleCreateAuditAuditSlipClick}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors shadow-xs"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors shadow-xs"
               >
                 <FileCheck2 className="w-4 h-4" />
                 <span>감모 승인 전표 발행</span>

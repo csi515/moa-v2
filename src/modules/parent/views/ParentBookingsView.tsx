@@ -135,7 +135,7 @@ export const MyReservationsView: React.FC<ParentBookingsViewProps> = () => {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-              <Calendar className="w-7 h-7 text-indigo-600" />
+              <Calendar className="w-7 h-7 text-slate-800" />
               내 예약
             </h1>
             <p className="text-sm text-slate-600 mt-1">
@@ -175,7 +175,7 @@ export const MyReservationsView: React.FC<ParentBookingsViewProps> = () => {
               onClick={() => setStatusFilter(status)}
               className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                 statusFilter === status
-                  ? 'bg-indigo-600 text-white'
+                  ? 'bg-slate-900 text-white'
                   : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'
               }`}
             >
@@ -194,7 +194,7 @@ export const MyReservationsView: React.FC<ParentBookingsViewProps> = () => {
             <p className="text-slate-500 font-medium mb-4">예약 내역이 없습니다</p>
             <button
               onClick={() => navigate('/')}
-              className="text-indigo-600 hover:text-indigo-700 font-semibold text-sm"
+              className="text-slate-800 hover:text-slate-700 font-semibold text-sm"
             >
               예약 가능한 조직 찾기
             </button>

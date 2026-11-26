@@ -129,7 +129,7 @@ export function DepositEscrowManagementView() {
       <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-indigo-600" />
+            <ShieldCheck className="w-5 h-5 text-slate-800" />
             예약 보증금 에스크로 & 노쇼 방지 차감 정산
           </h1>
           <p className="text-xs text-slate-500 mt-1">
@@ -146,7 +146,7 @@ export function DepositEscrowManagementView() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
           <div className="text-xs font-medium text-slate-500">예치 중인 보증금</div>
-          <div className="text-2xl font-black text-indigo-600 mt-1">
+          <div className="text-2xl font-black text-slate-800 mt-1">
             ₩{metrics.totalActiveHeldDeposit.toLocaleString()}
           </div>
           <div className="text-[11px] text-slate-400 mt-0.5">체크인 대기 상태</div>
@@ -203,7 +203,7 @@ export function DepositEscrowManagementView() {
                         ? 'bg-rose-50 text-rose-600'
                         : rec.status === 'checked_in'
                         ? 'bg-amber-50 text-amber-600'
-                        : 'bg-indigo-50 text-indigo-600'
+                        : 'bg-slate-50 text-slate-800'
                     }`}
                   >
                     <ShieldCheck className="w-5 h-5" />
@@ -222,7 +222,7 @@ export function DepositEscrowManagementView() {
                             ? 'bg-rose-100 text-rose-700'
                             : rec.status === 'refunded'
                             ? 'bg-slate-100 text-slate-500'
-                            : 'bg-indigo-50 text-indigo-700'
+                            : 'bg-slate-50 text-slate-700'
                         }`}
                       >
                         {rec.status === 'checked_in'
@@ -240,7 +240,7 @@ export function DepositEscrowManagementView() {
                     <div className="text-xs text-slate-500 mt-1 flex flex-wrap items-center gap-x-4 gap-y-1">
                       <span>서비스: <strong>{rec.serviceName}</strong></span>
                       <span>예약일시: <strong>{dateStr}</strong></span>
-                      <span>예치 보증금: <strong className="text-indigo-600">₩{rec.depositAmount.toLocaleString()}</strong></span>
+                      <span>예치 보증금: <strong className="text-slate-800">₩{rec.depositAmount.toLocaleString()}</strong></span>
                       {rec.finalPaidAmount !== undefined && (
                         <span>차감 후 실결제: <strong className="text-emerald-600">₩{rec.finalPaidAmount.toLocaleString()}</strong></span>
                       )}
@@ -254,7 +254,7 @@ export function DepositEscrowManagementView() {
                     <button
                       type="button"
                       onClick={() => handleCheckIn(rec.id)}
-                      className="px-3 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-xl text-xs font-bold transition-colors"
+                      className="px-3 py-2 bg-slate-50 text-slate-700 hover:bg-slate-100 rounded-xl text-xs font-bold transition-colors"
                     >
                       체크인 확인
                     </button>
@@ -326,7 +326,7 @@ export function DepositEscrowManagementView() {
               </div>
               <div className="flex justify-between text-slate-500">
                 <span>기납부 보증금</span>
-                <strong className="text-indigo-600 font-bold">
+                <strong className="text-slate-800 font-bold">
                   - ₩{settlingRecord.depositAmount.toLocaleString()}
                 </strong>
               </div>

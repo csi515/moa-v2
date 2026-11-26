@@ -189,7 +189,7 @@ export const StudentListPage: React.FC = () => {
         <button
           type="button"
           onClick={() => show("customers", student.id)}
-          className="font-bold text-slate-900 hover:text-indigo-600 hover:underline text-left"
+          className="font-bold text-slate-900 hover:text-slate-800 hover:underline text-left"
         >
           {student.name}
         </button>
@@ -248,7 +248,7 @@ export const StudentListPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setClaimTarget({ id: student.id, name: student.name })}
-            className="p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded-xl transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             title="스마트폰 1회용 QR 연결"
           >
             <QrCode className="h-4 w-4" />
@@ -273,7 +273,7 @@ export const StudentListPage: React.FC = () => {
             <button
               type="button"
               onClick={() => edit("customers", student.id)}
-              className="p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded-xl transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
               title="수정"
             >
               <Edit2 className="h-4 w-4" />
@@ -310,7 +310,7 @@ export const StudentListPage: React.FC = () => {
             <button
               type="button"
               onClick={() => show("customers", student.id)}
-              className="text-base font-bold text-slate-900 hover:text-indigo-600 text-left"
+              className="text-base font-bold text-slate-900 hover:text-slate-800 text-left"
             >
               {student.name}
             </button>
@@ -336,7 +336,7 @@ export const StudentListPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setClaimTarget({ id: student.id, name: student.name })}
-            className="h-11 flex items-center justify-center gap-1 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold transition"
+            className="h-11 flex items-center justify-center gap-1 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition"
           >
             <QrCode className="w-3.5 h-3.5" />
             <span>QR</span>
@@ -387,7 +387,7 @@ export const StudentListPage: React.FC = () => {
             onClick={() => setShowScanner((prev) => !prev)}
             className={`min-h-[44px] inline-flex items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-colors border ${
               showScanner
-                ? "bg-indigo-50 border-indigo-200 text-indigo-700"
+                ? "bg-slate-50 border-slate-200 text-slate-700"
                 : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-2xs"
             }`}
           >
@@ -399,7 +399,7 @@ export const StudentListPage: React.FC = () => {
             <button
               type="button"
               onClick={() => create("customers")}
-              className="min-h-[44px] inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 text-sm font-semibold text-white shadow-md shadow-indigo-100 hover:bg-indigo-700 transition-colors active:scale-[0.98]"
+              className="min-h-[44px] inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 text-sm font-semibold text-white shadow-md shadow-indigo-100 hover:bg-slate-800 transition-colors active:scale-[0.98]"
             >
               <Plus className="h-4 w-4" />
               <span>{customerWord} 등록</span>

@@ -39,7 +39,7 @@ export const TextbookReceiptModal: React.FC<TextbookReceiptModalProps> = ({
         {/* Header (No print) */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 no-print">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-800 flex items-center justify-center font-bold">
               <FileText className="w-4 h-4" />
             </div>
             <div>
@@ -50,7 +50,7 @@ export const TextbookReceiptModal: React.FC<TextbookReceiptModalProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-xs"
             >
               <Printer className="w-3.5 h-3.5" />
               인쇄 / PDF
@@ -142,7 +142,7 @@ export const TextbookReceiptModal: React.FC<TextbookReceiptModalProps> = ({
               <span className="font-medium">₩{sale.totalAmount.toLocaleString()}</span>
             </div>
             {payment && (
-              <div className="flex justify-between text-indigo-600 font-semibold">
+              <div className="flex justify-between text-slate-800 font-semibold">
                 <span>금회 납부 금액</span>
                 <span>₩{payment.amount.toLocaleString()}</span>
               </div>

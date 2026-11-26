@@ -78,7 +78,7 @@ export const PianoTimetableDesktopGrid: FC<PianoTimetableDesktopGridProps> = ({
               <div
                 key={day}
                 className={`py-2.5 px-2 border-r border-slate-200 last:border-r-0 ${
-                  day === todayDay ? 'bg-indigo-50 text-indigo-700' : ''
+                  day === todayDay ? 'bg-slate-50 text-slate-700' : ''
                 }`}
               >
                 {day}요일
@@ -106,8 +106,8 @@ export const PianoTimetableDesktopGrid: FC<PianoTimetableDesktopGridProps> = ({
                       onDragOver={handleDragOver}
                       onDrop={(e) => handleDrop(e, day, slot)}
                       className={`p-1 border-r border-slate-200 last:border-r-0 space-y-1 min-h-[56px] ${
-                        day === todayDay ? 'bg-indigo-50/25' : ''
-                      } hover:bg-indigo-50/40 transition-colors`}
+                        day === todayDay ? 'bg-slate-50/25' : ''
+                      } hover:bg-slate-50/40 transition-colors`}
                     >
                       {placements.length === 0 ? (
                         <div className="h-full min-h-[56px] rounded-lg border border-dashed border-slate-200/80 flex items-center justify-center">
@@ -233,8 +233,8 @@ export const PianoTimetableStudentPool: FC<StudentPoolProps> = ({
                 }}
                 className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold cursor-grab active:cursor-grabbing border ${
                   highlighted
-                    ? 'bg-indigo-600 text-white border-indigo-600 ring-2 ring-indigo-200'
-                    : 'bg-slate-100 text-slate-800 border-slate-200 hover:border-indigo-300 hover:bg-indigo-50'
+                    ? 'bg-slate-900 text-white border-indigo-600 ring-2 ring-indigo-200'
+                    : 'bg-slate-100 text-slate-800 border-slate-200 hover:border-indigo-300 hover:bg-slate-50'
                 }`}
               >
                 {s.name}

@@ -208,7 +208,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
         type="button"
         onClick={() => setViewMode('daily')}
         className={`px-3 py-1.5 min-h-[44px] rounded-lg transition-all cursor-pointer ${
-          showDailyView ? 'bg-white text-indigo-600 shadow-2xs' : 'hover:text-slate-900'
+          showDailyView ? 'bg-white text-slate-800 shadow-2xs' : 'hover:text-slate-900'
         }`}
       >
         일간 목록
@@ -217,7 +217,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
         type="button"
         onClick={() => setViewMode('weekly')}
         className={`px-3 py-1.5 min-h-[44px] rounded-lg transition-all cursor-pointer ${
-          showWeeklyView ? 'bg-white text-indigo-600 shadow-2xs' : 'hover:text-slate-900'
+          showWeeklyView ? 'bg-white text-slate-800 shadow-2xs' : 'hover:text-slate-900'
         }`}
       >
         주간 그리드
@@ -255,7 +255,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
               type="button"
               onClick={() => setViewMode('daily')}
               className={`px-3 py-1.5 min-h-[44px] rounded-lg transition-all cursor-pointer ${
-                showDailyView ? 'bg-white text-indigo-600 shadow-2xs' : 'hover:text-slate-900'
+                showDailyView ? 'bg-white text-slate-800 shadow-2xs' : 'hover:text-slate-900'
               }`}
             >
               일간
@@ -264,7 +264,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
               type="button"
               onClick={() => setViewMode('weekly')}
               className={`px-3 py-1.5 min-h-[44px] rounded-lg transition-all cursor-pointer ${
-                showWeeklyView ? 'bg-white text-indigo-600 shadow-2xs' : 'hover:text-slate-900'
+                showWeeklyView ? 'bg-white text-slate-800 shadow-2xs' : 'hover:text-slate-900'
               }`}
             >
               주간
@@ -284,7 +284,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
       <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-2 no-print">
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500">
-            <Filter className="w-4 h-4 text-indigo-600" />
+            <Filter className="w-4 h-4 text-slate-800" />
             <span>필터</span>
           </div>
 
@@ -292,7 +292,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
             <select
               value={teacherFilter}
               onChange={(e) => setTeacherFilter(e.target.value)}
-              className="px-3 py-2 min-h-[44px] text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+              className="px-3 py-2 min-h-[44px] text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 font-medium"
               aria-label="선생님별 필터"
             >
               <option value="ALL">전체 선생님</option>
@@ -307,7 +307,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
           <select
             value={roomFilter}
             onChange={(e) => setRoomFilter(e.target.value)}
-            className="px-3 py-2 min-h-[44px] text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+            className="px-3 py-2 min-h-[44px] text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 font-medium"
             aria-label="강의실 필터"
           >
             <option value="ALL">전체 강의실</option>
@@ -331,7 +331,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
             <button
               type="button"
               onClick={() => setSelectedDay(todayDay)}
-              className="px-2.5 py-2 rounded-xl text-xs font-bold shrink-0 min-h-[44px] bg-indigo-50 text-indigo-700 border border-indigo-200 cursor-pointer"
+              className="px-2.5 py-2 rounded-xl text-xs font-bold shrink-0 min-h-[44px] bg-slate-50 text-slate-700 border border-slate-200 cursor-pointer"
             >
               오늘로
             </button>
@@ -348,7 +348,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
                 onClick={() => setSelectedDay(day)}
                 className={`px-2.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 cursor-pointer flex items-center gap-1.5 min-h-[44px] ${
                   isSelected
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
+                    ? 'bg-slate-900 text-white shadow-md shadow-indigo-600/20'
                     : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                 }`}
               >
@@ -356,7 +356,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
                 {isToday && (
                   <span
                     className={`text-[10px] px-1.5 py-0.5 rounded font-black ${
-                      isSelected ? 'bg-white/20 text-white' : 'bg-indigo-100 text-indigo-700'
+                      isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
                     }`}
                   >
                     오늘
@@ -378,7 +378,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
           <div className="space-y-3">
             <div className="flex items-center justify-between px-1">
               <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-indigo-600" />
+                <Calendar className="w-4 h-4 text-slate-800" />
                 {selectedDay === todayDay ? '오늘' : `${selectedDay}요일`} 수업 ({dayClasses.length})
               </h3>
               <span className="text-xs text-slate-400 hidden sm:inline">탭하면 상세·출결</span>
@@ -411,8 +411,8 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
             />
 
             {dayMakeups.length > 0 && (
-              <div className="rounded-2xl border border-purple-200 bg-purple-50/60 p-4 space-y-2">
-                <h4 className="text-sm font-bold text-purple-900 flex items-center gap-2">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 space-y-2">
+                <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
                   보강 ({selectedDayDate}) · {dayMakeups.length}건
                 </h4>
@@ -421,10 +421,10 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
                     key={m.attendanceId}
                     type="button"
                     onClick={() => setActiveTab('makeups')}
-                    className="w-full text-left rounded-xl bg-white border border-purple-100 px-3 py-2.5 min-h-[44px] hover:border-purple-300"
+                    className="w-full text-left rounded-xl bg-white border border-slate-200 px-3 py-2.5 min-h-[44px] hover:border-purple-300"
                   >
                     <p className="text-sm font-bold text-slate-900">{m.studentName}</p>
-                    <p className="text-xs text-purple-700 mt-0.5">
+                    <p className="text-xs text-slate-700 mt-0.5">
                       {m.makeUpStartTime && m.makeUpEndTime
                         ? `${m.makeUpStartTime}–${m.makeUpEndTime}`
                         : '시간 미정'}
@@ -527,7 +527,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
                           setSelectedStudentId(st.id);
                           setActiveTab('students');
                         }}
-                        className="w-full p-2.5 rounded-xl bg-slate-50 hover:bg-indigo-50 flex items-center justify-between text-xs transition-colors cursor-pointer min-h-[44px]"
+                        className="w-full p-2.5 rounded-xl bg-slate-50 hover:bg-slate-50 flex items-center justify-between text-xs transition-colors cursor-pointer min-h-[44px]"
                       >
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-slate-900">{st.name}</span>
@@ -535,7 +535,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
                             {st.school} {st.grade}
                           </span>
                         </div>
-                        <span className="text-indigo-600 font-semibold flex items-center">
+                        <span className="text-slate-800 font-semibold flex items-center">
                           상세 <ChevronRight className="w-3.5 h-3.5" />
                         </span>
                       </button>
@@ -555,7 +555,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
                     setSelectedClass(null);
                     setActiveTab('attendance');
                   }}
-                  className="w-full py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-colors flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+                  className="w-full py-2.5 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-colors flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
                 >
                   <CalendarCheck className="w-4 h-4" />
                   출결 체크하러 가기

@@ -101,7 +101,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
         {/* 헤더 */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-lg">
+            <div className="p-2 bg-slate-50 dark:bg-indigo-950/60 text-slate-800 dark:text-indigo-400 rounded-lg">
               <Tag className="w-5 h-5" />
             </div>
             <div>
@@ -144,7 +144,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
               placeholder="예: [이벤트 할인] 봄맞이 기구 필라테스 3개월권 30% 특가"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:text-slate-100"
+              className="w-full px-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 dark:text-slate-100"
             />
           </div>
 
@@ -157,7 +157,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
               <select
                 value={targetType}
                 onChange={(e) => setTargetType(e.target.value as PromoTargetType)}
-                className="w-full px-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:text-slate-100"
+                className="w-full px-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 dark:text-slate-100"
               >
                 <option value="PASS">수강권 / 회원권 (PASS)</option>
                 <option value="RETAIL">소매 상품 / 장비 (RETAIL)</option>
@@ -173,7 +173,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
                 placeholder="예: 3개월 프리미엄 정기권"
                 value={targetId}
                 onChange={(e) => setTargetId(e.target.value)}
-                className="w-full px-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:text-slate-100"
+                className="w-full px-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 dark:text-slate-100"
               />
             </div>
           </div>
@@ -195,7 +195,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
                   onChange={(e) =>
                     setOriginalPrice(e.target.value === '' ? '' : Number(e.target.value))
                   }
-                  className="w-full pl-8 pr-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:text-slate-100"
+                  className="w-full pl-8 pr-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 dark:text-slate-100"
                 />
               </div>
             </div>
@@ -221,7 +221,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
                   onChange={(e) =>
                     setSpecialPrice(e.target.value === '' ? '' : Number(e.target.value))
                   }
-                  className="w-full pl-8 pr-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:text-slate-100"
+                  className="w-full pl-8 pr-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 dark:text-slate-100"
                 />
               </div>
             </div>
@@ -241,7 +241,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
                 required
                 value={startAt}
                 onChange={(e) => setStartAt(e.target.value)}
-                className="w-full px-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:text-slate-100"
+                className="w-full px-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 dark:text-slate-100"
               />
             </div>
             <div>
@@ -256,7 +256,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
                 required
                 value={endAt}
                 onChange={(e) => setEndAt(e.target.value)}
-                className="w-full px-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:text-slate-100"
+                className="w-full px-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 dark:text-slate-100"
               />
             </div>
           </div>
@@ -274,7 +274,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
               onChange={(e) =>
                 setLimitedQuantity(e.target.value === '' ? '' : Number(e.target.value))
               }
-              className="w-full px-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:text-slate-100"
+              className="w-full px-3.5 py-2 text-sm bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 dark:text-slate-100"
             />
             <p className="mt-1 text-[11px] text-slate-500">
               * 설정한 수량이 모두 소진되면 기간 내라도 자동으로 정가 판매로 복귀합니다.
@@ -294,7 +294,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting || isLocked}
-              className="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-xl transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-5 py-2 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 active:bg-slate-950 rounded-xl transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting || isLocked ? '등록 중...' : '[기간 한정 특가] 등록하기'}
             </button>

@@ -122,7 +122,7 @@ export const StudentEditPage: React.FC = () => {
               className={`w-full rounded-xl border px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 ${
                 errors.name
                   ? "border-rose-300 focus:ring-rose-500 bg-rose-50/30"
-                  : "border-slate-200 focus:ring-indigo-500"
+                  : "border-slate-200 focus:ring-slate-900"
               }`}
             />
             {errors.name && (
@@ -144,7 +144,7 @@ export const StudentEditPage: React.FC = () => {
                 type="tel"
                 {...register("phone")}
                 placeholder="예: 010-1234-5678"
-                className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
 
@@ -157,7 +157,7 @@ export const StudentEditPage: React.FC = () => {
                 type="email"
                 {...register("email")}
                 placeholder="예: customer@example.com"
-                className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
           </div>
@@ -170,7 +170,7 @@ export const StudentEditPage: React.FC = () => {
             <select
               id="status"
               {...register("status")}
-              className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-900"
             >
               <option value="active">{statusActiveLabel} (정상 이용 가능)</option>
               <option value="paused">{statusPausedLabel} (일시 정지)</option>
@@ -188,7 +188,7 @@ export const StudentEditPage: React.FC = () => {
               rows={4}
               {...register("memo")}
               placeholder="학습 목표, 건강 상태, 상담 기록 등을 자유롭게 입력하세요."
-              className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -205,7 +205,7 @@ export const StudentEditPage: React.FC = () => {
             <button
               type="submit"
               disabled={formLoading}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors"
             >
               {formLoading ? (
                 <>

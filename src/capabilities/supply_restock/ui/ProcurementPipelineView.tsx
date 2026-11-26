@@ -182,7 +182,7 @@ export const ProcurementPipelineView: React.FC = () => {
 
         <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs relative overflow-hidden">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
+            <span className="text-[11px] font-bold text-slate-800 bg-slate-50 px-2 py-0.5 rounded-md">
               2단계: 필요성 검수
             </span>
             <ShieldCheck className="w-4 h-4 text-indigo-500" />

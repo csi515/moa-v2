@@ -127,17 +127,17 @@ export const PlannerSettlementDashboard: React.FC<PlannerSettlementDashboardProp
           </span>
         </Card>
 
-        <Card className="p-4 border-indigo-200 bg-indigo-50/50 space-y-1">
+        <Card className="p-4 border-slate-200 bg-slate-50/50 space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-xs text-indigo-800 font-semibold flex items-center gap-1">
-              <Coins className="w-3.5 h-3.5 text-indigo-600" /> 정산 승인 대기
+              <Coins className="w-3.5 h-3.5 text-slate-800" /> 정산 승인 대기
             </span>
             <Badge variant="brand">{summary.readyToSettleCount}건</Badge>
           </div>
-          <div className="text-xl font-extrabold text-indigo-900">
+          <div className="text-xl font-extrabold text-slate-900">
             ₩{summary.readyToSettleAmount.toLocaleString()}
           </div>
-          <span className="text-[11px] text-indigo-700 block">행사 완료 (익월 10일 입금)</span>
+          <span className="text-[11px] text-slate-700 block">행사 완료 (익월 10일 입금)</span>
         </Card>
 
         <Card className="p-4 border-emerald-200 bg-emerald-50/50 space-y-1">
@@ -177,7 +177,7 @@ export const PlannerSettlementDashboard: React.FC<PlannerSettlementDashboardProp
                 onClick={() => setStatusFilter(tab.key)}
                 className={`px-2.5 py-1 rounded font-medium transition-colors ${
                   statusFilter === tab.key
-                    ? 'bg-white text-indigo-600 shadow-sm'
+                    ? 'bg-white text-slate-800 shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -244,7 +244,7 @@ export const PlannerSettlementDashboard: React.FC<PlannerSettlementDashboardProp
                     </div>
 
                     <div className="text-right shrink-0">
-                      <div className="text-base font-black text-indigo-700">
+                      <div className="text-base font-black text-slate-700">
                         ₩{total.toLocaleString()}
                       </div>
                       <div className="text-[11px] text-slate-500 flex items-center justify-end gap-1">

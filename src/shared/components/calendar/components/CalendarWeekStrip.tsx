@@ -149,9 +149,9 @@ export const CalendarWeekStrip: React.FC<CalendarWeekStripProps> = ({
               onClick={() => onDateSelect(d)}
               className={`flex flex-col items-center justify-center py-2 px-1 rounded-xl transition-all cursor-pointer min-h-[58px] ${
                 selected
-                  ? 'bg-indigo-600 text-white shadow-sm ring-2 ring-indigo-600/30'
+                  ? 'bg-slate-900 text-white shadow-sm ring-2 ring-indigo-600/30'
                   : today
-                  ? 'bg-indigo-50/80 text-indigo-900 border border-indigo-200'
+                  ? 'bg-slate-50/80 text-slate-900 border border-slate-200'
                   : 'bg-slate-50/60 hover:bg-slate-100 text-slate-700 border border-slate-100'
               }`}
             >

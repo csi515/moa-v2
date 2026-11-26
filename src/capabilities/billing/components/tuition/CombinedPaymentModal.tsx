@@ -107,7 +107,7 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
     <Modal isOpen onClose={onClose} title={`${student.name} · 통합 수납`} maxWidth="xl">
       <form onSubmit={handleSubmit} className="p-6 space-y-4 text-xs">
         <p className="text-xs text-slate-500 -mt-2 flex items-center gap-2">
-          <CreditCard className="w-4 h-4 text-indigo-600" />
+          <CreditCard className="w-4 h-4 text-slate-800" />
           항목별 납부 금액을 지정합니다. 자동 배분은 하지 않습니다.
         </p>
 
@@ -122,7 +122,7 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
                 <div
                   key={inv.id}
                   className={`p-3 rounded-xl border space-y-2 ${
-                    isChecked ? 'border-indigo-300 bg-indigo-50/50' : 'border-slate-200'
+                    isChecked ? 'border-indigo-300 bg-slate-50/50' : 'border-slate-200'
                   }`}
                 >
                   <button
@@ -132,7 +132,7 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
                   >
                     <span className="flex items-center gap-2">
                       {isChecked ? (
-                        <CheckSquare className="w-4 h-4 text-indigo-600" />
+                        <CheckSquare className="w-4 h-4 text-slate-800" />
                       ) : (
                         <Square className="w-4 h-4 text-slate-400" />
                       )}

@@ -409,7 +409,7 @@ export const LoyaltyStampView: React.FC = () => {
       <div className="bg-white rounded-3xl border border-slate-200 p-6 space-y-4 shadow-xs">
         <div className="flex items-center justify-between">
           <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-            <Ticket className="w-5 h-5 text-indigo-600" />
+            <Ticket className="w-5 h-5 text-slate-800" />
             <span>달성 리워드 쿠폰 보관함 ({coupons.length}개)</span>
           </h3>
           <span className="text-xs text-slate-400">
@@ -429,7 +429,7 @@ export const LoyaltyStampView: React.FC = () => {
                 className={`p-4 rounded-2xl border transition-all ${
                   cpn.isRedeemed
                     ? 'bg-slate-50 border-slate-200 opacity-60'
-                    : 'bg-white border-indigo-200 shadow-xs hover:border-indigo-300'
+                    : 'bg-white border-slate-200 shadow-xs hover:border-indigo-300'
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">
@@ -463,7 +463,7 @@ export const LoyaltyStampView: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleRedeemCoupon(cpn)}
-                      className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors"
+                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors"
                     >
                       현장 즉시 사용
                     </button>

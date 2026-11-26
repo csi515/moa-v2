@@ -95,7 +95,7 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
         {/* 모달 헤더 */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+            <div className="w-9 h-9 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center font-bold">
               <User className="w-5 h-5" />
             </div>
             <div>
@@ -129,7 +129,7 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
                 value={staffName}
                 onChange={(e) => setStaffName(e.target.value)}
                 placeholder="예: 이지은 파티시에"
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 text-slate-900"
               />
             </div>
 
@@ -140,7 +140,7 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
                 value={headlineTitle}
                 onChange={(e) => setHeadlineTitle(e.target.value)}
                 placeholder="예: 프랑스 정통 홈베이킹 마스터 12주"
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 text-slate-900"
               />
             </div>
           </div>
@@ -152,7 +152,7 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
               value={profileImageUrl}
               onChange={(e) => setProfileImageUrl(e.target.value)}
               placeholder="https://..."
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 text-slate-900"
             />
           </div>
 
@@ -163,13 +163,13 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
               value={specialtiesText}
               onChange={(e) => setSpecialtiesText(e.target.value)}
               placeholder="예: 홈베이킹, 천연발효종, 디저트 플레이팅"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 text-slate-900"
             />
           </div>
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
-              <GraduationCap className="w-3.5 h-3.5 text-indigo-600" />
+              <GraduationCap className="w-3.5 h-3.5 text-slate-800" />
               학력 사항
             </label>
             <input
@@ -177,14 +177,14 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
               value={academicBackground}
               onChange={(e) => setAcademicBackground(e.target.value)}
               placeholder="예: 프랑스 르 꼬르동 블루 제과 디플로마 수석 졸업"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 text-slate-900"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
-                <Briefcase className="w-3.5 h-3.5 text-indigo-600" />
+                <Briefcase className="w-3.5 h-3.5 text-slate-800" />
                 대표 경력 (줄바꿈 구분)
               </label>
               <textarea
@@ -192,13 +192,13 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
                 value={careerText}
                 onChange={(e) => setCareerText(e.target.value)}
                 placeholder="전) 호텔신라 베이커리 선임 파티시에&#10;현) 아뜰리에 브레드 대표원장"
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900 text-xs font-mono"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 text-slate-900 text-xs font-mono"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
-                <Award className="w-3.5 h-3.5 text-indigo-600" />
+                <Award className="w-3.5 h-3.5 text-slate-800" />
                 보유 자격증 & 면허 (줄바꿈 구분)
               </label>
               <textarea
@@ -206,7 +206,7 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
                 value={certText}
                 onChange={(e) => setCertText(e.target.value)}
                 placeholder="국가공인 제과기능장&#10;제빵기능사 1급&#10;SCA 국제 바리스타 자격"
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900 text-xs font-mono"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 text-slate-900 text-xs font-mono"
               />
             </div>
           </div>
@@ -218,7 +218,7 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
               value={awardsText}
               onChange={(e) => setAwardsText(e.target.value)}
               placeholder="2023 대한민국 베이커리 페스티벌 금상 수상&#10;KBS 생생정보 제과 명인 출연"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900 text-xs font-mono"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 text-slate-900 text-xs font-mono"
             />
           </div>
 
@@ -229,7 +229,7 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
               value={introduction}
               onChange={(e) => setIntroduction(e.target.value)}
               placeholder="회원들이 일상에서도 높은 퀄리티를 구현할 수 있도록 친절하고 세심하게 원리를 짚어드립니다..."
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900 text-xs"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 text-slate-900 text-xs"
             />
           </div>
 
@@ -237,13 +237,13 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
           <div className="border-t border-slate-100 pt-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
+                <BookOpen className="w-3.5 h-3.5 text-slate-800" />
                 A4 포스터에 표기할 대표 강좌 ({courses.length}개)
               </span>
               <button
                 type="button"
                 onClick={handleAddCourse}
-                className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1"
+                className="text-xs text-slate-800 hover:text-indigo-800 font-semibold flex items-center gap-1"
               >
                 <Plus className="w-3.5 h-3.5" /> 강좌 추가
               </button>
@@ -317,7 +317,7 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
           <button
             type="button"
             onClick={handleSave}
-            className="px-5 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-bold text-xs transition-colors flex items-center gap-1.5 shadow-xs"
+            className="px-5 py-2 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-bold text-xs transition-colors flex items-center gap-1.5 shadow-xs"
           >
             <CheckCircle2 className="w-4 h-4" />
             저장 및 프로필 반영

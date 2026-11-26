@@ -319,7 +319,7 @@ export const AutoSchemaForm: React.FC<AutoSchemaFormProps> = ({
         <button
           type="submit"
           disabled={disabled || isSubmitting}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm transition-colors disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-xl shadow-sm transition-colors disabled:opacity-50"
         >
           {isSubmitting ? (
             <>
@@ -387,14 +387,14 @@ const TagEditorField: React.FC<{
             tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-lg border border-indigo-100"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-slate-50 text-slate-700 rounded-lg border border-slate-200"
               >
                 <span>{tag}</span>
                 {!disabled && (
                   <button
                     type="button"
                     onClick={() => handleRemoveTag(tag)}
-                    className="hover:text-indigo-900 transition-colors"
+                    className="hover:text-slate-900 transition-colors"
                   >
                     <X className="w-3 h-3" />
                   </button>

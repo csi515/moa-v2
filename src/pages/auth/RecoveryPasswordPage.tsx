@@ -100,7 +100,7 @@ export const RecoveryPasswordPage: React.FC = () => {
             <p>재설정 링크가 만료되었거나 유효하지 않습니다. 비밀번호 찾기를 다시 요청해 주세요.</p>
             <Link
               to="/signup?mode=forgot"
-              className="inline-flex font-bold text-indigo-600 hover:underline min-h-[44px] items-center"
+              className="inline-flex font-bold text-slate-800 hover:underline min-h-[44px] items-center"
             >
               비밀번호 찾기 다시하기
             </Link>
@@ -164,7 +164,7 @@ export const RecoveryPasswordPage: React.FC = () => {
               type="submit"
               disabled={loading}
               data-testid="recovery-submit"
-              className="w-full py-3 rounded-xl bg-indigo-600 text-white text-sm font-bold min-h-[44px] disabled:opacity-50"
+              className="w-full py-3 rounded-xl bg-slate-900 text-white text-sm font-bold min-h-[44px] disabled:opacity-50"
             >
               {loading ? (
                 <span className="inline-flex items-center gap-2">
@@ -178,7 +178,7 @@ export const RecoveryPasswordPage: React.FC = () => {
         )}
 
         <p className="text-center text-xs text-slate-500">
-          <Link to="/login" className="font-bold text-indigo-600 hover:underline">
+          <Link to="/login" className="font-bold text-slate-800 hover:underline">
             로그인으로 돌아가기
           </Link>
         </p>

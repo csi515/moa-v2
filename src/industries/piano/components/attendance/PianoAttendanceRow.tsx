@@ -58,7 +58,7 @@ export const PianoAttendanceRow: FC<PianoAttendanceRowProps> = ({
           <button
             type="button"
             onClick={onOpenStudent}
-            className="font-bold text-slate-900 text-base sm:text-sm hover:text-indigo-600 text-left min-h-[44px] sm:min-h-0 inline-flex items-center transition-colors"
+            className="font-bold text-slate-900 text-base sm:text-sm hover:text-slate-800 text-left min-h-[44px] sm:min-h-0 inline-flex items-center transition-colors"
           >
             {student.name}
           </button>
@@ -71,7 +71,7 @@ export const PianoAttendanceRow: FC<PianoAttendanceRowProps> = ({
 
           {pinCheckedIn && (
             <span
-              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100"
+              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-50 text-slate-700 border border-slate-200"
               title="키패드 PIN으로 체크인됨"
             >
               <Smartphone className="w-3 h-3 text-indigo-500" />

@@ -191,7 +191,7 @@ export const ResourceApprovalInboxView: React.FC<ResourceApprovalInboxViewProps>
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-1.5">
-                      <span className="px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 text-[11px] font-bold">
+                      <span className="px-2 py-0.5 rounded-md bg-slate-50 text-slate-700 text-[11px] font-bold">
                         {metadata.category === 'vehicle'
                           ? '차량'
                           : metadata.category === 'meeting_room'
@@ -246,7 +246,7 @@ export const ResourceApprovalInboxView: React.FC<ResourceApprovalInboxViewProps>
                   <button
                     onClick={() => handleApprove(item)}
                     disabled={isProcessing}
-                    className="inline-flex items-center gap-1 px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-xs"
+                    className="inline-flex items-center gap-1 px-4 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-xs"
                   >
                     {isProcessing ? (
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />

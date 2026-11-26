@@ -31,7 +31,7 @@ export const AttendanceKioskPage: React.FC = () => {
           </p>
           <a
             href="/"
-            className="inline-flex items-center justify-center min-h-[44px] px-4 rounded-xl bg-indigo-600 text-white text-sm font-bold"
+            className="inline-flex items-center justify-center min-h-[44px] px-4 rounded-xl bg-slate-900 text-white text-sm font-bold"
           >
             앱으로 이동
           </a>

@@ -234,7 +234,7 @@ export const InstructorCommissionSettlementView: React.FC = () => {
 
           <button
             onClick={() => handleOpenContractModal()}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-lg shadow-sm transition-colors"
           >
             <FileSignature className="w-4 h-4" />
             강사 위탁계약 체결
@@ -292,16 +292,16 @@ export const InstructorCommissionSettlementView: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-indigo-200 shadow-sm bg-indigo-50/30">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm bg-slate-50/30">
           <div className="flex items-center justify-between">
             <span className="text-xs text-indigo-800 font-medium">센터 귀속 순이익</span>
-            <Percent className="w-4 h-4 text-indigo-600" />
+            <Percent className="w-4 h-4 text-slate-800" />
           </div>
           <div className="mt-2">
-            <span className="text-2xl font-extrabold text-indigo-700 tabular-nums">
+            <span className="text-2xl font-extrabold text-slate-700 tabular-nums">
               {summaryKPI.totalCenterShare.toLocaleString()}
             </span>
-            <span className="text-xs text-indigo-600 ml-0.5">원</span>
+            <span className="text-xs text-slate-800 ml-0.5">원</span>
           </div>
           <div className="text-[11px] text-slate-400 mt-1 tabular-nums">
             재료비 공제: {summaryKPI.totalMaterialCost.toLocaleString()}원
@@ -375,7 +375,7 @@ export const InstructorCommissionSettlementView: React.FC = () => {
                 <th className="py-3 px-3 font-semibold text-right">강사 배분(세전)</th>
                 <th className="py-3 px-3 font-semibold text-right">원천징수(3.3%)</th>
                 <th className="py-3 px-3.5 font-semibold text-right text-blue-700">강사 실수령액</th>
-                <th className="py-3 px-3 font-semibold text-right text-indigo-700">센터 귀속</th>
+                <th className="py-3 px-3 font-semibold text-right text-slate-700">센터 귀속</th>
                 <th className="py-3 px-3 font-semibold text-center print:hidden">상태</th>
                 <th className="py-3 px-3.5 font-semibold text-center print:hidden">계약/조치</th>
               </tr>
@@ -430,7 +430,7 @@ export const InstructorCommissionSettlementView: React.FC = () => {
                     <td className="py-3 px-3.5 text-right font-extrabold text-blue-600 bg-blue-50/30 tabular-nums">
                       {r.instructorNetPayout.toLocaleString()}원
                     </td>
-                    <td className="py-3 px-3 text-right font-semibold text-indigo-700 tabular-nums">
+                    <td className="py-3 px-3 text-right font-semibold text-slate-700 tabular-nums">
                       {r.centerGrossShare.toLocaleString()}원
                     </td>
                     <td className="py-3 px-3 text-center print:hidden">
@@ -448,7 +448,7 @@ export const InstructorCommissionSettlementView: React.FC = () => {
                     <td className="py-3 px-3.5 text-center print:hidden">
                       <button
                         onClick={() => handleOpenContractModal(item)}
-                        className="px-2 py-1 text-[11px] font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded border border-indigo-200 transition-colors"
+                        className="px-2 py-1 text-[11px] font-medium text-slate-800 bg-slate-50 hover:bg-slate-100 rounded border border-slate-200 transition-colors"
                       >
                         위탁계약서
                       </button>

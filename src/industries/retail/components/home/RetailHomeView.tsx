@@ -226,10 +226,10 @@ export const RetailHomeView: FC = () => {
               className="min-h-[88px] rounded-2xl border border-slate-200 bg-white p-4 text-left hover:bg-slate-50 active:bg-slate-50"
             >
               <p className="text-[11px] font-bold text-slate-500 flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5 text-indigo-600" aria-hidden />
+                <TrendingUp className="w-3.5 h-3.5 text-slate-800" aria-hidden />
                 평균 객단가 (1인당)
               </p>
-              <p className="mt-2 text-xl sm:text-2xl font-black tabular-nums text-indigo-700 truncate">
+              <p className="mt-2 text-xl sm:text-2xl font-black tabular-nums text-slate-700 truncate">
                 {formatCurrency(averageTicket)}
               </p>
             </button>

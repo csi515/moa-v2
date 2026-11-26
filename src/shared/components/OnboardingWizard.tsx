@@ -436,7 +436,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
           <button
             type="button"
             onClick={handleQuickFinishAnytime}
-            className="text-xs font-medium text-slate-400 hover:text-indigo-600 px-2 py-1.5 rounded-lg hover:bg-slate-50 transition-colors"
+            className="text-xs font-medium text-slate-400 hover:text-slate-800 px-2 py-1.5 rounded-lg hover:bg-slate-50 transition-colors"
             title="현재까지의 설정으로 온보딩을 마치고 대시보드로 이동합니다"
           >
             여기서 완료하고 시작
@@ -458,7 +458,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             type="button"
             onClick={opts.onNext}
             disabled={opts.nextDisabled || isSaving}
-            className="px-5 py-2.5 text-xs sm:text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl flex items-center gap-1 min-h-[44px] shadow-sm disabled:opacity-50 transition-colors"
+            className="px-5 py-2.5 text-xs sm:text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl flex items-center gap-1 min-h-[44px] shadow-sm disabled:opacity-50 transition-colors"
           >
             {isSaving ? '저장 중...' : opts.nextLabel || '다음'}{' '}
             <ChevronRight className="w-4 h-4" />
@@ -476,13 +476,13 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col">
                 <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-indigo-50/70 via-white to-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center shrink-0">
               <Sparkles className="w-4 h-4" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <h2 className="font-bold text-slate-900 text-base truncate">학원 시작 설정</h2>
-                <span className="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">
+                <span className="text-[11px] font-semibold text-slate-800 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-200">
                   {step + 1} / {TOTAL_STEPS}
                 </span>
               </div>
@@ -496,7 +496,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             <button
               type="button"
               onClick={requestSkip}
-              className="text-xs font-semibold text-slate-500 hover:text-indigo-600 hover:bg-slate-100 px-2.5 py-1.5 rounded-lg transition-colors"
+              className="text-xs font-semibold text-slate-500 hover:text-slate-800 hover:bg-slate-100 px-2.5 py-1.5 rounded-lg transition-colors"
               title="설정을 건너뛰고 메인 대시보드로 바로 이동합니다"
             >
               건너뛰기
@@ -530,13 +530,13 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                 <div
                   key={label}
                   className={`flex items-center gap-1 text-[10px] font-bold shrink-0 ${
-                    isActive ? 'text-indigo-600' : isDone ? 'text-emerald-600' : 'text-slate-400'
+                    isActive ? 'text-slate-800' : isDone ? 'text-emerald-600' : 'text-slate-400'
                   }`}
                   title={label}
                 >
                   <div
                     className={`w-7 h-7 rounded-lg flex items-center justify-center ${
-                      isActive ? 'bg-indigo-100' : isDone ? 'bg-emerald-50' : 'bg-slate-100'
+                      isActive ? 'bg-slate-100' : isDone ? 'bg-emerald-50' : 'bg-slate-100'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -550,11 +550,11 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
         <div className="overflow-y-auto flex-1">
                     {step === 0 && (
             <form onSubmit={handleOrganizationNext} className="p-6 space-y-4">
-              <div className="p-3 bg-indigo-50/70 border border-indigo-100 rounded-xl text-xs text-indigo-900 flex items-start gap-2.5">
-                <Sparkles className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 flex items-start gap-2.5">
+                <Sparkles className="w-4 h-4 text-slate-800 shrink-0 mt-0.5" />
                 <div className="space-y-0.5">
                   <p className="font-bold text-indigo-950">학원명만 입력하시면 바로 시작할 수 있습니다!</p>
-                  <p className="text-indigo-700/90 text-[11px] leading-relaxed">
+                  <p className="text-slate-700/90 text-[11px] leading-relaxed">
                     운영시간·수강료 등은 표준 기본값으로 자동 구성되며, 언제든 설정 메뉴에서 자유롭게 수정하실 수 있습니다.
                   </p>
                 </div>
@@ -616,7 +616,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                     type="button"
                     onClick={handleQuickStartWithDefaults}
                     disabled={isSaving || !organizationForm.name.trim()}
-                    className="flex-1 sm:flex-initial px-4 py-2.5 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/80 rounded-xl min-h-[44px] flex items-center justify-center gap-1.5 transition-colors disabled:opacity-40"
+                    className="flex-1 sm:flex-initial px-4 py-2.5 text-xs font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-xl min-h-[44px] flex items-center justify-center gap-1.5 transition-colors disabled:opacity-40"
                     title="학원명 저장 후 기본 설정값으로 즉시 대시보드를 시작합니다"
                   >
                     <span>바로 시작하기</span>
@@ -624,7 +624,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                   <button
                     type="submit"
                     disabled={isSaving || !organizationForm.name.trim()}
-                    className="flex-1 sm:flex-initial px-5 py-2.5 text-xs sm:text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl flex items-center justify-center gap-1 min-h-[44px] shadow-sm disabled:opacity-50 transition-colors"
+                    className="flex-1 sm:flex-initial px-5 py-2.5 text-xs sm:text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl flex items-center justify-center gap-1 min-h-[44px] shadow-sm disabled:opacity-50 transition-colors"
                   >
                     {isSaving ? '저장 중...' : '다음 맞춤 설정'} <ChevronRight className="w-4 h-4" />
                   </button>
@@ -655,7 +655,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                       }
                       className={`w-11 min-h-[44px] rounded-lg text-xs font-bold ${
                         day.enabled
-                          ? 'bg-indigo-600 text-white'
+                          ? 'bg-slate-900 text-white'
                           : 'bg-white text-slate-400 border border-slate-200'
                       }`}
                     >
@@ -713,7 +713,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                     onClick={() => setLessonMinutes(mins)}
                     className={`min-h-[44px] rounded-xl border-2 text-sm font-bold ${
                       lessonMinutes === mins
-                        ? 'border-indigo-500 bg-indigo-50 text-indigo-800'
+                        ? 'border-indigo-500 bg-slate-50 text-indigo-800'
                         : 'border-slate-200 text-slate-600'
                     }`}
                   >
@@ -815,7 +815,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                   <button
                     type="button"
                     onClick={addDraftTextbook}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-indigo-600 bg-white border border-indigo-200 rounded-xl min-h-[44px] hover:bg-indigo-50"
+                    className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-xl min-h-[44px] hover:bg-slate-50"
                   >
                     <Plus className="w-4 h-4" /> 교재 추가
                   </button>
@@ -868,7 +868,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             <div className="p-6 space-y-5">
               <div className="space-y-1">
                 <h4 className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-                  <MessageSquareText className="w-4 h-4 text-indigo-600" />
+                  <MessageSquareText className="w-4 h-4 text-slate-800" />
                   학부모 상담 예약 가능 시간 설정
                 </h4>
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -908,7 +908,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                       prev.includes(6) ? prev : [...prev, 6]
                     );
                   }}
-                  className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition"
+                  className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 transition"
                 >
                   + 토요일 포함
                 </button>
@@ -941,7 +941,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                         }
                         className={`flex-1 py-2 rounded-xl text-xs font-bold transition min-h-[44px] border ${
                           active
-                            ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs'
+                            ? 'bg-slate-900 text-white border-indigo-600 shadow-2xs'
                             : isWeekend
                             ? 'bg-slate-50 text-slate-400 border-slate-200 hover:border-slate-300'
                             : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
@@ -997,8 +997,8 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
               </div>
 
               {/* 안내 박스 */}
-              <div className="rounded-xl border border-indigo-100 bg-indigo-50/50 p-3.5 space-y-1">
-                <p className="text-[11px] text-indigo-900 font-medium leading-relaxed">
+              <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-3.5 space-y-1">
+                <p className="text-[11px] text-slate-900 font-medium leading-relaxed">
                   💡 저장 시 학부모 전용 온라인 상담 신청 링크 및 QR 코드가 자동으로 활성화됩니다.
                 </p>
               </div>
@@ -1028,7 +1028,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                 <button
                   type="button"
                   onClick={finishToStudents}
-                  className="w-full py-3 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl min-h-[44px]"
+                  className="w-full py-3 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl min-h-[44px]"
                 >
                   첫 학생 등록하기
                 </button>

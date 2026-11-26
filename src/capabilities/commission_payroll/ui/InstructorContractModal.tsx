@@ -269,7 +269,7 @@ export const InstructorContractModal: React.FC<InstructorContractModalProps> = (
 
             <div className="space-y-3 bg-slate-50/80 p-4 rounded-xl border border-slate-200">
               <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
-                <BookOpen className="w-4 h-4 text-indigo-600" />
+                <BookOpen className="w-4 h-4 text-slate-800" />
                 위탁 대상 강좌 설정
               </h3>
               <div>
@@ -279,7 +279,7 @@ export const InstructorContractModal: React.FC<InstructorContractModalProps> = (
                   value={courseName}
                   onChange={(e) => setCourseName(e.target.value)}
                   placeholder="예: 정통 이탈리안 파스타 마스터 클래스"
-                  className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 bg-white"
+                  className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 bg-white"
                 />
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -397,10 +397,10 @@ export const InstructorContractModal: React.FC<InstructorContractModalProps> = (
           </div>
 
           {/* 자필 전자서명 패드 */}
-          <div className="border border-indigo-200 rounded-xl p-4 bg-indigo-50/30 space-y-2">
+          <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/30 space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
-                <FileSignature className="w-4 h-4 text-indigo-600" />
+                <FileSignature className="w-4 h-4 text-slate-800" />
                 위탁 강사 자필 전자서명 (터치/마우스 드로잉) *
               </label>
               <button
@@ -413,7 +413,7 @@ export const InstructorContractModal: React.FC<InstructorContractModalProps> = (
               </button>
             </div>
 
-            <div className="relative border-2 border-dashed border-indigo-200 bg-white rounded-lg overflow-hidden h-32 touch-none">
+            <div className="relative border-2 border-dashed border-slate-200 bg-white rounded-lg overflow-hidden h-32 touch-none">
               <canvas
                 ref={canvasRef}
                 width={700}

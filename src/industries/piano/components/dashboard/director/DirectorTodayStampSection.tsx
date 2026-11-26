@@ -80,7 +80,7 @@ export const DirectorTodayStampSection: FC<DirectorTodayStampSectionProps> = ({ 
           <button
             type="button"
             onClick={onOpenHub}
-            className="text-xs font-bold text-indigo-600 min-h-[44px] px-1"
+            className="text-xs font-bold text-slate-800 min-h-[44px] px-1"
           >
             수동 수여
           </button>

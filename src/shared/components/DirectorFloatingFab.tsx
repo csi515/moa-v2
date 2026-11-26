@@ -37,10 +37,10 @@ export const DirectorFloatingFab: React.FC = () => {
           <button
             type="button"
             onClick={() => handleAction('students')}
-            className="flex items-center gap-2.5 px-4 py-2.5 bg-white text-slate-800 font-bold text-xs rounded-2xl shadow-lg border border-slate-100 hover:bg-indigo-50 hover:text-indigo-600 transition-all active:scale-95"
+            className="flex items-center gap-2.5 px-4 py-2.5 bg-white text-slate-800 font-bold text-xs rounded-2xl shadow-lg border border-slate-100 hover:bg-slate-50 hover:text-slate-800 transition-all active:scale-95"
           >
             <span>신규 {customerLabel} 등록</span>
-            <div className="w-7 h-7 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center">
               <UserPlus className="w-4 h-4" />
             </div>
           </button>

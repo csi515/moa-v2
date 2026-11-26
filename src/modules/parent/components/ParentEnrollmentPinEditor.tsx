@@ -127,7 +127,7 @@ export const ParentEnrollmentPinEditor: React.FC<ParentEnrollmentPinEditorProps>
         ) : (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <KeyRound className="w-4 h-4 text-indigo-600" />
+              <KeyRound className="w-4 h-4 text-slate-800" />
               <span className="text-sm font-bold text-slate-900">출결 PIN</span>
               <span
                 className={`text-[10px] font-bold ml-auto ${pinSet ? 'text-emerald-600' : 'text-rose-500'}`}
@@ -137,7 +137,7 @@ export const ParentEnrollmentPinEditor: React.FC<ParentEnrollmentPinEditorProps>
             </div>
 
             {revealedPin && (
-              <div className="bg-indigo-600 text-white rounded-xl p-3 text-center">
+              <div className="bg-slate-900 text-white rounded-xl p-3 text-center">
                 <p className="text-[10px] opacity-80">발급·저장된 PIN (한 번만 표시)</p>
                 <p className="text-2xl font-black tracking-[0.3em] font-mono mt-1">{revealedPin}</p>
               </div>
@@ -173,7 +173,7 @@ export const ParentEnrollmentPinEditor: React.FC<ParentEnrollmentPinEditorProps>
                 type="button"
                 disabled={loading}
                 onClick={() => void handleGenerate()}
-                className="flex-1 py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1 min-h-[44px]"
+                className="flex-1 py-3 bg-slate-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1 min-h-[44px]"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

@@ -21,7 +21,7 @@ interface TurnaroundRow {
 const STATUS_BADGES: Record<TurnaroundStatus, { label: string; color: string }> = {
   in_service: { label: '고객 이용 중', color: 'bg-blue-50 text-blue-700 border-blue-200' },
   cleaning_needed: { label: '퇴실 ➔ 정비 필요', color: 'bg-amber-50 text-amber-700 border-amber-200' },
-  cleaning_in_progress: { label: '청소·환기 진행 중', color: 'bg-purple-50 text-purple-700 border-purple-200' },
+  cleaning_in_progress: { label: '청소·환기 진행 중', color: 'bg-slate-50 text-slate-700 border-slate-200' },
   ready_for_next: { label: '다음 입실 준비 완료', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
 };
 
@@ -106,7 +106,7 @@ export const SpaceTurnaroundView: React.FC = () => {
                     <span>이용 종료 예정:</span>
                     <strong className="text-slate-900">{new Date(room.service_end_at).toLocaleTimeString()}</strong>
                   </div>
-                  <div className="flex justify-between text-indigo-600 font-medium">
+                  <div className="flex justify-between text-slate-800 font-medium">
                     <span>정비 버퍼 만료 (+{room.buffer_minutes}분):</span>
                     <strong>{new Date(room.buffer_end_at).toLocaleTimeString()}</strong>
                   </div>
@@ -153,7 +153,7 @@ export const SpaceTurnaroundView: React.FC = () => {
                   {room.status === 'cleaning_needed' && (
                     <button
                       onClick={() => handleAction(room, 'start_cleaning')}
-                      className="px-3 py-1.5 bg-purple-600 text-white rounded-lg text-xs font-semibold hover:bg-purple-700"
+                      className="px-3 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800"
                     >
                       청소·환기 시작
                     </button>
@@ -169,7 +169,7 @@ export const SpaceTurnaroundView: React.FC = () => {
                   {room.status === 'ready_for_next' && (
                     <button
                       onClick={() => handleAction(room, 'checkin_next')}
-                      className="px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-semibold hover:bg-indigo-700"
+                      className="px-3 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800"
                     >
                       다음 고객 체크인
                     </button>

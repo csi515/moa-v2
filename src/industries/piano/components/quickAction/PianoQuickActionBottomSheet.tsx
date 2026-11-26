@@ -41,7 +41,7 @@ export const PianoQuickActionBottomSheet: FC = () => {
   const getIcon = (type: string) => {
     switch (type) {
       case 'user_plus':
-        return <UserPlus className="w-5 h-5 text-indigo-600" />;
+        return <UserPlus className="w-5 h-5 text-slate-800" />;
       case 'check_circle':
         return <CheckCircle2 className="w-5 h-5 text-emerald-600" />;
       case 'credit_card':
@@ -49,14 +49,14 @@ export const PianoQuickActionBottomSheet: FC = () => {
       case 'piano':
         return <Piano className="w-5 h-5 text-amber-600" />;
       default:
-        return <Zap className="w-5 h-5 text-indigo-600" />;
+        return <Zap className="w-5 h-5 text-slate-800" />;
     }
   };
 
   const getThemeBg = (color: string) => {
     switch (color) {
       case 'indigo':
-        return 'bg-indigo-50 border-indigo-100 text-indigo-700';
+        return 'bg-slate-50 border-slate-200 text-slate-700';
       case 'emerald':
         return 'bg-emerald-50 border-emerald-100 text-emerald-700';
       case 'violet':
@@ -104,8 +104,8 @@ export const PianoQuickActionBottomSheet: FC = () => {
               <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto" />
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center">
-                    <Zap className="w-4 h-4 fill-indigo-600 text-indigo-600" />
+                  <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center">
+                    <Zap className="w-4 h-4 fill-indigo-600 text-slate-800" />
                   </div>
                   <div>
                     <h3 className="text-base font-black text-slate-900 leading-tight">
@@ -134,7 +134,7 @@ export const PianoQuickActionBottomSheet: FC = () => {
                   key={item.id}
                   type="button"
                   onClick={() => handleActionClick(item.id)}
-                  className="w-full text-left p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100/90 active:bg-indigo-50/70 border border-slate-200/80 hover:border-indigo-200 transition-all flex items-center justify-between gap-3 min-h-[58px] cursor-pointer group shadow-2xs"
+                  className="w-full text-left p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100/90 active:bg-slate-50 border border-slate-200/80 hover:border-slate-200 transition-all flex items-center justify-between gap-3 min-h-[58px] cursor-pointer group shadow-2xs"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div
@@ -146,11 +146,11 @@ export const PianoQuickActionBottomSheet: FC = () => {
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-sm font-black text-slate-900 group-hover:text-indigo-600 transition-colors">
+                        <span className="text-sm font-black text-slate-900 group-hover:text-slate-800 transition-colors">
                           {item.title}
                         </span>
                         {item.badge && (
-                          <span className="px-1.5 py-0.5 rounded-md text-[10px] font-black bg-indigo-600 text-white">
+                          <span className="px-1.5 py-0.5 rounded-md text-[10px] font-black bg-slate-900 text-white">
                             {item.badge}
                           </span>
                         )}
@@ -160,7 +160,7 @@ export const PianoQuickActionBottomSheet: FC = () => {
                       </p>
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all shrink-0" />
+                  <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-slate-800 group-hover:translate-x-0.5 transition-all shrink-0" />
                 </button>
               ))}
             </div>

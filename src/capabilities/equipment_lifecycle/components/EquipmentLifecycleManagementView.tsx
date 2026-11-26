@@ -103,15 +103,15 @@ export function EquipmentLifecycleManagementView() {
       <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
-            <Wrench className="w-5 h-5 text-indigo-600" />
+            <Wrench className="w-5 h-5 text-slate-800" />
             고가 기구 점검 주기 & 소모품 감가상각 관리
           </h1>
           <p className="text-xs text-slate-500 mt-1">
             장비별 감가상각 잔존가액을 산출하고, 누적 수리비 대비 신규 교체 vs 수리 의사결정 지표를 제공합니다.
           </p>
         </div>
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-2xl text-xs font-bold border border-indigo-100">
-          <ShieldAlert className="w-3.5 h-3.5 text-indigo-600" />
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 rounded-2xl text-xs font-bold border border-slate-200">
+          <ShieldAlert className="w-3.5 h-3.5 text-slate-800" />
           안전사고 0건 예방 모니터링
         </div>
       </div>
@@ -173,7 +173,7 @@ export function EquipmentLifecycleManagementView() {
                           ? 'bg-rose-100 text-rose-600'
                           : urgency === 'overdue'
                           ? 'bg-amber-100 text-amber-600'
-                          : 'bg-indigo-50 text-indigo-600'
+                          : 'bg-slate-50 text-slate-800'
                       }`}
                     >
                       <Wrench className="w-5 h-5" />
@@ -238,7 +238,7 @@ export function EquipmentLifecycleManagementView() {
                     <span className="text-slate-400">취득원가 / 잔존장부가</span>
                     <div className="font-extrabold text-slate-700 mt-0.5">
                       ₩{asset.purchaseCost.toLocaleString()} <span className="text-slate-400">/</span>{' '}
-                      <span className="text-indigo-600">₩{decision.currentBookValue.toLocaleString()}</span>
+                      <span className="text-slate-800">₩{decision.currentBookValue.toLocaleString()}</span>
                     </div>
                   </div>
 

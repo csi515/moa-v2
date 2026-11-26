@@ -123,7 +123,7 @@ export const PromotionListPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2.5 bg-indigo-600 text-white rounded-xl shadow-sm">
+            <div className="p-2.5 bg-slate-900 text-white rounded-xl shadow-sm">
               <Tag className="w-6 h-6" />
             </div>
             <div>
@@ -139,7 +139,7 @@ export const PromotionListPage: React.FC = () => {
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-xl transition-all shadow-sm hover:shadow"
+          className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 active:bg-slate-950 rounded-xl transition-all shadow-sm hover:shadow"
         >
           <Plus className="w-4 h-4" />
           <span>새 [기간 한정 특가] 등록</span>
@@ -192,7 +192,7 @@ export const PromotionListPage: React.FC = () => {
             onClick={() => setCurrentTab('ALL')}
             className={`px-3.5 py-1.5 text-xs font-semibold rounded-xl transition-all ${
               currentTab === 'ALL'
-                ? 'bg-indigo-600 text-white shadow-sm'
+                ? 'bg-slate-900 text-white shadow-sm'
                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
@@ -227,7 +227,7 @@ export const PromotionListPage: React.FC = () => {
             placeholder="특가 제목 또는 품목 검색"
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
-            className="w-full pl-9 pr-3.5 py-1.5 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:text-slate-100"
+            className="w-full pl-9 pr-3.5 py-1.5 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 dark:text-slate-100"
           />
         </div>
       </div>
@@ -288,7 +288,7 @@ export const PromotionListPage: React.FC = () => {
                           <span
                             className={`px-2 py-0.5 rounded-md text-[10px] font-semibold ${
                               deal.target_type === 'PASS'
-                                ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800'
+                                ? 'bg-slate-50 dark:bg-purple-950/60 text-slate-800 dark:text-purple-400 border border-slate-200 dark:border-purple-800'
                                 : 'bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-800'
                             }`}
                           >
@@ -344,14 +344,14 @@ export const PromotionListPage: React.FC = () => {
                               <span>
                                 {deal.sold_quantity} / {deal.limited_quantity}개
                               </span>
-                              <span className="font-semibold text-indigo-600 dark:text-indigo-400">
+                              <span className="font-semibold text-slate-800 dark:text-indigo-400">
                                 {percentSold}%
                               </span>
                             </div>
                             <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                               <div
                                 className={`h-full rounded-full transition-all duration-300 ${
-                                  isSoldOut ? 'bg-amber-500' : 'bg-indigo-600'
+                                  isSoldOut ? 'bg-amber-500' : 'bg-slate-900'
                                 }`}
                                 style={{ width: `${percentSold}%` }}
                               />
@@ -380,7 +380,7 @@ export const PromotionListPage: React.FC = () => {
                           title={deal.is_active ? '이벤트 조기 마감하기' : '이벤트 다시 활성화하기'}
                           className={`p-1 rounded-lg transition-colors ${
                             deal.is_active
-                              ? 'text-indigo-600 hover:text-indigo-700 dark:text-indigo-400'
+                              ? 'text-slate-800 hover:text-slate-700 dark:text-indigo-400'
                               : 'text-slate-400 hover:text-slate-600'
                           }`}
                         >

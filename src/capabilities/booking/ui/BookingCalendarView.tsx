@@ -836,7 +836,7 @@ export const BookingCalendarView: React.FC = () => {
                 onClick={() => setDisplayMode('calendar')}
                 className={`px-3 py-1.5 min-h-[36px] rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
                   displayMode === 'calendar'
-                    ? 'bg-white text-indigo-700 shadow-2xs font-extrabold'
+                    ? 'bg-white text-slate-700 shadow-2xs font-extrabold'
                     : 'hover:text-slate-900'
                 }`}
               >
@@ -848,7 +848,7 @@ export const BookingCalendarView: React.FC = () => {
                 onClick={() => setDisplayMode('list')}
                 className={`px-3 py-1.5 min-h-[36px] rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
                   displayMode === 'list'
-                    ? 'bg-white text-indigo-700 shadow-2xs font-extrabold'
+                    ? 'bg-white text-slate-700 shadow-2xs font-extrabold'
                     : 'hover:text-slate-900'
                 }`}
               >
@@ -877,7 +877,7 @@ export const BookingCalendarView: React.FC = () => {
       <div className="bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-4 shadow-2xs space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-800 flex items-center justify-center font-bold">
               <Users className="w-4 h-4" />
             </div>
             <div>
@@ -896,7 +896,7 @@ export const BookingCalendarView: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
                 scheduleScopeMode === 'my_only'
-                  ? 'bg-white text-indigo-700 shadow-2xs'
+                  ? 'bg-white text-slate-700 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -910,7 +910,7 @@ export const BookingCalendarView: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
                 scheduleScopeMode === 'all'
-                  ? 'bg-white text-indigo-700 shadow-2xs'
+                  ? 'bg-white text-slate-700 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -924,7 +924,7 @@ export const BookingCalendarView: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
                 scheduleScopeMode === 'custom_staff'
-                  ? 'bg-white text-indigo-700 shadow-2xs'
+                  ? 'bg-white text-slate-700 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -952,7 +952,7 @@ export const BookingCalendarView: React.FC = () => {
                   }}
                   className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                     isSelected
-                      ? 'bg-indigo-600 text-white shadow-2xs'
+                      ? 'bg-slate-900 text-white shadow-2xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80'
                   }`}
                 >
@@ -984,7 +984,7 @@ export const BookingCalendarView: React.FC = () => {
                     setSelectedStaffIds(instructors.map((i) => i.id));
                   }
                 }}
-                className="text-[11px] text-indigo-600 hover:underline font-bold ml-1.5 cursor-pointer"
+                className="text-[11px] text-slate-800 hover:underline font-bold ml-1.5 cursor-pointer"
               >
                 {selectedStaffIds.length === instructors.length ? '전체 해제' : '전체 선택'}
               </button>

@@ -312,7 +312,7 @@ export function MemberList(): React.JSX.Element {
                             대표 사업자
                           </span>
                         ) : member.role === 'admin' ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-bold text-purple-800">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-purple-800">
                             관리자
                           </span>
                         ) : member.role === 'instructor' ? (
@@ -330,8 +330,8 @@ export function MemberList(): React.JSX.Element {
                       <td className="px-5 py-4">
                         {assignedRole ? (
                           <div className="space-y-1">
-                            <span className="inline-flex items-center gap-1 rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-bold text-indigo-800">
-                              <ShieldCheck className="h-3 w-3 text-indigo-600" />
+                            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-indigo-800">
+                              <ShieldCheck className="h-3 w-3 text-slate-800" />
                               {assignedRole.name}
                             </span>
                             <span className="block text-[11px] text-slate-400">
@@ -354,7 +354,7 @@ export function MemberList(): React.JSX.Element {
                                 return (
                                   <span
                                     key={k}
-                                    className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200/60"
+                                    className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-700 border border-slate-200/60"
                                   >
                                     <span>⚙️</span>
                                     <span>{opt.label.replace(' 담당', '')}</span>
@@ -442,7 +442,7 @@ export function MemberList(): React.JSX.Element {
           <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b pb-3">
               <div className="flex items-center gap-2">
-                <KeyRound className="h-5 w-5 text-indigo-600" />
+                <KeyRound className="h-5 w-5 text-slate-800" />
                 <h2 className="text-lg font-bold text-slate-900">직급 부여 및 업무 권한 위임</h2>
               </div>
               <button
@@ -483,14 +483,14 @@ export function MemberList(): React.JSX.Element {
             </div>
 
             {selectedRole ? (
-              <div className="rounded-xl border border-indigo-100 bg-indigo-50/60 p-3 text-xs space-y-2">
-                <p className="font-bold text-indigo-900">포함된 세부 권한:</p>
+              <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-3 text-xs space-y-2">
+                <p className="font-bold text-slate-900">포함된 세부 권한:</p>
                 <div className="flex flex-wrap gap-1">
                   {listEnabledPermissionLabels(selectedRole.permissions, scopedCapIds).map((item) => (
                     <span
                       key={item.key}
                       title={item.key}
-                      className="rounded-md bg-white border border-indigo-200 px-2 py-0.5 text-[11px] font-semibold text-indigo-800"
+                      className="rounded-md bg-white border border-slate-200 px-2 py-0.5 text-[11px] font-semibold text-indigo-800"
                     >
                       ✓ {item.label}
                     </span>
@@ -624,7 +624,7 @@ export function MemberList(): React.JSX.Element {
                           (targetId ? `${String(targetId).slice(0, 8)}…` : '대상 미상')}
                       </span>
                       {roleName ? (
-                        <span className="text-xs text-indigo-700">→ {roleName}</span>
+                        <span className="text-xs text-slate-700">→ {roleName}</span>
                       ) : null}
                     </div>
                     <p className="mt-0.5 text-[11px] text-slate-500">
@@ -678,7 +678,7 @@ export function MemberList(): React.JSX.Element {
                     key={feat.key}
                     className={`flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
                       isEnabled
-                        ? 'border-indigo-500 bg-indigo-50/50 shadow-2xs'
+                        ? 'border-indigo-500 bg-slate-50/50 shadow-2xs'
                         : 'border-slate-200 bg-white hover:bg-slate-50'
                     }`}
                   >
@@ -710,12 +710,12 @@ export function MemberList(): React.JSX.Element {
                           setFeatureSavingKey(null);
                         }
                       }}
-                      className="mt-0.5 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                      className="mt-0.5 h-4 w-4 rounded border-slate-300 text-slate-800 focus:ring-slate-900"
                     />
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-bold text-slate-900 flex items-center justify-between">
                         <span>{feat.label}</span>
-                        {isBusy && <span className="text-[10px] text-indigo-600 font-normal">저장 중...</span>}
+                        {isBusy && <span className="text-[10px] text-slate-800 font-normal">저장 중...</span>}
                       </p>
                       <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
                         {feat.desc}

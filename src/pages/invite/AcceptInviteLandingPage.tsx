@@ -34,8 +34,8 @@ export const AcceptInviteLandingPage: React.FC = () => {
     <AuthLayout mode="login">
       <div className="space-y-5" data-testid="invite-accept-landing">
         <div className="flex items-start gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-indigo-50 flex items-center justify-center shrink-0">
-            <ShieldCheck className="w-5 h-5 text-indigo-600" />
+          <div className="w-11 h-11 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0">
+            <ShieldCheck className="w-5 h-5 text-slate-800" />
           </div>
           <div>
             <h1 className="text-xl font-extrabold text-slate-900">직원 초대 수락</h1>
@@ -70,14 +70,14 @@ export const AcceptInviteLandingPage: React.FC = () => {
           <button
             type="submit"
             data-testid="invite-token-submit"
-            className="w-full py-3 rounded-xl bg-indigo-600 text-white text-sm font-bold min-h-[44px]"
+            className="w-full py-3 rounded-xl bg-slate-900 text-white text-sm font-bold min-h-[44px]"
           >
             초대 수락하기
           </button>
         </form>
 
         <p className="text-center text-xs text-slate-500">
-          <Link to="/login" className="font-bold text-indigo-600 hover:underline">
+          <Link to="/login" className="font-bold text-slate-800 hover:underline">
             로그인으로 돌아가기
           </Link>
         </p>

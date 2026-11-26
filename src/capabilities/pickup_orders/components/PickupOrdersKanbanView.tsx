@@ -99,8 +99,8 @@ const STAGE_CONFIG: Record<
   },
   READY_FOR_PICKUP: {
     label: '픽업 대기',
-    color: 'text-purple-700 border-purple-200',
-    badgeBg: 'bg-purple-50 text-purple-800',
+    color: 'text-slate-700 border-slate-200',
+    badgeBg: 'bg-slate-50 text-purple-800',
     nextStage: 'COMPLETED',
     nextLabel: '수령 완료 처리',
   },
@@ -146,7 +146,7 @@ export const PickupOrdersKanbanView: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <PackageCheck className="w-7 h-7 text-indigo-600" />
+            <PackageCheck className="w-7 h-7 text-slate-800" />
             <h1 className="text-2xl font-bold text-slate-900">사전 예약 픽업 주문 관리</h1>
           </div>
           <p className="text-sm text-slate-500 mt-1">
@@ -155,7 +155,7 @@ export const PickupOrdersKanbanView: React.FC = () => {
         </div>
 
         <div className="flex gap-2">
-          <div className="px-3 py-2 bg-indigo-50 text-indigo-800 rounded-lg text-sm font-medium flex items-center gap-1.5">
+          <div className="px-3 py-2 bg-slate-50 text-indigo-800 rounded-lg text-sm font-medium flex items-center gap-1.5">
             <Clock className="w-4 h-4" />
             <span>오늘 픽업 예정: <strong>{summary.todayPickupCount}건</strong></span>
           </div>
@@ -230,7 +230,7 @@ export const PickupOrdersKanbanView: React.FC = () => {
                           ))}
                         </div>
 
-                        <div className="flex items-center gap-1 text-xs font-semibold text-indigo-700">
+                        <div className="flex items-center gap-1 text-xs font-semibold text-slate-700">
                           <Calendar className="w-3.5 h-3.5" />
                           <span>픽업 희망: {pickupTimeStr}</span>
                         </div>
@@ -244,7 +244,7 @@ export const PickupOrdersKanbanView: React.FC = () => {
                         {config.nextStage && (
                           <button
                             onClick={() => handleAdvance(order)}
-                            className="w-full mt-2 py-1.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-medium flex items-center justify-center gap-1 transition-colors"
+                            className="w-full mt-2 py-1.5 px-3 bg-slate-900 hover:bg-slate-800 text-white rounded text-xs font-medium flex items-center justify-center gap-1 transition-colors"
                           >
                             <span>{config.nextLabel}</span>
                             <ChevronRight className="w-3.5 h-3.5" />

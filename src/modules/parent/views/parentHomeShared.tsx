@@ -14,7 +14,7 @@ const NOTICE_BADGE_CLASS: Partial<Record<ParentPortalNotificationKind, string>> 
   absence: 'bg-rose-50 text-rose-700',
   makeup: 'bg-amber-50 text-amber-800',
   tuition_unpaid: 'bg-rose-50 text-rose-700',
-  notice: 'bg-indigo-50 text-indigo-700',
+  notice: 'bg-slate-50 text-slate-700',
   announcement: 'bg-sky-50 text-sky-700',
 };
 
@@ -38,7 +38,7 @@ export function ParentNoticePreview({
           <button
             type="button"
             onClick={() => onNavigate('notices')}
-            className="text-[11px] font-bold text-indigo-600 min-h-[44px] px-1"
+            className="text-[11px] font-bold text-slate-800 min-h-[44px] px-1"
           >
             전체
           </button>

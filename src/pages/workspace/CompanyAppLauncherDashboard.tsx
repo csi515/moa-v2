@@ -407,7 +407,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
         const permKey = APP_FEATURE_PERM_MAP[t.id];
       const isFeatureManager = permKey ? Boolean(userFeaturePermissions[permKey]) : false;
       const finalBadge = t.badge ?? (isFeatureManager ? '담당' : null);
-      const finalBadgeColor = t.badge ? t.badgeColor : (isFeatureManager ? 'bg-indigo-600 text-white' : undefined);
+      const finalBadgeColor = t.badge ? t.badgeColor : (isFeatureManager ? 'bg-slate-900 text-white' : undefined);
       return {
         ...t,
         badge: finalBadge,
@@ -450,8 +450,8 @@ export const CompanyAppLauncherDashboard: React.FC<{
         <section className="mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200/80 pb-5">
             <div>
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">
-                <Sparkles className="h-3.5 w-3.5 text-indigo-600" />
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
+                <Sparkles className="h-3.5 w-3.5 text-slate-800" />
                 <span>{orgName}</span>
               </div>
               <h1 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
@@ -472,7 +472,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
                     {assignedRoleBadges.map((badge) => (
                       <span
                         key={badge}
-                        className="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded-md text-[11px] border border-indigo-200 shadow-2xs"
+                        className="bg-slate-50 text-slate-700 font-bold px-2 py-0.5 rounded-md text-[11px] border border-slate-200 shadow-2xs"
                       >
                         ★ {badge}
                       </span>
@@ -548,7 +548,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
               </div>
 
               <div className="w-full">
-                <span className="block text-base sm:text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                <span className="block text-base sm:text-lg font-bold text-slate-900 group-hover:text-slate-800 transition-colors">
                   {app.label}
                 </span>
                 <span className="mt-0.5 block text-xs font-medium text-slate-500 line-clamp-1">
@@ -590,7 +590,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
                   className="rounded-2xl border border-slate-200 bg-slate-50/60 p-3.5 transition-colors hover:bg-slate-100"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="inline-block rounded-md bg-indigo-100 px-2 py-0.5 text-[11px] font-bold text-indigo-700">
+                    <span className="inline-block rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-700">
                       {item.domainLabel}
                     </span>
                     <span className="text-[11px] text-slate-400">{item.timeAgo}</span>
@@ -601,7 +601,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
                     <Link
                       to={item.to}
                       onClick={() => setShowApprovalModal(false)}
-                      className="inline-flex items-center gap-1 rounded-xl bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-indigo-700"
+                      className="inline-flex items-center gap-1 rounded-xl bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-slate-800"
                     >
                       <span>결재함에서 검토</span>
                       <ChevronRight className="h-3 w-3" />

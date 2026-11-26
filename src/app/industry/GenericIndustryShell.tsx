@@ -413,7 +413,7 @@ function GenericDashboardView({ onNavigate, enabledCaps = [] }: GenericDashboard
             <p className="text-xs font-bold uppercase text-slate-400">전체 {customerWord}</p>
             <p className="text-2xl font-black text-slate-900 mt-1">{allCustomers.length}명</p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center">
             <Users className="w-6 h-6" />
           </div>
         </div>
@@ -449,18 +449,18 @@ function GenericDashboardView({ onNavigate, enabledCaps = [] }: GenericDashboard
           <button
             type="button"
             onClick={() => setIsFormOpen(true)}
-            className="flex items-center justify-between p-4 rounded-2xl border border-indigo-100 bg-indigo-50/60 text-indigo-900 hover:bg-indigo-100/70 transition-colors text-left"
+            className="flex items-center justify-between p-4 rounded-2xl border border-slate-200 bg-slate-50/60 text-slate-900 hover:bg-slate-100/70 transition-colors text-left"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center">
                 <UserPlus className="w-5 h-5" />
               </div>
               <div>
                 <p className="text-sm font-bold">{customerWord} 신규 등록</p>
-                <p className="text-xs text-indigo-700/80">맞춤 정보 포함 등록</p>
+                <p className="text-xs text-slate-700/80">맞춤 정보 포함 등록</p>
               </div>
             </div>
-            <ArrowRight className="w-4 h-4 text-indigo-600" />
+            <ArrowRight className="w-4 h-4 text-slate-800" />
           </button>
 
           <button
@@ -1332,10 +1332,10 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
       if (TAB_REQUIRED_CAPABILITIES[activeTab]) {
         return (
           <div className="max-w-xl mx-auto mt-10 p-6 sm:p-8 text-center bg-white rounded-3xl border border-slate-200 shadow-xs" data-testid="deferred-feature-notice">
-            <div className="w-12 h-12 mx-auto mb-3.5 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <div className="w-12 h-12 mx-auto mb-3.5 rounded-2xl bg-slate-50 text-slate-800 flex items-center justify-center">
               <Building2 className="w-6 h-6" />
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50/80 text-indigo-700 rounded-full text-xs font-semibold mb-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-50/80 text-slate-700 rounded-full text-xs font-semibold mb-2">
               <span>Tier 3 · 화면 준비 중</span>
             </div>
             <h2 className="text-xl font-extrabold text-slate-800">

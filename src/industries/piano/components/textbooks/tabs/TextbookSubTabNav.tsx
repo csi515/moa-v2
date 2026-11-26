@@ -64,7 +64,7 @@ export const TextbookSubTabNav: React.FC<TextbookSubTabNavProps> = ({
             onClick={() => onSubTabChange(tab.id)}
             className={`py-2 px-3 sm:px-4 text-xs font-bold flex items-center gap-2 rounded-xl transition-all whitespace-nowrap shrink-0 min-h-[44px] sm:min-h-[40px] cursor-pointer ${
               isActive
-                ? 'bg-white text-indigo-600 shadow-xs border border-slate-200/60 font-black'
+                ? 'bg-white text-slate-800 shadow-xs border border-slate-200/60 font-black'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
             }`}
           >

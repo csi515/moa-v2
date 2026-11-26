@@ -332,7 +332,7 @@ export function ScheduleCalendarPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
+            <span className="p-2 rounded-xl bg-slate-50 text-slate-800">
               <CalendarIcon className="w-5 h-5" />
             </span>
             <div>
@@ -358,7 +358,7 @@ export function ScheduleCalendarPage() {
           <button
             type="button"
             onClick={() => handleOpenCreateModal()}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-xs cursor-pointer min-h-[40px]"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs cursor-pointer min-h-[40px]"
           >
             <Plus className="w-4 h-4" />
             <span>수업 개설</span>
@@ -370,14 +370,14 @@ export function ScheduleCalendarPage() {
       <div className="lg:hidden bg-white p-3 rounded-2xl border border-slate-200/80 shadow-xs space-y-2">
         <div className="flex items-center justify-between text-xs">
           <span className="font-bold text-slate-700 flex items-center gap-1.5">
-            <Users className="w-3.5 h-3.5 text-indigo-600" />
+            <Users className="w-3.5 h-3.5 text-slate-800" />
             활성 회원 퀵 필터 ({activeMembers.length}명)
           </span>
           {selectedMemberId && (
             <button
               type="button"
               onClick={handleClearMemberFilter}
-              className="text-indigo-600 font-bold hover:underline"
+              className="text-slate-800 font-bold hover:underline"
             >
               전체 보기
             </button>
@@ -404,7 +404,7 @@ export function ScheduleCalendarPage() {
                 onClick={() => handleSelectMember(m.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 flex items-center gap-1.5 transition-all ${
                   isSelected
-                    ? 'bg-indigo-600 text-white shadow-xs'
+                    ? 'bg-slate-900 text-white shadow-xs'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
@@ -418,9 +418,9 @@ export function ScheduleCalendarPage() {
 
       {/* 회원 필터 활성화 알림 배너 */}
       {selectedMember && (
-        <div className="rounded-2xl border border-indigo-200 bg-indigo-50/90 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-indigo-950 font-bold shadow-xs">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50/90 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-indigo-950 font-bold shadow-xs">
           <div className="flex items-center gap-2">
-            <span className="inline-block w-2.5 h-2.5 rounded-full bg-indigo-600 animate-pulse" />
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-slate-900 animate-pulse" />
             <span>
               <strong>{selectedMember.name}</strong> 님의 일정만 캘린더에 표시 중입니다.
               (총 {calendarEvents.length}개 일정)
@@ -429,7 +429,7 @@ export function ScheduleCalendarPage() {
           <button
             type="button"
             onClick={handleClearMemberFilter}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-50 font-semibold cursor-pointer"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold cursor-pointer"
           >
             <X className="w-3.5 h-3.5" />
             <span>필터 해제 (전체 보기)</span>
@@ -465,7 +465,7 @@ export function ScheduleCalendarPage() {
                 <div
                   className={`h-full rounded-xl p-2 text-xs flex flex-col justify-between transition-all border ${
                     isFilteredTarget
-                      ? 'bg-indigo-600 text-white border-indigo-700 shadow-md ring-2 ring-indigo-400'
+                      ? 'bg-slate-900 text-white border-indigo-700 shadow-md ring-2 ring-indigo-400'
                       : 'bg-white text-slate-800 border-slate-200/90 shadow-2xs hover:border-indigo-300'
                   }`}
                 >
@@ -517,7 +517,7 @@ export function ScheduleCalendarPage() {
         <aside className="hidden lg:flex w-72 xl:w-80 shrink-0 bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex-col space-y-3.5 sticky top-4">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-indigo-50 text-indigo-600">
+              <span className="p-1.5 rounded-lg bg-slate-50 text-slate-800">
                 <Users className="w-4 h-4" />
               </span>
               <div>
@@ -538,7 +538,7 @@ export function ScheduleCalendarPage() {
               placeholder="회원 이름 검색..."
               value={memberSearchQuery}
               onChange={(e) => setMemberSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-7 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[38px]"
+              className="w-full pl-8 pr-7 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 min-h-[38px]"
             />
             {memberSearchQuery && (
               <button
@@ -588,7 +588,7 @@ export function ScheduleCalendarPage() {
                     onClick={() => handleSelectMember(member.id)}
                     className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between gap-2.5 cursor-pointer min-h-[46px] ${
                       isSelected
-                        ? 'bg-indigo-50/80 border-indigo-400 ring-2 ring-indigo-500/20 text-indigo-950 font-bold'
+                        ? 'bg-slate-50/80 border-indigo-400 ring-2 ring-indigo-500/20 text-indigo-950 font-bold'
                         : 'bg-white hover:bg-slate-50 border-slate-200/80 text-slate-800'
                     }`}
                   >
@@ -596,7 +596,7 @@ export function ScheduleCalendarPage() {
                       <div
                         className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0 ${
                           isSelected
-                            ? 'bg-indigo-600 text-white'
+                            ? 'bg-slate-900 text-white'
                             : 'bg-slate-100 text-slate-600'
                         }`}
                       >
@@ -615,7 +615,7 @@ export function ScheduleCalendarPage() {
                         수업 {enrolledClassesCount}개
                       </span>
                       {isSelected && (
-                        <Check className="w-3.5 h-3.5 text-indigo-600 stroke-[3]" />
+                        <Check className="w-3.5 h-3.5 text-slate-800 stroke-[3]" />
                       )}
                     </div>
                   </button>
@@ -741,7 +741,7 @@ export function ScheduleCalendarPage() {
                           );
                         }
                       }}
-                      className="rounded text-indigo-600 focus:ring-indigo-500"
+                      className="rounded text-slate-800 focus:ring-slate-900"
                     />
                     <span>{m.name}</span>
                     <span className="text-[10px] text-slate-400">({m.phone || '연락처 없음'})</span>
@@ -761,7 +761,7 @@ export function ScheduleCalendarPage() {
             </button>
             <button
               type="submit"
-              className="flex-1 min-h-[44px] rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs cursor-pointer"
+              className="flex-1 min-h-[44px] rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-xs cursor-pointer"
             >
               수업 개설 완료
             </button>

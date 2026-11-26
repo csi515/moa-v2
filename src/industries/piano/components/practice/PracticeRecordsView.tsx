@@ -307,7 +307,7 @@ export const PracticeRecordsView: React.FC = () => {
                     </td>
                     <td className="px-4 py-3">
                       {p.source === 'parent' ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-purple-800">
                           앱 제출
                         </span>
                       ) : (
@@ -344,7 +344,7 @@ export const PracticeRecordsView: React.FC = () => {
                         <span className="font-bold text-slate-900 text-sm">
                           {p.studentName}
                         </span>
-                        <span className="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
+                        <span className="text-[11px] font-semibold text-slate-800 bg-slate-50 px-2 py-0.5 rounded-md">
                           {p.minutes}분 연습
                         </span>
                       </div>
@@ -355,7 +355,7 @@ export const PracticeRecordsView: React.FC = () => {
 
                     <div className="flex items-center gap-1.5 shrink-0">
                       {p.source === 'parent' ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-100 text-purple-800">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-purple-800">
                           앱 제출
                         </span>
                       ) : (

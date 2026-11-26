@@ -19,7 +19,7 @@ export const StudentDetailClassesTab: React.FC<StudentDetailClassesTabProps> = (
         <button
           type="button"
           onClick={() => setActiveTab('makeups')}
-          className="text-xs font-bold text-indigo-600 min-h-[44px] px-1"
+          className="text-xs font-bold text-slate-800 min-h-[44px] px-1"
         >
           보강 관리
         </button>
@@ -32,7 +32,7 @@ export const StudentDetailClassesTab: React.FC<StudentDetailClassesTabProps> = (
           <button
             type="button"
             onClick={() => setActiveTab('classes')}
-            className="text-xs font-bold text-indigo-600 min-h-[44px]"
+            className="text-xs font-bold text-slate-800 min-h-[44px]"
           >
             {serviceLabel} 관리로 이동
           </button>
@@ -43,7 +43,7 @@ export const StudentDetailClassesTab: React.FC<StudentDetailClassesTabProps> = (
             <div key={cls.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
               <div className="flex items-center justify-between">
                 <h5 className="font-bold text-sm text-slate-900">{cls.name}</h5>
-                <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md">
+                <span className="text-[11px] font-semibold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-md">
                   {cls.room}
                 </span>
               </div>

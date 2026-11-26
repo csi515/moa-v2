@@ -28,7 +28,7 @@ export const ConsultationTodaySection: FC<{
     <h3 className="text-sm font-bold text-slate-900">오늘 상담</h3>
     {loading ? (
       <div className="py-10 flex justify-center" role="status" aria-label="불러오는 중">
-        <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
+        <Loader2 className="w-6 h-6 text-slate-800 animate-spin" />
       </div>
     ) : error ? (
       <div className="rounded-2xl border border-dashed border-rose-200 bg-rose-50/60 px-4 py-8 text-center space-y-2">
@@ -37,7 +37,7 @@ export const ConsultationTodaySection: FC<{
           <button
             type="button"
             onClick={onRetry}
-            className="min-h-[44px] px-3 text-xs font-bold text-indigo-600"
+            className="min-h-[44px] px-3 text-xs font-bold text-slate-800"
           >
             다시 시도
           </button>
@@ -63,7 +63,7 @@ export const ConsultationTodaySection: FC<{
               className="rounded-2xl border border-slate-200 bg-white px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4"
             >
               <div className="flex items-center gap-2 shrink-0">
-                <Clock className="w-4 h-4 text-indigo-600" />
+                <Clock className="w-4 h-4 text-slate-800" />
                 <span className="text-sm font-bold text-slate-900 tabular-nums">
                   {formatConsultationTime(row.schedule_starts_at)}
                 </span>
@@ -86,7 +86,7 @@ export const ConsultationTodaySection: FC<{
               <button
                 type="button"
                 onClick={onOpenReservations}
-                className="text-xs font-bold text-indigo-600 min-h-[44px] px-2 self-start sm:self-center"
+                className="text-xs font-bold text-slate-800 min-h-[44px] px-2 self-start sm:self-center"
               >
                 예약에서 보기
               </button>

@@ -22,9 +22,9 @@ export const LessonsHubView: FC = () => {
     <div className="space-y-4 pb-4">
       <div className="sticky top-0 z-10 -mx-1 px-1 py-1 bg-slate-50/90 backdrop-blur-sm space-y-3">
         <div className="px-0.5">
-          <p className="text-[11px] font-semibold text-indigo-600">수업</p>
+          <p className="text-[11px] font-semibold text-slate-800">수업</p>
           <h2 className="text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-            <Piano className="w-5 h-5 text-indigo-600 shrink-0" />
+            <Piano className="w-5 h-5 text-slate-800 shrink-0" />
             {segment === 'today' ? '오늘 수업' : '수업 기록'}
           </h2>
         </div>

@@ -192,7 +192,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
               </>
             ) : (
               <>
-                <Share2 className="w-3.5 h-3.5 text-indigo-600" /> 카카오톡 브리핑 링크 복사
+                <Share2 className="w-3.5 h-3.5 text-slate-800" /> 카카오톡 브리핑 링크 복사
               </>
             )}
           </Button>
@@ -212,9 +212,9 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
     >
       <div className="space-y-4">
         {/* 상단: 담당 플래너 및 [확정 예정 수수료 ₩150,000 (D-45)] 뱃지 시각화 */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl border border-indigo-100 bg-indigo-50/50 text-xs gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl border border-slate-200 bg-slate-50/50 text-xs gap-2">
           <div className="flex items-center gap-2">
-            <UserCheck className="w-4 h-4 text-indigo-600" />
+            <UserCheck className="w-4 h-4 text-slate-800" />
             <span className="font-semibold text-slate-800">
               담당 플래너:{' '}
               {formState.plannerName
@@ -237,7 +237,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
             onClick={() => setActiveTab('overview')}
             className={`pb-2 px-3 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'overview'
-                ? 'border-indigo-600 text-indigo-600'
+                ? 'border-indigo-600 text-slate-800'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -248,7 +248,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
             onClick={() => setActiveTab('timeline')}
             className={`pb-2 px-3 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'timeline'
-                ? 'border-indigo-600 text-indigo-600'
+                ? 'border-indigo-600 text-slate-800'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -259,7 +259,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
             onClick={() => setActiveTab('styling')}
             className={`pb-2 px-3 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'styling'
-                ? 'border-indigo-600 text-indigo-600'
+                ? 'border-indigo-600 text-slate-800'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -270,7 +270,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
             onClick={() => setActiveTab('rules')}
             className={`pb-2 px-3 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'rules'
-                ? 'border-indigo-600 text-indigo-600'
+                ? 'border-indigo-600 text-slate-800'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -281,7 +281,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
             onClick={() => setActiveTab('planner')}
             className={`pb-2 px-3 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'planner'
-                ? 'border-indigo-600 text-indigo-600'
+                ? 'border-indigo-600 text-slate-800'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -310,12 +310,12 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
             </div>
 
             {/* 1. 세팅 및 철수 버퍼 분리 관리 섹션 */}
-            <div className="border border-indigo-100 bg-indigo-50/40 rounded-xl p-3.5 space-y-3">
+            <div className="border border-slate-200 bg-slate-50/40 rounded-xl p-3.5 space-y-3">
               <h4 className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-indigo-600" /> 세팅 및 철수 버퍼 시간 분리 관리
+                <Clock className="w-4 h-4 text-slate-800" /> 세팅 및 철수 버퍼 시간 분리 관리
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                <div className="bg-white p-2.5 rounded-lg border border-indigo-100 space-y-1">
+                <div className="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1">
                   <span className="text-slate-500 font-medium block">
                     하객 본 행사 시간 (시작 ~ 종료)
                   </span>
@@ -342,8 +342,8 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
                   </div>
                 </div>
 
-                <div className="bg-white p-2.5 rounded-lg border border-indigo-100 space-y-1">
-                  <span className="text-indigo-700 font-semibold block flex items-center gap-1">
+                <div className="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1">
+                  <span className="text-slate-700 font-semibold block flex items-center gap-1">
                     <Sparkles className="w-3.5 h-3.5 text-indigo-500" /> 세팅 입실 & 철수 완료 버퍼
                   </span>
                   <div className="flex items-center gap-2">
@@ -356,7 +356,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
                         onChange={(e) =>
                           setFormState({ ...formState, setupStartTime: e.target.value })
                         }
-                        className="w-20 font-bold border rounded p-1 text-center font-mono text-indigo-900"
+                        className="w-20 font-bold border rounded p-1 text-center font-mono text-slate-900"
                       />
                     </div>
                     <span>~</span>
@@ -369,7 +369,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
                         onChange={(e) =>
                           setFormState({ ...formState, teardownEndTime: e.target.value })
                         }
-                        className="w-20 font-bold border rounded p-1 text-center font-mono text-indigo-900"
+                        className="w-20 font-bold border rounded p-1 text-center font-mono text-slate-900"
                       />
                     </div>
                   </div>
@@ -379,7 +379,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
 
             <div className="border border-slate-200 rounded-lg p-3.5 space-y-3">
               <h4 className="font-semibold text-slate-800 text-xs flex items-center gap-1.5">
-                <Users className="w-4 h-4 text-indigo-600" /> 초청 인원 및 유아 좌석 관리
+                <Users className="w-4 h-4 text-slate-800" /> 초청 인원 및 유아 좌석 관리
               </h4>
               <div className="grid grid-cols-3 gap-3">
                 <div className="bg-white border rounded p-2.5">
@@ -452,7 +452,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
                   key={step.stepOrder || idx}
                   className="flex items-start gap-2 bg-slate-50 border border-slate-200 rounded-lg p-2.5"
                 >
-                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs shrink-0 mt-1">
+                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-bold text-xs shrink-0 mt-1">
                     {step.stepOrder}
                   </div>
                   <div className="w-20 shrink-0">
@@ -747,9 +747,9 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
         {/* 탭 5: 담당 플래너 & 수수료 귀속 */}
         {activeTab === 'planner' && (
           <div className="space-y-4 text-sm">
-            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 text-xs text-indigo-900 space-y-1">
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs text-slate-900 space-y-1">
               <div className="flex items-center gap-1.5 font-bold">
-                <Coins className="w-4 h-4 text-indigo-600" /> 플래너 배정 및 성사 수수료 귀속 관리
+                <Coins className="w-4 h-4 text-slate-800" /> 플래너 배정 및 성사 수수료 귀속 관리
               </div>
               <p>
                 「D-Day 행사 완료 후 익월 정산」 원칙에 따라 고객 잔금 완납 시 지정일에 자동 정산됩니다.

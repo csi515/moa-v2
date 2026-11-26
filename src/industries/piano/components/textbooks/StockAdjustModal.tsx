@@ -64,7 +64,7 @@ export const StockAdjustModal: React.FC<StockAdjustModalProps> = ({
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center">
               <PackagePlus className="w-5 h-5" />
             </div>
             <div>
@@ -106,7 +106,7 @@ export const StockAdjustModal: React.FC<StockAdjustModalProps> = ({
                 }}
                 className={`py-2 px-2 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1 transition-all ${
                   transactionType === 'inbound'
-                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                    ? 'bg-slate-900 text-white border-indigo-600 shadow-xs'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -159,7 +159,7 @@ export const StockAdjustModal: React.FC<StockAdjustModalProps> = ({
               type="number"
               value={deltaQuantity}
               onChange={(e) => setDeltaQuantity(Number(e.target.value))}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white font-bold text-slate-900 text-base focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white font-bold text-slate-900 text-base focus:outline-hidden focus:ring-2 focus:ring-slate-900"
             />
             {/* Quick buttons */}
             <div className="flex gap-1.5 mt-2">
@@ -184,18 +184,18 @@ export const StockAdjustModal: React.FC<StockAdjustModalProps> = ({
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
               placeholder="예: 8월 신학기 정기 입고, 도서 파손 손실 처리 등"
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
           {/* Real-time Calculation */}
-          <div className="p-3.5 bg-indigo-50/70 border border-indigo-100 rounded-xl flex items-center justify-between text-xs">
+          <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs">
             <div>
               <span className="text-slate-500">반영 후 예상 재고:</span>
               <div className="flex items-center gap-2 font-bold text-slate-800 text-sm mt-0.5">
                 <span className="text-slate-400">{previousStock}권</span>
-                <ArrowRight className="w-3.5 h-3.5 text-indigo-600" />
-                <span className="text-indigo-700 text-base font-black">
+                <ArrowRight className="w-3.5 h-3.5 text-slate-800" />
+                <span className="text-slate-700 text-base font-black">
                   {currentCalculatedStock}권
                 </span>
               </div>
@@ -216,7 +216,7 @@ export const StockAdjustModal: React.FC<StockAdjustModalProps> = ({
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-semibold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-semibold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-xs"
             >
               <Save className="w-4 h-4" />
               재고 변동 적용

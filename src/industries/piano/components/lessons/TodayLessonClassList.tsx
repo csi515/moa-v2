@@ -240,7 +240,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
             onDrop={(e) => handleDropClass(e, cls)}
             className={`rounded-2xl border bg-white overflow-hidden shadow-xs transition-all ${
               isDropTarget
-                ? 'ring-2 ring-indigo-500 border-indigo-400 bg-indigo-50/20 shadow-md'
+                ? 'ring-2 ring-indigo-500 border-indigo-400 bg-slate-50/20 shadow-md'
                 : isNow
                   ? 'border-indigo-300 ring-1 ring-indigo-200'
                   : isNext
@@ -251,9 +251,9 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
             <div
               className={`px-3 sm:px-4 py-2.5 flex items-center justify-between gap-3 ${
                 isDropTarget
-                  ? 'bg-indigo-100/70'
+                  ? 'bg-slate-100/70'
                   : isNow
-                    ? 'bg-indigo-50'
+                    ? 'bg-slate-50'
                     : isNext
                       ? 'bg-emerald-50/70'
                       : 'bg-slate-50/80'
@@ -261,14 +261,14 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
             >
               <div className="min-w-0 flex items-start gap-3">
                 <div className="shrink-0 w-14 text-center">
-                  <p className="font-mono text-sm font-black text-indigo-700">{cls.startTime}</p>
+                  <p className="font-mono text-sm font-black text-slate-700">{cls.startTime}</p>
                   <p className="text-[10px] text-slate-400">~{cls.endTime}</p>
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <p className="font-bold text-slate-900 truncate">{cls.name}</p>
                     {isNow && (
-                      <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-indigo-600 text-white">
+                      <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-slate-900 text-white">
                         진행 중
                       </span>
                     )}
@@ -278,7 +278,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                       </span>
                     )}
                     {isDropTarget && (
-                      <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-indigo-600 text-white animate-pulse">
+                      <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-slate-900 text-white animate-pulse">
                         여기에 놓아 이동
                       </span>
                     )}
@@ -333,7 +333,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                     오늘 {movedOut.targetStartTime}으로 임시 변경
                                   </span>
                                   {movedOut.isSwap && (
-                                    <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-purple-100 text-purple-700">
+                                    <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700">
                                       시간 맞교환
                                     </span>
                                   )}
@@ -374,7 +374,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                         onDrop={(e) => handleDropOnStudentCard(e, student, cls)}
                         className={`transition-colors ${
                           isStudentSwapTarget
-                            ? 'bg-purple-100/70 ring-2 ring-purple-500 ring-inset'
+                            ? 'bg-slate-100/70 ring-2 ring-purple-500 ring-inset'
                             : 'hover:bg-slate-50/50'
                         }`}
                       >
@@ -382,7 +382,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                           <button
                             type="button"
                             onClick={() => onOpenSession({ student, classItem: cls })}
-                            className="flex-1 text-left flex items-center gap-2.5 min-w-0 hover:bg-indigo-50/50 active:bg-indigo-50 rounded-xl px-1.5 py-1 transition-colors cursor-pointer"
+                            className="flex-1 text-left flex items-center gap-2.5 min-w-0 hover:bg-slate-50/50 active:bg-slate-50 rounded-xl px-1.5 py-1 transition-colors cursor-pointer"
                           >
                             <span
                               className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm shrink-0 cursor-grab active:cursor-grabbing ${
@@ -390,7 +390,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                   ? att?.status === 'absent'
                                     ? 'bg-rose-100 text-rose-700'
                                     : 'bg-emerald-100 text-emerald-700'
-                                  : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100'
+                                  : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
                               }`}
                               title="드래그하여 다른 시간대로 이동하거나 다른 학생과 시간 맞교환"
                             >
@@ -453,7 +453,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                   e.stopPropagation();
                                   onQuickMoveRequest?.(student, cls);
                                 }}
-                                className="min-h-[44px] px-2 rounded-xl text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 transition-colors cursor-pointer inline-flex items-center gap-1"
+                                className="min-h-[44px] px-2 rounded-xl text-slate-400 hover:text-slate-800 hover:bg-slate-50 border border-slate-200 hover:border-slate-200 transition-colors cursor-pointer inline-flex items-center gap-1"
                                 title="오늘만 다른 시간대로 임시 변경"
                                 aria-label={`${student.name} 오늘만 시간 임시 변경`}
                               >
@@ -468,10 +468,10 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                               {att?.status === 'absent' && (
                                 makeupTokensMap[student.id] ? (
                                   <span
-                                    className="inline-flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0"
+                                    className="inline-flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-bold bg-slate-50 text-slate-700 border border-slate-200 shrink-0"
                                     title={`보강권 발급 완료 (D-${makeupTokensMap[student.id]!.daysRemaining}일 남음)`}
                                   >
-                                    <Ticket className="w-3.5 h-3.5 text-indigo-600" />
+                                    <Ticket className="w-3.5 h-3.5 text-slate-800" />
                                     <span>보강 D-{makeupTokensMap[student.id]!.daysRemaining}</span>
                                   </span>
                                 ) : (
@@ -481,11 +481,11 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                       e.stopPropagation();
                                       onOpenIssueMakeupToken?.(student, att?.date || '');
                                     }}
-                                    className="min-h-[40px] px-2.5 py-1.5 rounded-xl text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-colors cursor-pointer inline-flex items-center gap-1 shrink-0"
+                                    className="min-h-[40px] px-2.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer inline-flex items-center gap-1 shrink-0"
                                     title="사전 결석 건에 대해 유효기간 30일 보강권 1회 발급"
                                     aria-label={`${student.name} 보강권 발급`}
                                   >
-                                    <Ticket className="w-3.5 h-3.5 text-indigo-600" />
+                                    <Ticket className="w-3.5 h-3.5 text-slate-800" />
                                     <span className="hidden sm:inline">보강권</span>
                                   </button>
                                 )
@@ -495,7 +495,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                 onClick={() => onOpenSession({ student, classItem: cls })}
                                 className={`min-h-[40px] px-2.5 py-1.5 rounded-xl text-xs font-bold inline-flex items-center gap-1 transition-colors cursor-pointer ${
                                   lesson?.songTitle
-                                    ? 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200'
+                                    ? 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
                                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
                                 }`}
                                 aria-label={`${student.name} 수업 노트`}
@@ -518,7 +518,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                   e.stopPropagation();
                                   onQuickMoveRequest?.(student, cls);
                                 }}
-                                className="min-h-[40px] px-2 rounded-xl text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 transition-colors cursor-pointer inline-flex items-center gap-1"
+                                className="min-h-[40px] px-2 rounded-xl text-slate-400 hover:text-slate-800 hover:bg-slate-50 border border-slate-200 hover:border-slate-200 transition-colors cursor-pointer inline-flex items-center gap-1"
                                 title="오늘만 다른 시간대로 임시 변경 (출결/기록 동시 이관)"
                                 aria-label={`${student.name} 오늘만 시간 임시 변경`}
                               >
@@ -547,13 +547,13 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                     return (
                       <li
                         key={`incoming_${student.id}`}
-                        className="bg-purple-50/40 border-l-4 border-l-purple-500"
+                        className="bg-slate-50/40 border-l-4 border-l-purple-500"
                       >
                         <div className="flex items-stretch gap-1 px-2 sm:px-3 py-2 min-h-[60px]">
                           <button
                             type="button"
                             onClick={() => onOpenSession({ student, classItem: cls })}
-                            className="flex-1 text-left flex items-center gap-2.5 min-w-0 hover:bg-purple-100/50 active:bg-purple-100 rounded-xl px-1.5 py-1 transition-colors cursor-pointer"
+                            className="flex-1 text-left flex items-center gap-2.5 min-w-0 hover:bg-slate-100/50 active:bg-slate-100 rounded-xl px-1.5 py-1 transition-colors cursor-pointer"
                           >
                             <span
                               className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm shrink-0 ${
@@ -561,7 +561,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                   ? att?.status === 'absent'
                                     ? 'bg-rose-100 text-rose-700'
                                     : 'bg-emerald-100 text-emerald-700'
-                                  : 'bg-purple-100 text-purple-700'
+                                  : 'bg-slate-100 text-slate-700'
                               }`}
                             >
                               {student.name.slice(0, 1)}
@@ -569,8 +569,8 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-1.5 flex-wrap">
                                 <p className="font-bold text-slate-900 truncate">{student.name}</p>
-                                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 border border-purple-200">
-                                  <Sparkles className="w-3 h-3 text-purple-600" />
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                                  <Sparkles className="w-3 h-3 text-slate-800" />
                                   오늘 임시 ({tempRecord.originalStartTime} ➔ {cls.startTime})
                                 </span>
                                 {tempRecord.handoverNotes?.latestSong && (
@@ -583,7 +583,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                   </span>
                                 )}
                                 {tempRecord.isSwap && (
-                                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700">
+                                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">
                                     맞교환
                                   </span>
                                 )}
@@ -609,7 +609,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                 <button
                                   type="button"
                                   onClick={(e) => onQuickStatus(e, student, cls, 'present')}
-                                  className="min-h-[44px] min-w-[50px] px-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold shadow-2xs transition-colors cursor-pointer"
+                                  className="min-h-[44px] min-w-[50px] px-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-2xs transition-colors cursor-pointer"
                                   aria-label={`${student.name} 즉시 출석`}
                                 >
                                   출석
@@ -629,10 +629,10 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                 {att?.status === 'absent' && (
                                   makeupTokensMap[student.id] ? (
                                     <span
-                                      className="inline-flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0"
+                                      className="inline-flex items-center gap-1 px-2 py-1 rounded-xl text-[11px] font-bold bg-slate-50 text-slate-700 border border-slate-200 shrink-0"
                                       title={`보강권 발급 완료 (D-${makeupTokensMap[student.id]!.daysRemaining}일 남음)`}
                                     >
-                                      <Ticket className="w-3.5 h-3.5 text-indigo-600" />
+                                      <Ticket className="w-3.5 h-3.5 text-slate-800" />
                                       <span>보강 D-{makeupTokensMap[student.id]!.daysRemaining}</span>
                                     </span>
                                   ) : (
@@ -642,11 +642,11 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                         e.stopPropagation();
                                         onOpenIssueMakeupToken?.(student, att?.date || '');
                                       }}
-                                      className="min-h-[40px] px-2.5 py-1.5 rounded-xl text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-colors cursor-pointer inline-flex items-center gap-1 shrink-0"
+                                      className="min-h-[40px] px-2.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer inline-flex items-center gap-1 shrink-0"
                                       title="사전 결석 건에 대해 유효기간 30일 보강권 1회 발급"
                                       aria-label={`${student.name} 보강권 발급`}
                                     >
-                                      <Ticket className="w-3.5 h-3.5 text-indigo-600" />
+                                      <Ticket className="w-3.5 h-3.5 text-slate-800" />
                                       <span className="hidden sm:inline">보강권</span>
                                     </button>
                                   )
@@ -654,7 +654,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                 <button
                                   type="button"
                                   onClick={() => onOpenSession({ student, classItem: cls })}
-                                  className="min-h-[40px] px-2.5 py-1.5 rounded-xl text-xs font-bold inline-flex items-center gap-1 bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors cursor-pointer"
+                                  className="min-h-[40px] px-2.5 py-1.5 rounded-xl text-xs font-bold inline-flex items-center gap-1 bg-slate-100 text-slate-700 hover:bg-purple-200 transition-colors cursor-pointer"
                                 >
                                   <Edit3 className="w-3.5 h-3.5" />
                                   <span className="hidden sm:inline">노트</span>
@@ -664,7 +664,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                             <button
                               type="button"
                               onClick={() => onRevertMove?.(tempRecord.id)}
-                              className="min-h-[44px] px-2 rounded-xl text-slate-400 hover:text-purple-700 hover:bg-purple-100/70 transition-colors cursor-pointer inline-flex items-center gap-1"
+                              className="min-h-[44px] px-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100/70 transition-colors cursor-pointer inline-flex items-center gap-1"
                               title="원래 시간대로 복구"
                               aria-label={`${student.name} 임시 이동 원복`}
                             >

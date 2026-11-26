@@ -178,7 +178,7 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
                 key={idx}
                 className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-black transition-all duration-150 border-2 ${
                   hasDigit
-                    ? 'bg-indigo-600 border-indigo-400 text-white shadow-lg shadow-indigo-600/30 scale-105'
+                    ? 'bg-slate-900 border-indigo-400 text-white shadow-lg shadow-indigo-600/30 scale-105'
                     : 'bg-slate-900 border-slate-800 text-slate-600'
                 }`}
               >
@@ -202,7 +202,7 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
               key={digit}
               type="button"
               onClick={() => handleDigit(digit)}
-              className="h-16 sm:h-20 rounded-2xl bg-slate-900/90 border border-slate-800 hover:bg-indigo-600/80 hover:border-indigo-500 text-2xl sm:text-3xl font-bold text-white transition-all active:scale-95 shadow-md flex items-center justify-center cursor-pointer"
+              className="h-16 sm:h-20 rounded-2xl bg-slate-900/90 border border-slate-800 hover:bg-slate-900/80 hover:border-indigo-500 text-2xl sm:text-3xl font-bold text-white transition-all active:scale-95 shadow-md flex items-center justify-center cursor-pointer"
             >
               {digit}
             </button>
@@ -217,7 +217,7 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
           <button
             type="button"
             onClick={() => handleDigit('0')}
-            className="h-16 sm:h-20 rounded-2xl bg-slate-900/90 border border-slate-800 hover:bg-indigo-600/80 hover:border-indigo-500 text-2xl sm:text-3xl font-bold text-white transition-all active:scale-95 shadow-md flex items-center justify-center cursor-pointer"
+            className="h-16 sm:h-20 rounded-2xl bg-slate-900/90 border border-slate-800 hover:bg-slate-900/80 hover:border-indigo-500 text-2xl sm:text-3xl font-bold text-white transition-all active:scale-95 shadow-md flex items-center justify-center cursor-pointer"
           >
             0
           </button>
@@ -320,7 +320,7 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
                 setAdminPinError(false);
               }}
               placeholder="마스터 PIN 4자리"
-              className="w-full text-center text-2xl tracking-widest bg-slate-950 border border-slate-800 rounded-xl py-3 text-white focus:outline-none focus:border-indigo-500 mb-2 font-mono"
+              className="w-full text-center text-2xl tracking-widest bg-slate-950 border border-slate-800 rounded-xl py-3 text-white focus:outline-none focus:border-slate-900 mb-2 font-mono"
               autoFocus
             />
 
@@ -344,7 +344,7 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
               <button
                 type="button"
                 onClick={handleVerifyExit}
-                className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-sm transition-colors"
+                className="flex-1 py-3 bg-slate-900 hover:bg-indigo-500 text-white font-bold rounded-xl text-sm transition-colors"
               >
                 종료 확인
               </button>

@@ -155,7 +155,7 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
         {/* 모달 헤더 */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+            <div className="w-9 h-9 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center font-bold">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
@@ -193,7 +193,7 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
               value={courseName}
               onChange={(e) => setCourseName(e.target.value)}
               placeholder="예: 홈베이킹 제과제빵 초급반 (12주 코스)"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900 text-sm"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 text-slate-900 text-sm"
             />
           </div>
 
@@ -201,13 +201,13 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block font-bold text-slate-800 mb-1 flex items-center gap-1">
-                <DoorOpen className="w-3.5 h-3.5 text-indigo-600" />
+                <DoorOpen className="w-3.5 h-3.5 text-slate-800" />
                 배정 강의실 (seat_room 자원) *
               </label>
               <select
                 value={roomId}
                 onChange={(e) => setRoomId(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900 bg-white"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 text-slate-900 bg-white"
               >
                 {DEFAULT_ROOMS.map((r) => (
                   <option key={r.id} value={r.id}>
@@ -219,13 +219,13 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
 
             <div>
               <label className="block font-bold text-slate-800 mb-1 flex items-center gap-1">
-                <User className="w-3.5 h-3.5 text-indigo-600" />
+                <User className="w-3.5 h-3.5 text-slate-800" />
                 담당 강사 지정 *
               </label>
               <select
                 value={instructorId}
                 onChange={(e) => setInstructorId(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-slate-900 bg-white"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 text-slate-900 bg-white"
               >
                 {DEFAULT_INSTRUCTORS.map((i) => (
                   <option key={i.id} value={i.id}>
@@ -249,7 +249,7 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
                     onClick={() => toggleDay(day)}
                     className={`flex-1 py-1.5 rounded-lg font-bold text-xs transition-colors ${
                       isSelected
-                        ? 'bg-indigo-600 text-white shadow-xs'
+                        ? 'bg-slate-900 text-white shadow-xs'
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
@@ -264,7 +264,7 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block font-bold text-slate-800 mb-1 flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-indigo-600" />
+                <Clock className="w-3.5 h-3.5 text-slate-800" />
                 시작 시각
               </label>
               <input
@@ -276,7 +276,7 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
             </div>
             <div>
               <label className="block font-bold text-slate-800 mb-1 flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-indigo-600" />
+                <Clock className="w-3.5 h-3.5 text-slate-800" />
                 종료 시각
               </label>
               <input
@@ -325,7 +325,7 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
           <div className="grid grid-cols-3 gap-3 pt-1 border-t border-slate-100">
             <div>
               <label className="block font-bold text-slate-800 mb-1 flex items-center gap-1">
-                <Users className="w-3.5 h-3.5 text-indigo-600" />
+                <Users className="w-3.5 h-3.5 text-slate-800" />
                 모집 정원 (명)
               </label>
               <input
@@ -339,7 +339,7 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
             </div>
             <div>
               <label className="block font-bold text-slate-800 mb-1 flex items-center gap-1">
-                <CreditCard className="w-3.5 h-3.5 text-indigo-600" />
+                <CreditCard className="w-3.5 h-3.5 text-slate-800" />
                 수강료 (원)
               </label>
               <input
@@ -373,7 +373,7 @@ export const CourseOpenScheduleModal: React.FC<CourseOpenScheduleModalProps> = (
             </button>
             <button
               type="submit"
-              className="px-5 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-bold flex items-center gap-1.5 shadow-xs"
+              className="px-5 py-2 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-bold flex items-center gap-1.5 shadow-xs"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>강좌 시간표 개설 확정</span>

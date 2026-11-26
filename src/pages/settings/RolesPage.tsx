@@ -315,7 +315,7 @@ export const RolesPage: React.FC = () => {
       {/* 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold mb-2">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold mb-2">
             <Sparkles className="w-3.5 h-3.5" />
             <span>하이브리드 RBAC 직급 시스템</span>
           </div>
@@ -333,9 +333,9 @@ export const RolesPage: React.FC = () => {
               type="button"
               onClick={handleAutoProvisionRoles}
               disabled={isAutoProvisioning}
-              className="h-12 inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-50 border border-indigo-200 px-4 text-sm font-semibold text-indigo-700 hover:bg-indigo-100 transition-colors disabled:opacity-50"
+              className="h-12 inline-flex items-center justify-center gap-2 rounded-xl bg-slate-50 border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition-colors disabled:opacity-50"
             >
-              <Sparkles className="h-4 w-4 text-indigo-600" />
+              <Sparkles className="h-4 w-4 text-slate-800" />
               <span>{isAutoProvisioning ? "직급 세팅 중..." : "표준 직급 자동 완성"}</span>
             </button>
           )}
@@ -346,7 +346,7 @@ export const RolesPage: React.FC = () => {
               onClick={() => setInviteModalOpen(true)}
               className="h-12 inline-flex items-center justify-center gap-2 rounded-xl bg-white border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 shadow-2xs transition-colors"
             >
-              <QrCode className="h-4 w-4 text-indigo-600" />
+              <QrCode className="h-4 w-4 text-slate-800" />
               <span>직원 초대 1회용 QR</span>
             </button>
           </CanAccess>
@@ -355,7 +355,7 @@ export const RolesPage: React.FC = () => {
             <button
               type="button"
               onClick={handleOpenCreate}
-              className="h-12 inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 text-sm font-semibold text-white shadow-md shadow-indigo-100 hover:bg-indigo-700 transition-colors"
+              className="h-12 inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 text-sm font-semibold text-white shadow-md shadow-indigo-100 hover:bg-slate-800 transition-colors"
             >
               <Plus className="h-4 w-4" />
               <span>직급 신규 추가</span>
@@ -368,7 +368,7 @@ export const RolesPage: React.FC = () => {
       <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xs">
         <div className="p-5 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center space-x-2 text-sm font-bold text-slate-800">
-            <Shield className="w-4 h-4 text-indigo-600" />
+            <Shield className="w-4 h-4 text-slate-800" />
             <span>등록된 매장 직급 ({roles.length}개)</span>
           </div>
           <span className="text-xs text-slate-400">숫자가 낮을수록 상위 직급</span>
@@ -390,7 +390,7 @@ export const RolesPage: React.FC = () => {
             {isCorporateEp ? (
               <Link
                 to="/workspace/settings/roles"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 shadow-sm transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-slate-900 text-white text-sm font-bold hover:bg-slate-800 shadow-sm transition-colors"
               >
                 <Shield className="w-4 h-4" />
                 <span>워크스페이스 직급·권한 설정으로 이동</span>
@@ -400,7 +400,7 @@ export const RolesPage: React.FC = () => {
                 type="button"
                 onClick={handleAutoProvisionRoles}
                 disabled={isAutoProvisioning}
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 shadow-sm transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-slate-900 text-white text-sm font-bold hover:bg-slate-800 shadow-sm transition-colors"
               >
                 <Zap className="w-4 h-4" />
                 <span>우리 업종 표준 4대 직급 1초 자동 세팅</span>
@@ -429,7 +429,7 @@ export const RolesPage: React.FC = () => {
                       {perms.length === 0 ? (
                         <span className="text-xs text-slate-400">부여된 권한 없음</span>
                       ) : perms.includes("*") ? (
-                        <span className="px-2.5 py-0.5 rounded-md bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold">
+                        <span className="px-2.5 py-0.5 rounded-md bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold">
                           모든 권한 허용 (*)
                         </span>
                       ) : (
@@ -495,9 +495,9 @@ export const RolesPage: React.FC = () => {
 
             <form onSubmit={handleSubmit(onSubmitRole)} className="p-6 space-y-6">
               {/* 우리 업종 추천 직급 프리셋 원클릭 자동완성 */}
-              <div className="space-y-2 p-3.5 rounded-2xl bg-indigo-50/70 border border-indigo-100">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-900">
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+              <div className="space-y-2 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                  <Sparkles className="w-3.5 h-3.5 text-slate-800" />
                   <span>우리 업종 추천 직급 (클릭 시 직급명 및 안전 권한 자동 완성)</span>
                 </div>
                 <div className="flex flex-wrap gap-1.5 pt-0.5">
@@ -512,7 +512,7 @@ export const RolesPage: React.FC = () => {
                         });
                         setSelectedPermissions(tpl.permissions);
                       }}
-                      className="px-3 py-1.5 rounded-xl bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-100/80 text-xs font-semibold shadow-2xs transition-colors flex items-center gap-1.5"
+                      className="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100/80 text-xs font-semibold shadow-2xs transition-colors flex items-center gap-1.5"
                     >
                       <span>{tpl.name}</span>
                       <span className="text-[10px] text-indigo-400 font-normal">
@@ -569,7 +569,7 @@ export const RolesPage: React.FC = () => {
                         const allPerms = PERMISSION_GROUPS.flatMap((g) => g.items.map((i) => i.key));
                         setSelectedPermissions(allPerms);
                       }}
-                      className="text-xs text-indigo-600 font-semibold hover:underline"
+                      className="text-xs text-slate-800 font-semibold hover:underline"
                     >
                       모든 권한 선택
                     </button>
@@ -602,7 +602,7 @@ export const RolesPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => handleToggleDomain(group.domain, group.items)}
-                            className="text-[11px] font-semibold text-indigo-600 hover:underline"
+                            className="text-[11px] font-semibold text-slate-800 hover:underline"
                           >
                             {isAllSelected ? "전체 해제" : "전체 선택"}
                           </button>
@@ -618,13 +618,13 @@ export const RolesPage: React.FC = () => {
                                 onClick={() => handleTogglePermission(item.key)}
                                 className={`h-11 px-3 flex items-center justify-between rounded-xl border text-xs font-medium transition ${
                                   isChecked
-                                    ? "bg-indigo-50/80 border-indigo-200 text-indigo-900 font-semibold"
+                                    ? "bg-slate-50/80 border-slate-200 text-slate-900 font-semibold"
                                     : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
                                 }`}
                               >
                                 <span>{item.label}</span>
                                 {isChecked && (
-                                  <Check className="w-3.5 h-3.5 text-indigo-600 shrink-0 ml-1" />
+                                  <Check className="w-3.5 h-3.5 text-slate-800 shrink-0 ml-1" />
                                 )}
                               </button>
                             );
@@ -647,7 +647,7 @@ export const RolesPage: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="h-12 px-6 flex items-center space-x-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-md shadow-indigo-100 transition"
+                  className="h-12 px-6 flex items-center space-x-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow-md shadow-indigo-100 transition"
                 >
                   <Save className="w-4 h-4" />
                   <span>{editingRole ? "변경사항 저장" : "직급 등록"}</span>

@@ -79,7 +79,7 @@ export const ClaimTokenPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-slate-100 p-8 text-center animate-in fade-in duration-200">
-        <div className="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl text-white shadow-lg mb-6">
+        <div className="inline-flex items-center justify-center w-14 h-14 bg-slate-900 rounded-2xl text-white shadow-lg mb-6">
           <ShieldCheck className="w-8 h-8" />
         </div>
 
@@ -87,7 +87,7 @@ export const ClaimTokenPage: React.FC = () => {
 
         {authLoading || loading ? (
           <div className="py-8 flex flex-col items-center">
-            <RefreshCw className="w-8 h-8 text-indigo-600 animate-spin mb-3" />
+            <RefreshCw className="w-8 h-8 text-slate-800 animate-spin mb-3" />
             <p className="text-sm text-slate-500">본인 계정과 안전하게 연결하는 중입니다...</p>
           </div>
         ) : !isAuthenticated ? (
@@ -98,7 +98,7 @@ export const ClaimTokenPage: React.FC = () => {
             </p>
             <button
               onClick={() => navigate(`/login?returnUrl=/claim/${token}`)}
-              className="w-full h-12 flex items-center justify-center space-x-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition shadow-md shadow-indigo-100"
+              className="w-full h-12 flex items-center justify-center space-x-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition shadow-md shadow-indigo-100"
             >
               <span>로그인하고 계속하기</span>
               <ArrowRight className="w-4 h-4" />

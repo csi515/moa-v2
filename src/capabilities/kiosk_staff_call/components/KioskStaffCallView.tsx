@@ -92,7 +92,7 @@ export function KioskStaffCallView() {
       <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
-            <BellRing className="w-5 h-5 text-indigo-600" />
+            <BellRing className="w-5 h-5 text-slate-800" />
             좌석/룸 스마트 직원 호출 & 디지털 벨보드
           </h1>
           <p className="text-xs text-slate-500 mt-1">
@@ -106,7 +106,7 @@ export function KioskStaffCallView() {
             onClick={() => setViewMode('board')}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
               viewMode === 'board'
-                ? 'bg-white text-indigo-700 shadow-xs'
+                ? 'bg-white text-slate-700 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -117,7 +117,7 @@ export function KioskStaffCallView() {
             onClick={() => setViewMode('pad')}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
               viewMode === 'pad'
-                ? 'bg-white text-indigo-700 shadow-xs'
+                ? 'bg-white text-slate-700 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -193,7 +193,7 @@ export function KioskStaffCallView() {
                         ? 'bg-blue-100 text-blue-700'
                         : req.requestType === 'equipment_issue'
                         ? 'bg-amber-100 text-amber-700'
-                        : 'bg-indigo-100 text-indigo-700'
+                        : 'bg-slate-100 text-slate-700'
                     }`}
                   >
                     {req.isSilent ? (
@@ -264,7 +264,7 @@ export function KioskStaffCallView() {
       {viewMode === 'pad' && (
         <div className="max-w-xl mx-auto bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-6">
           <div className="text-center border-b border-slate-100 pb-4">
-            <span className="text-xs text-indigo-600 font-bold uppercase tracking-wider">SMART CALL PAD</span>
+            <span className="text-xs text-slate-800 font-bold uppercase tracking-wider">SMART CALL PAD</span>
             <h2 className="text-xl font-black text-slate-800 mt-0.5">직원 호출 서비스</h2>
             <div className="mt-3 flex items-center justify-center gap-2">
               <span className="text-xs text-slate-500 font-medium">현재 위치:</span>
@@ -295,7 +295,7 @@ export function KioskStaffCallView() {
             <button
               type="button"
               onClick={() => handleSendCall('temperature', '에어컨/난방 온도를 조절해 주세요')}
-              className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-600 hover:bg-indigo-50/40 text-left transition-all space-y-2 group shadow-2xs"
+              className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-600 hover:bg-slate-50/40 text-left transition-all space-y-2 group shadow-2xs"
             >
               <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Thermometer className="w-5 h-5" />
@@ -309,9 +309,9 @@ export function KioskStaffCallView() {
             <button
               type="button"
               onClick={() => handleSendCall('water_dishes', '추가 물/식기/냅킨을 가져다 주세요')}
-              className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-600 hover:bg-indigo-50/40 text-left transition-all space-y-2 group shadow-2xs"
+              className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-600 hover:bg-slate-50/40 text-left transition-all space-y-2 group shadow-2xs"
             >
-              <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <UtensilsCrossed className="w-5 h-5" />
               </div>
               <div>
@@ -323,7 +323,7 @@ export function KioskStaffCallView() {
             <button
               type="button"
               onClick={() => handleSendCall('equipment_issue', '기기/센서가 작동하지 않습니다')}
-              className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-600 hover:bg-indigo-50/40 text-left transition-all space-y-2 group shadow-2xs"
+              className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-600 hover:bg-slate-50/40 text-left transition-all space-y-2 group shadow-2xs"
             >
               <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Wrench className="w-5 h-5" />
@@ -337,7 +337,7 @@ export function KioskStaffCallView() {
             <button
               type="button"
               onClick={() => handleSendCall('cleaning', '좌석/룸 청소 및 정리가 필요합니다')}
-              className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-600 hover:bg-indigo-50/40 text-left transition-all space-y-2 group shadow-2xs"
+              className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-600 hover:bg-slate-50/40 text-left transition-all space-y-2 group shadow-2xs"
             >
               <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Sparkles className="w-5 h-5" />

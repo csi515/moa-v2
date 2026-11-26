@@ -185,14 +185,14 @@ export const RecitalManagementView: React.FC = () => {
     <div className="space-y-4 pb-4">
       <PageHeader
         icon={<Award className="w-6 h-6" />}
-        iconClassName="text-purple-600"
+        iconClassName="text-slate-800"
         title="연주회·콩쿠르 관리"
         description="정기 연주회 참가 원생 배정, 연주곡 선곡 및 콩쿠르 출전 이력 관리"
         actions={
           canManageRecitals ? (
           <button
             onClick={() => setIsCreateOpen(true)}
-            className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl flex items-center gap-2 w-full sm:w-auto"
+            className="px-4 py-2.5 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-xl flex items-center gap-2 w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" />
             행사 등록
@@ -236,7 +236,7 @@ export const RecitalManagementView: React.FC = () => {
                   className={`w-full text-left bg-white rounded-2xl border p-4 transition-all ${
                     isSelected
                       ? 'border-indigo-400 ring-2 ring-indigo-100 shadow-sm'
-                      : 'border-slate-200/80 hover:border-indigo-200'
+                      : 'border-slate-200/80 hover:border-slate-200'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -245,7 +245,7 @@ export const RecitalManagementView: React.FC = () => {
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                             ev.type === 'concert'
-                              ? 'bg-indigo-100 text-indigo-700'
+                              ? 'bg-slate-100 text-slate-700'
                               : 'bg-amber-100 text-amber-700'
                           }`}
                         >
@@ -263,7 +263,7 @@ export const RecitalManagementView: React.FC = () => {
                         {ev.startDate}
                       </p>
                     </div>
-                    <ChevronRight className={`w-4 h-4 shrink-0 ${isSelected ? 'text-indigo-600' : 'text-slate-300'}`} />
+                    <ChevronRight className={`w-4 h-4 shrink-0 ${isSelected ? 'text-slate-800' : 'text-slate-300'}`} />
                   </div>
                   <div className="flex items-center gap-3 mt-3 text-[11px] text-slate-500">
                     <span className="flex items-center gap-1">
@@ -314,7 +314,7 @@ export const RecitalManagementView: React.FC = () => {
                     <span
                       className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                         selectedEvent.type === 'concert'
-                          ? 'bg-indigo-100 text-indigo-700'
+                          ? 'bg-slate-100 text-slate-700'
                           : 'bg-amber-100 text-amber-700'
                       }`}
                     >
@@ -340,11 +340,11 @@ export const RecitalManagementView: React.FC = () => {
                 <div className="mt-4 p-3 bg-white rounded-xl border border-slate-200">
                   <div className="flex items-center justify-between text-xs mb-2">
                     <span className="font-bold text-slate-700">영상 등록률</span>
-                    <span className="font-black text-indigo-700">{videoCompletionRate}%</span>
+                    <span className="font-black text-slate-700">{videoCompletionRate}%</span>
                   </div>
                   <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-indigo-600 rounded-full transition-all"
+                      className="h-full bg-slate-900 rounded-full transition-all"
                       style={{ width: `${videoCompletionRate}%` }}
                     />
                   </div>
@@ -360,11 +360,11 @@ export const RecitalManagementView: React.FC = () => {
                   onClick={() => setDetailTab('quickBoard')}
                   className={`pb-2.5 px-3 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-all ${
                     detailTab === 'quickBoard'
-                      ? 'border-indigo-600 text-indigo-700'
+                      ? 'border-indigo-600 text-slate-700'
                       : 'border-transparent text-slate-500 hover:text-slate-800'
                   }`}
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                  <Sparkles className="w-3.5 h-3.5 text-slate-800" />
                   1터치 취합 현황판
                 </button>
                 <button
@@ -372,11 +372,11 @@ export const RecitalManagementView: React.FC = () => {
                   onClick={() => setDetailTab('participants')}
                   className={`pb-2.5 px-3 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-all ${
                     detailTab === 'participants'
-                      ? 'border-indigo-600 text-indigo-700'
+                      ? 'border-indigo-600 text-slate-700'
                       : 'border-transparent text-slate-500 hover:text-slate-800'
                   }`}
                 >
-                  <Users className="w-3.5 h-3.5 text-indigo-600" />
+                  <Users className="w-3.5 h-3.5 text-slate-800" />
                   참가 명단 & 연주 영상 ({participants.length}명)
                 </button>
               </div>
@@ -393,7 +393,7 @@ export const RecitalManagementView: React.FC = () => {
               <div className="p-5 space-y-5">
                 <div>
                   <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2 mb-3">
-                    <Users className="w-4 h-4 text-indigo-600" />
+                    <Users className="w-4 h-4 text-slate-800" />
                     참가 학생 ({participants.length}명)
                   </h4>
 
@@ -429,7 +429,7 @@ export const RecitalManagementView: React.FC = () => {
                             {p.parentPhone && (
                               <a
                                 href={`tel:${p.parentPhone}`}
-                                className="text-[11px] text-indigo-600 font-semibold mt-0.5 inline-flex items-center gap-1"
+                                className="text-[11px] text-slate-800 font-semibold mt-0.5 inline-flex items-center gap-1"
                               >
                                 <Phone className="w-3 h-3" /> {formatPhone(p.parentPhone)}
                               </a>
@@ -445,14 +445,14 @@ export const RecitalManagementView: React.FC = () => {
                                 }
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="px-2.5 py-1.5 text-[11px] font-bold bg-white border border-slate-200 rounded-lg text-slate-600 hover:text-indigo-600 flex items-center gap-1"
+                                className="px-2.5 py-1.5 text-[11px] font-bold bg-white border border-slate-200 rounded-lg text-slate-600 hover:text-slate-800 flex items-center gap-1"
                               >
                                 <ExternalLink className="w-3 h-3" /> 영상
                               </a>
                             )}
                             <button
                               onClick={() => openStudent(p.studentId, 'videos')}
-                              className="px-2.5 py-1.5 text-[11px] font-bold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                              className="px-2.5 py-1.5 text-[11px] font-bold bg-slate-900 text-white rounded-lg hover:bg-slate-800"
                             >
                               {p.hasVideo ? '학생 보기' : '영상 등록'}
                             </button>
@@ -488,10 +488,10 @@ export const RecitalManagementView: React.FC = () => {
                         <button
                           key={st.id}
                           onClick={() => handleAddParticipant(st.id)}
-                          className="w-full flex items-center justify-between px-3 py-2 text-xs rounded-xl hover:bg-indigo-50 border border-transparent hover:border-indigo-100"
+                          className="w-full flex items-center justify-between px-3 py-2 text-xs rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200"
                         >
                           <span className="font-semibold text-slate-800">{st.name}</span>
-                          <Plus className="w-3.5 h-3.5 text-indigo-600" />
+                          <Plus className="w-3.5 h-3.5 text-slate-800" />
                         </button>
                       ))
                     )}
@@ -501,27 +501,27 @@ export const RecitalManagementView: React.FC = () => {
                 {eventVideos.length > 0 && (
                   <div className="pt-4 border-t border-slate-100">
                     <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2 mb-3">
-                      <Video className="w-4 h-4 text-purple-600" />
+                      <Video className="w-4 h-4 text-slate-800" />
                       등록된 연주 영상 ({eventVideos.length})
                     </h4>
                     <div className="space-y-2">
                       {eventVideos.map((video) => (
                         <div
                           key={video.id}
-                          className="flex items-center justify-between p-3 rounded-xl bg-purple-50/50 border border-purple-100 text-xs"
+                          className="flex items-center justify-between p-3 rounded-xl bg-slate-50/50 border border-slate-200 text-xs"
                         >
                           <div>
                             <p className="font-bold text-slate-900">{video.studentName}</p>
                             <p className="text-slate-600 mt-0.5">{video.title}</p>
                             {video.songTitle && (
-                              <p className="text-indigo-700 font-semibold mt-0.5">🎵 {video.songTitle}</p>
+                              <p className="text-slate-700 font-semibold mt-0.5">🎵 {video.songTitle}</p>
                             )}
                           </div>
                           <a
                             href={getYouTubeWatchUrl(video.youtubeUrl) || '#'}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 text-indigo-600 hover:bg-white rounded-lg"
+                            className="p-2 text-slate-800 hover:bg-white rounded-lg"
                           >
                             <ExternalLink className="w-4 h-4" />
                           </a>
@@ -587,7 +587,7 @@ export const RecitalManagementView: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-full py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl"
+            className="w-full py-2.5 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl"
           >
             등록
           </button>

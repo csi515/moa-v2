@@ -90,14 +90,14 @@ export const ParentMakeupRequestModal: React.FC<ParentMakeupRequestModalProps> =
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* 보강권 요약 배너 */}
-        <div className="p-3.5 bg-indigo-50/70 rounded-xl border border-indigo-100 text-xs text-indigo-900 space-y-1.5">
+        <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-900 space-y-1.5">
           <div className="flex items-center justify-between font-semibold">
             <span>{studentName} 학생 보강권 (1회)</span>
-            <span className="px-1.5 py-0.5 rounded bg-indigo-600 text-white font-bold text-[10px]">
+            <span className="px-1.5 py-0.5 rounded bg-slate-900 text-white font-bold text-[10px]">
               D-{token.daysRemaining}일 남음
             </span>
           </div>
-          <div className="text-[11px] text-indigo-700/90 flex items-center justify-between">
+          <div className="text-[11px] text-slate-700/90 flex items-center justify-between">
             <span>결석일자: <strong>{token.originDate}</strong></span>
             <span>유효기간: <strong>~{token.expiresAt}까지</strong></span>
           </div>
@@ -124,7 +124,7 @@ export const ParentMakeupRequestModal: React.FC<ParentMakeupRequestModalProps> =
               value={preferredDate}
               onChange={(e) => setPreferredDate(e.target.value)}
               required
-              className="w-full px-3 py-2 text-xs font-medium border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 text-xs font-medium border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
           <p className="text-[11px] text-slate-400">
@@ -141,7 +141,7 @@ export const ParentMakeupRequestModal: React.FC<ParentMakeupRequestModalProps> =
             id="pref-time"
             value={preferredTime}
             onChange={(e) => setPreferredTime(e.target.value)}
-            className="w-full px-3 py-2 text-xs font-medium border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-3 py-2 text-xs font-medium border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
           >
             <option value="13:00">13:00 (오후 1시)</option>
             <option value="14:00">14:00 (오후 2시)</option>
@@ -164,7 +164,7 @@ export const ParentMakeupRequestModal: React.FC<ParentMakeupRequestModalProps> =
             value={memo}
             onChange={(e) => setMemo(e.target.value)}
             placeholder="예: 셔틀 차량 탑승 가능한지 문의드립니다."
-            className="w-full px-3 py-2 text-xs font-medium border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+            className="w-full px-3 py-2 text-xs font-medium border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 resize-none"
           />
         </div>
 
@@ -185,7 +185,7 @@ export const ParentMakeupRequestModal: React.FC<ParentMakeupRequestModalProps> =
           <button
             type="submit"
             disabled={submitting}
-            className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-xs transition-colors cursor-pointer inline-flex items-center gap-1.5 disabled:opacity-50"
+            className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 shadow-xs transition-colors cursor-pointer inline-flex items-center gap-1.5 disabled:opacity-50"
           >
             <Send className="w-3.5 h-3.5" />
             보강 신청하기

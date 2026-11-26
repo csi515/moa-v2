@@ -27,9 +27,9 @@ const THEME_BADGE_STYLES: Record<string, string> = {
   amber: "text-amber-700 bg-amber-50 border-amber-200/80",
   sky: "text-sky-700 bg-sky-50 border-sky-200/80",
   teal: "text-teal-700 bg-teal-50 border-teal-200/80",
-  purple: "text-purple-700 bg-purple-50 border-purple-200/80",
+  purple: "text-slate-700 bg-slate-50 border-slate-200/80",
   slate: "text-slate-700 bg-slate-100 border-slate-200/80",
-  indigo: "text-indigo-700 bg-indigo-50 border-indigo-100/80",
+  indigo: "text-slate-700 bg-slate-50 border-slate-200/80",
 };
 import { customerJoinService } from "@/core/customer/services/customerJoinService";
 import { CustomerJoinRequestsPanel } from "@/core/customer/CustomerJoinRequestsPanel";
@@ -247,18 +247,18 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={handleToggleMode}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 sm:px-3 text-xs font-bold text-indigo-700 hover:bg-indigo-100 transition-colors shadow-xs shrink-0"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1.5 sm:px-3 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors shadow-xs shrink-0"
               title={isCustomerView ? "사업주 운영 모드로 전환" : "고객 이용권 모드로 전환"}
             >
               {isCustomerView ? (
                 <>
-                  <ArrowLeftRight className="h-3.5 w-3.5 text-indigo-600 shrink-0" />
+                  <ArrowLeftRight className="h-3.5 w-3.5 text-slate-800 shrink-0" />
                   <span className="hidden sm:inline">사업주 모드로 전환</span>
                   <span className="sm:hidden">사업주</span>
                 </>
               ) : (
                 <>
-                  <Ticket className="h-3.5 w-3.5 text-indigo-600 shrink-0" />
+                  <Ticket className="h-3.5 w-3.5 text-slate-800 shrink-0" />
                   <span className="hidden sm:inline">고객 모드로 전환</span>
                   <span className="sm:hidden">고객</span>
                 </>

@@ -113,7 +113,7 @@ export const CustomTermsSettingCard: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-indigo-600" />
+            <BookOpen className="w-5 h-5 text-slate-800" />
             <h3 className="text-lg font-bold text-slate-900">매장 맞춤 용어 사전 (Terminology)</h3>
           </div>
           <p className="text-xs text-slate-500 mt-1">
@@ -134,7 +134,7 @@ export const CustomTermsSettingCard: React.FC = () => {
             type="button"
             onClick={handleSave}
             disabled={isSaving}
-            className="px-4 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 rounded-lg shadow-xs flex items-center gap-1.5 transition-colors"
+            className="px-4 py-1.5 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 disabled:opacity-50 rounded-lg shadow-xs flex items-center gap-1.5 transition-colors"
           >
             {saveSuccess ? (
               <>
@@ -184,7 +184,7 @@ export const CustomTermsSettingCard: React.FC = () => {
                 value={currentVal}
                 onChange={(e) => handleChange(key, e.target.value)}
                 placeholder={placeholderVal}
-                className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-300"
+                className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 transition-all placeholder:text-slate-300"
               />
               <p className="text-[11px] text-slate-400">{meta.helper}</p>
             </div>

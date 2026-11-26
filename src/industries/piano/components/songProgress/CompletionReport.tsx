@@ -31,7 +31,7 @@ export const CompletionReport: FC<CompletionReportProps> = ({
   granterNameById,
 }) => {
   return (
-    <section className="bg-gradient-to-br from-indigo-50 via-white to-amber-50 rounded-2xl border border-indigo-100 p-4 space-y-3">
+    <section className="bg-gradient-to-br from-indigo-50 via-white to-amber-50 rounded-2xl border border-slate-200 p-4 space-y-3">
       <div className="flex items-start justify-between gap-2">
         <div>
           <h3 className="text-sm font-black text-slate-900">{SONG_PROGRESS_COPY.reportTitle}</h3>
@@ -43,7 +43,7 @@ export const CompletionReport: FC<CompletionReportProps> = ({
           <button
             type="button"
             onClick={onShare}
-            className="min-h-[44px] px-3 rounded-xl bg-white border border-indigo-200 text-indigo-700 text-xs font-bold inline-flex items-center gap-1.5 hover:bg-indigo-50"
+            className="min-h-[44px] px-3 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold inline-flex items-center gap-1.5 hover:bg-slate-50"
           >
             <Share2 className="w-3.5 h-3.5" />
             {SONG_PROGRESS_COPY.shareCta}
@@ -54,7 +54,7 @@ export const CompletionReport: FC<CompletionReportProps> = ({
       {rows.length === 0 ? (
         <p className="text-xs text-slate-400 text-center py-4">아직 승인·수여된 완곡이 없습니다.</p>
       ) : (
-        <ol className="relative border-l-2 border-indigo-200 ml-2 space-y-3 pl-4">
+        <ol className="relative border-l-2 border-slate-200 ml-2 space-y-3 pl-4">
           {rows.map((r) => {
             const granterId = r.granted_by || r.approved_by;
             const granter =
@@ -63,7 +63,7 @@ export const CompletionReport: FC<CompletionReportProps> = ({
                 : null;
             return (
               <li key={r.id} className="relative">
-                <span className="absolute -left-[1.35rem] top-1 w-2.5 h-2.5 rounded-full bg-indigo-600 ring-4 ring-indigo-100" />
+                <span className="absolute -left-[1.35rem] top-1 w-2.5 h-2.5 rounded-full bg-slate-900 ring-4 ring-indigo-100" />
                 <p className="text-sm font-bold text-slate-900">
                   {r.book_name} · {r.song_title}
                 </p>

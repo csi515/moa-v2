@@ -39,7 +39,7 @@ const STATUS_STYLE: Record<MboStatus, string> = {
   submitted: 'bg-amber-50 text-amber-800',
   approved: 'bg-blue-50 text-blue-800',
   rejected: 'bg-rose-50 text-rose-800',
-  in_progress: 'bg-indigo-50 text-indigo-800',
+  in_progress: 'bg-slate-50 text-indigo-800',
   completed: 'bg-emerald-50 text-emerald-800',
   canceled: 'bg-slate-200 text-slate-500',
 };
@@ -72,7 +72,7 @@ function ProjectCard({
     <article
       className={[
         'rounded-xl border p-3 transition-shadow',
-        selected ? 'border-indigo-400 bg-indigo-50/40 shadow-sm' : 'border-slate-200 bg-white hover:shadow-sm',
+        selected ? 'border-indigo-400 bg-slate-50/40 shadow-sm' : 'border-slate-200 bg-white hover:shadow-sm',
       ].join(' ')}
     >
       <button type="button" className="w-full text-left" onClick={onSelect}>
@@ -99,7 +99,7 @@ function ProjectCard({
         )}
         <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
           <div
-            className="h-full rounded-full bg-indigo-600 transition-all"
+            className="h-full rounded-full bg-slate-900 transition-all"
             style={{ width: `${Math.max(0, Math.min(100, project.progressRate))}%` }}
           />
         </div>
@@ -194,7 +194,7 @@ export const MboProjectPortfolioView: React.FC<MboProjectPortfolioViewProps> = (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
             <FolderKanban className="h-3.5 w-3.5" />
             {title}
           </div>
@@ -417,7 +417,7 @@ export const MboProjectPortfolioView: React.FC<MboProjectPortfolioViewProps> = (
                     활성 {bucket.activeCount}건 · 평균 진척 {bucket.averageProgressRate}%
                   </p>
                 </div>
-                <span className="rounded-full bg-indigo-50 px-2.5 py-1 text-[11px] font-bold text-indigo-700">
+                <span className="rounded-full bg-slate-50 px-2.5 py-1 text-[11px] font-bold text-slate-700">
                   {bucket.projects.length}건
                 </span>
               </div>

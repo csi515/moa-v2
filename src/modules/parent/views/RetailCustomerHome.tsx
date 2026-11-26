@@ -75,15 +75,15 @@ export const RetailCustomerHome: FC<Props> = ({ onNavigate }) => {
               className="w-full bg-white rounded-2xl border border-slate-200 p-5 flex items-center justify-between hover:bg-slate-50 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center">
-                  <Coins className="w-5 h-5 text-indigo-600" />
+                <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center">
+                  <Coins className="w-5 h-5 text-slate-800" />
                 </div>
                 <div className="text-left">
                   <p className="text-sm font-bold text-slate-900">사용 가능 포인트</p>
                   <p className="text-xs text-slate-500">클릭하여 적립/사용 내역 보기</p>
                 </div>
               </div>
-              <p className="text-xl font-black text-indigo-600">
+              <p className="text-xl font-black text-slate-800">
                 {balance.toLocaleString('ko-KR')} <span className="text-sm font-bold text-slate-500">P</span>
               </p>
             </button>

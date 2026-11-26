@@ -192,7 +192,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
+            <span className="p-2 bg-slate-100 text-slate-800 rounded-lg">
               <Calculator className="w-5 h-5" />
             </span>
             <h1 className="text-2xl font-bold text-slate-900">
@@ -206,7 +206,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
+            className="flex items-center gap-1.5 px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition"
           >
             <PlusCircle className="w-4 h-4" />
             실적(매출) 등록
@@ -241,7 +241,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
             <span className="text-sm font-medium">총 세전 인센티브/수당</span>
             <DollarSign className="w-4 h-4 text-indigo-500" />
           </div>
-          <div className="text-2xl font-bold text-indigo-600">
+          <div className="text-2xl font-bold text-slate-800">
             {formatKoreanWon(summary.totalPreTaxEarnings)}
           </div>
           <p className="text-xs text-slate-400 mt-1">기본급 + 요율 커미션 - 공제</p>
@@ -280,7 +280,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
               onClick={() => setSelectedStaffId(p.staffId)}
               className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition flex items-center gap-2 ${
                 isSelected
-                  ? 'bg-indigo-600 text-white shadow-sm'
+                  ? 'bg-slate-900 text-white shadow-sm'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
@@ -304,7 +304,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
               <p className="text-xs text-slate-500">{selectedPolicy.role}</p>
             </div>
             <div className="text-right">
-              <span className="inline-block px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-semibold rounded-full">
+              <span className="inline-block px-2.5 py-1 bg-slate-50 text-slate-700 text-xs font-semibold rounded-full">
                 커미션 요율 {Math.round(selectedPolicy.defaultCommissionRate * 100)}%
               </span>
             </div>
@@ -325,7 +325,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
             </div>
             <div className="flex justify-between text-slate-600">
               <span>매출 인센티브 수당</span>
-              <span className="font-semibold text-indigo-600">+{formatKoreanWon(selectedStatement.totalCommission)}</span>
+              <span className="font-semibold text-slate-800">+{formatKoreanWon(selectedStatement.totalCommission)}</span>
             </div>
 
             <div className="pt-2 border-t border-slate-100 space-y-2">
@@ -365,7 +365,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
               </div>
             </div>
 
-            <div className="pt-3 border-t-2 border-indigo-100">
+            <div className="pt-3 border-t-2 border-slate-200">
               <div className="flex items-center justify-between">
                 <span className="text-base font-bold text-slate-900">세후 실지급액</span>
                 <span className="text-xl font-extrabold text-emerald-600 tabular-nums">
@@ -383,7 +383,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
         <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-indigo-600" />
+              <FileText className="w-4 h-4 text-slate-800" />
               <span>당월 수행 실적 명세 ({selectedItems.length}건)</span>
             </h3>
             <span className="text-xs text-slate-500">
@@ -449,7 +449,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
                             {item.paymentMethod === 'card' ? '카드' : '현금/이체'}
                           </span>
                         </td>
-                        <td className="py-3 px-3 text-right text-indigo-600 font-semibold whitespace-nowrap tabular-nums">
+                        <td className="py-3 px-3 text-right text-slate-800 font-semibold whitespace-nowrap tabular-nums">
                           {formatKoreanWon(commission)}
                           <span className="text-xs text-slate-400 block font-normal tabular-nums">
                             ({Math.round(rate * 100)}%)
@@ -495,7 +495,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
                   value={newServiceName}
                   onChange={(e) => setNewServiceName(e.target.value)}
                   placeholder="예: 발레아쥬 옴브레 염색, 1:1 PT 10회 등"
-                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
                 />
               </div>
 
@@ -507,7 +507,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
                   value={newCustomerName}
                   onChange={(e) => setNewCustomerName(e.target.value)}
                   placeholder="고객 이름"
-                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
                 />
               </div>
 
@@ -521,7 +521,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
                     step={1000}
                     value={newGrossSales}
                     onChange={(e) => setNewGrossSales(Number(e.target.value))}
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
                   />
                 </div>
 
@@ -530,7 +530,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
                   <select
                     value={newPaymentMethod}
                     onChange={(e) => setNewPaymentMethod(e.target.value as PaymentMethod)}
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
                   >
                     <option value="card">신용카드</option>
                     <option value="cash">현금</option>
@@ -550,7 +550,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
                   value={newMaterialCost}
                   onChange={(e) => setNewMaterialCost(Number(e.target.value))}
                   placeholder="0"
-                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
                 />
               </div>
 
@@ -564,7 +564,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700"
+                  className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800"
                 >
                   등록 완료
                 </button>

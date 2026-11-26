@@ -295,15 +295,15 @@ export const PianoLessonTimetableView: FC = () => {
       `}</style>
 
       {pendingStudentId && (
-        <div className="rounded-2xl border border-indigo-200 bg-indigo-50/90 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-indigo-950 font-bold shadow-xs">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50/90 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-indigo-950 font-bold shadow-xs">
           <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
+            <span className="inline-block w-2 h-2 rounded-full bg-slate-900 animate-pulse" />
             <span>배치할 시간대를 시간표에서 클릭하세요.</span>
           </div>
           <button
             type="button"
             onClick={() => setPendingStudentId(null)}
-            className="px-2.5 py-1 rounded-lg bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-50 font-semibold"
+            className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold"
           >
             배치 취소
           </button>
@@ -319,7 +319,7 @@ export const PianoLessonTimetableView: FC = () => {
               type="button"
               onClick={() => setLayoutMode('week')}
               className={`px-3 py-1.5 min-h-[38px] rounded-lg transition-all cursor-pointer ${
-                layoutMode === 'week' ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
+                layoutMode === 'week' ? 'bg-white text-slate-800 shadow-xs' : 'hover:text-slate-900'
               }`}
             >
               전체
@@ -329,7 +329,7 @@ export const PianoLessonTimetableView: FC = () => {
               onClick={() => setLayoutMode('byTeacher')}
               className={`px-3 py-1.5 min-h-[38px] rounded-lg transition-all cursor-pointer ${
                 layoutMode === 'byTeacher'
-                  ? 'bg-white text-indigo-600 shadow-xs'
+                  ? 'bg-white text-slate-800 shadow-xs'
                   : 'hover:text-slate-900'
               }`}
             >
@@ -340,7 +340,7 @@ export const PianoLessonTimetableView: FC = () => {
               onClick={() => setLayoutMode('byRoom')}
               className={`px-3 py-1.5 min-h-[38px] rounded-lg transition-all cursor-pointer ${
                 layoutMode === 'byRoom'
-                  ? 'bg-white text-indigo-600 shadow-xs'
+                  ? 'bg-white text-slate-800 shadow-xs'
                   : 'hover:text-slate-900'
               }`}
             >
@@ -394,10 +394,10 @@ export const PianoLessonTimetableView: FC = () => {
           <button
             type="button"
             onClick={() => navigate('students')}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-xs font-bold transition shadow-2xs cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold transition shadow-2xs cursor-pointer"
             title="원생 목록으로 이동하여 시간표 일괄 배정"
           >
-            <UserPlus className="w-3.5 h-3.5 text-indigo-600" />
+            <UserPlus className="w-3.5 h-3.5 text-slate-800" />
             <span>{customerWord} 목록에서 일괄 배정</span>
           </button>
           <button
@@ -423,7 +423,7 @@ export const PianoLessonTimetableView: FC = () => {
             }}
             className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 ${
               selectedDayFilter === 'ALL'
-                ? 'bg-indigo-600 text-white shadow-xs'
+                ? 'bg-slate-900 text-white shadow-xs'
                 : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
             }`}
           >
@@ -441,13 +441,13 @@ export const PianoLessonTimetableView: FC = () => {
                 }}
                 className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 ${
                   selected
-                    ? 'bg-indigo-600 text-white shadow-xs'
+                    ? 'bg-slate-900 text-white shadow-xs'
                     : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
                 }`}
               >
                 {day}요일
                 {day === todayDay && (
-                  <span className={`ml-1 text-[9px] ${selected ? 'text-indigo-200' : 'text-indigo-600 font-extrabold'}`}>
+                  <span className={`ml-1 text-[9px] ${selected ? 'text-indigo-200' : 'text-slate-800 font-extrabold'}`}>
                     • 오늘
                   </span>
                 )}

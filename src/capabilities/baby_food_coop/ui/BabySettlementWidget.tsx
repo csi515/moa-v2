@@ -142,7 +142,7 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
       {/* 위젯 헤더 */}
       <div className="flex items-center justify-between border-b border-slate-100 pb-3">
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50 text-slate-800">
             <Calculator className="h-5 w-5" />
           </div>
           <div>
@@ -155,7 +155,7 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
           </div>
         </div>
 
-        <span className="inline-flex items-center gap-1 rounded-md bg-indigo-50 px-2 py-1 text-xs font-semibold text-indigo-700">
+        <span className="inline-flex items-center gap-1 rounded-md bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-700">
           <Clock className="h-3.5 w-3.5" />
           {settlementCycle}
         </span>
@@ -173,7 +173,7 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
             value={sessionTitle}
             onChange={(e) => setSessionTitle(e.target.value)}
             placeholder="예: 10월 4주차 초기이유식 품앗이"
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
           />
         </div>
 
@@ -185,7 +185,7 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
             <select
               value={settlementCycle}
               onChange={(e) => setSettlementCycle(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
             >
               <option value="주 1회 (화요일)">주 1회 (화요일)</option>
               <option value="주 1회 (목요일)">주 1회 (목요일)</option>
@@ -211,7 +211,7 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
               value={numericExpense > 0 ? numericExpense.toLocaleString('ko-KR') : ''}
               onChange={handleExpenseChange}
               placeholder="0"
-              className="w-full rounded-lg border border-slate-300 pl-8 pr-3 py-2 text-sm font-semibold text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-300 pl-8 pr-3 py-2 text-sm font-semibold text-slate-900 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
             />
           </div>
           <div className="mt-1.5 flex flex-wrap gap-1">
@@ -241,10 +241,10 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
             참여 아기 수
           </label>
           {participatingBabies.length > 0 ? (
-            <div className="rounded-lg border border-indigo-100 bg-indigo-50/50 p-2 text-xs">
-              <div className="flex items-center justify-between font-bold text-indigo-900 mb-1">
+            <div className="rounded-lg border border-slate-200 bg-slate-50/50 p-2 text-xs">
+              <div className="flex items-center justify-between font-bold text-slate-900 mb-1">
                 <span>선택된 아기: {participatingBabies.length}명</span>
-                <span className="text-[11px] text-indigo-600 font-normal">
+                <span className="text-[11px] text-slate-800 font-normal">
                   (프로필 카드와 자동 연동)
                 </span>
               </div>
@@ -252,7 +252,7 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
                 {participatingBabies.map((b) => (
                   <span
                     key={`part-${b.id}`}
-                    className="inline-block rounded bg-indigo-100 px-1.5 py-0.5 text-[11px] text-indigo-700 font-medium"
+                    className="inline-block rounded bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-700 font-medium"
                   >
                     {b.name}
                   </span>
@@ -278,7 +278,7 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
                     Math.max(1, parseInt(e.target.value, 10) || 1)
                   )
                 }
-                className="w-20 rounded-lg border border-slate-300 py-2 text-center text-sm font-semibold text-slate-900 focus:border-indigo-500 focus:outline-none"
+                className="w-20 rounded-lg border border-slate-300 py-2 text-center text-sm font-semibold text-slate-900 focus:border-slate-900 focus:outline-none"
               />
               <button
                 type="button"
@@ -316,14 +316,14 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
       )}
 
       {/* 실시간 1/N 정산 결과 박스 */}
-      <div className="mt-5 rounded-xl border border-indigo-200 bg-gradient-to-br from-indigo-50/60 to-purple-50/40 p-4">
+      <div className="mt-5 rounded-xl border border-slate-200 bg-gradient-to-br from-indigo-50/60 to-purple-50/40 p-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-indigo-700">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-700">
               1인당 부담 금액
             </span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl font-black text-indigo-900">
+              <span className="text-2xl font-black text-slate-900">
                 {settlement.formattedPerPerson}
               </span>
               <span className="text-xs font-medium text-slate-600">
@@ -342,9 +342,9 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
           </div>
         </div>
 
-        <div className="mt-3 pt-3 border-t border-indigo-100 flex items-center justify-between text-xs text-slate-600">
+        <div className="mt-3 pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-600">
           <div className="flex items-center gap-1.5">
-            <Coins className="h-3.5 w-3.5 text-indigo-600" />
+            <Coins className="h-3.5 w-3.5 text-slate-800" />
             <span>
               검산: {settlement.formattedPerPerson} × {effectiveBabyCount}명 + 잔여{' '}
               {settlement.formattedRemainder} ={' '}
@@ -358,7 +358,7 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
             disabled={numericExpense <= 0}
             className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all shadow-sm ${
               numericExpense > 0
-                ? 'bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95'
+                ? 'bg-slate-900 text-white hover:bg-slate-800 active:scale-95'
                 : 'bg-slate-200 text-slate-600 cursor-not-allowed'
             }`}
           >
@@ -406,7 +406,7 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
                 </div>
 
                 <div className="text-right">
-                  <span className="font-bold text-indigo-700">
+                  <span className="font-bold text-slate-700">
                     1인당 {item.formattedPerPerson}
                   </span>
                   <div className="text-[11px] text-slate-600">

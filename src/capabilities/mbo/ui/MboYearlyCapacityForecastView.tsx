@@ -113,7 +113,7 @@ export const MboYearlyCapacityForecastView: React.FC<MboYearlyCapacityForecastVi
             <span>연간 계획 목표 투입</span>
             <TrendingUp className="h-4 w-4 text-indigo-500" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+          <div className="mt-2 text-2xl font-bold text-slate-800 dark:text-indigo-400">
             {summary.totalPlanned.toLocaleString()}시간
           </div>
         </div>
@@ -181,7 +181,7 @@ export const MboYearlyCapacityForecastView: React.FC<MboYearlyCapacityForecastVi
                     <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
                       {row.totalAvailableHours.toLocaleString()}h
                     </td>
-                    <td className="px-6 py-4 font-medium text-indigo-600 dark:text-indigo-400">
+                    <td className="px-6 py-4 font-medium text-slate-800 dark:text-indigo-400">
                       {row.totalPlannedProjectHours.toLocaleString()}h
                     </td>
                     <td className="px-6 py-4">

@@ -232,7 +232,7 @@ export const ChangeManagementView: React.FC = () => {
       case 'man':
         return 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200';
       case 'machine':
-        return 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200';
+        return 'bg-slate-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200';
       case 'material':
         return 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200';
       case 'method':
@@ -266,7 +266,7 @@ export const ChangeManagementView: React.FC = () => {
       case 'approved':
         return <span className="px-2 py-0.5 text-xs rounded bg-emerald-100 text-emerald-700 font-semibold">승인완료</span>;
       case 'applied':
-        return <span className="px-2 py-0.5 text-xs rounded bg-indigo-100 text-indigo-700 font-bold">현장적용됨</span>;
+        return <span className="px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-700 font-bold">현장적용됨</span>;
       case 'rejected':
         return <span className="px-2 py-0.5 text-xs rounded bg-rose-100 text-rose-700">반려됨</span>;
       default:
@@ -547,14 +547,14 @@ export const ChangeManagementView: React.FC = () => {
                         type="button"
                         onClick={handleApplyChangeOrder}
                         disabled={isUpdatingOrder}
-                        className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow transition-colors"
+                        className="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow transition-colors"
                       >
                         현장 최종 적용 완료 (Apply ECN)
                       </button>
                     )}
 
                     {selectedOrder.status === 'applied' && (
-                      <div className="text-xs text-indigo-600 dark:text-indigo-400 font-bold">
+                      <div className="text-xs text-slate-800 dark:text-indigo-400 font-bold">
                         ✓ {selectedOrder.applied_at?.slice(0, 10)} 현장 적용 완료됨 ({selectedOrder.applied_by})
                       </div>
                     )}

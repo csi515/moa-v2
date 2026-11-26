@@ -262,7 +262,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-indigo-600 text-white rounded-xl shadow-xs">
+            <div className="p-2 bg-slate-900 text-white rounded-xl shadow-xs">
               <CalendarDays className="w-6 h-6" />
             </div>
             <div>
@@ -284,7 +284,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                 onClick={() => setActiveTab('calendar')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   activeTab === 'calendar'
-                    ? 'bg-white text-indigo-900 shadow-xs'
+                    ? 'bg-white text-slate-900 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -295,7 +295,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                 onClick={() => setActiveTab('inbox')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all relative ${
                   activeTab === 'inbox'
-                    ? 'bg-white text-indigo-900 shadow-xs'
+                    ? 'bg-white text-slate-900 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -313,7 +313,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
             <button
               type="button"
               onClick={() => setIsMasterModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-xs transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               새 자원 등록
@@ -350,13 +350,13 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                   onClick={() => setSelectedCategory(tab.id)}
                   className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold border transition-all shrink-0 cursor-pointer ${
                     isSelected
-                      ? 'border-indigo-600 bg-indigo-50/70 text-indigo-900 shadow-2xs'
+                      ? 'border-indigo-600 bg-slate-50 text-slate-900 shadow-2xs'
                       : 'border-slate-200 hover:border-slate-300 text-slate-600 bg-white'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isSelected ? 'text-indigo-600' : 'text-slate-400'}`} />
+                  <Icon className={`w-4 h-4 ${isSelected ? 'text-slate-800' : 'text-slate-400'}`} />
                   <span>{tab.label}</span>
-                  <span className={`text-[11px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-indigo-200 text-indigo-900' : 'bg-slate-100 text-slate-500'}`}>
+                  <span className={`text-[11px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-indigo-200 text-slate-900' : 'bg-slate-100 text-slate-500'}`}>
                     {count}
                   </span>
                 </button>
@@ -399,7 +399,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                 onClick={() => setViewMode('month')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   viewMode === 'month'
-                    ? 'bg-white text-indigo-900 shadow-xs'
+                    ? 'bg-white text-slate-900 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -409,7 +409,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                 onClick={() => setViewMode('week')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   viewMode === 'week'
-                    ? 'bg-white text-indigo-900 shadow-xs'
+                    ? 'bg-white text-slate-900 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -419,7 +419,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                 onClick={() => setViewMode('day')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   viewMode === 'day'
-                    ? 'bg-white text-indigo-900 shadow-xs'
+                    ? 'bg-white text-slate-900 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -499,7 +499,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                                     ? 'bg-amber-50/80 border-l-2 border-l-amber-500'
                                     : isMine
                                       ? 'bg-emerald-50/90 border-l-2 border-l-emerald-600'
-                                      : 'bg-indigo-50/90 border-l-2 border-l-indigo-600'
+                                      : 'bg-slate-50/90 border-l-2 border-l-indigo-600'
                                 }`}
                               >
                                 <div className="text-[11px] font-bold truncate text-slate-800">
@@ -517,7 +517,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                             <button
                               key={res.id}
                               onClick={() => handleOpenBooking(res, slot)}
-                              className="p-1 border-r border-slate-100 last:border-r-0 hover:bg-indigo-50/40 transition-colors group flex items-center justify-center text-slate-300 hover:text-indigo-600"
+                              className="p-1 border-r border-slate-100 last:border-r-0 hover:bg-slate-50/40 transition-colors group flex items-center justify-center text-slate-300 hover:text-slate-800"
                               title={`${res.name} ${slot} 예약 신청`}
                             >
                               <Plus className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -535,7 +535,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
             {viewMode === 'week' && (
               <div className="p-6 text-center text-slate-500 text-xs space-y-4">
                 <div className="max-w-md mx-auto p-4 bg-slate-50 rounded-xl border border-slate-200">
-                  <Clock className="w-6 h-6 text-indigo-600 mx-auto mb-2" />
+                  <Clock className="w-6 h-6 text-slate-800 mx-auto mb-2" />
                   <h4 className="font-bold text-slate-800 mb-1">주간 타임테이블 뷰</h4>
                   <p className="text-[11px] text-slate-500 leading-relaxed">
                     선택된 주간의 요일별 점유 현황을 한눈에 파악할 수 있습니다. 특정 자원의 상세 슬롯은 일간 뷰를 통해 예약 신청하세요.
@@ -545,7 +545,7 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                   {['일', '월', '화', '수', '목', '금', '토'].map((day, idx) => (
                     <div key={day} className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center">
                       <div className="font-bold text-xs text-slate-700">{day}요일</div>
-                      <div className="text-[11px] text-indigo-600 font-semibold mt-1">
+                      <div className="text-[11px] text-slate-800 font-semibold mt-1">
                         예약 {reservations.filter((r) => r.status === 'approved').length}건
                       </div>
                     </div>
@@ -579,14 +579,14 @@ export const UniversalResourceCalendarView: React.FC<UniversalResourceCalendarVi
                         }}
                         className={`min-h-[70px] sm:min-h-[90px] p-2 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
                           isWithinMonth
-                            ? 'bg-white border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/20'
+                            ? 'bg-white border-slate-200 hover:border-indigo-400 hover:bg-slate-50/20'
                             : 'bg-slate-50 border-transparent text-slate-300 pointer-events-none'
                         }`}
                       >
                         <span className="font-bold text-xs text-slate-700">{isWithinMonth ? dayNum : ''}</span>
                         {isWithinMonth && (
                           <div className="text-[10px] space-y-1">
-                            <span className="inline-block px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 font-bold truncate max-w-full">
+                            <span className="inline-block px-1.5 py-0.5 rounded bg-slate-50 text-slate-700 font-bold truncate max-w-full">
                               공용 예약 활성
                             </span>
                           </div>

@@ -46,7 +46,7 @@ export const TeacherPayrollView: React.FC<{ embedded?: boolean }> = ({
           <button
             type="button"
             onClick={() => payroll.setActiveTab('teachers')}
-            className="text-xs font-bold text-indigo-600 hover:underline min-h-[44px] self-start shrink-0"
+            className="text-xs font-bold text-slate-800 hover:underline min-h-[44px] self-start shrink-0"
           >
             강사 정산 기준 설정
           </button>

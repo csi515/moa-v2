@@ -135,7 +135,7 @@ export function ParentMoreView({
               onClick={() => onNavigate(item.id)}
               className="w-full flex items-center gap-3 px-4 py-3.5 min-h-[56px] text-left hover:bg-slate-50"
             >
-              <span className="text-indigo-600 shrink-0">{item.icon}</span>
+              <span className="text-slate-800 shrink-0">{item.icon}</span>
               <span className="min-w-0 flex-1">
                 <span className="block text-sm font-bold text-slate-900">{item.label}</span>
                 <span className="block text-[11px] text-slate-500">{item.description}</span>
@@ -153,7 +153,7 @@ export function ParentMoreView({
             onClick={onSwitchChild}
             className="w-full flex items-center gap-3 px-4 py-3.5 min-h-[56px] text-left hover:bg-slate-50"
           >
-            <Users className="w-5 h-5 text-indigo-600 shrink-0" />
+            <Users className="w-5 h-5 text-slate-800 shrink-0" />
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-bold text-slate-900">{switchCopy.title}</span>
               <span className="block text-[11px] text-slate-500">{switchCopy.description}</span>
@@ -166,7 +166,7 @@ export function ParentMoreView({
             href={`tel:${phone.replace(/\s/g, '')}`}
             className="w-full flex items-center gap-3 px-4 py-3.5 min-h-[56px] text-left hover:bg-slate-50"
           >
-            <Phone className="w-5 h-5 text-indigo-600 shrink-0" />
+            <Phone className="w-5 h-5 text-slate-800 shrink-0" />
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-bold text-slate-900">{place}에 문의</span>
               <span className="block text-[11px] text-slate-500 font-mono">{phone}</span>

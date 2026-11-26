@@ -30,7 +30,7 @@ export const DirectorTodayScheduleSection: FC<DirectorTodayScheduleSectionProps>
       <div className="flex items-center justify-between gap-2">
         <div>
           <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
-            <Clock className="w-4 h-4 text-indigo-600 shrink-0" />
+            <Clock className="w-4 h-4 text-slate-800 shrink-0" />
             오늘 일정
           </h3>
           <p className="text-[11px] text-slate-500 mt-0.5">
@@ -40,7 +40,7 @@ export const DirectorTodayScheduleSection: FC<DirectorTodayScheduleSectionProps>
         <button
           type="button"
           onClick={onOpenSchedule}
-          className="text-xs font-bold text-indigo-600 min-h-[44px] px-1 shrink-0"
+          className="text-xs font-bold text-slate-800 min-h-[44px] px-1 shrink-0"
         >
           시간표 보기
         </button>
@@ -58,7 +58,7 @@ export const DirectorTodayScheduleSection: FC<DirectorTodayScheduleSectionProps>
               className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl border border-slate-100 bg-slate-50/70 min-h-[52px]"
             >
               <div className="min-w-0">
-                <p className="text-[11px] font-bold text-indigo-700 tabular-nums">
+                <p className="text-[11px] font-bold text-slate-700 tabular-nums">
                   {cls.startTime}
                   {cls.endTime ? ` – ${cls.endTime}` : ''}
                 </p>

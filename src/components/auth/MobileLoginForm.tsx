@@ -224,7 +224,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
                   navigate(forgotPath);
                 }
               }}
-              className="text-xs text-indigo-600 hover:text-indigo-800 min-h-[32px] inline-flex items-center font-medium"
+              className="text-xs text-slate-800 hover:text-indigo-800 min-h-[32px] inline-flex items-center font-medium"
               data-testid="link-forgot-password"
             >
               {isEn ? "Forgot password?" : "비밀번호 찾기"}
@@ -255,7 +255,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
               type="checkbox"
               checked={isRemember}
               onChange={(e) => setRemember(e.target.checked)}
-              className="w-4 h-4 rounded text-indigo-600 border-slate-300 focus:ring-indigo-500"
+              className="w-4 h-4 rounded text-slate-800 border-slate-300 focus:ring-slate-900"
             />
             <span className="text-xs text-slate-600 font-medium">
               {isEn ? "Keep me signed in" : "로그인 상태 유지"}
@@ -276,7 +276,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
           type="submit"
           data-testid="btn-email-submit"
           disabled={isLoading}
-          className="w-full mt-2 h-11 min-h-[44px] flex items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white shadow-md bg-indigo-600 shadow-indigo-600/20 hover:bg-indigo-500 disabled:opacity-50 transition-all active:scale-[0.99] cursor-pointer"
+          className="w-full mt-2 h-11 min-h-[44px] flex items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white shadow-md bg-slate-900 shadow-indigo-600/20 hover:bg-indigo-500 disabled:opacity-50 transition-all active:scale-[0.99] cursor-pointer"
         >
           {isLoading ? (
             <>
@@ -293,7 +293,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
       <div className="pt-1 text-center">
         <p className="text-xs text-slate-500">
           {isEn ? "Have an invite code? " : "초대 코드를 받으셨나요? "}
-          <Link to="/invite/accept" className="font-bold text-indigo-600 hover:underline">
+          <Link to="/invite/accept" className="font-bold text-slate-800 hover:underline">
             {isEn ? "Accept invite code" : "초대 코드 등록"}
           </Link>
         </p>
@@ -316,7 +316,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
             }
           }}
           data-testid="link-signup"
-          className="text-xs text-slate-600 hover:text-indigo-600 font-bold inline-flex items-center gap-1 min-h-[44px]"
+          className="text-xs text-slate-600 hover:text-slate-800 font-bold inline-flex items-center gap-1 min-h-[44px]"
         >
           <span>{isEn ? "Need an account? Sign Up" : "계정이 없으신가요? 회원가입"}</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -329,7 +329,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
               type="button"
               onClick={() => onLanguageChange('ko')}
               className={`min-h-[44px] min-w-[44px] px-2 rounded-md transition-all ${
-                !isEn ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
+                !isEn ? 'bg-white text-slate-800 shadow-xs' : 'hover:text-slate-900'
               }`}
             >
               KO
@@ -338,7 +338,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
               type="button"
               onClick={() => onLanguageChange('en')}
               className={`min-h-[44px] min-w-[44px] px-2 rounded-md transition-all ${
-                isEn ? 'bg-white text-indigo-600 shadow-xs' : 'hover:text-slate-900'
+                isEn ? 'bg-white text-slate-800 shadow-xs' : 'hover:text-slate-900'
               }`}
             >
               EN

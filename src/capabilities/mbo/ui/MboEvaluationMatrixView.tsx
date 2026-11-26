@@ -85,7 +85,7 @@ export const MboEvaluationMatrixView: React.FC<MboEvaluationMatrixViewProps> = (
   const getGradeBadge = (grade: MboEvaluationGrade) => {
     switch (grade) {
       case 'S':
-        return <span className="px-2 py-0.5 rounded-full font-black text-xs bg-purple-100 text-purple-700">등급 S (탁월)</span>;
+        return <span className="px-2 py-0.5 rounded-full font-black text-xs bg-slate-100 text-slate-700">등급 S (탁월)</span>;
       case 'A':
         return <span className="px-2 py-0.5 rounded-full font-black text-xs bg-emerald-100 text-emerald-700">등급 A (우수)</span>;
       case 'B':
@@ -169,7 +169,7 @@ export const MboEvaluationMatrixView: React.FC<MboEvaluationMatrixViewProps> = (
       {/* 상단 평가 대시보드 카드 */}
       <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-xs font-semibold mb-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-50 text-slate-700 rounded-full text-xs font-semibold mb-1">
             <Award className="w-3.5 h-3.5" />
             <span>3단계 다면 성과평가표 (자기 20% · 팀장 50% · 임원 30%)</span>
           </div>
@@ -195,7 +195,7 @@ export const MboEvaluationMatrixView: React.FC<MboEvaluationMatrixViewProps> = (
           <button
             type="button"
             onClick={() => setShowModal(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>평가서 등록</span>
@@ -217,7 +217,7 @@ export const MboEvaluationMatrixView: React.FC<MboEvaluationMatrixViewProps> = (
             >
               <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md">
+                  <span className="text-xs font-bold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-md">
                     {getEvaluationTypeLabel(item.evaluationType)}
                   </span>
                   {item.isConfidential && (
@@ -300,7 +300,7 @@ export const MboEvaluationMatrixView: React.FC<MboEvaluationMatrixViewProps> = (
                   type="checkbox"
                   checked={isConfidential}
                   onChange={(e) => setIsConfidential(e.target.checked)}
-                  className="w-4 h-4 text-purple-600 rounded"
+                  className="w-4 h-4 text-slate-800 rounded"
                 />
                 <span className="text-xs font-bold text-slate-700">비공개 평가 (인사 평가자 외 열람 제한)</span>
               </label>
@@ -315,7 +315,7 @@ export const MboEvaluationMatrixView: React.FC<MboEvaluationMatrixViewProps> = (
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs shadow-xs"
+                  className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs shadow-xs"
                 >
                   평가 제출
                 </button>

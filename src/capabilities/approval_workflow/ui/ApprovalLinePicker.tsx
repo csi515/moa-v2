@@ -35,7 +35,7 @@ export const ApprovalLinePicker: React.FC<Props> = ({
             setLineTitle('');
             setSaveOpen(true);
           }}
-          className="h-9 rounded-lg bg-white px-3 text-xs font-semibold text-indigo-700 border border-indigo-200 disabled:opacity-50"
+          className="h-9 rounded-lg bg-white px-3 text-xs font-semibold text-slate-700 border border-slate-200 disabled:opacity-50"
         >
           현재 결재선 저장
         </button>
@@ -66,7 +66,7 @@ export const ApprovalLinePicker: React.FC<Props> = ({
       ) : null}
 
       {saveOpen ? (
-        <div className="space-y-2 rounded-lg border border-indigo-100 bg-white p-3">
+        <div className="space-y-2 rounded-lg border border-slate-200 bg-white p-3">
           <label className="block text-xs font-semibold text-slate-700">
             결재선 이름
             <input
@@ -88,7 +88,7 @@ export const ApprovalLinePicker: React.FC<Props> = ({
             </button>
             <button
               type="button"
-              className="h-10 flex-1 rounded-lg bg-indigo-600 text-xs font-semibold text-white disabled:opacity-50"
+              className="h-10 flex-1 rounded-lg bg-slate-900 text-xs font-semibold text-white disabled:opacity-50"
               disabled={saving || !lineTitle.trim()}
               onClick={() => {
                 setSaving(true);

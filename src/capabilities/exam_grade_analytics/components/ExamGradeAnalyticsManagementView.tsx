@@ -80,15 +80,15 @@ export function ExamGradeAnalyticsManagementView() {
       <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
-            <Award className="w-5 h-5 text-indigo-600" />
+            <Award className="w-5 h-5 text-slate-800" />
             센터 단원평가 성적 채점 & 취약영역 레이더 분석
           </h1>
           <p className="text-xs text-slate-500 mt-1">
             시험 점수 입력 시 반 평균/표준편차(Z-Score)를 자동 산출하고, 영역별 취약 단원을 시각화합니다.
           </p>
         </div>
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-2xl text-xs font-bold border border-indigo-100">
-          <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-700 rounded-2xl text-xs font-bold border border-slate-200">
+          <BookOpen className="w-3.5 h-3.5 text-slate-800" />
           학부모 상담용 객관 리포트
         </div>
       </div>
@@ -97,7 +97,7 @@ export function ExamGradeAnalyticsManagementView() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
           <div className="text-xs font-medium text-slate-500">반 전체 평균 점수</div>
-          <div className="text-2xl font-black text-indigo-600 mt-1">
+          <div className="text-2xl font-black text-slate-800 mt-1">
             {stats.classAverage}<span className="text-xs font-semibold text-slate-400">점</span>
           </div>
           <div className="text-[11px] text-slate-400 mt-0.5">총 {stats.totalSubmissions}명 응시</div>
@@ -141,13 +141,13 @@ export function ExamGradeAnalyticsManagementView() {
               <div key={sub.id} className="p-5 space-y-4 hover:bg-slate-50/50 transition-colors">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-black text-base">
+                    <div className="w-10 h-10 rounded-2xl bg-slate-50 text-slate-700 flex items-center justify-center font-black text-base">
                       {analysis.rank}위
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-black text-slate-800 text-sm">{sub.studentName}</span>
-                        <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
+                        <span className="text-xs font-bold text-slate-800 bg-slate-50 px-2 py-0.5 rounded-full">
                           상위 {analysis.percentileRank}%
                         </span>
                         <span className="text-xs text-slate-400 font-mono">
@@ -198,7 +198,7 @@ export function ExamGradeAnalyticsManagementView() {
                                 ? 'bg-rose-500'
                                 : isStrongest
                                 ? 'bg-emerald-500'
-                                : 'bg-indigo-600'
+                                : 'bg-slate-900'
                             }`}
                             style={{ width: `${cat.percentage}%` }}
                           />
@@ -224,7 +224,7 @@ export function ExamGradeAnalyticsManagementView() {
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-5">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
-                <span className="text-xs text-indigo-600 font-bold uppercase tracking-wider">ACADEMIC REPORT</span>
+                <span className="text-xs text-slate-800 font-bold uppercase tracking-wider">ACADEMIC REPORT</span>
                 <h3 className="font-black text-slate-800 text-lg mt-0.5">
                   {selectedStudent.studentName} 학생 단원평가 분석표
                 </h3>
@@ -250,7 +250,7 @@ export function ExamGradeAnalyticsManagementView() {
                     </div>
                     <div>
                       <div className="text-[11px] text-slate-400">반 석차</div>
-                      <div className="text-lg font-black text-indigo-600 mt-0.5">{analysis.rank}위 ({analysis.percentileRank}%)</div>
+                      <div className="text-lg font-black text-slate-800 mt-0.5">{analysis.rank}위 ({analysis.percentileRank}%)</div>
                     </div>
                     <div>
                       <div className="text-[11px] text-slate-400">반 평균 대비</div>
@@ -272,7 +272,7 @@ export function ExamGradeAnalyticsManagementView() {
                           <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
                             <div
                               className={`h-full rounded-full ${
-                                cat.percentage < 70 ? 'bg-rose-500' : 'bg-indigo-600'
+                                cat.percentage < 70 ? 'bg-rose-500' : 'bg-slate-900'
                               }`}
                               style={{ width: `${cat.percentage}%` }}
                             />
@@ -282,9 +282,9 @@ export function ExamGradeAnalyticsManagementView() {
                     </div>
                   </div>
 
-                  <div className="bg-indigo-50/70 p-4 rounded-2xl border border-indigo-100 text-xs text-indigo-900 leading-relaxed">
+                  <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs text-slate-900 leading-relaxed">
                     <strong>학습 처방 코멘트:</strong> {selectedStudent.studentName} 학생은 
-                    <strong className="text-indigo-700"> '{analysis.strongestCategory.category}'</strong> 영역에서 
+                    <strong className="text-slate-700"> '{analysis.strongestCategory.category}'</strong> 영역에서 
                     {analysis.strongestCategory.percentage}%의 높은 정답률을 보였으나, 
                     <strong className="text-rose-700"> '{analysis.weakestCategory.category}'</strong> 영역의 개념 응용 보강이 추천됩니다.
                   </div>

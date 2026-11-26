@@ -144,7 +144,7 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
             type="button"
             onClick={() => void handleSubmit()}
             disabled={loading || consentFields.length === 0 || !hasSigned}
-            className="flex-1 min-h-[48px] h-12 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 shadow-md shadow-indigo-100 transition-all cursor-pointer"
+            className="flex-1 min-h-[48px] h-12 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 shadow-md shadow-indigo-100 transition-all cursor-pointer"
           >
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -157,8 +157,8 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
       }
     >
       <div className="space-y-4">
-        <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl">
-          <p className="text-sm font-bold text-indigo-900 mb-2">등록 정보</p>
+        <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <p className="text-sm font-bold text-slate-900 mb-2">등록 정보</p>
           <div className="space-y-1 text-sm text-indigo-800">
             <p>• 자녀: <span className="font-bold">{student.displayName}</span></p>
             <p>• {place}: <span className="font-bold">{organization.name}</span></p>
@@ -186,7 +186,7 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
                   type="checkbox"
                   checked={consentFields.includes(field)}
                   onChange={() => toggleField(field)}
-                  className="w-5 h-5 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500"
+                  className="w-5 h-5 text-slate-800 border-slate-300 rounded focus:ring-slate-900"
                   disabled={loading}
                 />
                 <div className="flex-1">
@@ -196,7 +196,7 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
                   <p className="text-xs text-slate-500">{sharedFieldPreview(field, student)}</p>
                 </div>
                 {consentFields.includes(field) && (
-                  <CheckCircle2 className="w-5 h-5 text-indigo-600 shrink-0" />
+                  <CheckCircle2 className="w-5 h-5 text-slate-800 shrink-0" />
                 )}
               </label>
             ))}
@@ -223,7 +223,7 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
         <div>
           <div className="flex items-center justify-between mb-1.5">
             <span className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-              <PenTool className="w-3.5 h-3.5 text-indigo-600" />
+              <PenTool className="w-3.5 h-3.5 text-slate-800" />
               <span>학부모 전자 서명 (필수)</span>
             </span>
             <button

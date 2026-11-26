@@ -355,7 +355,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
             <div>
               <h3 className="text-xl font-black text-slate-900 tracking-tight">시간표 배정 완료!</h3>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                선택한 <strong className="text-indigo-600 font-bold">{assignedResult.count}명</strong>이{' '}
+                선택한 <strong className="text-slate-800 font-bold">{assignedResult.count}명</strong>이{' '}
                 <strong className="text-slate-900 font-bold">[{assignedResult.className}]</strong> 수업 시간표에 성공적으로 배정되었습니다.
               </p>
             </div>
@@ -366,7 +366,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                   handleClose();
                   onNavigateToTimetable?.();
                 }}
-                className="flex-1 min-h-[44px] px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="flex-1 min-h-[44px] px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>주간 시간표에서 바로 확인하기 →</span>
               </button>
@@ -382,22 +382,22 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
         ) : (
           <>
             {/* 선택된 명단 미리보기 배너 */}
-            <div className="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100/60 flex items-center gap-2 overflow-x-auto text-xs">
+            <div className="p-3 bg-slate-50/50 rounded-xl border border-slate-200/60 flex items-center gap-2 overflow-x-auto text-xs">
               <span className="font-bold text-indigo-950 shrink-0 flex items-center gap-1">
-                <Users className="w-3.5 h-3.5 text-indigo-600" />
+                <Users className="w-3.5 h-3.5 text-slate-800" />
                 배정 대상:
               </span>
               <div className="flex items-center gap-1.5 flex-wrap max-h-16 overflow-y-auto">
                 {selectedStudents.slice(0, 8).map((st) => (
                   <span
                     key={st.id}
-                    className="px-2 py-0.5 bg-white border border-indigo-200 text-indigo-700 font-semibold rounded-lg shadow-2xs"
+                    className="px-2 py-0.5 bg-white border border-slate-200 text-slate-700 font-semibold rounded-lg shadow-2xs"
                   >
                     {st.name}
                   </span>
                 ))}
                 {selectedStudents.length > 8 && (
-                  <span className="text-[11px] font-bold text-indigo-600">
+                  <span className="text-[11px] font-bold text-slate-800">
                     외 {selectedStudents.length - 8}명
                   </span>
                 )}
@@ -471,7 +471,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
               onClick={() => setAssignMode('create_new')}
               className={`py-2 px-3 text-xs font-black rounded-xl transition-all cursor-pointer ${
                 assignMode === 'create_new'
-                  ? 'bg-white text-indigo-700 shadow-xs'
+                  ? 'bg-white text-slate-700 shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -482,7 +482,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
               onClick={() => setAssignMode('join_existing')}
               className={`py-2 px-3 text-xs font-black rounded-xl transition-all cursor-pointer ${
                 assignMode === 'join_existing'
-                  ? 'bg-white text-indigo-700 shadow-xs'
+                  ? 'bg-white text-slate-700 shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -497,21 +497,21 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-black text-slate-700 flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+                    <Calendar className="w-3.5 h-3.5 text-slate-800" />
                     수업 요일 선택
                   </label>
                   <div className="flex items-center gap-1">
                     <button
                       type="button"
                       onClick={() => applyPresetDays(['월', '수', '금'])}
-                      className="text-[11px] font-bold px-2 py-0.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 cursor-pointer"
+                      className="text-[11px] font-bold px-2 py-0.5 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 cursor-pointer"
                     >
                       월수금
                     </button>
                     <button
                       type="button"
                       onClick={() => applyPresetDays(['화', '목'])}
-                      className="text-[11px] font-bold px-2 py-0.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 cursor-pointer"
+                      className="text-[11px] font-bold px-2 py-0.5 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 cursor-pointer"
                     >
                       화목
                     </button>
@@ -534,7 +534,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                         onClick={() => toggleDay(d.key)}
                         className={`min-h-[44px] flex items-center justify-center rounded-xl text-xs font-black transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-indigo-600 text-white shadow-xs'
+                            ? 'bg-slate-900 text-white shadow-xs'
                             : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                         }`}
                       >
@@ -548,7 +548,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
               {/* 시간대 선택 */}
               <div>
                 <label className="text-xs font-black text-slate-700 flex items-center gap-1.5 mb-2">
-                  <Clock className="w-3.5 h-3.5 text-indigo-600" />
+                  <Clock className="w-3.5 h-3.5 text-slate-800" />
                   시작 시간
                 </label>
                 <div className="grid grid-cols-4 sm:grid-cols-5 gap-1.5 max-h-32 overflow-y-auto p-1 border border-slate-200 rounded-xl">
@@ -561,8 +561,8 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                         onClick={() => setStartTime(slot)}
                         className={`py-1.5 text-xs font-mono font-bold rounded-lg transition-colors cursor-pointer ${
                           isSelected
-                            ? 'bg-indigo-600 text-white shadow-xs'
-                            : 'bg-slate-50 text-slate-700 hover:bg-indigo-50'
+                            ? 'bg-slate-900 text-white shadow-xs'
+                            : 'bg-slate-50 text-slate-700 hover:bg-slate-50'
                         }`}
                       >
                         {slot}
@@ -580,18 +580,18 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                       type="checkbox"
                       checked={customTimePerDay}
                       onChange={(e) => setCustomTimePerDay(e.target.checked)}
-                      className="rounded text-indigo-600 focus:ring-indigo-500"
+                      className="rounded text-slate-800 focus:ring-slate-900"
                     />
                     <span>요일마다 다른 시간에 시작하기 (요일별 개별 시간 지정)</span>
                   </label>
                   {customTimePerDay && (
-                    <div className="mt-2.5 p-3 rounded-2xl bg-indigo-50/70 border border-indigo-100 space-y-2">
+                    <div className="mt-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                       <p className="text-[11px] font-bold text-indigo-950">선택한 요일별 시작 시간</p>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         {selectedDays.map((d) => (
                           <div
                             key={d}
-                            className="p-2 rounded-xl bg-white border border-indigo-200/80 flex items-center justify-between gap-1 shadow-2xs"
+                            className="p-2 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-1 shadow-2xs"
                           >
                             <span className="font-black text-xs text-indigo-950">{d}요일</span>
                             <select
@@ -622,7 +622,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                   <select
                     value={durationMinutes}
                     onChange={(e) => setDurationMinutes(Number(e.target.value))}
-                    className="w-full text-xs font-semibold border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                    className="w-full text-xs font-semibold border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-slate-900"
                   >
                     {DURATION_OPTIONS.map((opt) => (
                       <option key={opt.minutes} value={opt.minutes}>
@@ -633,7 +633,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                 </div>
                 <div className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-center">
                   <p className="text-[10px] text-slate-400 font-bold">시간표 슬롯</p>
-                  <p className="text-xs font-mono font-black text-indigo-700 mt-0.5">
+                  <p className="text-xs font-mono font-black text-slate-700 mt-0.5">
                     {startTime} ~ {endTime}
                   </p>
                 </div>
@@ -648,7 +648,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                     placeholder={autoGeneratedName}
                     value={customClassName}
                     onChange={(e) => setCustomClassName(e.target.value)}
-                    className="w-full text-xs font-semibold border border-slate-200 rounded-xl px-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                    className="w-full text-xs font-semibold border border-slate-200 rounded-xl px-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-slate-900"
                   />
                 </div>
                 <div>
@@ -659,7 +659,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                     max={30}
                     value={capacity}
                     onChange={(e) => setCapacity(Number(e.target.value))}
-                    className="w-full text-xs font-semibold border border-slate-200 rounded-xl px-3 py-2 text-center focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                    className="w-full text-xs font-semibold border border-slate-200 rounded-xl px-3 py-2 text-center focus:outline-hidden focus:ring-2 focus:ring-slate-900"
                   />
                 </div>
               </div>
@@ -669,7 +669,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
             <div className="space-y-4">
               <div>
                 <label className="text-xs font-black text-slate-700 flex items-center gap-1.5 mb-2">
-                  <Building className="w-3.5 h-3.5 text-indigo-600" />
+                  <Building className="w-3.5 h-3.5 text-slate-800" />
                   기존 개설된 반 선택
                 </label>
                 {existingClasses.length === 0 ? (
@@ -691,8 +691,8 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                           onClick={() => setSelectedExistingClassId(cls.id)}
                           className={`w-full text-left p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-2 ${
                             isSelected
-                              ? 'border-indigo-600 bg-indigo-50/70 ring-1 ring-indigo-500'
-                              : 'border-slate-200 hover:border-indigo-200 hover:bg-slate-50'
+                              ? 'border-indigo-600 bg-slate-50 ring-1 ring-indigo-500'
+                              : 'border-slate-200 hover:border-slate-200 hover:bg-slate-50'
                           }`}
                         >
                           <div className="min-w-0">
@@ -768,7 +768,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
             className={`min-h-[44px] px-5 py-2.5 rounded-xl text-white text-xs font-black shadow-md transition-all cursor-pointer flex items-center gap-1.5 ${
               isOverCapacity && !allowOverCapacity
                 ? 'bg-slate-300 cursor-not-allowed text-slate-500 shadow-none'
-                : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/20'
+                : 'bg-slate-900 hover:bg-slate-800 shadow-indigo-600/20'
             }`}
           >
             <CheckCircle2 className="w-4 h-4" />

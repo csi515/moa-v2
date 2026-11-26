@@ -92,7 +92,7 @@ export function ParentAttendanceView({
           type="button"
           onClick={() => void handleRefresh()}
           disabled={loading || refreshing}
-          className="flex items-center gap-1 text-xs font-bold text-indigo-600 min-h-[44px] px-2"
+          className="flex items-center gap-1 text-xs font-bold text-slate-800 min-h-[44px] px-2"
         >
           {loading || refreshing ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -128,7 +128,7 @@ export function ParentAttendanceView({
               return (
                 <div
                   key={token.id}
-                  className="p-3.5 rounded-xl border border-indigo-100 bg-gradient-to-r from-indigo-50/60 to-purple-50/40 space-y-2 shadow-2xs"
+                  className="p-3.5 rounded-xl border border-slate-200 bg-gradient-to-r from-indigo-50/60 to-purple-50/40 space-y-2 shadow-2xs"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -136,7 +136,7 @@ export function ParentAttendanceView({
                         <span className="font-bold text-sm text-slate-900">
                           1회 보강권 ({reasonLabel})
                         </span>
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-600 text-white">
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-900 text-white">
                           D-{token.daysRemaining}일 남음
                         </span>
                       </div>
@@ -160,7 +160,7 @@ export function ParentAttendanceView({
                       <button
                         type="button"
                         onClick={() => setSelectedTokenForRequest(token)}
-                        className="px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-2xs transition-colors cursor-pointer shrink-0 inline-flex items-center gap-1"
+                        className="px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 shadow-2xs transition-colors cursor-pointer shrink-0 inline-flex items-center gap-1"
                       >
                         <Ticket className="w-3.5 h-3.5" />
                         보강 신청하기
@@ -198,7 +198,7 @@ export function ParentAttendanceView({
                       : ''}
                   </p>
                   {(m.makeUpRoom || m.makeUpTeacherName) && (
-                    <p className="text-[11px] text-indigo-600 mt-0.5">
+                    <p className="text-[11px] text-slate-800 mt-0.5">
                       {[m.makeUpRoom, m.makeUpTeacherName].filter(Boolean).join(' · ')}
                     </p>
                   )}

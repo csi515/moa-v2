@@ -71,7 +71,7 @@ export const CustomerPinPanel: React.FC<CustomerPinPanelProps> = ({ student }) =
   return (
     <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-3">
       <div className="flex items-center gap-2">
-        <KeyRound className="w-4 h-4 text-indigo-600" />
+        <KeyRound className="w-4 h-4 text-slate-800" />
         <h4 className="text-sm font-bold text-slate-900">출결 PIN</h4>
         <span className={`text-[10px] font-bold ml-auto ${pinSet ? 'text-emerald-600' : 'text-rose-500'}`}>
           {pinSet ? '설정됨' : '미설정'}
@@ -91,7 +91,7 @@ export const CustomerPinPanel: React.FC<CustomerPinPanelProps> = ({ student }) =
       )}
 
       {revealedPin && (
-        <div className="bg-indigo-600 text-white rounded-xl p-3 text-center">
+        <div className="bg-slate-900 text-white rounded-xl p-3 text-center">
           <p className="text-[10px] opacity-80">발급된 PIN (한 번만 표시)</p>
           <p className="text-2xl font-black tracking-[0.3em] font-mono mt-1">{revealedPin}</p>
           <p className="text-[10px] opacity-80 mt-2">
@@ -109,7 +109,7 @@ export const CustomerPinPanel: React.FC<CustomerPinPanelProps> = ({ student }) =
           placeholder="직접 입력 (4~8자리)"
           value={customPin}
           onChange={(e) => setCustomPin(e.target.value.replace(/\D/g, ''))}
-          className="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-xl font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          className="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-xl font-mono focus:ring-2 focus:ring-slate-900 focus:outline-none"
           disabled={loading}
         />
         <button
@@ -127,7 +127,7 @@ export const CustomerPinPanel: React.FC<CustomerPinPanelProps> = ({ student }) =
           type="button"
           disabled={loading}
           onClick={handleGenerate}
-          className="flex-1 py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1 min-h-[44px] hover:bg-indigo-700 active:scale-[0.98] transition-all disabled:opacity-50"
+          className="flex-1 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1 min-h-[44px] hover:bg-slate-800 active:scale-[0.98] transition-all disabled:opacity-50"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           {loading ? '발급 중...' : 'PIN 자동 발급'}

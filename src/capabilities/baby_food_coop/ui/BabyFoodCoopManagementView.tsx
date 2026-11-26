@@ -70,10 +70,10 @@ export const BabyFoodCoopManagementView: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-6">
+      <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-indigo-100 px-3 py-1 text-xs font-bold text-indigo-800">
+            <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-indigo-800">
               <Baby className="h-4 w-4" />
               {BABY_FOOD_COOP_COPY.heroBadge}
             </div>
@@ -105,7 +105,7 @@ export const BabyFoodCoopManagementView: React.FC = () => {
         />
       </section>
 
-      <section className="rounded-2xl border border-indigo-200 bg-indigo-50/70 p-4">
+      <section className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
         <h2 className="text-sm font-black text-indigo-950">
           {BABY_FOOD_COOP_COPY.checklistTitle} ({checklistDone}/{checklist.length})
         </h2>
@@ -130,7 +130,7 @@ export const BabyFoodCoopManagementView: React.FC = () => {
         <div className="space-y-4 lg:col-span-7">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-indigo-600" />
+              <Users className="h-5 w-5 text-slate-800" />
               <h2 className="text-base font-bold text-slate-900">
                 {BABY_FOOD_COOP_COPY.babiesHeading} ({babies.length}명)
               </h2>
@@ -140,7 +140,7 @@ export const BabyFoodCoopManagementView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setSelectedBabyIds(new Set(babies.map((b) => b.id)))}
-                  className="min-h-11 font-semibold text-indigo-600 hover:text-indigo-800"
+                  className="min-h-11 font-semibold text-slate-800 hover:text-indigo-800"
                 >
                   {BABY_FOOD_COOP_COPY.selectAll}
                 </button>

@@ -53,7 +53,7 @@ export function MboCycleSettingsCard({ onChange }: Props) {
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
       <div className="mb-3 flex items-center gap-2">
-        <CalendarClock className="h-5 w-5 text-indigo-600" />
+        <CalendarClock className="h-5 w-5 text-slate-800" />
         <h2 className="text-sm font-extrabold text-slate-900">목표 잠금 · 연말 평가 기간</h2>
       </div>
       <p className="mb-4 text-xs text-slate-500">

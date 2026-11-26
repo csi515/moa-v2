@@ -141,11 +141,11 @@ export const FavoriteMenuQuickDock: FC<Props> = ({ onNavigate, activeTab }) => {
                 title={item.description}
                 className={`min-h-[42px] px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer shadow-2xs ${
                   isActive
-                    ? 'bg-indigo-600 text-white shadow-xs scale-[1.02]'
-                    : 'bg-white hover:bg-indigo-50/60 text-slate-700 border border-slate-200/90 hover:border-indigo-300'
+                    ? 'bg-slate-900 text-white shadow-xs scale-[1.02]'
+                    : 'bg-white hover:bg-slate-50/60 text-slate-700 border border-slate-200/90 hover:border-indigo-300'
                 }`}
               >
-                <span className={isActive ? 'text-amber-300' : 'text-indigo-600'}>
+                <span className={isActive ? 'text-amber-300' : 'text-slate-800'}>
                   {renderIcon(item.iconType, 'w-4 h-4')}
                 </span>
                 <span>{item.label}</span>
@@ -184,7 +184,7 @@ export const FavoriteMenuQuickDock: FC<Props> = ({ onNavigate, activeTab }) => {
               <button
                 type="button"
                 onClick={handleSaveFavorites}
-                className="px-5 py-2.5 rounded-xl text-xs font-black text-white bg-indigo-600 hover:bg-indigo-700 shadow-xs transition-colors cursor-pointer"
+                className="px-5 py-2.5 rounded-xl text-xs font-black text-white bg-slate-900 hover:bg-slate-800 shadow-xs transition-colors cursor-pointer"
               >
                 저장하기
               </button>
@@ -204,14 +204,14 @@ export const FavoriteMenuQuickDock: FC<Props> = ({ onNavigate, activeTab }) => {
                   onClick={() => handleToggle(item.tab)}
                   className={`p-3 rounded-2xl border text-left transition-all flex items-start gap-3 cursor-pointer ${
                     isChecked
-                      ? 'bg-indigo-50/80 border-indigo-500 ring-2 ring-indigo-500/20'
+                      ? 'bg-slate-50/80 border-indigo-500 ring-2 ring-indigo-500/20'
                       : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/60'
                   }`}
                 >
                   <div
                     className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${
                       isChecked
-                        ? 'bg-indigo-600 text-white border-indigo-600'
+                        ? 'bg-slate-900 text-white border-indigo-600'
                         : 'bg-slate-100 text-slate-500 border-slate-200'
                     }`}
                   >
@@ -223,7 +223,7 @@ export const FavoriteMenuQuickDock: FC<Props> = ({ onNavigate, activeTab }) => {
                         {item.label}
                       </span>
                       {isChecked && (
-                        <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                        <span className="w-5 h-5 rounded-full bg-slate-900 text-white flex items-center justify-center shrink-0">
                           <Check className="w-3 h-3 stroke-[3]" />
                         </span>
                       )}
