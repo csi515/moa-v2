@@ -12,6 +12,7 @@ import { FilterBar, FilterTabs } from '@/shared/components';
 import { COMBINED_BILLING_STATUS_FILTER_LABELS } from './tuitionViewTypes';
 
 interface TuitionCombinedBillingViewProps {
+  hideFilterBar?: boolean;
   customerLabel: string;
   students: Student[];
   selectedMonth: string;
@@ -58,6 +59,7 @@ export const TuitionCombinedBillingView: React.FC<TuitionCombinedBillingViewProp
   searchQuery,
   onSelectStudent,
   onCombinedPay,
+  hideFilterBar = false,
   statusFilter: controlledStatusFilter,
   onStatusFilterChange,
 }) => {
@@ -92,16 +94,18 @@ export const TuitionCombinedBillingView: React.FC<TuitionCombinedBillingViewProp
 
   return (
     <div className="space-y-3">
-      <FilterBar>
-        <FilterTabs
-          tabs={statusFilterTabs}
-          active={workStatusFilter}
-          onChange={(id) => setWorkStatusFilter(id as MonthlyTuitionWorkFilter)}
-        />
-      </FilterBar>
+      {!hideFilterBar && (
+        <FilterBar>
+          <FilterTabs
+            tabs={statusFilterTabs}
+            active={workStatusFilter}
+            onChange={(id) => setWorkStatusFilter(id as MonthlyTuitionWorkFilter)}
+          />
+        </FilterBar>
+      )}
 
       {/* 데스크톱 테이블 */}
-      <div className="hidden md:block bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
+      <div className="hidden md:block bg-white rounded-lg border border-slate-200/80 shadow-xs overflow-hidden">
         <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-1 text-xs">
           <span className="font-bold text-slate-800">
             {customerLabel}별 총 청구/수납/미납 현황 (수강료 + 교재비 자동 합산)
@@ -139,7 +143,7 @@ export const TuitionCombinedBillingView: React.FC<TuitionCombinedBillingViewProp
                       <td className="px-6 py-4">
                         <button
                           onClick={() => onSelectStudent(student.id)}
-                          className="font-bold text-slate-900 hover:text-indigo-600 text-left block"
+                          className="font-bold text-slate-900 hover:text-slate-900 text-left block"
                         >
                           {student.name}
                         </button>
@@ -208,7 +212,7 @@ export const TuitionCombinedBillingView: React.FC<TuitionCombinedBillingViewProp
       {/* 모바일 카드 */}
       <div className="md:hidden space-y-3">
         {filteredStudents.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs">{emptyMessage}</div>
+          <div className="bg-white rounded-lg border border-slate-200/80 shadow-xs">{emptyMessage}</div>
         ) : (
           filteredStudents.map((student) => {
             const summary = TuitionService.getStudentBillingSummary(student.id, selectedMonth);
@@ -217,13 +221,13 @@ export const TuitionCombinedBillingView: React.FC<TuitionCombinedBillingViewProp
             return (
               <div
                 key={student.id}
-                className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-4 space-y-3"
+                className="bg-white rounded-lg border border-slate-200/80 shadow-xs p-4 space-y-3"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <button
                       onClick={() => onSelectStudent(student.id)}
-                      className="font-bold text-slate-900 hover:text-indigo-600 text-sm text-left"
+                      className="font-bold text-slate-900 hover:text-slate-900 text-sm text-left"
                     >
                       {student.name}
                     </button>

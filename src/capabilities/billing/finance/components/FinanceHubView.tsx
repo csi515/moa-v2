@@ -128,7 +128,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
       <div className="space-y-4 pb-4">
         <PageHeader
           density="compact"
-          icon={<CreditCard className="w-6 h-6 text-indigo-600" />}
+          icon={<CreditCard className="w-6 h-6 text-slate-800" />}
           title={`${tuitionTabLabel} 관리`}
           description="회원별 수납 내역 및 미납금 현황을 통합 관리"
           actions={
@@ -139,7 +139,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
               aria-label="수납 메뉴"
               fullWidth
               className="w-full sm:w-auto min-w-[240px]"
-              activeClassName="bg-indigo-600 text-white"
+              activeClassName="bg-slate-900 text-white"
             />
           }
         />

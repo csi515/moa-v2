@@ -21,6 +21,7 @@ import { formatCurrency, formatPhone } from '@/utils/formatters';
 import { CombinedPaymentModal } from '../tuition/CombinedPaymentModal';
 import {
   AlertCircle,
+  CheckCircle,
   CreditCard,
   BookOpen,
   Phone,
@@ -73,67 +74,48 @@ export const UnpaidManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
 
   return (
     <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
-      {embedded ? (
-        <>
-          <div className="grid grid-cols-2 gap-2">
-            <SummaryMetricCard label={`미납 ${customerLabel}`} value={`${stats.studentCount}명`} />
-            <SummaryMetricCard
-              label="총 미납액"
-              value={formatCurrency(stats.grandTotal)}
-              variant="rose"
-            />
-            <SummaryMetricCard
-              label="수강료 미납"
-              value={formatCurrency(stats.tuitionTotal)}
-              variant="indigo"
-            />
-            <SummaryMetricCard
-              label="교재비 미납"
-              value={formatCurrency(stats.textbookTotal)}
-              variant="amber"
-            />
-          </div>
-        </>
-      ) : (
+      {!embedded && (
         <PageHeader
-          icon={<AlertCircle className="w-6 h-6" />}
-          iconClassName="text-rose-600"
+          icon={<AlertCircle className="w-6 h-6 text-slate-700" />}
           title="미납 통합 관리"
           description={`수강료·교재비 미납을 ${customerLabel}별로 한눈에 확인하고 수납 처리합니다`}
         />
       )}
 
-            {!embedded && (
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <SummaryMetricCard
-          label={`미납 ${customerLabel}`}
-          value={`${stats.studentCount}명`}
-          onClick={() => setFilterMode('all')}
-          className={`cursor-pointer transition-all hover:scale-[1.02] ${filterMode === 'all' ? 'ring-2 ring-indigo-500 shadow-xs' : ''}`}
-        />
-        <SummaryMetricCard
-          label="총 미납액"
-          value={formatCurrency(stats.grandTotal)}
-          variant="rose"
-          onClick={() => setFilterMode('all')}
-          className={`cursor-pointer transition-all hover:scale-[1.02] ${filterMode === 'all' ? 'ring-2 ring-rose-500 shadow-xs' : ''}`}
-        />
-        <SummaryMetricCard
-          label="수강료 미납"
-          value={formatCurrency(stats.tuitionTotal)}
-          variant="indigo"
-          onClick={() => setFilterMode('tuition')}
-          className={`cursor-pointer transition-all hover:scale-[1.02] ${filterMode === 'tuition' ? 'ring-2 ring-indigo-500 shadow-xs' : ''}`}
-        />
-        <SummaryMetricCard
-          label="교재비 미납"
-          value={formatCurrency(stats.textbookTotal)}
-          variant="amber"
-          onClick={() => setFilterMode('textbook')}
-          className={`cursor-pointer transition-all hover:scale-[1.02] ${filterMode === 'textbook' ? 'ring-2 ring-amber-500 shadow-xs' : ''}`}
-        />
+      {/* 4열 1행 KPI 요약 카드 (B2B 표준 톤앤매너) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="p-3.5 sm:p-4 rounded-lg border border-slate-200 bg-white shadow-2xs flex flex-col justify-between">
+          <span className="text-xs font-semibold text-slate-500">미납 {customerLabel}</span>
+          <div className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 tabular-nums my-1">
+            {stats.studentCount}명
+          </div>
+          <span className="text-[11px] text-slate-400">당월 미수 발생 대상</span>
+        </div>
+
+        <div className="p-3.5 sm:p-4 rounded-lg border border-slate-200 bg-white shadow-2xs flex flex-col justify-between">
+          <span className="text-xs font-semibold text-slate-500">총 미납액</span>
+          <div className="text-xl sm:text-2xl font-bold tracking-tight text-rose-600 tabular-nums my-1">
+            {formatCurrency(stats.grandTotal)}
+          </div>
+          <span className="text-[11px] text-rose-600/80 font-medium">전체 미수 합계</span>
+        </div>
+
+        <div className="p-3.5 sm:p-4 rounded-lg border border-slate-200 bg-white shadow-2xs flex flex-col justify-between">
+          <span className="text-xs font-semibold text-slate-500">수강료 미납</span>
+          <div className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 tabular-nums my-1">
+            {formatCurrency(stats.tuitionTotal)}
+          </div>
+          <span className="text-[11px] text-slate-400">정규 수강료 항목</span>
+        </div>
+
+        <div className="p-3.5 sm:p-4 rounded-lg border border-slate-200 bg-white shadow-2xs flex flex-col justify-between">
+          <span className="text-xs font-semibold text-slate-500">교재·부대비 미납</span>
+          <div className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 tabular-nums my-1">
+            {formatCurrency(stats.textbookTotal)}
+          </div>
+          <span className="text-[11px] text-slate-400">교재 및 기타 항목</span>
+        </div>
       </div>
-      )}
 
       <FilterBar>
         <FilterTabs tabs={filterTabs} active={filterMode} onChange={(id) => setFilterMode(id as UnpaidFilter)} />
@@ -146,25 +128,19 @@ export const UnpaidManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
       </FilterBar>
 
       {filtered.length === 0 ? (
-        <EmptyState
-          icon={<span className="text-3xl">🎉</span>}
-          title="미납 내역이 없습니다!"
-          description="청구서를 발행하고 입금을 처리하면 미납이 여기 표시됩니다."
-          guide={{
-            badge: '30초 시작 가이드',
-            title: '수납·미납 흐름',
-            tip: '미납이 비어 있으면 정상입니다. 청구 후 미수금이 생기면 이 목록에 나타납니다.',
-            steps: [
-              { stepNumber: 1, title: '수납 메뉴에서 청구', detail: '월회비·교재비 청구서를 만듭니다.' },
-              { stepNumber: 2, title: '입금 확인', detail: '입금이 오면 수납 완료로 처리합니다.' },
-              { stepNumber: 3, title: '미납 추적', detail: '미수금이 있으면 이 화면에서 연락·수납합니다.' },
-            ],
-          }}
-        />
+        <div className="bg-white rounded-lg border border-slate-200 p-12 text-center shadow-2xs">
+          <div className="w-12 h-12 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <CheckCircle className="w-6 h-6 text-emerald-600" />
+          </div>
+          <h3 className="text-base font-bold text-slate-900 mb-1">미납 내역이 없습니다</h3>
+          <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            청구서를 발행하고 입금을 처리하면 내역이 표시됩니다.
+          </p>
+        </div>
       ) : (
         <>
           {/* 데스크톱 테이블 */}
-          <div className="hidden md:block bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+          <div className="hidden md:block bg-white rounded-lg border border-slate-200/80 shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
@@ -242,7 +218,7 @@ export const UnpaidManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
           {filtered.map((s) => (
             <div
               key={s.studentId}
-              className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-4 sm:p-5"
+              className="bg-white rounded-lg border border-slate-200/80 shadow-xs p-4 sm:p-5"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>

@@ -53,7 +53,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
 
   return (
     <div className="space-y-3">
-      <div className="hidden md:block bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
+      <div className="hidden md:block bg-white rounded-lg border border-slate-200/80 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
@@ -91,7 +91,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                         <button
                           type="button"
                           onClick={() => onSelectStudent(inv.studentId)}
-                          className="font-bold text-slate-900 hover:text-indigo-600 transition-colors text-left"
+                          className="font-bold text-slate-900 hover:text-slate-900 transition-colors text-left"
                         >
                           {inv.studentName}
                         </button>
@@ -112,7 +112,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                       <td className="py-3.5 px-4 font-extrabold text-slate-900 tabular-nums">
                         <span className="block">{formatCurrency(inv.totalAmount)}</span>
                         {((inv.textbookFee || 0) > 0 || (inv.extraFee || 0) > 0) && (
-                          <span className="block text-[10px] font-medium text-indigo-600 mt-0.5">
+                          <span className="block text-[10px] font-medium text-slate-900 mt-0.5">
                             {(inv.textbookFee || 0) > 0 ? '교재' : ''}
                             {(inv.textbookFee || 0) > 0 && (inv.extraFee || 0) > 0 ? '·' : ''}
                             {(inv.extraFee || 0) > 0 ? '행사비' : ''} 포함
@@ -160,7 +160,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                               title="카카오톡/문자 원비 청구 안내 복사/공유"
                               className="inline-flex items-center gap-1 px-2.5 py-2 min-h-[40px] border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-xl text-xs transition-colors shadow-2xs cursor-pointer"
                             >
-                              <MessageSquare className="w-3.5 h-3.5 text-indigo-600" />
+                              <MessageSquare className="w-3.5 h-3.5 text-slate-900" />
                               청구 안내
                             </button>
                           )}
@@ -186,7 +186,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
 
       <div className="block md:hidden space-y-3">
         {filteredInvoices.length === 0 ? (
-          <div className="bg-white rounded-3xl p-8 text-center text-slate-400 font-medium border border-slate-200">
+          <div className="bg-white rounded-lg p-8 text-center text-slate-400 font-medium border border-slate-200">
             해당 조건의 수납 내역이 없습니다.
           </div>
         ) : (
@@ -200,7 +200,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
             return (
               <div
                 key={inv.id}
-                className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-2xs space-y-3"
+                className="bg-white rounded-lg p-4 border border-slate-200/90 shadow-2xs space-y-3"
               >
                 <div className="flex items-start justify-between gap-2">
                     <div>
@@ -208,7 +208,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                         <button
                           type="button"
                           onClick={() => onSelectStudent(inv.studentId)}
-                          className="font-bold text-sm text-slate-900 hover:text-indigo-600 text-left"
+                          className="font-bold text-sm text-slate-900 hover:text-slate-900 text-left"
                         >
                           {inv.studentName}
                         </button>
@@ -244,7 +244,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                     {st?.parentPhone && (
                       <a
                         href={`tel:${st.parentPhone}`}
-                        className="text-indigo-600 font-medium hover:underline"
+                        className="text-slate-900 font-medium hover:underline"
                       >
                         {st.parentPhone}
                       </a>
@@ -267,7 +267,7 @@ export const TuitionInvoiceListView: React.FC<TuitionInvoiceListViewProps> = ({
                         onClick={() => setSelectedShareInvoice(inv)}
                         className="inline-flex items-center gap-1 px-3 py-2 min-h-[40px] border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-xl text-xs shadow-2xs cursor-pointer"
                       >
-                        <MessageSquare className="w-3.5 h-3.5 text-indigo-600" />
+                        <MessageSquare className="w-3.5 h-3.5 text-slate-900" />
                         청구 안내
                       </button>
                     )}
