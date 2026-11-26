@@ -706,7 +706,7 @@ export const PianoConsultationHubView: FC = () => {
           isOpen={showAvailabilityModal}
           onClose={() => setShowAvailabilityModal(false)}
           title="상담 가능시간 및 예약 규칙 설정"
-          description="학부모가 온라인/QR로 상담을 신청할 수 있는 요일별 시간대와 슬롯 간격을 설정합니다."
+          description="고객이 온라인/QR로 예약을 신청할 수 있는 요일별 시간대와 간격을 설정합니다."
           maxWidth="2xl"
         >
           <div className="p-4 sm:p-6">
@@ -715,6 +715,7 @@ export const PianoConsultationHubView: FC = () => {
               title="상담 가능시간"
               defaultSlotTitle="상담"
               defaultSlotMinutes={30}
+              onClose={() => setShowAvailabilityModal(false)}
             />
           </div>
         </Modal>

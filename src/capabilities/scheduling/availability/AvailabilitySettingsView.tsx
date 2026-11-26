@@ -1,5 +1,5 @@
-﻿import { useCallback, useEffect, useMemo, useState, type FC } from 'react';
-import { CalendarOff, Clock, Loader2, Plus, RefreshCw, Trash2 } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState, type FC } from 'react';
+import { CalendarOff, Clock, Copy, Loader2, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { PageHeader, EmptyState } from '@/shared/components';
@@ -16,6 +16,7 @@ import { getIntervalMinutes, getOverrideWindows } from './windows';
 
 const WEEKDAYS: AvailabilityDayOfWeek[] = [1, 2, 3, 4, 5, 6, 0];
 const WEEKDAYS_MON_FRI: AvailabilityDayOfWeek[] = [1, 2, 3, 4, 5];
+const WEEKDAYS_WEEKEND: AvailabilityDayOfWeek[] = [6, 0];
 const SLOT_OPTIONS: AvailabilitySlotMinutes[] = [15, 20, 30, 45, 60];
 
 type DayDraft = {
@@ -55,6 +56,7 @@ interface AvailabilitySettingsViewProps {
   defaultSlotTitle?: string;
   defaultSlotMinutes?: AvailabilitySlotMinutes;
   embedded?: boolean;
+  onClose?: () => void;
 }
 
 function toHm(value: string): string {
@@ -63,10 +65,11 @@ function toHm(value: string): string {
 
 export const AvailabilitySettingsView: FC<AvailabilitySettingsViewProps> = ({
   title = '가능 시간 설정',
-  description = '매주 반복되는 가능 시간과 특정 날짜 예외를 설정합니다.',
+  description = '고객이 온라인/QR로 예약을 신청할 수 있는 요일별 시간대와 간격을 설정합니다.',
   defaultSlotTitle = '상담',
   defaultSlotMinutes = 30,
   embedded = false,
+  onClose,
 }) => {
   const { currentOrganization } = useOrganization();
   const [rules, setRules] = useState<AvailabilityRule[]>([]);
@@ -148,7 +151,43 @@ export const AvailabilitySettingsView: FC<AvailabilitySettingsViewProps> = ({
       }
       return next;
     });
-    showToast('평일(월~금)에 동일 시간을 적용했습니다. 저장을 눌러 반영하세요.', 'info');
+    showToast('평일(월~금)에 동일 시간을 적용했습니다.', 'info');
+  };
+
+  const applyWeekendSame = () => {
+    const sat = dayDraft[6];
+    const sun = dayDraft[0];
+    const source = sat.enabled ? sat : sun.enabled ? sun : sat;
+    setDayDraft((prev) => {
+      const next = { ...prev };
+      for (const d of WEEKDAYS_WEEKEND) {
+        next[d] = {
+          enabled: true,
+          windows: source.windows.map((w) => ({ ...w })),
+        };
+      }
+      return next;
+    });
+    showToast('주말(토~일)에 동일 시간을 적용했습니다.', 'info');
+  };
+
+  const copyDayToWeekdays = (sourceDay: AvailabilityDayOfWeek) => {
+    const source = dayDraft[sourceDay];
+    if (!source.enabled) {
+      showToast(`${DAY_OF_WEEK_LABELS[sourceDay]}요일이 비활성화 상태입니다.`, 'warning');
+      return;
+    }
+    setDayDraft((prev) => {
+      const next = { ...prev };
+      for (const d of WEEKDAYS_MON_FRI) {
+        next[d] = {
+          enabled: true,
+          windows: source.windows.map((w) => ({ ...w })),
+        };
+      }
+      return next;
+    });
+    showToast(`${DAY_OF_WEEK_LABELS[sourceDay]}요일 시간대를 평일(월~금)에 복사했습니다.`, 'info');
   };
 
   const updateDay = (day: AvailabilityDayOfWeek, patch: Partial<DayDraft>) => {
@@ -200,9 +239,12 @@ export const AvailabilitySettingsView: FC<AvailabilitySettingsViewProps> = ({
           });
         }
       }
-      showToast('상담 가능시간을 저장했습니다.', 'success');
+      showToast('예약 가능시간을 저장했습니다.', 'success');
       await load();
       await syncSlots();
+      if (onClose) {
+        onClose();
+      }
     } catch (err) {
       console.error(err);
       showToast.error(err, '저장에 실패했습니다.');
@@ -264,16 +306,16 @@ export const AvailabilitySettingsView: FC<AvailabilitySettingsViewProps> = ({
   if (loading) {
     return (
       <div className="py-16 flex justify-center">
-        <Loader2 className="w-7 h-7 text-indigo-600 animate-spin" />
+        <Loader2 className="w-6 h-6 text-slate-700 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className={embedded ? 'space-y-5' : 'space-y-4 pb-4'}>
+    <div className="space-y-5 text-slate-800">
       {!embedded && (
         <PageHeader
-          icon={<Clock className="w-6 h-6" />}
+          icon={<Clock className="w-5 h-5 text-slate-700" />}
           title={title}
           description={description}
           actions={
@@ -281,129 +323,199 @@ export const AvailabilitySettingsView: FC<AvailabilitySettingsViewProps> = ({
               type="button"
               onClick={() => void syncSlots()}
               disabled={syncing}
-              className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white text-xs font-bold rounded-xl flex items-center gap-2"
+              className="px-3.5 py-2 min-h-[40px] bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 text-white text-xs font-medium rounded-lg flex items-center gap-1.5 transition-colors shadow-xs"
             >
-              {syncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+              {syncing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
               예약 슬롯 동기화
             </button>
           }
         />
       )}
 
-      {embedded && (
-        <div className="flex justify-end">
-          <button
-            type="button"
-            onClick={() => void syncSlots()}
-            disabled={syncing}
-            className="px-4 py-2.5 min-h-[44px] bg-slate-100 hover:bg-slate-200 disabled:opacity-60 text-slate-700 text-xs font-bold rounded-xl flex items-center gap-2"
-          >
-            {syncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
-            슬롯 동기화
-          </button>
-        </div>
-      )}
-
-      <section className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+      {/* 요일별 반복 가능시간 설정 */}
+      <section className="space-y-2.5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-1">
           <div>
-            <h3 className="text-sm font-bold text-slate-900">매주 반복되는 상담 가능시간</h3>
-            <p className="text-xs text-slate-500 mt-0.5">활성화된 요일 {enabledCount}개</p>
+            <h3 className="text-sm font-semibold text-slate-900">매주 반복되는 예약 가능시간</h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              운영 요일 <span className="font-medium text-slate-700">{enabledCount}일</span> 설정됨
+            </p>
           </div>
-          <button
-            type="button"
-            onClick={applyWeekdaySame}
-            className="min-h-[44px] px-3 py-2 text-xs font-bold rounded-xl border border-indigo-200 text-indigo-700 bg-indigo-50 hover:bg-indigo-100"
-          >
-            평일 동일 시간 적용
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={applyWeekdaySame}
+              className="px-2.5 py-1.5 text-xs font-medium rounded-md border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 transition-colors shadow-xs"
+            >
+              평일 동일 적용
+            </button>
+            <button
+              type="button"
+              onClick={applyWeekendSame}
+              className="px-2.5 py-1.5 text-xs font-medium rounded-md border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 transition-colors shadow-xs"
+            >
+              주말 동일 적용
+            </button>
+          </div>
         </div>
 
-        <div className="space-y-3">
+        {/* 1줄 인라인 가로 배치 리스트 */}
+        <div className="border border-slate-200 rounded-lg divide-y divide-slate-100 bg-white overflow-hidden shadow-xs">
           {WEEKDAYS.map((day) => {
             const draft = dayDraft[day];
             return (
               <div
                 key={day}
-                className={`rounded-xl border p-3 space-y-2 ${
-                  draft.enabled ? 'border-indigo-100 bg-indigo-50/30' : 'border-slate-100 bg-slate-50/50'
+                className={`p-2.5 sm:px-3 sm:py-2.5 transition-colors ${
+                  draft.enabled ? 'bg-white' : 'bg-slate-50/50'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <label className="inline-flex items-center gap-2 min-h-[44px] cursor-pointer">
+                {/* 첫 번째 줄 (요일 체크박스 + 첫 번째 시간 구간 or 비활성화 표시) */}
+                <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-[90px] shrink-0">
                     <input
                       type="checkbox"
+                      id={`avail-day-${day}`}
                       checked={draft.enabled}
                       onChange={(e) => updateDay(day, { enabled: e.target.checked })}
-                      className="w-4 h-4 rounded border-slate-300 text-indigo-600"
+                      className="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 focus:ring-offset-0 cursor-pointer"
                     />
-                    <span className="text-sm font-bold text-slate-800 w-6">
-                      {DAY_OF_WEEK_LABELS[day]}
-                    </span>
-                  </label>
-                  {!draft.enabled && (
-                    <span className="text-xs text-slate-400">상담 없음</span>
-                  )}
-                </div>
+                    <label
+                      htmlFor={`avail-day-${day}`}
+                      className={`text-xs sm:text-sm font-medium cursor-pointer select-none ${
+                        draft.enabled ? 'text-slate-900 font-semibold' : 'text-slate-400'
+                      }`}
+                    >
+                      {DAY_OF_WEEK_LABELS[day]}요일
+                    </label>
+                  </div>
 
-                {draft.enabled && (
-                  <div className="space-y-2 pl-1 sm:pl-8">
-                    {draft.windows.map((win, idx) => (
-                      <div key={idx} className="flex flex-wrap items-center gap-2">
+                  {!draft.enabled ? (
+                    <div className="flex-1 text-left sm:text-right">
+                      <span className="text-xs text-slate-400 font-normal">운영 안 함 (예약 불가)</span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-1 items-center justify-between sm:justify-end gap-2 flex-wrap sm:flex-nowrap">
+                      {/* 1번 시간 구간 */}
+                      <div className="flex items-center gap-1.5">
                         <input
                           type="time"
-                          value={win.start_time}
-                          onChange={(e) => updateWindow(day, idx, { start_time: e.target.value })}
-                          className="px-2.5 py-2 min-h-[40px] text-sm rounded-lg border border-slate-200 bg-white"
+                          value={draft.windows[0]?.start_time || '14:00'}
+                          onChange={(e) => updateWindow(day, 0, { start_time: e.target.value })}
+                          className="px-2 py-1 text-xs sm:text-sm font-medium rounded-md border border-slate-200 bg-white text-slate-800 tabular-nums focus:border-slate-400 focus:outline-none w-24 sm:w-28"
                         />
-                        <span className="text-slate-400 text-xs">─</span>
+                        <span className="text-slate-400 text-xs">~</span>
                         <input
                           type="time"
-                          value={win.end_time}
-                          onChange={(e) => updateWindow(day, idx, { end_time: e.target.value })}
-                          className="px-2.5 py-2 min-h-[40px] text-sm rounded-lg border border-slate-200 bg-white"
+                          value={draft.windows[0]?.end_time || '19:00'}
+                          onChange={(e) => updateWindow(day, 0, { end_time: e.target.value })}
+                          className="px-2 py-1 text-xs sm:text-sm font-medium rounded-md border border-slate-200 bg-white text-slate-800 tabular-nums focus:border-slate-400 focus:outline-none w-24 sm:w-28"
                         />
+                      </div>
+
+                      {/* 액션 버튼들 */}
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateDay(day, {
+                              windows: [
+                                ...draft.windows,
+                                { start_time: '09:00', end_time: '12:00' },
+                              ],
+                            })
+                          }
+                          className="p-1.5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                          title="시간 구간 추가"
+                          aria-label="시간 구간 추가"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                        </button>
+
                         {draft.windows.length > 1 && (
                           <button
                             type="button"
                             onClick={() =>
                               updateDay(day, {
-                                windows: draft.windows.filter((_, i) => i !== idx),
+                                windows: draft.windows.slice(1),
                               })
                             }
-                            className="min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-400 hover:text-rose-600"
-                            aria-label="구간 삭제"
+                            className="p-1.5 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                            title="첫 구간 삭제"
+                            aria-label="첫 구간 삭제"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         )}
+
+                        <button
+                          type="button"
+                          onClick={() => copyDayToWeekdays(day)}
+                          className="p-1.5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                          title="평일(월~금)에 이 시간 복사"
+                          aria-label="평일(월~금)에 이 시간 복사"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                        </button>
                       </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        updateDay(day, {
-                          windows: [
-                            ...draft.windows,
-                            { start_time: '09:00', end_time: '12:00' },
-                          ],
-                        })
-                      }
-                      className="text-xs font-bold text-indigo-600 inline-flex items-center gap-1 min-h-[36px]"
-                    >
-                      <Plus className="w-3.5 h-3.5" />
-                      시간 추가
-                    </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* 추가 시간 구간들 (2개 이상인 경우 아래로 깔끔하게 들여쓰기 배치) */}
+                {draft.enabled && draft.windows.length > 1 && (
+                  <div className="mt-2 pt-2 border-t border-slate-100 sm:pl-[100px] flex flex-col gap-1.5">
+                    {draft.windows.slice(1).map((win, idx) => {
+                      const realIndex = idx + 1;
+                      return (
+                        <div key={realIndex} className="flex items-center justify-between sm:justify-end gap-2">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[11px] text-slate-400 w-12 sm:hidden">추가구간:</span>
+                            <input
+                              type="time"
+                              value={win.start_time}
+                              onChange={(e) => updateWindow(day, realIndex, { start_time: e.target.value })}
+                              className="px-2 py-1 text-xs sm:text-sm font-medium rounded-md border border-slate-200 bg-white text-slate-800 tabular-nums focus:border-slate-400 focus:outline-none w-24 sm:w-28"
+                            />
+                            <span className="text-slate-400 text-xs">~</span>
+                            <input
+                              type="time"
+                              value={win.end_time}
+                              onChange={(e) => updateWindow(day, realIndex, { end_time: e.target.value })}
+                              className="px-2 py-1 text-xs sm:text-sm font-medium rounded-md border border-slate-200 bg-white text-slate-800 tabular-nums focus:border-slate-400 focus:outline-none w-24 sm:w-28"
+                            />
+                          </div>
+                          <div className="flex items-center gap-1 shrink-0">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                updateDay(day, {
+                                  windows: draft.windows.filter((_, i) => i !== realIndex),
+                                })
+                              }
+                              className="p-1.5 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                              title="구간 삭제"
+                              aria-label="구간 삭제"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
             );
           })}
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+      {/* 예약 규칙 (소요 시간 & 간격) */}
+      <section className="bg-slate-50/70 border border-slate-200 rounded-lg p-3 sm:p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <label className="block space-y-1">
-            <span className="text-xs font-bold text-slate-500">상담 시간</span>
+            <span className="text-xs font-semibold text-slate-700">예약 1회당 시간</span>
             <select
               value={slotMinutes}
               onChange={(e) => {
@@ -411,7 +523,7 @@ export const AvailabilitySettingsView: FC<AvailabilitySettingsViewProps> = ({
                 setSlotMinutes(v);
                 if (intervalMinutes === slotMinutes) setIntervalMinutes(v);
               }}
-              className="w-full px-3 py-2.5 min-h-[44px] text-sm rounded-xl border border-slate-200 bg-slate-50"
+              className="w-full px-2.5 py-1.5 text-xs sm:text-sm font-medium rounded-md border border-slate-200 bg-white text-slate-800 focus:border-slate-400 focus:outline-none"
             >
               {SLOT_OPTIONS.map((m) => (
                 <option key={m} value={m}>
@@ -421,11 +533,11 @@ export const AvailabilitySettingsView: FC<AvailabilitySettingsViewProps> = ({
             </select>
           </label>
           <label className="block space-y-1">
-            <span className="text-xs font-bold text-slate-500">예약 시작 간격</span>
+            <span className="text-xs font-semibold text-slate-700">예약 신청 시작 간격</span>
             <select
               value={intervalMinutes}
               onChange={(e) => setIntervalMinutes(Number(e.target.value) as AvailabilitySlotMinutes)}
-              className="w-full px-3 py-2.5 min-h-[44px] text-sm rounded-xl border border-slate-200 bg-slate-50"
+              className="w-full px-2.5 py-1.5 text-xs sm:text-sm font-medium rounded-md border border-slate-200 bg-white text-slate-800 focus:border-slate-400 focus:outline-none"
             >
               {SLOT_OPTIONS.map((m) => (
                 <option key={m} value={m}>
@@ -435,153 +547,123 @@ export const AvailabilitySettingsView: FC<AvailabilitySettingsViewProps> = ({
             </select>
           </label>
         </div>
-
-        <button
-          type="button"
-          onClick={() => void handleSaveRules()}
-          disabled={saving}
-          className="w-full sm:w-auto min-h-[44px] px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white text-sm font-bold inline-flex items-center justify-center gap-2"
-        >
-          {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-          저장
-        </button>
       </section>
 
-      <section className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 space-y-4">
-        <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-          <CalendarOff className="w-4 h-4 text-slate-500" />
-          특정 날짜 예외
-        </h3>
+      {/* 특정 날짜 예외 (Overrides) */}
+      <section className="border border-slate-200 rounded-lg p-3 sm:p-4 space-y-3 bg-white">
+        <h4 className="text-xs font-semibold text-slate-800 flex items-center gap-1.5">
+          <CalendarOff className="w-3.5 h-3.5 text-slate-500" />
+          특정 날짜 예외 (휴무일 · 특별 예약일)
+        </h4>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <label className="block space-y-1">
-            <span className="text-xs font-bold text-slate-500">날짜</span>
-            <input
-              type="date"
-              value={overrideDate}
-              onChange={(e) => setOverrideDate(e.target.value)}
-              className="w-full px-3 py-2.5 min-h-[44px] text-sm rounded-xl border border-slate-200 bg-slate-50"
-            />
-          </label>
-          <label className="block space-y-1">
-            <span className="text-xs font-bold text-slate-500">유형</span>
-            <select
-              value={overrideClosed ? 'closed' : 'open'}
-              onChange={(e) => setOverrideClosed(e.target.value === 'closed')}
-              className="w-full px-3 py-2.5 min-h-[44px] text-sm rounded-xl border border-slate-200 bg-slate-50"
-            >
-              <option value="closed">상담 불가</option>
-              <option value="open">임시 상담 가능</option>
-            </select>
-          </label>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <input
+            type="date"
+            value={overrideDate}
+            onChange={(e) => setOverrideDate(e.target.value)}
+            className="px-2.5 py-1.5 text-xs sm:text-sm rounded-md border border-slate-200 bg-white text-slate-800 focus:border-slate-400 focus:outline-none"
+          />
+          <select
+            value={overrideClosed ? 'closed' : 'open'}
+            onChange={(e) => setOverrideClosed(e.target.value === 'closed')}
+            className="px-2.5 py-1.5 text-xs sm:text-sm rounded-md border border-slate-200 bg-white text-slate-800 focus:border-slate-400 focus:outline-none"
+          >
+            <option value="closed">예약 불가 (휴무)</option>
+            <option value="open">임시 운영 (예약 가능)</option>
+          </select>
+
+          <button
+            type="button"
+            onClick={() => void handleAddOverride()}
+            className="px-3 py-1.5 text-xs font-medium rounded-md border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 transition-colors shrink-0"
+          >
+            + 예외 등록
+          </button>
         </div>
 
         {!overrideClosed && (
-          <div className="space-y-2">
-            {overrideWindows.map((win, idx) => (
-              <div key={idx} className="flex flex-wrap items-center gap-2">
-                <input
-                  type="time"
-                  value={win.start_time}
-                  onChange={(e) =>
-                    setOverrideWindows((prev) =>
-                      prev.map((w, i) => (i === idx ? { ...w, start_time: e.target.value } : w))
-                    )
-                  }
-                  className="px-2.5 py-2 min-h-[40px] text-sm rounded-lg border border-slate-200"
-                />
-                <span className="text-slate-400 text-xs">─</span>
-                <input
-                  type="time"
-                  value={win.end_time}
-                  onChange={(e) =>
-                    setOverrideWindows((prev) =>
-                      prev.map((w, i) => (i === idx ? { ...w, end_time: e.target.value } : w))
-                    )
-                  }
-                  className="px-2.5 py-2 min-h-[40px] text-sm rounded-lg border border-slate-200"
-                />
-                {overrideWindows.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setOverrideWindows((prev) => prev.filter((_, i) => i !== idx))
-                    }
-                    className="min-h-[40px] min-w-[40px] text-slate-400 hover:text-rose-600"
-                    aria-label="구간 삭제"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() =>
-                setOverrideWindows((prev) => [
-                  ...prev,
-                  { start_time: '09:00', end_time: '12:00' },
-                ])
+          <div className="p-2.5 rounded-md bg-slate-50 border border-slate-100 flex items-center gap-2 flex-wrap">
+            <span className="text-xs text-slate-500 font-medium">운영 시간:</span>
+            <input
+              type="time"
+              value={overrideWindows[0]?.start_time || '14:00'}
+              onChange={(e) =>
+                setOverrideWindows((prev) => [{ ...prev[0], start_time: e.target.value }])
               }
-              className="text-xs font-bold text-indigo-600 inline-flex items-center gap-1 min-h-[36px]"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              시간 추가
-            </button>
+              className="px-2 py-1 text-xs rounded-md border border-slate-200 bg-white text-slate-800 tabular-nums"
+            />
+            <span className="text-slate-400 text-xs">~</span>
+            <input
+              type="time"
+              value={overrideWindows[0]?.end_time || '17:00'}
+              onChange={(e) =>
+                setOverrideWindows((prev) => [{ ...prev[0], end_time: e.target.value }])
+              }
+              className="px-2 py-1 text-xs rounded-md border border-slate-200 bg-white text-slate-800 tabular-nums"
+            />
           </div>
         )}
 
-        <button
-          type="button"
-          onClick={() => void handleAddOverride()}
-          className="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50"
-        >
-          + 예외 날짜 추가
-        </button>
-
-        {overrides.length === 0 ? (
-          <EmptyState
-            icon={<CalendarOff className="w-10 h-10" />}
-            title="등록된 예외가 없습니다"
-            description="휴가·임시 휴무·특별 상담일 등을 추가하세요."
-          />
-        ) : (
-          <ul className="space-y-2">
+        {overrides.length > 0 && (
+          <div className="divide-y divide-slate-100 border-t border-slate-100 pt-2 space-y-1">
             {overrides.map((o) => {
               const wins = getOverrideWindows(o);
               return (
-                <li
+                <div
                   key={o.id}
-                  className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl border border-slate-100 bg-slate-50/80"
+                  className="flex items-center justify-between gap-2 py-1.5 text-xs"
                 >
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-slate-800">{o.override_date}</p>
-                    <p className="text-xs text-slate-500">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-slate-800">{o.override_date}</span>
+                    <span className={`px-1.5 py-0.5 rounded text-[11px] ${
+                      o.is_closed ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-700'
+                    }`}>
                       {o.is_closed
-                        ? '상담 불가'
-                        : wins.map((w) => `${toHm(w.start_time)} ~ ${toHm(w.end_time)}`).join(', ')}
-                    </p>
+                        ? '예약 불가'
+                        : wins.map((w) => `${toHm(w.start_time)}~${toHm(w.end_time)}`).join(', ')}
+                    </span>
                   </div>
                   <button
                     type="button"
                     onClick={() => void handleRemoveOverride(o.id)}
-                    className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-rose-600"
+                    className="p-1 text-slate-400 hover:text-rose-600 rounded transition-colors"
                     aria-label="예외 삭제"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-3.5 h-3.5" />
                   </button>
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
         )}
       </section>
 
-      {rules.length === 0 && enabledCount === 0 && (
-        <p className="text-xs text-slate-500 text-center">
-          아직 저장된 반복 규칙이 없습니다. 요일을 켠 뒤 저장하세요.
-        </p>
-      )}
+      {/* Sticky Footer */}
+      <div className="sticky bottom-0 -mx-4 sm:-mx-6 -mb-4 sm:-mb-6 px-4 sm:px-6 py-3.5 bg-white/95 backdrop-blur-xs border-t border-slate-200 flex items-center justify-between gap-3 z-10">
+        <div className="text-xs text-slate-500">
+          운영 요일 <span className="font-semibold text-slate-800">{enabledCount}일</span> 선택됨
+        </div>
+        <div className="flex items-center gap-2">
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-xs sm:text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+            >
+              닫기
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => void handleSaveRules()}
+            disabled={saving}
+            className="px-5 py-2 text-xs sm:text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 rounded-lg inline-flex items-center gap-2 transition-colors shadow-xs"
+          >
+            {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+            설정 저장
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
