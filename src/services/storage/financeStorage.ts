@@ -146,22 +146,24 @@ export function createFinanceStorage(api: StorageApi) {
     },
 
     getFinanceSummary(industry: string = 'piano'): FinanceSummary {
-      const expenses = (api.getExpenses as () => Expense[])();
-      const incomeEntries = (api.getIncomeEntries as () => IncomeEntry[])();
+      const expenses = ((api.getExpenses as () => Expense[])() || []);
+      const incomeEntries = ((api.getIncomeEntries as () => IncomeEntry[])() || []);
       const currentYearMonth = yearMonthLocal();
 
       const getIncomeForMonth = (ym: string, linkedOnly?: boolean): number =>
         incomeEntries
           .filter((e) => {
-            if (!e.date.startsWith(ym)) return false;
+            if (!e || !e.date || typeof e.date !== 'string' || !e.date.startsWith(ym)) return false;
             if (linkedOnly === true) return e.sourceType === 'tuition' || e.sourceType === 'textbook';
             if (linkedOnly === false) return !e.sourceType || e.sourceType === 'manual';
             return true;
           })
-          .reduce((sum, e) => sum + e.amount, 0);
+          .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
 
       const getExpenseForMonth = (ym: string): number =>
-        expenses.filter((e) => e.date.startsWith(ym)).reduce((sum, e) => sum + e.amount, 0);
+        expenses
+          .filter((e) => e && e.date && typeof e.date === 'string' && e.date.startsWith(ym))
+          .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
 
       const manualIncomeThisMonth = getIncomeForMonth(currentYearMonth, false);
       const linkedIncomeThisMonth = getIncomeForMonth(currentYearMonth, true);

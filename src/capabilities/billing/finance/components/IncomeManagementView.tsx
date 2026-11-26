@@ -67,7 +67,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
 
   const filteredEntries = useMemo(() => {
     return entries.filter((e) => {
-      if (selectedMonth && !e.date.startsWith(selectedMonth)) return false;
+      if (selectedMonth && (!e?.date || typeof e.date !== 'string' || !e.date.startsWith(selectedMonth))) return false;
       if (categoryFilter !== 'ALL' && e.category !== categoryFilter) return false;
       return true;
     });
@@ -156,8 +156,8 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
 
   if (!hasFinanceAccess) {
     return (
-      <div className="bg-white rounded-3xl border border-slate-200 p-8 text-center max-w-md mx-auto my-6 shadow-sm space-y-4">
-        <div className="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mx-auto">
+      <div className="bg-white rounded-lg border border-slate-200 p-8 text-center max-w-md mx-auto my-6 shadow-sm space-y-4">
+        <div className="w-12 h-12 bg-rose-50 text-rose-600 rounded-lg flex items-center justify-center mx-auto">
           <ShieldAlert className="w-6 h-6" />
         </div>
         <div className="space-y-1">
@@ -185,7 +185,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
           </div>
         )}
         {embedded && (
-          <div className="flex-1 min-w-0 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2.5">
+          <div className="flex-1 min-w-0 rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-2.5">
             <p className="text-[10px] font-bold text-emerald-700">{selectedMonth} 수입 합계</p>
             <p className="text-base font-black text-emerald-700 tabular-nums mt-0.5">
               {formatCurrency(totalAmount)}
@@ -195,7 +195,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
         )}
         <button
           onClick={handleOpenCreate}
-          className="px-4 py-2.5 min-h-[44px] bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 self-start sm:self-auto sm:ml-auto shrink-0"
+          className="px-4 py-2.5 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-lg transition-all shadow-md flex items-center gap-2 self-start sm:self-auto sm:ml-auto shrink-0"
         >
           <Plus className="w-4 h-4" />
           신규 수입 등록
@@ -203,7 +203,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
       </div>
 
       {!embedded && (
-        <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs">
+        <div className="bg-white rounded-lg p-4 border border-slate-200/80 shadow-xs">
           <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             {selectedMonth} 직접 등록 수입
           </span>
@@ -212,12 +212,12 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
         </div>
       )}
 
-      <div className="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-white p-3.5 rounded-lg border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2.5">
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="px-3.5 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl font-bold"
+            className="px-3.5 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-lg font-bold"
           >
             {monthOptions.map((m) => (
               <option key={m.value} value={m.value}>
@@ -228,7 +228,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-3.5 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl"
+            className="px-3.5 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-lg"
           >
             <option value="ALL">전체 항목</option>
             {categoryOptions.map((c) => (
@@ -261,7 +261,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
       ) : (
         <div className="space-y-3">
           {/* 데스크톱 테이블 */}
-          <div className="hidden md:block bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+          <div className="hidden md:block bg-white rounded-lg border border-slate-200/80 shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
@@ -328,7 +328,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
           {/* 모바일 카드 */}
           <div className="md:hidden space-y-3">
             {filteredEntries.map((entry) => (
-              <div key={entry.id} className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-4 space-y-2">
+              <div key={entry.id} className="bg-white rounded-lg border border-slate-200/80 shadow-xs p-4 space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <p className="font-bold text-slate-900 text-sm">
@@ -349,13 +349,13 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                 <div className="flex gap-2 pt-2 border-t border-slate-100">
                   <button
                     onClick={() => handleOpenEdit(entry)}
-                    className="flex-1 min-h-[44px] text-xs font-bold rounded-xl bg-slate-100 text-slate-700"
+                    className="flex-1 min-h-[44px] text-xs font-bold rounded-lg bg-slate-100 text-slate-700"
                   >
                     수정
                   </button>
                   <button
                     onClick={() => handleDelete(entry)}
-                    className="flex-1 min-h-[44px] text-xs font-bold rounded-xl bg-rose-50 text-rose-700"
+                    className="flex-1 min-h-[44px] text-xs font-bold rounded-lg bg-rose-50 text-rose-700"
                   >
                     삭제
                   </button>
@@ -368,7 +368,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
 
       {isModalOpen && (
         <div onClick={() => setIsModalOpen(false)} className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-xs cursor-pointer">
-          <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 w-full sm:max-w-md max-h-[90vh] flex flex-col overflow-hidden cursor-default">
+          <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-t-3xl sm:rounded-lg shadow-2xl border border-slate-200 w-full sm:max-w-md max-h-[90vh] flex flex-col overflow-hidden cursor-default">
             <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between shrink-0">
               <h3 className="font-bold text-slate-900 text-base">
                 {editingEntry ? '수입 내역 수정' : '신규 수입 등록'}
@@ -376,7 +376,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-slate-600 rounded-xl"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-slate-600 rounded-lg"
                 aria-label="닫기"
               >
                 <X className="w-5 h-5" />
@@ -390,7 +390,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                   required
                   value={formData.date}
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
+                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -399,7 +399,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl font-bold"
+                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg font-bold"
                   >
                     {categoryOptions.map((c) => (
                       <option key={c.value} value={c.value}>
@@ -426,7 +426,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                   required
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
+                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -436,7 +436,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                     type="text"
                     value={formData.payer}
                     onChange={(e) => setFormData({ ...formData, payer: e.target.value })}
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
+                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none"
                   />
                 </div>
                 <div>
@@ -444,7 +444,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                   <select
                     value={formData.paymentMethod}
                     onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value as PaymentMethod })}
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl"
+                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg"
                   >
                     <option value="transfer">이체</option>
                     <option value="card">카드</option>
@@ -458,20 +458,20 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
                   type="text"
                   value={formData.memo}
                   onChange={(e) => setFormData({ ...formData, memo: e.target.value })}
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none"
+                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none"
                 />
               </div>
               <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 rounded-xl"
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 rounded-lg"
                 >
                   취소
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md flex items-center gap-1.5"
+                  className="px-5 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-lg shadow-md flex items-center gap-1.5"
                 >
                   <Save className="w-3.5 h-3.5" />
                   저장
