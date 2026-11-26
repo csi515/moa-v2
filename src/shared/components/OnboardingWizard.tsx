@@ -14,6 +14,8 @@ import { getIndustryType } from '@/services/adapters/storageContext';
 import { getBusinessRule } from '@/app/presets/presetBusinessRules';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
+import { availabilityCapability } from '@/capabilities/scheduling/availability/availabilityCapability';
+import type { AvailabilityDayOfWeek, AvailabilitySlotMinutes } from '@/capabilities/scheduling/availability/types';
 import { formatNumberWithCommas } from '@/utils/formatters';
 import {
   Building2,
@@ -118,6 +120,13 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
   });
 
   const [textbooks, setTextbooks] = useState<DraftTextbook[]>([]);
+
+  // Step 5: 상담 가능시간 설정 상태
+  const [consultationDays, setConsultationDays] = useState<number[]>([1, 2, 3, 4, 5]);
+  const [consultationStartTime, setConsultationStartTime] = useState('14:00');
+  const [consultationEndTime, setConsultationEndTime] = useState('19:00');
+  const [consultationSlotMinutes, setConsultationSlotMinutes] = useState<number>(30);
+  const [isSavingConsultation, setIsSavingConsultation] = useState(false);
   const [draftTextbook, setDraftTextbook] = useState({ title: '', price: '15000' });
 
   useEffect(() => {
@@ -340,6 +349,49 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       showToast(`${savedCount}권의 교재가 등록되었습니다.`, 'success');
     }
     goNext();
+  };
+
+  const handleSaveConsultation = async () => {
+    const orgId = org?.currentOrganization?.id;
+    if (!orgId) {
+      goNext();
+      return;
+    }
+
+    if (consultationDays.length === 0) {
+      showToast('상담을 진행할 요일을 최소 1개 이상 선택해 주세요. (또는 [건너뛰기]를 누르세요)', 'warning');
+      return;
+    }
+
+    if (consultationStartTime >= consultationEndTime) {
+      showToast('종료 시간은 시작 시간보다 늦어야 합니다.', 'warning');
+      return;
+    }
+
+    setIsSavingConsultation(true);
+    try {
+      for (let d = 0; d <= 6; d++) {
+        await availabilityCapability.deactivateRulesForDay(orgId, d as AvailabilityDayOfWeek);
+        if (consultationDays.includes(d)) {
+          await availabilityCapability.createRule(orgId, {
+            day_of_week: d as AvailabilityDayOfWeek,
+            start_time: consultationStartTime,
+            end_time: consultationEndTime,
+            slot_minutes: consultationSlotMinutes as AvailabilitySlotMinutes,
+            interval_minutes: consultationSlotMinutes as AvailabilitySlotMinutes,
+            title: '입학 및 수강 상담',
+          });
+        }
+      }
+      showToast('상담 가능시간이 설정되었습니다.', 'success');
+      goNext();
+    } catch (err) {
+      console.error(err);
+      showToast.error(err, '상담 가능시간 저장 중 오류가 발생했습니다. 나중에 설정에서 다시 변경할 수 있습니다.');
+      goNext();
+    } finally {
+      setIsSavingConsultation(false);
+    }
   };
 
   const openConsultationSettings = () => {
@@ -813,25 +865,149 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
 
 
           {step === 5 && (
-            <div className="p-6 space-y-4">
-              <p className="text-sm text-slate-500">
-                상담 예약 가능 시간은 설정에서 관리합니다. QR·예약 화면은 그대로 사용하며, 이
-                단계에서 새로 만들지 않습니다.
-              </p>
-              <div className="rounded-xl border border-indigo-100 bg-indigo-50/50 p-4 space-y-2">
-                <p className="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
-                  <MessageSquareText className="w-4 h-4" />
-                  상담 · 가능 시간
-                </p>
-                <p className="text-[11px] text-indigo-800/80 leading-relaxed">
-                  설정 → 부가 → 「상담 가능시간」에서 요일·시간대를 설정할 수 있습니다.
+            <div className="p-6 space-y-5">
+              <div className="space-y-1">
+                <h4 className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                  <MessageSquareText className="w-4 h-4 text-indigo-600" />
+                  학부모 상담 예약 가능 시간 설정
+                </h4>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  신규 원생 학부모가 예약할 수 있는 요일과 시간대를 설정합니다. 언제든 설정 메뉴에서 수정할 수 있습니다.
                 </p>
               </div>
+
+              {/* 빠른 프리셋 버튼 */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-semibold text-slate-400">빠른 설정:</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConsultationDays([1, 2, 3, 4, 5]);
+                    setConsultationStartTime('14:00');
+                    setConsultationEndTime('19:00');
+                  }}
+                  className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
+                >
+                  평일 오후 (14~19시)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConsultationDays([1, 2, 3, 4, 5]);
+                    setConsultationStartTime('16:00');
+                    setConsultationEndTime('21:00');
+                  }}
+                  className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
+                >
+                  평일 저녁 (16~21시)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConsultationDays((prev) =>
+                      prev.includes(6) ? prev : [...prev, 6]
+                    );
+                  }}
+                  className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition"
+                >
+                  + 토요일 포함
+                </button>
+              </div>
+
+              {/* 요일 선택 토글 바 */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-2">
+                  상담 가능 요일 선택
+                </label>
+                <div className="flex items-center gap-1.5">
+                  {[
+                    { d: 1, label: '월' },
+                    { d: 2, label: '화' },
+                    { d: 3, label: '수' },
+                    { d: 4, label: '목' },
+                    { d: 5, label: '금' },
+                    { d: 6, label: '토', isWeekend: true },
+                    { d: 0, label: '일', isWeekend: true },
+                  ].map(({ d, label, isWeekend }) => {
+                    const active = consultationDays.includes(d);
+                    return (
+                      <button
+                        key={d}
+                        type="button"
+                        onClick={() =>
+                          setConsultationDays((prev) =>
+                            prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]
+                          )
+                        }
+                        className={`flex-1 py-2 rounded-xl text-xs font-bold transition min-h-[44px] border ${
+                          active
+                            ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs'
+                            : isWeekend
+                            ? 'bg-slate-50 text-slate-400 border-slate-200 hover:border-slate-300'
+                            : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 시간대 및 1회 상담 소요 시간 */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    시작 시간
+                  </label>
+                  <input
+                    type="time"
+                    value={consultationStartTime}
+                    onChange={(e) => setConsultationStartTime(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 font-medium min-h-[44px]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    종료 시간
+                  </label>
+                  <input
+                    type="time"
+                    value={consultationEndTime}
+                    onChange={(e) => setConsultationEndTime(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 font-medium min-h-[44px]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    1회 상담 소요 시간
+                  </label>
+                  <select
+                    value={consultationSlotMinutes}
+                    onChange={(e) => setConsultationSlotMinutes(Number(e.target.value))}
+                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 font-medium min-h-[44px]"
+                  >
+                    <option value={15}>15분</option>
+                    <option value={20}>20분</option>
+                    <option value={30}>30분 (표준)</option>
+                    <option value={45}>45분</option>
+                    <option value={60}>60분 (1시간)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* 안내 박스 */}
+              <div className="rounded-xl border border-indigo-100 bg-indigo-50/50 p-3.5 space-y-1">
+                <p className="text-[11px] text-indigo-900 font-medium leading-relaxed">
+                  💡 저장 시 학부모 전용 온라인 상담 신청 링크 및 QR 코드가 자동으로 활성화됩니다.
+                </p>
+              </div>
+
               {footerNav({
-                onNext: goNext,
-                nextLabel: '나중에',
-                secondaryLabel: '설정',
-                onSecondary: openConsultationSettings,
+                onNext: handleSaveConsultation,
+                nextLabel: isSavingConsultation ? '저장 중...' : '상담 시간 저장',
+                secondaryLabel: '건너뛰기 (나중에)',
+                onSecondary: goNext,
               })}
             </div>
           )}
