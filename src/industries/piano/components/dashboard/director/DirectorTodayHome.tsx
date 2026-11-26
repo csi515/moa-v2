@@ -188,7 +188,7 @@ export const DirectorTodayHome: FC = () => {
 
       <FavoriteMenuQuickDock onNavigate={navigate} activeTab="dashboard" />
 
-      <section className="bg-white border border-slate-200/80 rounded-2xl py-3 px-3.5 sm:p-5 shadow-2xs">
+      <section className="bg-white border border-slate-200 rounded-xl py-3.5 px-4 sm:p-5 shadow-xs">
         <p className="text-xs text-slate-400 font-medium">
           {formatKoreanDate(new Date().toISOString())}
         </p>
@@ -219,14 +219,14 @@ export const DirectorTodayHome: FC = () => {
               <button
                 type="button"
                 onClick={() => setIsOnboardingWizardOpen(true)}
-                className="min-h-[38px] px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
+                className="min-h-[36px] px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors shadow-2xs flex items-center gap-1.5 cursor-pointer"
               >
-                <span>✨ 3분 만에 학원 세팅 끝내기 (추천)</span>
+                <span>초기 설정 마법사 시작</span>
               </button>
               <button
                 type="button"
                 onClick={() => navigate('students')}
-                className="min-h-[38px] px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors cursor-pointer"
+                className="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition-colors cursor-pointer min-h-[36px]"
               >
                 원생 직접 등록
               </button>
@@ -235,9 +235,9 @@ export const DirectorTodayHome: FC = () => {
             <button
               type="button"
               onClick={() => setIsOnboardingWizardOpen(true)}
-              className="min-h-[38px] px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5"
+              className="min-h-[36px] px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 shadow-2xs"
             >
-              <span>💡 3분 학원 세팅 마법사</span>
+              <span>학원 설정 마법사</span>
             </button>
           )}
         </div>

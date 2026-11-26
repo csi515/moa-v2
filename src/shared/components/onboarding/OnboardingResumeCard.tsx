@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Sparkles } from 'lucide-react';
+import { ArrowRight, Settings } from 'lucide-react';
 
 interface OnboardingResumeCardProps {
   stepLabel?: string;
@@ -7,40 +7,46 @@ interface OnboardingResumeCardProps {
   onSkip: () => void;
 }
 
-/** 홈 — 미완료 온보딩 이어하기 */
+/** 홈 — 미완료 온보딩 이어하기 (단정하고 슬림한 B2B 인라인 Alert Bar) */
 export const OnboardingResumeCard: FC<OnboardingResumeCardProps> = ({
   stepLabel,
   onContinue,
   onSkip,
 }) => (
-  <section className="rounded-2xl border border-indigo-100 bg-indigo-50/80 p-4 space-y-3">
-    <div className="flex items-start gap-3">
-      <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center shrink-0">
-        <Sparkles className="w-5 h-5 text-indigo-600" />
+  <section
+    aria-label="초기 운영 설정 이어하기"
+    className="rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors"
+  >
+    <div className="flex items-center gap-2.5 min-w-0">
+      <div className="w-7 h-7 rounded-md bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+        <Settings className="w-3.5 h-3.5" strokeWidth={1.5} />
       </div>
       <div className="min-w-0">
-        <h3 className="text-sm font-bold text-slate-900">학원 초기 설정을 이어서 할까요?</h3>
-        <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+        <p className="text-xs sm:text-sm font-semibold text-slate-900 truncate">
+          초기 운영 설정이 완료되지 않았습니다
+        </p>
+        <p className="text-[11px] text-slate-500 truncate mt-0.5">
           {stepLabel
-            ? `마지막 위치: ${stepLabel}. 필수는 학원명뿐이며, 나머지는 나중에 설정해도 됩니다.`
-            : '필수는 학원명뿐이며, 나머지는 나중에 설정해도 됩니다.'}
+            ? `마지막 진행: ${stepLabel} · 언제든 설정 메뉴에서 추가 입력할 수 있습니다.`
+            : '필수 기본 정보를 입력하면 바로 운영을 시작할 수 있습니다.'}
         </p>
       </div>
     </div>
-    <div className="flex flex-col sm:flex-row gap-2">
-      <button
-        type="button"
-        onClick={onContinue}
-        className="flex-1 min-h-[44px] px-4 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl"
-      >
-        이어서 설정
-      </button>
+    <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
       <button
         type="button"
         onClick={onSkip}
-        className="flex-1 min-h-[44px] px-4 py-2.5 text-sm font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 rounded-xl"
+        className="px-2.5 py-1.5 text-xs font-medium text-slate-500 hover:text-slate-800 rounded-md transition-colors min-h-[32px]"
       >
         나중에 하기
+      </button>
+      <button
+        type="button"
+        onClick={onContinue}
+        className="px-3.5 py-1.5 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 active:bg-slate-950 rounded-md transition-colors inline-flex items-center gap-1 shadow-2xs min-h-[32px]"
+      >
+        <span>이어서 설정</span>
+        <ArrowRight className="w-3 h-3" strokeWidth={1.5} />
       </button>
     </div>
   </section>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, FC } from 'react';
 import {
   CheckCircle2,
   Circle,
-  Sparkles,
+  CheckSquare,
   ArrowRight,
   ChevronDown,
   ChevronUp,
@@ -50,7 +50,7 @@ const ICON_MAP: Record<QuestIconType, React.ReactNode> = {
   package: <Package className="w-5 h-5 text-purple-600" />,
   clock: <Clock className="w-5 h-5 text-orange-600" />,
   file: <FileText className="w-5 h-5 text-teal-600" />,
-  sparkles: <Sparkles className="w-5 h-5 text-rose-600" />,
+  sparkles: <CheckSquare className="w-4 h-4 text-slate-600" strokeWidth={1.5} />,
 };
 
 export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
@@ -190,14 +190,14 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
 
   return (
     <div
-      className="bg-gradient-to-br from-white via-indigo-50/20 to-slate-50/80 rounded-3xl border border-indigo-100/80 p-5 sm:p-7 shadow-xs relative overflow-hidden transition-all duration-300"
+      className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs relative overflow-hidden transition-all duration-200"
       data-testid="getting-started-quest-widget"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-indigo-50">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-xs font-bold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>사업장 맞춤형 첫걸음 퀘스트</span>
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md text-xs font-semibold">
+            <CheckSquare className="w-3.5 h-3.5 text-slate-600" strokeWidth={1.5} />
+            <span>초기 설정 체크리스트</span>
           </div>
           <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
             대표님을 위한 {placeWord} 첫 세팅 가이드
@@ -206,7 +206,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="bg-white px-3.5 py-2 rounded-2xl border border-slate-200/80 shadow-2xs min-w-[140px]">
+          <div className="bg-slate-50 px-3.5 py-2 rounded-lg border border-slate-200 min-w-[140px]">
             <div className="flex justify-between items-center text-xs font-black mb-1.5">
               <span className="text-slate-600">진척도</span>
               <span className={progress.isAllCompleted ? 'text-emerald-600' : 'text-indigo-600'}>
@@ -216,7 +216,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
             <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-500 ${
-                  progress.isAllCompleted ? 'bg-emerald-500' : 'bg-indigo-600'
+                  progress.isAllCompleted ? 'bg-emerald-600' : 'bg-slate-800'
                 }`}
                 style={{ width: `${progress.progressPercent}%` }}
               />
@@ -327,7 +327,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
                         isDone ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-50 border border-slate-100'
                       }`}
                     >
-                      {ICON_MAP[quest.icon] || <Sparkles className="w-5 h-5 text-indigo-600" />}
+                      {ICON_MAP[quest.icon] || <CheckSquare className="w-5 h-5 text-slate-600" strokeWidth={1.5} />}
                     </div>
                     <div className="min-w-0">
                       <h3
