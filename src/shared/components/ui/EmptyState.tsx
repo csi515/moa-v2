@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { Button } from './Button';
 import { EmptyStateHero, type EmptyStateGuide } from './EmptyStateHero';
 
 export type { EmptyStateGuide, EmptyStateGuideStep, EmptyStateHeroProps } from './EmptyStateHero';
@@ -50,13 +51,14 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
             ? action
             : typeof action === 'object' && 'label' in action
             ? (
-              <button
-                type="button"
+              <Button
+                variant="primary"
+                size="md"
                 onClick={(action as { onClick: () => void; label: string }).onClick}
-                className="px-4 py-2.5 min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-colors"
+                leftIcon={(action as { icon?: ReactNode }).icon}
               >
                 {(action as { onClick: () => void; label: string }).label}
-              </button>
+              </Button>
             )
             : null}
         </div>

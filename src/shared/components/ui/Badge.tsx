@@ -45,7 +45,7 @@ export const Badge: React.FC<BadgeProps> = ({
 
   return (
     <span
-      className={`inline-flex items-center border font-semibold tracking-tight transition-colors ${BADGE_VARIANTS[variant]} ${BADGE_SIZES[size]} ${radiusClass} ${className}`}
+      className={`inline-flex items-center border font-semibold tracking-tight whitespace-nowrap select-none transition-colors ${BADGE_VARIANTS[variant]} ${BADGE_SIZES[size]} ${radiusClass} ${className}`}
       {...rest}
     >
       {icon && <span className="shrink-0">{icon}</span>}

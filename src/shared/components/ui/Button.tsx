@@ -7,6 +7,7 @@ export type ButtonVariant =
   | 'outline'
   | 'ghost'
   | 'destructive'
+  | 'danger'
   | 'success';
 
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon-sm' | 'icon-md';
@@ -22,14 +23,16 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   primary:
-    'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white shadow-xs shadow-indigo-200 focus-visible:ring-indigo-600',
+    'bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white shadow-xs focus-visible:ring-slate-900',
   secondary:
     'bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 focus-visible:ring-slate-400',
   outline:
-    'border border-slate-200 hover:border-slate-300 hover:bg-slate-50 active:bg-slate-100 text-slate-700 bg-white shadow-2xs focus-visible:ring-indigo-500',
+    'border border-slate-200 hover:border-slate-300 hover:bg-slate-50 active:bg-slate-100 text-slate-700 bg-white shadow-2xs focus-visible:ring-slate-400',
   ghost:
     'text-slate-600 hover:text-slate-900 hover:bg-slate-100 active:bg-slate-200 focus-visible:ring-slate-400',
   destructive:
+    'bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white shadow-xs shadow-rose-200 focus-visible:ring-rose-600',
+  danger:
     'bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white shadow-xs shadow-rose-200 focus-visible:ring-rose-600',
   success:
     'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white shadow-xs shadow-emerald-200 focus-visible:ring-emerald-600',
