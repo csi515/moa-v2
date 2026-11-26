@@ -23,7 +23,7 @@ export const PianoSidebar: FC = () => {
       activeTab={activeTab}
       onNavigate={onNavigate}
       isItemActive={isPianoNavItemActive}
-      user={{ name: currentUser.name, roleLabel, roleBadge }}
+      showProfileFooter={false}
     />
   );
 };

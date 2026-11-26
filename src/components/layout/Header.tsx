@@ -11,7 +11,9 @@ import {
   Search,
   UserPlus,
   X,
+  Settings,
 } from "lucide-react";
+import { useApp } from "@/context/AppContext";
 import { requestCommandPalette } from "@/components/common/GlobalCommandPalette";
 import { useOrganization } from "@/core/organizations/OrganizationProvider";
 import { getIndustryLabel } from "@/core/industry/types";
@@ -76,6 +78,27 @@ export const Header: React.FC = () => {
   }, [isOrgSwitcherOpen]);
 
   const isCustomerView = customerPortalActive || location.pathname.startsWith("/customer");
+
+  let app: ReturnType<typeof useApp> | null = null;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    app = useApp();
+  } catch {
+    // AppContext 미제공 영역 대비
+  }
+
+  const isSettingsActive = !isCustomerView && (
+    app?.activeTab === "settings" ||
+    location.pathname.startsWith("/workspace/settings") ||
+    location.pathname.startsWith("/settings")
+  );
+
+  const handleSettingsClick = () => {
+    if (app?.setActiveTab) {
+      app.setActiveTab("settings");
+    }
+    navigate("/workspace/settings");
+  };
 
   const checkPendingRequests = useCallback(async () => {
     if (!currentOrganization?.id || isCustomerView) {
@@ -270,6 +293,24 @@ export const Header: React.FC = () => {
               </span>
             )}
           </button>
+
+          {/* 사업장 운영 설정 버튼 */}
+          {!isCustomerView && (
+            <button
+              type="button"
+              onClick={handleSettingsClick}
+              className={cn(
+                "rounded-full p-2 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer",
+                isSettingsActive
+                  ? "bg-slate-100 text-slate-900 font-bold shadow-2xs"
+                  : "text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+              )}
+              title="사업장 설정"
+              aria-label="설정"
+            >
+              <Settings className={cn("h-5 w-5", isSettingsActive && "text-slate-900")} />
+            </button>
+          )}
 
           <div className="flex items-center gap-2 border-l border-slate-200 pl-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-600">

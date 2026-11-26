@@ -28,11 +28,11 @@ export function getConfiguredRooms(
   settings?: Pick<AcademySettings, 'rooms'> | AcademySettings | null
 ): AcademyRoom[] {
   const list = settings?.rooms || [];
-  return list
+  return (Array.isArray(list) ? list : [])
     .map((r): AcademyRoom => ({
-      id: r.id || crypto.randomUUID(),
-      name: r.name.trim(),
-      kind: (r.kind === 'practice' || r.kind === 'treatment' ? r.kind : 'classroom') as AcademyRoomKind,
+      id: r?.id || crypto.randomUUID(),
+      name: (r?.name != null ? String(r.name) : '').trim(),
+      kind: (r?.kind === 'practice' || r?.kind === 'treatment' ? r.kind : 'classroom') as AcademyRoomKind,
     }))
     .filter((r) => r.name.length > 0);
 }

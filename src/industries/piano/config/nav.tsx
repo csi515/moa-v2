@@ -81,7 +81,6 @@ function settingsNavItem(size: 'sm' | 'md'): NavMenuItem {
 export function getPianoSidebarSections(labels: ModuleLabels): NavMenuSection[] {
   return [
     buildNavSection('업무', getPianoCoreNavItems(labels, 'sm')),
-    buildNavSection('설정', [settingsNavItem('sm')]),
   ];
 }
 

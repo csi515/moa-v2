@@ -44,11 +44,11 @@ export const BillingSettingsView: FC = () => {
   const accentBtn = `${accent.btn} ${accent.btnHover}`;
   const accentIcon = accent.icon;
 
-  const [settings, setSettings] = useState<AcademySettings>(() => StorageService.getSettings());
+  const [settings, setSettings] = useState<AcademySettings>(() => StorageService.getSettings() ?? {} as AcademySettings);
   const [isSaving, setIsSaving] = useState(false);
 
   const passPackages: SessionPassPackage[] =
-    settings.sessionPassPackages && settings.sessionPassPackages.length > 0
+    Array.isArray(settings?.sessionPassPackages) && settings.sessionPassPackages.length > 0
       ? settings.sessionPassPackages
       : DEFAULT_SESSION_PASS_PACKAGES;
 
@@ -147,7 +147,7 @@ export const BillingSettingsView: FC = () => {
                       onClick={() =>
                         setSettings({ ...settings, defaultBillingMode: opt.value })
                       }
-                      className={`min-h-[52px] rounded-xl border px-3 py-2 text-left transition-colors ${
+                      className={`min-h-[52px] rounded-lg border px-3 py-2 text-left transition-colors ${
                         active
                           ? `${accent.btn} text-white border-transparent`
                           : 'bg-white text-slate-700 border-slate-200 hover:border-indigo-300'
@@ -178,7 +178,7 @@ export const BillingSettingsView: FC = () => {
                 />
               </FormField>
             ) : (
-              <div className="rounded-xl border border-indigo-100 bg-indigo-50/70 px-3.5 py-3 text-xs text-slate-700 leading-relaxed flex items-start gap-2.5">
+              <div className="rounded-lg border border-indigo-100 bg-indigo-50/70 px-3.5 py-3 text-xs text-slate-700 leading-relaxed flex items-start gap-2.5">
                 <Ticket className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold text-indigo-900 block">회차권(이용권) 모드 활성화</span>
@@ -210,7 +210,7 @@ export const BillingSettingsView: FC = () => {
                 </select>
               </FormField>
 
-              <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-3.5 space-y-2">
+              <div className="rounded-lg border border-slate-200 bg-slate-50/80 p-3.5 space-y-2">
                 <label className="flex items-start gap-3 cursor-pointer min-h-[44px]">
                   <input
                     type="checkbox"
@@ -236,7 +236,7 @@ export const BillingSettingsView: FC = () => {
               </div>
             </div>
           ) : (
-            <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-3.5 text-[11px] text-slate-500 leading-relaxed">
+            <div className="rounded-lg border border-slate-200 bg-slate-50/80 p-3.5 text-[11px] text-slate-500 leading-relaxed">
               회차권 모드에서는 월 청구·결제일·교재 합산 옵션을 쓰지 않으며, 출석 시 회차권에서 1회가 차감됩니다.
             </div>
           )}
@@ -259,7 +259,7 @@ export const BillingSettingsView: FC = () => {
               <button
                 type="button"
                 onClick={handleAddPackage}
-                className="px-3 py-1.5 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors flex items-center gap-1 cursor-pointer shrink-0"
+                className="px-3 py-1.5 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors flex items-center gap-1 cursor-pointer shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>상품 추가</span>
@@ -270,7 +270,7 @@ export const BillingSettingsView: FC = () => {
               {passPackages.map((pkg, idx) => (
                 <div
                   key={pkg.id || idx}
-                  className="flex flex-col sm:flex-row sm:items-center gap-2.5 p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl"
+                  className="flex flex-col sm:flex-row sm:items-center gap-2.5 p-3.5 bg-slate-50 border border-slate-200/80 rounded-lg"
                 >
                   <div className="flex-1 min-w-[140px]">
                     <label className="block text-[10px] font-semibold text-slate-500 mb-1">
@@ -343,7 +343,7 @@ export const BillingSettingsView: FC = () => {
           </div>
 
           {depositSupported && (
-            <div className="space-y-3 rounded-xl border border-rose-100 bg-rose-50/40 p-4">
+            <div className="space-y-3 rounded-lg border border-rose-100 bg-rose-50/40 p-4">
               <label className="flex items-start gap-2">
                 <input
                   type="checkbox"
@@ -398,7 +398,7 @@ export const BillingSettingsView: FC = () => {
             <button
               type="submit"
               disabled={isSaving}
-              className={`px-6 py-2.5 min-h-[44px] ${accentBtn} disabled:opacity-60 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer`}
+              className={`px-6 py-2.5 min-h-[44px] ${accentBtn} disabled:opacity-60 text-white font-bold text-xs sm:text-sm rounded-lg transition-all shadow-md flex items-center gap-2 cursor-pointer`}
             >
               {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               {isSaving ? '저장 중…' : '수납 설정 저장'}

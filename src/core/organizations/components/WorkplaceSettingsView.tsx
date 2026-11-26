@@ -67,10 +67,10 @@ export const WorkplaceSettingsView: FC = () => {
   const accentIcon = accent.icon;
   const accentHover = accent.hoverBg;
 
-  const [settings, setSettings] = useState<AcademySettings>(() => StorageService.getSettings());
+  const [settings, setSettings] = useState<AcademySettings>(() => StorageService.getSettings() ?? {} as AcademySettings);
   const [addressParts, setAddressParts] = useState<OrganizationAddressValue>(() => {
-    const saved = StorageService.getSettings();
-    const existing = (saved.address || '').trim();
+    const saved = StorageService.getSettings() ?? {} as AcademySettings;
+    const existing = (saved?.address || '').trim();
     return existing
       ? { ...EMPTY_ORGANIZATION_ADDRESS, roadAddress: existing }
       : EMPTY_ORGANIZATION_ADDRESS;
@@ -99,6 +99,7 @@ export const WorkplaceSettingsView: FC = () => {
     }
   };
   const rooms = getConfiguredRooms(settings);
+  const allowedKinds = Array.isArray(roomCfg?.allowedKinds) ? roomCfg.allowedKinds : ['classroom', 'practice'];
 
   useEffect(() => {
     const result = StorageService.backfillAttendanceFeatureFlag();
@@ -234,10 +235,10 @@ export const WorkplaceSettingsView: FC = () => {
 
         <form onSubmit={handleSaveSettings} className="space-y-6">
           <OrganizationProfileFields
-            name={settings.name}
-            directorName={settings.directorName || ''}
-            phone={settings.phone}
-            businessNumber={settings.businessNumber || ''}
+            name={settings?.name || ''}
+            directorName={settings?.directorName || ''}
+            phone={settings?.phone || ''}
+            businessNumber={settings?.businessNumber || ''}
             addressParts={addressParts}
             placeLabel={placeLabel}
             ownerLabel={ownerLabel}
@@ -262,7 +263,7 @@ export const WorkplaceSettingsView: FC = () => {
               <button
                 type="button"
                 onClick={addRoom}
-                className={`inline-flex items-center gap-1 px-3 py-2 min-h-[44px] text-xs font-bold rounded-xl ${accent.hoverBg} ${accentIcon}`}
+                className={`inline-flex items-center gap-1 px-3 py-2 min-h-[44px] text-xs font-bold rounded-lg ${accent.hoverBg} ${accentIcon}`}
               >
                 <Plus className="w-4 h-4" />
                 추가
@@ -272,7 +273,7 @@ export const WorkplaceSettingsView: FC = () => {
               {roomCfg.sectionDescription}
             </p>
             {rooms.length === 0 ? (
-              <p className="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5">
+              <p className="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2.5">
                 등록된 실이 없습니다. 추가하거나 온보딩에서 설정해 주세요.
               </p>
             ) : (
@@ -280,7 +281,7 @@ export const WorkplaceSettingsView: FC = () => {
                 {rooms.map((room) => (
                   <li
                     key={room.id}
-                    className="flex flex-col sm:flex-row gap-2 sm:items-center rounded-xl border border-slate-100 bg-slate-50/80 p-2.5"
+                    className="flex flex-col sm:flex-row gap-2 sm:items-center rounded-lg border border-slate-100 bg-slate-50/80 p-2.5"
                   >
                     <input
                       type="text"
@@ -296,20 +297,20 @@ export const WorkplaceSettingsView: FC = () => {
                       }
                       className={`${FORM_CONTROL_CLASS} sm:w-32 min-h-[44px]`}
                     >
-                      {(roomCfg.allowedKinds as string[]).includes('treatment') && (
+                      {allowedKinds.includes('treatment') && (
                         <option value="treatment">{ROOM_KIND_LABEL.treatment}</option>
                       )}
-                      {(roomCfg.allowedKinds as string[]).includes('classroom') && (
+                      {allowedKinds.includes('classroom') && (
                         <option value="classroom">{ROOM_KIND_LABEL.classroom}</option>
                       )}
-                      {(roomCfg.allowedKinds as string[]).includes('practice') && (
+                      {allowedKinds.includes('practice') && (
                         <option value="practice">{ROOM_KIND_LABEL.practice}</option>
                       )}
                     </select>
                     <button
                       type="button"
                       onClick={() => removeRoom(room.id)}
-                      className="p-2.5 min-h-[44px] min-w-[44px] text-rose-500 hover:bg-rose-50 rounded-xl"
+                      className="p-2.5 min-h-[44px] min-w-[44px] text-rose-500 hover:bg-rose-50 rounded-lg"
                       aria-label={`${room.name} 삭제`}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -334,7 +335,7 @@ export const WorkplaceSettingsView: FC = () => {
             <button
               type="submit"
               disabled={isSaving}
-              className={`px-6 py-2.5 min-h-[44px] ${accentBtn} disabled:opacity-60 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer`}
+              className={`px-6 py-2.5 min-h-[44px] ${accentBtn} disabled:opacity-60 text-white font-bold text-xs sm:text-sm rounded-lg transition-all shadow-md flex items-center gap-2 cursor-pointer`}
             >
               {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               {isSaving ? '저장 중…' : '설정 정보 저장'}
@@ -364,7 +365,7 @@ export const WorkplaceSettingsView: FC = () => {
 
 {/* 변경 사항 감지 시 떠오르는 모던 스티키 플로팅 저장 바 */}
       {isDirty && (
-        <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-2xl bg-slate-900/95 text-white backdrop-blur-md rounded-2xl shadow-2xl p-3 sm:p-4 border border-slate-700/80 flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-4 duration-200">
+        <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-2xl bg-slate-900/95 text-white backdrop-blur-md rounded-lg shadow-2xl p-3 sm:p-4 border border-slate-700/80 flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-4 duration-200">
           <div className="flex items-center gap-2.5 min-w-0">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
             <div className="min-w-0">
@@ -381,7 +382,7 @@ export const WorkplaceSettingsView: FC = () => {
               type="button"
               onClick={handleResetSettings}
               disabled={isSaving}
-              className="px-3 py-1.5 min-h-[38px] text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+              className="px-3 py-1.5 min-h-[38px] text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
             >
               되돌리기
             </button>
@@ -389,7 +390,7 @@ export const WorkplaceSettingsView: FC = () => {
               type="button"
               onClick={handleSaveSettings}
               disabled={isSaving}
-              className={`px-4 sm:px-5 py-2 min-h-[38px] ${accentBtn} text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50`}
+              className={`px-4 sm:px-5 py-2 min-h-[38px] ${accentBtn} text-white font-bold text-xs sm:text-sm rounded-lg transition-all shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50`}
             >
               {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
               <span>{isSaving ? '저장 중…' : '지금 저장'}</span>

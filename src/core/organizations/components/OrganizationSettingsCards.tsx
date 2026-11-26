@@ -116,7 +116,7 @@ export const OrganizationProfileFields: FC<OrganizationProfileFieldsProps> = ({
 
       {/* 학부모 자가 연결 미사용 단계: 연결코드 배너 UI 임시 숨김
       {publicCode && (
-        <div className="rounded-xl border border-indigo-100 bg-indigo-50/60 p-4 space-y-2">
+        <div className="rounded-lg border border-indigo-100 bg-indigo-50/60 p-4 space-y-2">
           <p className="text-xs font-bold text-indigo-900">{contactLabel} {placeLabel} 연결코드</p>
           <p className="font-mono text-lg font-black tracking-widest text-indigo-700">
             {publicCode}
@@ -242,7 +242,7 @@ export const OrganizationBackupCard: FC<OrganizationBackupCardProps> = ({
           type="button"
           onClick={handleExportData}
           disabled={isImporting}
-          className={`w-full py-3 min-h-[44px] bg-slate-50 ${accentHover} border border-slate-200 text-slate-800 text-xs font-bold rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60`}
+          className={`w-full py-3 min-h-[44px] bg-slate-50 ${accentHover} border border-slate-200 text-slate-800 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60`}
         >
           <Download className={`w-4 h-4 ${accentIcon}`} />
           전체 데이터 백업 (JSON 다운로드)
@@ -252,7 +252,7 @@ export const OrganizationBackupCard: FC<OrganizationBackupCardProps> = ({
           type="button"
           disabled={isImporting}
           onClick={() => importInputRef.current?.click()}
-          className={`w-full py-3 min-h-[44px] bg-slate-50 ${accentHover} border border-slate-200 text-slate-800 text-xs font-bold rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60`}
+          className={`w-full py-3 min-h-[44px] bg-slate-50 ${accentHover} border border-slate-200 text-slate-800 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60`}
         >
           {isImporting ? (
             <Loader2 className={`w-4 h-4 animate-spin ${accentIcon}`} />
@@ -343,7 +343,7 @@ export const OrganizationDangerZoneCard: FC<OrganizationDangerZoneCardProps> = (
         icon={<AlertTriangle className="w-4 h-4 text-rose-600" />}
       >
         <div className="space-y-3">
-          <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl">
+          <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg">
             <p className="text-xs text-rose-800 leading-relaxed">
               <strong>조직을 삭제하면 모든 데이터가 영구적으로 삭제됩니다.</strong>
               <br />
@@ -353,7 +353,7 @@ export const OrganizationDangerZoneCard: FC<OrganizationDangerZoneCardProps> = (
           <button
             type="button"
             onClick={() => setShowDeleteModal(true)}
-            className="w-full py-3 min-h-[44px] bg-rose-50 hover:bg-rose-100 border-2 border-rose-300 text-rose-700 text-sm font-bold rounded-xl transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 min-h-[44px] bg-rose-50 hover:bg-rose-100 border-2 border-rose-300 text-rose-700 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2"
           >
             <Trash2 className="w-4 h-4" />
             조직 영구 삭제
@@ -363,9 +363,9 @@ export const OrganizationDangerZoneCard: FC<OrganizationDangerZoneCardProps> = (
 
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 w-full max-w-md overflow-hidden">
+          <div className="bg-white rounded-lg shadow-2xl border border-slate-100 w-full max-w-md overflow-hidden">
             <div className="px-6 py-4 border-b border-rose-100 bg-rose-50 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-lg bg-rose-100 flex items-center justify-center">
                 <AlertTriangle className="w-5 h-5 text-rose-600" />
               </div>
               <div>
@@ -403,7 +403,7 @@ export const OrganizationDangerZoneCard: FC<OrganizationDangerZoneCardProps> = (
                   value={deleteConfirmName}
                   onChange={(e) => setDeleteConfirmName(e.target.value)}
                   placeholder="조직명을 입력하세요"
-                  className="w-full px-3 py-2.5 text-sm border-2 border-slate-300 rounded-xl focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-100"
+                  className="w-full px-3 py-2.5 text-sm border-2 border-slate-300 rounded-lg focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-100"
                   autoFocus
                 />
               </div>
@@ -416,7 +416,7 @@ export const OrganizationDangerZoneCard: FC<OrganizationDangerZoneCardProps> = (
                     setDeleteConfirmName('');
                   }}
                   disabled={isDeleting}
-                  className="flex-1 py-2.5 min-h-[44px] bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl transition-colors disabled:opacity-50"
+                  className="flex-1 py-2.5 min-h-[44px] bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-lg transition-colors disabled:opacity-50"
                 >
                   취소
                 </button>
@@ -424,7 +424,7 @@ export const OrganizationDangerZoneCard: FC<OrganizationDangerZoneCardProps> = (
                   type="button"
                   onClick={handleDeleteOrganization}
                   disabled={isDeleting || deleteConfirmName !== org.currentOrganization.name}
-                  className="flex-1 py-2.5 min-h-[44px] bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 py-2.5 min-h-[44px] bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isDeleting ? (
                     <>

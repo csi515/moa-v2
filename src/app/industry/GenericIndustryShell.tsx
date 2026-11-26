@@ -1459,7 +1459,7 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
             sections={filteredSections}
             activeTab={activeTab}
             onNavigate={navigateCorporateTab}
-            user={{ name: currentUser.name, roleLabel, roleBadge }}
+            showProfileFooter={false}
           />
         }
         bottomNav={
