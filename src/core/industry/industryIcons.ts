@@ -2,6 +2,7 @@ import type { ComponentType } from 'react';
 import {
   Activity,
   Baby,
+  Cake,
   BookOpen,
   Briefcase,
   Building2,
@@ -52,6 +53,7 @@ export const INDUSTRY_ICONS: Partial<Record<IndustryType, ComponentType<{ classN
   academy: GraduationCap,
   hair_salon: Scissors,
   skin_clinic: Sparkles,
+  first_birthday_party: Cake,
 };
 
 export { Building2 as DEFAULT_INDUSTRY_ICON };

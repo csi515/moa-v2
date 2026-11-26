@@ -197,6 +197,7 @@ const DEFINITION_LIST = [
 
   defineIndustry('wedding_planner', '웨딩플래너', '웨딩·스드메', 'event'),
   defineIndustry('party_event', '파티·행사', '이벤트·파티', 'event'),
+  defineIndustry('first_birthday_party', '돌잔치·파티룸', '돌잔치·가족연회·파티룸', 'event'),
   defineIndustry('funeral_service', '상조·장례', '상조·장례 서비스', 'event'),
 
   defineIndustry('hotel_pension', '호텔·펜션', '숙박업', 'travel'),
