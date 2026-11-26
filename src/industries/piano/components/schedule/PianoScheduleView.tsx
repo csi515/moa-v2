@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type FC } from 'react';
-import { Calendar, Clock, DoorOpen, Sparkles, Plus, X } from 'lucide-react';
+import { Calendar, Clock, DoorOpen, Plus, X } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { getPlaceLabel } from '@/core/industry/industryUi';
@@ -76,12 +76,13 @@ export const PianoScheduleView: FC = () => {
 
   return (
     <div className="space-y-4 pb-4">
-      <div className="sticky top-0 z-10 -mx-1 px-1 py-1 bg-slate-50/90 backdrop-blur-sm space-y-3">
+      <div className="sticky top-0 z-10 -mx-1 px-1 py-1 bg-slate-50/90 backdrop-blur-sm space-y-2.5">
         <div className="flex items-center justify-between gap-3 px-0.5">
-          <div>
-            <p className="text-[11px] font-semibold text-indigo-600">일정</p>
-            <h2 className="text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-              <TitleIcon className="w-5 h-5 text-indigo-600 shrink-0" />
+          <div className="flex items-center gap-2">
+            <span className="p-1.5 rounded-lg bg-slate-100 text-slate-700 border border-slate-200/80">
+              <TitleIcon className="w-4 h-4 text-slate-700" strokeWidth={1.5} />
+            </span>
+            <h2 className="text-base font-bold text-slate-900 tracking-tight">
               {title}
             </h2>
           </div>
@@ -91,10 +92,9 @@ export const PianoScheduleView: FC = () => {
             <button
               type="button"
               onClick={() => setShowMakeupModal(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-bold transition shadow-2xs min-h-[36px] cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-medium transition shadow-2xs min-h-[36px] cursor-pointer"
               title="결석 원생의 보강 레슨을 배정하거나 관리합니다"
             >
-              <Sparkles className="w-3.5 h-3.5 text-purple-600" />
               <span>보강 일정 관리</span>
             </button>
           )}
@@ -106,7 +106,7 @@ export const PianoScheduleView: FC = () => {
           onChange={handleSegmentChange}
           aria-label="일정 보기 전환"
           fullWidth
-          className="w-full shadow-xs"
+          className="w-full shadow-2xs"
         />
       </div>
 

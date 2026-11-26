@@ -457,52 +457,36 @@ export const PracticeRoomBookingView: FC = () => {
 
   return (
     <div className="space-y-4 pb-6">
-      {/* 상단 컨트롤 바: 실시간 현황 / 월/주/일 뷰 전환 + 신규 예약 버튼 */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-xs">
-        <div className="flex items-center gap-2">
-          <span className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
-            <DoorOpen className="w-5 h-5" />
-          </span>
-          <div>
-            <h2 className="text-base font-black text-slate-900 tracking-tight">
-              연습실 공간 관리 & 예약 현황
-            </h2>
-            <p className="text-xs text-slate-500">
-              실시간 룸 타임보드로 잔여 시간을 확인하고, 캘린더로 향후 일정을 조율합니다.
-            </p>
-          </div>
-        </div>
+      {/* 상단 컴팩트 컨트롤 바: 뷰 전환 세그먼트 + 우측 예약 등록 메인 버튼 통합 */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs">
+        <SegmentedControl
+          value={viewMode}
+          options={VIEW_OPTIONS}
+          onChange={handleViewChange}
+          aria-label="연습실 뷰 모드 전환"
+          className="shadow-2xs"
+        />
 
-        <div className="flex items-center gap-2.5">
-          <SegmentedControl
-            value={viewMode}
-            options={VIEW_OPTIONS}
-            onChange={handleViewChange}
-            aria-label="연습실 뷰 모드 전환"
-            className="shadow-2xs"
-          />
-
-          <button
-            type="button"
-            onClick={() => openCreateModal()}
-            disabled={rooms.length === 0}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-xs cursor-pointer min-h-[40px] disabled:opacity-50"
-          >
-            <Plus className="w-4 h-4" />
-            <span>예약 등록</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => openCreateModal()}
+          disabled={rooms.length === 0}
+          className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors shadow-2xs cursor-pointer min-h-[36px] disabled:opacity-50"
+        >
+          <Plus className="w-3.5 h-3.5" strokeWidth={1.5} />
+          <span>예약 등록</span>
+        </button>
       </div>
 
       {/* 날짜 네비게이션 헤더 (캘린더 모드일 때 노출) */}
       {viewMode !== 'live' && (
-        <div className="flex items-center justify-between gap-2 rounded-2xl border border-slate-200/90 bg-white px-3 py-2 shadow-xs">
+        <div className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 shadow-2xs">
           <button
             type="button"
             onClick={() =>
               handleSelectDate(shiftCalendarPeriod(viewMode, selectedDate, -1))
             }
-            className="min-h-[40px] min-w-[40px] flex items-center justify-center rounded-xl text-slate-600 hover:bg-slate-100 transition-colors"
+            className="min-h-[32px] min-w-[32px] flex items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 transition-colors"
             aria-label="이전 기간"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -515,7 +499,7 @@ export const PracticeRoomBookingView: FC = () => {
             <button
               type="button"
               onClick={() => handleSelectDate(todayIsoDate())}
-              className="px-2.5 py-1 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-all"
+              className="px-2.5 py-1 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded transition-all"
             >
               오늘
             </button>
@@ -526,7 +510,7 @@ export const PracticeRoomBookingView: FC = () => {
             onClick={() =>
               handleSelectDate(shiftCalendarPeriod(viewMode, selectedDate, 1))
             }
-            className="min-h-[40px] min-w-[40px] flex items-center justify-center rounded-xl text-slate-600 hover:bg-slate-100 transition-colors"
+            className="min-h-[32px] min-w-[32px] flex items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 transition-colors"
             aria-label="다음 기간"
           >
             <ChevronRight className="w-5 h-5" />
@@ -644,14 +628,14 @@ export const PracticeRoomBookingView: FC = () => {
             <button
               type="button"
               onClick={() => setModalOpen(false)}
-              className="flex-1 min-h-[44px] rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+              className="flex-1 min-h-[40px] rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
             >
               닫기
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-[1.4] min-h-[44px] rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs disabled:opacity-50 cursor-pointer"
+              className="flex-[1.4] min-h-[40px] rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-2xs disabled:opacity-50 cursor-pointer"
             >
               {saving ? '예약 저장 중...' : '예약 등록 완료'}
             </button>
