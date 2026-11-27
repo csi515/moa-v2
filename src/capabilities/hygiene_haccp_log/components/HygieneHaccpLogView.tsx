@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useOpsTable } from '@/hooks/useOpsTable';
+import { Button } from '@/shared/components/ui/Button';
+import { EmptyState } from '@/shared/components/ui/EmptyState';
 import {
   TemperatureRecord,
   HealthCertificateRecord,
@@ -212,33 +214,25 @@ export const HygieneHaccpLogView: React.FC = () => {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button
+          <Button
+            variant={activeTab === 'temp' ? 'primary' : 'outline'}
+            size="md"
             onClick={() => setActiveTab('temp')}
-            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] cursor-pointer ${
-              activeTab === 'temp'
-                ? 'bg-blue-600 text-white border-blue-600 shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
-            }`}
           >
             냉장·냉동 온도 일지 ({tempRecords.length})
-          </button>
-          <button
+          </Button>
+          <Button
+            variant={activeTab === 'checklist' ? 'primary' : 'outline'}
+            size="md"
             onClick={() => setActiveTab('checklist')}
-            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] cursor-pointer ${
-              activeTab === 'checklist'
-                ? 'bg-blue-600 text-white border-blue-600 shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
-            }`}
           >
             일일 위생 체크표 ({auditSummary.checklistCompletionRate}%)
-          </button>
-          <button
+          </Button>
+          <Button
+            variant={activeTab === 'certs' ? 'primary' : 'outline'}
+            size="md"
             onClick={() => setActiveTab('certs')}
-            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] cursor-pointer flex items-center gap-1.5 ${
-              activeTab === 'certs'
-                ? 'bg-blue-600 text-white border-blue-600 shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
-            }`}
+            className="flex items-center gap-1.5"
           >
             직원 보건증 만료 ({auditSummary.expiringHealthCertCount})
             {auditSummary.expiringHealthCertCount > 0 && (
@@ -246,7 +240,7 @@ export const HygieneHaccpLogView: React.FC = () => {
                 {auditSummary.expiringHealthCertCount}
               </span>
             )}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -320,17 +314,25 @@ export const HygieneHaccpLogView: React.FC = () => {
                 />
                 <span className="text-xs sm:text-sm font-semibold text-slate-700">℃</span>
               </div>
-              <button
+              <Button
+                variant="primary"
+                size="md"
                 onClick={handleAddTemperature}
-                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs shrink-0"
+                className="shrink-0"
               >
                 + 즉시 기록
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* 온도 기록 목록 */}
-          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
+          {tempRecords.length === 0 ? (
+            <EmptyState
+              title="기록된 냉장·냉동 온도가 없습니다."
+              description="상단 폼에서 실측 온도를 입력하여 일일 HACCP 기록을 시작하세요."
+            />
+          ) : (
+            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide border-b border-slate-200">
@@ -378,7 +380,8 @@ export const HygieneHaccpLogView: React.FC = () => {
               </table>
             </div>
           </div>
-        </div>
+        )}
+      </div>
       ) : activeTab === 'checklist' ? (
         /* 일일 위생 체크리스트 */
         <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs p-5 sm:p-6 space-y-4">
@@ -426,6 +429,11 @@ export const HygieneHaccpLogView: React.FC = () => {
             ))}
           </div>
         </div>
+      ) : healthCerts.length === 0 ? (
+        <EmptyState
+          title="등록된 종사자 보건증 내역이 없습니다."
+          description="종사자 보건증 만료일을 등록하여 법적 과태료 위험을 예방하세요."
+        />
       ) : (
         /* 직원 보건증 만료 관리 탭 */
         <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs p-5 sm:p-6 space-y-4">
@@ -473,12 +481,13 @@ export const HygieneHaccpLogView: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-3.5 py-3.5">
-                      <button
+                      <Button
+                        variant="primary"
+                        size="sm"
                         onClick={() => handleRenewCert(cert.certId)}
-                        className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold min-h-[36px] transition-colors cursor-pointer shadow-2xs"
                       >
                         검진 갱신(1년 연장)
-                      </button>
+                      </Button>
                     </td>
                   </tr>
                 ))}

@@ -1,4 +1,6 @@
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { Button } from '@/shared/components/ui/Button';
+import { EmptyState } from '@/shared/components/ui/EmptyState';
 import { formatNumberWithCommas } from '@/utils/formatters';
 import React, { useState } from 'react';
 import {
@@ -169,23 +171,18 @@ export const MembershipReferralTreeView: React.FC = () => {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button
+          <Button
+            variant={activeTab === 'families' ? 'primary' : 'outline'}
+            size="md"
             onClick={() => setActiveTab('families')}
-            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] cursor-pointer ${
-              activeTab === 'families'
-                ? 'bg-blue-600 text-white border-blue-600 shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
-            }`}
           >
             패밀리 그룹 & 결합할인 ({totalFamilies})
-          </button>
-          <button
+          </Button>
+          <Button
+            variant={activeTab === 'referrals' ? 'primary' : 'outline'}
+            size="md"
             onClick={() => setActiveTab('referrals')}
-            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] cursor-pointer flex items-center gap-1.5 ${
-              activeTab === 'referrals'
-                ? 'bg-blue-600 text-white border-blue-600 shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
-            }`}
+            className="flex items-center gap-1.5"
           >
             지인 추천 리워드 ({referrals.length})
             {pendingRewards > 0 && (
@@ -193,7 +190,7 @@ export const MembershipReferralTreeView: React.FC = () => {
                 {pendingRewards}
               </span>
             )}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -226,12 +223,18 @@ export const MembershipReferralTreeView: React.FC = () => {
       </div>
 
       {activeTab === 'families' ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* 좌측: 패밀리 목록 */}
-          <div className="space-y-3">
-            <h3 className="text-base font-bold text-slate-900 flex items-center gap-1.5">
-              📋 패밀리 그룹 목록
-            </h3>
+        familyGroups.length === 0 ? (
+          <EmptyState
+            title="등록된 패밀리 그룹이 없습니다."
+            description="가족 구성원을 바인딩하여 패밀리 결합 할인 및 공용 크레딧을 연동하세요."
+          />
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* 좌측: 패밀리 목록 */}
+            <div className="space-y-3">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-1.5">
+                📋 패밀리 그룹 목록
+              </h3>
             <div className="flex flex-col gap-3">
               {familyGroups.map(group => {
                 const isSelected = selectedGroup?.groupId === group.groupId;
@@ -322,12 +325,14 @@ export const MembershipReferralTreeView: React.FC = () => {
                     onChange={e => setNewChildTuition(Number(e.target.value))}
                     className="w-full sm:w-28 px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm font-mono tabular-nums focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
-                  <button
+                  <Button
+                    variant="primary"
+                    size="md"
                     onClick={() => handleAddMember(selectedGroup)}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs sm:text-sm font-semibold min-h-[44px] transition-colors cursor-pointer shadow-2xs shrink-0"
+                    className="shrink-0"
                   >
                     + 가족 바인딩
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -347,18 +352,20 @@ export const MembershipReferralTreeView: React.FC = () => {
                     onChange={e => setCreditInput(Number(e.target.value))}
                     className="w-32 px-3 py-1.5 rounded-lg border border-emerald-300 bg-white text-xs sm:text-sm font-mono tabular-nums focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
                   />
-                  <button
+                  <Button
+                    variant="success"
+                    size="sm"
                     onClick={() => handleDepositCredit(selectedGroup)}
-                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold min-h-[36px] transition-colors cursor-pointer shadow-2xs"
                   >
                     충전(+)
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
                     onClick={() => handleDeductCredit(selectedGroup)}
-                    className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold min-h-[36px] transition-colors cursor-pointer shadow-2xs"
                   >
                     현장차감(-)
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -390,7 +397,13 @@ export const MembershipReferralTreeView: React.FC = () => {
               </div>
             </div>
           )}
-        </div>
+          </div>
+        )
+      ) : referrals.length === 0 ? (
+        <EmptyState
+          title="추천인 등록 내역이 없습니다."
+          description="신규 지인 소개 및 추천인 보너스 내역이 여기에 표시됩니다."
+        />
       ) : (
         /* 지인 추천인 리워드 관리 탭 */
         <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs p-5">
@@ -427,12 +440,13 @@ export const MembershipReferralTreeView: React.FC = () => {
                     </td>
                     <td className="px-3.5 py-3.5">
                       {ref.status === 'pending' ? (
-                        <button
+                        <Button
+                          variant="primary"
+                          size="sm"
                           onClick={() => handleReward(ref)}
-                          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold min-h-[36px] transition-colors cursor-pointer shadow-2xs"
                         >
                           보너스 즉시 지급
-                        </button>
+                        </Button>
                       ) : (
                         <span className="text-slate-400 text-xs">처리 완료</span>
                       )}

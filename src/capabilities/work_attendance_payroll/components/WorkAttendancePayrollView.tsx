@@ -1,6 +1,7 @@
 import { showToast } from '@/shared/feedback/uiFeedback';
-import { formatNumberWithCommas } from '@/utils/formatters';
 import { Modal } from '@/shared/components/ui/Modal';
+import { Button } from '@/shared/components/ui/Button';
+import { EmptyState } from '@/shared/components/ui/EmptyState';
 import React, { useState } from 'react';
 import {
   StaffEmploymentProfile,
@@ -199,16 +200,18 @@ export const WorkAttendancePayrollView: React.FC = () => {
         <div className="flex items-center gap-2 text-xs sm:text-sm">
           <span className={`inline-block w-2.5 h-2.5 rounded-full ${mockWifiConnected ? 'bg-emerald-500' : 'bg-red-500'}`} />
           <span className="text-slate-700 font-medium">{authStatusMessage}</span>
-          <button
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => {
               const next = !mockWifiConnected;
               setMockWifiConnected(next);
               setAuthStatusMessage(next ? '매장 Wi-Fi (Moa_Store_5G) 정상 연결됨' : '외부 네트워크 연결 (인증 차단 시뮬레이션)');
             }}
-            className="ml-2 px-2.5 py-1 text-xs rounded-md border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition-colors cursor-pointer"
+            className="ml-2"
           >
             Wi-Fi 상태 변경
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -237,7 +240,7 @@ export const WorkAttendancePayrollView: React.FC = () => {
         <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
           <div className="text-xs font-medium text-slate-500">당월 법정 주휴수당 합계</div>
           <div className="text-2xl font-bold text-blue-600 mt-1.5 tabular-nums font-mono">
-            {formatNumberWithCommas(totalWeeklyHolidaySum)}원
+            {totalWeeklyHolidaySum.toLocaleString()}원
           </div>
           <div className="text-xs text-blue-600/80 mt-1">
             주 15시간 이상 알바 자동 산출
@@ -262,112 +265,122 @@ export const WorkAttendancePayrollView: React.FC = () => {
           { key: 'timecards', label: '근태 타임카드 이력' },
           { key: 'payroll_slips', label: '월간 법정 급여명세서 마감' },
         ].map((tab) => (
-          <button
+          <Button
             key={tab.key}
+            variant={activeTab === tab.key ? 'primary' : 'ghost'}
+            size="md"
             onClick={() => setActiveTab(tab.key as any)}
-            className={`px-4 py-2.5 font-semibold text-sm transition-colors border-b-2 cursor-pointer ${
-              activeTab === tab.key
-                ? 'text-blue-600 border-blue-600'
-                : 'text-slate-500 border-transparent hover:text-slate-700'
-            }`}
+            className="rounded-b-none"
           >
             {tab.label}
-          </button>
+          </Button>
         ))}
       </div>
 
       {/* 탭 1: 실시간 출퇴근 태그 */}
       {activeTab === 'clock_in' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {staffList.map((staff) => {
-            const isClockedIn = clockedInStaffIds.includes(staff.staffId);
-            return (
-              <div
-                key={staff.staffId}
-                className={`bg-white rounded-xl p-5 flex flex-col justify-between transition-all ${
-                  isClockedIn
-                    ? 'border-2 border-emerald-500 shadow-2xs'
-                    : 'border border-slate-200 shadow-2xs'
-                }`}
-              >
-                <div>
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-base font-bold text-slate-900">{staff.staffName}</h3>
-                    <span
-                      className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${
-                        isClockedIn
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : 'bg-slate-100 text-slate-600'
-                      }`}
-                    >
-                      {isClockedIn ? '근무 중' : '미출근'}
-                    </span>
+        staffList.length === 0 ? (
+          <EmptyState
+            title="등록된 직원이 없습니다."
+            description="새로운 직원을 등록하여 출퇴근 인증 및 타임카드를 관리하세요."
+          />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {staffList.map((staff) => {
+              const isClockedIn = clockedInStaffIds.includes(staff.staffId);
+              return (
+                <div
+                  key={staff.staffId}
+                  className={`bg-white rounded-xl p-5 flex flex-col justify-between transition-all ${
+                    isClockedIn
+                      ? 'border-2 border-emerald-500 shadow-2xs'
+                      : 'border border-slate-200 shadow-2xs'
+                  }`}
+                >
+                  <div>
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-base font-bold text-slate-900">{staff.staffName}</h3>
+                      <span
+                        className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${
+                          isClockedIn
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : 'bg-slate-100 text-slate-600'
+                        }`}
+                      >
+                        {isClockedIn ? '근무 중' : '미출근'}
+                      </span>
+                    </div>
+                    <div className="mt-2.5 text-xs text-slate-600 space-y-1">
+                      <div>구분: {staff.employmentType === 'salaried_regular' ? '정규직 (월급제)' : '파트타임 (시급제)'}</div>
+                      <div>시급: <strong className="tabular-nums font-mono text-slate-900">{staff.hourlyRate.toLocaleString()}원</strong></div>
+                      <div>계약 근로시간: 주 <span className="tabular-nums font-mono">{staff.contractWeeklyHours}</span>시간 {staff.contractWeeklyHours >= 15 ? '(주휴수당 대상)' : '(주휴 제외)'}</div>
+                    </div>
                   </div>
-                  <div className="mt-2.5 text-xs text-slate-600 space-y-1">
-                    <div>구분: {staff.employmentType === 'salaried_regular' ? '정규직 (월급제)' : '파트타임 (시급제)'}</div>
-                    <div>시급: <strong className="tabular-nums font-mono text-slate-900">{formatNumberWithCommas(staff.hourlyRate)}원</strong></div>
-                    <div>계약 근로시간: 주 <span className="tabular-nums font-mono">{staff.contractWeeklyHours}</span>시간 {staff.contractWeeklyHours >= 15 ? '(주휴수당 대상)' : '(주휴 제외)'}</div>
-                  </div>
-                </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100">
-                  <button
-                    onClick={() => handleToggleClock(staff.staffId)}
-                    className={`w-full py-2 px-3 rounded-lg font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs ${
-                      isClockedIn
-                        ? 'bg-red-600 hover:bg-red-700 text-white'
-                        : 'bg-blue-600 hover:bg-blue-700 text-white'
-                    }`}
-                  >
-                    {isClockedIn ? '퇴근 처리 (Clock Out)' : '출근 인증 (Clock In)'}
-                  </button>
+                  <div className="mt-4 pt-3 border-t border-slate-100">
+                    <Button
+                      variant={isClockedIn ? 'danger' : 'primary'}
+                      size="md"
+                      onClick={() => handleToggleClock(staff.staffId)}
+                      className="w-full"
+                    >
+                      {isClockedIn ? '퇴근 처리 (Clock Out)' : '출근 인증 (Clock In)'}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )
       )}
 
       {/* 탭 2: 근태 타임카드 이력 */}
       {activeTab === 'timecards' && (
-        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm">
-              <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide border-b border-slate-200">
-                <tr>
-                  <th className="px-4 py-3">근무일자</th>
-                  <th className="px-4 py-3">출근 시각</th>
-                  <th className="px-4 py-3">퇴근 시각</th>
-                  <th className="px-4 py-3 text-center">휴게시간</th>
-                  <th className="px-4 py-3 text-right">기본근로</th>
-                  <th className="px-4 py-3 text-right">연장근로(8h 초과)</th>
-                  <th className="px-4 py-3 text-right">야간근로(22~06)</th>
-                  <th className="px-4 py-3 text-right">실근로 합계</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {timecards.map((tc, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                    <td className="px-4 py-3.5 font-medium text-slate-900 tabular-nums">{tc.date}</td>
-                    <td className="px-4 py-3.5 text-emerald-600 font-semibold tabular-nums font-mono">{tc.clockInTime}</td>
-                    <td className="px-4 py-3.5 text-red-600 font-semibold tabular-nums font-mono">{tc.clockOutTime}</td>
-                    <td className="px-4 py-3.5 text-center text-slate-500 tabular-nums font-mono">{tc.breakMinutes}분</td>
-                    <td className="px-4 py-3.5 text-right text-slate-700 tabular-nums font-mono">{tc.regularHours}h</td>
-                    <td className={`px-4 py-3.5 text-right tabular-nums font-mono ${tc.overtimeHours > 0 ? 'text-amber-600 font-semibold' : 'text-slate-400'}`}>
-                      {tc.overtimeHours}h
-                    </td>
-                    <td className={`px-4 py-3.5 text-right tabular-nums font-mono ${tc.nightHours > 0 ? 'text-blue-600 font-semibold' : 'text-slate-400'}`}>
-                      {tc.nightHours}h
-                    </td>
-                    <td className="px-4 py-3.5 text-right font-bold text-slate-900 tabular-nums font-mono">
-                      {tc.totalWorkedHours}h
-                    </td>
+        timecards.length === 0 ? (
+          <EmptyState
+            title="기록된 타임카드가 없습니다."
+            description="직원이 출퇴근을 기록하면 일자별 근로시간 및 야간/연장 시간이 자동으로 산출됩니다."
+          />
+        ) : (
+          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs sm:text-sm">
+                <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide border-b border-slate-200">
+                  <tr>
+                    <th className="px-4 py-3">근무일자</th>
+                    <th className="px-4 py-3">출근 시각</th>
+                    <th className="px-4 py-3">퇴근 시각</th>
+                    <th className="px-4 py-3 text-center">휴게시간</th>
+                    <th className="px-4 py-3 text-right">기본근로</th>
+                    <th className="px-4 py-3 text-right">연장근로(8h 초과)</th>
+                    <th className="px-4 py-3 text-right">야간근로(22~06)</th>
+                    <th className="px-4 py-3 text-right">실근로 합계</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {timecards.map((tc, idx) => (
+                    <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-4 py-3.5 font-medium text-slate-900 tabular-nums">{tc.date}</td>
+                      <td className="px-4 py-3.5 text-emerald-600 font-semibold tabular-nums font-mono">{tc.clockInTime}</td>
+                      <td className="px-4 py-3.5 text-red-600 font-semibold tabular-nums font-mono">{tc.clockOutTime}</td>
+                      <td className="px-4 py-3.5 text-center text-slate-500 tabular-nums font-mono">{tc.breakMinutes}분</td>
+                      <td className="px-4 py-3.5 text-right text-slate-700 tabular-nums font-mono">{tc.regularHours}h</td>
+                      <td className={`px-4 py-3.5 text-right tabular-nums font-mono ${tc.overtimeHours > 0 ? 'text-amber-600 font-semibold' : 'text-slate-400'}`}>
+                        {tc.overtimeHours}h
+                      </td>
+                      <td className={`px-4 py-3.5 text-right tabular-nums font-mono ${tc.nightHours > 0 ? 'text-blue-600 font-semibold' : 'text-slate-400'}`}>
+                        {tc.nightHours}h
+                      </td>
+                      <td className="px-4 py-3.5 text-right font-bold text-slate-900 tabular-nums font-mono">
+                        {tc.totalWorkedHours}h
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        )
       )}
 
       {/* 탭 3: 월간 법정 급여명세서 마감 */}
@@ -395,21 +408,21 @@ export const WorkAttendancePayrollView: React.FC = () => {
                 <option value="STANDARD">표준 계좌이체 양식</option>
               </select>
 
-              <button
-                type="button"
+              <Button
+                variant="success"
+                size="md"
                 onClick={handleDownloadBankTransferCsv}
-                className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs flex items-center gap-1.5"
               >
                 📥 급여 대량이체 파일
-              </button>
+              </Button>
 
-              <button
-                type="button"
+              <Button
+                variant="primary"
+                size="md"
                 onClick={handleDownloadTaxLedgerCsv}
-                className="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs flex items-center gap-1.5"
               >
                 📄 세무사 제출용 급여대장
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -444,35 +457,36 @@ export const WorkAttendancePayrollView: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-3.5 py-3.5 text-right tabular-nums font-mono">{slip.statutoryPay.totalWorkedHours}시간</td>
-                      <td className="px-3.5 py-3.5 text-right tabular-nums font-mono">{formatNumberWithCommas(slip.statutoryPay.regularPay)}원</td>
+                      <td className="px-3.5 py-3.5 text-right tabular-nums font-mono">{slip.statutoryPay.regularPay.toLocaleString()}원</td>
                       <td className="px-3.5 py-3.5 text-right text-blue-600 font-semibold tabular-nums font-mono">
-                        {slip.statutoryPay.weeklyHolidayPay > 0 ? `${formatNumberWithCommas(slip.statutoryPay.weeklyHolidayPay)}원` : '-'}
+                        {slip.statutoryPay.weeklyHolidayPay > 0 ? `${slip.statutoryPay.weeklyHolidayPay.toLocaleString()}원` : '-'}
                       </td>
                       <td className="px-3.5 py-3.5 text-right text-amber-600 tabular-nums font-mono">
                         {(slip.statutoryPay.overtimePay + slip.statutoryPay.nightPay).toLocaleString()}원
                       </td>
                       <td className="px-3.5 py-3.5 text-right text-emerald-600 font-semibold tabular-nums font-mono">
-                        {nonTax > 0 ? `-${formatNumberWithCommas(nonTax)}원` : '-'}
+                        {nonTax > 0 ? `-${nonTax.toLocaleString()}원` : '-'}
                       </td>
                       <td className="px-3.5 py-3.5 text-right font-semibold text-slate-900 tabular-nums font-mono">
-                        {formatNumberWithCommas(slip.statutoryPay.totalGrossPay)}원
+                        {slip.statutoryPay.totalGrossPay.toLocaleString()}원
                       </td>
                       <td className="px-3.5 py-3.5 text-right text-slate-600 tabular-nums font-mono">
-                        {formatNumberWithCommas(taxable)}원
+                        {taxable.toLocaleString()}원
                       </td>
                       <td className="px-3.5 py-3.5 text-right text-red-600 tabular-nums font-mono">
-                        -{formatNumberWithCommas(slip.deductions.totalDeductions)}원
+                        -{slip.deductions.totalDeductions.toLocaleString()}원
                       </td>
                       <td className="px-3.5 py-3.5 text-right font-bold text-emerald-600 text-sm sm:text-base tabular-nums font-mono">
-                        {formatNumberWithCommas(slip.netPay)}원
+                        {slip.netPay.toLocaleString()}원
                       </td>
                       <td className="px-3.5 py-3.5 text-center">
-                        <button
+                        <Button
+                          variant="primary"
+                          size="sm"
                           onClick={() => setSelectedStaffForSlip(slip)}
-                          className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs min-h-[36px] transition-colors cursor-pointer shadow-2xs"
                         >
                           명세서 보기
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   );
@@ -499,7 +513,7 @@ export const WorkAttendancePayrollView: React.FC = () => {
             <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1">
               <div><strong>성명:</strong> {selectedStaffForSlip.staffName}</div>
               <div><strong>근무 형태:</strong> {selectedStaffForSlip.employmentType === 'salaried_regular' ? '정규직' : '단시간 근로자(알바)'}</div>
-              <div><strong>통상 시급:</strong> <span className="tabular-nums font-mono font-bold">{formatNumberWithCommas(selectedStaffForSlip.hourlyRate)}원</span></div>
+              <div><strong>통상 시급:</strong> <span className="tabular-nums font-mono font-bold">{selectedStaffForSlip.hourlyRate.toLocaleString()}원</span></div>
             </div>
 
             {/* 지급 항목 */}
@@ -507,11 +521,11 @@ export const WorkAttendancePayrollView: React.FC = () => {
               <div className="font-bold text-slate-900">[지급 내역]</div>
               <div className="flex justify-between">
                 <span>기본 근로시간 ({selectedStaffForSlip.statutoryPay.totalWorkedHours}h)</span>
-                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.statutoryPay.regularPay)}원</span>
+                <span className="tabular-nums font-mono">{selectedStaffForSlip.statutoryPay.regularPay.toLocaleString()}원</span>
               </div>
               <div className="flex justify-between text-blue-600 font-medium">
                 <span>법정 주휴수당 ({selectedStaffForSlip.statutoryPay.weeklyHolidayHours}h)</span>
-                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.statutoryPay.weeklyHolidayPay)}원</span>
+                <span className="tabular-nums font-mono">{selectedStaffForSlip.statutoryPay.weeklyHolidayPay.toLocaleString()}원</span>
               </div>
               <div className="flex justify-between text-amber-600 font-medium">
                 <span>연장가산 (1.5배, {selectedStaffForSlip.statutoryPay.overtimeHours}h)</span>
@@ -519,11 +533,11 @@ export const WorkAttendancePayrollView: React.FC = () => {
               </div>
               <div className="flex justify-between text-blue-600 font-medium">
                 <span>야간가산 (0.5배, {selectedStaffForSlip.statutoryPay.nightHours}h)</span>
-                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.statutoryPay.nightPay)}원</span>
+                <span className="tabular-nums font-mono">{selectedStaffForSlip.statutoryPay.nightPay.toLocaleString()}원</span>
               </div>
               <div className="flex justify-between font-bold pt-2 border-t border-slate-200 text-slate-900">
                 <span>지급액 계 (세전)</span>
-                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.statutoryPay.totalGrossPay)}원</span>
+                <span className="tabular-nums font-mono">{selectedStaffForSlip.statutoryPay.totalGrossPay.toLocaleString()}원</span>
               </div>
             </div>
 
@@ -534,19 +548,19 @@ export const WorkAttendancePayrollView: React.FC = () => {
                 {selectedStaffForSlip.nonTaxable.mealAllowance > 0 && (
                   <div className="flex justify-between text-emerald-700">
                     <span>식대 비과세 (월 최대 20만)</span>
-                    <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.nonTaxable.mealAllowance)}원</span>
+                    <span className="tabular-nums font-mono">{selectedStaffForSlip.nonTaxable.mealAllowance.toLocaleString()}원</span>
                   </div>
                 )}
                 {selectedStaffForSlip.nonTaxable.drivingAllowance > 0 && (
                   <div className="flex justify-between text-emerald-700">
                     <span>자가운전보조금 비과세 (월 최대 20만)</span>
-                    <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.nonTaxable.drivingAllowance)}원</span>
+                    <span className="tabular-nums font-mono">{selectedStaffForSlip.nonTaxable.drivingAllowance.toLocaleString()}원</span>
                   </div>
                 )}
                 {selectedStaffForSlip.nonTaxable.researchAllowance > 0 && (
                   <div className="flex justify-between text-emerald-700">
                     <span>연구보조비 비과세 (월 최대 20만)</span>
-                    <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.nonTaxable.researchAllowance)}원</span>
+                    <span className="tabular-nums font-mono">{selectedStaffForSlip.nonTaxable.researchAllowance.toLocaleString()}원</span>
                   </div>
                 )}
                 <div className="flex justify-between font-bold pt-2 border-t border-emerald-200 text-emerald-900">
@@ -561,23 +575,23 @@ export const WorkAttendancePayrollView: React.FC = () => {
               <div className="font-bold text-rose-800">[공제 내역 (4대보험 및 세금)]</div>
               <div className="flex justify-between text-rose-700">
                 <span>국민연금 (4.5%)</span>
-                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.deductions.nationalPension)}원</span>
+                <span className="tabular-nums font-mono">{selectedStaffForSlip.deductions.nationalPension.toLocaleString()}원</span>
               </div>
               <div className="flex justify-between text-rose-700">
                 <span>건강보험 (3.545%)</span>
-                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.deductions.healthInsurance)}원</span>
+                <span className="tabular-nums font-mono">{selectedStaffForSlip.deductions.healthInsurance.toLocaleString()}원</span>
               </div>
               <div className="flex justify-between text-rose-700">
                 <span>장기요양보험 (건보의 12.95%)</span>
-                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.deductions.longTermCare)}원</span>
+                <span className="tabular-nums font-mono">{selectedStaffForSlip.deductions.longTermCare.toLocaleString()}원</span>
               </div>
               <div className="flex justify-between text-rose-700">
                 <span>고용보험 (0.9%)</span>
-                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.deductions.employmentInsurance)}원</span>
+                <span className="tabular-nums font-mono">{selectedStaffForSlip.deductions.employmentInsurance.toLocaleString()}원</span>
               </div>
               <div className="flex justify-between font-bold pt-2 border-t border-rose-200 text-rose-800">
                 <span>공제액 계</span>
-                <span className="tabular-nums font-mono">-{formatNumberWithCommas(selectedStaffForSlip.deductions.totalDeductions)}원</span>
+                <span className="tabular-nums font-mono">-{selectedStaffForSlip.deductions.totalDeductions.toLocaleString()}원</span>
               </div>
             </div>
 
@@ -585,28 +599,28 @@ export const WorkAttendancePayrollView: React.FC = () => {
             <div className="p-3.5 bg-emerald-50 rounded-xl border border-emerald-300 flex justify-between items-center">
               <span className="font-bold text-sm sm:text-base text-emerald-900">실지급액 (실수령액)</span>
               <span className="font-bold text-lg sm:text-xl text-emerald-600 tabular-nums font-mono">
-                {formatNumberWithCommas(selectedStaffForSlip.netPay)}원
+                {selectedStaffForSlip.netPay.toLocaleString()}원
               </span>
             </div>
 
             <div className="pt-3 flex justify-end gap-2 border-t border-slate-100">
-              <button
-                type="button"
+              <Button
+                variant="outline"
+                size="md"
                 onClick={() => setSelectedStaffForSlip(null)}
-                className="px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer"
               >
                 닫기
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
                 onClick={() => {
                   showToast(`[법정 전자 교부 완료] ${selectedStaffForSlip.staffName}님의 카카오 알림톡/이메일로 임금명세서 PDF가 발송되었습니다.`, 'success');
                   setSelectedStaffForSlip(null);
                 }}
-                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs"
               >
                 명세서 전자 교부
-              </button>
+              </Button>
             </div>
           </div>
         </Modal>

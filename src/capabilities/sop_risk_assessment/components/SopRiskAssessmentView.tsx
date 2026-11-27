@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useOpsTable } from '@/hooks/useOpsTable';
+import { Button } from '@/shared/components/ui/Button';
+import { EmptyState } from '@/shared/components/ui/EmptyState';
 import {
   WorkStandardSOP,
   HazardRiskItem,
@@ -216,46 +218,34 @@ export const SopRiskAssessmentView: React.FC = () => {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button
+          <Button
+            variant={activeTab === 'sop' ? 'danger' : 'outline'}
+            size="md"
             onClick={() => setActiveTab('sop')}
-            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] ${
-              activeTab === 'sop'
-                ? 'bg-red-600 text-white border-red-600 shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
-            }`}
           >
             안전작업표준 (SOP) ({sops.length})
-          </button>
-          <button
+          </Button>
+          <Button
+            variant={activeTab === 'matrix' ? 'danger' : 'outline'}
+            size="md"
             onClick={() => setActiveTab('matrix')}
-            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] ${
-              activeTab === 'matrix'
-                ? 'bg-red-600 text-white border-red-600 shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
-            }`}
           >
             5×5 위험성평가표 ({hazards.length})
-          </button>
-          <button
+          </Button>
+          <Button
+            variant={activeTab === 'controls' ? 'danger' : 'outline'}
+            size="md"
             onClick={() => setActiveTab('controls')}
-            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] ${
-              activeTab === 'controls'
-                ? 'bg-red-600 text-white border-red-600 shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
-            }`}
           >
             개선대책 이행률 ({auditSummary.complianceRatePercent}%)
-          </button>
-          <button
+          </Button>
+          <Button
+            variant={activeTab === 'approval' ? 'danger' : 'outline'}
+            size="md"
             onClick={() => setActiveTab('approval')}
-            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] ${
-              activeTab === 'approval'
-                ? 'bg-red-600 text-white border-red-600 shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
-            }`}
           >
             결재선·개정
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -458,66 +448,75 @@ export const SopRiskAssessmentView: React.FC = () => {
                 onChange={e => setNewControl(e.target.value)}
                 className="flex-1 px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-red-500"
               />
-              <button
+              <Button
+                variant="destructive"
+                size="md"
                 onClick={handleAddHazard}
-                className="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] shadow-2xs transition-colors shrink-0"
+                className="shrink-0"
               >
                 + 위험요인 평가 등록
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* 등록된 위험요인 5x5 평가표 */}
-          <div className="overflow-x-auto rounded-xl border border-slate-200">
-            <table className="w-full text-left text-xs sm:text-sm bg-white">
-              <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide">
-                <tr className="bg-slate-50 border-b border-slate-200 text-slate-700 font-semibold select-none">
-                  <th className="px-3 py-2.5">공정명</th>
-                  <th className="px-3 py-2.5">유해·위험요인</th>
-                  <th className="px-3 py-2.5">빈도×강도</th>
-                  <th className="px-3 py-2.5">위험 점수</th>
-                  <th className="px-3 py-2.5">위험 등급</th>
-                  <th className="px-3 py-2.5">개선 대책</th>
-                  <th className="px-3 py-2.5">상태</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {hazards.map(h => (
-                  <tr key={h.hazardId} className="hover:bg-slate-50/50 transition-colors">
-                    <td className="px-3 py-3 font-semibold text-slate-900">{h.processName}</td>
-                    <td className="px-3 py-3 text-slate-700">{h.hazardDescription}</td>
-                    <td className="px-3 py-3 text-slate-500 tabular-nums font-mono">{h.currentFrequency} × {h.currentSeverity}</td>
-                    <td className={`px-3 py-3 font-bold tabular-nums font-mono ${h.currentRiskScore >= 15 ? 'text-red-600' : 'text-slate-900'}`}>
-                      {h.currentRiskScore} 점
-                    </td>
-                    <td className="px-3 py-3">
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-xs font-bold tabular-nums ${
-                          h.currentRiskLevel === 'critical'
-                            ? 'bg-red-100 text-red-800'
-                            : h.currentRiskLevel === 'high'
-                            ? 'bg-orange-100 text-orange-800'
-                            : 'bg-amber-100 text-amber-800'
-                        }`}
-                      >
-                        {h.currentRiskLevel.toUpperCase()}
-                      </span>
-                    </td>
-                    <td className="px-3 py-3 text-slate-600">{h.controlMeasure}</td>
-                    <td className="px-3 py-3">
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
-                          h.isImplemented ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
-                        }`}
-                      >
-                        {h.isImplemented ? '조치 완료' : '미조치 (진행중)'}
-                      </span>
-                    </td>
+          {hazards.length === 0 ? (
+            <EmptyState
+              title="등록된 유해·위험요인이 없습니다."
+              description="상단의 발굴 폼을 통해 공정별 유해·위험요인을 등록하고 위험도를 평가하세요."
+            />
+          ) : (
+            <div className="overflow-x-auto rounded-xl border border-slate-200">
+              <table className="w-full text-left text-xs sm:text-sm bg-white">
+                <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide">
+                  <tr className="bg-slate-50 border-b border-slate-200 text-slate-700 font-semibold select-none">
+                    <th className="px-3 py-2.5">공정명</th>
+                    <th className="px-3 py-2.5">유해·위험요인</th>
+                    <th className="px-3 py-2.5">빈도×강도</th>
+                    <th className="px-3 py-2.5">위험 점수</th>
+                    <th className="px-3 py-2.5">위험 등급</th>
+                    <th className="px-3 py-2.5">개선 대책</th>
+                    <th className="px-3 py-2.5">상태</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {hazards.map(h => (
+                    <tr key={h.hazardId} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-3 py-3 font-semibold text-slate-900">{h.processName}</td>
+                      <td className="px-3 py-3 text-slate-700">{h.hazardDescription}</td>
+                      <td className="px-3 py-3 text-slate-500 tabular-nums font-mono">{h.currentFrequency} × {h.currentSeverity}</td>
+                      <td className={`px-3 py-3 font-bold tabular-nums font-mono ${h.currentRiskScore >= 15 ? 'text-red-600' : 'text-slate-900'}`}>
+                        {h.currentRiskScore} 점
+                      </td>
+                      <td className="px-3 py-3">
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-xs font-bold tabular-nums ${
+                            h.currentRiskLevel === 'critical'
+                              ? 'bg-red-100 text-red-800'
+                              : h.currentRiskLevel === 'high'
+                              ? 'bg-orange-100 text-orange-800'
+                              : 'bg-amber-100 text-amber-800'
+                          }`}
+                        >
+                          {h.currentRiskLevel.toUpperCase()}
+                        </span>
+                      </td>
+                      <td className="px-3 py-3 text-slate-600">{h.controlMeasure}</td>
+                      <td className="px-3 py-3">
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+                            h.isImplemented ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+                          }`}
+                        >
+                          {h.isImplemented ? '조치 완료' : '미조치 (진행중)'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       ) : (
         /* 탭 3: 개선대책 이행 점검 및 잔여 위험도 재평가 */
@@ -526,52 +525,57 @@ export const SopRiskAssessmentView: React.FC = () => {
             🛠️ 위험 감소 개선대책 이행 및 잔여위험도 재평가
           </h3>
 
-          <div className="flex flex-col gap-3">
-            {hazards.map(h => (
-              <div
-                key={h.hazardId}
-                className={`p-4 rounded-xl border flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-colors ${
-                  h.isImplemented ? 'border-emerald-200 bg-emerald-50/40' : 'border-rose-200 bg-rose-50/40'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                    <span className="font-bold text-sm text-slate-900">
-                      {h.processName}
-                    </span>
-                    <span className="text-xs text-red-600 font-semibold tabular-nums font-mono">
-                      [개선전: {h.currentRiskScore}점({h.currentRiskLevel})]
-                    </span>
-                    <span className="text-slate-400">➔</span>
-                    <span className="text-xs text-emerald-600 font-semibold tabular-nums font-mono">
-                      [개선후: {h.residualRiskScore}점({h.residualRiskLevel})]
-                    </span>
+          {hazards.length === 0 ? (
+            <EmptyState
+              title="진행 중인 위험 감소 개선대책이 없습니다."
+              description="5×5 위험성평가표 탭에서 고위험 요인을 발굴하고 개선대책을 수립하세요."
+            />
+          ) : (
+            <div className="flex flex-col gap-3">
+              {hazards.map(h => (
+                <div
+                  key={h.hazardId}
+                  className={`p-4 rounded-xl border flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-colors ${
+                    h.isImplemented ? 'border-emerald-200 bg-emerald-50/40' : 'border-rose-200 bg-rose-50/40'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                      <span className="font-bold text-sm text-slate-900">
+                        {h.processName}
+                      </span>
+                      <span className="text-xs text-red-600 font-semibold tabular-nums font-mono">
+                        [개선전: {h.currentRiskScore}점({h.currentRiskLevel})]
+                      </span>
+                      <span className="text-slate-400">➔</span>
+                      <span className="text-xs text-emerald-600 font-semibold tabular-nums font-mono">
+                        [개선후: {h.residualRiskScore}점({h.residualRiskLevel})]
+                      </span>
+                    </div>
+
+                    <div className="text-xs sm:text-sm text-slate-700 mb-1">
+                      <strong className="font-semibold text-slate-900">수립 대책:</strong> {h.controlMeasure}
+                    </div>
+
+                    <div className="text-xs text-slate-500 tabular-nums">
+                      이행 기한: {h.actionDeadline} | 담당 점검자: {h.inspectorName}
+                    </div>
                   </div>
 
-                  <div className="text-xs sm:text-sm text-slate-700 mb-1">
-                    <strong className="font-semibold text-slate-900">수립 대책:</strong> {h.controlMeasure}
-                  </div>
-
-                  <div className="text-xs text-slate-500 tabular-nums">
-                    이행 기한: {h.actionDeadline} | 담당 점검자: {h.inspectorName}
+                  <div>
+                    <Button
+                      variant={h.isImplemented ? 'success' : 'destructive'}
+                      size="sm"
+                      onClick={() => handleToggleImplement(h.hazardId)}
+                      className="shrink-0"
+                    >
+                      {h.isImplemented ? '✓ 조치 완료됨' : '조치 완료 처리'}
+                    </Button>
                   </div>
                 </div>
-
-                <div>
-                  <button
-                    onClick={() => handleToggleImplement(h.hazardId)}
-                    className={`px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm min-h-[44px] transition-colors shrink-0 shadow-2xs ${
-                      h.isImplemented
-                        ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                        : 'bg-red-600 hover:bg-red-700 text-white'
-                    }`}
-                  >
-                    {h.isImplemented ? '✓ 조치 완료됨' : '조치 완료 처리'}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
