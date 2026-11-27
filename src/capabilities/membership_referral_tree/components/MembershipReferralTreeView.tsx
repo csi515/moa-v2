@@ -1,4 +1,5 @@
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { formatNumberWithCommas } from '@/utils/formatters';
 import React, { useState } from 'react';
 import {
   FamilyGroup,
@@ -156,47 +157,39 @@ export const MembershipReferralTreeView: React.FC = () => {
   const currentBilling = selectedGroup ? calculateFamilyBilling(selectedGroup, 10, true) : null;
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'sans-serif' }}>
+    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-800">
       {/* 헤더 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-5">
         <div>
-          <h2 style={{ fontSize: '22px', fontWeight: 700, margin: '0 0 6px 0', color: '#111827' }}>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900">
             👨‍👩‍👧‍👦 형제·패밀리 연동 & 추천인 리워드
           </h2>
-          <p style={{ margin: 0, fontSize: '14px', color: '#6b7280' }}>
+          <p className="text-sm text-slate-500 mt-1">
             형제/자매 자동 결합 할인, 가족 공용 충전 크레딧 지갑 및 지인 소개 보너스를 실시간 통합 관리합니다.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveTab('families')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: '1px solid #d1d5db',
-              background: activeTab === 'families' ? '#4f46e5' : '#ffffff',
-              color: activeTab === 'families' ? '#ffffff' : '#374151',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
+            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] cursor-pointer ${
+              activeTab === 'families'
+                ? 'bg-blue-600 text-white border-blue-600 shadow-2xs'
+                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+            }`}
           >
             패밀리 그룹 & 결합할인 ({totalFamilies})
           </button>
           <button
             onClick={() => setActiveTab('referrals')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: '1px solid #d1d5db',
-              background: activeTab === 'referrals' ? '#4f46e5' : '#ffffff',
-              color: activeTab === 'referrals' ? '#ffffff' : '#374151',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
+            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'referrals'
+                ? 'bg-blue-600 text-white border-blue-600 shadow-2xs'
+                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+            }`}
           >
             지인 추천 리워드 ({referrals.length})
             {pendingRewards > 0 && (
-              <span style={{ marginLeft: '6px', background: '#ef4444', color: '#fff', fontSize: '11px', padding: '2px 6px', borderRadius: '10px' }}>
+              <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full font-bold tabular-nums">
                 {pendingRewards}
               </span>
             )}
@@ -205,41 +198,41 @@ export const MembershipReferralTreeView: React.FC = () => {
       </div>
 
       {/* 상단 통계 카드 */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
-        <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>등록 패밀리 그룹</div>
-          <div style={{ fontSize: '24px', fontWeight: 700, color: '#111827' }}>{totalFamilies} 가구</div>
-          <div style={{ fontSize: '12px', color: '#10b981', marginTop: '4px' }}>총 {totalChildren}명 회원 묶음 관리</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">등록 패밀리 그룹</div>
+          <div className="text-2xl font-bold text-slate-900 mt-1.5 tabular-nums font-mono">{totalFamilies} 가구</div>
+          <div className="text-xs text-emerald-600 mt-1 tabular-nums font-mono">총 {totalChildren}명 회원 묶음 관리</div>
         </div>
-        <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>형제 자동 결합 할인</div>
-          <div style={{ fontSize: '24px', fontWeight: 700, color: '#4f46e5' }}>2인 10% / 3인 15%</div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>매월 청구 시 자동 차감</div>
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">형제 자동 결합 할인</div>
+          <div className="text-2xl font-bold text-blue-600 mt-1.5">2인 10% / 3인 15%</div>
+          <div className="text-xs text-slate-400 mt-1">매월 청구 시 자동 차감</div>
         </div>
-        <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>가족 공용 크레딧 예치 잔액</div>
-          <div style={{ fontSize: '24px', fontWeight: 700, color: '#059669' }}>
-            {totalSharedCredit.toLocaleString()} 원
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">가족 공용 크레딧 예치 잔액</div>
+          <div className="text-2xl font-bold text-emerald-600 mt-1.5 tabular-nums font-mono">
+            {formatNumberWithCommas(totalSharedCredit)} 원
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>자녀 누구나 현장 차감 사용</div>
+          <div className="text-xs text-slate-400 mt-1">자녀 누구나 현장 차감 사용</div>
         </div>
-        <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>추천인 보너스 승인 대기</div>
-          <div style={{ fontSize: '24px', fontWeight: 700, color: pendingRewards > 0 ? '#ef4444' : '#111827' }}>
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">추천인 보너스 승인 대기</div>
+          <div className={`text-2xl font-bold mt-1.5 tabular-nums font-mono ${pendingRewards > 0 ? 'text-red-600' : 'text-slate-900'}`}>
             {pendingRewards} 건
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>1인 소개 시 30,000 크레딧</div>
+          <div className="text-xs text-slate-400 mt-1">1인 소개 시 30,000 크레딧</div>
         </div>
       </div>
 
       {activeTab === 'families' ? (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* 좌측: 패밀리 목록 */}
-          <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '12px', color: '#111827' }}>
+          <div className="space-y-3">
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-1.5">
               📋 패밀리 그룹 목록
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div className="flex flex-col gap-3">
               {familyGroups.map(group => {
                 const isSelected = selectedGroup?.groupId === group.groupId;
                 const discountRate = group.members.length >= 3 ? 15 : group.members.length === 2 ? 10 : 0;
@@ -247,41 +240,33 @@ export const MembershipReferralTreeView: React.FC = () => {
                   <div
                     key={group.groupId}
                     onClick={() => setSelectedGroup(group)}
-                    style={{
-                      padding: '16px',
-                      borderRadius: '8px',
-                      border: isSelected ? '2px solid #4f46e5' : '1px solid #e5e7eb',
-                      background: isSelected ? '#eef2ff' : '#ffffff',
-                      cursor: 'pointer',
-                      boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-                    }}
+                    className={`p-4 rounded-xl border transition-all cursor-pointer shadow-2xs ${
+                      isSelected
+                        ? 'border-blue-600 bg-blue-50/50 shadow-xs'
+                        : 'border-slate-200 bg-white hover:border-slate-300'
+                    }`}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                      <span style={{ fontWeight: 700, fontSize: '15px', color: '#111827' }}>{group.familyName}</span>
-                      <span style={{
-                        fontSize: '12px',
-                        padding: '3px 8px',
-                        borderRadius: '12px',
-                        background: discountRate > 0 ? '#dcfce7' : '#f3f4f6',
-                        color: discountRate > 0 ? '#166534' : '#6b7280',
-                        fontWeight: 600,
-                      }}>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-bold text-sm sm:text-base text-slate-900">{group.familyName}</span>
+                      <span className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${
+                        discountRate > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
+                      }`}>
                         {discountRate > 0 ? `형제 할인 ${discountRate}%` : '단일 수강'}
                       </span>
                     </div>
 
-                    <div style={{ fontSize: '13px', color: '#4b5563', marginBottom: '6px' }}>
+                    <div className="text-xs sm:text-sm text-slate-600 mb-1.5">
                       👤 학부모 대표: <strong>{group.representativeName}</strong>
                     </div>
 
-                    <div style={{ fontSize: '13px', color: '#6b7280', marginBottom: '10px' }}>
+                    <div className="text-xs text-slate-500 mb-2.5">
                       자녀 목록: {group.members.map(m => m.name).join(', ')}
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', borderTop: '1px dashed #d1d5db', paddingTop: '8px' }}>
-                      <span style={{ color: '#6b7280' }}>가족 공용 크레딧:</span>
-                      <span style={{ fontWeight: 700, color: '#059669' }}>
-                        {group.sharedCreditBalance.toLocaleString()} 원
+                    <div className="flex justify-between text-xs sm:text-sm border-t border-dashed border-slate-200 pt-2">
+                      <span className="text-slate-500">가족 공용 크레딧:</span>
+                      <span className="font-bold text-emerald-600 tabular-nums font-mono">
+                        {formatNumberWithCommas(group.sharedCreditBalance)} 원
                       </span>
                     </div>
                   </div>
@@ -292,37 +277,29 @@ export const MembershipReferralTreeView: React.FC = () => {
 
           {/* 우측: 선택된 패밀리 상세 & 실시간 결합 청구 계산기 */}
           {selectedGroup && currentBilling && (
-            <div style={{ background: '#ffffff', padding: '20px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-              <div style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '12px', marginBottom: '16px' }}>
-                <span style={{ fontSize: '12px', color: '#4f46e5', fontWeight: 600 }}>상세 설정 & 정산 시뮬레이터</span>
-                <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '4px 0 0 0', color: '#111827' }}>
+            <div className="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+              <div className="border-b border-slate-200 pb-3">
+                <span className="text-xs font-semibold text-blue-600">상세 설정 & 정산 시뮬레이터</span>
+                <h3 className="text-lg font-bold text-slate-900 mt-1">
                   {selectedGroup.familyName}
                 </h3>
               </div>
 
               {/* 자녀 목록 및 과목 */}
-              <div style={{ marginBottom: '16px' }}>
-                <div style={{ fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
+              <div className="space-y-3">
+                <div className="text-sm font-semibold text-slate-700">
                   구성원 수강 명세
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div className="flex flex-col gap-2">
                   {selectedGroup.members.map((m, idx) => (
                     <div
                       key={idx}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '10px 12px',
-                        background: '#f9fafb',
-                        borderRadius: '6px',
-                        fontSize: '13px',
-                      }}
+                      className="flex justify-between items-center p-3 bg-slate-50 rounded-lg text-xs sm:text-sm border border-slate-100"
                     >
                       <div>
-                        <strong>{m.name}</strong> ({m.enrolledCoursesCount}개 강좌)
+                        <strong className="text-slate-900">{m.name}</strong> ({m.enrolledCoursesCount}개 강좌)
                       </div>
-                      <div style={{ fontWeight: 600, color: '#111827' }}>
+                      <div className="font-semibold text-slate-900 tabular-nums font-mono">
                         {m.monthlyTuition.toLocaleString()} 원/월
                       </div>
                     </div>
@@ -330,33 +307,24 @@ export const MembershipReferralTreeView: React.FC = () => {
                 </div>
 
                 {/* 신규 형제/자매 추가 폼 */}
-                <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
+                <div className="flex flex-col sm:flex-row gap-2 pt-1">
                   <input
                     type="text"
                     placeholder="신규 형제/자매 이름"
                     value={newChildName}
                     onChange={e => setNewChildName(e.target.value)}
-                    style={{ flex: 1, padding: '6px 10px', borderRadius: '4px', border: '1px solid #d1d5db', fontSize: '13px' }}
+                    className="flex-1 px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="number"
                     placeholder="수강료"
                     value={newChildTuition}
                     onChange={e => setNewChildTuition(Number(e.target.value))}
-                    style={{ width: '100px', padding: '6px 10px', borderRadius: '4px', border: '1px solid #d1d5db', fontSize: '13px' }}
+                    className="w-full sm:w-28 px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm font-mono tabular-nums focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                   <button
                     onClick={() => handleAddMember(selectedGroup)}
-                    style={{
-                      padding: '6px 12px',
-                      background: '#4f46e5',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '4px',
-                      fontSize: '13px',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                    }}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs sm:text-sm font-semibold min-h-[44px] transition-colors cursor-pointer shadow-2xs shrink-0"
                   >
                     + 가족 바인딩
                   </button>
@@ -364,30 +332,30 @@ export const MembershipReferralTreeView: React.FC = () => {
               </div>
 
               {/* 가족 공용 크레딧 충전/차감 */}
-              <div style={{ background: '#f0fdf4', padding: '14px', borderRadius: '6px', marginBottom: '16px', border: '1px solid #bbf7d0' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#166534' }}>💳 가족 공용 선불 크레딧</span>
-                  <span style={{ fontSize: '16px', fontWeight: 700, color: '#15803d' }}>
-                    {selectedGroup.sharedCreditBalance.toLocaleString()} 원
+              <div className="bg-emerald-50/60 p-4 rounded-xl border border-emerald-200 space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs sm:text-sm font-semibold text-emerald-900">💳 가족 공용 선불 크레딧</span>
+                  <span className="text-base sm:text-lg font-bold text-emerald-700 tabular-nums font-mono">
+                    {formatNumberWithCommas(selectedGroup.sharedCreditBalance)} 원
                   </span>
                 </div>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <div className="flex gap-2 items-center">
                   <input
                     type="number"
                     step={10000}
                     value={creditInput}
                     onChange={e => setCreditInput(Number(e.target.value))}
-                    style={{ width: '120px', padding: '6px 8px', borderRadius: '4px', border: '1px solid #86efac', fontSize: '13px' }}
+                    className="w-32 px-3 py-1.5 rounded-lg border border-emerald-300 bg-white text-xs sm:text-sm font-mono tabular-nums focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
                   />
                   <button
                     onClick={() => handleDepositCredit(selectedGroup)}
-                    style={{ padding: '6px 10px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}
+                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold min-h-[36px] transition-colors cursor-pointer shadow-2xs"
                   >
                     충전(+)
                   </button>
                   <button
                     onClick={() => handleDeductCredit(selectedGroup)}
-                    style={{ padding: '6px 10px', background: '#dc2626', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}
+                    className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold min-h-[36px] transition-colors cursor-pointer shadow-2xs"
                   >
                     현장차감(-)
                   </button>
@@ -395,29 +363,29 @@ export const MembershipReferralTreeView: React.FC = () => {
               </div>
 
               {/* 형제 결합 청구 시뮬레이션 결과 */}
-              <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                <div style={{ fontSize: '14px', fontWeight: 700, color: '#0f172a', marginBottom: '12px' }}>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 text-xs sm:text-sm">
+                <div className="font-bold text-slate-900 mb-2">
                   💰 당월 수강료 결합 정산 명세서
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '6px' }}>
-                  <span style={{ color: '#64748b' }}>정상 수강료 합계:</span>
-                  <span style={{ color: '#0f172a' }}>{currentBilling.totalOriginalTuition.toLocaleString()} 원</span>
+                <div className="flex justify-between text-slate-600">
+                  <span>정상 수강료 합계:</span>
+                  <span className="text-slate-900 tabular-nums font-mono">{formatNumberWithCommas(currentBilling.totalOriginalTuition)} 원</span>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '6px' }}>
-                  <span style={{ color: '#ef4444' }}>형제 결합 감면 ({currentBilling.discountRatePercent}%):</span>
-                  <span style={{ color: '#ef4444', fontWeight: 600 }}>-{currentBilling.discountAmount.toLocaleString()} 원</span>
+                <div className="flex justify-between text-red-600 font-medium">
+                  <span>형제 결합 감면 ({currentBilling.discountRatePercent}%):</span>
+                  <span className="tabular-nums font-mono">-{formatNumberWithCommas(currentBilling.discountAmount)} 원</span>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '6px' }}>
-                  <span style={{ color: '#059669' }}>가족 공용 크레딧 자동 상계:</span>
-                  <span style={{ color: '#059669', fontWeight: 600 }}>-{currentBilling.coveredBySharedCredit.toLocaleString()} 원</span>
+                <div className="flex justify-between text-emerald-600 font-medium">
+                  <span>가족 공용 크레딧 자동 상계:</span>
+                  <span className="tabular-nums font-mono">-{formatNumberWithCommas(currentBilling.coveredBySharedCredit)} 원</span>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', fontWeight: 700, borderTop: '2px solid #cbd5e1', paddingTop: '10px', marginTop: '10px' }}>
-                  <span style={{ color: '#1e293b' }}>최종 실납부 청구액:</span>
-                  <span style={{ color: '#4f46e5' }}>{currentBilling.finalOutOfPocketAmount.toLocaleString()} 원</span>
+                <div className="flex justify-between font-bold text-base sm:text-lg border-t border-slate-200 pt-2.5 mt-2 text-slate-900">
+                  <span>최종 실납부 청구액:</span>
+                  <span className="text-blue-600 tabular-nums font-mono">{formatNumberWithCommas(currentBilling.finalOutOfPocketAmount)} 원</span>
                 </div>
               </div>
             </div>
@@ -425,67 +393,55 @@ export const MembershipReferralTreeView: React.FC = () => {
         </div>
       ) : (
         /* 지인 추천인 리워드 관리 탭 */
-        <div style={{ background: '#ffffff', padding: '20px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px', color: '#111827' }}>
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs p-5">
+          <h3 className="text-base font-bold text-slate-900 mb-4">
             🎁 지인 추천 리워드 승인 내역
           </h3>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-            <thead>
-              <tr style={{ background: '#f9fafb', borderBottom: '2px solid #e5e7eb', textAlign: 'left' }}>
-                <th style={{ padding: '10px' }}>등록 일자</th>
-                <th style={{ padding: '10px' }}>추천인 (기존 회원)</th>
-                <th style={{ padding: '10px' }}>피추천인 (신규 회원)</th>
-                <th style={{ padding: '10px' }}>리워드 혜택</th>
-                <th style={{ padding: '10px' }}>지급 상태</th>
-                <th style={{ padding: '10px' }}>조치</th>
-              </tr>
-            </thead>
-            <tbody>
-              {referrals.map(ref => (
-                <tr key={ref.referralId} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                  <td style={{ padding: '12px 10px', color: '#6b7280' }}>{ref.registeredDate}</td>
-                  <td style={{ padding: '12px 10px', fontWeight: 600, color: '#111827' }}>{ref.referrerName}</td>
-                  <td style={{ padding: '12px 10px', color: '#374151' }}>{ref.refereeName}</td>
-                  <td style={{ padding: '12px 10px', color: '#059669', fontWeight: 600 }}>
-                    {ref.rewardValue.toLocaleString()} 크레딧
-                  </td>
-                  <td style={{ padding: '12px 10px' }}>
-                    <span style={{
-                      padding: '3px 8px',
-                      borderRadius: '12px',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      background: ref.status === 'rewarded' ? '#dcfce7' : '#fef3c7',
-                      color: ref.status === 'rewarded' ? '#166534' : '#92400e',
-                    }}>
-                      {ref.status === 'rewarded' ? '지급 완료' : '승인 대기'}
-                    </span>
-                  </td>
-                  <td style={{ padding: '12px 10px' }}>
-                    {ref.status === 'pending' ? (
-                      <button
-                        onClick={() => handleReward(ref)}
-                        style={{
-                          padding: '4px 10px',
-                          background: '#4f46e5',
-                          color: '#fff',
-                          border: 'none',
-                          borderRadius: '4px',
-                          fontSize: '12px',
-                          cursor: 'pointer',
-                          fontWeight: 600,
-                        }}
-                      >
-                        보너스 즉시 지급
-                      </button>
-                    ) : (
-                      <span style={{ color: '#9ca3af', fontSize: '12px' }}>처리 완료</span>
-                    )}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs sm:text-sm">
+              <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide border-b border-slate-200">
+                <tr>
+                  <th className="px-3.5 py-3">등록 일자</th>
+                  <th className="px-3.5 py-3">추천인 (기존 회원)</th>
+                  <th className="px-3.5 py-3">피추천인 (신규 회원)</th>
+                  <th className="px-3.5 py-3">리워드 혜택</th>
+                  <th className="px-3.5 py-3">지급 상태</th>
+                  <th className="px-3.5 py-3">조치</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {referrals.map(ref => (
+                  <tr key={ref.referralId} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="px-3.5 py-3.5 text-slate-500 tabular-nums">{ref.registeredDate}</td>
+                    <td className="px-3.5 py-3.5 font-semibold text-slate-900">{ref.referrerName}</td>
+                    <td className="px-3.5 py-3.5 text-slate-700">{ref.refereeName}</td>
+                    <td className="px-3.5 py-3.5 text-emerald-600 font-semibold tabular-nums font-mono">
+                      {formatNumberWithCommas(ref.rewardValue)} 크레딧
+                    </td>
+                    <td className="px-3.5 py-3.5">
+                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                        ref.status === 'rewarded' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                      }`}>
+                        {ref.status === 'rewarded' ? '지급 완료' : '승인 대기'}
+                      </span>
+                    </td>
+                    <td className="px-3.5 py-3.5">
+                      {ref.status === 'pending' ? (
+                        <button
+                          onClick={() => handleReward(ref)}
+                          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold min-h-[36px] transition-colors cursor-pointer shadow-2xs"
+                        >
+                          보너스 즉시 지급
+                        </button>
+                      ) : (
+                        <span className="text-slate-400 text-xs">처리 완료</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

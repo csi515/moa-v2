@@ -204,73 +204,55 @@ export const SopRiskAssessmentView: React.FC = () => {
   const auditSummary = calculateSafetyAuditSummary(hazards);
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'sans-serif' }}>
+    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-800">
       {/* 헤더 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-5">
         <div>
-          <h2 style={{ fontSize: '22px', fontWeight: 700, margin: '0 0 6px 0', color: '#111827' }}>
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
             🛡️ 작업표준(SOP) 및 위험성평가 관리
           </h2>
-          <p style={{ margin: 0, fontSize: '14px', color: '#6b7280' }}>
+          <p className="text-sm text-slate-500 mt-1">
             산업안전보건법 제36조 기준 공정별 안전작업표준, 5×5 빈도·강도 위험성평가 및 개선대책 이행을 통합 관리합니다.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveTab('sop')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: '1px solid #d1d5db',
-              background: activeTab === 'sop' ? '#dc2626' : '#ffffff',
-              color: activeTab === 'sop' ? '#ffffff' : '#374151',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
+            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] ${
+              activeTab === 'sop'
+                ? 'bg-red-600 text-white border-red-600 shadow-2xs'
+                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+            }`}
           >
             안전작업표준 (SOP) ({sops.length})
           </button>
           <button
             onClick={() => setActiveTab('matrix')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: '1px solid #d1d5db',
-              background: activeTab === 'matrix' ? '#dc2626' : '#ffffff',
-              color: activeTab === 'matrix' ? '#ffffff' : '#374151',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
+            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] ${
+              activeTab === 'matrix'
+                ? 'bg-red-600 text-white border-red-600 shadow-2xs'
+                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+            }`}
           >
             5×5 위험성평가표 ({hazards.length})
           </button>
           <button
             onClick={() => setActiveTab('controls')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: '1px solid #d1d5db',
-              background: activeTab === 'controls' ? '#dc2626' : '#ffffff',
-              color: activeTab === 'controls' ? '#ffffff' : '#374151',
-              fontWeight: 600,
-              cursor: 'pointer',
-              minHeight: 48,
-            }}
+            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] ${
+              activeTab === 'controls'
+                ? 'bg-red-600 text-white border-red-600 shadow-2xs'
+                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+            }`}
           >
             개선대책 이행률 ({auditSummary.complianceRatePercent}%)
           </button>
           <button
             onClick={() => setActiveTab('approval')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: '1px solid #d1d5db',
-              background: activeTab === 'approval' ? '#dc2626' : '#ffffff',
-              color: activeTab === 'approval' ? '#ffffff' : '#374151',
-              fontWeight: 600,
-              cursor: 'pointer',
-              minHeight: 48,
-            }}
+            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] ${
+              activeTab === 'approval'
+                ? 'bg-red-600 text-white border-red-600 shadow-2xs'
+                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+            }`}
           >
             결재선·개정
           </button>
@@ -278,47 +260,43 @@ export const SopRiskAssessmentView: React.FC = () => {
       </div>
 
       {/* 종합 안전 감사 지표 카드 */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
-        <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>법정 점검 적합성</div>
-          <div style={{
-            fontSize: '22px',
-            fontWeight: 700,
-            color: auditSummary.isLegalAuditReady ? '#10b981' : '#dc2626',
-          }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500 mb-1">법정 점검 적합성</div>
+          <div className={`text-2xl font-bold tabular-nums font-mono ${auditSummary.isLegalAuditReady ? 'text-emerald-600' : 'text-red-600'}`}>
             {auditSummary.isLegalAuditReady ? '✅ 적합 (Audit Ready)' : '⚠️ 개선 미완료'}
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+          <div className="text-xs text-slate-400 mt-1">
             중대위험 100% 해소 & 이행률 80% 이상
           </div>
         </div>
 
-        <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>중대·고위험 요인</div>
-          <div style={{ fontSize: '24px', fontWeight: 700, color: auditSummary.criticalHazards > 0 ? '#dc2626' : '#111827' }}>
+        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500 mb-1">중대·고위험 요인</div>
+          <div className={`text-2xl font-bold tabular-nums font-mono ${auditSummary.criticalHazards > 0 ? 'text-red-600' : 'text-slate-900'}`}>
             {auditSummary.criticalHazards} 건 (중대) / {auditSummary.highHazards} 건 (높음)
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+          <div className="text-xs text-slate-400 mt-1">
             위험 점수 15점 이상 즉시 작업 중지
           </div>
         </div>
 
-        <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>개선대책 조치 완료</div>
-          <div style={{ fontSize: '24px', fontWeight: 700, color: '#2563eb' }}>
+        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500 mb-1">개선대책 조치 완료</div>
+          <div className="text-2xl font-bold text-blue-600 tabular-nums font-mono">
             {auditSummary.implementedCount} / {auditSummary.totalHazards} 건
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+          <div className="text-xs text-slate-400 mt-1">
             미이행 {auditSummary.pendingCount}건 진행 중
           </div>
         </div>
 
-        <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>공정 안전 표준 (SOP)</div>
-          <div style={{ fontSize: '24px', fontWeight: 700, color: '#111827' }}>
+        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500 mb-1">공정 안전 표준 (SOP)</div>
+          <div className="text-2xl font-bold text-slate-900 tabular-nums font-mono">
             {sops.length} 개 공정
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+          <div className="text-xs text-slate-400 mt-1">
             전 작업자 안전수칙 숙지 및 서명 관리
           </div>
         </div>
@@ -328,29 +306,27 @@ export const SopRiskAssessmentView: React.FC = () => {
         <SopRiskApprovalPanel />
       ) : activeTab === 'sop' ? (
         /* 탭 1: 안전작업표준 (SOP) 상세 */
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '24px' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* 공정 선택 목록 */}
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '12px', color: '#111827' }}>
+            <h3 className="text-base font-bold text-slate-900 mb-3 flex items-center gap-1.5">
               📋 표준 공정 매뉴얼 목록
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div className="flex flex-col gap-2.5">
               {sops.map(s => (
                 <div
                   key={s.sopId}
                   onClick={() => setSelectedSop(s)}
-                  style={{
-                    padding: '14px',
-                    borderRadius: '8px',
-                    border: selectedSop.sopId === s.sopId ? '2px solid #dc2626' : '1px solid #e5e7eb',
-                    background: selectedSop.sopId === s.sopId ? '#fef2f2' : '#ffffff',
-                    cursor: 'pointer',
-                  }}
+                  className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
+                    selectedSop.sopId === s.sopId
+                      ? 'border-red-600 bg-red-50/50 shadow-2xs'
+                      : 'border-slate-200 bg-white hover:border-slate-300'
+                  }`}
                 >
-                  <div style={{ fontWeight: 700, fontSize: '14px', color: '#111827', marginBottom: '4px' }}>
+                  <div className="font-bold text-sm text-slate-900 mb-1">
                     {s.processName}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                  <div className="text-xs text-slate-500">
                     {s.department} • 개정일: {s.revisedDate}
                   </div>
                 </div>
@@ -359,34 +335,27 @@ export const SopRiskAssessmentView: React.FC = () => {
           </div>
 
           {/* 선택된 SOP 상세 정보 */}
-          <div style={{ background: '#ffffff', padding: '24px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-            <div style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '16px', marginBottom: '16px' }}>
-              <span style={{ fontSize: '12px', color: '#dc2626', fontWeight: 700 }}>STANDARD OPERATING PROCEDURE</span>
-              <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '4px 0 8px 0', color: '#111827' }}>
+          <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+            <div className="border-b border-slate-200 pb-4 mb-4">
+              <span className="text-xs font-bold text-rose-600 tracking-wider uppercase">STANDARD OPERATING PROCEDURE</span>
+              <h3 className="text-xl font-bold text-slate-900 mt-1 mb-2">
                 {selectedSop.processName}
               </h3>
-              <div style={{ fontSize: '13px', color: '#4b5563' }}>
+              <div className="text-xs text-slate-600">
                 작성/검토자: <strong>{selectedSop.authorName}</strong> | 부서: {selectedSop.department}
               </div>
             </div>
 
             {/* 필수 보호구 (PPE) */}
-            <div style={{ marginBottom: '20px' }}>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
+            <div className="mb-5">
+              <div className="text-sm font-semibold text-slate-700 mb-2">
                 🦺 필수 착용 개인보호구 (PPE)
               </div>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <div className="flex gap-2 flex-wrap">
                 {selectedSop.requiredPPE.map((ppe, idx) => (
                   <span
                     key={idx}
-                    style={{
-                      padding: '4px 10px',
-                      borderRadius: '16px',
-                      background: '#fee2e2',
-                      color: '#991b1b',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                    }}
+                    className="px-2.5 py-1 rounded-full bg-red-100 text-red-800 text-xs font-semibold"
                   >
                     ✓ {ppe}
                   </span>
@@ -395,29 +364,24 @@ export const SopRiskAssessmentView: React.FC = () => {
             </div>
 
             {/* 단계별 표준 절차 */}
-            <div style={{ marginBottom: '20px' }}>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '10px' }}>
+            <div className="mb-5">
+              <div className="text-sm font-semibold text-slate-700 mb-2.5">
                 ⚙️ 표준 작업 순서 및 안전 통제점
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div className="flex flex-col gap-2.5">
                 {selectedSop.standardSteps.map(step => (
                   <div
                     key={step.stepNumber}
-                    style={{
-                      padding: '12px',
-                      background: '#f9fafb',
-                      borderRadius: '6px',
-                      borderLeft: '4px solid #dc2626',
-                    }}
+                    className="p-3 bg-slate-50 rounded-lg border-l-4 border-l-red-600"
                   >
-                    <div style={{ fontWeight: 700, fontSize: '13px', color: '#111827', marginBottom: '4px' }}>
+                    <div className="font-bold text-xs sm:text-sm text-slate-900 mb-1">
                       STEP {step.stepNumber}. {step.actionTitle}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#166534', marginBottom: '2px' }}>
+                    <div className="text-xs text-emerald-800 mb-0.5">
                       <strong>안전 핵심:</strong> {step.safetyControlPoint}
                     </div>
                     {step.potentialHazard && (
-                      <div style={{ fontSize: '11px', color: '#b91c1c' }}>
+                      <div className="text-[11px] text-red-700">
                         ⚠️ 잠재 위험: {step.potentialHazard}
                       </div>
                     )}
@@ -427,13 +391,13 @@ export const SopRiskAssessmentView: React.FC = () => {
             </div>
 
             {/* 절대 금지 사항 */}
-            <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', padding: '14px', borderRadius: '6px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#be123c', marginBottom: '6px' }}>
+            <div className="bg-rose-50/50 border border-rose-200 p-4 rounded-xl space-y-2">
+              <div className="text-xs sm:text-sm font-bold text-rose-700 mb-1.5">
                 🚫 절대 금지 행위 (위반 시 작업 퇴장)
               </div>
-              <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '12px', color: '#9f1239' }}>
+              <ul className="list-disc pl-5 text-xs text-rose-800 space-y-0.5">
                 {selectedSop.prohibitedActions.map((act, idx) => (
-                  <li key={idx} style={{ marginBottom: '2px' }}>{act}</li>
+                  <li key={idx}>{act}</li>
                 ))}
               </ul>
             </div>
@@ -443,69 +407,60 @@ export const SopRiskAssessmentView: React.FC = () => {
         /* 탭 2: 5x5 위험성평가 매트릭스 등록 */
         <div>
           {/* 신규 위험요인 등록 박스 */}
-          <div style={{ background: '#fef2f2', border: '1px solid #fecaca', padding: '18px', borderRadius: '8px', marginBottom: '24px' }}>
-            <h4 style={{ margin: '0 0 12px 0', fontSize: '15px', color: '#991b1b' }}>
+          <div className="bg-rose-50/40 border border-rose-200 p-5 rounded-2xl mb-6 space-y-4">
+            <h4 className="text-sm sm:text-base font-bold text-rose-900 mb-3">
               ➕ 유해·위험요인 발굴 및 5×5 평가 등록
             </h4>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 100px 100px', gap: '12px', marginBottom: '10px' }}>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-2.5">
               <input
                 type="text"
                 placeholder="대상 공정/작업명"
                 value={newProcess}
                 onChange={e => setNewProcess(e.target.value)}
-                style={{ padding: '8px 10px', borderRadius: '4px', border: '1px solid #d1d5db', fontSize: '13px' }}
+                className="col-span-1 md:col-span-4 px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-red-500"
               />
               <input
                 type="text"
                 placeholder="유해·위험요인 (상황 및 재해 유형)"
                 value={newDesc}
                 onChange={e => setNewDesc(e.target.value)}
-                style={{ padding: '8px 10px', borderRadius: '4px', border: '1px solid #d1d5db', fontSize: '13px' }}
+                className="col-span-1 md:col-span-4 px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-red-500"
               />
-              <div>
-                <label style={{ fontSize: '11px', color: '#6b7280', display: 'block' }}>빈도 (1~5)</label>
+              <div className="col-span-1 md:col-span-2">
+                <label className="text-[11px] font-medium text-slate-500 block mb-0.5">빈도 (1~5)</label>
                 <input
                   type="number"
                   min={1}
                   max={5}
                   value={newFreq}
                   onChange={e => setNewFreq(Number(e.target.value))}
-                  style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #d1d5db', fontSize: '13px' }}
+                  className="w-full px-2 py-1.5 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm text-center font-mono tabular-nums focus:outline-hidden focus:ring-2 focus:ring-red-500"
                 />
               </div>
-              <div>
-                <label style={{ fontSize: '11px', color: '#6b7280', display: 'block' }}>강도 (1~5)</label>
+              <div className="col-span-1 md:col-span-2">
+                <label className="text-[11px] font-medium text-slate-500 block mb-0.5">강도 (1~5)</label>
                 <input
                   type="number"
                   min={1}
                   max={5}
                   value={newSev}
                   onChange={e => setNewSev(Number(e.target.value))}
-                  style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #d1d5db', fontSize: '13px' }}
+                  className="w-full px-2 py-1.5 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm text-center font-mono tabular-nums focus:outline-hidden focus:ring-2 focus:ring-red-500"
                 />
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
               <input
                 type="text"
                 placeholder="위험 감소 대책 (공학적 방호장치 / 작업절차 개선 / 보호구)"
                 value={newControl}
                 onChange={e => setNewControl(e.target.value)}
-                style={{ flex: 1, padding: '8px 10px', borderRadius: '4px', border: '1px solid #d1d5db', fontSize: '13px' }}
+                className="flex-1 px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-red-500"
               />
               <button
                 onClick={handleAddHazard}
-                style={{
-                  padding: '8px 20px',
-                  background: '#dc2626',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '4px',
-                  fontWeight: 600,
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                }}
+                className="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] shadow-2xs transition-colors shrink-0"
               >
                 + 위험요인 평가 등록
               </button>
@@ -513,111 +468,91 @@ export const SopRiskAssessmentView: React.FC = () => {
           </div>
 
           {/* 등록된 위험요인 5x5 평가표 */}
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
-            <thead>
-              <tr style={{ background: '#f9fafb', borderBottom: '2px solid #e5e7eb', textAlign: 'left' }}>
-                <th style={{ padding: '10px' }}>공정명</th>
-                <th style={{ padding: '10px' }}>유해·위험요인</th>
-                <th style={{ padding: '10px' }}>빈도×강도</th>
-                <th style={{ padding: '10px' }}>위험 점수</th>
-                <th style={{ padding: '10px' }}>위험 등급</th>
-                <th style={{ padding: '10px' }}>개선 대책</th>
-                <th style={{ padding: '10px' }}>상태</th>
-              </tr>
-            </thead>
-            <tbody>
-              {hazards.map(h => (
-                <tr key={h.hazardId} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                  <td style={{ padding: '12px 10px', fontWeight: 600 }}>{h.processName}</td>
-                  <td style={{ padding: '12px 10px', color: '#374151' }}>{h.hazardDescription}</td>
-                  <td style={{ padding: '12px 10px', color: '#6b7280' }}>{h.currentFrequency} × {h.currentSeverity}</td>
-                  <td style={{ padding: '12px 10px', fontWeight: 700, color: h.currentRiskScore >= 15 ? '#dc2626' : '#111827' }}>
-                    {h.currentRiskScore} 점
-                  </td>
-                  <td style={{ padding: '12px 10px' }}>
-                    <span
-                      style={{
-                        padding: '3px 8px',
-                        borderRadius: '12px',
-                        fontSize: '11px',
-                        fontWeight: 700,
-                        background:
-                          h.currentRiskLevel === 'critical'
-                            ? '#fee2e2'
-                            : h.currentRiskLevel === 'high'
-                            ? '#ffedd5'
-                            : '#fef9c3',
-                        color:
-                          h.currentRiskLevel === 'critical'
-                            ? '#991b1b'
-                            : h.currentRiskLevel === 'high'
-                            ? '#c2410c'
-                            : '#854d0e',
-                      }}
-                    >
-                      {h.currentRiskLevel.toUpperCase()}
-                    </span>
-                  </td>
-                  <td style={{ padding: '12px 10px', color: '#4b5563' }}>{h.controlMeasure}</td>
-                  <td style={{ padding: '12px 10px' }}>
-                    <span
-                      style={{
-                        padding: '3px 8px',
-                        borderRadius: '12px',
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        background: h.isImplemented ? '#dcfce7' : '#fee2e2',
-                        color: h.isImplemented ? '#166534' : '#991b1b',
-                      }}
-                    >
-                      {h.isImplemented ? '조치 완료' : '미조치 (진행중)'}
-                    </span>
-                  </td>
+          <div className="overflow-x-auto rounded-xl border border-slate-200">
+            <table className="w-full text-left text-xs sm:text-sm bg-white">
+              <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide">
+                <tr className="bg-slate-50 border-b border-slate-200 text-slate-700 font-semibold select-none">
+                  <th className="px-3 py-2.5">공정명</th>
+                  <th className="px-3 py-2.5">유해·위험요인</th>
+                  <th className="px-3 py-2.5">빈도×강도</th>
+                  <th className="px-3 py-2.5">위험 점수</th>
+                  <th className="px-3 py-2.5">위험 등급</th>
+                  <th className="px-3 py-2.5">개선 대책</th>
+                  <th className="px-3 py-2.5">상태</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {hazards.map(h => (
+                  <tr key={h.hazardId} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="px-3 py-3 font-semibold text-slate-900">{h.processName}</td>
+                    <td className="px-3 py-3 text-slate-700">{h.hazardDescription}</td>
+                    <td className="px-3 py-3 text-slate-500 tabular-nums font-mono">{h.currentFrequency} × {h.currentSeverity}</td>
+                    <td className={`px-3 py-3 font-bold tabular-nums font-mono ${h.currentRiskScore >= 15 ? 'text-red-600' : 'text-slate-900'}`}>
+                      {h.currentRiskScore} 점
+                    </td>
+                    <td className="px-3 py-3">
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-xs font-bold tabular-nums ${
+                          h.currentRiskLevel === 'critical'
+                            ? 'bg-red-100 text-red-800'
+                            : h.currentRiskLevel === 'high'
+                            ? 'bg-orange-100 text-orange-800'
+                            : 'bg-amber-100 text-amber-800'
+                        }`}
+                      >
+                        {h.currentRiskLevel.toUpperCase()}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 text-slate-600">{h.controlMeasure}</td>
+                    <td className="px-3 py-3">
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+                          h.isImplemented ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        {h.isImplemented ? '조치 완료' : '미조치 (진행중)'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : (
         /* 탭 3: 개선대책 이행 점검 및 잔여 위험도 재평가 */
-        <div style={{ background: '#ffffff', padding: '20px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px', color: '#111827' }}>
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
+          <h3 className="text-base font-bold text-slate-900 mb-4">
             🛠️ 위험 감소 개선대책 이행 및 잔여위험도 재평가
           </h3>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div className="flex flex-col gap-3">
             {hazards.map(h => (
               <div
                 key={h.hazardId}
-                style={{
-                  padding: '16px',
-                  borderRadius: '6px',
-                  border: h.isImplemented ? '1px solid #86efac' : '1px solid #fecaca',
-                  background: h.isImplemented ? '#f0fdf4' : '#fff5f5',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
+                className={`p-4 rounded-xl border flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-colors ${
+                  h.isImplemented ? 'border-emerald-200 bg-emerald-50/40' : 'border-rose-200 bg-rose-50/40'
+                }`}
               >
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                    <span style={{ fontWeight: 700, fontSize: '14px', color: '#111827' }}>
+                  <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                    <span className="font-bold text-sm text-slate-900">
                       {h.processName}
                     </span>
-                    <span style={{ fontSize: '12px', color: '#dc2626', fontWeight: 600 }}>
+                    <span className="text-xs text-red-600 font-semibold tabular-nums font-mono">
                       [개선전: {h.currentRiskScore}점({h.currentRiskLevel})]
                     </span>
-                    <span>➔</span>
-                    <span style={{ fontSize: '12px', color: '#16a34a', fontWeight: 600 }}>
+                    <span className="text-slate-400">➔</span>
+                    <span className="text-xs text-emerald-600 font-semibold tabular-nums font-mono">
                       [개선후: {h.residualRiskScore}점({h.residualRiskLevel})]
                     </span>
                   </div>
 
-                  <div style={{ fontSize: '13px', color: '#374151', marginBottom: '4px' }}>
-                    <strong>수립 대책:</strong> {h.controlMeasure}
+                  <div className="text-xs sm:text-sm text-slate-700 mb-1">
+                    <strong className="font-semibold text-slate-900">수립 대책:</strong> {h.controlMeasure}
                   </div>
 
-                  <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                  <div className="text-xs text-slate-500 tabular-nums">
                     이행 기한: {h.actionDeadline} | 담당 점검자: {h.inspectorName}
                   </div>
                 </div>
@@ -625,16 +560,11 @@ export const SopRiskAssessmentView: React.FC = () => {
                 <div>
                   <button
                     onClick={() => handleToggleImplement(h.hazardId)}
-                    style={{
-                      padding: '8px 16px',
-                      borderRadius: '6px',
-                      border: 'none',
-                      background: h.isImplemented ? '#16a34a' : '#dc2626',
-                      color: '#ffffff',
-                      fontSize: '13px',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                    }}
+                    className={`px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm min-h-[44px] transition-colors shrink-0 shadow-2xs ${
+                      h.isImplemented
+                        ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                        : 'bg-red-600 hover:bg-red-700 text-white'
+                    }`}
                   >
                     {h.isImplemented ? '✓ 조치 완료됨' : '조치 완료 처리'}
                   </button>

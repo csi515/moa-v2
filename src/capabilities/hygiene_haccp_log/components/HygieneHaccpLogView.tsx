@@ -200,61 +200,49 @@ export const HygieneHaccpLogView: React.FC = () => {
   const auditSummary = calculateDailyHygieneAudit('2026-03-15', tempRecords, checklist, healthCerts);
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'sans-serif' }}>
+    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-800">
       {/* 헤더 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-5">
         <div>
-          <h2 style={{ fontSize: '22px', fontWeight: 700, margin: '0 0 6px 0', color: '#111827' }}>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900">
             🧼 주방 위생 HACCP 점검 & 보건증 만료 관리
           </h2>
-          <p style={{ margin: 0, fontSize: '14px', color: '#6b7280' }}>
+          <p className="text-sm text-slate-500 mt-1">
             식품위생법 표준 냉장·냉동고 실시간 온도 일지, 식약처 일일 위생 체크리스트 및 직원 보건증 D-Day를 통합 관제합니다.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveTab('temp')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: '1px solid #d1d5db',
-              background: activeTab === 'temp' ? '#0284c7' : '#ffffff',
-              color: activeTab === 'temp' ? '#ffffff' : '#374151',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
+            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] cursor-pointer ${
+              activeTab === 'temp'
+                ? 'bg-blue-600 text-white border-blue-600 shadow-2xs'
+                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+            }`}
           >
             냉장·냉동 온도 일지 ({tempRecords.length})
           </button>
           <button
             onClick={() => setActiveTab('checklist')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: '1px solid #d1d5db',
-              background: activeTab === 'checklist' ? '#0284c7' : '#ffffff',
-              color: activeTab === 'checklist' ? '#ffffff' : '#374151',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
+            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] cursor-pointer ${
+              activeTab === 'checklist'
+                ? 'bg-blue-600 text-white border-blue-600 shadow-2xs'
+                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+            }`}
           >
             일일 위생 체크표 ({auditSummary.checklistCompletionRate}%)
           </button>
           <button
             onClick={() => setActiveTab('certs')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: '1px solid #d1d5db',
-              background: activeTab === 'certs' ? '#0284c7' : '#ffffff',
-              color: activeTab === 'certs' ? '#ffffff' : '#374151',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
+            className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors min-h-[44px] cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'certs'
+                ? 'bg-blue-600 text-white border-blue-600 shadow-2xs'
+                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+            }`}
           >
             직원 보건증 만료 ({auditSummary.expiringHealthCertCount})
             {auditSummary.expiringHealthCertCount > 0 && (
-              <span style={{ marginLeft: '6px', background: '#ef4444', color: '#fff', fontSize: '11px', padding: '2px 6px', borderRadius: '10px' }}>
+              <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full font-bold tabular-nums">
                 {auditSummary.expiringHealthCertCount}
               </span>
             )}
@@ -263,57 +251,53 @@ export const HygieneHaccpLogView: React.FC = () => {
       </div>
 
       {/* 종합 현황 카드 */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
-        <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>식약처 점검 적합성</div>
-          <div style={{
-            fontSize: '22px',
-            fontWeight: 700,
-            color: auditSummary.isInspectionReady ? '#10b981' : '#ef4444',
-          }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">식약처 점검 적합성</div>
+          <div className={`text-2xl font-bold mt-1.5 ${auditSummary.isInspectionReady ? 'text-emerald-600' : 'text-red-600'}`}>
             {auditSummary.isInspectionReady ? '✅ 합격 (Ready)' : '⚠️ 보완 필요'}
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+          <div className="text-xs text-slate-400 mt-1">
             {auditSummary.isInspectionReady ? '구청 위생점검 대응 완료' : '이상 온도 또는 미완료 항목 존재'}
           </div>
         </div>
-        <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>냉장·냉동 이상 온도</div>
-          <div style={{ fontSize: '24px', fontWeight: 700, color: auditSummary.temperatureAlerts > 0 ? '#ef4444' : '#10b981' }}>
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">냉장·냉동 이상 온도</div>
+          <div className={`text-2xl font-bold mt-1.5 tabular-nums font-mono ${auditSummary.temperatureAlerts > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
             {auditSummary.temperatureAlerts} 건
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>냉장 0~5℃ / 냉동 -18℃ 이하</div>
+          <div className="text-xs text-slate-400 mt-1">냉장 0~5℃ / 냉동 -18℃ 이하</div>
         </div>
-        <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>일일 위생 체크 진행률</div>
-          <div style={{ fontSize: '24px', fontWeight: 700, color: '#0284c7' }}>
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">일일 위생 체크 진행률</div>
+          <div className="text-2xl font-bold text-blue-600 mt-1.5 tabular-nums font-mono">
             {auditSummary.checklistCompletionRate}%
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+          <div className="text-xs text-slate-400 mt-1 tabular-nums font-mono">
             {auditSummary.completedCheckItems} / {auditSummary.totalCheckItems} 항목 완료
           </div>
         </div>
-        <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>보건증 만료 임박/경과</div>
-          <div style={{ fontSize: '24px', fontWeight: 700, color: auditSummary.expiringHealthCertCount > 0 ? '#ef4444' : '#10b981' }}>
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">보건증 만료 임박/경과</div>
+          <div className={`text-2xl font-bold mt-1.5 tabular-nums font-mono ${auditSummary.expiringHealthCertCount > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
             {auditSummary.expiringHealthCertCount} 명
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>D-14일 전 사전 경고 표시</div>
+          <div className="text-xs text-slate-400 mt-1">D-14일 전 사전 경고 표시</div>
         </div>
       </div>
 
       {activeTab === 'temp' ? (
-        <div>
+        <div className="space-y-4">
           {/* 주방 태블릿 원터치 온도 입력 바 */}
-          <div style={{ background: '#f0f9ff', border: '1px solid #bae6fd', padding: '16px', borderRadius: '8px', marginBottom: '20px' }}>
-            <h4 style={{ margin: '0 0 10px 0', fontSize: '15px', color: '#0369a1' }}>
+          <div className="bg-blue-50/60 border border-blue-200 p-4 rounded-xl shadow-2xs space-y-3">
+            <h4 className="text-sm font-bold text-blue-900">
               📟 주방 태블릿 간편 실측 온도 등록
             </h4>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
               <select
                 value={selectedUnitType}
                 onChange={e => setSelectedUnitType(e.target.value as any)}
-                style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #93c5fd', fontSize: '14px' }}
+                className="px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm text-slate-700 font-medium focus:outline-hidden focus:ring-2 focus:ring-blue-500"
               >
                 <option value="refrigerator">냉장고 (기준 0~5℃)</option>
                 <option value="freezer">냉동고 (기준 -18℃ 이하)</option>
@@ -323,31 +307,22 @@ export const HygieneHaccpLogView: React.FC = () => {
                 value={unitNameInput}
                 onChange={e => setUnitNameInput(e.target.value)}
                 placeholder="기기명 (예: 메인 냉장고)"
-                style={{ flex: 1, padding: '8px 12px', borderRadius: '6px', border: '1px solid #93c5fd', fontSize: '14px' }}
+                className="flex-1 px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
               />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '14px', fontWeight: 600 }}>실측:</span>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className="text-xs sm:text-sm font-semibold text-slate-700">실측:</span>
                 <input
                   type="number"
                   step={0.1}
                   value={inputTemp}
                   onChange={e => setInputTemp(Number(e.target.value))}
-                  style={{ width: '80px', padding: '8px', borderRadius: '6px', border: '1px solid #93c5fd', fontSize: '14px', textAlign: 'center' }}
+                  className="w-20 px-2 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm font-mono tabular-nums text-center focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
-                <span style={{ fontSize: '14px', fontWeight: 600 }}>℃</span>
+                <span className="text-xs sm:text-sm font-semibold text-slate-700">℃</span>
               </div>
               <button
                 onClick={handleAddTemperature}
-                style={{
-                  padding: '8px 18px',
-                  background: '#0284c7',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontWeight: 600,
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                }}
+                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs shrink-0"
               >
                 + 즉시 기록
               </button>
@@ -355,100 +330,94 @@ export const HygieneHaccpLogView: React.FC = () => {
           </div>
 
           {/* 온도 기록 목록 */}
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
-            <thead>
-              <tr style={{ background: '#f9fafb', borderBottom: '2px solid #e5e7eb', textAlign: 'left' }}>
-                <th style={{ padding: '10px' }}>측정 시간</th>
-                <th style={{ padding: '10px' }}>보관 기기명</th>
-                <th style={{ padding: '10px' }}>구분</th>
-                <th style={{ padding: '10px' }}>기준 온도</th>
-                <th style={{ padding: '10px' }}>실측 온도</th>
-                <th style={{ padding: '10px' }}>판정 결과</th>
-                <th style={{ padding: '10px' }}>기록자</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tempRecords.map(rec => (
-                <tr key={rec.recordId} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                  <td style={{ padding: '12px 10px', color: '#6b7280' }}>{rec.recordedAt} ({rec.timeSlot === 'morning' ? '오전' : '오후'})</td>
-                  <td style={{ padding: '12px 10px', fontWeight: 600, color: '#111827' }}>{rec.unitName}</td>
-                  <td style={{ padding: '12px 10px', color: '#4b5563' }}>
-                    {rec.unitType === 'refrigerator' ? '냉장' : '냉동'}
-                  </td>
-                  <td style={{ padding: '12px 10px', color: '#6b7280' }}>
-                    {rec.unitType === 'refrigerator' ? '0℃ ~ 5℃' : '-18℃ 이하'}
-                  </td>
-                  <td style={{ padding: '12px 10px', fontWeight: 700, color: rec.isAlert ? '#ef4444' : '#111827' }}>
-                    {rec.recordedTemp} ℃
-                  </td>
-                  <td style={{ padding: '12px 10px' }}>
-                    {rec.isAlert ? (
-                      <span style={{ padding: '3px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: 600, background: '#fee2e2', color: '#991b1b' }}>
-                        ⚠️ {rec.alertReason}
-                      </span>
-                    ) : (
-                      <span style={{ padding: '3px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: 600, background: '#dcfce7', color: '#166534' }}>
-                        정상 (적합)
-                      </span>
-                    )}
-                  </td>
-                  <td style={{ padding: '12px 10px', color: '#6b7280' }}>{rec.recordedBy}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs sm:text-sm">
+                <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide border-b border-slate-200">
+                  <tr>
+                    <th className="px-3.5 py-3">측정 시간</th>
+                    <th className="px-3.5 py-3">보관 기기명</th>
+                    <th className="px-3.5 py-3">구분</th>
+                    <th className="px-3.5 py-3">기준 온도</th>
+                    <th className="px-3.5 py-3">실측 온도</th>
+                    <th className="px-3.5 py-3">판정 결과</th>
+                    <th className="px-3.5 py-3">기록자</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {tempRecords.map(rec => (
+                    <tr key={rec.recordId} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-3.5 py-3.5 text-slate-500 tabular-nums font-mono">
+                        {rec.recordedAt} ({rec.timeSlot === 'morning' ? '오전' : '오후'})
+                      </td>
+                      <td className="px-3.5 py-3.5 font-semibold text-slate-900">{rec.unitName}</td>
+                      <td className="px-3.5 py-3.5 text-slate-600">
+                        {rec.unitType === 'refrigerator' ? '냉장' : '냉동'}
+                      </td>
+                      <td className="px-3.5 py-3.5 text-slate-500 tabular-nums font-mono">
+                        {rec.unitType === 'refrigerator' ? '0℃ ~ 5℃' : '-18℃ 이하'}
+                      </td>
+                      <td className={`px-3.5 py-3.5 font-bold tabular-nums font-mono ${rec.isAlert ? 'text-red-600' : 'text-slate-900'}`}>
+                        {rec.recordedTemp} ℃
+                      </td>
+                      <td className="px-3.5 py-3.5">
+                        {rec.isAlert ? (
+                          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                            ⚠️ {rec.alertReason}
+                          </span>
+                        ) : (
+                          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+                            정상 (적합)
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-3.5 py-3.5 text-slate-500">{rec.recordedBy}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       ) : activeTab === 'checklist' ? (
         /* 일일 위생 체크리스트 */
-        <div style={{ background: '#ffffff', padding: '20px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 600, margin: 0, color: '#111827' }}>
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs p-5 sm:p-6 space-y-4">
+          <div className="flex justify-between items-center border-b border-slate-200 pb-3">
+            <h3 className="text-base font-bold text-slate-900">
               📋 식약처 기준 일일 위생 점검표
             </h3>
-            <span style={{ fontSize: '13px', color: '#6b7280' }}>
-              당일 점검 완료율: <strong>{auditSummary.checklistCompletionRate}%</strong>
+            <span className="text-xs sm:text-sm text-slate-500">
+              당일 점검 완료율: <strong className="text-blue-600 tabular-nums font-mono">{auditSummary.checklistCompletionRate}%</strong>
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div className="flex flex-col gap-2.5">
             {checklist.map(item => (
               <div
                 key={item.id}
                 onClick={() => handleToggleCheck(item.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '14px',
-                  borderRadius: '6px',
-                  border: item.isChecked ? '1px solid #86efac' : '1px solid #e5e7eb',
-                  background: item.isChecked ? '#f0fdf4' : '#f9fafb',
-                  cursor: 'pointer',
-                }}
+                className={`flex items-center justify-between p-3.5 rounded-xl border transition-colors cursor-pointer ${
+                  item.isChecked ? 'border-emerald-200 bg-emerald-50/50' : 'border-slate-200 bg-slate-50/60 hover:bg-slate-100/60'
+                }`}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div className="flex items-center gap-3">
                   <input
                     type="checkbox"
                     checked={item.isChecked}
                     onChange={() => {}} // 부모 div 클릭으로 토글
-                    style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                    className="w-4 h-4 rounded-sm text-emerald-600 focus:ring-emerald-500 cursor-pointer"
                   />
-                  <span style={{
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    color: item.isChecked ? '#166534' : '#374151',
-                    textDecoration: item.isChecked ? 'none' : 'none',
-                  }}>
+                  <span className={`text-xs sm:text-sm font-medium ${item.isChecked ? 'text-emerald-950 font-semibold' : 'text-slate-700'}`}>
                     {item.task}
                   </span>
                 </div>
                 <div>
                   {item.isChecked ? (
-                    <span style={{ fontSize: '12px', color: '#15803d', fontWeight: 600 }}>
+                    <span className="text-xs text-emerald-700 font-semibold">
                       ✓ 점검 완료 ({item.inspectorName || '점검자'})
                     </span>
                   ) : (
-                    <span style={{ fontSize: '12px', color: '#ef4444', fontWeight: 600 }}>
+                    <span className="text-xs text-red-500 font-semibold">
                       미점검
                     </span>
                   )}
@@ -459,81 +428,63 @@ export const HygieneHaccpLogView: React.FC = () => {
         </div>
       ) : (
         /* 직원 보건증 만료 관리 탭 */
-        <div style={{ background: '#ffffff', padding: '20px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px', color: '#111827' }}>
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs p-5 sm:p-6 space-y-4">
+          <h3 className="text-base font-bold text-slate-900">
             🪪 조리·서빙 종사자 법정 보건증(건강진단결과서) 유효 현황
           </h3>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-            <thead>
-              <tr style={{ background: '#f9fafb', borderBottom: '2px solid #e5e7eb', textAlign: 'left' }}>
-                <th style={{ padding: '10px' }}>직원명</th>
-                <th style={{ padding: '10px' }}>직무/역할</th>
-                <th style={{ padding: '10px' }}>최근 검진일</th>
-                <th style={{ padding: '10px' }}>만료 예정일</th>
-                <th style={{ padding: '10px' }}>잔여 일수 (D-Day)</th>
-                <th style={{ padding: '10px' }}>상태</th>
-                <th style={{ padding: '10px' }}>갱신 관리</th>
-              </tr>
-            </thead>
-            <tbody>
-              {healthCerts.map(cert => (
-                <tr key={cert.certId} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                  <td style={{ padding: '12px 10px', fontWeight: 600, color: '#111827' }}>{cert.staffName}</td>
-                  <td style={{ padding: '12px 10px', color: '#4b5563' }}>{cert.role}</td>
-                  <td style={{ padding: '12px 10px', color: '#6b7280' }}>{cert.examDate}</td>
-                  <td style={{ padding: '12px 10px', color: '#6b7280' }}>{cert.expiryDate}</td>
-                  <td style={{ padding: '12px 10px', fontWeight: 700 }}>
-                    {cert.dDay < 0 ? (
-                      <span style={{ color: '#dc2626' }}>만료 {Math.abs(cert.dDay)}일 경과</span>
-                    ) : (
-                      <span style={{ color: cert.dDay <= 14 ? '#d97706' : '#15803d' }}>
-                        D-{cert.dDay}
-                      </span>
-                    )}
-                  </td>
-                  <td style={{ padding: '12px 10px' }}>
-                    <span style={{
-                      padding: '3px 8px',
-                      borderRadius: '12px',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      background:
-                        cert.status === 'valid'
-                          ? '#dcfce7'
-                          : cert.status === 'warning'
-                          ? '#fef3c7'
-                          : '#fee2e2',
-                      color:
-                        cert.status === 'valid'
-                          ? '#166534'
-                          : cert.status === 'warning'
-                          ? '#92400e'
-                          : '#991b1b',
-                    }}>
-                      {cert.status === 'valid' ? '유효' : cert.status === 'warning' ? '만료 임박 (14일 이내)' : '만료 (과태료 대상)'}
-                    </span>
-                  </td>
-                  <td style={{ padding: '12px 10px' }}>
-                    <button
-                      onClick={() => handleRenewCert(cert.certId)}
-                      style={{
-                        padding: '4px 10px',
-                        background: '#0284c7',
-                        color: '#fff',
-                        border: 'none',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      검진 갱신(1년 연장)
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs sm:text-sm">
+              <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide border-b border-slate-200">
+                <tr>
+                  <th className="px-3.5 py-3">직원명</th>
+                  <th className="px-3.5 py-3">직무/역할</th>
+                  <th className="px-3.5 py-3">최근 검진일</th>
+                  <th className="px-3.5 py-3">만료 예정일</th>
+                  <th className="px-3.5 py-3">잔여 일수 (D-Day)</th>
+                  <th className="px-3.5 py-3">상태</th>
+                  <th className="px-3.5 py-3">갱신 관리</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {healthCerts.map(cert => (
+                  <tr key={cert.certId} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="px-3.5 py-3.5 font-semibold text-slate-900">{cert.staffName}</td>
+                    <td className="px-3.5 py-3.5 text-slate-600">{cert.role}</td>
+                    <td className="px-3.5 py-3.5 text-slate-500 tabular-nums font-mono">{cert.examDate}</td>
+                    <td className="px-3.5 py-3.5 text-slate-500 tabular-nums font-mono">{cert.expiryDate}</td>
+                    <td className="px-3.5 py-3.5 font-bold tabular-nums font-mono">
+                      {cert.dDay < 0 ? (
+                        <span className="text-red-600">만료 {Math.abs(cert.dDay)}일 경과</span>
+                      ) : (
+                        <span className={cert.dDay <= 14 ? 'text-amber-600' : 'text-emerald-600'}>
+                          D-{cert.dDay}
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-3.5 py-3.5">
+                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                        cert.status === 'valid'
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : cert.status === 'warning'
+                          ? 'bg-amber-100 text-amber-800'
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {cert.status === 'valid' ? '유효' : cert.status === 'warning' ? '만료 임박 (14일 이내)' : '만료 (과태료 대상)'}
+                      </span>
+                    </td>
+                    <td className="px-3.5 py-3.5">
+                      <button
+                        onClick={() => handleRenewCert(cert.certId)}
+                        className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold min-h-[36px] transition-colors cursor-pointer shadow-2xs"
+                      >
+                        검진 갱신(1년 연장)
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

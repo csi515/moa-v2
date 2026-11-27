@@ -1,4 +1,6 @@
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { formatNumberWithCommas } from '@/utils/formatters';
+import { Modal } from '@/shared/components/ui/Modal';
 import React, { useState } from 'react';
 import {
   StaffEmploymentProfile,
@@ -183,27 +185,27 @@ export const WorkAttendancePayrollView: React.FC = () => {
   const totalWorkedHoursSum = payrollSlips.reduce((sum, s) => sum + s.statutoryPay.totalWorkedHours, 0);
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-800">
       {/* 헤더 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-5">
         <div>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0, color: '#111827' }}>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
             직원 근태 & 법정 급여명세서 (Time & Attendance Payroll)
           </h1>
-          <p style={{ margin: '4px 0 0', color: '#6b7280', fontSize: '14px' }}>
+          <p className="text-sm text-slate-500 mt-1">
             매장 Wi-Fi/GPS 출퇴근 인증, 근로기준법상 주 15시간 주휴수당, 연장/야간 가산 및 전자 급여명세서 자동 발행
           </p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
-          <span style={{ display: 'inline-block', width: '10px', height: '10px', borderRadius: '50%', background: mockWifiConnected ? '#10b981' : '#ef4444' }} />
-          <span style={{ color: '#374151', fontWeight: 500 }}>{authStatusMessage}</span>
+        <div className="flex items-center gap-2 text-xs sm:text-sm">
+          <span className={`inline-block w-2.5 h-2.5 rounded-full ${mockWifiConnected ? 'bg-emerald-500' : 'bg-red-500'}`} />
+          <span className="text-slate-700 font-medium">{authStatusMessage}</span>
           <button
             onClick={() => {
               const next = !mockWifiConnected;
               setMockWifiConnected(next);
               setAuthStatusMessage(next ? '매장 Wi-Fi (Moa_Store_5G) 정상 연결됨' : '외부 네트워크 연결 (인증 차단 시뮬레이션)');
             }}
-            style={{ marginLeft: '8px', padding: '4px 8px', fontSize: '11px', borderRadius: '4px', border: '1px solid #d1d5db', background: '#f9fafb', cursor: 'pointer' }}
+            className="ml-2 px-2.5 py-1 text-xs rounded-md border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium transition-colors cursor-pointer"
           >
             Wi-Fi 상태 변경
           </button>
@@ -211,50 +213,50 @@ export const WorkAttendancePayrollView: React.FC = () => {
       </div>
 
       {/* KPI 카드 그리드 */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px' }}>
-          <div style={{ color: '#6b7280', fontSize: '13px', fontWeight: 500 }}>현재 현장 근무 중</div>
-          <div style={{ fontSize: '26px', fontWeight: 'bold', color: '#059669', marginTop: '6px' }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">현재 현장 근무 중</div>
+          <div className="text-2xl font-bold text-emerald-600 mt-1.5 tabular-nums font-mono">
             {clockedInStaffIds.length}명
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+          <div className="text-xs text-slate-400 mt-1">
             전체 등록 직원 {staffList.length}명 중
           </div>
         </div>
 
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px' }}>
-          <div style={{ color: '#6b7280', fontSize: '13px', fontWeight: 500 }}>당월 총 실근무시간</div>
-          <div style={{ fontSize: '26px', fontWeight: 'bold', color: '#111827', marginTop: '6px' }}>
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">당월 총 실근무시간</div>
+          <div className="text-2xl font-bold text-slate-900 mt-1.5 tabular-nums font-mono">
             {totalWorkedHoursSum}시간
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+          <div className="text-xs text-slate-400 mt-1">
             휴게시간 자동 차감 완료
           </div>
         </div>
 
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px' }}>
-          <div style={{ color: '#6b7280', fontSize: '13px', fontWeight: 500 }}>당월 법정 주휴수당 합계</div>
-          <div style={{ fontSize: '26px', fontWeight: 'bold', color: '#2563eb', marginTop: '6px' }}>
-            {totalWeeklyHolidaySum.toLocaleString()}원
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">당월 법정 주휴수당 합계</div>
+          <div className="text-2xl font-bold text-blue-600 mt-1.5 tabular-nums font-mono">
+            {formatNumberWithCommas(totalWeeklyHolidaySum)}원
           </div>
-          <div style={{ fontSize: '12px', color: '#2563eb', marginTop: '4px' }}>
+          <div className="text-xs text-blue-600/80 mt-1">
             주 15시간 이상 알바 자동 산출
           </div>
         </div>
 
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px' }}>
-          <div style={{ color: '#6b7280', fontSize: '13px', fontWeight: 500 }}>당월 총 급여 지급 예정액</div>
-          <div style={{ fontSize: '26px', fontWeight: 'bold', color: '#7c3aed', marginTop: '6px' }}>
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">당월 총 급여 지급 예정액</div>
+          <div className="text-2xl font-bold text-blue-600 mt-1.5 tabular-nums font-mono">
             {totalMonthlyPayroll.toLocaleString()}원
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+          <div className="text-xs text-slate-400 mt-1">
             세전 기준 (4대보험 공제 전)
           </div>
         </div>
       </div>
 
       {/* 탭 네비게이션 */}
-      <div style={{ display: 'flex', borderBottom: '1px solid #e5e7eb', marginBottom: '20px', gap: '8px' }}>
+      <div className="flex border-b border-slate-200 gap-2">
         {[
           { key: 'clock_in', label: '실시간 출퇴근 태그 (현장 데스크)' },
           { key: 'timecards', label: '근태 타임카드 이력' },
@@ -263,16 +265,11 @@ export const WorkAttendancePayrollView: React.FC = () => {
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key as any)}
-            style={{
-              padding: '10px 16px',
-              border: 'none',
-              background: 'none',
-              fontWeight: 600,
-              fontSize: '14px',
-              cursor: 'pointer',
-              color: activeTab === tab.key ? '#2563eb' : '#6b7280',
-              borderBottom: activeTab === tab.key ? '2px solid #2563eb' : '2px solid transparent',
-            }}
+            className={`px-4 py-2.5 font-semibold text-sm transition-colors border-b-2 cursor-pointer ${
+              activeTab === tab.key
+                ? 'text-blue-600 border-blue-600'
+                : 'text-slate-500 border-transparent hover:text-slate-700'
+            }`}
           >
             {tab.label}
           </button>
@@ -281,59 +278,46 @@ export const WorkAttendancePayrollView: React.FC = () => {
 
       {/* 탭 1: 실시간 출퇴근 태그 */}
       {activeTab === 'clock_in' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {staffList.map((staff) => {
             const isClockedIn = clockedInStaffIds.includes(staff.staffId);
             return (
               <div
                 key={staff.staffId}
-                style={{
-                  background: '#fff',
-                  border: isClockedIn ? '2px solid #10b981' : '1px solid #e5e7eb',
-                  borderRadius: '12px',
-                  padding: '20px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                }}
+                className={`bg-white rounded-xl p-5 flex flex-col justify-between transition-all ${
+                  isClockedIn
+                    ? 'border-2 border-emerald-500 shadow-2xs'
+                    : 'border border-slate-200 shadow-2xs'
+                }`}
               >
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h3 style={{ margin: 0, fontSize: '17px', fontWeight: 600, color: '#111827' }}>{staff.staffName}</h3>
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-base font-bold text-slate-900">{staff.staffName}</h3>
                     <span
-                      style={{
-                        fontSize: '12px',
-                        padding: '3px 8px',
-                        borderRadius: '6px',
-                        fontWeight: 600,
-                        background: isClockedIn ? '#ecfdf5' : '#f3f4f6',
-                        color: isClockedIn ? '#059669' : '#6b7280',
-                      }}
+                      className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${
+                        isClockedIn
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : 'bg-slate-100 text-slate-600'
+                      }`}
                     >
                       {isClockedIn ? '근무 중' : '미출근'}
                     </span>
                   </div>
-                  <div style={{ marginTop: '10px', fontSize: '13px', color: '#4b5563', lineHeight: 1.6 }}>
+                  <div className="mt-2.5 text-xs text-slate-600 space-y-1">
                     <div>구분: {staff.employmentType === 'salaried_regular' ? '정규직 (월급제)' : '파트타임 (시급제)'}</div>
-                    <div>시급: <strong>{staff.hourlyRate.toLocaleString()}원</strong></div>
-                    <div>계약 근로시간: 주 {staff.contractWeeklyHours}시간 {staff.contractWeeklyHours >= 15 ? '(주휴수당 대상)' : '(주휴 제외)'}</div>
+                    <div>시급: <strong className="tabular-nums font-mono text-slate-900">{formatNumberWithCommas(staff.hourlyRate)}원</strong></div>
+                    <div>계약 근로시간: 주 <span className="tabular-nums font-mono">{staff.contractWeeklyHours}</span>시간 {staff.contractWeeklyHours >= 15 ? '(주휴수당 대상)' : '(주휴 제외)'}</div>
                   </div>
                 </div>
 
-                <div style={{ marginTop: '18px' }}>
+                <div className="mt-4 pt-3 border-t border-slate-100">
                   <button
                     onClick={() => handleToggleClock(staff.staffId)}
-                    style={{
-                      width: '100%',
-                      padding: '10px',
-                      borderRadius: '8px',
-                      border: 'none',
-                      fontWeight: 600,
-                      fontSize: '14px',
-                      cursor: 'pointer',
-                      background: isClockedIn ? '#ef4444' : '#2563eb',
-                      color: '#fff',
-                    }}
+                    className={`w-full py-2 px-3 rounded-lg font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs ${
+                      isClockedIn
+                        ? 'bg-red-600 hover:bg-red-700 text-white'
+                        : 'bg-blue-600 hover:bg-blue-700 text-white'
+                    }`}
                   >
                     {isClockedIn ? '퇴근 처리 (Clock Out)' : '출근 인증 (Clock In)'}
                   </button>
@@ -346,69 +330,63 @@ export const WorkAttendancePayrollView: React.FC = () => {
 
       {/* 탭 2: 근태 타임카드 이력 */}
       {activeTab === 'timecards' && (
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
-            <thead>
-              <tr style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb', color: '#4b5563' }}>
-                <th style={{ padding: '12px 16px' }}>근무일자</th>
-                <th style={{ padding: '12px 16px' }}>출근 시각</th>
-                <th style={{ padding: '12px 16px' }}>퇴근 시각</th>
-                <th style={{ padding: '12px 16px', textAlign: 'center' }}>휴게시간</th>
-                <th style={{ padding: '12px 16px', textAlign: 'right' }}>기본근로</th>
-                <th style={{ padding: '12px 16px', textAlign: 'right' }}>연장근로(8h 초과)</th>
-                <th style={{ padding: '12px 16px', textAlign: 'right' }}>야간근로(22~06)</th>
-                <th style={{ padding: '12px 16px', textAlign: 'right' }}>실근로 합계</th>
-              </tr>
-            </thead>
-            <tbody>
-              {timecards.map((tc, idx) => (
-                <tr key={idx} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                  <td style={{ padding: '14px 16px', fontWeight: 500, color: '#111827' }}>{tc.date}</td>
-                  <td style={{ padding: '14px 16px', color: '#059669', fontWeight: 600 }}>{tc.clockInTime}</td>
-                  <td style={{ padding: '14px 16px', color: '#dc2626', fontWeight: 600 }}>{tc.clockOutTime}</td>
-                  <td style={{ padding: '14px 16px', textAlign: 'center', color: '#6b7280' }}>{tc.breakMinutes}분</td>
-                  <td style={{ padding: '14px 16px', textAlign: 'right', color: '#374151' }}>{tc.regularHours}h</td>
-                  <td style={{ padding: '14px 16px', textAlign: 'right', color: tc.overtimeHours > 0 ? '#d97706' : '#9ca3af', fontWeight: tc.overtimeHours > 0 ? 600 : 400 }}>
-                    {tc.overtimeHours}h
-                  </td>
-                  <td style={{ padding: '14px 16px', textAlign: 'right', color: tc.nightHours > 0 ? '#7c3aed' : '#9ca3af', fontWeight: tc.nightHours > 0 ? 600 : 400 }}>
-                    {tc.nightHours}h
-                  </td>
-                  <td style={{ padding: '14px 16px', textAlign: 'right', fontWeight: 600, color: '#111827' }}>
-                    {tc.totalWorkedHours}h
-                  </td>
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs sm:text-sm">
+              <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide border-b border-slate-200">
+                <tr>
+                  <th className="px-4 py-3">근무일자</th>
+                  <th className="px-4 py-3">출근 시각</th>
+                  <th className="px-4 py-3">퇴근 시각</th>
+                  <th className="px-4 py-3 text-center">휴게시간</th>
+                  <th className="px-4 py-3 text-right">기본근로</th>
+                  <th className="px-4 py-3 text-right">연장근로(8h 초과)</th>
+                  <th className="px-4 py-3 text-right">야간근로(22~06)</th>
+                  <th className="px-4 py-3 text-right">실근로 합계</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {timecards.map((tc, idx) => (
+                  <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="px-4 py-3.5 font-medium text-slate-900 tabular-nums">{tc.date}</td>
+                    <td className="px-4 py-3.5 text-emerald-600 font-semibold tabular-nums font-mono">{tc.clockInTime}</td>
+                    <td className="px-4 py-3.5 text-red-600 font-semibold tabular-nums font-mono">{tc.clockOutTime}</td>
+                    <td className="px-4 py-3.5 text-center text-slate-500 tabular-nums font-mono">{tc.breakMinutes}분</td>
+                    <td className="px-4 py-3.5 text-right text-slate-700 tabular-nums font-mono">{tc.regularHours}h</td>
+                    <td className={`px-4 py-3.5 text-right tabular-nums font-mono ${tc.overtimeHours > 0 ? 'text-amber-600 font-semibold' : 'text-slate-400'}`}>
+                      {tc.overtimeHours}h
+                    </td>
+                    <td className={`px-4 py-3.5 text-right tabular-nums font-mono ${tc.nightHours > 0 ? 'text-blue-600 font-semibold' : 'text-slate-400'}`}>
+                      {tc.nightHours}h
+                    </td>
+                    <td className="px-4 py-3.5 text-right font-bold text-slate-900 tabular-nums font-mono">
+                      {tc.totalWorkedHours}h
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {/* 탭 3: 월간 법정 급여명세서 마감 */}
       {activeTab === 'payroll_slips' && (
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', overflow: 'hidden' }}>
-          <div style={{ padding: '16px 20px', background: '#f9fafb', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
+          <div className="p-4 sm:p-5 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-              <div style={{ fontWeight: 600, fontSize: '15px', color: '#111827' }}>2026년 10월 급여 정산 대장</div>
-              <div style={{ fontSize: '12px', color: '#059669', marginTop: '2px' }}>
+              <div className="font-bold text-base text-slate-900">2026년 10월 급여 정산 대장</div>
+              <div className="text-xs text-emerald-700 mt-0.5">
                 ✓ 식대(월 20만) 및 자가운전보조금(월 20만) 비과세 소득공제 자동 적용 완료
               </div>
             </div>
 
             {/* 은행 대량이체 및 세무사 제출용 엑셀 다운로드 버튼 그룹 */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="flex flex-wrap items-center gap-2">
               <select
                 value={selectedBank}
                 onChange={(e) => setSelectedBank(e.target.value as BankFormatCode)}
-                style={{
-                  padding: '7px 10px',
-                  borderRadius: '6px',
-                  border: '1px solid #d1d5db',
-                  fontSize: '13px',
-                  background: '#fff',
-                  color: '#374151',
-                  fontWeight: 500,
-                }}
+                className="px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm text-slate-700 font-medium focus:outline-hidden focus:ring-2 focus:ring-blue-500"
               >
                 <option value="KB">KB국민은행 대량이체 양식</option>
                 <option value="SHINHAN">신한은행 대량이체 양식</option>
@@ -420,19 +398,7 @@ export const WorkAttendancePayrollView: React.FC = () => {
               <button
                 type="button"
                 onClick={handleDownloadBankTransferCsv}
-                style={{
-                  background: '#059669',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '7px 12px',
-                  borderRadius: '6px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                }}
+                className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs flex items-center gap-1.5"
               >
                 📥 급여 대량이체 파일
               </button>
@@ -440,225 +406,210 @@ export const WorkAttendancePayrollView: React.FC = () => {
               <button
                 type="button"
                 onClick={handleDownloadTaxLedgerCsv}
-                style={{
-                  background: '#4f46e5',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '7px 12px',
-                  borderRadius: '6px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                }}
+                className="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs flex items-center gap-1.5"
               >
                 📄 세무사 제출용 급여대장
               </button>
             </div>
           </div>
 
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
-            <thead>
-              <tr style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', color: '#4b5563' }}>
-                <th style={{ padding: '12px 14px' }}>직원명</th>
-                <th style={{ padding: '12px 14px', textAlign: 'right' }}>총 근로시간</th>
-                <th style={{ padding: '12px 14px', textAlign: 'right' }}>기본급</th>
-                <th style={{ padding: '12px 14px', textAlign: 'right' }}>주휴수당</th>
-                <th style={{ padding: '12px 14px', textAlign: 'right' }}>연장·야간</th>
-                <th style={{ padding: '12px 14px', textAlign: 'right', color: '#059669' }}>비과세 소득</th>
-                <th style={{ padding: '12px 14px', textAlign: 'right' }}>세전 총급여</th>
-                <th style={{ padding: '12px 14px', textAlign: 'right', color: '#4b5563' }}>과세 대상액</th>
-                <th style={{ padding: '12px 14px', textAlign: 'right' }}>4대보험 등 공제</th>
-                <th style={{ padding: '12px 14px', textAlign: 'right' }}>실수령액</th>
-                <th style={{ padding: '12px 14px', textAlign: 'center' }}>명세서 교부</th>
-              </tr>
-            </thead>
-            <tbody>
-              {payrollSlips.map((slip) => {
-                const nonTax = slip.nonTaxable?.totalNonTaxable ?? 0;
-                const taxable = slip.taxableGrossPay ?? (slip.statutoryPay.totalGrossPay - nonTax);
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs sm:text-sm">
+              <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide border-b border-slate-200">
+                <tr>
+                  <th className="px-3.5 py-3">직원명</th>
+                  <th className="px-3.5 py-3 text-right">총 근로시간</th>
+                  <th className="px-3.5 py-3 text-right">기본급</th>
+                  <th className="px-3.5 py-3 text-right">주휴수당</th>
+                  <th className="px-3.5 py-3 text-right">연장·야간</th>
+                  <th className="px-3.5 py-3 text-right text-emerald-600">비과세 소득</th>
+                  <th className="px-3.5 py-3 text-right">세전 총급여</th>
+                  <th className="px-3.5 py-3 text-right text-slate-600">과세 대상액</th>
+                  <th className="px-3.5 py-3 text-right">4대보험 등 공제</th>
+                  <th className="px-3.5 py-3 text-right">실수령액</th>
+                  <th className="px-3.5 py-3 text-center">명세서 교부</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {payrollSlips.map((slip) => {
+                  const nonTax = slip.nonTaxable?.totalNonTaxable ?? 0;
+                  const taxable = slip.taxableGrossPay ?? (slip.statutoryPay.totalGrossPay - nonTax);
 
-                return (
-                  <tr key={slip.staffId} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                    <td style={{ padding: '14px 14px' }}>
-                      <div style={{ fontWeight: 600, color: '#111827' }}>{slip.staffName}</div>
-                      <div style={{ fontSize: '12px', color: '#6b7280' }}>
-                        {slip.bankName} {slip.accountNumber}
-                      </div>
-                    </td>
-                    <td style={{ padding: '14px 14px', textAlign: 'right' }}>{slip.statutoryPay.totalWorkedHours}시간</td>
-                    <td style={{ padding: '14px 14px', textAlign: 'right' }}>{slip.statutoryPay.regularPay.toLocaleString()}원</td>
-                    <td style={{ padding: '14px 14px', textAlign: 'right', color: '#2563eb', fontWeight: 600 }}>
-                      {slip.statutoryPay.weeklyHolidayPay > 0 ? `${slip.statutoryPay.weeklyHolidayPay.toLocaleString()}원` : '-'}
-                    </td>
-                    <td style={{ padding: '14px 14px', textAlign: 'right', color: '#d97706' }}>
-                      {(slip.statutoryPay.overtimePay + slip.statutoryPay.nightPay).toLocaleString()}원
-                    </td>
-                    <td style={{ padding: '14px 14px', textAlign: 'right', color: '#059669', fontWeight: 600 }}>
-                      {nonTax > 0 ? `-${nonTax.toLocaleString()}원` : '-'}
-                    </td>
-                    <td style={{ padding: '14px 14px', textAlign: 'right', fontWeight: 600, color: '#111827' }}>
-                      {slip.statutoryPay.totalGrossPay.toLocaleString()}원
-                    </td>
-                    <td style={{ padding: '14px 14px', textAlign: 'right', color: '#4b5563' }}>
-                      {taxable.toLocaleString()}원
-                    </td>
-                    <td style={{ padding: '14px 14px', textAlign: 'right', color: '#dc2626' }}>
-                      -{slip.deductions.totalDeductions.toLocaleString()}원
-                    </td>
-                    <td style={{ padding: '14px 14px', textAlign: 'right', fontWeight: 'bold', color: '#059669', fontSize: '15px' }}>
-                      {slip.netPay.toLocaleString()}원
-                    </td>
-                    <td style={{ padding: '14px 14px', textAlign: 'center' }}>
-                      <button
-                        onClick={() => setSelectedStaffForSlip(slip)}
-                        style={{
-                          background: '#2563eb',
-                          color: '#fff',
-                          border: 'none',
-                          padding: '6px 12px',
-                          borderRadius: '6px',
-                          fontSize: '12px',
-                          fontWeight: 600,
-                          cursor: 'pointer',
-                        }}
-                      >
-                        명세서 보기
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  return (
+                    <tr key={slip.staffId} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-3.5 py-3.5">
+                        <div className="font-bold text-slate-900">{slip.staffName}</div>
+                        <div className="text-xs text-slate-500 tabular-nums">
+                          {slip.bankName} {slip.accountNumber}
+                        </div>
+                      </td>
+                      <td className="px-3.5 py-3.5 text-right tabular-nums font-mono">{slip.statutoryPay.totalWorkedHours}시간</td>
+                      <td className="px-3.5 py-3.5 text-right tabular-nums font-mono">{formatNumberWithCommas(slip.statutoryPay.regularPay)}원</td>
+                      <td className="px-3.5 py-3.5 text-right text-blue-600 font-semibold tabular-nums font-mono">
+                        {slip.statutoryPay.weeklyHolidayPay > 0 ? `${formatNumberWithCommas(slip.statutoryPay.weeklyHolidayPay)}원` : '-'}
+                      </td>
+                      <td className="px-3.5 py-3.5 text-right text-amber-600 tabular-nums font-mono">
+                        {(slip.statutoryPay.overtimePay + slip.statutoryPay.nightPay).toLocaleString()}원
+                      </td>
+                      <td className="px-3.5 py-3.5 text-right text-emerald-600 font-semibold tabular-nums font-mono">
+                        {nonTax > 0 ? `-${formatNumberWithCommas(nonTax)}원` : '-'}
+                      </td>
+                      <td className="px-3.5 py-3.5 text-right font-semibold text-slate-900 tabular-nums font-mono">
+                        {formatNumberWithCommas(slip.statutoryPay.totalGrossPay)}원
+                      </td>
+                      <td className="px-3.5 py-3.5 text-right text-slate-600 tabular-nums font-mono">
+                        {formatNumberWithCommas(taxable)}원
+                      </td>
+                      <td className="px-3.5 py-3.5 text-right text-red-600 tabular-nums font-mono">
+                        -{formatNumberWithCommas(slip.deductions.totalDeductions)}원
+                      </td>
+                      <td className="px-3.5 py-3.5 text-right font-bold text-emerald-600 text-sm sm:text-base tabular-nums font-mono">
+                        {formatNumberWithCommas(slip.netPay)}원
+                      </td>
+                      <td className="px-3.5 py-3.5 text-center">
+                        <button
+                          onClick={() => setSelectedStaffForSlip(slip)}
+                          className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs min-h-[36px] transition-colors cursor-pointer shadow-2xs"
+                        >
+                          명세서 보기
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
-      {/* 전자 급여명세서 팝업 모달 */}
+      {/* 전자 급여명세서 표준 Modal */}
       {selectedStaffForSlip && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div style={{ background: '#fff', borderRadius: '12px', width: '500px', padding: '24px', boxShadow: '0 10px 25px rgba(0,0,0,0.2)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e5e7eb', paddingBottom: '12px' }}>
-              <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold', color: '#111827' }}>
-                임금명세서 (근로기준법 제48조)
-              </h2>
-              <span style={{ fontSize: '12px', color: '#6b7280' }}>귀속월: {selectedStaffForSlip.payrollPeriod}</span>
+        <Modal
+          isOpen={!!selectedStaffForSlip}
+          onClose={() => setSelectedStaffForSlip(null)}
+          title="임금명세서 (근로기준법 제48조)"
+        >
+          <div className="space-y-4 text-slate-800 text-xs sm:text-sm">
+            <div className="flex justify-between items-center text-xs text-slate-500 border-b border-slate-100 pb-2">
+              <span>사업장: <strong>{orgName}</strong></span>
+              <span>귀속월: <strong className="tabular-nums">{selectedStaffForSlip.payrollPeriod}</strong></span>
             </div>
 
-            <div style={{ marginTop: '16px', fontSize: '14px', lineHeight: 1.8 }}>
+            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1">
               <div><strong>성명:</strong> {selectedStaffForSlip.staffName}</div>
               <div><strong>근무 형태:</strong> {selectedStaffForSlip.employmentType === 'salaried_regular' ? '정규직' : '단시간 근로자(알바)'}</div>
-              <div><strong>통상 시급:</strong> {selectedStaffForSlip.hourlyRate.toLocaleString()}원</div>
+              <div><strong>통상 시급:</strong> <span className="tabular-nums font-mono font-bold">{formatNumberWithCommas(selectedStaffForSlip.hourlyRate)}원</span></div>
             </div>
 
             {/* 지급 항목 */}
-            <div style={{ marginTop: '16px', background: '#f9fafb', padding: '12px', borderRadius: '8px' }}>
-              <div style={{ fontWeight: 600, fontSize: '14px', color: '#111827', marginBottom: '8px' }}>[지급 내역]</div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2">
+              <div className="font-bold text-slate-900">[지급 내역]</div>
+              <div className="flex justify-between">
                 <span>기본 근로시간 ({selectedStaffForSlip.statutoryPay.totalWorkedHours}h)</span>
-                <span>{selectedStaffForSlip.statutoryPay.regularPay.toLocaleString()}원</span>
+                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.statutoryPay.regularPay)}원</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#2563eb' }}>
+              <div className="flex justify-between text-blue-600 font-medium">
                 <span>법정 주휴수당 ({selectedStaffForSlip.statutoryPay.weeklyHolidayHours}h)</span>
-                <span>{selectedStaffForSlip.statutoryPay.weeklyHolidayPay.toLocaleString()}원</span>
+                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.statutoryPay.weeklyHolidayPay)}원</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#d97706' }}>
+              <div className="flex justify-between text-amber-600 font-medium">
                 <span>연장가산 (1.5배, {selectedStaffForSlip.statutoryPay.overtimeHours}h)</span>
-                <span>{selectedStaffForSlip.statutoryPay.overtimePay.toLocaleString()}원</span>
+                <span className="tabular-nums font-mono">{selectedStaffForSlip.statutoryPay.overtimePay.toLocaleString()}원</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#7c3aed' }}>
+              <div className="flex justify-between text-blue-600 font-medium">
                 <span>야간가산 (0.5배, {selectedStaffForSlip.statutoryPay.nightHours}h)</span>
-                <span>{selectedStaffForSlip.statutoryPay.nightPay.toLocaleString()}원</span>
+                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.statutoryPay.nightPay)}원</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: 'bold', marginTop: '6px', paddingTop: '6px', borderTop: '1px solid #e5e7eb' }}>
+              <div className="flex justify-between font-bold pt-2 border-t border-slate-200 text-slate-900">
                 <span>지급액 계 (세전)</span>
-                <span>{selectedStaffForSlip.statutoryPay.totalGrossPay.toLocaleString()}원</span>
+                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.statutoryPay.totalGrossPay)}원</span>
               </div>
             </div>
 
             {/* 비과세 소득 공제 내역 */}
             {selectedStaffForSlip.nonTaxable && selectedStaffForSlip.nonTaxable.totalNonTaxable > 0 && (
-              <div style={{ marginTop: '12px', background: '#ecfdf5', padding: '12px', borderRadius: '8px' }}>
-                <div style={{ fontWeight: 600, fontSize: '14px', color: '#065f46', marginBottom: '8px' }}>[비과세 소득 공제]</div>
+              <div className="bg-emerald-50/60 p-3.5 rounded-xl border border-emerald-200 space-y-2 text-emerald-900">
+                <div className="font-bold text-emerald-800">[비과세 소득 공제]</div>
                 {selectedStaffForSlip.nonTaxable.mealAllowance > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#047857' }}>
+                  <div className="flex justify-between text-emerald-700">
                     <span>식대 비과세 (월 최대 20만)</span>
-                    <span>{selectedStaffForSlip.nonTaxable.mealAllowance.toLocaleString()}원</span>
+                    <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.nonTaxable.mealAllowance)}원</span>
                   </div>
                 )}
                 {selectedStaffForSlip.nonTaxable.drivingAllowance > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#047857' }}>
+                  <div className="flex justify-between text-emerald-700">
                     <span>자가운전보조금 비과세 (월 최대 20만)</span>
-                    <span>{selectedStaffForSlip.nonTaxable.drivingAllowance.toLocaleString()}원</span>
+                    <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.nonTaxable.drivingAllowance)}원</span>
                   </div>
                 )}
                 {selectedStaffForSlip.nonTaxable.researchAllowance > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#047857' }}>
+                  <div className="flex justify-between text-emerald-700">
                     <span>연구보조비 비과세 (월 최대 20만)</span>
-                    <span>{selectedStaffForSlip.nonTaxable.researchAllowance.toLocaleString()}원</span>
+                    <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.nonTaxable.researchAllowance)}원</span>
                   </div>
                 )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 600, marginTop: '4px', borderTop: '1px solid #a7f3d0', paddingTop: '4px', color: '#065f46' }}>
+                <div className="flex justify-between font-bold pt-2 border-t border-emerald-200 text-emerald-900">
                   <span>과세 대상 급여 (4대보험/소득세 과표)</span>
-                  <span>{selectedStaffForSlip.taxableGrossPay?.toLocaleString()}원</span>
+                  <span className="tabular-nums font-mono">{selectedStaffForSlip.taxableGrossPay?.toLocaleString()}원</span>
                 </div>
               </div>
             )}
 
             {/* 공제 항목 */}
-            <div style={{ marginTop: '12px', background: '#fef2f2', padding: '12px', borderRadius: '8px' }}>
-              <div style={{ fontWeight: 600, fontSize: '14px', color: '#991b1b', marginBottom: '8px' }}>[공제 내역 (4대보험 및 세금)]</div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+            <div className="bg-rose-50/60 p-3.5 rounded-xl border border-rose-200 space-y-2 text-rose-900">
+              <div className="font-bold text-rose-800">[공제 내역 (4대보험 및 세금)]</div>
+              <div className="flex justify-between text-rose-700">
                 <span>국민연금 (4.5%)</span>
-                <span>{selectedStaffForSlip.deductions.nationalPension.toLocaleString()}원</span>
+                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.deductions.nationalPension)}원</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+              <div className="flex justify-between text-rose-700">
                 <span>건강보험 (3.545%)</span>
-                <span>{selectedStaffForSlip.deductions.healthInsurance.toLocaleString()}원</span>
+                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.deductions.healthInsurance)}원</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+              <div className="flex justify-between text-rose-700">
                 <span>장기요양보험 (건보의 12.95%)</span>
-                <span>{selectedStaffForSlip.deductions.longTermCare.toLocaleString()}원</span>
+                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.deductions.longTermCare)}원</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+              <div className="flex justify-between text-rose-700">
                 <span>고용보험 (0.9%)</span>
-                <span>{selectedStaffForSlip.deductions.employmentInsurance.toLocaleString()}원</span>
+                <span className="tabular-nums font-mono">{formatNumberWithCommas(selectedStaffForSlip.deductions.employmentInsurance)}원</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: 'bold', marginTop: '6px', paddingTop: '6px', borderTop: '1px solid #fecaca', color: '#dc2626' }}>
+              <div className="flex justify-between font-bold pt-2 border-t border-rose-200 text-rose-800">
                 <span>공제액 계</span>
-                <span>-{selectedStaffForSlip.deductions.totalDeductions.toLocaleString()}원</span>
+                <span className="tabular-nums font-mono">-{formatNumberWithCommas(selectedStaffForSlip.deductions.totalDeductions)}원</span>
               </div>
             </div>
 
             {/* 실수령액 */}
-            <div style={{ marginTop: '16px', padding: '12px', background: '#ecfdf5', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontWeight: 'bold', fontSize: '16px', color: '#065f46' }}>실지급액 (실수령액)</span>
-              <span style={{ fontWeight: 'bold', fontSize: '20px', color: '#059669' }}>
-                {selectedStaffForSlip.netPay.toLocaleString()}원
+            <div className="p-3.5 bg-emerald-50 rounded-xl border border-emerald-300 flex justify-between items-center">
+              <span className="font-bold text-sm sm:text-base text-emerald-900">실지급액 (실수령액)</span>
+              <span className="font-bold text-lg sm:text-xl text-emerald-600 tabular-nums font-mono">
+                {formatNumberWithCommas(selectedStaffForSlip.netPay)}원
               </span>
             </div>
 
-            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+            <div className="pt-3 flex justify-end gap-2 border-t border-slate-100">
               <button
+                type="button"
                 onClick={() => setSelectedStaffForSlip(null)}
-                style={{ padding: '8px 16px', borderRadius: '6px', border: '1px solid #d1d5db', background: '#fff', cursor: 'pointer' }}
+                className="px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer"
               >
                 닫기
               </button>
               <button
+                type="button"
                 onClick={() => {
                   showToast(`[법정 전자 교부 완료] ${selectedStaffForSlip.staffName}님의 카카오 알림톡/이메일로 임금명세서 PDF가 발송되었습니다.`, 'success');
                   setSelectedStaffForSlip(null);
                 }}
-                style={{ padding: '8px 16px', borderRadius: '6px', border: 'none', background: '#2563eb', color: '#fff', fontWeight: 600, cursor: 'pointer' }}
+                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs"
               >
                 명세서 전자 교부
               </button>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

@@ -1,4 +1,6 @@
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { Modal } from '@/shared/components/ui/Modal';
+import { formatNumberWithCommas } from '@/utils/formatters';
 import React, { useState } from 'react';
 import {
   Vendor,
@@ -223,79 +225,70 @@ export const VendorApInvoiceView: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-800">
       {/* 헤더 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-5">
         <div>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0, color: '#111827' }}>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
             공급처 원장 & 매입 세무 전표 (Vendor & AP)
           </h1>
-          <p style={{ margin: '4px 0 0', color: '#6b7280', fontSize: '14px' }}>
+          <p className="text-sm text-slate-500 mt-1">
             B2B 거래처 관리, 외상 매입금 미지급 잔액(AP), 원가 변동률 및 부가세 매입세액 공제 합계표
           </p>
         </div>
         <button
           onClick={() => setShowInvoiceModal(true)}
-          style={{
-            backgroundColor: '#2563eb',
-            color: '#fff',
-            border: 'none',
-            padding: '10px 18px',
-            borderRadius: '8px',
-            fontWeight: 600,
-            cursor: 'pointer',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          }}
+          className="px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs shrink-0"
         >
           + 매입 전표 등록
         </button>
       </div>
 
       {/* KPI 카드 그리드 */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px' }}>
-          <div style={{ color: '#6b7280', fontSize: '13px', fontWeight: 500 }}>총 외상 매입금 (미지급 잔액)</div>
-          <div style={{ fontSize: '26px', fontWeight: 'bold', color: '#dc2626', marginTop: '6px' }}>
-            {totalPayableOutstanding.toLocaleString()}원
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">총 외상 매입금 (미지급 잔액)</div>
+          <div className="text-2xl font-bold text-red-600 mt-1.5 tabular-nums font-mono">
+            {formatNumberWithCommas(totalPayableOutstanding)}원
           </div>
-          <div style={{ fontSize: '12px', color: apAging.overdue1To30Days > 0 ? '#ef4444' : '#10b981', marginTop: '4px' }}>
-            {apAging.overdue1To30Days > 0 ? `⚠️ 만기 경과 연체: ${apAging.overdue1To30Days.toLocaleString()}원` : '✓ 정상 만기 미도래'}
-          </div>
-        </div>
-
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px' }}>
-          <div style={{ color: '#6b7280', fontSize: '13px', fontWeight: 500 }}>등록 매입 전표 총액</div>
-          <div style={{ fontSize: '26px', fontWeight: 'bold', color: '#111827', marginTop: '6px' }}>
-            {currentMonthPurchases.toLocaleString()}원
-          </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
-            총 {invoices.length}건 (공급가액 {(currentMonthPurchases - currentMonthDeductibleTax).toLocaleString()}원)
+          <div className={`text-xs mt-1 tabular-nums ${apAging.overdue1To30Days > 0 ? 'text-red-500' : 'text-emerald-600'}`}>
+            {apAging.overdue1To30Days > 0 ? `⚠️ 만기 경과 연체: ${formatNumberWithCommas(apAging.overdue1To30Days)}원` : '✓ 정상 만기 미도래'}
           </div>
         </div>
 
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px' }}>
-          <div style={{ color: '#6b7280', fontSize: '13px', fontWeight: 500 }}>부가세 매입세액 공제 예상액</div>
-          <div style={{ fontSize: '26px', fontWeight: 'bold', color: '#2563eb', marginTop: '6px' }}>
-            {currentMonthDeductibleTax.toLocaleString()}원
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">등록 매입 전표 총액</div>
+          <div className="text-2xl font-bold text-slate-900 mt-1.5 tabular-nums font-mono">
+            {formatNumberWithCommas(currentMonthPurchases)}원
           </div>
-          <div style={{ fontSize: '12px', color: '#10b981', marginTop: '4px' }}>
+          <div className="text-xs text-slate-400 mt-1 tabular-nums font-mono">
+            총 {invoices.length}건 (공급가액 {formatNumberWithCommas(currentMonthPurchases - currentMonthDeductibleTax)}원)
+          </div>
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">부가세 매입세액 공제 예상액</div>
+          <div className="text-2xl font-bold text-blue-600 mt-1.5 tabular-nums font-mono">
+            {formatNumberWithCommas(currentMonthDeductibleTax)}원
+          </div>
+          <div className="text-xs text-emerald-600 mt-1">
             세무 신고 시 부가세 납부세액에서 전액 차감
           </div>
         </div>
 
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px' }}>
-          <div style={{ color: '#6b7280', fontSize: '13px', fontWeight: 500 }}>등록 공급처 (거래처)</div>
-          <div style={{ fontSize: '26px', fontWeight: 'bold', color: '#059669', marginTop: '6px' }}>
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500">등록 공급처 (거래처)</div>
+          <div className="text-2xl font-bold text-emerald-600 mt-1.5 tabular-nums font-mono">
             {vendors.length}개사
           </div>
-          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+          <div className="text-xs text-slate-400 mt-1">
             외상 거래처 {vendors.filter((v) => v.currentPayableBalance > 0).length}곳
           </div>
         </div>
       </div>
 
       {/* 네비게이션 탭 */}
-      <div style={{ display: 'flex', borderBottom: '1px solid #e5e7eb', marginBottom: '20px', gap: '8px' }}>
+      <div className="flex border-b border-slate-200 gap-2">
         {[
           { key: 'invoices', label: '매입 전표 & 외상 관리' },
           { key: 'vendors', label: '공급처(Vendor) 원장' },
@@ -305,16 +298,11 @@ export const VendorApInvoiceView: React.FC = () => {
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key as any)}
-            style={{
-              padding: '10px 16px',
-              border: 'none',
-              background: 'none',
-              fontWeight: 600,
-              fontSize: '14px',
-              cursor: 'pointer',
-              color: activeTab === tab.key ? '#2563eb' : '#6b7280',
-              borderBottom: activeTab === tab.key ? '2px solid #2563eb' : '2px solid transparent',
-            }}
+            className={`px-4 py-2.5 font-semibold text-sm transition-colors border-b-2 cursor-pointer ${
+              activeTab === tab.key
+                ? 'text-blue-600 border-blue-600'
+                : 'text-slate-500 border-transparent hover:text-slate-700'
+            }`}
           >
             {tab.label}
           </button>
@@ -323,104 +311,104 @@ export const VendorApInvoiceView: React.FC = () => {
 
       {/* 탭 1: 매입 전표 및 외상 관리 */}
       {activeTab === 'invoices' && (
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
-            <thead>
-              <tr style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb', color: '#4b5563' }}>
-                <th style={{ padding: '12px 16px' }}>전표번호 / 매입일</th>
-                <th style={{ padding: '12px 16px' }}>공급처명</th>
-                <th style={{ padding: '12px 16px' }}>품목 요약</th>
-                <th style={{ padding: '12px 16px', textAlign: 'right' }}>공급가액</th>
-                <th style={{ padding: '12px 16px', textAlign: 'right' }}>부가세</th>
-                <th style={{ padding: '12px 16px', textAlign: 'right' }}>총 매입액</th>
-                <th style={{ padding: '12px 16px' }}>결제 기한</th>
-                <th style={{ padding: '12px 16px', textAlign: 'center' }}>상태 / 결제</th>
-              </tr>
-            </thead>
-            <tbody>
-              {invoices.map((inv) => (
-                <tr key={inv.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                  <td style={{ padding: '14px 16px' }}>
-                    <div style={{ fontWeight: 600, color: '#111827' }}>{inv.id}</div>
-                    <div style={{ fontSize: '12px', color: '#6b7280' }}>{inv.invoiceDate}</div>
-                  </td>
-                  <td style={{ padding: '14px 16px', fontWeight: 500, color: '#1f2937' }}>
-                    {inv.vendorName}
-                  </td>
-                  <td style={{ padding: '14px 16px', color: '#4b5563' }}>
-                    {inv.items[0]?.name || '자재'}
-                    {inv.items.length > 1 ? ` 외 ${inv.items.length - 1}건` : ''}
-                  </td>
-                  <td style={{ padding: '14px 16px', textAlign: 'right', color: '#374151' }}>
-                    {inv.totalSupplyAmount.toLocaleString()}원
-                  </td>
-                  <td style={{ padding: '14px 16px', textAlign: 'right', color: '#374151' }}>
-                    {inv.totalTaxAmount.toLocaleString()}원
-                  </td>
-                  <td style={{ padding: '14px 16px', textAlign: 'right', fontWeight: 600, color: '#111827' }}>
-                    {inv.totalAmount.toLocaleString()}원
-                  </td>
-                  <td style={{ padding: '14px 16px', color: new Date(inv.dueDate) < new Date('2026-10-15') && inv.remainingAmount > 0 ? '#dc2626' : '#4b5563' }}>
-                    {inv.dueDate}
-                  </td>
-                  <td style={{ padding: '14px 16px', textAlign: 'center' }}>
-                    {inv.paymentStatus === 'paid' ? (
-                      <span style={{ background: '#ecfdf5', color: '#059669', padding: '4px 8px', borderRadius: '6px', fontSize: '12px', fontWeight: 600 }}>
-                        완납 완료
-                      </span>
-                    ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-                        <span style={{ background: inv.paymentStatus === 'partially_paid' ? '#fef3c7' : '#fee2e2', color: inv.paymentStatus === 'partially_paid' ? '#d97706' : '#dc2626', padding: '2px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 600 }}>
-                          {inv.paymentStatus === 'partially_paid' ? '부분지급' : '미지급'} (잔액 {inv.remainingAmount.toLocaleString()}원)
-                        </span>
-                        <button
-                          onClick={() => {
-                            setPayingInvoice(inv);
-                            setPayAmount(inv.remainingAmount);
-                          }}
-                          style={{
-                            background: '#2563eb',
-                            color: '#fff',
-                            border: 'none',
-                            padding: '4px 10px',
-                            borderRadius: '4px',
-                            fontSize: '12px',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          대금 결제
-                        </button>
-                      </div>
-                    )}
-                  </td>
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs sm:text-sm">
+              <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide border-b border-slate-200">
+                <tr>
+                  <th className="px-4 py-3">전표번호 / 매입일</th>
+                  <th className="px-4 py-3">공급처명</th>
+                  <th className="px-4 py-3">품목 요약</th>
+                  <th className="px-4 py-3 text-right">공급가액</th>
+                  <th className="px-4 py-3 text-right">부가세</th>
+                  <th className="px-4 py-3 text-right">총 매입액</th>
+                  <th className="px-4 py-3">결제 기한</th>
+                  <th className="px-4 py-3 text-center">상태 / 결제</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {invoices.map((inv) => (
+                  <tr key={inv.id} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="px-4 py-3.5">
+                      <div className="font-bold text-slate-900">{inv.id}</div>
+                      <div className="text-xs text-slate-500 tabular-nums">{inv.invoiceDate}</div>
+                    </td>
+                    <td className="px-4 py-3.5 font-semibold text-slate-900">
+                      {inv.vendorName}
+                    </td>
+                    <td className="px-4 py-3.5 text-slate-600">
+                      {inv.items[0]?.name || '자재'}
+                      {inv.items.length > 1 ? ` 외 ${inv.items.length - 1}건` : ''}
+                    </td>
+                    <td className="px-4 py-3.5 text-right text-slate-700 tabular-nums font-mono">
+                      {formatNumberWithCommas(inv.totalSupplyAmount)}원
+                    </td>
+                    <td className="px-4 py-3.5 text-right text-slate-500 tabular-nums font-mono">
+                      {formatNumberWithCommas(inv.totalTaxAmount)}원
+                    </td>
+                    <td className="px-4 py-3.5 text-right font-bold text-slate-900 tabular-nums font-mono">
+                      {formatNumberWithCommas(inv.totalAmount)}원
+                    </td>
+                    <td className={`px-4 py-3.5 tabular-nums ${new Date(inv.dueDate) < new Date('2026-10-15') && inv.remainingAmount > 0 ? 'text-red-600 font-semibold' : 'text-slate-600'}`}>
+                      {inv.dueDate}
+                    </td>
+                    <td className="px-4 py-3.5 text-center">
+                      {inv.paymentStatus === 'paid' ? (
+                        <span className="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-xs font-semibold">
+                          완납 완료
+                        </span>
+                      ) : (
+                        <div className="flex flex-col items-center gap-1.5">
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-semibold tabular-nums font-mono ${
+                            inv.paymentStatus === 'partially_paid'
+                              ? 'bg-amber-100 text-amber-800'
+                              : 'bg-red-100 text-red-800'
+                          }`}>
+                            {inv.paymentStatus === 'partially_paid' ? '부분지급' : '미지급'} (잔액 {formatNumberWithCommas(inv.remainingAmount)}원)
+                          </span>
+                          <button
+                            onClick={() => {
+                              setPayingInvoice(inv);
+                              setPayAmount(inv.remainingAmount);
+                            }}
+                            className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs min-h-[32px] transition-colors cursor-pointer shadow-2xs"
+                          >
+                            대금 결제
+                          </button>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {/* 탭 2: 공급처(Vendor) 원장 */}
       {activeTab === 'vendors' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '16px' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {vendors.map((v) => (
-            <div key={v.id} style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '20px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#111827' }}>{v.name}</h3>
-                <span style={{ fontSize: '12px', padding: '2px 8px', borderRadius: '4px', background: '#f3f4f6', color: '#4b5563' }}>
-                  {v.paymentTerm === 'end_of_next_month' ? '익월 말 결제' : v.paymentTerm === 'end_of_month' ? '당월 말 결제' : '15일 후 결제'}
-                </span>
+            <div key={v.id} className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between items-start gap-2">
+                  <h3 className="text-base font-bold text-slate-900">{v.name}</h3>
+                  <span className="text-xs px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 font-medium shrink-0">
+                    {v.paymentTerm === 'end_of_next_month' ? '익월 말 결제' : v.paymentTerm === 'end_of_month' ? '당월 말 결제' : '15일 후 결제'}
+                  </span>
+                </div>
+                <div className="mt-3 text-xs text-slate-600 space-y-1.5 leading-relaxed">
+                  <div><strong>사업자등록번호:</strong> <span className="tabular-nums font-mono">{v.businessNumber}</span> (대표: {v.representative})</div>
+                  <div><strong>담당 연락처:</strong> <span className="tabular-nums font-mono">{v.contactPhone}</span></div>
+                  {v.email && <div><strong>전자세금계산서 메일:</strong> {v.email}</div>}
+                  <div><strong>입금 계좌:</strong> {v.bankAccount.bank} <span className="tabular-nums font-mono">{v.bankAccount.accountNumber}</span> ({v.bankAccount.accountHolder})</div>
+                </div>
               </div>
-              <div style={{ marginTop: '12px', fontSize: '13px', color: '#4b5563', lineHeight: 1.8 }}>
-                <div><strong>사업자등록번호:</strong> {v.businessNumber} (대표: {v.representative})</div>
-                <div><strong>담당 연락처:</strong> {v.contactPhone}</div>
-                {v.email && <div><strong>전자세금계산서 메일:</strong> {v.email}</div>}
-                <div><strong>입금 계좌:</strong> {v.bankAccount.bank} {v.bankAccount.accountNumber} ({v.bankAccount.accountHolder})</div>
-              </div>
-              <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #f3f4f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '13px', color: '#6b7280' }}>현재 외상 미지급 잔액:</span>
-                <span style={{ fontSize: '16px', fontWeight: 'bold', color: v.currentPayableBalance > 0 ? '#dc2626' : '#10b981' }}>
-                  {v.currentPayableBalance.toLocaleString()}원
+              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
+                <span className="text-xs text-slate-500">현재 외상 미지급 잔액:</span>
+                <span className={`text-sm sm:text-base font-bold tabular-nums font-mono ${v.currentPayableBalance > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+                  {formatNumberWithCommas(v.currentPayableBalance)}원
                 </span>
               </div>
             </div>
@@ -430,40 +418,34 @@ export const VendorApInvoiceView: React.FC = () => {
 
       {/* 탭 3: 품목별 단가 변동 모니터링 */}
       {activeTab === 'price_trends' && (
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '20px' }}>
-          <h3 style={{ margin: '0 0 16px', fontSize: '16px', fontWeight: 600, color: '#111827' }}>
+        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs space-y-4">
+          <h3 className="text-base font-bold text-slate-900">
             납품 단가 급등 및 변동 모니터링 (직전 대비)
           </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div className="flex flex-col gap-3">
             {priceTrends.map((trend) => {
               const check = trackItemPriceFluctuation(trend.prevPrice, trend.currPrice, 10);
               return (
                 <div
                   key={trend.sku}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '14px 16px',
-                    borderRadius: '8px',
-                    border: '1px solid #e5e7eb',
-                    background: check.isPriceSurge ? '#fef2f2' : '#f9fafb',
-                  }}
+                  className={`p-4 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors ${
+                    check.isPriceSurge ? 'border-red-200 bg-red-50/40' : 'border-slate-200 bg-slate-50/60'
+                  }`}
                 >
                   <div>
-                    <div style={{ fontWeight: 600, color: '#111827' }}>{trend.name}</div>
-                    <div style={{ fontSize: '12px', color: '#6b7280' }}>
-                      SKU: {trend.sku} | 공급처: {trend.vendor}
+                    <div className="font-bold text-sm text-slate-900">{trend.name}</div>
+                    <div className="text-xs text-slate-500 mt-0.5">
+                      SKU: <span className="font-mono">{trend.sku}</span> | 공급처: {trend.vendor}
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '15px', fontWeight: 600 }}>
-                      <span style={{ textDecoration: 'line-through', color: '#9ca3af', marginRight: '8px', fontSize: '13px' }}>
-                        {trend.prevPrice.toLocaleString()}원
+                  <div className="text-left sm:text-right">
+                    <div className="text-sm sm:text-base font-bold tabular-nums font-mono text-slate-900">
+                      <span className="line-through text-slate-400 mr-2 text-xs font-normal">
+                        {formatNumberWithCommas(trend.prevPrice)}원
                       </span>
-                      → {trend.currPrice.toLocaleString()}원
+                      → {formatNumberWithCommas(trend.currPrice)}원
                     </div>
-                    <div style={{ fontSize: '12px', fontWeight: 600, color: check.changeRatePercent > 0 ? '#dc2626' : '#059669', marginTop: '2px' }}>
+                    <div className={`text-xs font-semibold mt-0.5 tabular-nums font-mono ${check.changeRatePercent > 0 ? 'text-red-600' : check.changeRatePercent < 0 ? 'text-emerald-600' : 'text-slate-500'}`}>
                       {check.changeRatePercent > 0 ? `▲ +${check.changeRatePercent}% 인상` : check.changeRatePercent < 0 ? `▼ ${check.changeRatePercent}% 인하` : '변동 없음'}
                       {check.isPriceSurge && ' (⚠️ 10% 초과 급등)'}
                     </div>
@@ -477,66 +459,61 @@ export const VendorApInvoiceView: React.FC = () => {
 
       {/* 탭 4: 홈택스 세금계산서 합계표 */}
       {activeTab === 'tax_summary' && (
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <div className="bg-white border border-slate-200 rounded-xl p-5 sm:p-6 shadow-2xs space-y-5">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#111827' }}>
+              <h3 className="text-base font-bold text-slate-900">
                 부가가치세 매입처별 세금계산서 합계표
               </h3>
-              <p style={{ margin: '4px 0 0', color: '#6b7280', fontSize: '13px' }}>
+              <p className="text-xs text-slate-500 mt-1">
                 과세기간: {taxSummary.periodLabel} (세무사 사무소 제출 및 홈택스 신고용 전산 데이터)
               </p>
             </div>
             <button
               onClick={() => showToast('세무사 제출용 매입 세금계산서 합계표(Excel)가 다운로드되었습니다.', 'success')}
-              style={{
-                background: '#059669',
-                color: '#fff',
-                border: 'none',
-                padding: '8px 16px',
-                borderRadius: '6px',
-                fontWeight: 600,
-                fontSize: '13px',
-                cursor: 'pointer',
-              }}
+              className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs shrink-0 flex items-center gap-1.5"
             >
               📊 세무 신고용 엑셀 추출
             </button>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '24px', background: '#f9fafb', padding: '16px', borderRadius: '8px' }}>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
             <div>
-              <div style={{ fontSize: '12px', color: '#6b7280' }}>매입처(공급처) 수</div>
-              <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#111827', marginTop: '4px' }}>{taxSummary.totalVendorCount}개소</div>
+              <div className="text-xs text-slate-500">매입처(공급처) 수</div>
+              <div className="text-xl font-bold text-slate-900 mt-1 tabular-nums font-mono">{taxSummary.totalVendorCount}개소</div>
             </div>
             <div>
-              <div style={{ fontSize: '12px', color: '#6b7280' }}>세금계산서 매수</div>
-              <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#111827', marginTop: '4px' }}>{taxSummary.totalInvoiceCount}매</div>
+              <div className="text-xs text-slate-500">세금계산서 매수</div>
+              <div className="text-xl font-bold text-slate-900 mt-1 tabular-nums font-mono">{taxSummary.totalInvoiceCount}매</div>
             </div>
             <div>
-              <div style={{ fontSize: '12px', color: '#6b7280' }}>총 공급가액</div>
-              <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#111827', marginTop: '4px' }}>{taxSummary.totalSupplyAmount.toLocaleString()}원</div>
+              <div className="text-xs text-slate-500">총 공급가액</div>
+              <div className="text-xl font-bold text-slate-900 mt-1 tabular-nums font-mono">{formatNumberWithCommas(taxSummary.totalSupplyAmount)}원</div>
             </div>
             <div>
-              <div style={{ fontSize: '12px', color: '#6b7280' }}>공제대상 매입세액</div>
-              <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#2563eb', marginTop: '4px' }}>{taxSummary.totalDeductibleTax.toLocaleString()}원</div>
+              <div className="text-xs text-slate-500">공제대상 매입세액</div>
+              <div className="text-xl font-bold text-blue-600 mt-1 tabular-nums font-mono">{formatNumberWithCommas(taxSummary.totalDeductibleTax)}원</div>
             </div>
           </div>
         </div>
       )}
 
-      {/* 대금 지급 모달 */}
+      {/* 대금 결제 표준 Modal */}
       {payingInvoice && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div style={{ background: '#fff', borderRadius: '12px', width: '420px', padding: '24px' }}>
-            <h3 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: 600 }}>외상 매입 대금 결제</h3>
-            <div style={{ fontSize: '14px', color: '#4b5563', marginBottom: '16px' }}>
+        <Modal
+          isOpen={!!payingInvoice}
+          onClose={() => setPayingInvoice(null)}
+          title="외상 매입 대금 결제"
+        >
+          <div className="space-y-4 text-xs sm:text-sm text-slate-800">
+            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1">
               <div><strong>공급처:</strong> {payingInvoice.vendorName}</div>
-              <div><strong>전표 총액:</strong> {payingInvoice.totalAmount.toLocaleString()}원</div>
-              <div><strong>잔여 미지급액:</strong> {payingInvoice.remainingAmount.toLocaleString()}원</div>
+              <div><strong>전표 총액:</strong> <span className="tabular-nums font-mono">{formatNumberWithCommas(payingInvoice.totalAmount)}원</span></div>
+              <div><strong>잔여 미지급액:</strong> <span className="tabular-nums font-mono text-red-600 font-bold">{formatNumberWithCommas(payingInvoice.remainingAmount)}원</span></div>
             </div>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 지급 금액 입력 (원)
               </label>
               <input
@@ -544,126 +521,136 @@ export const VendorApInvoiceView: React.FC = () => {
                 value={payAmount}
                 max={payingInvoice.remainingAmount}
                 onChange={(e) => setPayAmount(Number(e.target.value))}
-                style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #d1d5db', fontSize: '15px' }}
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-sm font-mono tabular-nums focus:outline-hidden focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+
+            <div className="pt-3 flex justify-end gap-2 border-t border-slate-100">
               <button
+                type="button"
                 onClick={() => setPayingInvoice(null)}
-                style={{ padding: '8px 14px', borderRadius: '6px', border: '1px solid #d1d5db', background: '#fff', cursor: 'pointer' }}
+                className="px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer"
               >
                 취소
               </button>
               <button
+                type="button"
                 onClick={handleConfirmPayment}
-                style={{ padding: '8px 16px', borderRadius: '6px', border: 'none', background: '#2563eb', color: '#fff', fontWeight: 600, cursor: 'pointer' }}
+                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs"
               >
                 지급 확정
               </button>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
 
-      {/* 신규 매입 전표 등록 모달 */}
+      {/* 신규 매입 전표 등록 표준 Modal */}
       {showInvoiceModal && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div style={{ background: '#fff', borderRadius: '12px', width: '480px', padding: '24px' }}>
-            <h3 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: 600 }}>신규 매입 전표 등록</h3>
-            <form onSubmit={handleCreateInvoice}>
-              <div style={{ marginBottom: '12px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px' }}>공급처 선택</label>
-                <select
-                  value={selectedVendorId}
-                  onChange={(e) => setSelectedVendorId(e.target.value)}
-                  style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #d1d5db' }}
-                >
-                  {vendors.map((v) => (
-                    <option key={v.id} value={v.id}>{v.name} ({v.businessNumber})</option>
-                  ))}
-                </select>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px' }}>매입 일자</label>
-                  <input
-                    type="date"
-                    value={invoiceDate}
-                    onChange={(e) => setInvoiceDate(e.target.value)}
-                    style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #d1d5db' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px' }}>외상 결제 예정일</label>
-                  <input
-                    type="date"
-                    value={dueDate}
-                    onChange={(e) => setDueDate(e.target.value)}
-                    style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #d1d5db' }}
-                  />
-                </div>
-              </div>
-              <div style={{ marginBottom: '12px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px' }}>품목명</label>
+        <Modal
+          isOpen={showInvoiceModal}
+          onClose={() => setShowInvoiceModal(false)}
+          title="신규 매입 전표 등록"
+        >
+          <form onSubmit={handleCreateInvoice} className="space-y-3.5 text-xs sm:text-sm text-slate-800">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">공급처 선택</label>
+              <select
+                value={selectedVendorId}
+                onChange={(e) => setSelectedVendorId(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+              >
+                {vendors.map((v) => (
+                  <option key={v.id} value={v.id}>{v.name} ({v.businessNumber})</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">매입 일자</label>
                 <input
-                  type="text"
-                  placeholder="예: 원두 1kg, 펌제, 엔진오일"
-                  value={itemName}
-                  onChange={(e) => setItemName(e.target.value)}
-                  required
-                  style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #d1d5db' }}
+                  type="date"
+                  value={invoiceDate}
+                  onChange={(e) => setInvoiceDate(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px' }}>입고 수량</label>
-                  <input
-                    type="number"
-                    value={itemQuantity}
-                    min={1}
-                    onChange={(e) => setItemQuantity(Number(e.target.value))}
-                    style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #d1d5db' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px' }}>단가 (원)</label>
-                  <input
-                    type="number"
-                    value={itemUnitPrice}
-                    min={0}
-                    onChange={(e) => setItemUnitPrice(Number(e.target.value))}
-                    style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #d1d5db' }}
-                  />
-                </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">외상 결제 예정일</label>
+                <input
+                  type="date"
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                />
               </div>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', cursor: 'pointer' }}>
-                  <input
-                    type="checkbox"
-                    checked={isTaxExempt}
-                    onChange={(e) => setIsTaxExempt(e.target.checked)}
-                  />
-                  면세 품목 (농수산물 등 부가세 0원 처리)
-                </label>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">품목명</label>
+              <input
+                type="text"
+                placeholder="예: 원두 1kg, 펌제, 엔진오일"
+                value={itemName}
+                onChange={(e) => setItemName(e.target.value)}
+                required
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">입고 수량</label>
+                <input
+                  type="number"
+                  value={itemQuantity}
+                  min={1}
+                  onChange={(e) => setItemQuantity(Number(e.target.value))}
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm font-mono tabular-nums focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                />
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-                <button
-                  type="button"
-                  onClick={() => setShowInvoiceModal(false)}
-                  style={{ padding: '8px 14px', borderRadius: '6px', border: '1px solid #d1d5db', background: '#fff', cursor: 'pointer' }}
-                >
-                  취소
-                </button>
-                <button
-                  type="submit"
-                  style={{ padding: '8px 16px', borderRadius: '6px', border: 'none', background: '#2563eb', color: '#fff', fontWeight: 600, cursor: 'pointer' }}
-                >
-                  전표 생성
-                </button>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">단가 (원)</label>
+                <input
+                  type="number"
+                  value={itemUnitPrice}
+                  min={0}
+                  onChange={(e) => setItemUnitPrice(Number(e.target.value))}
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm font-mono tabular-nums focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                />
               </div>
-            </form>
-          </div>
-        </div>
+            </div>
+
+            <div>
+              <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={isTaxExempt}
+                  onChange={(e) => setIsTaxExempt(e.target.checked)}
+                  className="rounded text-blue-600 focus:ring-blue-500"
+                />
+                면세 품목 (농수산물 등 부가세 0원 처리)
+              </label>
+            </div>
+
+            <div className="pt-3 flex justify-end gap-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setShowInvoiceModal(false)}
+                className="px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer"
+              >
+                취소
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm min-h-[44px] transition-colors cursor-pointer shadow-2xs"
+              >
+                전표 생성
+              </button>
+            </div>
+          </form>
+        </Modal>
       )}
     </div>
   );
