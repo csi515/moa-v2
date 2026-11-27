@@ -105,7 +105,8 @@ export function loadDaumPostcodeScript(): Promise<void> {
 
     const script = document.createElement('script');
     script.id = 'daum-postcode-script';
-    script.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    // 카카오 우편번호 공식 CDN: 2026년 11월 30일 t1.daumcdn.net 종료에 따라 t1.kakaocdn.net 필수 적용
+    script.src = 'https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
     script.async = true;
     script.onload = () => resolve();
     script.onerror = () => {

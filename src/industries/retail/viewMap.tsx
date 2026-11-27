@@ -25,6 +25,11 @@ const MaintenanceChecklistView = lazy(() =>
     default: m.MaintenanceChecklistManagementView,
   }))
 );
+const WorkplaceCalendarView = lazy(() =>
+  import('@/capabilities/scheduling/calendar').then((m) => ({
+    default: m.WorkplaceCalendarView,
+  }))
+);
 
 const retailSettingsHub = () => <RetailSettingsView />;
 
@@ -96,6 +101,7 @@ const RETAIL_VIEW_MAP: Record<string, () => ReactNode> = {
   income: () => <SaleHistoryView />,
   reports: () => <RetailRevenueView />,
   instructors: () => <RetailStaffHubView />,
+  calendar: () => lazyCap(<WorkplaceCalendarView />, '캘린더'),
   ledger: () => <RetailLedgerView />,
   closing: () => <RetailLedgerView />,
   shifts: () => lazyCap(<ShiftScheduleView />, '근무표'),

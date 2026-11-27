@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import { CanAccess } from '@refinedev/core';
 import {
   Users,
@@ -186,7 +188,7 @@ export function MemberList(): React.JSX.Element {
   const selectedRole = roles.find((r) => r.id === selectedRoleId);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6" data-testid="member-list-page">
+    <div className={cn(DESKTOP_CONTAINERS.wide, 'space-y-6 p-4 sm:p-6')} data-testid="member-list-page">
       {/* 상단 헤더 */}
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>

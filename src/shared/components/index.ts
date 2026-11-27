@@ -3,6 +3,7 @@ export { ModuleAppShell } from './layout/ModuleAppShell';
 export { ModuleSidebar } from './layout/ModuleSidebar';
 export { ModuleBottomNav } from './layout/ModuleBottomNav';
 export { MODULE_THEMES, type ModuleTheme } from './layout/moduleTheme';
+export { MasterDetailLayout, type MasterDetailLayoutProps } from './layout/MasterDetailLayout';
 export { LoadingScreen } from './LoadingScreen';
 export { AppErrorBoundary } from './AppErrorBoundary';
 export { PluginErrorBoundary } from './PluginErrorBoundary';

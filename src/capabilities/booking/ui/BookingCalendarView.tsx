@@ -23,6 +23,8 @@ import {
 import { rescheduleBooking } from '@/capabilities/booking/domain/rescheduleBooking';
 import { notifyBookingChange } from '@/capabilities/booking';
 import { validateScheduleConstraints } from '@/capabilities/scheduling';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import { EmptyState, FilterTabs, Modal, PageHeader, UnifiedScheduleCalendar, type CalendarEventItem, type CalendarResourceColumn, type CalendarSlotTarget } from '@/shared/components';
 import { Calendar, List, Users, Eye, EyeOff, UserCheck, ShieldAlert } from 'lucide-react';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';

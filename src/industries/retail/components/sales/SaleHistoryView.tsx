@@ -6,6 +6,8 @@ import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { EmptyState, PageHeader } from '@/shared/components';
 import { FilterBar, FilterTabs, FORM_CONTROL_CLASS, SearchField } from '@/shared/components/ui';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
+import { cn } from '@/shared/lib/utils';
 import { formatCurrency, formatKoreanDate } from '@/utils/formatters';
 import { saleHistoryService } from '../../services/saleHistoryService';
 import { saleReturnService } from '../../services/saleReturnService';
@@ -175,7 +177,7 @@ export const SaleHistoryView: FC = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 space-y-4 pb-8">
+    <div className={cn(DESKTOP_CONTAINERS.wide, 'space-y-4 pb-8')}>
       <PageHeader
         icon={<Receipt className="w-5 h-5" />}
         iconClassName="text-teal-600"

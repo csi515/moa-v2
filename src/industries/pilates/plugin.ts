@@ -68,6 +68,7 @@ export const pilatesPluginManifest: IndustryPluginManifest = {
   adminTabs: withNoticesTabs([
     'dashboard',
     'bookings',
+    'calendar',
     'services',
     'members',
     'passes',
@@ -75,7 +76,7 @@ export const pilatesPluginManifest: IndustryPluginManifest = {
     'attendance',
     'settings',
   ]),
-  staffTabs: withNoticesTabs(['dashboard', 'bookings', 'members', 'passes', 'attendance']),
+  staffTabs: withNoticesTabs(['dashboard', 'bookings', 'calendar', 'members', 'passes', 'attendance']),
   getExpenseCategories: pilatesExpenseCategories,
   getPayrollExpenseCategory: pilatesPayrollExpenseCategory,
   bookingAdapter: pilatesBookingAdapter,

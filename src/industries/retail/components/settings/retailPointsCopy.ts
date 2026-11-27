@@ -23,5 +23,5 @@ export const RETAIL_POINTS_COPY = {
   saved: '포인트 설정이 저장되었습니다.',
   saveError: '포인트 설정 저장에 실패했습니다.',
   noOrg: '사업장을 선택해 주세요',
-  needAdmin: '원장·관리자만 포인트 설정을 변경할 수 있습니다.',
+  needAdmin: '점주·관리자만 포인트 설정을 변경할 수 있습니다.',
 } as const;

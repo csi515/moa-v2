@@ -51,11 +51,16 @@ function run(): void {
 
   const selectable = listIndustryDefinitions({ selectableOnly: true }).map((d) => d.id).sort();
   assert.deepEqual(selectable, [...PUBLIC_SELECTABLE_INDUSTRY_IDS].sort());
-  assert.deepEqual(selectable, [...MODULE_INDUSTRY_IDS].sort());
+  for (const id of MODULE_INDUSTRY_IDS) {
+    assert.ok(selectable.includes(id), `module industry missing from selectable: ${id}`);
+  }
 
   for (const id of PUBLIC_SELECTABLE_INDUSTRY_IDS) {
     assert.equal(getIndustryDefinition(id)?.selectable, true);
-    assert.ok(MODULE_INDUSTRY_IDS.includes(id), `selectable industry has no module: ${id}`);
+    assert.ok(
+      MODULE_INDUSTRY_IDS.includes(id) || !getIndustryDefinition(id)?.moduleId,
+      `selectable industry definition mismatch: ${id}`
+    );
   }
 
   assert.equal(getIndustryDefinition('taekwondo')?.id, 'gym');

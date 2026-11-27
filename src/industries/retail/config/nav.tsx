@@ -16,6 +16,7 @@ import {
   Settings,
   Warehouse,
   BookOpenCheck,
+  CalendarDays,
   ClipboardList,
   CalendarClock,
 } from 'lucide-react';
@@ -39,6 +40,7 @@ export function getRetailSidebarSections(labels: ModuleLabels): NavMenuSection[]
     buildNavSection('더보기', [
       { tab: 'reports', label: '매출', icon: icon(<BarChart3 className="w-4 h-4" />) },
       { tab: 'income', label: '판매내역', icon: icon(<Receipt className="w-4 h-4" />) },
+      { tab: 'calendar', label: '캘린더', icon: icon(<CalendarDays className="w-4 h-4" />) },
       { tab: 'ledger', label: '시재 마감', icon: icon(<BookOpenCheck className="w-4 h-4" />) },
       { tab: 'shifts', label: '근무표', icon: icon(<CalendarClock className="w-4 h-4" />) },
       { tab: 'maintenance', label: '매장 점검', icon: icon(<ClipboardList className="w-4 h-4" />) },
@@ -88,6 +90,12 @@ export function getRetailMoreTabs(labels: ModuleLabels): NavMenuItem[] {
       label: '판매내역',
       icon: icon(<Receipt className="w-5 h-5" />),
       section: MORE_NAV_SECTION.manage,
+    },
+    {
+      tab: 'calendar',
+      label: '캘린더',
+      icon: icon(<CalendarDays className="w-5 h-5" />),
+      section: MORE_NAV_SECTION.work,
     },
     {
       tab: 'ledger',

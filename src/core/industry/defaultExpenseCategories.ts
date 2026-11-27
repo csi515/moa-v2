@@ -30,3 +30,16 @@ export const DEFAULT_PIANO_EXPENSE_CATEGORIES: DefaultExpenseCategory[] = [
 export function defaultExpenseCategories(): DefaultExpenseCategory[] {
   return [...DEFAULT_COMMON_EXPENSE_CATEGORIES, ...DEFAULT_PIANO_EXPENSE_CATEGORIES];
 }
+
+export const DEFAULT_COMMON_INCOME_CATEGORIES: DefaultExpenseCategory[] = [
+  { value: 'membership', label: '회원권/정기 수입' },
+  { value: 'session', label: '수업/세션 매출' },
+  { value: 'product', label: '상품 판매' },
+  { value: 'rental', label: '대관/임대 수입' },
+  { value: 'grant', label: '지원금/보조금' },
+  { value: 'other', label: '기타 수입' },
+];
+
+export function defaultIncomeCategories(): DefaultExpenseCategory[] {
+  return [...DEFAULT_COMMON_INCOME_CATEGORIES];
+}

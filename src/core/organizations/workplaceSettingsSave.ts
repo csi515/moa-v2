@@ -66,6 +66,8 @@ export function buildWorkplaceSettingsSavePayload(
     staffHours: settings.staffHours,
     features: settings.features,
     rooms: options.rooms,
+    customExpenseCategories: settings.customExpenseCategories,
+    customIncomeCategories: settings.customIncomeCategories,
   };
 
   const validation = validateWorkplaceSettingsPayload(payload);

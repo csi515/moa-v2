@@ -190,10 +190,10 @@ export const OrganizationSelector: React.FC = () => {
                     <div>
                       <div className="flex items-center gap-1.5 mb-1">
                         <Sparkles className="w-3.5 h-3.5 text-slate-800" />
-                        <span className="text-xs font-bold text-slate-900">사업주 · 원장님</span>
+                        <span className="text-xs font-bold text-slate-900">사업주 · 대표님</span>
                       </div>
                       <p className="text-xs text-slate-500 leading-normal">
-                        새 매장을 개설하고 출결·회원권·장부를 관리합니다
+                        새 매장을 개설하고 판매·재고·고객을 관리합니다
                       </p>
                     </div>
                     <button

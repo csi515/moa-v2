@@ -1,5 +1,11 @@
 // Legacy academy event types (Preserved for backwards compatibility)
-export type { AcademyEvent, AcademyEventType, EventParticipantSummary } from './eventTypes';
+export type {
+  AcademyEvent,
+  AcademyEventType,
+  WorkplaceEventType,
+  EventVisibility,
+  EventParticipantSummary,
+} from './eventTypes';
 
 // Core In-App Domain Event Bus
 export * from './types';

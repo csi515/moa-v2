@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState, type FC } from 'react';
 import { BookOpen, ClipboardList, Pill } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { PageHeader, SegmentedControl } from '@/shared/components';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import { peekCareFocus, subscribeCareFocus } from '../care/careFocus';
 
 type CareSegment = 'journals' | 'medications' | 'records';
@@ -49,7 +51,7 @@ export const DaycareCareHubView: FC<{
   };
 
   return (
-    <div className="space-y-4 pb-4">
+    <div className={cn(DESKTOP_CONTAINERS.wide, 'space-y-4 pb-4')}>
       <PageHeader
         density="compact"
         icon={

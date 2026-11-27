@@ -78,6 +78,7 @@ export const skinPluginManifest: IndustryPluginManifest = {
   adminTabs: withNoticesTabs([
     'dashboard',
     'bookings',
+    'calendar',
     'services',
     'members',
     'passes',
@@ -86,7 +87,7 @@ export const skinPluginManifest: IndustryPluginManifest = {
     'attendance',
     'settings',
   ]),
-  staffTabs: withNoticesTabs(['dashboard', 'bookings', 'members', 'passes', 'retail', 'attendance']),
+  staffTabs: withNoticesTabs(['dashboard', 'bookings', 'calendar', 'members', 'passes', 'retail', 'attendance']),
   getExpenseCategories: skinExpenseCategories,
   getPayrollExpenseCategory: skinPayrollExpenseCategory,
   bookingAdapter: skinBookingAdapter,

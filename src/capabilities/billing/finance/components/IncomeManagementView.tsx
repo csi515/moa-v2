@@ -38,7 +38,12 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
   const { industry, isOwner, isAdmin, canPermission } = usePermissions();
   const hasFinanceAccess = isOwner || isAdmin || canPermission('finance.read');
   const refreshKey = useStorageRefresh('finance');
-  const categoryOptions = getIncomeCategories(industry);
+  const settingsRefreshKey = useStorageRefresh('settings');
+  const currentSettings = useMemo(() => billingStorage.getSettings(), [settingsRefreshKey]);
+  const categoryOptions = useMemo(
+    () => getIncomeCategories(industry, currentSettings?.customIncomeCategories),
+    [industry, currentSettings?.customIncomeCategories]
+  );
 
   const [selectedMonth, setSelectedMonth] = useState(yearMonthLocal());
   const [categoryFilter, setCategoryFilter] = useState('ALL');

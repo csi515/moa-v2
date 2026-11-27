@@ -4,6 +4,7 @@ import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { getPlaceLabel } from '@/core/industry/industryUi';
 import { SegmentedControl } from '@/shared/components';
+import { WorkplaceCalendarView } from '../../calendar';
 import { WeeklyTimetableView } from '../timetable/WeeklyTimetableView';
 type ScheduleSegment = 'classes' | 'events';
 
@@ -69,7 +70,9 @@ export const ClassScheduleHubView: FC<ClassScheduleHubViewProps> = ({ calendarVi
         <WeeklyTimetableView embedded />
       ) : CalendarView ? (
         <CalendarView embedded />
-      ) : null}
+      ) : (
+        <WorkplaceCalendarView embedded />
+      )}
     </div>
   );
 };

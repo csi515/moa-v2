@@ -19,6 +19,9 @@ import { useApp } from '@/context/AppContext';
 const BookingView = lazy(() =>
   import('@/capabilities/booking/ui/BookingCalendarView').then((m) => ({ default: m.BookingCalendarView }))
 );
+const WorkplaceCalendarView = lazy(() =>
+  import('@/capabilities/scheduling/calendar').then((m) => ({ default: m.WorkplaceCalendarView }))
+);
 const PassesView = lazy(() =>
   import('@/pages/passes/list').then((m) => ({ default: m.PassesListPage }))
 );
@@ -169,6 +172,11 @@ const BATH_VIEW_MAP: Record<string, () => ReactNode> = {
   bookings: () => (
     <Suspense fallback={<div className="p-8 text-center text-slate-400">예약 화면을 불러오는 중...</div>}>
       <BookingView />
+    </Suspense>
+  ),
+  calendar: () => (
+    <Suspense fallback={<div className="p-8 text-center text-slate-400">캘린더를 불러오는 중...</div>}>
+      <WorkplaceCalendarView />
     </Suspense>
   ),
   settings: bathSettings,

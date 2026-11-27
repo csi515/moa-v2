@@ -6,6 +6,8 @@ import { billingStorage } from '@/capabilities/billing/infrastructure/billingSto
 import { resolveFinanceHubNav } from '@/capabilities/billing/finance/financeHubNav';
 import { formatCurrency } from '@/utils/formatters';
 import { buildYearMonthOptions } from '@/capabilities/billing/finance/categories';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import { yearMonthLocal } from '@/shared/utils/localDate';
 import {
   TrendingUp,
@@ -119,7 +121,7 @@ export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded
   }
 
   return (
-    <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
+    <div className={cn(embedded ? 'space-y-4 pb-2' : DESKTOP_CONTAINERS.dashboard, 'space-y-4 pb-4')}>
       {!embedded && (
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>

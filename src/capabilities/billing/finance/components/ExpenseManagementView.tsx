@@ -31,7 +31,12 @@ const PAYROLL_RELATED_CATEGORIES = new Set(['teacher_salary', 'instructor_fee', 
 export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const { industry } = usePermissions();
   const refreshKey = useStorageRefresh('finance');
-  const categoryOptions = getExpenseCategories(industry);
+  const settingsRefreshKey = useStorageRefresh('settings');
+  const currentSettings = useMemo(() => billingStorage.getSettings(), [settingsRefreshKey]);
+  const categoryOptions = useMemo(
+    () => getExpenseCategories(industry, currentSettings?.customExpenseCategories),
+    [industry, currentSettings?.customExpenseCategories]
+  );
 
   const [selectedMonth, setSelectedMonth] = useState(yearMonthLocal());
   const [categoryFilter, setCategoryFilter] = useState('ALL');

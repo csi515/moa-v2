@@ -11,9 +11,15 @@ import {
 import {
   type AcademySettings,
   type SessionPassPackage,
+  type FinanceCategoryOption,
   DEFAULT_SESSION_PASS_PACKAGES,
 } from '../settingsTypes';
-import { Wallet, Save, Loader2, BookOpen, Plus, Trash2, Ticket, Check } from 'lucide-react';
+import { Wallet, Save, Loader2, BookOpen, Plus, Trash2, Ticket, Check, Tags, RotateCcw } from 'lucide-react';
+import { getIndustryPlugin } from '@/core/industry/pluginHost';
+import {
+  defaultExpenseCategories,
+  defaultIncomeCategories,
+} from '@/core/industry/defaultExpenseCategories';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import {
   getCustomerLabel,
@@ -124,6 +130,90 @@ export const BillingSettingsView: FC = () => {
     });
   };
 
+  // 장부 수입/지출 커스텀 카테고리 상태
+  const [expenseCategories, setExpenseCategories] = useState<FinanceCategoryOption[]>(() => {
+    if (Array.isArray(settings?.customExpenseCategories) && settings.customExpenseCategories.length > 0) {
+      return settings.customExpenseCategories;
+    }
+    const owned = getIndustryPlugin(industry).getExpenseCategories?.();
+    const source = owned ?? defaultExpenseCategories();
+    return source.map((c) => ({ value: c.value, label: c.label }));
+  });
+
+  const [incomeCategories, setIncomeCategories] = useState<FinanceCategoryOption[]>(() => {
+    if (Array.isArray(settings?.customIncomeCategories) && settings.customIncomeCategories.length > 0) {
+      return settings.customIncomeCategories;
+    }
+    return defaultIncomeCategories().map((c) => ({ value: c.value, label: c.label }));
+  });
+
+  const [newExpenseLabel, setNewExpenseLabel] = useState('');
+  const [newIncomeLabel, setNewIncomeLabel] = useState('');
+
+  const handleAddExpenseCategory = () => {
+    const trimmed = newExpenseLabel.trim();
+    if (!trimmed) return;
+    if (expenseCategories.some((c) => c.label === trimmed)) {
+      showToast('이미 존재하는 지출 카테고리입니다.', 'warning');
+      return;
+    }
+    const value = `custom_exp_${Date.now()}`;
+    setExpenseCategories([...expenseCategories, { value, label: trimmed }]);
+    setNewExpenseLabel('');
+  };
+
+  const handleRemoveExpenseCategory = (value: string) => {
+    if (expenseCategories.length <= 1) {
+      showToast('최소 1개 이상의 지출 카테고리가 필요합니다.', 'warning');
+      return;
+    }
+    setExpenseCategories(expenseCategories.filter((c) => c.value !== value));
+  };
+
+  const handleUpdateExpenseCategory = (value: string, newLabel: string) => {
+    setExpenseCategories(
+      expenseCategories.map((c) => (c.value === value ? { ...c, label: newLabel } : c))
+    );
+  };
+
+  const handleResetExpenseCategories = () => {
+    const owned = getIndustryPlugin(industry).getExpenseCategories?.();
+    const source = owned ?? defaultExpenseCategories();
+    setExpenseCategories(source.map((c) => ({ value: c.value, label: c.label })));
+    showToast('지출 카테고리가 기본값으로 복원되었습니다.', 'info');
+  };
+
+  const handleAddIncomeCategory = () => {
+    const trimmed = newIncomeLabel.trim();
+    if (!trimmed) return;
+    if (incomeCategories.some((c) => c.label === trimmed)) {
+      showToast('이미 존재하는 수입 카테고리입니다.', 'warning');
+      return;
+    }
+    const value = `custom_inc_${Date.now()}`;
+    setIncomeCategories([...incomeCategories, { value, label: trimmed }]);
+    setNewIncomeLabel('');
+  };
+
+  const handleRemoveIncomeCategory = (value: string) => {
+    if (incomeCategories.length <= 1) {
+      showToast('최소 1개 이상의 수입 카테고리가 필요합니다.', 'warning');
+      return;
+    }
+    setIncomeCategories(incomeCategories.filter((c) => c.value !== value));
+  };
+
+  const handleUpdateIncomeCategory = (value: string, newLabel: string) => {
+    setIncomeCategories(
+      incomeCategories.map((c) => (c.value === value ? { ...c, label: newLabel } : c))
+    );
+  };
+
+  const handleResetIncomeCategories = () => {
+    setIncomeCategories(defaultIncomeCategories().map((c) => ({ value: c.value, label: c.label })));
+    showToast('수입 카테고리가 기본값으로 복원되었습니다.', 'info');
+  };
+
   const handleSaveBillingSettings = async (e: FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
@@ -131,6 +221,8 @@ export const BillingSettingsView: FC = () => {
       const nextSettings: AcademySettings = {
         ...settings,
         sessionPassPackages: passPackages,
+        customExpenseCategories: expenseCategories,
+        customIncomeCategories: incomeCategories,
       };
 
       if (org.currentOrganization) {
@@ -146,7 +238,7 @@ export const BillingSettingsView: FC = () => {
       StorageService.saveSettings(nextSettings);
       setSettings(nextSettings);
       triggerRefresh();
-      showToast(`${feeLabel} 및 수납 설정이 저장되었습니다.`, 'success');
+      showToast(`${feeLabel} 및 수납·장부 설정이 저장되었습니다.`, 'success');
     } catch (err) {
       showToast.error(err, '수납 설정 저장 중 오류가 발생했습니다.');
     } finally {
@@ -155,7 +247,7 @@ export const BillingSettingsView: FC = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-4xl">
+    <form onSubmit={handleSaveBillingSettings} className="space-y-6 max-w-4xl">
       <SettingsCard
         className="sm:p-8"
         title={`${feeLabel} 및 수납 기본 정책`}
@@ -165,7 +257,7 @@ export const BillingSettingsView: FC = () => {
           신규 {customerLabel} 등록 시 기본 적용되는 수강 형태, 정기 결제일 및 청구서에 표기될 수납 계좌 정보를 설정합니다.
         </p>
 
-        <form onSubmit={handleSaveBillingSettings} className="space-y-6">
+        <div className="space-y-6">
           {/* 1. 기본 수강 형태 및 월 수강료 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField label="기본 수강 형태">
@@ -478,21 +570,172 @@ export const BillingSettingsView: FC = () => {
               </button>
             </div>
           )}
-
-          {/* 7. 하단 설정 저장 버튼 */}
-          <div className="flex justify-end pt-4 border-t border-slate-100">
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="px-6 py-2.5 min-h-[44px] bg-slate-900 hover:bg-slate-800 disabled:opacity-60 text-white font-bold text-xs sm:text-sm rounded-lg transition-colors shadow-2xs flex items-center gap-2 cursor-pointer"
-            >
-              {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              {isSaving ? '저장 중…' : '수납 설정 저장'}
-            </button>
-          </div>
-        </form>
+        </div>
       </SettingsCard>
-    </div>
+
+      {/* 2번째 카드: 학원 장부 카테고리 설정 (수입 · 지출) */}
+      <SettingsCard
+        className="sm:p-8"
+        title="학원 장부 카테고리 관리 (수입 · 지출)"
+        icon={<Tags className="w-4 h-4 text-slate-700" />}
+      >
+        <p className="text-xs text-slate-500 mb-6 leading-relaxed">
+          수입 및 지출 내역 등록 시 선택할 수 있는 카테고리 항목을 사업장 환경에 맞게 자유롭게 추가, 수정, 삭제할 수 있습니다.
+        </p>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* 수입 카테고리 관리 */}
+          <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+              <div>
+                <h4 className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                  <span>수입 카테고리</span>
+                  <span className="text-xs font-normal text-slate-400">({incomeCategories.length}개)</span>
+                </h4>
+                <p className="text-[11px] text-slate-500 mt-0.5">학원 장부 수입 등록 시 사용할 분류</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleResetIncomeCategories}
+                className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-slate-600 hover:text-slate-900 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                title="기본값으로 복원"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>기본값 복원</span>
+              </button>
+            </div>
+
+            {/* 신규 수입 카테고리 추가 */}
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                placeholder="새 수입 카테고리명 입력"
+                value={newIncomeLabel}
+                onChange={(e) => setNewIncomeLabel(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddIncomeCategory();
+                  }
+                }}
+                className="flex-1 h-9 px-3 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-slate-900"
+              />
+              <button
+                type="button"
+                onClick={handleAddIncomeCategory}
+                className="px-3 h-9 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors flex items-center gap-1 cursor-pointer shrink-0"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>추가</span>
+              </button>
+            </div>
+
+            {/* 수입 카테고리 목록 */}
+            <div className="border border-slate-200 rounded-lg bg-white overflow-hidden divide-y divide-slate-100 max-h-64 overflow-y-auto">
+              {incomeCategories.map((cat) => (
+                <div key={cat.value} className="flex items-center gap-2 px-3 py-2 hover:bg-slate-50/70 transition-colors">
+                  <input
+                    type="text"
+                    value={cat.label}
+                    onChange={(e) => handleUpdateIncomeCategory(cat.value, e.target.value)}
+                    className="flex-1 h-8 px-2 text-xs bg-transparent border-0 font-medium text-slate-800 focus:bg-white focus:ring-1 focus:ring-slate-900 rounded"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveIncomeCategory(cat.value)}
+                    className="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors cursor-pointer"
+                    title="카테고리 삭제"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 지출 카테고리 관리 */}
+          <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+              <div>
+                <h4 className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                  <span>지출 카테고리</span>
+                  <span className="text-xs font-normal text-slate-400">({expenseCategories.length}개)</span>
+                </h4>
+                <p className="text-[11px] text-slate-500 mt-0.5">운영비·임대료·강사료 등 지출 등록 시 분류</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleResetExpenseCategories}
+                className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-slate-600 hover:text-slate-900 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                title="기본값으로 복원"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>기본값 복원</span>
+              </button>
+            </div>
+
+            {/* 신규 지출 카테고리 추가 */}
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                placeholder="새 지출 카테고리명 입력"
+                value={newExpenseLabel}
+                onChange={(e) => setNewExpenseLabel(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddExpenseCategory();
+                  }
+                }}
+                className="flex-1 h-9 px-3 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-slate-900"
+              />
+              <button
+                type="button"
+                onClick={handleAddExpenseCategory}
+                className="px-3 h-9 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors flex items-center gap-1 cursor-pointer shrink-0"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>추가</span>
+              </button>
+            </div>
+
+            {/* 지출 카테고리 목록 */}
+            <div className="border border-slate-200 rounded-lg bg-white overflow-hidden divide-y divide-slate-100 max-h-64 overflow-y-auto">
+              {expenseCategories.map((cat) => (
+                <div key={cat.value} className="flex items-center gap-2 px-3 py-2 hover:bg-slate-50/70 transition-colors">
+                  <input
+                    type="text"
+                    value={cat.label}
+                    onChange={(e) => handleUpdateExpenseCategory(cat.value, e.target.value)}
+                    className="flex-1 h-8 px-2 text-xs bg-transparent border-0 font-medium text-slate-800 focus:bg-white focus:ring-1 focus:ring-slate-900 rounded"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveExpenseCategory(cat.value)}
+                    className="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors cursor-pointer"
+                    title="카테고리 삭제"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </SettingsCard>
+
+      {/* 하단 전체 설정 저장 버튼 */}
+      <div className="flex justify-end pt-2">
+        <button
+          type="submit"
+          disabled={isSaving}
+          className="px-6 py-2.5 min-h-[44px] bg-slate-900 hover:bg-slate-800 disabled:opacity-60 text-white font-bold text-xs sm:text-sm rounded-lg transition-colors shadow-2xs flex items-center gap-2 cursor-pointer"
+        >
+          {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+          {isSaving ? '저장 중…' : '수납 및 장부 설정 저장'}
+        </button>
+      </div>
+    </form>
   );
 };
 

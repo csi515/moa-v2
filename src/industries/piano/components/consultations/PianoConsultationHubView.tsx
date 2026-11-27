@@ -1,4 +1,6 @@
 import { useState, useMemo, useEffect, type FC } from 'react';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import {
   Calendar,
   CalendarPlus,
@@ -18,6 +20,8 @@ import {
   UserPlus,
 } from 'lucide-react';
 import { PageHeader, PaginationBar } from '@/shared/components';
+import { MasterDetailLayout } from '@/shared/components/layout/MasterDetailLayout';
+import { X } from 'lucide-react';
 import { Modal } from '@/shared/components/ui/Modal';
 import { AvailabilitySettingsView } from '@/capabilities/scheduling/availability';
 import { useTerminology } from '@/core/terminology';
@@ -49,6 +53,7 @@ export const PianoConsultationHubView: FC = () => {
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
 
   // 상담 기록 모달 상태
+  const [selectedConsultationRow, setSelectedConsultationRow] = useState<UnifiedConsultationRow | null>(null);
   const [recordModalRow, setRecordModalRow] = useState<UnifiedConsultationRow | null>(null);
 
   // 원생 등록 모달 상태
@@ -102,7 +107,7 @@ export const PianoConsultationHubView: FC = () => {
   };
 
   return (
-    <div className="space-y-4 pb-6">
+    <div className={cn(DESKTOP_CONTAINERS.wide, 'space-y-4 pb-6')}>
       {/* 1. 페이지 헤더 */}
       <PageHeader
         density="compact"
@@ -354,7 +359,8 @@ export const PianoConsultationHubView: FC = () => {
                   return (
                     <tr
                       key={row.id}
-                      className="hover:bg-slate-50/30 transition-colors group"
+                      onClick={() => setSelectedConsultationRow(row)}
+                      className={cn("hover:bg-slate-50/60 transition-colors group cursor-pointer", selectedConsultationRow?.id === row.id && "bg-teal-50/50 ring-1 ring-teal-400")}
                     >
                       {/* 1. 상담 일시 */}
                       <td className="py-3.5 pl-5 pr-3 whitespace-nowrap">
@@ -504,7 +510,8 @@ export const PianoConsultationHubView: FC = () => {
               const isConfirming = isConfirmingId === row.id;
 
               return (
-                <div key={row.id} className="p-4 space-y-3 bg-white hover:bg-slate-50/60 transition-colors">
+                <div key={row.id} onClick={() => setSelectedConsultationRow(row)}
+                  className={cn("p-4 space-y-3 bg-white hover:bg-slate-50/60 transition-colors cursor-pointer", selectedConsultationRow?.id === row.id && "bg-teal-50/50 ring-1 ring-teal-400")}>
                   {/* 1. 상단: 고객 정보 & 상태 뱃지 */}
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2.5 min-w-0">

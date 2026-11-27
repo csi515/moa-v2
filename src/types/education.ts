@@ -116,7 +116,16 @@ export type ParentPortalTab =
   | 'shuttle'
   | 'more';
 
-export type AcademyEventType = 'concert' | 'competition' | 'special_lesson' | 'tuning' | 'vacation' | 'other';
+export type AcademyEventType =
+  | 'concert'
+  | 'competition'
+  | 'special_lesson'
+  | 'tuning'
+  | 'vacation'
+  | 'personal'
+  | 'event'
+  | 'maintenance'
+  | 'other';
 export type PerformanceVideoEventType = 'recital' | 'competition' | 'lesson' | 'practice' | 'other';
 
 export const ACADEMY_EVENT_TYPE_LABEL: Record<AcademyEventType, string> = {
@@ -125,6 +134,9 @@ export const ACADEMY_EVENT_TYPE_LABEL: Record<AcademyEventType, string> = {
   special_lesson: '특강',
   tuning: '조율',
   vacation: '방학',
+  personal: '개인 일정',
+  event: '행사',
+  maintenance: '점검',
   other: '기타',
 };
 

@@ -73,9 +73,9 @@ interface QuickSetupFormData {
 const INDUSTRY_CARDS = [
   {
     id: 'first_birthday_party',
-    title: '돌잔치 · 파티룸',
+    title: '행사장 · 연회/파티',
     subtitle: '홀/룸 타임 예약, 세팅·철수 버퍼, 플래너 수수료 및 식순 브리핑',
-    badge: '인기 돌잔치',
+    badge: '인기 행사장',
     icon: Cake,
     color: 'amber',
   },

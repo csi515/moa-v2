@@ -1,6 +1,7 @@
 import type { NavTab } from '@/context/AppContext';
 import type { FC, ReactNode } from 'react';
 import { BookingCalendarView } from '@/capabilities/booking/ui/BookingCalendarView';
+import { WorkplaceCalendarView } from '@/capabilities/scheduling/calendar';
 import { ServiceManagementView } from '@/capabilities/booking/ui/ServiceManagementView';
 import {
   PilatesDashboardView,
@@ -36,6 +37,7 @@ const scheduleHub = () => (
 const PILATES_VIEW_MAP: Record<string, () => ReactNode> = {
   dashboard: () => <PilatesDashboardView />,
   bookings: scheduleHub,
+  calendar: () => <WorkplaceCalendarView />,
   services: scheduleHub,
   members: customerHub,
   passes: customerHub,

@@ -1,4 +1,6 @@
 import React, { useState, useMemo } from 'react';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { getIndustryPlugin } from '@/core/industry/registry';
@@ -288,7 +290,7 @@ export const StudentListView: React.FC = () => {
 
 
   return (
-    <div className={DENSITY.pageStack}>
+    <div className={cn(DESKTOP_CONTAINERS.wide, DENSITY.pageStack)}>
       {/* 1. 상단 단일 헤더: 페이지 제목 + 우측 주요 액션 버튼 일원화 */}
       <PageHeader
         icon={<Users className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}

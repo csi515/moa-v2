@@ -8,12 +8,7 @@ import {
   Loader2,
   ArrowRight,
   ArrowLeft,
-  DoorOpen,
-  Plus,
-  Trash2,
 } from 'lucide-react';
-import { createRoom } from './utils/academyRooms';
-import type { AcademyRoom } from './settingsTypes';
 import {
   type IndustryType,
   getIndustryCategoryForType,
@@ -25,9 +20,6 @@ import {
   getPlaceLabel,
   getPlaceNamePlaceholder,
   isRetailIndustry,
-  isPianoIndustry,
-  isPilatesIndustry,
-  isGymIndustry,
 } from '../industry/industryUi';
 import { StorageService } from '@/services/storage';
 import { userFacingErrorMessage } from '@/shared/errors/userFacingError';
@@ -78,34 +70,6 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
   const [addressParts, setAddressParts] = useState<OrganizationAddressValue>(
     EMPTY_ORGANIZATION_ADDRESS
   );
-  const [rooms, setRooms] = useState<AcademyRoom[]>([]);
-
-  const addRoom = (name?: string) => {
-    const nextNum = rooms.length + 1;
-    const roomName = name || `${placeLabel} 방 ${nextNum}`;
-    setRooms((prev) => [...prev, createRoom({ name: roomName, kind: 'classroom' })]);
-  };
-
-  const removeRoom = (id: string) => {
-    setRooms((prev) => prev.filter((r) => r.id !== id));
-  };
-
-  const updateRoomName = (id: string, name: string) => {
-    setRooms((prev) => prev.map((r) => (r.id === id ? { ...r, name } : r)));
-  };
-
-  const recommendedRoomChips = useMemo(() => {
-    if (isPianoIndustry(formData.industryType) || formData.industryType === 'vocal') {
-      return ['1번 연습실', '2번 연습실', '3번 연습실', '그랜드룸', '이론실'];
-    }
-    if (isPilatesIndustry(formData.industryType) || isGymIndustry(formData.industryType)) {
-      return ['1:1 개인레슨실', '그룹 레슨실', '유산소존', '락커룸'];
-    }
-    if (formData.industryType === 'study_cafe') {
-      return ['1인 집중실', '오픈 스터디존', '스터디룸 A', '스터디룸 B'];
-    }
-    return ['1강의실', '2강의실', '상담실', '실습실'];
-  }, [formData.industryType]);
 
   const placeLabel = getPlaceLabel(formData.industryType);
   const customerWord = isRetailIndustry(formData.industryType) ? '고객' : '회원';
@@ -135,22 +99,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
     }
   }, [formData.industryType]);
 
-  const handleStepInfo = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name.trim()) {
-      setError(`${placeLabel} 이름을 입력해 주세요.`);
-      return;
-    }
-    const fullAddress = formatOrganizationAddress(addressParts);
-    if (!fullAddress) {
-      setError(`${placeLabel} 주소를 검색하거나 직접 입력해 주세요.`);
-      return;
-    }
-    setError(null);
-    setStep(2); // Step 2(강의실 설정 단계)로 이동
-  };
-
-  const handleFinish = async (roomsToSave: AcademyRoom[] = rooms) => {
+  const handleFinish = async () => {
     if (submittingRef.current) return;
     submittingRef.current = true;
     setIsSaving(true);
@@ -161,18 +110,17 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
       if (orgId) {
         await ensureOrganizationDefaultLocation(orgId);
       } else {
-        const validRooms = roomsToSave.filter((r) => r.name.trim().length > 0);
         orgId = await org.createOrganization(formData.name.trim(), formData.industryType, {
           directorName: StorageService.getActiveUser().name.trim(),
           representativeName: StorageService.getActiveUser().name.trim(),
           address: formatOrganizationAddress(addressParts),
           addressParts,
-          rooms: validRooms,
+          rooms: [], // 온보딩에서는 기본 생성, 상세 룸/시설 설정은 개설 이후 설정 메뉴에서 구성
         });
         setCreatedOrgId(orgId);
       }
 
-      setStep(3); // Step 3(완료 단계)로 이동
+      setStep(2); // Step 2 (완료 단계)로 이동
     } catch (err) {
       submittingRef.current = false;
       if (err instanceof OrganizationLocationSetupError) {
@@ -184,6 +132,21 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleStepInfo = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name.trim()) {
+      setError(`${placeLabel} 이름을 입력해 주세요.`);
+      return;
+    }
+    const fullAddress = formatOrganizationAddress(addressParts);
+    if (!fullAddress) {
+      setError(`${placeLabel} 주소를 검색하거나 직접 입력해 주세요.`);
+      return;
+    }
+    setError(null);
+    await handleFinish();
   };
 
   const handleEnterOrganization = async (opts?: { refreshFirst?: boolean }) => {
@@ -208,7 +171,6 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
   const steps = [
     { icon: Sparkles, label: '업종 선택' },
     { icon: Building2, label: '사업장 정보' },
-    { icon: DoorOpen, label: '강의실(룸)' },
     { icon: CheckCircle2, label: '완료' },
   ];
 
@@ -225,7 +187,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
             <Sparkles className="w-5 h-5 text-slate-800" />
             <h2 className="font-bold text-slate-900">새 사업장 등록</h2>
           </div>
-          {step < 3 && (
+          {step < 2 && (
             <button
               onClick={onCancel}
               className="text-slate-400 hover:text-slate-600 p-1 min-w-[44px] min-h-[44px] flex items-center justify-center"
@@ -385,175 +347,35 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
                 type="button"
                 onClick={() => setStep(0)}
                 disabled={isSaving}
-                className="text-xs text-slate-500 hover:text-slate-700 min-h-[44px] px-3 inline-flex items-center gap-1"
+                className="text-xs text-slate-500 hover:text-slate-700 min-h-[44px] px-3 inline-flex items-center gap-1 cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>이전 (업종 선택)</span>
               </button>
               <button
                 type="submit"
-                data-testid="btn-wizard-next"
-                className="px-5 py-2.5 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl min-h-[44px] inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
+                disabled={isSaving}
+                data-testid="btn-wizard-submit"
+                className="px-5 py-2.5 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl min-h-[44px] disabled:opacity-50 inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer"
               >
-                <span>다음: 강의실 설정</span>
-                <ArrowRight className="w-4 h-4" />
+                {isSaving ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>개설 중...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>{placeLabel} 개설하기</span>
+                    <CheckCircle2 className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </form>
         )}
 
-        {/* Step 2: 강의실(시설·룸) 설정 단계 (선택 사항, 스킵 가능) */}
+        {/* Step 2: 완료 단계 */}
         {step === 2 && (
-          <div className="p-6 space-y-4">
-            <div>
-              <h3 className="text-base font-bold text-slate-900">
-                수업 강의실이나 피아노 방이 있으신가요?
-              </h3>
-              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                운영 중인 강의실이나 연습실 목록을 등록해 두면 시간표를 방별로 편리하게 관리할 수 있습니다.
-                <br />
-                <span className="text-slate-800 font-semibold">
-                  방 구분이 필요 없거나 나중에 설정하시려면 건너뛰셔도 됩니다.
-                </span>
-              </p>
-            </div>
-
-            {/* 빠른 추천 칩 */}
-            <div className="space-y-1.5 bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
-              <span className="text-[11px] font-bold text-slate-600 block">
-                자주 쓰는 추천 이름 (클릭하면 바로 추가)
-              </span>
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                {recommendedRoomChips.map((chipName) => {
-                  const alreadyExists = rooms.some((r) => r.name === chipName);
-                  return (
-                    <button
-                      key={chipName}
-                      type="button"
-                      disabled={alreadyExists}
-                      onClick={() => addRoom(chipName)}
-                      className={`px-2.5 py-1 text-xs rounded-lg font-medium transition flex items-center gap-1 ${
-                        alreadyExists
-                          ? 'bg-slate-200/70 text-slate-400 cursor-not-allowed'
-                          : 'bg-white hover:bg-slate-50 hover:text-slate-900 border border-slate-200 text-slate-700 shadow-2xs cursor-pointer'
-                      }`}
-                    >
-                      <Plus className="w-3 h-3" />
-                      <span>{chipName}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* 등록된 방 목록 */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-slate-700">
-                  등록할 방 목록 {rooms.length > 0 && <span className="text-slate-800">({rooms.length}개)</span>}
-                </label>
-                <button
-                  type="button"
-                  onClick={() => addRoom()}
-                  className="text-xs font-bold text-slate-800 hover:text-slate-900 flex items-center gap-1 min-h-[32px] px-2 cursor-pointer"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>직접 추가</span>
-                </button>
-              </div>
-
-              {rooms.length === 0 ? (
-                <div className="py-7 text-center bg-slate-50/70 rounded-2xl border border-dashed border-slate-200">
-                  <DoorOpen className="w-7 h-7 mx-auto text-slate-300 mb-1" />
-                  <p className="text-xs text-slate-500 font-medium">아직 등록된 방이 없습니다.</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
-                    추천 이름을 누르거나 건너뛰기를 누르세요.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
-                  {rooms.map((room, idx) => (
-                    <div
-                      key={room.id}
-                      className="flex items-center gap-2 bg-white p-2 rounded-xl border border-slate-200"
-                    >
-                      <span className="text-xs font-mono font-bold text-slate-400 w-5 text-center shrink-0">
-                        {idx + 1}
-                      </span>
-                      <input
-                        type="text"
-                        value={room.name}
-                        onChange={(e) => updateRoomName(room.id, e.target.value)}
-                        placeholder="방 또는 강의실 이름"
-                        className="flex-1 px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 font-semibold"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeRoom(room.id)}
-                        className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition cursor-pointer"
-                        aria-label="방 삭제"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {error && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-100 text-sm text-rose-700">
-                {error}
-              </div>
-            )}
-
-            {/* 하단 액션 버튼: 이전 / 건너뛰기 / 개설 완료 */}
-            <div className="flex justify-between items-center pt-3 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={() => setStep(1)}
-                disabled={isSaving}
-                className="text-xs text-slate-500 hover:text-slate-700 min-h-[44px] px-3 inline-flex items-center gap-1 cursor-pointer"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>이전 (사업장 정보)</span>
-              </button>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  disabled={isSaving}
-                  data-testid="btn-wizard-skip-rooms"
-                  onClick={() => void handleFinish([])}
-                  className="px-4 py-2.5 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200/80 rounded-xl min-h-[44px] transition cursor-pointer"
-                >
-                  건너뛰기
-                </button>
-                <button
-                  type="button"
-                  disabled={isSaving}
-                  data-testid="btn-wizard-submit"
-                  onClick={() => void handleFinish(rooms)}
-                  className="px-5 py-2.5 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl min-h-[44px] disabled:opacity-50 inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer"
-                >
-                  {isSaving ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>개설 중...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>{rooms.length > 0 ? `${rooms.length}개 방 등록하고 개설` : '사업장 개설하기'}</span>
-                      <CheckCircle2 className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: 완료 단계 */}
-        {step === 3 && (
           <div className="p-6 space-y-5 text-center">
             <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-8 h-8 text-emerald-600" />

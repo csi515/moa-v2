@@ -17,6 +17,8 @@ import { formatBankAccountText } from '@/capabilities/billing/finance/paymentMet
 import { useClipboard } from '@/shared/hooks';
 import { Modal } from '@/shared/components/ui/Modal';
 import { PageHeader } from '@/shared/components';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import { CombinedPaymentModal } from './CombinedPaymentModal';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import { TuitionSummaryCards, type TuitionSummaryFilterType } from './TuitionSummaryCards';
@@ -207,7 +209,7 @@ export const TuitionManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
   };
 
   return (
-    <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
+    <div className={cn(embedded ? 'space-y-4 pb-2' : DESKTOP_CONTAINERS.wide, 'space-y-4 pb-4')}>
       {embedded ? (
         <TuitionSummaryCards
           selectedMonth={formatYearMonthLabel(selectedMonth)}

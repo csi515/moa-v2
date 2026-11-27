@@ -52,7 +52,7 @@ export const bathPluginManifest: IndustryPluginManifest = {
     placeholder: '예: 1실',
     allowedKinds: ['classroom', 'practice'],
   },
-  adminTabs: withNoticesTabs(['dashboard', 'members', 'bookings', 'settings']),
-  staffTabs: withNoticesTabs(['dashboard', 'members', 'bookings']),
+  adminTabs: withNoticesTabs(['dashboard', 'members', 'bookings', 'calendar', 'settings']),
+  staffTabs: withNoticesTabs(['dashboard', 'members', 'bookings', 'calendar']),
   getExpenseCategories: bathExpenseCategories,
 };

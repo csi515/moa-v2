@@ -461,7 +461,7 @@ export const spacePresets: Record<string, IndustryPresetDefinition> = {
     },
     starterPassTemplates: [
       {
-        name: '프리미엄 돌잔치 올인원 패키지 (보증 50인 + 돌상 + 뷔페)',
+        name: '프리미엄 연회 올인원 패키지 (보증 50인 + 행사 세팅 + 뷔페)',
         passType: 'COUNT_BASED',
         totalCount: 1,
         validityDays: 180,
@@ -469,7 +469,7 @@ export const spacePresets: Record<string, IndustryPresetDefinition> = {
         badge: '인기',
       },
       {
-        name: '직계가족 소규모 돌잔치 패키지 (보증 15인 + 전통돌상)',
+        name: '소규모 가족모임·기념일 패키지 (보증 15인 + 기본 세팅)',
         passType: 'COUNT_BASED',
         totalCount: 1,
         validityDays: 180,
@@ -477,7 +477,7 @@ export const spacePresets: Record<string, IndustryPresetDefinition> = {
         badge: '추천',
       },
       {
-        name: '단독홀 대관 & 돌상 베이직 패키지',
+        name: '단독홀 대관 & 베이직 세팅 패키지',
         passType: 'COUNT_BASED',
         totalCount: 1,
         validityDays: 180,
@@ -485,9 +485,9 @@ export const spacePresets: Record<string, IndustryPresetDefinition> = {
       },
     ],
     terms: {
-      customer: '혼주/부모님',
+      customer: '주최자/고객',
       instructor: '행사 디렉터',
-      space: '연회홀/파티룸',
+      space: '연회홀/행사장',
       pass: '행사 패키지권',
       fee: '대관 및 연회비',
       lesson: '행사 타임',
@@ -501,8 +501,8 @@ export const spacePresets: Record<string, IndustryPresetDefinition> = {
     facilities: {
       turnaroundBufferMinutes: 60,
     },
-    name: '돌잔치·연회 전문점',
-    description: '돌잔치·가족연회 타임별 홀 예약, 최소 보증인원 및 식순 시나리오 관리, 플래너 일정 공유 및 업체 소개자료 공개',
+    name: '행사장 · 연회 전문점',
+    description: '연회·기념일·기업행사·파티룸 타임별 홀 예약, 최소 보증인원 및 식순 시나리오 관리, 플래너 일정 공유 및 업체 소개자료 공개',
     category: 'studio',
     capabilities: [
       'booking',
@@ -536,7 +536,7 @@ export const spacePresets: Record<string, IndustryPresetDefinition> = {
     roles: [
       { name: '대표/총지배인', rank_order: 1, permissions: ['*'] },
       {
-        name: '돌잔치 전담 플래너',
+        name: '행사 전담 플래너',
         rank_order: 2,
         permissions: ['booking:*', 'seat_room:*', 'custom_order_craft:*', 'task_pipeline:*', 'consultation_crm:*'],
       },

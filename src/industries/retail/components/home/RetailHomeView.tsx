@@ -16,6 +16,8 @@ import { usePermissions } from '@/core/auth/usePermissions';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { EmptyState, PageHeader } from '@/shared/components';
+import { DESKTOP_CONTAINERS, RESPONSIVE_GRIDS } from '@/shared/styles/density';
+import { cn } from '@/shared/lib/utils';
 import { formatCurrency } from '@/utils/formatters';
 import { inventoryService } from '../../services/inventoryService';
 import { saleHistoryService } from '../../services/saleHistoryService';
@@ -175,7 +177,7 @@ export const RetailHomeView: FC = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 space-y-4 pb-8" data-testid="director-home">
+    <div className={cn(DESKTOP_CONTAINERS.dashboard, 'space-y-4 pb-8')} data-testid="director-home">
       <PageHeader
         icon={<LayoutDashboard className="w-5 h-5" />}
         iconClassName="text-teal-600"
@@ -188,7 +190,7 @@ export const RetailHomeView: FC = () => {
       ) : (
         <>
           {/* 1. 핵심 경영 지표 4개 (순매출, 결제건수, 객단가, 재고부족) */}
-          <section className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <section className={RESPONSIVE_GRIDS.metrics}>
             <button
               type="button"
               onClick={goRevenueSummary}

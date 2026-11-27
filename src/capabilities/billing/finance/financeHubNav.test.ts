@@ -57,7 +57,7 @@ const AREAS_A = [
   {
     id: 'books',
     label: `${WORD_HAKWON} 장부`,
-    hint: '수입 · 지출 · 강사료 정산',
+    hint: '수입 · 지출',
     entrySegment: 'income',
     menuLabel: `${WORD_HAKWON} 장부 메뉴`,
     segments: [
@@ -69,12 +69,7 @@ const AREAS_A = [
       {
         value: 'expenses',
         label: `${WORD_HAKWON} 지출`,
-        description: '운영비·임대료·비품 지출 내역 관리',
-      },
-      {
-        value: 'payroll',
-        label: '선생님 급여·정산',
-        description: '강사료 정산 확정 후 지출 등록',
+        description: '운영비·임대료·강사료 지출 내역 관리',
       },
     ],
   },

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { ModuleLabels } from './labels';
 import type { NavMenuItem, NavMenuSection } from '@/core/auth/navUtils';
+import { MORE_NAV_SECTION } from '@/core/auth/navUtils';
 import { defineMobileMainNav } from '@/core/auth/mobileNavPolicy';
 import { buildNavSection } from '@/core/auth/navBuilders';
 import { CalendarDays, LayoutDashboard, Lock, Settings, Ticket, Users } from 'lucide-react';
@@ -19,6 +20,7 @@ export function getBathSidebarSections(labels: ModuleLabels): NavMenuSection[] {
       { tab: 'lockers', label: '사물함·락커', icon: icon(<Lock className="w-4 h-4" />) },
       { tab: 'passes', label: '이용권·회원권', icon: icon(<Ticket className="w-4 h-4" />) },
       { tab: 'bookings', label: '예약', icon: icon(<CalendarDays className="w-4 h-4" />) },
+      { tab: 'calendar', label: '캘린더', icon: icon(<CalendarDays className="w-4 h-4" />) },
     ]),
     buildNavSection('설정', [
       { tab: 'settings', label: '설정', icon: icon(<Settings className="w-4 h-4" />) },
@@ -41,5 +43,8 @@ export function getBathMainTabs(labels: ModuleLabels): NavMenuItem[] {
 }
 
 export function getBathMoreTabs(): NavMenuItem[] {
-  return [{ tab: 'settings', label: '설정', icon: icon(<Settings className="w-5 h-5" />) }];
+  return [
+    { tab: 'calendar', label: '캘린더', icon: icon(<CalendarDays className="w-5 h-5" />), section: MORE_NAV_SECTION.work },
+    { tab: 'settings', label: '설정', icon: icon(<Settings className="w-5 h-5" />) },
+  ];
 }

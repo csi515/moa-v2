@@ -18,6 +18,8 @@ import {
 import { CombinedPaymentModal } from '@/capabilities/billing/components/tuition/CombinedPaymentModal';
 import { TuitionService } from '@/capabilities/billing/finance';
 import { AbsentReasonModal } from './AbsentReasonModal';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import { PianoAttendanceTimelineGroup } from './PianoAttendanceTimelineGroup';
 import { usePianoAttendanceView } from './usePianoAttendanceView';
 import {
@@ -158,7 +160,7 @@ export const PianoAttendanceView: FC = () => {
   };
 
   return (
-    <div className="space-y-3.5 sm:space-y-4 pb-6">
+    <div className={cn(DESKTOP_CONTAINERS.wide, 'space-y-3.5 sm:space-y-4 pb-6')}>
       <PageHeader
         density="compact"
         icon={<CheckSquare className="w-6 h-6 text-slate-800" />}

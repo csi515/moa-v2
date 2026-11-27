@@ -35,6 +35,7 @@ export const POS_PAYMENT_METHODS: readonly SalePaymentMethod[] = [
   'card',
   'cash',
   'transfer',
+  'deposit',
   'other',
 ] as const;
 

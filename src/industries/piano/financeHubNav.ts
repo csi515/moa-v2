@@ -20,13 +20,12 @@ export const pianoFinanceHubNav: IndustryFinanceHubNav = {
     {
       id: 'books',
       label: '학원 장부',
-      hint: '수입 · 지출 · 강사료 정산',
+      hint: '수입 · 지출',
       entrySegment: 'income',
       menuLabel: '학원 장부 메뉴',
       segments: [
         { value: 'income', label: '학원 수입', description: '수입 내역과 월별 합계를 확인' },
-        { value: 'expenses', label: '학원 지출', description: '운영비·임대료·비품 지출 내역 관리' },
-        { value: 'payroll', label: '선생님 급여·정산', description: '강사료 정산 확정 후 지출 등록' },
+        { value: 'expenses', label: '학원 지출', description: '운영비·임대료·강사료 지출 내역 관리' },
       ],
     },
   ],

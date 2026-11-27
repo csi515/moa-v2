@@ -73,6 +73,7 @@ export const retailPluginManifest: IndustryPluginManifest = {
     'reports',
     'income',
     'instructors',
+    'calendar',
     'ledger',
     'closing',
     'shifts',
@@ -85,6 +86,7 @@ export const retailPluginManifest: IndustryPluginManifest = {
     'inventory',
     'members',
     'income',
+    'calendar',
   ]),
   getExpenseCategories: retailExpenseCategories,
 };

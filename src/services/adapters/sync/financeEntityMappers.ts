@@ -1,21 +1,13 @@
-﻿import type { Json } from '@/lib/supabase/database.types';
+﻿import type { Json, PaymentMethod as DbPaymentMethod } from '@/lib/supabase/database.types';
 import type { FinanceExpense, IncomeEntry } from '@/capabilities/finance/types';
 import type { TeacherPayrollSettlement } from '@/capabilities/finance/teacherPayroll/settlements';
 import type { Expense, TuitionInvoice, TuitionPayment } from '@/capabilities/billing/finance/billingLedgerTypes';
-
-type DbPaymentMethod =
-  | 'cash'
-  | 'card'
-  | 'transfer'
-  | 'other'
-  | 'online'
-  | 'local_currency'
-  | 'onsite_card';
 
 const APP_TO_DB_PAYMENT: Record<string, DbPaymentMethod> = {
   cash: 'cash',
   card: 'card',
   transfer: 'transfer',
+  deposit: 'deposit',
   other: 'other',
   local_currency: 'local_currency',
   onsite_card: 'onsite_card',
@@ -25,6 +17,7 @@ const DB_TO_APP_PAYMENT: Record<string, Expense['paymentMethod']> = {
   card: 'card',
   transfer: 'transfer',
   cash: 'cash',
+  deposit: 'other',
   other: 'other',
   online: 'other',
   local_currency: 'local_currency',

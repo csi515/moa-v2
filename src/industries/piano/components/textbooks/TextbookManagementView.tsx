@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import type { Textbook, TextbookSale, TextbookPayment, TextbookInventoryTransaction } from '@/capabilities/commerce/textbookTypes';
 import { StorageService } from '@/services/storage';
 import { useApp } from '@/context/AppContext';
@@ -200,7 +202,7 @@ export const TextbookManagementView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4 pb-6">
+    <div className={cn(DESKTOP_CONTAINERS.wide, 'space-y-4 pb-6')}>
       <PageHeader
         icon={<BookOpen className="w-6 h-6 text-slate-800" />}
         title="교재 관리"

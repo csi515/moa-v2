@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, type FormEvent, type FC } from 'react';
-import { Plus, Trash2, Barcode, Camera, Sparkles, RefreshCw } from 'lucide-react';
+import { Plus, Trash2, Barcode, Sparkles, RefreshCw } from 'lucide-react';
 import { Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS, SegmentedControl } from '@/shared/components/ui';
 import { useBarcodeScanner, playScannerSound } from '@/capabilities/inventory';
@@ -70,7 +70,7 @@ export const ProductFormModal: FC<Props> = ({
 }) => {
   const [name, setName] = useState('');
   const [productCode, setProductCode] = useState('');
-  const [isNoBarcode, setIsNoBarcode] = useState(false);
+  const [showBarcodeOption, setShowBarcodeOption] = useState(false);
   const [price, setPrice] = useState('');
   const [cost, setCost] = useState('');
   const [initialStock, setInitialStock] = useState('');
@@ -83,25 +83,23 @@ export const ProductFormModal: FC<Props> = ({
   const [hydrating, setHydrating] = useState(false);
   const [lastScannedFeedback, setLastScannedFeedback] = useState(false);
 
-  // 기성품 바코드 핸드스캐너(HID) 자동 입력 리스너
+  // 기성품 바코드 핸드스캐너(HID) 자동 입력 리스너 (바코드 옵션 활성화 시에만 수신)
   const handleBarcodeScanned = useCallback(
     (code: string) => {
-      if (!isOpen || isNoBarcode) return;
+      if (!isOpen || !showBarcodeOption) return;
       const clean = code.trim();
       if (clean) {
         setProductCode(clean);
-        setIsNoBarcode(false);
-        playScannerSound('success');
         setLastScannedFeedback(true);
         setTimeout(() => setLastScannedFeedback(false), 1500);
       }
     },
-    [isOpen, isNoBarcode]
+    [isOpen, showBarcodeOption]
   );
 
   useBarcodeScanner({
     onScan: handleBarcodeScanned,
-    enabled: isOpen && !isNoBarcode,
+    enabled: isOpen && showBarcodeOption,
     feedbackOnScan: false,
   });
 
@@ -114,7 +112,7 @@ export const ProductFormModal: FC<Props> = ({
       if (!editing) {
         setName('');
         setProductCode('');
-        setIsNoBarcode(false);
+        setShowBarcodeOption(false);
         setPrice('');
         setCost('');
         setInitialStock('');
@@ -133,7 +131,7 @@ export const ProductFormModal: FC<Props> = ({
       setName(editing.name);
       const code = editing.productCode || '';
       setProductCode(code);
-      setIsNoBarcode(!code);
+      setShowBarcodeOption(Boolean(code));
       setPrice(String(editing.price));
       setCost(editing.cost != null ? String(editing.cost) : '');
       setCategoryId(editing.categoryId || '');
@@ -185,7 +183,7 @@ export const ProductFormModal: FC<Props> = ({
     const dateStr = new Date().toISOString().slice(2, 10).replace(/-/g, '');
     const generated = `NB-${dateStr}-${randomSuffix}`;
     setProductCode(generated);
-    setIsNoBarcode(false);
+    setShowBarcodeOption(true);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -221,7 +219,7 @@ export const ProductFormModal: FC<Props> = ({
         organizationId,
         {
           name,
-          productCode: isNoBarcode ? null : productCode.trim() || null,
+          productCode: productCode.trim() || null,
           price: priceNum,
           cost: parseOptionalNumber(cost),
           categoryId: categoryId || null,
@@ -302,64 +300,11 @@ export const ProductFormModal: FC<Props> = ({
             onChange={(e) => setName(e.target.value)}
             className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
             autoComplete="off"
-            placeholder="상품명 입력 (예: 코카콜라 500ml, 종량제봉투 20L)"
+            placeholder="상품명 입력 (예: 둥근머리 볼트 M6, 방수 절연테이프, 배관 엘보 15A)"
           />
         </FormField>
 
-        {/* 기성품 바코드 스캔 및 무바코드 토글 섹션 */}
-        <div className="space-y-1.5 p-3.5 bg-slate-50 border border-slate-200 rounded-2xl">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5">
-              <Barcode className="w-4 h-4 text-teal-600" />
-              <label className="text-xs font-bold text-slate-700">
-                기성품 바코드 (EAN-13, 880, UPC 등)
-              </label>
-              {lastScannedFeedback && (
-                <span className="text-[11px] font-bold text-teal-600 flex items-center gap-0.5 animate-pulse">
-                  <Sparkles className="w-3.5 h-3.5" /> 스캔 완료!
-                </span>
-              )}
-            </div>
-            <button
-              type="button"
-              onClick={handleGenerateInternalCode}
-              className="text-[11px] font-bold text-slate-600 hover:text-teal-700 flex items-center gap-1 cursor-pointer"
-              title="바코드가 없는 제품용 임의 고유 코드 생성"
-            >
-              <RefreshCw className="w-3 h-3" /> 관리코드 자동생성
-            </button>
-          </div>
-
-          <div className="relative">
-            <input
-              value={isNoBarcode ? '' : productCode}
-              disabled={isNoBarcode}
-              onChange={(e) => setProductCode(e.target.value)}
-              className={`${FORM_CONTROL_CLASS} min-h-[44px] font-mono text-sm disabled:bg-slate-100 disabled:text-slate-400`}
-              placeholder={isNoBarcode ? '바코드 없는 제품 (무바코드 등록)' : '바코드 스캐너로 삑 찍거나 직접 입력'}
-              autoComplete="off"
-            />
-          </div>
-
-          <div className="flex items-center justify-between pt-1">
-            <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={isNoBarcode}
-                onChange={(e) => {
-                  setIsNoBarcode(e.target.checked);
-                  if (e.target.checked) setProductCode('');
-                }}
-                className="w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500"
-              />
-              <span>바코드가 없는 제품입니다 (신선/수제식품, 봉투, 서비스 등)</span>
-            </label>
-            <span className="text-[10px] text-slate-400 font-medium hidden sm:inline">
-              스캐너를 비추면 자동 입력됩니다
-            </span>
-          </div>
-        </div>
-
+        {/* 판매가 및 원가 (전면 2열 배치) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <FormField label={COPY.priceLabel} required>
             <input
@@ -369,8 +314,8 @@ export const ProductFormModal: FC<Props> = ({
               required
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              className={`${FORM_CONTROL_CLASS} min-h-[44px] font-bold tabular-nums`}
-              placeholder="판매가 (원)"
+              className={`${FORM_CONTROL_CLASS} min-h-[44px] font-bold tabular-nums text-teal-700`}
+              placeholder="판매단가 (원)"
             />
           </FormField>
           <FormField label={COPY.costLabel}>
@@ -381,45 +326,60 @@ export const ProductFormModal: FC<Props> = ({
               value={cost}
               onChange={(e) => setCost(e.target.value)}
               className={`${FORM_CONTROL_CLASS} min-h-[44px] font-bold tabular-nums`}
-              placeholder="원가 (선택)"
+              placeholder="입고원가 (선택)"
             />
           </FormField>
         </div>
 
-        {!editing && optionMode === 'none' && (
-          <FormField
-            label="초기 입고 재고 수량 (개)"
-            hint="상품 등록과 동시에 입력한 수량만큼 즉시 입고 처리되어 POS 판매가 가능해집니다 (선택)"
-          >
-            <input
-              type="number"
-              min={0}
-              step={1}
-              value={initialStock}
-              onChange={(e) => setInitialStock(e.target.value)}
-              className={`${FORM_CONTROL_CLASS} min-h-[44px] font-bold tabular-nums text-teal-700 bg-teal-50/40 border-teal-200 focus:border-teal-500`}
-              placeholder="0 (나중에 재고 탭에서 입고 가능)"
-            />
+        {/* 카테고리 및 초기 재고 수량 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <FormField label={COPY.categoryLabel}>
+            <select
+              value={categoryId}
+              onChange={(e) => {
+                setCategoryId(e.target.value);
+                if (e.target.value) setNewCategoryName('');
+              }}
+              className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
+            >
+              <option value="">{COPY.categoryNone}</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
           </FormField>
-        )}
 
-        <FormField label={COPY.categoryLabel}>
-          <select
-            value={categoryId}
-            onChange={(e) => {
-              setCategoryId(e.target.value);
-              if (e.target.value) setNewCategoryName('');
-            }}
-            className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
-          >
-            <option value="">{COPY.categoryNone}</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </FormField>
+          {!editing && optionMode === 'none' ? (
+            <FormField
+              label="현재고 수량 (초기 입고)"
+              hint="입력한 수량만큼 즉시 재고가 등록됩니다"
+            >
+              <input
+                type="number"
+                min={0}
+                step={1}
+                value={initialStock}
+                onChange={(e) => setInitialStock(e.target.value)}
+                className={`${FORM_CONTROL_CLASS} min-h-[44px] font-bold tabular-nums text-teal-800 bg-teal-50/40 border-teal-200 focus:border-teal-500`}
+                placeholder="0 (현재 매장 보유 수량)"
+              />
+            </FormField>
+          ) : (
+            <div className="flex items-center">
+              <label className="flex items-center gap-2 min-h-[44px] text-sm font-semibold text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={isActive}
+                  onChange={(e) => setIsActive(e.target.checked)}
+                  className="w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500"
+                />
+                {COPY.activeLabel} ({isActive ? COPY.statusActive : COPY.statusInactive})
+              </label>
+            </div>
+          )}
+        </div>
 
         {!categoryId && (
           <FormField label={COPY.newCategoryLabel}>
@@ -432,17 +392,20 @@ export const ProductFormModal: FC<Props> = ({
           </FormField>
         )}
 
-        <label className="flex items-center gap-2 min-h-[44px] text-sm font-semibold text-slate-700">
-          <input
-            type="checkbox"
-            checked={isActive}
-            onChange={(e) => setIsActive(e.target.checked)}
-            className="w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500"
-          />
-          {COPY.activeLabel} ({isActive ? COPY.statusActive : COPY.statusInactive})
-        </label>
+        {!editing && optionMode === 'none' && (
+          <label className="flex items-center gap-2 min-h-[44px] text-sm font-semibold text-slate-700">
+            <input
+              type="checkbox"
+              checked={isActive}
+              onChange={(e) => setIsActive(e.target.checked)}
+              className="w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500"
+            />
+            {COPY.activeLabel} ({isActive ? COPY.statusActive : COPY.statusInactive})
+          </label>
+        )}
 
-        <div className="space-y-2">
+        {/* 규격 및 옵션 설정 */}
+        <div className="space-y-2 pt-2 border-t border-slate-100">
           <p className="text-xs font-semibold text-slate-700">{COPY.optionModeLabel}</p>
           {requireSizeColorVariants ? (
             <p className="text-xs text-teal-800 bg-teal-50 border border-teal-100 rounded-lg px-3 py-2">
@@ -466,6 +429,54 @@ export const ProductFormModal: FC<Props> = ({
             fullWidth
             aria-label={COPY.optionModeLabel}
           />
+        </div>
+
+        {/* 보조 옵션: 바코드/관리코드 (기본 접힘) */}
+        <div className="pt-2 border-t border-slate-100">
+          <button
+            type="button"
+            onClick={() => setShowBarcodeOption((prev) => !prev)}
+            className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 cursor-pointer py-1"
+          >
+            <Barcode className="w-4 h-4 text-slate-400" />
+            <span>{showBarcodeOption ? '바코드/식별코드 접기' : '바코드/식별코드 입력 (선택)'}</span>
+            <span className="text-[10px] text-slate-400 font-normal">
+              {showBarcodeOption ? '▲' : '▼ (무바코드 상품은 비워두셔도 됩니다)'}
+            </span>
+          </button>
+
+          {showBarcodeOption && (
+            <div className="mt-2 space-y-2 p-3.5 bg-slate-50 border border-slate-200 rounded-2xl animate-in fade-in duration-150">
+              <div className="flex items-center justify-between gap-2">
+                <label className="text-xs font-bold text-slate-700">
+                  기성품 바코드 / 고유 관리코드
+                </label>
+                <button
+                  type="button"
+                  onClick={handleGenerateInternalCode}
+                  className="text-[11px] font-bold text-slate-600 hover:text-teal-700 flex items-center gap-1 cursor-pointer"
+                  title="바코드가 없는 제품용 임의 고유 코드 생성"
+                >
+                  <RefreshCw className="w-3 h-3" /> 관리코드 자동생성
+                </button>
+              </div>
+
+              <div className="relative">
+                <input
+                  value={productCode}
+                  onChange={(e) => setProductCode(e.target.value)}
+                  className={`${FORM_CONTROL_CLASS} min-h-[44px] font-mono text-sm`}
+                  placeholder="바코드 번호 입력 (스캐너 인식 시 자동 기입)"
+                  autoComplete="off"
+                />
+              </div>
+              {lastScannedFeedback && (
+                <p className="text-[11px] font-bold text-teal-600 flex items-center gap-0.5 animate-pulse">
+                  <Sparkles className="w-3.5 h-3.5" /> 스캐너로 입력되었습니다!
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         {optionMode === 'yes' && (

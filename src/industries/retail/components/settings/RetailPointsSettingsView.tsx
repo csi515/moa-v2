@@ -6,6 +6,8 @@ import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import * as orgService from '@/core/organizations/services/organizationService';
 import { settingsStorage } from '@/services/storage/settingsStorage';
 import { PageHeader } from '@/shared/components';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
+import { cn } from '@/shared/lib/utils';
 import {
   FormField,
   FORM_CONTROL_CLASS,
@@ -103,7 +105,7 @@ export const RetailPointsSettingsView: FC<Props> = ({ onBack }) => {
   };
 
   return (
-    <div className="p-4 sm:p-6 space-y-4 pb-8">
+    <div className={cn(DESKTOP_CONTAINERS.content, 'space-y-4 pb-8')}>
       <PageHeader
         density="compact"
         icon={<Coins className="w-5 h-5" />}

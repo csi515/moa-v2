@@ -64,19 +64,26 @@ export class CreateOrganizationWizardPage {
     await this.addressDetailInput.fill(detail);
   }
 
-  /** 사업장 정보 → 강의실 스텝 이동 */
+  /** 사업장 정보 → 개설 완료 이동 */
   async proceedToNextStep() {
-    await this.nextBtn.click();
+    if (await this.submitBtn.isVisible().catch(() => false)) {
+      await this.submitBtn.click();
+    } else {
+      await this.nextBtn.click();
+    }
   }
 
-  /** 강의실 스텝 건너뛰고 개설 완료까지 진행 */
+  /** 강의실 스텝 건너뛰고 개설 완료까지 진행 (간소화 위저드 하위 호환) */
   async skipRoomsAndFinish() {
-    await expect(this.skipRoomsBtn).toBeVisible({ timeout: 10000 });
-    await this.skipRoomsBtn.click();
+    if (await this.skipRoomsBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+      await this.skipRoomsBtn.click();
+    } else if (await this.submitBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+      await this.submitBtn.click();
+    }
   }
 
   async submitCreation() {
-    await expect(this.submitBtn).toBeVisible();
+    await expect(this.submitBtn).toBeVisible({ timeout: 10000 });
     await this.submitBtn.click();
   }
 

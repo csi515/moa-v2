@@ -9,6 +9,8 @@ import { LessonService } from '@/core/lessons';
 import { TuitionService } from '@/capabilities/finance';
 import { resolveStudentUnpaidBadge, type StudentUnpaidBadgeInfo } from '@/capabilities/billing/studentBillingStatusHelpers';
 import { EmptyState, PageHeader } from '@/shared/components';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import type { AttendanceRecord, AttendanceStatus } from '@/capabilities/attendance/domain/types';
 import type { ClassItem } from '@/types/classItem';
 import type { LessonRecord } from '@/core/lessons/types';

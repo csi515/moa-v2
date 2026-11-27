@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState, type FC, type FormEvent } from 'react';
-import { Banknote, Calculator } from 'lucide-react';
+import { Banknote, Calculator, Wallet } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import type { CustomerSearchResult } from '@/core/customer/services/customerLinkService';
 import {
   maxRedeemablePoints,
   pointRedeemService,
 } from '@/capabilities/commerce';
+import { creditWalletService } from '@/capabilities/credit_wallet';
 import { Modal } from '@/shared/components';
 import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 import { formatCurrency } from '@/utils/formatters';
@@ -55,6 +56,10 @@ export const SaleCheckoutModal: FC<Props> = ({
   const [pointBalance, setPointBalance] = useState(0);
   const [pointsUseInput, setPointsUseInput] = useState('');
   const [pointsLoading, setPointsLoading] = useState(false);
+
+  // 선불 예치금(충전금) 잔액
+  const [depositBalance, setDepositBalance] = useState<number>(0);
+  const [depositLoading, setDepositLoading] = useState(false);
 
   // 현금 결제용 받은 금액 & 거스름돈 계산기
   const [receivedInput, setReceivedInput] = useState<string>('');
@@ -121,6 +126,7 @@ export const SaleCheckoutModal: FC<Props> = ({
     setReceivedInput('');
     setSplitCashInput('');
     setSplitReceivedInput('');
+    setDepositBalance(0);
   }, [isOpen]);
 
   useEffect(() => {
@@ -169,6 +175,28 @@ export const SaleCheckoutModal: FC<Props> = ({
     };
   }, [isOpen, organizationId, customer, pointsEnabled, onError]);
 
+  useEffect(() => {
+    if (!isOpen || !organizationId || !customer) {
+      setDepositBalance(0);
+      return;
+    }
+    let cancelled = false;
+    setDepositLoading(true);
+    void (async () => {
+      try {
+        const wallet = await creditWalletService.getWallet(organizationId, customer.id);
+        if (!cancelled) setDepositBalance(wallet.totalBalance);
+      } catch {
+        if (!cancelled) setDepositBalance(0);
+      } finally {
+        if (!cancelled) setDepositLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen, organizationId, customer]);
+
   const buildSaleItems = (): SaleCreateInput['items'] =>
     lines.map((line) => ({
       productId: line.productId,
@@ -188,14 +216,45 @@ export const SaleCheckoutModal: FC<Props> = ({
       }
       const actualPaymentMethod = selectedMethod === 'split' ? 'other' : selectedMethod;
       const idempotencyKey = idempotencyCapability.newKey();
-      const sale = await saleService.createSale({
-        organizationId,
-        customerId: customer?.id ?? null,
-        paymentMethod: actualPaymentMethod,
-        pointsUsed: pointsToUse > 0 ? pointsToUse : 0,
-        items: buildSaleItems(),
-        idempotencyKey,
-      });
+
+      if (actualPaymentMethod === 'deposit') {
+        if (!customer) {
+          throw new Error('예치금 결제를 위해 고객 선택이 필요합니다.');
+        }
+        await creditWalletService.useCredit({
+          organizationId,
+          customerId: customer.id,
+          amount: payable,
+          description: `POS 판매 결제 (${lines[0]?.productName || '상품'}${lines.length > 1 ? ` 외 ${lines.length - 1}건` : ''})`,
+          idempotencyKey,
+        });
+      }
+
+      let sale: SaleWithItems;
+      try {
+        sale = await saleService.createSale({
+          organizationId,
+          customerId: customer?.id ?? null,
+          paymentMethod: actualPaymentMethod,
+          pointsUsed: pointsToUse > 0 ? pointsToUse : 0,
+          items: buildSaleItems(),
+          idempotencyKey,
+        });
+      } catch (saleErr) {
+        if (actualPaymentMethod === 'deposit' && customer) {
+          try {
+            await creditWalletService.refundCredit({
+              organizationId,
+              customerId: customer.id,
+              amount: payable,
+              reason: 'POS 판매 등록 실패로 인한 자동 환불',
+            });
+          } catch {
+            // log silently
+          }
+        }
+        throw saleErr;
+      }
       const paid = Math.max(0, sale.totalAmount - (sale.pointsUsed ?? 0));
       let changeInfo: { received: number; change: number } | undefined;
       let splitDetail: SplitPaymentDetail | undefined;
@@ -266,6 +325,16 @@ export const SaleCheckoutModal: FC<Props> = ({
     if (pointsUseInput !== '' && Number(pointsUseInput) > maxPoints) {
       onError(COPY.pointsExceed);
       return;
+    }
+    if (selectedMethod === 'deposit') {
+      if (!customer) {
+        onError('예치금 결제를 위해 고객을 먼저 선택해 주세요.');
+        return;
+      }
+      if (depositBalance < payable) {
+        onError(`예치금 잔액이 ${formatCurrency(payable - depositBalance)} 부족합니다.`);
+        return;
+      }
     }
     if (selectedMethod === 'cash' && receivedAmount > 0 && changeAmount < 0) {
       onError(`받은 금액이 ${formatCurrency(-changeAmount)} 부족합니다.`);
@@ -438,6 +507,56 @@ export const SaleCheckoutModal: FC<Props> = ({
                       </dd>
                     </div>
                   </dl>
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* 예치금 결제 전용 섹션 */}
+          {selectedMethod === 'deposit' && (
+            <section className="space-y-3 rounded-2xl border border-teal-200 bg-teal-50/40 p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-teal-800 uppercase tracking-wide">
+                  <Wallet className="w-4 h-4 text-teal-600" />
+                  <span>예치금 / 선입금 잔액 결제</span>
+                </div>
+                <span className="text-xs font-bold text-slate-500">
+                  결제 예정: {formatCurrency(payable)}
+                </span>
+              </div>
+
+              {!customer ? (
+                <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs sm:text-sm font-medium">
+                  ⚠️ 예치금 결제를 진행하려면 상단에서 <strong>고객을 먼저 선택</strong>해 주세요.
+                </div>
+              ) : depositLoading ? (
+                <p className="text-sm text-slate-500 py-2">예치금 잔액 조회 중…</p>
+              ) : (
+                <div className="space-y-2">
+                  <div className="p-3 rounded-xl bg-white border border-teal-200 flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-bold text-slate-500">{customer.name} 님의 보유 예치금</p>
+                      <p className="text-xs text-slate-400 mt-0.5">결제 시 잔액에서 즉시 차감됩니다</p>
+                    </div>
+                    <p className="text-lg font-black tabular-nums text-teal-700">
+                      {formatCurrency(depositBalance)}
+                    </p>
+                  </div>
+
+                  <div
+                    className={`p-3 rounded-xl flex items-center justify-between text-xs sm:text-sm font-bold ${
+                      depositBalance >= payable
+                        ? 'bg-emerald-100/80 border border-emerald-300 text-emerald-900'
+                        : 'bg-rose-100/80 border border-rose-300 text-rose-900'
+                    }`}
+                  >
+                    <span>{depositBalance >= payable ? '결제 후 잔액' : '예치금 부족액'}</span>
+                    <span className="text-sm sm:text-base tabular-nums">
+                      {depositBalance >= payable
+                        ? formatCurrency(depositBalance - payable)
+                        : `${formatCurrency(payable - depositBalance)} 부족`}
+                    </span>
+                  </div>
                 </div>
               )}
             </section>
@@ -719,6 +838,56 @@ export const SaleCheckoutModal: FC<Props> = ({
               )}
             </section>
           )}
+
+          {/* 예치금 결제 전용 섹션 */}
+          {selectedMethod === 'deposit' && (
+            <section className="space-y-3 rounded-2xl border border-teal-200 bg-teal-50/40 p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-teal-800 uppercase tracking-wide">
+                  <Wallet className="w-4 h-4 text-teal-600" />
+                  <span>예치금 / 선입금 잔액 결제</span>
+                </div>
+                <span className="text-xs font-bold text-slate-500">
+                  결제 예정: {formatCurrency(payable)}
+                </span>
+              </div>
+
+              {!customer ? (
+                <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs sm:text-sm font-medium">
+                  ⚠️ 예치금 결제를 진행하려면 상단에서 <strong>고객을 먼저 선택</strong>해 주세요.
+                </div>
+              ) : depositLoading ? (
+                <p className="text-sm text-slate-500 py-2">예치금 잔액 조회 중…</p>
+              ) : (
+                <div className="space-y-2">
+                  <div className="p-3 rounded-xl bg-white border border-teal-200 flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-bold text-slate-500">{customer.name} 님의 보유 예치금</p>
+                      <p className="text-xs text-slate-400 mt-0.5">결제 시 잔액에서 즉시 차감됩니다</p>
+                    </div>
+                    <p className="text-lg font-black tabular-nums text-teal-700">
+                      {formatCurrency(depositBalance)}
+                    </p>
+                  </div>
+
+                  <div
+                    className={`p-3 rounded-xl flex items-center justify-between text-xs sm:text-sm font-bold ${
+                      depositBalance >= payable
+                        ? 'bg-emerald-100/80 border border-emerald-300 text-emerald-900'
+                        : 'bg-rose-100/80 border border-rose-300 text-rose-900'
+                    }`}
+                  >
+                    <span>{depositBalance >= payable ? '결제 후 잔액' : '예치금 부족액'}</span>
+                    <span className="text-sm sm:text-base tabular-nums">
+                      {depositBalance >= payable
+                        ? formatCurrency(depositBalance - payable)
+                        : `${formatCurrency(payable - depositBalance)} 부족`}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </section>
+          )}
         </div>
 
         <div className="flex gap-2 p-4 sm:p-6 border-t border-slate-100 bg-white">
@@ -731,7 +900,11 @@ export const SaleCheckoutModal: FC<Props> = ({
           </button>
           <button
             type="submit"
-            disabled={saving || lines.length === 0}
+            disabled={
+              saving ||
+              lines.length === 0 ||
+              (selectedMethod === 'deposit' && (!customer || depositBalance < payable))
+            }
             className="flex-[1.4] min-h-[48px] rounded-xl bg-teal-600 text-white text-sm font-bold hover:bg-teal-700 disabled:opacity-60 transition-colors cursor-pointer"
           >
             {saving ? COPY.confirming : COPY.confirmSale}

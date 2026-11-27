@@ -42,6 +42,9 @@ import { GettingStartedQuestWidget } from '@/app/onboarding/GettingStartedQuestW
 import { BusinessHealthWidget } from '@/shared/components/diagnostics';
 import { CompanyAppLauncherDashboard } from '@/pages/workspace/CompanyAppLauncherDashboard';
 
+const WorkplaceCalendarView = lazy(() =>
+  import('@/capabilities/scheduling/calendar').then((m) => ({ default: m.WorkplaceCalendarView }))
+);
 const WorkplaceSettingsView = lazy(() =>
   import('@/core/organizations/components/WorkplaceSettingsView').then((m) => ({ default: m.WorkplaceSettingsView }))
 );
@@ -539,23 +542,15 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
 
 
   const navSections: NavMenuSection[] = useMemo(() => {
-    const items: NavMenuItem[] = [{ tab: 'dashboard', label: '홈', icon: <Home className="w-4 h-4" /> }];
+    const items: NavMenuItem[] = [
+      { tab: 'dashboard', label: '홈', icon: <Home className="w-4 h-4" /> },
+      { tab: 'calendar', label: '캘린더', icon: <Calendar className="w-4 h-4" /> },
+    ];
     if (isTabAllowedForCapabilities('students', enabledCaps)) {
       items.push({ tab: 'students', label: `${customerWord} 관리`, icon: <Users className="w-4 h-4" /> });
     }
 
-    const hasIntranetSuite =
-      enabledCaps.includes('mbo') ||
-      enabledCaps.includes('whistleblower_grievance') ||
-      enabledCaps.includes('research_project') ||
-      enabledCaps.includes('approval_workflow');
-    if (hasIntranetSuite) {
-      items.splice(1, 0, {
-        tab: 'intranet-hub',
-        label: '사내 업무',
-        icon: <Building2 className="w-4 h-4" />,
-      });
-    }
+
 
     if (enabledCaps.includes('booking') || enabledCaps.includes('seat_room')) {
       items.push({ tab: 'bookings', label: '예약·공간', icon: <Calendar className="w-4 h-4" /> });
@@ -759,31 +754,17 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
   const location = useLocation();
   const navigate = useNavigate();
 
-  /** 기업 크롬: 런처 전용 경로와 셸 탭 이중 진입을 합친다 */
-  const CORPORATE_DEDICATED_TAB_ROUTES: Record<string, string> = {
-    'approval-workflow': '/workspace/approvals',
-    'sop-risk': '/workspace/sop-risk',
-    'risk-approvals': '/workspace/sop-risk',
-    fleet: '/workspace/resources',
-    bookings: '/workspace/resources',
-    inventory: '/workspace/inventory',
-    'supply-restock': '/workspace/supply-restock',
-  };
-
   const navigateCorporateTab = (tab: string) => {
-    const industryType = currentOrganization?.industry_type || industry;
-    if (isCorporateChromePreset(industryType)) {
-      const dedicated = CORPORATE_DEDICATED_TAB_ROUTES[tab];
-      if (dedicated) {
-        navigate(dedicated);
-        return;
-      }
-    }
     setActiveTab(tab);
   };
 
   const defaultViewMap: Record<string, () => ReactNode> = {
     dashboard: () => <GenericDashboardView onNavigate={setActiveTab} enabledCaps={enabledCaps} />,
+    calendar: () => (
+      <Suspense fallback={<div className="p-8 text-center text-slate-400">캘린더를 불러오는 중...</div>}>
+        <WorkplaceCalendarView />
+      </Suspense>
+    ),
     'intranet-hub': () => (
       <Suspense fallback={<div className="p-8 text-center text-slate-400">사내 허브를 불러오는 중...</div>}>
         <WorkspaceIntranetHubPage enabledCapabilityIds={enabledCaps} />
@@ -1286,7 +1267,7 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
     }
   }, [urlTab, location.pathname, location.search, setActiveTab, navigate, moduleChrome]);
 
-  const isCurrentTabAllowed = isTabAllowedForCapabilities(activeTab, enabledCaps);
+  const isCurrentTabAllowed = Boolean(externalViewMap?.[activeTab]) || isTabAllowedForCapabilities(activeTab, enabledCaps);
 
   const renderViewContent = () => {
     const tabMeta = getTabMetadata(activeTab);

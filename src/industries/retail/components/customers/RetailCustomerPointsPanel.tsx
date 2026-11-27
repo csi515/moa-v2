@@ -38,11 +38,11 @@ export const RetailCustomerPointsPanel: FC<Props> = ({
   onBack,
   onOpenSale,
 }) => (
-  <div className="p-4 sm:p-6 space-y-4">
+  <div className="space-y-4">
     <button
       type="button"
       onClick={onBack}
-      className="inline-flex items-center gap-1.5 min-h-[44px] text-sm font-bold text-slate-600"
+      className="inline-flex lg:hidden items-center gap-1.5 min-h-[44px] text-sm font-bold text-slate-600"
     >
       <ArrowLeft className="w-4 h-4" aria-hidden />
       {COPY.pointsBack}

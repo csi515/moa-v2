@@ -61,3 +61,32 @@ export const UI_TYPOGRAPHY = {
   caption: 'text-xs font-semibold text-slate-600',
   meta: 'text-[11px] text-slate-400',
 } as const;
+
+/** 데스크톱 화면 최대 너비 및 중앙 정렬 위계 (Desktop Container Hierarchy) */
+export const DESKTOP_CONTAINERS = {
+  /** 단일 폼, 계정/비밀번호 변경, 단순 설정 상세 (~672px) */
+  form: 'max-w-2xl mx-auto w-full',
+  /** 설정 허브, 법정 서식, 단일 리포트, 체크리스트 (~896px) */
+  content: 'max-w-4xl mx-auto w-full',
+  /** 대시보드, 지표 관제 위젯, 통계 차트 (~1152px) */
+  dashboard: 'max-w-6xl mx-auto w-full',
+  /** POS 판매대, 학생/고객 대형 명부, 마스터-디테일 스플릿 뷰 (~1280px) */
+  wide: 'max-w-7xl mx-auto w-full',
+} as const;
+
+/** 데스크톱/태블릿 반응형 그리드 토큰 (Responsive Grid Tokens) */
+export const RESPONSIVE_GRIDS = {
+  /** 일반 정보/엔티티 카드 3열 그리드 */
+  cards: 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4',
+  /** 콤팩트 카드/상품/교재 4열 그리드 */
+  cardsDense: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3',
+  /** 대시보드 상단 핵심 지표 요약 4열 그리드 */
+  metrics: 'grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3',
+  /** 설정 메뉴/타일 버튼 2열 그리드 */
+  settings: 'grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-3.5',
+  /** 입력 폼 2열 그리드 */
+  form2Col: 'grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4',
+  /** 마스터(좌 4~5) - 디테일(우 7~8) 12그리드 분할 스플릿 */
+  splitView: 'grid grid-cols-1 lg:grid-cols-12 gap-5',
+} as const;
+

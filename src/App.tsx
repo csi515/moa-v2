@@ -68,30 +68,6 @@ const AcceptInviteLandingPage = lazy(() => import("./pages/invite/AcceptInviteLa
 const RecoveryPasswordPage = lazy(() => import("./pages/auth/RecoveryPasswordPage").then((m) => ({ default: m.RecoveryPasswordPage })));
 const QuickSetupPage = lazy(() => import("./pages/onboarding/QuickSetupPage").then((m) => ({ default: m.QuickSetupPage })));
 const OrganizationTreePage = lazy(() => import("./pages/organization/OrganizationTreePage").then((m) => ({ default: m.OrganizationTreePage })));
-const WorkspaceResourcesPage = lazy(() => import("./pages/workspace/WorkspaceResourcesPage").then((m) => ({ default: m.WorkspaceResourcesPage })));
-const WorkspaceFeedbacksPage = lazy(() => import("./pages/workspace/WorkspaceFeedbacksPage").then((m) => ({ default: m.WorkspaceFeedbacksPage })));
-const RndPortalPage = lazy(() => import("./pages/workspace/RndPortalPage").then((m) => ({ default: m.RndPortalPage })));
-const WorkspaceIntranetHubPage = lazy(() => import("./pages/workspace/WorkspaceIntranetHubPage").then((m) => ({ default: m.WorkspaceIntranetHubPage })));
-const WorkspaceMboPage = lazy(() => import("./pages/workspace/WorkspaceMboPage").then((m) => ({ default: m.WorkspaceMboPage })));
-const WorkspaceApprovalsPage = lazy(() => import("./pages/workspace/WorkspaceApprovalsPage").then((m) => ({ default: m.WorkspaceApprovalsPage })));
-const WorkspaceInventoryPage = lazy(() => import("./pages/workspace/WorkspaceInventoryPage").then((m) => ({ default: m.WorkspaceInventoryPage })));
-const WorkspaceSupplyRestockPage = lazy(() => import("./pages/workspace/WorkspaceSupplyRestockPage").then((m) => ({ default: m.WorkspaceSupplyRestockPage })));
-const WorkspaceSopRiskPage = lazy(() => import("./pages/workspace/WorkspaceSopRiskPage").then((m) => ({ default: m.WorkspaceSopRiskPage })));
-const WorkspaceShuttleMyPage = lazy(() => import("./pages/workspace/WorkspaceShuttlePage").then((m) => ({ default: m.WorkspaceShuttleMyPage })));
-const WorkspaceShuttleRosterPage = lazy(() => import("./pages/workspace/WorkspaceShuttlePage").then((m) => ({ default: m.WorkspaceShuttleRosterPage })));
-const WorkspaceShuttleRoutesPage = lazy(() => import("./pages/workspace/WorkspaceShuttlePage").then((m) => ({ default: m.WorkspaceShuttleRoutesPage })));
-const WorkspaceVolunteerListPage = lazy(() => import("./pages/workspace/WorkspaceVolunteerPage").then((m) => ({ default: m.WorkspaceVolunteerListPage })));
-const WorkspaceVolunteerManagePage = lazy(() => import("./pages/workspace/WorkspaceVolunteerPage").then((m) => ({ default: m.WorkspaceVolunteerManagePage })));
-const WorkspaceMealSurveyMyPage = lazy(() => import("./pages/workspace/WorkspaceMealSurveyPage").then((m) => ({ default: m.WorkspaceMealSurveyMyPage })));
-const WorkspaceMealSurveyManagePage = lazy(() => import("./pages/workspace/WorkspaceMealSurveyPage").then((m) => ({ default: m.WorkspaceMealSurveyManagePage })));
-const WorkspaceMealSurveySettingsPage = lazy(() => import("./pages/workspace/WorkspaceMealSurveyPage").then((m) => ({ default: m.WorkspaceMealSurveySettingsPage })));
-const WorkspaceOfficeSupplyMyPage = lazy(() => import("./pages/workspace/WorkspaceOfficeSupplyPage").then((m) => ({ default: m.WorkspaceOfficeSupplyMyPage })));
-const WorkspaceOfficeSupplyManagePage = lazy(() => import("./pages/workspace/WorkspaceOfficeSupplyPage").then((m) => ({ default: m.WorkspaceOfficeSupplyManagePage })));
-const WorkspaceOfficeSupplyCatalogPage = lazy(() => import("./pages/workspace/WorkspaceOfficeSupplyPage").then((m) => ({ default: m.WorkspaceOfficeSupplyCatalogPage })));
-const WorkspaceHazardousSubstancesPage = lazy(() => import("./pages/workspace/WorkspaceHazardousSubstancesPage").then((m) => ({ default: m.WorkspaceHazardousSubstancesPage })));
-const WorkspaceVehicleMileagePage = lazy(() => import("./pages/workspace/WorkspaceVehicleMileagePage").then((m) => ({ default: m.WorkspaceVehicleMileagePage })));
-const EpZeroSetupWizard = lazy(() => import("./pages/onboarding/EpZeroSetupWizard").then((m) => ({ default: m.EpZeroSetupWizard })));
-const WorkspaceSafetyPermitsPage = lazy(() => import("./pages/workspace/WorkspaceSafetyPermitsPage").then((m) => ({ default: m.WorkspaceSafetyPermitsPage })));
 const PassesListPage = lazy(() => import("./pages/passes/list").then((m) => ({ default: m.PassesListPage })));
 const LockersGridPage = lazy(() => import("./pages/lockers/grid").then((m) => ({ default: m.LockersGridPage })));
 const PublicStoreLandingPage = lazy(() => import("./pages/public/PublicStoreLandingPage").then((m) => ({ default: m.PublicStoreLandingPage })));
@@ -358,36 +334,9 @@ const RefineApp: React.FC = () => {
               </AppErrorBoundary>
             }
           >
-            <Route index element={<IndustryAppRouter />} />
+                        <Route index element={<IndustryAppRouter />} />
             <Route path="/workspace/settings/roles" element={<DynamicRoleSettingsPage />} />
-            <Route path="/workspace/members" element={<MemberList />} />
             <Route path="/workspace/organization" element={<OrganizationTreePage />} />
-            <Route path="/workspace/intranet" element={<WorkspaceIntranetHubPage />} />
-            <Route path="/workspace/resources" element={<WorkspaceResourcesPage />} />
-            <Route path="/workspace/feedbacks" element={<WorkspaceFeedbacksPage />} />
-            <Route path="/workspace/mbo" element={<WorkspaceMboPage />} />
-            <Route path="/workspace/approvals" element={<WorkspaceApprovalsPage />} />
-            <Route path="/workspace/inventory" element={<WorkspaceInventoryPage />} />
-            <Route path="/workspace/supply-restock" element={<WorkspaceSupplyRestockPage />} />
-            <Route path="/workspace/shuttle/routes" element={<WorkspaceShuttleRoutesPage />} />
-            <Route path="/workspace/shuttle/roster" element={<WorkspaceShuttleRosterPage />} />
-            <Route path="/workspace/shuttle/my" element={<WorkspaceShuttleMyPage />} />
-            <Route path="/workspace/sop-risk" element={<WorkspaceSopRiskPage />} />
-            <Route path="/workspace/volunteer" element={<WorkspaceVolunteerListPage />} />
-            <Route path="/workspace/volunteer/manage" element={<WorkspaceVolunteerManagePage />} />
-            <Route path="/workspace/meal-survey" element={<WorkspaceMealSurveyMyPage />} />
-            <Route path="/workspace/meal-survey/manage" element={<WorkspaceMealSurveyManagePage />} />
-            <Route path="/workspace/meal-survey/settings" element={<WorkspaceMealSurveySettingsPage />} />
-            <Route path="/workspace/office-supply" element={<WorkspaceOfficeSupplyMyPage />} />
-            <Route path="/workspace/office-supply/manage" element={<WorkspaceOfficeSupplyManagePage />} />
-            <Route path="/workspace/office-supply/catalog" element={<WorkspaceOfficeSupplyCatalogPage />} />
-            <Route path="/workspace/hazardous-substances" element={<WorkspaceHazardousSubstancesPage />} />
-            <Route path="/workspace/vehicle-mileage" element={<WorkspaceVehicleMileagePage />} />
-            <Route path="/workspace/safety-permits" element={<WorkspaceSafetyPermitsPage />} />
-            <Route path="/workspace/setup-wizard" element={<EpZeroSetupWizard />} />
-            <Route path="/onboarding/ep-setup" element={<EpZeroSetupWizard />} />
-            <Route path="/rnd" element={<RndPortalPage />} />
-            <Route path="/rnd_workspace" element={<Navigate to="/rnd" replace />} />
             <Route path="/workspace" element={<IndustryAppRouter />} />
             <Route path="/workspace/:tab" element={<IndustryAppRouter />} />
             <Route path="/dashboard" element={<Navigate to="/workspace" replace />} />

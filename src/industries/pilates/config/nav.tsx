@@ -6,6 +6,7 @@ import { defineMobileMainNav } from '@/core/auth/mobileNavPolicy';
 import { buildFinanceNavItem, buildNavSection } from '@/core/auth/navBuilders';
 import {
   Calendar,
+  CalendarDays,
   KeyRound,
   LayoutDashboard,
   Settings,
@@ -28,6 +29,11 @@ export function getPilatesSidebarSections(labels: ModuleLabels): NavMenuSection[
         tab: 'bookings',
         label: '일정',
         icon: icon(<Calendar className="w-4 h-4" />),
+      },
+      {
+        tab: 'calendar',
+        label: '캘린더',
+        icon: icon(<CalendarDays className="w-4 h-4" />),
       },
       buildFinanceNavItem('sm'),
     ]),
@@ -60,6 +66,12 @@ export function getPilatesMoreTabs(): NavMenuItem[] {
       tab: 'attendance',
       label: '출결',
       icon: icon(<KeyRound className="w-5 h-5" />),
+      section: MORE_NAV_SECTION.work,
+    },
+    {
+      tab: 'calendar',
+      label: '캘린더',
+      icon: icon(<CalendarDays className="w-5 h-5" />),
       section: MORE_NAV_SECTION.work,
     },
     {

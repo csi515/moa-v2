@@ -2,6 +2,7 @@ import type { IndustryType } from '@/core/industry/types';
 import { getIndustryPlugin } from '@/core/industry/pluginHost';
 import {
   DEFAULT_COMMON_EXPENSE_CATEGORIES,
+  DEFAULT_COMMON_INCOME_CATEGORIES,
   DEFAULT_PIANO_EXPENSE_CATEGORIES,
   defaultExpenseCategories,
 } from '@/core/industry/defaultExpenseCategories';
@@ -32,14 +33,7 @@ export const PILATES_EXPENSE_CATEGORIES: CategoryOption[] = [
 ];
 
 /** 업종 공통 수입 카테고리 */
-export const COMMON_INCOME_CATEGORIES: CategoryOption[] = [
-  { value: 'membership', label: '회원권/정기 수입' },
-  { value: 'session', label: '수업/세션 매출' },
-  { value: 'product', label: '상품 판매' },
-  { value: 'rental', label: '대관/임대 수입' },
-  { value: 'grant', label: '지원금/보조금' },
-  { value: 'other', label: '기타 수입' },
-];
+export const COMMON_INCOME_CATEGORIES: CategoryOption[] = DEFAULT_COMMON_INCOME_CATEGORIES;
 
 /** 체육관 추가 지출 카테고리 */
 export const GYM_EXPENSE_CATEGORIES: CategoryOption[] = [
@@ -57,13 +51,25 @@ export const DAYCARE_EXPENSE_CATEGORIES: CategoryOption[] = [
   { value: 'teacher_salary', label: '교사 인건비' },
 ];
 
-export function getExpenseCategories(industry: IndustryType | string): CategoryOption[] {
+export function getExpenseCategories(
+  industry: IndustryType | string,
+  customCategories?: CategoryOption[]
+): CategoryOption[] {
+  if (Array.isArray(customCategories) && customCategories.length > 0) {
+    return customCategories;
+  }
   const owned = getIndustryPlugin(industry).getExpenseCategories?.();
   const source = owned ?? defaultExpenseCategories();
   return source.map((item) => ({ value: item.value, label: item.label }));
 }
 
-export function getIncomeCategories(_industry: IndustryType | string): CategoryOption[] {
+export function getIncomeCategories(
+  _industry: IndustryType | string,
+  customCategories?: CategoryOption[]
+): CategoryOption[] {
+  if (Array.isArray(customCategories) && customCategories.length > 0) {
+    return customCategories;
+  }
   return COMMON_INCOME_CATEGORIES;
 }
 

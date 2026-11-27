@@ -21,6 +21,7 @@ export type SalePaymentMethod =
   | 'cash'
   | 'card'
   | 'transfer'
+  | 'deposit'
   | 'online'
   | 'other'
   | 'local_currency'
@@ -30,6 +31,7 @@ export const SALE_PAYMENT_METHODS: readonly SalePaymentMethod[] = [
   'cash',
   'card',
   'transfer',
+  'deposit',
   'online',
   'other',
   'local_currency',
@@ -40,6 +42,7 @@ export const SALE_PAYMENT_METHOD_LABELS: Record<SalePaymentMethod, string> = {
   cash: '현금',
   card: '카드',
   transfer: '계좌이체',
+  deposit: '예치금',
   online: '온라인',
   other: '기타',
   local_currency: '지역화폐',

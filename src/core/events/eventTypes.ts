@@ -1,3 +1,6 @@
+/** 사업장 캘린더 행사 공개 범위 */
+export type EventVisibility = 'private' | 'public';
+
 /** 사업장 캘린더 행사. type 값 집합은 Industry 화면이 해석한다. */
 
 export type AcademyEventType =
@@ -6,7 +9,12 @@ export type AcademyEventType =
   | 'special_lesson'
   | 'tuning'
   | 'vacation'
+  | 'personal'
+  | 'event'
+  | 'maintenance'
   | 'other';
+
+export type WorkplaceEventType = AcademyEventType;
 
 export interface AcademyEvent {
   id: string;
@@ -18,6 +26,8 @@ export interface AcademyEvent {
   color?: string;
   participantIds?: string[];
   participationFee?: number;
+  ownerUserId?: string | null;
+  visibility?: EventVisibility;
 }
 
 export interface EventParticipantSummary {

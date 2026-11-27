@@ -52,7 +52,29 @@
 
 ---
 
-## 5. 회복 탄력적 에러 핸들링 및 가시성 (Resilient Observability)
+## 5. 데스크톱 프로덕션 레이아웃 표준 (Desktop Production Layout Standard)
+
+모바일 1열 스택 UI가 데스크톱 와이드 모니터(1400px~1920px)에서 좌우로 기형적으로 늘어나는 현상을 방지하기 위해 다음 4대 표준을 의무 적용한다:
+
+1. **컨테이너 최대 너비 위계 준수 (`DESKTOP_CONTAINERS`)**:
+   - 화면 성격에 맞추어 `src/shared/styles/density.ts`의 표준 컨테이너 토큰을 필수로 지정한다:
+     - `DESKTOP_CONTAINERS.form` (`max-w-2xl mx-auto w-full`): 단일 폼, 계정/비밀번호 변경, 단순 설정 상세
+     - `DESKTOP_CONTAINERS.content` (`max-w-4xl mx-auto w-full`): 설정 허브, 법정 서식, 단일 리포트, 점검 체크리스트
+     - `DESKTOP_CONTAINERS.dashboard` (`max-w-6xl mx-auto w-full`): 대시보드, 지표 관제 위젯, 통계 차트 (3~4열 그리드)
+     - `DESKTOP_CONTAINERS.wide` (`max-w-7xl mx-auto w-full`): POS 판매대, 학생/고객 대형 명부, 마스터-디테일 스플릿 뷰
+2. **Master-Detail 2패널 스플릿 뷰 의무화 (`MasterDetailLayout`)**:
+   - 고객 허브, 상담 내역, 진도 일지 등 목록과 상세가 결합된 화면은 모바일에서는 화면 전환(Panel Switch)을 유지하되, **데스크톱(≥1024px)에서는 반드시 좌측 목록(35~40%) + 우측 상세(60~65%) 2패널 분할 뷰**를 적용한다.
+3. **반응형 카드 그리드 의무화 (`RESPONSIVE_GRIDS`)**:
+   - 카드 목록이나 지표 요약은 모바일 1열에 머물지 않고 데스크톱 브레이크포인트에 따라 확장한다:
+     - 일반 카드: `RESPONSIVE_GRIDS.cards` (`grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4`)
+     - 지표 요약: `RESPONSIVE_GRIDS.metrics` (`grid-cols-2 md:grid-cols-4 gap-3`)
+     - 설정 타일: `RESPONSIVE_GRIDS.settings` (`grid-cols-1 md:grid-cols-2 gap-3.5`)
+4. **전체 너비 버튼(Full-width Button) 스트레치 금지**:
+   - 설정 메뉴나 조작 버튼이 화면 전체 폭(`w-full min-h-[64px]`)으로 거대하게 늘어나는 것을 금지하며, 데스크톱에서는 2열 타일 그리드 또는 고정폭 버튼 컨테이너를 적용한다.
+
+---
+
+## 6. 회복 탄력적 에러 핸들링 및 가시성 (Resilient Observability)
 
 1. **기술 용어 숨김 및 한국어 번역 필수**:
    - Supabase RLS 오류(`42501`, `row-level security`), DB 제약조건명, 영문 시스템 에러를 사용자에게 그대로 노출하지 않고 반드시 **[`userFacingErrorMessage`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/src/shared/errors/userFacingError.ts)**를 거쳐 친절한 한국어 해결 가이드로 변환한다.
@@ -63,7 +85,7 @@
 
 ---
 
-## 6. 대규모 데이터 성능 및 개인정보 보호 (Performance & Compliance)
+## 7. 대규모 데이터 성능 및 개인정보 보호 (Performance & Compliance)
 
 1. **대량 목록 가상화(Virtualization)**:
    - 원생 목록, 출결 로그 등 100건 이상 데이터 목록은 `@tanstack/react-virtual` 가상 스크롤 또는 서버 페이징을 적용한다.
@@ -74,7 +96,7 @@
 
 ---
 
-## 7. 다역할(Multi-Role) 권한 및 테넌트 전환 보안 (Identity & Role Switching)
+## 8. 다역할(Multi-Role) 권한 및 테넌트 전환 보안 (Identity & Role Switching)
 
 1. **활성 멤버십 권한 검증 (Active Role Guard)**:
    - 사용자가 여러 사업장에서 다른 역할(예: A학원 원장, B학원 학부모)을 가질 수 있으므로, 단순 `user.role` 체크를 금지하고 반드시 현재 활성 테넌트의 권한(`canAccess` / `RoleGate`)을 기반으로 UI와 기능을 제어한다.
@@ -83,7 +105,7 @@
 
 ---
 
-## 8. 오프라인 우선 큐 및 현장 네트워크 복원력 (Offline-First Resilience)
+## 9. 오프라인 우선 큐 및 현장 네트워크 복원력 (Offline-First Resilience)
 
 1. **현장 필수 기능의 오프라인 큐화**:
    - 로비 키오스크 출결 체크, 셔틀버스 승하차 확인 등 순간적인 통신 두절이 잦은 현장 기능은 [`attendanceOfflineQueue`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/src/capabilities/attendance/offline/attendanceOfflineQueue.test.ts) 패턴을 적용한다.
@@ -92,7 +114,7 @@
 
 ---
 
-## 9. 마찰 없는 사용성 보장 규칙 (Frictionless UX Invariants)
+## 10. 마찰 없는 사용성 보장 규칙 (Frictionless UX Invariants)
 
 실제 사용자가 매일 운영하며 겪는 조작 피로도와 마찰(Friction)을 원천 차단하기 위해 아래 5대 규칙을 의무 적용한다.
 
@@ -110,7 +132,7 @@
 
 ---
 
-## 10. 표준 데이터 뷰 자동 바인딩 규격 (The Auto-Wired DataView Contract)
+## 11. 표준 데이터 뷰 자동 바인딩 규격 (The Auto-Wired DataView Contract)
 
 목록(List) 화면 개발 시 날것의 `<table>` 태그나 분절된 UI를 수동 조립하는 것을 금지하며, 공통 컨테이너인 [`StandardListView`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/src/shared/components/ui/StandardListView.tsx)를 통해 아래 6대 기본 운영 기능을 **선언적(Auto-wired)**으로 세팅한다:
 
@@ -129,7 +151,7 @@
 
 ---
 
-## 11. 대량 작업(Bulk Operations) 안전성 및 리포트 규격 (Bulk Action Safety Contract)
+## 12. 대량 작업(Bulk Operations) 안전성 및 리포트 규격 (Bulk Action Safety Contract)
 
 다수의 대상을 한 번에 처리하는 일괄 작업 시 조작 실수와 침묵의 실패를 방지한다.
 
@@ -140,7 +162,7 @@
 
 ---
 
-## 12. 폼 유효성 검사 및 첫 에러 필드 자동 포커스 규격 (Form Validation & Focus Contract)
+## 13. 폼 유효성 검사 및 첫 에러 필드 자동 포커스 규격 (Form Validation & Focus Contract)
 
 긴 입력 폼 작성 시 저장 버튼 클릭 후 화면이 멈춰있는 오해를 방지한다.
 
@@ -151,7 +173,7 @@
 
 ---
 
-## 13. 일관성 보장을 위한 표준 구현 레시피 (Canonical Code Recipes)
+## 14. 일관성 보장을 위한 표준 구현 레시피 (Canonical Code Recipes)
 
 Moa-v2의 전 화면에서 일관된 UX와 안정성을 담보하기 위해 아래 5대 표준 패턴을 의무 적용한다.
 

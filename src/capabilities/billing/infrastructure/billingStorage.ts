@@ -1,6 +1,7 @@
 import { createFinanceInvoicePersist } from '@/services/storage/financeInvoicePersist';
 import { createFinanceStorage } from '@/services/storage/financeStorage';
 import { createInvoicePaymentService } from '@/capabilities/billing/finance/services/invoicePaymentService';
+import { settingsStorage } from '@/services/storage/settingsStorage';
 import type { StorageApi } from '@/services/storage/helpers';
 import { storageApi } from '@/services/storage/storageApi';
 
@@ -10,6 +11,7 @@ export function createBillingCapabilityStorage(api: StorageApi) {
     ...createFinanceStorage(api),
     ...createFinanceInvoicePersist(api),
     ...createInvoicePaymentService(api),
+    getSettings: () => settingsStorage.getSettings(),
   };
 }
 

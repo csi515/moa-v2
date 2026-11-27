@@ -50,6 +50,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
   const feeLabel = getFeeLabel(industry);
   const tuitionTabLabel = feeLabel === '수강료' ? '수납' : feeLabel;
   const hubNav = resolveFinanceHubNav(industry);
+  const booksArea = hubNav.areas.find((a) => a.id === 'books');
   const splitAreas = hubNav.areas.length > 0 && billingEnabled;
 
   // 현재 활성 탭이 수납(tuition, unpaid)인지, 재무(finance, income, expenses, payroll, overview)인지 판별
@@ -68,16 +69,31 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
     [tuitionTabLabel]
   );
 
-  // 2. 재무 관리 전용 옵션 (요약, 수입, 지출, 정산)
-  const booksOptions = useMemo(
-    () => [
+  // 2. 재무 관리 전용 옵션 (플러그인 정의 영역 기반 또는 기본 요약/수입/지출/정산)
+  const booksOptions = useMemo(() => {
+    if (booksArea?.segments && booksArea.segments.length > 0) {
+      return booksArea.segments.map((s) => ({
+        value: s.value as FinanceHubSegment,
+        label: s.label,
+      }));
+    }
+    return [
       { value: 'overview' as const, label: '재무 요약' },
       { value: 'income' as const, label: '수입' },
       { value: 'expenses' as const, label: '지출' },
       { value: 'payroll' as const, label: '강사 정산' },
-    ],
-    []
-  );
+    ];
+  }, [booksArea]);
+
+  const activeBookSegment = useMemo(() => {
+    if (segment === 'tuition' || segment === 'unpaid') {
+      return booksArea?.entrySegment ?? 'overview';
+    }
+    if (booksOptions.some((opt) => opt.value === segment)) {
+      return segment;
+    }
+    return booksArea?.entrySegment ?? booksOptions[0]?.value ?? 'overview';
+  }, [segment, booksArea, booksOptions]);
 
   // 3. 분리되지 않은 단일 모드 업종용 옵션
   const genericOptions = useMemo(() => {
@@ -154,14 +170,18 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
         <PageHeader
           density="compact"
           icon={<BarChart3 className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}
-          title="재무 관리"
-          description="수납 내역, 강사 급여 정산, 사업장 수입·지출 장부를 통합 관리"
+          title={booksArea?.label ?? '재무 관리'}
+          description={
+            booksArea?.hint
+              ? `${booksArea.hint} 내역을 통합 관리`
+              : '수납 내역, 강사 급여 정산, 사업장 수입·지출 장부를 통합 관리'
+          }
           actions={
             <SegmentedControl
-              value={segment === 'tuition' || segment === 'unpaid' ? 'overview' : segment}
+              value={activeBookSegment}
               options={booksOptions}
               onChange={(next) => setActiveTab(SEGMENT_TO_TAB[next])}
-              aria-label="재무 관리 메뉴"
+              aria-label={booksArea?.menuLabel ?? '재무 관리 메뉴'}
               fullWidth
               className="w-full sm:w-auto min-w-[320px]"
               activeClassName="bg-slate-800 text-white"
@@ -169,10 +189,10 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
           }
         />
 
-        {segment === 'overview' && <FinanceOverviewView embedded />}
-        {segment === 'income' && <IncomeManagementView embedded />}
-        {segment === 'expenses' && <ExpenseManagementView embedded />}
-        {segment === 'payroll' && <TeacherPayrollView embedded />}
+        {activeBookSegment === 'overview' && <FinanceOverviewView embedded />}
+        {activeBookSegment === 'income' && <IncomeManagementView embedded />}
+        {activeBookSegment === 'expenses' && <ExpenseManagementView embedded />}
+        {activeBookSegment === 'payroll' && <TeacherPayrollView embedded />}
       </div>
     );
   }

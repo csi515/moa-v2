@@ -8,6 +8,7 @@ import {
 import { InstructorListView } from './components/instructors/InstructorListView';
 import { MemberListView } from './components/members/MemberListView';
 import { BookingCalendarView } from '@/capabilities/booking/ui/BookingCalendarView';
+import { WorkplaceCalendarView } from '@/capabilities/scheduling/calendar';
 import { ServiceManagementView } from '@/capabilities/booking/ui/ServiceManagementView';
 import { PassManagementView } from '@/capabilities/billing/ui/PassManagementView';
 import { skinPassConfig } from './config/passConfig';
@@ -38,6 +39,7 @@ const scheduleHub = () => (
 const SKIN_VIEW_MAP: Record<string, () => ReactNode> = {
   dashboard: () => <SkinDashboardView />,
   bookings: scheduleHub,
+  calendar: () => <WorkplaceCalendarView />,
   services: scheduleHub,
   members: customerHub,
   passes: customerHub,

@@ -1,4 +1,6 @@
 import { useEffect, useState, type FC, type FormEvent } from 'react';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
@@ -214,7 +216,7 @@ export const WorkplaceSettingsView: FC = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className={cn(DESKTOP_CONTAINERS.content, 'space-y-6')}>
       <SettingsCard
         className="sm:p-8"
         title={`${placeLabel} 기본 정보 및 공간 관리`}

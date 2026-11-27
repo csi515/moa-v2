@@ -1,6 +1,6 @@
 import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import type { FC } from 'react';
-import { Users, Coins } from 'lucide-react';
+import { Users, Coins, Wallet } from 'lucide-react';
 import type { CustomerSearchResult } from '@/core/customer/services/customerLinkService';
 import { EmptyState } from '@/shared/components';
 import { PageHeader } from '@/shared/components/ui';
@@ -16,6 +16,7 @@ interface Props {
   balances: Map<string, number>;
   onSelect: (customer: CustomerSearchResult) => void;
   onOpenManualPoint?: () => void;
+  onOpenCreditCharge?: () => void;
 }
 
 export const RetailCustomerListPanel: FC<Props> = ({
@@ -27,22 +28,34 @@ export const RetailCustomerListPanel: FC<Props> = ({
   balances,
   onSelect,
   onOpenManualPoint,
+  onOpenCreditCharge,
 }) => (
-  <div className="p-4 sm:p-6 space-y-4">
+  <div className="space-y-4">
     <PageHeader 
       title={COPY.listTitle} 
       description={COPY.listDescription}
       icon={<Users className="w-5 h-5 text-slate-800" />}
       actions={
-        onOpenManualPoint ? (
-          <button
-            onClick={onOpenManualPoint}
-            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-50 text-slate-700 text-sm font-bold rounded-xl hover:bg-slate-100 min-h-[44px]"
-          >
-            <Coins className="w-4 h-4" />
-            수동 적립/차감
-          </button>
-        ) : undefined
+        <div className="flex items-center gap-2">
+          {onOpenCreditCharge && (
+            <button
+              onClick={onOpenCreditCharge}
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-50 text-teal-800 text-xs sm:text-sm font-bold rounded-xl hover:bg-teal-100 min-h-[44px] cursor-pointer"
+            >
+              <Wallet className="w-4 h-4" />
+              예치금 충전
+            </button>
+          )}
+          {onOpenManualPoint && (
+            <button
+              onClick={onOpenManualPoint}
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold rounded-xl hover:bg-slate-100 min-h-[44px] cursor-pointer"
+            >
+              <Coins className="w-4 h-4" />
+              포인트 조정
+            </button>
+          )}
+        </div>
       }
     />
 
@@ -55,7 +68,7 @@ export const RetailCustomerListPanel: FC<Props> = ({
     </FilterBar>
 
     {loading ? (
-      <PageListSkeleton rows={4} message="회원 목록을 불러오는 중입니다..." />
+      <PageListSkeleton rows={4} message="고객 목록을 불러오는 중입니다..." />
     ) : filtered.length === 0 ? (
       <EmptyState
         icon={<Users className="w-10 h-10" />}

@@ -17,6 +17,8 @@ import { billingStorage } from '@/capabilities/billing/infrastructure/billingSto
 import { todayIsoLocal } from '@/shared/utils/localDate';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { PageHeader, Modal } from '@/shared/components';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import {
   Users,
   Plus,
@@ -185,7 +187,7 @@ export const PianoFamilyManagementView: React.FC = () => {
   const totalCredits = groupDetails.reduce((acc, g) => acc + g.group.sharedCreditBalance, 0);
 
   return (
-    <div className="space-y-6 pb-8">
+    <div className={cn(DESKTOP_CONTAINERS.wide, 'space-y-6 pb-8')}>
       {/* 1. 상단 타이틀 & 액션 헤더 */}
       <PageHeader
         icon={<Users className="w-6 h-6 text-slate-800" />}

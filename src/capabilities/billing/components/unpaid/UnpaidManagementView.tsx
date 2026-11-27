@@ -22,6 +22,8 @@ import {
   type FilterTabItem,
 } from '@/shared/components';
 import { formatCurrency, formatPhone } from '@/utils/formatters';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import { CombinedPaymentModal } from '../tuition/CombinedPaymentModal';
 import {
   AlertCircle,
@@ -244,7 +246,7 @@ export const UnpaidManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
   );
 
   return (
-    <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
+    <div className={cn(embedded ? 'space-y-4 pb-2' : DESKTOP_CONTAINERS.wide, 'space-y-4 pb-4')}>
       {!embedded && (
         <PageHeader
           density="compact"

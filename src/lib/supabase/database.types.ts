@@ -30,6 +30,7 @@ export type PaymentMethod =
   | 'cash'
   | 'card'
   | 'transfer'
+  | 'deposit'
   | 'online'
   | 'other'
   | 'local_currency'

@@ -33,6 +33,11 @@ export const DEFAULT_SESSION_PASS_PACKAGES: SessionPassPackage[] = [
   { id: 'pkg-10', name: '10회 이용권', sessions: 10, price: 400000 },
 ];
 
+export interface FinanceCategoryOption {
+  value: string;
+  label: string;
+}
+
 /** 1. 모든 업종 공통 기본 사업장 정보 */
 export interface CommonWorkplaceSettings {
   name: string;
@@ -48,6 +53,8 @@ export interface CommonWorkplaceSettings {
     accountNumber: string;
     holder: string;
   };
+  customExpenseCategories?: FinanceCategoryOption[];
+  customIncomeCategories?: FinanceCategoryOption[];
 }
 
 /** 2. 공간/룸 설정 (공통) */

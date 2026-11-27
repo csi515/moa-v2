@@ -1,17 +1,13 @@
 import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import { useCallback, useEffect, useMemo, useRef, useState, type FC } from 'react';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import {
   ArrowLeftRight,
   PackagePlus,
   SlidersHorizontal,
   Warehouse,
-  Camera,
-  Printer,
-  QrCode,
   Plus,
-  Barcode,
-  ChevronDown,
-  Wrench,
 } from 'lucide-react';
 import { useList } from '@refinedev/core';
 import { useApp } from '@/context/AppContext';
@@ -26,13 +22,6 @@ import {
   FORM_CONTROL_CLASS,
   SearchField,
 } from '@/shared/components/ui';
-import {
-  BarcodeLabelPrintModal,
-  StoreQrPopPrintModal,
-  InventoryScannerModal,
-  generateItemBarcode,
-  type InventoryItem,
-} from '@/capabilities/inventory';
 import {
   stockLocationService,
   type StockLocation,
@@ -91,24 +80,7 @@ export const InventoryListView: FC = () => {
   const [newLocName, setNewLocName] = useState('');
   const [newLocDeptId, setNewLocDeptId] = useState('');
   const [savingLoc, setSavingLoc] = useState(false);
-  const [scannerOpen, setScannerOpen] = useState(false);
-  const [labelPrintOpen, setLabelPrintOpen] = useState(false);
-  const [selectedLabelItem, setSelectedLabelItem] = useState<InventoryItem | null>(null);
-  const [storePopOpen, setStorePopOpen] = useState(false);
   const [stocktakeOpen, setStocktakeOpen] = useState(false);
-  const [toolsOpen, setToolsOpen] = useState(false);
-  const toolsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!toolsOpen) return;
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (toolsRef.current && !toolsRef.current.contains(e.target as Node)) {
-        setToolsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleOutsideClick);
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
-  }, [toolsOpen]);
 
   const { query: deptQuery } = useList<{ id: string; name: string }>({
     resource: 'departments',
@@ -203,30 +175,6 @@ export const InventoryListView: FC = () => {
     setAdjustOpen(true);
   };
 
-  const inventoryItems: InventoryItem[] = useMemo(() => {
-    const orgCode = orgId ? orgId.replace(/-/g, '').slice(0, 4).toUpperCase() : '0001';
-    return rows.map((r, idx) => ({
-      id: r.key,
-      name: r.variantName ? `${r.productName} (${r.variantName})` : r.productName,
-      sku: r.key,
-      barcode: generateItemBarcode(orgCode, idx + 1),
-      qrCodeUrl: `https://moa.app/scan/item?id=${encodeURIComponent(r.key)}`,
-      currentStock: r.quantity,
-      safetyStock: INVENTORY_LOW_STOCK_THRESHOLD,
-      unitPrice: 0,
-    }));
-  }, [rows, orgId]);
-
-  const openLabelPrint = (row?: InventoryStockRow) => {
-    if (row) {
-      const found = inventoryItems.find((it) => it.id === row.key);
-      setSelectedLabelItem(found ?? null);
-    } else {
-      setSelectedLabelItem(inventoryItems[0] ?? null);
-    }
-    setLabelPrintOpen(true);
-  };
-
   if (!orgId) {
     return (
       <div className="p-4 sm:p-6">
@@ -240,7 +188,7 @@ export const InventoryListView: FC = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 space-y-4 pb-8">
+    <div className={cn(DESKTOP_CONTAINERS.wide, 'space-y-4 pb-8')}>
       <PageHeader
         icon={<Warehouse className="w-5 h-5" />}
         iconClassName="text-teal-600"
@@ -257,99 +205,41 @@ export const InventoryListView: FC = () => {
         actions={
           <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
             {canMutate && (
-              <button
-                type="button"
-                onClick={() => openInbound()}
-                disabled={rows.length === 0}
-                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 min-h-[44px] bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold rounded-xl shadow-xs disabled:opacity-60 cursor-pointer flex-1 sm:flex-initial"
-              >
-                <PackagePlus className="w-4 h-4" />
-                {COPY.inbound}
-              </button>
-            )}
-            {canMutate && (
-              <button
-                type="button"
-                onClick={() => setStocktakeOpen(true)}
-                disabled={rows.length === 0}
-                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 min-h-[44px] bg-teal-50 hover:bg-teal-100/80 text-teal-800 border border-teal-200 text-sm font-bold rounded-xl shadow-2xs disabled:opacity-60 cursor-pointer flex-1 sm:flex-initial"
-                title="무선 스캐너로 매대를 돌며 실재고 전수조사 및 로스 자동 파악"
-              >
-                <Barcode className="w-4 h-4 text-teal-700" />
-                재고 실사
-              </button>
-            )}
-
-            {/* 재고 관리 보조 도구 드롭다운 (스캔, QR POP, 조정, 이동) */}
-            <div className="relative w-full sm:w-auto" ref={toolsRef}>
-              <button
-                type="button"
-                onClick={() => setToolsOpen((prev) => !prev)}
-                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 text-sm font-bold rounded-xl border border-slate-200/90 shadow-2xs w-full sm:w-auto cursor-pointer"
-                aria-expanded={toolsOpen}
-              >
-                <Wrench className="w-4 h-4 text-slate-500" />
-                <span>재고 도구</span>
-                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${toolsOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {toolsOpen && (
-                <div className="absolute right-0 mt-1.5 w-full sm:w-56 bg-white rounded-xl shadow-lg border border-slate-200 py-1.5 z-40">
+              <>
+                <button
+                  type="button"
+                  onClick={() => openInbound()}
+                  disabled={rows.length === 0}
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 min-h-[44px] bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold rounded-xl shadow-xs disabled:opacity-60 cursor-pointer flex-1 sm:flex-initial"
+                >
+                  <PackagePlus className="w-4 h-4" />
+                  {COPY.inbound}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openAdjust()}
+                  disabled={rows.length === 0}
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-sm font-bold rounded-xl shadow-2xs disabled:opacity-60 cursor-pointer flex-1 sm:flex-initial"
+                >
+                  <SlidersHorizontal className="w-4 h-4 text-slate-500" />
+                  <span>수량 직접 조정</span>
+                </button>
+                {locations.length > 1 && (
                   <button
                     type="button"
                     onClick={() => {
-                      setScannerOpen(true);
-                      setToolsOpen(false);
+                      setTransferInitial(null);
+                      setTransferOpen(true);
                     }}
-                    className="w-full px-3.5 py-2.5 text-left text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 cursor-pointer"
+                    disabled={rows.length === 0}
+                    className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-sm font-bold rounded-xl shadow-2xs disabled:opacity-60 cursor-pointer flex-1 sm:flex-initial"
                   >
-                    <Camera className="w-4 h-4 text-slate-800" />
-                    <span>실시간 카메라 스캔</span>
+                    <ArrowLeftRight className="w-4 h-4 text-slate-500" />
+                    <span>창고간 이동</span>
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setStorePopOpen(true);
-                      setToolsOpen(false);
-                    }}
-                    className="w-full px-3.5 py-2.5 text-left text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 cursor-pointer"
-                  >
-                    <QrCode className="w-4 h-4 text-slate-600" />
-                    <span>매장 안내용 QR POP 인쇄</span>
-                  </button>
-                  {canMutate && (
-                    <>
-                      <div className="my-1 border-t border-slate-100" />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          openAdjust();
-                          setToolsOpen(false);
-                        }}
-                        disabled={rows.length === 0}
-                        className="w-full px-3.5 py-2.5 text-left text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 cursor-pointer disabled:opacity-50"
-                      >
-                        <SlidersHorizontal className="w-4 h-4 text-slate-600" />
-                        <span>{COPY.adjust} (수량 단품 조정)</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setTransferInitial(null);
-                          setTransferOpen(true);
-                          setToolsOpen(false);
-                        }}
-                        disabled={rows.length === 0 || locations.length < 2}
-                        className="w-full px-3.5 py-2.5 text-left text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 cursor-pointer disabled:opacity-50"
-                      >
-                        <ArrowLeftRight className="w-4 h-4 text-slate-600" />
-                        <span>{COPY.transfer} (창고간 이동)</span>
-                      </button>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
+                )}
+              </>
+            )}
           </div>
         }
       />
@@ -460,14 +350,6 @@ export const InventoryListView: FC = () => {
                         {row.isActive ? COPY.statusActive : COPY.statusInactive}
                       </span>
                       <div className="flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => openLabelPrint(row)}
-                          className="text-xs font-bold text-slate-800 min-h-[44px] px-1 flex items-center gap-1"
-                        >
-                          <Printer className="w-3.5 h-3.5" />
-                          라벨
-                        </button>
                         {canMutate && (
                           <>
                             <button
@@ -535,14 +417,6 @@ export const InventoryListView: FC = () => {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right space-x-2 whitespace-nowrap">
-                      <button
-                        type="button"
-                        onClick={() => openLabelPrint(row)}
-                        className="text-xs font-bold text-slate-800 hover:text-slate-900 min-h-[44px] px-2 inline-flex items-center gap-1"
-                      >
-                        <Printer className="w-3.5 h-3.5" />
-                        라벨
-                      </button>
                       {canMutate && (
                         <>
                           <button
@@ -701,31 +575,6 @@ export const InventoryListView: FC = () => {
           </Modal>
         </>
       )}
-
-      <InventoryScannerModal
-        isOpen={scannerOpen}
-        onClose={() => setScannerOpen(false)}
-        items={inventoryItems}
-        onStockUpdated={(_updatedItem, reason) => {
-          showToast(`스캔 완료: ${reason}`, 'success');
-          void load();
-        }}
-      />
-
-      <BarcodeLabelPrintModal
-        isOpen={labelPrintOpen}
-        onClose={() => setLabelPrintOpen(false)}
-        item={selectedLabelItem}
-        organizationName={currentOrganization?.name || '사업장'}
-      />
-
-      <StoreQrPopPrintModal
-        isOpen={storePopOpen}
-        onClose={() => setStorePopOpen(false)}
-        organizationName={currentOrganization?.name || '사업장'}
-        organizationCode={currentOrganization?.id?.replace(/-/g, '').slice(0, 8).toUpperCase() || 'MOA-001'}
-        industryLabel="스마트 사업장"
-      />
 
       {/* 바코드 연속 스캔 재고 실사 모달 */}
       <StocktakeAuditModal

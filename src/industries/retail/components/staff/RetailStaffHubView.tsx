@@ -2,6 +2,8 @@ import type { FC } from 'react';
 import { Users } from 'lucide-react';
 import { PageHeader } from '@/shared/components';
 import { MemberList } from '@/pages/members/MemberList';
+import { cn } from '@/shared/lib/utils';
+import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 
 /**
  * 리테일「직원」탭 — Core 멤버·동적 직급 UI 재사용.
@@ -9,8 +11,8 @@ import { MemberList } from '@/pages/members/MemberList';
  */
 export const RetailStaffHubView: FC = () => {
   return (
-    <div className="space-y-4 pb-8">
-      <div className="px-4 pt-4 sm:px-6 sm:pt-6">
+    <div className={cn(DESKTOP_CONTAINERS.wide, 'space-y-4 pb-8')}>
+      <div>
         <PageHeader
           icon={<Users className="w-5 h-5" />}
           iconClassName="text-teal-600"

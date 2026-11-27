@@ -168,18 +168,22 @@ function run(): void {
     assert.equal(parseIndustryType(alias), target);
   }
 
-  // 4. selectable industry has valid definition
+  // 4. selectable industry has valid definition (module-backed or Generic shell)
   for (const id of PUBLIC_SELECTABLE_INDUSTRY_IDS) {
     const def = getIndustryDefinition(id);
     assert.ok(def, `selectable missing definition: ${id}`);
     assert.equal(def.selectable, true);
-    assert.ok(def.moduleId, `selectable industry has no module: ${id}`);
+    assert.ok(
+      def.moduleId || shouldUseGenericShell(id),
+      `selectable industry must resolve to module or generic shell: ${id}`
+    );
   }
-  assert.deepEqual(
-    [...PUBLIC_SELECTABLE_INDUSTRY_IDS].sort(),
-    [...MODULE_INDUSTRY_IDS].sort(),
-    'selectable and module lists must stay derived and aligned'
-  );
+  for (const id of MODULE_INDUSTRY_IDS) {
+    assert.ok(
+      PUBLIC_SELECTABLE_INDUSTRY_IDS.includes(id),
+      `module industry must remain selectable: ${id}`
+    );
+  }
 
   // 5–7. module-backed industry has matching module + manifest id
   for (const id of MODULE_INDUSTRY_IDS) {
