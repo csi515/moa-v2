@@ -8,6 +8,8 @@ import {
   type PosReconciliationRecord,
 } from '../domain/posReconciliationEngine';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { StandardDataTable, type StandardColumn } from '@/shared/components/ui/StandardDataTable';
+import { Modal } from '@/shared/components/ui/Modal';
 
 export const PosReconciliationListPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,6 +74,73 @@ export const PosReconciliationListPage: React.FC = () => {
     );
   };
 
+  const columns: StandardColumn<PosReconciliationRecord>[] = [
+    {
+      key: 'reconciled_at',
+      header: '일시',
+      render: (rec) => <span className="text-xs font-mono text-slate-500">{new Date(rec.reconciled_at).toLocaleString('ko-KR')}</span>,
+    },
+    {
+      key: 'register_name',
+      header: '금고/포스',
+      render: (rec) => <span className="font-medium text-slate-900">{rec.register_name}</span>,
+    },
+    {
+      key: 'opening_cash',
+      header: '개점 준비금',
+      align: 'right',
+      render: (rec) => <span className="tabular-nums font-mono text-slate-600">{rec.opening_cash.toLocaleString()}원</span>,
+    },
+    {
+      key: 'expected_cash',
+      header: '기대 시재액',
+      align: 'right',
+      render: (rec) => <span className="tabular-nums font-mono text-slate-700">{rec.expected_cash.toLocaleString()}원</span>,
+    },
+    {
+      key: 'actual_cash',
+      header: '실사 현금',
+      align: 'right',
+      render: (rec) => <span className="tabular-nums font-mono font-semibold text-slate-900">{rec.actual_cash.toLocaleString()}원</span>,
+    },
+    {
+      key: 'difference',
+      header: '차액(과부족)',
+      align: 'right',
+      render: (rec) => (
+        <span
+          className={`tabular-nums font-mono font-bold ${
+            rec.difference === 0
+              ? 'text-slate-600 dark:text-slate-400'
+              : rec.difference > 0
+              ? 'text-blue-600'
+              : 'text-rose-600'
+          }`}
+        >
+          {rec.difference > 0 ? `+${rec.difference.toLocaleString()}` : rec.difference.toLocaleString()}원
+        </span>
+      ),
+    },
+    {
+      key: 'status',
+      header: '상태',
+      align: 'center',
+      render: (rec) => (
+        <>
+          {rec.difference === 0 ? (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+              <CheckCircle className="w-3.5 h-3.5" /> 시재 일치
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-800">
+              <AlertTriangle className="w-3.5 h-3.5" /> 차액 발생
+            </span>
+          )}
+        </>
+      ),
+    },
+  ];
+
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
@@ -94,78 +163,24 @@ export const PosReconciliationListPage: React.FC = () => {
       </div>
 
       {/* 목록 테이블 */}
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow border border-slate-200 dark:border-slate-700 overflow-hidden">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 font-semibold border-b">
-            <tr>
-              <th className="p-3">일시</th>
-              <th className="p-3">금고/포스</th>
-              <th className="p-3 text-right">개점 준비금</th>
-              <th className="p-3 text-right">기대 시재액</th>
-              <th className="p-3 text-right">실사 현금</th>
-              <th className="p-3 text-right">차액(과부족)</th>
-              <th className="p-3 text-center">상태</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-            {isLoading ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-400">
-                  데이터 불러오는 중...
-                </td>
-              </tr>
-            ) : reconciliations.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-400">
-                  등록된 시재 마감 내역이 없습니다.
-                </td>
-              </tr>
-            ) : (
-              reconciliations.map((rec) => (
-                <tr key={rec.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30">
-                  <td className="p-3">{new Date(rec.reconciled_at).toLocaleString('ko-KR')}</td>
-                  <td className="p-3 font-medium">{rec.register_name}</td>
-                  <td className="p-3 text-right">{rec.opening_cash.toLocaleString()}원</td>
-                  <td className="p-3 text-right">{rec.expected_cash.toLocaleString()}원</td>
-                  <td className="p-3 text-right font-semibold">{rec.actual_cash.toLocaleString()}원</td>
-                  <td
-                    className={`p-3 text-right font-bold ${
-                      rec.difference === 0
-                        ? 'text-slate-600 dark:text-slate-400'
-                        : rec.difference > 0
-                        ? 'text-blue-600'
-                        : 'text-rose-600'
-                    }`}
-                  >
-                    {rec.difference > 0 ? `+${rec.difference.toLocaleString()}` : rec.difference.toLocaleString()}원
-                  </td>
-                  <td className="p-3 text-center">
-                    {rec.difference === 0 ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
-                        <CheckCircle className="w-3.5 h-3.5" /> 시재 일치
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-800">
-                        <AlertTriangle className="w-3.5 h-3.5" /> 차액 발생
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <StandardDataTable
+        data={reconciliations}
+        columns={columns}
+        isLoading={isLoading}
+        emptyTitle="등록된 시재 마감 내역이 없습니다"
+        emptyDescription="신규 마감 실사 버튼을 눌러 오늘 일일 시재를 점검하세요."
+        keyExtractor={(rec) => rec.id}
+      />
 
       {/* 등록 모달 */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-xl max-w-lg w-full p-6 space-y-4">
-            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-              <DollarSign className="w-5 h-5 text-emerald-600" />
-              신규 시재금 실사 마감
-            </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="신규 시재금 실사 마감"
+        maxWidth="lg"
+      >
+        <div className="p-1">
+          <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-600 mb-1">포스/금고 식별명</label>
                 <input
@@ -275,9 +290,8 @@ export const PosReconciliationListPage: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
         </div>
-      )}
+      </Modal>
     </div>
   );
 };

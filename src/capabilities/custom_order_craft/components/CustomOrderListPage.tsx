@@ -9,6 +9,8 @@ import {
   type CraftStage,
 } from '../domain/customOrderEngine';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { StandardDataTable, type StandardColumn } from '@/shared/components/ui/StandardDataTable';
+import { Modal } from '@/shared/components/ui/Modal';
 
 export const CustomOrderListPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -111,6 +113,69 @@ export const CustomOrderListPage: React.FC = () => {
     }
   };
 
+  const columns: StandardColumn<CustomCraftOrderRecord>[] = [
+    {
+      key: 'target_delivery_date',
+      header: '수령 희망일',
+      render: (o) => <span className="font-semibold text-amber-700 dark:text-amber-400 font-mono">{o.target_delivery_date}</span>,
+    },
+    {
+      key: 'customer_name',
+      header: '주문자명',
+      render: (o) => <span className="font-medium text-slate-900">{o.customer_name}</span>,
+    },
+    {
+      key: 'item_title',
+      header: '맞춤 제작 품목명',
+      render: (o) => <span className="font-bold text-slate-800 dark:text-slate-100">{o.item_title}</span>,
+    },
+    {
+      key: 'specs',
+      header: '각인/커스텀 사양',
+      render: (o) => (
+        <span className="text-xs text-slate-600 max-w-xs truncate">
+          {o.spec_custom_text ? `각인: "${o.spec_custom_text}"` : o.spec_dimensions || '-'}
+        </span>
+      ),
+    },
+    {
+      key: 'total_price',
+      header: '총 주문금액',
+      align: 'right',
+      render: (o) => <span className="tabular-nums font-mono text-slate-700">{o.total_price.toLocaleString()}원</span>,
+    },
+    {
+      key: 'balance_due',
+      header: '잔금(픽업시)',
+      align: 'right',
+      render: (o) => <span className="tabular-nums font-mono font-bold text-rose-600">{o.balance_due.toLocaleString()}원</span>,
+    },
+    {
+      key: 'stage',
+      header: '공정 상태',
+      render: (o) => getStageBadge(o.stage),
+    },
+    {
+      key: 'actions',
+      header: '다음 공정',
+      align: 'right',
+      render: (o) => (
+        <>
+          {o.stage !== 'FULFILLED' ? (
+            <button
+              onClick={() => handleAdvance(o)}
+              className="px-2.5 py-1 text-xs bg-amber-50 text-amber-800 border border-amber-300 rounded hover:bg-amber-100 font-semibold inline-flex items-center gap-1 cursor-pointer"
+            >
+              공정 진행 <ArrowRight className="w-3 h-3" />
+            </button>
+          ) : (
+            <span className="text-xs text-slate-400 font-medium">완료됨</span>
+          )}
+        </>
+      ),
+    },
+  ];
+
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
@@ -132,68 +197,23 @@ export const CustomOrderListPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow border border-slate-200 dark:border-slate-700 overflow-hidden">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 font-semibold border-b">
-            <tr>
-              <th className="p-3">수령 희망일</th>
-              <th className="p-3">주문자명</th>
-              <th className="p-3">맞춤 제작 품목명</th>
-              <th className="p-3">각인/커스텀 사양</th>
-              <th className="p-3 text-right">총 주문금액</th>
-              <th className="p-3 text-right text-rose-600 font-bold">잔금(픽업시)</th>
-              <th className="p-3">공정 상태</th>
-              <th className="p-3 text-right">다음 공정</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-            {isLoading ? (
-              <tr>
-                <td colSpan={8} className="p-8 text-center text-slate-400">불러오는 중...</td>
-              </tr>
-            ) : orders.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="p-8 text-center text-slate-400">진행 중인 주문 제작 건이 없습니다.</td>
-              </tr>
-            ) : (
-              orders.map((o) => (
-                <tr key={o.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30">
-                  <td className="p-3 font-semibold text-amber-700 dark:text-amber-400">{o.target_delivery_date}</td>
-                  <td className="p-3 font-medium">{o.customer_name}</td>
-                  <td className="p-3 font-bold text-slate-800 dark:text-slate-100">{o.item_title}</td>
-                  <td className="p-3 text-xs text-slate-600 max-w-xs truncate">
-                    {o.spec_custom_text ? `각인: "${o.spec_custom_text}"` : o.spec_dimensions || '-'}
-                  </td>
-                  <td className="p-3 text-right font-medium">{o.total_price.toLocaleString()}원</td>
-                  <td className="p-3 text-right font-bold text-rose-600">{o.balance_due.toLocaleString()}원</td>
-                  <td className="p-3">{getStageBadge(o.stage)}</td>
-                  <td className="p-3 text-right">
-                    {o.stage !== 'FULFILLED' ? (
-                      <button
-                        onClick={() => handleAdvance(o)}
-                        className="px-2.5 py-1 text-xs bg-amber-50 text-amber-800 border border-amber-300 rounded hover:bg-amber-100 font-semibold inline-flex items-center gap-1"
-                      >
-                        공정 진행 <ArrowRight className="w-3 h-3" />
-                      </button>
-                    ) : (
-                      <span className="text-xs text-slate-400 font-medium">완료됨</span>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <StandardDataTable
+        data={orders}
+        columns={columns}
+        isLoading={isLoading}
+        emptyTitle="진행 중인 주문 제작 건이 없습니다"
+        emptyDescription="신규 맞춤 주문 접수 버튼을 눌러 첫 주문을 등록하세요."
+        keyExtractor={(o) => o.id}
+      />
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-xl max-w-md w-full p-6 space-y-4">
-            <h2 className="text-xl font-bold flex items-center gap-2 text-amber-700">
-              <Hammer className="w-5 h-5" />
-              신규 맞춤 제작 주문서 접수
-            </h2>
-            <form onSubmit={handleCreate} className="space-y-4">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="신규 맞춤 제작 주문서 접수"
+        maxWidth="md"
+      >
+        <div className="p-1">
+          <form onSubmit={handleCreate} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-600 mb-1">고객 성명 *</label>
@@ -309,9 +329,8 @@ export const CustomOrderListPage: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
         </div>
-      )}
+      </Modal>
     </div>
   );
 };

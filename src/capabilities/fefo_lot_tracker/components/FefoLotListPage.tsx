@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useList, useCreate } from '@refinedev/core';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { StandardDataTable, type StandardColumn } from '@/shared/components/ui/StandardDataTable';
 import {
   type LotItemRecord,
   determineLotStatus,
@@ -63,6 +64,86 @@ export const FefoLotListPage: React.FC = () => {
   };
 
   const recommendedLot = lookupItemCode ? getFefoRecommendedLot(items, lookupItemCode, todayStr) : undefined;
+
+  const columns: StandardColumn<LotItemRecord>[] = [
+    {
+      key: 'itemName',
+      header: '품목명 / 코드',
+      render: (lot) => (
+        <span className="font-semibold text-slate-900">
+          {lot.itemName} <span className="text-slate-500 text-xs font-normal font-mono">({lot.itemCode})</span>
+        </span>
+      ),
+    },
+    {
+      key: 'lotNumber',
+      header: '로트 번호',
+      render: (lot) => <span className="font-mono text-xs text-slate-600">{lot.lotNumber}</span>,
+    },
+    {
+      key: 'expiryDate',
+      header: '유통기한',
+      render: (lot) => <span className="font-mono text-xs">{lot.expiryDate}</span>,
+    },
+    {
+      key: 'daysLeft',
+      header: '잔여 일수 (D-Day)',
+      render: (lot) => {
+        const daysLeft = getDaysUntilExpiry(lot.expiryDate, todayStr);
+        return (
+          <span className="font-bold tabular-nums font-mono text-xs">
+            {daysLeft < 0 ? (
+              <span className="text-rose-600">만료됨 ({Math.abs(daysLeft)}일 지남)</span>
+            ) : daysLeft <= 30 ? (
+              <span className="text-amber-600">D-{daysLeft}일 (임박)</span>
+            ) : (
+              <span className="text-emerald-600">D-{daysLeft}일</span>
+            )}
+          </span>
+        );
+      },
+    },
+    {
+      key: 'locationRack',
+      header: '보관 위치',
+      render: (lot) => <span className="text-slate-700 text-xs">{lot.locationRack}</span>,
+    },
+    {
+      key: 'currentStockQty',
+      header: '재고 수량',
+      align: 'right',
+      render: (lot) => <span className="font-mono tabular-nums font-semibold text-slate-800">{lot.currentStockQty}개</span>,
+    },
+    {
+      key: 'status',
+      header: '상태',
+      align: 'center',
+      render: (lot) => {
+        const status = determineLotStatus(lot.expiryDate, lot.currentStockQty, todayStr, 30);
+        return (
+          <span
+            className={`px-2 py-0.5 rounded text-xs font-medium ${
+              status === 'available'
+                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                : status === 'expiring_soon'
+                ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                : status === 'expired'
+                ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                : 'bg-slate-100 text-slate-600'
+            }`}
+          >
+            {status === 'available'
+              ? '정상'
+              : status === 'expiring_soon'
+              ? '⚠️ 임박'
+              : status === 'expired'
+              ? '🚨 폐기대상'
+              : '소진됨'}
+          </span>
+        );
+      },
+    },
+  ];
 
   return (
     <div style={{ padding: 24 }}>
@@ -180,90 +261,14 @@ export const FefoLotListPage: React.FC = () => {
         </div>
       </form>
 
-      {isLoading ? (
-        <div>로딩 중...</div>
-      ) : (
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-          <thead>
-            <tr style={{ borderBottom: '2px solid #ddd', backgroundColor: '#f3f4f6' }}>
-              <th style={{ padding: 8 }}>품목코드 / 품목명</th>
-              <th style={{ padding: 8 }}>로트 번호</th>
-              <th style={{ padding: 8 }}>유통기한</th>
-              <th style={{ padding: 8 }}>잔여 일수 (D-Day)</th>
-              <th style={{ padding: 8 }}>보관 위치</th>
-              <th style={{ padding: 8 }}>재고 수량</th>
-              <th style={{ padding: 8 }}>상태</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((lot) => {
-              const daysLeft = getDaysUntilExpiry(lot.expiryDate, todayStr);
-              const status = determineLotStatus(lot.expiryDate, lot.currentStockQty, todayStr, 30);
-
-              return (
-                <tr key={lot.id} style={{ borderBottom: '1px solid #eee' }}>
-                  <td style={{ padding: 8, fontWeight: 500 }}>
-                    {lot.itemName} <span style={{ color: '#666', fontSize: 12 }}>({lot.itemCode})</span>
-                  </td>
-                  <td style={{ padding: 8, fontFamily: 'monospace' }}>{lot.lotNumber}</td>
-                  <td style={{ padding: 8 }}>{lot.expiryDate}</td>
-                  <td style={{ padding: 8, fontWeight: 'bold' }}>
-                    {daysLeft < 0 ? (
-                      <span style={{ color: '#dc2626' }}>만료됨 ({Math.abs(daysLeft)}일 지남)</span>
-                    ) : daysLeft <= 30 ? (
-                      <span style={{ color: '#d97706' }}>D-{daysLeft}일 (임박)</span>
-                    ) : (
-                      <span style={{ color: '#059669' }}>D-{daysLeft}일</span>
-                    )}
-                  </td>
-                  <td style={{ padding: 8 }}>{lot.locationRack}</td>
-                  <td style={{ padding: 8 }}>{lot.currentStockQty}개</td>
-                  <td style={{ padding: 8 }}>
-                    <span
-                      style={{
-                        padding: '2px 6px',
-                        borderRadius: 4,
-                        fontSize: 12,
-                        backgroundColor:
-                          status === 'available'
-                            ? '#d1fae5'
-                            : status === 'expiring_soon'
-                            ? '#fef3c7'
-                            : status === 'expired'
-                            ? '#fee2e2'
-                            : '#f3f4f6',
-                        color:
-                          status === 'available'
-                            ? '#065f46'
-                            : status === 'expiring_soon'
-                            ? '#92400e'
-                            : status === 'expired'
-                            ? '#991b1b'
-                            : '#6b7280',
-                      }}
-                    >
-                      {status === 'available'
-                        ? '정상'
-                        : status === 'expiring_soon'
-                        ? '⚠️ 임박'
-                        : status === 'expired'
-                        ? '🚨 폐기대상'
-                        : '소진됨'}
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-            {items.length === 0 && (
-              <tr>
-                <td colSpan={7} style={{ padding: 24, textAlign: 'center', color: '#999' }}>
-                  등록된 로트가 없습니다.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      )}
+      <StandardDataTable
+        data={items}
+        columns={columns}
+        isLoading={isLoading}
+        emptyTitle="등록된 로트가 없습니다"
+        emptyDescription="신규 로트 및 유통기한 정보를 등록하여 선입선출 관리를 시작하세요."
+        keyExtractor={(lot) => lot.id}
+      />
     </div>
   );
 };

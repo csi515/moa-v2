@@ -7,6 +7,8 @@ import {
   type CalibrationDeviceRecord,
 } from '../domain/calibrationEngine';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { StandardDataTable, type StandardColumn } from '@/shared/components/ui/StandardDataTable';
+import { Modal } from '@/shared/components/ui/Modal';
 
 export const CalibrationListPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,6 +81,66 @@ export const CalibrationListPage: React.FC = () => {
     );
   };
 
+  const columns: StandardColumn<CalibrationDeviceRecord>[] = [
+    {
+      key: 'device_name',
+      header: '장비명',
+      render: (d) => <span className="font-semibold text-emerald-700 dark:text-emerald-400">{d.device_name}</span>,
+    },
+    {
+      key: 'serial_number',
+      header: '제조번호(S/N)',
+      render: (d) => <span className="font-mono text-xs text-slate-500">{d.serial_number}</span>,
+    },
+    {
+      key: 'location',
+      header: '설치 위치',
+      render: (d) => <span className="text-slate-600 dark:text-slate-300">{d.location}</span>,
+    },
+    {
+      key: 'measured_error_percent',
+      header: '오차율 / 허용한도',
+      align: 'center',
+      render: (d) => (
+        <span className="font-mono">
+          <span className="font-bold text-slate-700 dark:text-slate-200">{d.measured_error_percent}%</span>
+          <span className="text-xs text-slate-400"> (한도: ±{d.tolerance_max_percent}%)</span>
+        </span>
+      ),
+    },
+    {
+      key: 'last_calibrated_at',
+      header: '최근 교정일',
+      render: (d) => <span className="text-xs font-mono text-slate-400">{d.last_calibrated_at}</span>,
+    },
+    {
+      key: 'next_calibration_due',
+      header: '차기 교정 만료일',
+      render: (d) => <span className="font-semibold font-mono text-slate-800 dark:text-slate-100">{d.next_calibration_due}</span>,
+    },
+    {
+      key: 'status',
+      header: '상태',
+      align: 'center',
+      render: (d) => (
+        <>
+          {d.status === 'CALIBRATED_VALID' && (
+            <span className="px-2 py-0.5 rounded text-xs bg-emerald-100 text-emerald-800 font-medium">교정 유효</span>
+          )}
+          {d.status === 'WARNING_EXPIRING_SOON' && (
+            <span className="px-2 py-0.5 rounded text-xs bg-amber-100 text-amber-800 font-bold animate-pulse">만료 임박</span>
+          )}
+          {d.status === 'EXPIRED_OVERDUE' && (
+            <span className="px-2 py-0.5 rounded text-xs bg-rose-100 text-rose-800 font-bold">기한 경과</span>
+          )}
+          {d.status === 'OUT_OF_TOLERANCE' && (
+            <span className="px-2 py-0.5 rounded text-xs bg-red-200 text-red-900 font-bold">오차 불합격</span>
+          )}
+        </>
+      ),
+    },
+  ];
+
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
@@ -100,69 +162,23 @@ export const CalibrationListPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow border border-slate-200 dark:border-slate-700 overflow-hidden">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 font-semibold border-b">
-            <tr>
-              <th className="p-3">장비명</th>
-              <th className="p-3">제조번호(S/N)</th>
-              <th className="p-3">설치 위치</th>
-              <th className="p-3 text-center">오차율 / 허용한도</th>
-              <th className="p-3">최근 교정일</th>
-              <th className="p-3 font-semibold">차기 교정 만료일</th>
-              <th className="p-3 text-center">상태</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-            {isLoading ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-400">불러오는 중...</td>
-              </tr>
-            ) : devices.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-400">등록된 정밀 계측기가 없습니다.</td>
-              </tr>
-            ) : (
-              devices.map((d) => (
-                <tr key={d.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30">
-                  <td className="p-3 font-semibold text-emerald-700 dark:text-emerald-400">{d.device_name}</td>
-                  <td className="p-3 font-mono text-xs">{d.serial_number}</td>
-                  <td className="p-3 text-slate-500">{d.location}</td>
-                  <td className="p-3 text-center font-mono">
-                    <span className="font-bold text-slate-700 dark:text-slate-200">{d.measured_error_percent}%</span>
-                    <span className="text-xs text-slate-400"> (한도: ±{d.tolerance_max_percent}%)</span>
-                  </td>
-                  <td className="p-3 text-slate-400">{d.last_calibrated_at}</td>
-                  <td className="p-3 font-semibold text-slate-800 dark:text-slate-100">{d.next_calibration_due}</td>
-                  <td className="p-3 text-center">
-                    {d.status === 'CALIBRATED_VALID' && (
-                      <span className="px-2 py-0.5 rounded text-xs bg-emerald-100 text-emerald-800 font-medium">교정 유효</span>
-                    )}
-                    {d.status === 'WARNING_EXPIRING_SOON' && (
-                      <span className="px-2 py-0.5 rounded text-xs bg-amber-100 text-amber-800 font-bold animate-pulse">만료 임박</span>
-                    )}
-                    {d.status === 'EXPIRED_OVERDUE' && (
-                      <span className="px-2 py-0.5 rounded text-xs bg-rose-100 text-rose-800 font-bold">기한 경과</span>
-                    )}
-                    {d.status === 'OUT_OF_TOLERANCE' && (
-                      <span className="px-2 py-0.5 rounded text-xs bg-red-200 text-red-900 font-bold">오차 불합격</span>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <StandardDataTable
+        data={devices}
+        columns={columns}
+        isLoading={isLoading}
+        emptyTitle="등록된 정밀 계측기가 없습니다"
+        emptyDescription="새로운 계측기 및 교정 주기 정보를 등록하여 관리하세요."
+        keyExtractor={(d) => d.id}
+      />
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-xl max-w-md w-full p-6 space-y-4">
-            <h2 className="text-xl font-bold flex items-center gap-2 text-emerald-700">
-              <Gauge className="w-5 h-5" />
-              신규 정밀 계측기 교정 대장 등록
-            </h2>
-            <form onSubmit={handleCreate} className="space-y-4">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="신규 정밀 계측기 교정 대장 등록"
+        maxWidth="md"
+      >
+        <div className="p-1">
+          <form onSubmit={handleCreate} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-600 mb-1">장비명 *</label>
                 <input
@@ -265,9 +281,8 @@ export const CalibrationListPage: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
         </div>
-      )}
+      </Modal>
     </div>
   );
 };

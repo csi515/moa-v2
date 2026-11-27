@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useList, useCreate } from '@refinedev/core';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { StandardDataTable, type StandardColumn } from '@/shared/components/ui/StandardDataTable';
 import {
   type BudgetItemQuota,
   type OverbudgetPolicy,
@@ -65,6 +66,78 @@ export const BudgetCeilingListPage: React.FC = () => {
         selectedItemForCheck.overbudgetPolicy
       )
     : undefined;
+
+  const columns: StandardColumn<BudgetItemQuota>[] = [
+    {
+      key: 'yearMonth',
+      header: '연월',
+      render: (item) => <span className="font-mono text-xs text-slate-500">{item.yearMonth}</span>,
+    },
+    {
+      key: 'categoryName',
+      header: '예산 항목명',
+      render: (item) => <span className="font-semibold text-slate-900">{item.categoryName}</span>,
+    },
+    {
+      key: 'monthlyLimit',
+      header: '월 한도액',
+      align: 'right',
+      render: (item) => <span className="tabular-nums font-mono text-slate-700">{item.monthlyLimit.toLocaleString()}원</span>,
+    },
+    {
+      key: 'currentSpent',
+      header: '현재 지출액',
+      align: 'right',
+      render: (item) => <span className="tabular-nums font-mono text-slate-600">{item.currentSpent.toLocaleString()}원</span>,
+    },
+    {
+      key: 'remaining',
+      header: '잔여 예산',
+      align: 'right',
+      render: (item) => {
+        const remaining = calculateRemainingBudget(item.monthlyLimit, item.currentSpent);
+        return (
+          <span className={`tabular-nums font-mono font-bold ${remaining >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+            {remaining.toLocaleString()}원
+          </span>
+        );
+      },
+    },
+    {
+      key: 'usageRate',
+      header: '소진율',
+      render: (item) => {
+        const usageRate = calculateBudgetUsageRate(item.monthlyLimit, item.currentSpent);
+        return (
+          <div className="w-24">
+            <div className="text-xs font-mono mb-1">{usageRate}%</div>
+            <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full ${usageRate >= 100 ? 'bg-rose-500' : usageRate >= 85 ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                style={{ width: `${Math.min(100, usageRate)}%` }}
+              />
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      key: 'overbudgetPolicy',
+      header: '초과 정책',
+      align: 'center',
+      render: (item) => (
+        <span
+          className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
+            item.overbudgetPolicy === 'block'
+              ? 'bg-rose-50 text-rose-700 border border-rose-200'
+              : 'bg-amber-50 text-amber-700 border border-amber-200'
+          }`}
+        >
+          {item.overbudgetPolicy === 'block' ? '엄격 차단' : '경고 허용'}
+        </span>
+      ),
+    },
+  ];
 
   return (
     <div style={{ padding: 24 }}>
@@ -188,74 +261,14 @@ export const BudgetCeilingListPage: React.FC = () => {
         </div>
       </form>
 
-      {isLoading ? (
-        <div>로딩 중...</div>
-      ) : (
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-          <thead>
-            <tr style={{ borderBottom: '2px solid #ddd', backgroundColor: '#f3f4f6' }}>
-              <th style={{ padding: 8 }}>연월</th>
-              <th style={{ padding: 8 }}>예산 항목명</th>
-              <th style={{ padding: 8 }}>월 한도액</th>
-              <th style={{ padding: 8 }}>현재 지출액</th>
-              <th style={{ padding: 8 }}>잔여 예산</th>
-              <th style={{ padding: 8 }}>소진율</th>
-              <th style={{ padding: 8 }}>초과 정책</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => {
-              const remaining = calculateRemainingBudget(item.monthlyLimit, item.currentSpent);
-              const usageRate = calculateBudgetUsageRate(item.monthlyLimit, item.currentSpent);
-
-              return (
-                <tr key={item.id} style={{ borderBottom: '1px solid #eee' }}>
-                  <td style={{ padding: 8 }}>{item.yearMonth}</td>
-                  <td style={{ padding: 8, fontWeight: 500 }}>{item.categoryName}</td>
-                  <td style={{ padding: 8 }}>{item.monthlyLimit.toLocaleString()}원</td>
-                  <td style={{ padding: 8 }}>{item.currentSpent.toLocaleString()}원</td>
-                  <td style={{ padding: 8, fontWeight: 'bold', color: remaining >= 0 ? '#059669' : '#dc2626' }}>
-                    {remaining.toLocaleString()}원
-                  </td>
-                  <td style={{ padding: 8 }}>
-                    <div style={{ fontSize: 12, marginBottom: 2 }}>{usageRate}%</div>
-                    <div style={{ width: 100, height: 6, backgroundColor: '#e5e7eb', borderRadius: 3 }}>
-                      <div
-                        style={{
-                          width: `${Math.min(100, usageRate)}%`,
-                          height: '100%',
-                          backgroundColor: usageRate >= 100 ? '#dc2626' : usageRate >= 85 ? '#f59e0b' : '#10b981',
-                          borderRadius: 3,
-                        }}
-                      />
-                    </div>
-                  </td>
-                  <td style={{ padding: 8 }}>
-                    <span
-                      style={{
-                        padding: '2px 6px',
-                        borderRadius: 4,
-                        fontSize: 11,
-                        backgroundColor: item.overbudgetPolicy === 'block' ? '#fee2e2' : '#fef3c7',
-                        color: item.overbudgetPolicy === 'block' ? '#991b1b' : '#92400e',
-                      }}
-                    >
-                      {item.overbudgetPolicy === 'block' ? '엄격 차단' : '경고 허용'}
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-            {items.length === 0 && (
-              <tr>
-                <td colSpan={7} style={{ padding: 24, textAlign: 'center', color: '#999' }}>
-                  설정된 예산 한도가 없습니다.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      )}
+      <StandardDataTable
+        data={items}
+        columns={columns}
+        isLoading={isLoading}
+        emptyTitle="설정된 예산 한도가 없습니다"
+        emptyDescription="새로운 예산 항목 및 월 한도액을 등록하여 지출 통제를 시작하세요."
+        keyExtractor={(item) => item.id}
+      />
     </div>
   );
 };

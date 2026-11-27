@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useList, useCreate } from '@refinedev/core';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { StandardDataTable, type StandardColumn } from '@/shared/components/ui/StandardDataTable';
 import {
   type ArtExhibitionPiece,
   calculateMonthlyRentalTotal,
@@ -64,6 +65,65 @@ export const ExhibitionCurationListPage: React.FC = () => {
       }
     );
   };
+
+  const columns: StandardColumn<ArtExhibitionPiece>[] = [
+    {
+      key: 'artworkCode',
+      header: '관리번호',
+      render: (piece) => <span className="font-mono text-xs text-slate-500">{piece.artworkCode}</span>,
+    },
+    {
+      key: 'title',
+      header: '작품명 / 작가',
+      render: (piece) => (
+        <span className="font-semibold text-slate-900">
+          {piece.title} <span className="text-slate-500 text-xs font-normal">({piece.artistName})</span>
+        </span>
+      ),
+    },
+    {
+      key: 'medium',
+      header: '매체 / 규격',
+      render: (piece) => <span className="text-slate-600 text-xs">{piece.medium}</span>,
+    },
+    {
+      key: 'zoneLocation',
+      header: '전시 위치',
+      render: (piece) => <span className="text-slate-700">{piece.zoneLocation}</span>,
+    },
+    {
+      key: 'status',
+      header: '상태',
+      render: (piece) => (
+        <span
+          className={`px-2 py-0.5 rounded text-xs font-medium ${
+            piece.status === 'on_display'
+              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+              : 'bg-slate-100 text-slate-600'
+          }`}
+        >
+          {piece.status === 'on_display' ? '전시 중' : piece.status}
+        </span>
+      ),
+    },
+    {
+      key: 'rentalFeeMonthly',
+      header: '월 렌탈료',
+      align: 'right',
+      render: (piece) => <span className="tabular-nums font-mono text-slate-700">{piece.rentalFeeMonthly.toLocaleString()}원</span>,
+    },
+    {
+      key: 'insuranceValue',
+      header: '보험가액',
+      align: 'right',
+      render: (piece) => <span className="tabular-nums font-mono text-slate-600">{piece.insuranceValue.toLocaleString()}원</span>,
+    },
+    {
+      key: 'endDate',
+      header: '전시 기한',
+      render: (piece) => <span className="text-xs font-mono text-slate-500">~ {piece.endDate}</span>,
+    },
+  ];
 
   return (
     <div style={{ padding: 24 }}>
@@ -195,59 +255,14 @@ export const ExhibitionCurationListPage: React.FC = () => {
         </div>
       </form>
 
-      {isLoading ? (
-        <div>로딩 중...</div>
-      ) : (
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-          <thead>
-            <tr style={{ borderBottom: '2px solid #ddd', backgroundColor: '#f3f4f6' }}>
-              <th style={{ padding: 8 }}>관리번호</th>
-              <th style={{ padding: 8 }}>작품명 / 작가</th>
-              <th style={{ padding: 8 }}>매체 / 규격</th>
-              <th style={{ padding: 8 }}>전시 위치</th>
-              <th style={{ padding: 8 }}>상태</th>
-              <th style={{ padding: 8 }}>월 렌탈료</th>
-              <th style={{ padding: 8 }}>보험가액</th>
-              <th style={{ padding: 8 }}>전시 기한</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((piece) => (
-              <tr key={piece.id} style={{ borderBottom: '1px solid #eee' }}>
-                <td style={{ padding: 8, fontFamily: 'monospace' }}>{piece.artworkCode}</td>
-                <td style={{ padding: 8, fontWeight: 500 }}>
-                  {piece.title} <span style={{ color: '#666', fontSize: 12 }}>({piece.artistName})</span>
-                </td>
-                <td style={{ padding: 8, fontSize: 13 }}>{piece.medium}</td>
-                <td style={{ padding: 8 }}>{piece.zoneLocation}</td>
-                <td style={{ padding: 8 }}>
-                  <span
-                    style={{
-                      padding: '2px 6px',
-                      borderRadius: 4,
-                      fontSize: 12,
-                      backgroundColor: piece.status === 'on_display' ? '#d1fae5' : '#e5e7eb',
-                      color: piece.status === 'on_display' ? '#065f46' : '#374151',
-                    }}
-                  >
-                    {piece.status === 'on_display' ? '전시 중' : piece.status}
-                  </span>
-                </td>
-                <td style={{ padding: 8 }}>{piece.rentalFeeMonthly.toLocaleString()}원</td>
-                <td style={{ padding: 8 }}>{piece.insuranceValue.toLocaleString()}원</td>
-                <td style={{ padding: 8, fontSize: 12 }}>~ {piece.endDate}</td>
-              </tr>
-            ))}
-            {items.length === 0 && (
-              <tr>
-                <td colSpan={8} style={{ padding: 24, textAlign: 'center', color: '#999' }}>
-                  등록된 전시 작품이 없습니다.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      )}
+      <StandardDataTable
+        data={items}
+        columns={columns}
+        isLoading={isLoading}
+        emptyTitle="전시 등록된 예술품이 없습니다"
+        emptyDescription="신규 작품 정보를 등록하여 전시 및 렌탈 관리를 시작하세요."
+        keyExtractor={(piece) => piece.id}
+      />
     </div>
   );
 };

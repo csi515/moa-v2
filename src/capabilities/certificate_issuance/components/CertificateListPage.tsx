@@ -10,6 +10,8 @@ import {
   type CertificateType,
 } from '../domain/certificateEngine';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { StandardDataTable, type StandardColumn } from '@/shared/components/ui/StandardDataTable';
+import { Modal } from '@/shared/components/ui/Modal';
 
 export const CertificateListPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -92,6 +94,60 @@ export const CertificateListPage: React.FC = () => {
     }
   };
 
+  const columns: StandardColumn<IssuedCertificateRecord>[] = [
+    {
+      key: 'cert_number',
+      header: '발급 번호',
+      render: (cert) => <span className="font-mono font-bold text-amber-600">{cert.cert_number}</span>,
+    },
+    {
+      key: 'cert_type',
+      header: '문서 종류',
+      render: (cert) => (
+        <span className="px-2 py-0.5 rounded text-xs bg-amber-50 text-amber-800 font-medium border border-amber-200">
+          {getCertificateTypeLabel(cert.cert_type)}
+        </span>
+      ),
+    },
+    {
+      key: 'recipient_name',
+      header: '발급 대상자',
+      render: (cert) => <span className="font-semibold text-slate-900">{cert.recipient_name}</span>,
+    },
+    {
+      key: 'course_name',
+      header: '과정명 / 비고',
+      render: (cert) => (
+        <span className="text-slate-500">
+          {cert.course_name || (cert.issued_amount ? `${cert.issued_amount.toLocaleString()}원` : '-')}
+        </span>
+      ),
+    },
+    {
+      key: 'issued_date',
+      header: '발급일',
+      render: (cert) => <span className="text-xs font-mono text-slate-400">{cert.issued_date}</span>,
+    },
+    {
+      key: 'verification_hash',
+      header: '검증 해시',
+      render: (cert) => <span className="font-mono text-xs font-bold text-slate-600">{cert.verification_hash}</span>,
+    },
+    {
+      key: 'print',
+      header: '출력',
+      align: 'right',
+      render: (cert) => (
+        <button
+          onClick={() => handlePrint(cert)}
+          className="px-2.5 py-1 text-xs border border-slate-200 rounded hover:bg-slate-100 font-medium inline-flex items-center gap-1 cursor-pointer"
+        >
+          <Printer className="w-3.5 h-3.5" /> 인쇄
+        </button>
+      ),
+    },
+  ];
+
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
@@ -125,69 +181,24 @@ export const CertificateListPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow border border-slate-200 dark:border-slate-700 overflow-hidden">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 font-semibold border-b">
-            <tr>
-              <th className="p-3">발급 번호</th>
-              <th className="p-3">문서 종류</th>
-              <th className="p-3">발급 대상자</th>
-              <th className="p-3">과정명 / 비고</th>
-              <th className="p-3">발급일</th>
-              <th className="p-3 font-mono">검증 해시</th>
-              <th className="p-3 text-right">출력</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-            {isLoading ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-400">불러오는 중...</td>
-              </tr>
-            ) : certificates.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-400">발급된 증명서가 없습니다.</td>
-              </tr>
-            ) : (
-              certificates.map((cert) => (
-                <tr key={cert.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30">
-                  <td className="p-3 font-mono font-bold text-amber-600">{cert.cert_number}</td>
-                  <td className="p-3">
-                    <span className="px-2 py-0.5 rounded text-xs bg-amber-50 text-amber-800 font-medium border border-amber-200">
-                      {getCertificateTypeLabel(cert.cert_type)}
-                    </span>
-                  </td>
-                  <td className="p-3 font-semibold">{cert.recipient_name}</td>
-                  <td className="p-3 text-slate-500">
-                    {cert.course_name || (cert.issued_amount ? `${cert.issued_amount.toLocaleString()}원` : '-')}
-                  </td>
-                  <td className="p-3 text-slate-400">{cert.issued_date}</td>
-                  <td className="p-3 font-mono text-xs font-bold text-slate-600">
-                    {cert.verification_hash}
-                  </td>
-                  <td className="p-3 text-right">
-                    <button
-                      onClick={() => handlePrint(cert)}
-                      className="px-2.5 py-1 text-xs border rounded hover:bg-slate-100 font-medium inline-flex items-center gap-1"
-                    >
-                      <Printer className="w-3.5 h-3.5" /> 인쇄
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <StandardDataTable
+        data={certificates}
+        columns={columns}
+        isLoading={isLoading}
+        emptyTitle="발급된 증명서가 없습니다"
+        emptyDescription="신규 증명서 발급 버튼을 눌러 첫 증명서를 채번하고 발급하세요."
+        keyExtractor={(cert) => cert.id}
+      />
 
       {/* 발급 모달 */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-xl max-w-md w-full p-6 space-y-4">
-            <h2 className="text-xl font-bold flex items-center gap-2">
-              <Award className="w-5 h-5 text-amber-500" />
-              신규 증명서 채번 및 발급
-            </h2>
-            <form onSubmit={handleCreate} className="space-y-4">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="신규 증명서 채번 및 발급"
+        maxWidth="md"
+      >
+        <div className="p-1">
+          <form onSubmit={handleCreate} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-600 mb-1">문서 종류 선택 *</label>
                 <select
@@ -249,19 +260,18 @@ export const CertificateListPage: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
         </div>
-      )}
+      </Modal>
 
       {/* 진본 검증 모달 */}
-      {verifyModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-xl max-w-sm w-full p-6 space-y-4">
-            <h2 className="text-lg font-bold flex items-center gap-2 text-slate-800">
-              <ShieldCheck className="w-5 h-5 text-emerald-600" />
-              증명서 위변조 진본 확인
-            </h2>
-            <form onSubmit={handleVerify} className="space-y-3">
+      <Modal
+        isOpen={verifyModalOpen}
+        onClose={() => setVerifyModalOpen(false)}
+        title="증명서 위변조 진본 확인"
+        maxWidth="sm"
+      >
+        <div className="p-1">
+          <form onSubmit={handleVerify} className="space-y-3">
               <div>
                 <label className="block text-xs font-semibold text-slate-600 mb-1">검증 해시코드 (6자리)</label>
                 <input
@@ -300,9 +310,8 @@ export const CertificateListPage: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
         </div>
-      )}
+      </Modal>
     </div>
   );
 };

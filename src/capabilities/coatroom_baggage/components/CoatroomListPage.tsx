@@ -9,6 +9,8 @@ import {
   type BaggageType,
 } from '../domain/coatroomEngine';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { StandardDataTable, type StandardColumn } from '@/shared/components/ui/StandardDataTable';
+import { Modal } from '@/shared/components/ui/Modal';
 
 export const CoatroomListPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -95,6 +97,68 @@ export const CoatroomListPage: React.FC = () => {
     );
   };
 
+  const columns: StandardColumn<BaggageClaimRecord>[] = [
+    {
+      key: 'tag_number',
+      header: '태그 번호',
+      render: (c) => <span className="font-bold text-slate-800">No. {c.tag_number}</span>,
+    },
+    {
+      key: 'baggage_type',
+      header: '보관 분류',
+      render: (c) => (
+        <span className="px-2 py-0.5 rounded text-xs bg-slate-50 text-slate-700 font-medium border border-slate-200">
+          {getBaggageTypeLabel(c.baggage_type)}
+        </span>
+      ),
+    },
+    {
+      key: 'owner_name',
+      header: '고객명',
+      render: (c) => <span className="font-medium text-slate-900">{c.owner_name || '(미기재)'}</span>,
+    },
+    {
+      key: 'description',
+      header: '물품 설명',
+      render: (c) => <span className="text-slate-500">{c.description || '-'}</span>,
+    },
+    {
+      key: 'checked_in_at',
+      header: '보관 일시',
+      render: (c) => <span className="text-xs font-mono text-slate-400">{new Date(c.checked_in_at).toLocaleTimeString('ko-KR')}</span>,
+    },
+    {
+      key: 'status',
+      header: '상태',
+      render: (c) => (
+        <>
+          {c.status === 'CHECKED_IN' ? (
+            <span className="px-2 py-0.5 rounded text-xs bg-emerald-100 text-emerald-800 font-medium">보관중</span>
+          ) : (
+            <span className="px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-600">회수 완료</span>
+          )}
+        </>
+      ),
+    },
+    {
+      key: 'actions',
+      header: '회수 처리',
+      align: 'right',
+      render: (c) => (
+        <>
+          {c.status === 'CHECKED_IN' && (
+            <button
+              onClick={() => handleClaim(c)}
+              className="px-3 py-1 text-xs bg-emerald-600 text-white rounded hover:bg-emerald-700 font-medium cursor-pointer"
+            >
+              고객 인도 완료
+            </button>
+          )}
+        </>
+      ),
+    },
+  ];
+
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
@@ -116,72 +180,23 @@ export const CoatroomListPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow border border-slate-200 dark:border-slate-700 overflow-hidden">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 font-semibold border-b">
-            <tr>
-              <th className="p-3">태그 번호</th>
-              <th className="p-3">보관 분류</th>
-              <th className="p-3">고객명</th>
-              <th className="p-3">물품 설명</th>
-              <th className="p-3">보관 일시</th>
-              <th className="p-3">상태</th>
-              <th className="p-3 text-right">회수 처리</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-            {isLoading ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-400">불러오는 중...</td>
-              </tr>
-            ) : claims.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-400">현재 보관 중인 물품이 없습니다.</td>
-              </tr>
-            ) : (
-              claims.map((c) => (
-                <tr key={c.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30">
-                  <td className="p-3 font-bold text-slate-800">No. {c.tag_number}</td>
-                  <td className="p-3">
-                    <span className="px-2 py-0.5 rounded text-xs bg-slate-50 text-slate-700 font-medium border border-slate-200">
-                      {getBaggageTypeLabel(c.baggage_type)}
-                    </span>
-                  </td>
-                  <td className="p-3 font-medium">{c.owner_name || '(미기재)'}</td>
-                  <td className="p-3 text-slate-500">{c.description || '-'}</td>
-                  <td className="p-3 text-slate-400">{new Date(c.checked_in_at).toLocaleTimeString('ko-KR')}</td>
-                  <td className="p-3">
-                    {c.status === 'CHECKED_IN' ? (
-                      <span className="px-2 py-0.5 rounded text-xs bg-emerald-100 text-emerald-800 font-medium">보관중</span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-600">회수 완료</span>
-                    )}
-                  </td>
-                  <td className="p-3 text-right">
-                    {c.status === 'CHECKED_IN' && (
-                      <button
-                        onClick={() => handleClaim(c)}
-                        className="px-3 py-1 text-xs bg-emerald-600 text-white rounded hover:bg-emerald-700 font-medium"
-                      >
-                        고객 인도 완료
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <StandardDataTable
+        data={claims}
+        columns={columns}
+        isLoading={isLoading}
+        emptyTitle="현재 보관 중인 물품이 없습니다"
+        emptyDescription="신규 물품 보관 접수 버튼을 눌러 첫 외투나 가방을 보관 등록하세요."
+        keyExtractor={(c) => c.id}
+      />
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-xl max-w-md w-full p-6 space-y-4">
-            <h2 className="text-xl font-bold flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-slate-800" />
-              외투 및 수하물 보관 접수
-            </h2>
-            <form onSubmit={handleCreate} className="space-y-4">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="외투 및 수하물 보관 접수"
+        maxWidth="md"
+      >
+        <div className="p-1">
+          <form onSubmit={handleCreate} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-600 mb-1">행거/태그 번호 *</label>
@@ -244,9 +259,8 @@ export const CoatroomListPage: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
         </div>
-      )}
+      </Modal>
     </div>
   );
 };

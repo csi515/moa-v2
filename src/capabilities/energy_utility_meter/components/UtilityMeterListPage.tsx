@@ -9,6 +9,8 @@ import {
   type UtilityType,
 } from '../domain/utilityMeterEngine';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { StandardDataTable, type StandardColumn } from '@/shared/components/ui/StandardDataTable';
+import { Modal } from '@/shared/components/ui/Modal';
 
 export const UtilityMeterListPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,6 +73,66 @@ export const UtilityMeterListPage: React.FC = () => {
     );
   };
 
+  const columns: StandardColumn<UtilityMeterReadingRecord>[] = [
+    {
+      key: 'billed_month',
+      header: '과금월',
+      render: (r) => <span className="font-mono font-medium text-slate-700">{r.billed_month}</span>,
+    },
+    {
+      key: 'zone_name',
+      header: '구역/호실명',
+      render: (r) => <span className="font-semibold text-slate-800 dark:text-slate-100">{r.zone_name}</span>,
+    },
+    {
+      key: 'utility_type',
+      header: '검침 종목',
+      render: (r) => (
+        <span className="px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-700 font-medium border border-slate-200">
+          {r.utility_type === 'ELECTRICITY' ? '전기' : r.utility_type === 'WATER' ? '수도' : '가스'}
+        </span>
+      ),
+    },
+    {
+      key: 'previous_reading',
+      header: '전월 지침',
+      align: 'right',
+      render: (r) => <span className="tabular-nums font-mono text-slate-400">{r.previous_reading}</span>,
+    },
+    {
+      key: 'current_reading',
+      header: '당월 지침',
+      align: 'right',
+      render: (r) => <span className="tabular-nums font-mono text-slate-600">{r.current_reading}</span>,
+    },
+    {
+      key: 'usage_amount',
+      header: '사용량',
+      align: 'right',
+      render: (r) => (
+        <span className="tabular-nums font-mono font-bold text-slate-800 dark:text-slate-100">
+          {r.usage_amount} {getUtilityUnitLabel(r.utility_type)}
+        </span>
+      ),
+    },
+    {
+      key: 'unit_price',
+      header: '단가',
+      align: 'right',
+      render: (r) => <span className="tabular-nums font-mono text-slate-500">{r.unit_price}원</span>,
+    },
+    {
+      key: 'total_billed_amount',
+      header: '부과 금액',
+      align: 'right',
+      render: (r) => (
+        <span className="tabular-nums font-mono font-bold text-slate-900 dark:text-slate-100">
+          {r.total_billed_amount.toLocaleString()}원
+        </span>
+      ),
+    },
+  ];
+
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
@@ -92,63 +154,23 @@ export const UtilityMeterListPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow border border-slate-200 dark:border-slate-700 overflow-hidden">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 font-semibold border-b">
-            <tr>
-              <th className="p-3">부과 연월</th>
-              <th className="p-3">구역/호실명</th>
-              <th className="p-3">검침 종목</th>
-              <th className="p-3 text-right">전월 지침</th>
-              <th className="p-3 text-right">당월 지침</th>
-              <th className="p-3 text-right font-bold">사용량</th>
-              <th className="p-3 text-right">단가</th>
-              <th className="p-3 text-right font-bold">부과 금액</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-            {isLoading ? (
-              <tr>
-                <td colSpan={8} className="p-8 text-center text-slate-400">불러오는 중...</td>
-              </tr>
-            ) : readings.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="p-8 text-center text-slate-400">등록된 검침 내역이 없습니다.</td>
-              </tr>
-            ) : (
-              readings.map((r) => (
-                <tr key={r.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30">
-                  <td className="p-3 font-mono font-medium">{r.billed_month}</td>
-                  <td className="p-3 font-semibold text-yellow-700 dark:text-yellow-400">{r.zone_name}</td>
-                  <td className="p-3">
-                    <span className="px-2 py-0.5 rounded text-xs bg-yellow-50 text-yellow-800 font-medium border border-yellow-200">
-                      {r.utility_type === 'ELECTRICITY' ? '전기' : r.utility_type === 'WATER' ? '수도' : '가스'}
-                    </span>
-                  </td>
-                  <td className="p-3 text-right text-slate-400">{r.previous_reading}</td>
-                  <td className="p-3 text-right text-slate-600">{r.current_reading}</td>
-                  <td className="p-3 text-right font-bold text-slate-800 dark:text-slate-100">
-                    {r.usage_amount} {getUtilityUnitLabel(r.utility_type)}
-                  </td>
-                  <td className="p-3 text-right text-slate-500">{r.unit_price}원</td>
-                  <td className="p-3 text-right font-bold text-yellow-800 dark:text-yellow-300">
-                    {r.total_billed_amount.toLocaleString()}원
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <StandardDataTable
+        data={readings}
+        columns={columns}
+        isLoading={isLoading}
+        emptyTitle="등록된 검침 내역이 없습니다"
+        emptyDescription="신규 검침 등록 버튼을 눌러 첫 검침 지침을 기록하세요."
+        keyExtractor={(r) => r.id}
+      />
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-xl max-w-md w-full p-6 space-y-4">
-            <h2 className="text-xl font-bold flex items-center gap-2 text-yellow-700">
-              <Zap className="w-5 h-5" />
-              당월 계량기 지침 입력 및 고지
-            </h2>
-            <form onSubmit={handleCreate} className="space-y-4">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="당월 계량기 지침 입력 및 고지"
+        maxWidth="md"
+      >
+        <div className="p-1">
+          <form onSubmit={handleCreate} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-600 mb-1">구역/호실명 *</label>
@@ -251,9 +273,8 @@ export const UtilityMeterListPage: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
         </div>
-      )}
+      </Modal>
     </div>
   );
 };
