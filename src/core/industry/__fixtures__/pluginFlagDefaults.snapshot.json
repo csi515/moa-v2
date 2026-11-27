@@ -6365,6 +6365,99 @@
       "includesLinkedBillingIncome": false
     }
   },
+  "\"first_birthday_party\"": {
+    "pluginId": "first_birthday_party",
+    "flags": {
+      "isAppointment": false,
+      "publicLandingAdultFirst": false,
+      "usesClassBasedSchedule": false,
+      "showSchoolFields": false,
+      "showPickupFields": false,
+      "supportsDeposit": false,
+      "showsTextbooksLink": false,
+      "runsPinCheckInSideEffects": false,
+      "showsMakeupList": false,
+      "usesWithdrawalExitLabel": false,
+      "savesAttendanceWithPass": false,
+      "showsPracticeRoomTab": false,
+      "showsCustomerPoints": false,
+      "showsAdultPracticeGuide": false,
+      "showsStaffPracticeGuide": false,
+      "includesLinkedBillingIncome": false,
+      "showsPerformanceVideos": false,
+      "showsSongStamps": false,
+      "attendanceSummaryMetric": "indigo",
+      "placeLabel": "사업장",
+      "attendanceRecordNounDefault": null,
+      "portalRoleLabel": "학부모 포털",
+      "parentPortalRoleLabel": null,
+      "parentPortalNav": null,
+      "parentPortalSecondaryTabs": [
+        "notices",
+        "more"
+      ],
+      "parentPortalFeeTitle": null,
+      "parentBookingVariant": "standard",
+      "loyaltyStampTemplate": "RETAIL_CAFE"
+    },
+    "features": {
+      "class_based_schedule": false,
+      "deposit": false,
+      "textbooks_link": false,
+      "pin_side_effects": false,
+      "makeup_list": false,
+      "withdrawal_exit_label": false,
+      "attendance_with_pass": false,
+      "practice_room_tab": false,
+      "customer_points": false,
+      "adult_practice_guide": false,
+      "staff_practice_guide": false,
+      "linked_billing_income": false,
+      "performance_videos": false,
+      "song_stamps": false,
+      "public_landing_adult_first": false,
+      "school_fields": false,
+      "pickup_fields": false
+    },
+    "labels": {
+      "place": "사업장",
+      "customer": "고객",
+      "owner": "대표",
+      "fee": "이용료"
+    },
+    "context": {
+      "placeLabel": "사업장",
+      "customerLabel": "고객",
+      "ownerLabel": "대표",
+      "feeLabel": "이용료",
+      "levelLabel": "레벨"
+    },
+    "migrated": {
+      "attendanceRecordNoun": "출결",
+      "portalRoleLabel": "학부모 포털",
+      "terminology": "{\"customer\":{\"singular\":\"고객\",\"plural\":\"고객\",\"management\":\"고객 관리\",\"section\":\"고객\",\"add\":\"고객 등록\",\"search\":\"고객 검색\",\"statusActive\":\"이용중\",\"statusPaused\":\"정지\",\"statusWithdrawn\":\"종료\"},\"contact\":{\"singular\":\"연락처\",\"plural\":\"연락처\",\"management\":\"연락처 관리\"},\"staff\":{\"singular\":\"직원\",\"plural\":\"직원\",\"management\":\"직원 관리\",\"section\":\"직원\"},\"service\":{\"singular\":\"서비스\",\"plural\":\"서비스\",\"management\":\"서비스 관리\",\"section\":\"서비스\"},\"schedule\":{\"singular\":\"일정\",\"plural\":\"일정\",\"management\":\"일정\",\"section\":\"일정\"},\"attendance\":{\"noun\":\"출입\",\"checkIn\":\"입실\",\"checkOut\":\"퇴실\"},\"billing\":{\"fee\":\"이용료\",\"unpaid\":\"미납금\",\"pass\":\"이용권\",\"payment\":\"결제\"},\"facility\":{\"place\":\"사업장\",\"owner\":\"대표\",\"room\":\"공간\"}}"
+    },
+    "helpers": {
+      "isAppointmentIndustry": false,
+      "publicLandingAdultFirst": false,
+      "getPlaceLabel": "사업장",
+      "getOwnerLabel": "대표",
+      "getPlaceNamePlaceholder": "예: 행복 사업장",
+      "getCustomerLabel": "고객",
+      "getAttendanceSummaryMetric": "indigo",
+      "getFeeLabel": "이용료",
+      "getBankAccountPlaceholder": "예: 국민은행 000000-00-000000 (예금주: 홍길동)",
+      "supportsDeposit": false,
+      "showsTextbooksLink": false,
+      "runsPinCheckInSideEffects": false,
+      "showsMakeupList": false,
+      "showsPracticeRoomTab": false,
+      "showsCustomerPoints": false,
+      "showsAdultPracticeGuide": false,
+      "showsStaffPracticeGuide": false,
+      "includesLinkedBillingIncome": false
+    }
+  },
   "\"funeral_service\"": {
     "pluginId": "funeral_service",
     "flags": {

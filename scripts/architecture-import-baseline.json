@@ -996,17 +996,17 @@
   },
   {
     "file": "src/capabilities/mbo/ui/MboPlanApprovalModal.tsx",
-    "spec": "@/capabilities/approval_workflow/services/approvalWorkflowService",
+    "spec": "@/capabilities/approval_workflow",
     "kind": "capability-cross"
   },
   {
     "file": "src/capabilities/research_project/hooks/useResearchProjectWorkspace.ts",
-    "spec": "@/capabilities/approval_workflow/services/approvalWorkflowService",
+    "spec": "@/capabilities/approval_workflow",
     "kind": "capability-cross"
   },
   {
     "file": "src/capabilities/research_project/ui/ResearchProjectDetailPanel.tsx",
-    "spec": "@/capabilities/approval_workflow/services/approvalWorkflowService",
+    "spec": "@/capabilities/approval_workflow",
     "kind": "capability-cross"
   },
   {
@@ -1221,7 +1221,7 @@
   },
   {
     "file": "src/capabilities/supply_restock/ui/SupplyRestockView.tsx",
-    "spec": "@/capabilities/approval_workflow/services/approvalWorkflowService",
+    "spec": "@/capabilities/approval_workflow",
     "kind": "capability-cross"
   },
   {

@@ -18,7 +18,7 @@ export function FilterTabs<T extends string>({
   tabs,
   active,
   onChange,
-  activeClassName = 'bg-indigo-600 text-white shadow-xs',
+  activeClassName = 'bg-slate-900 text-white shadow-xs',
   inactiveClassName = 'bg-slate-100 text-slate-600 hover:bg-slate-200/80',
 }: FilterTabsProps<T>) {
   return (

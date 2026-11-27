@@ -286,7 +286,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
               onClick={() => onVisibilityChange?.('PUBLIC')}
               className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                 visibility === 'PUBLIC'
-                  ? 'border-indigo-600 bg-slate-50/80 text-indigo-950 font-bold ring-1 ring-indigo-500'
+                  ? 'border-slate-900 bg-slate-50/80 text-slate-950 font-bold ring-1 ring-slate-900'
                   : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
               }`}
             >
@@ -298,7 +298,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
               onClick={() => onVisibilityChange?.('FREE_BUSY_ONLY')}
               className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                 visibility === 'FREE_BUSY_ONLY'
-                  ? 'border-indigo-600 bg-slate-50/80 text-indigo-950 font-bold ring-1 ring-indigo-500'
+                  ? 'border-slate-900 bg-slate-50/80 text-slate-950 font-bold ring-1 ring-slate-900'
                   : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
               }`}
             >
@@ -310,7 +310,7 @@ export const BookingFormModal: React.FC<BookingFormModalProps> = ({
               onClick={() => onVisibilityChange?.('PRIVATE')}
               className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                 visibility === 'PRIVATE'
-                  ? 'border-indigo-600 bg-slate-50/80 text-indigo-950 font-bold ring-1 ring-indigo-500'
+                  ? 'border-slate-900 bg-slate-50/80 text-slate-950 font-bold ring-1 ring-slate-900'
                   : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
               }`}
             >

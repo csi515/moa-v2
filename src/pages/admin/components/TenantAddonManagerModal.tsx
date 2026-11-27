@@ -112,13 +112,13 @@ export const TenantAddonManagerModal: React.FC<TenantAddonManagerModalProps> = (
         {/* 모달 헤더 */}
         <div className="flex items-center justify-between border-b border-slate-800 px-6 py-4 bg-slate-900/90">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900/20 text-slate-500 border border-slate-400">
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
               <h2 className="text-base font-bold text-white flex items-center gap-2">
                 테넌트 유료 애드온(Add-on) 관리
-                <span className="text-[11px] font-normal px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                <span className="text-[11px] font-normal px-2 py-0.5 rounded-full bg-slate-900/10 text-slate-400 border border-slate-400">
                   {tenant.name}
                 </span>
               </h2>
@@ -143,7 +143,7 @@ export const TenantAddonManagerModal: React.FC<TenantAddonManagerModalProps> = (
               <div>
                 <span className="text-slate-400 block text-[11px]">사업장 상호</span>
                 <span className="font-bold text-white text-sm flex items-center gap-1.5 mt-0.5">
-                  <Building2 className="w-4 h-4 text-indigo-400" />
+                  <Building2 className="w-4 h-4 text-slate-500" />
                   {tenant.name}
                 </span>
               </div>
@@ -157,7 +157,7 @@ export const TenantAddonManagerModal: React.FC<TenantAddonManagerModalProps> = (
                 <span className="inline-flex items-center gap-1 mt-0.5 px-2 py-0.5 rounded bg-slate-700 text-slate-200 font-semibold text-[11px]">
                   {tenant.industryLabel}
                 </span>
-                <span className="ml-1.5 text-indigo-400 font-bold text-xs">
+                <span className="ml-1.5 text-slate-500 font-bold text-xs">
                   {tenant.subscriptionPlan} 플랜
                 </span>
               </div>
@@ -190,11 +190,11 @@ export const TenantAddonManagerModal: React.FC<TenantAddonManagerModalProps> = (
           {/* 3. 현재 장착된 애드온 목록 */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xs font-bold text-indigo-300 flex items-center gap-1.5">
-                <Package className="w-3.5 h-3.5 text-indigo-400" />
+              <h3 className="text-xs font-bold text-slate-400 flex items-center gap-1.5">
+                <Package className="w-3.5 h-3.5 text-slate-500" />
                 현재 장착된 유료 애드온 ({currentAddons.length}개)
               </h3>
-              <span className="text-[11px] text-indigo-400 font-medium">개당 월 20,000원</span>
+              <span className="text-[11px] text-slate-500 font-medium">개당 월 20,000원</span>
             </div>
 
             {currentAddons.length === 0 ? (
@@ -202,19 +202,19 @@ export const TenantAddonManagerModal: React.FC<TenantAddonManagerModalProps> = (
                 장착된 추가 애드온이 없습니다. 아래에서 원하는 기능을 추가할 수 있습니다.
               </div>
             ) : (
-              <div className="flex flex-wrap gap-2 rounded-xl border border-indigo-950/60 bg-indigo-950/20 p-3.5">
+              <div className="flex flex-wrap gap-2 rounded-xl border border-slate-800/60 bg-slate-900/20 p-3.5">
                 {currentAddons.map((capId) => (
                   <span
                     key={capId}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900/30 px-2.5 py-1 text-xs font-semibold text-indigo-200 border border-indigo-500/40 shadow-xs"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900/30 px-2.5 py-1 text-xs font-semibold text-slate-300 border border-slate-400 shadow-xs"
                   >
-                    <Sparkles className="w-3 h-3 text-indigo-400" />
+                    <Sparkles className="w-3 h-3 text-slate-500" />
                     <span>{getCapabilityDisplayName(capId)}</span>
-                    <span className="text-[10px] text-indigo-300 font-mono">({capId})</span>
+                    <span className="text-[10px] text-slate-400 font-mono">({capId})</span>
                     <button
                       type="button"
                       onClick={() => handleRemoveAddon(capId)}
-                      className="ml-1 rounded-full p-0.5 hover:bg-rose-500/30 hover:text-rose-200 text-indigo-300 transition-colors"
+                      className="ml-1 rounded-full p-0.5 hover:bg-rose-500/30 hover:text-rose-200 text-slate-400 transition-colors"
                       title="애드온 삭제"
                     >
                       <Trash2 className="w-3 h-3" />
@@ -248,7 +248,7 @@ export const TenantAddonManagerModal: React.FC<TenantAddonManagerModalProps> = (
                 type="button"
                 onClick={handleAddAddon}
                 disabled={!selectedCapToAdd}
-                className="flex items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-4 py-2 text-xs font-bold text-white hover:bg-indigo-500 disabled:opacity-50 transition-all shrink-0"
+                className="flex items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-4 py-2 text-xs font-bold text-white hover:bg-slate-800 disabled:opacity-50 transition-all shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" />
                 애드온 장착
@@ -279,7 +279,7 @@ export const TenantAddonManagerModal: React.FC<TenantAddonManagerModalProps> = (
                 <span>+</span>
                 <span>
                   애드온 ({currentAddons.length}개):{' '}
-                  <strong className="text-indigo-300">
+                  <strong className="text-slate-400">
                     {billingSummary.addons_total.toLocaleString()}원
                   </strong>
                 </span>

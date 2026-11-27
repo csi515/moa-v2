@@ -52,7 +52,7 @@ export const BusinessHealthWidget: React.FC<BusinessHealthWidgetProps> = ({
       border: 'border-slate-200',
       badge: 'bg-slate-900 text-white',
       text: 'text-slate-700',
-      progress: 'bg-indigo-500',
+      progress: 'bg-slate-900',
     },
     amber: {
       bg: 'bg-amber-50',
@@ -97,7 +97,7 @@ export const BusinessHealthWidget: React.FC<BusinessHealthWidgetProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-xs space-y-6 ${className}`}>
+    <div className={`bg-white rounded-xl border border-slate-200 p-6 sm:p-7 shadow-xs space-y-6 ${className}`}>
       {/* 1. 상단 종합 점수 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
         <div className="space-y-1">

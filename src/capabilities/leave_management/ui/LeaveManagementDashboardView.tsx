@@ -78,7 +78,7 @@ export const LeaveManagementDashboardView: React.FC = () => {
       {/* 최상단 타이틀 & 탭 네비게이션 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-50 text-slate-700 rounded-full text-xs font-semibold mb-1.5 dark:bg-indigo-950 dark:text-indigo-300">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-50 text-slate-700 rounded-full text-xs font-semibold mb-1.5 dark:bg-slate-900 dark:text-slate-400">
             <Clock className="w-3.5 h-3.5" />
             <span>유연근무 맞춤형 시간(Hour) 단위 휴가 관리</span>
           </div>

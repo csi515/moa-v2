@@ -97,7 +97,7 @@ export const CustomerShell: React.FC = () => {
         <button
           type="button"
           onClick={() => void load()}
-          className="px-4 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px]"
+          className="px-4 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl min-h-[44px]"
         >
           다시 시도
         </button>

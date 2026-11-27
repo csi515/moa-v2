@@ -316,7 +316,7 @@ export const BabySettlementWidget: React.FC<BabySettlementWidgetProps> = ({
       )}
 
       {/* 실시간 1/N 정산 결과 박스 */}
-      <div className="mt-5 rounded-xl border border-slate-200 bg-gradient-to-br from-indigo-50/60 to-purple-50/40 p-4">
+      <div className="mt-5 rounded-xl border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-50 p-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-700">

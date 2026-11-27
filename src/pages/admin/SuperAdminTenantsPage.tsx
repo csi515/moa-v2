@@ -33,6 +33,7 @@ import {
   type AdminTenantSummary,
   type SubscriptionPlan,
 } from '@/services/admin/adminTenantService';
+import { showToast as showGlobalToast } from '@/shared/feedback/uiFeedback';
 import { ManualPaymentModal } from './components/ManualPaymentModal';
 import { TenantAddonManagerModal } from './components/TenantAddonManagerModal';
 
@@ -46,7 +47,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [industryFilter, setIndustryFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  
 
   // 수동 납부 확인 모달 상태
   const [selectedTenantForPayment, setSelectedTenantForPayment] =
@@ -74,10 +75,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
     void loadTenants();
   }, []);
 
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
+  const showToast = (msg: string) => { showGlobalToast(msg); };
 
   // 업종 고유 목록 추출
   const availableIndustries = useMemo(() => {
@@ -249,18 +247,13 @@ export const SuperAdminTenantsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 p-4 sm:p-8">
       {/* 토스트 알림 */}
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl border border-indigo-400 animate-in fade-in slide-in-from-bottom-2">
-          <CheckCircle2 className="w-5 h-5" />
-          <span className="text-sm font-semibold">{toastMessage}</span>
-        </div>
-      )}
+      
 
       {/* 상단 헤더 */}
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg shadow-indigo-500/20 text-white">
+            <div className="p-3 bg-slate-800 rounded-xl shadow-md border border-slate-700 text-white">
               <ShieldAlert className="w-7 h-7" />
             </div>
             <div>
@@ -289,7 +282,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
             </button>
             <button
               onClick={() => navigate('/workspace')}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-md shadow-indigo-600/30"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-md shadow-indigo-600/30"
             >
               내 워크스페이스
             </button>
@@ -380,7 +373,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
                 {loading ? (
                   <tr>
                     <td colSpan={7} className="py-12 text-center text-slate-400">
-                      <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-indigo-400" />
+                      <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-slate-500" />
                       테넌트 데이터를 불러오는 중입니다...
                     </td>
                   </tr>
@@ -399,11 +392,11 @@ export const SuperAdminTenantsPage: React.FC = () => {
                       {/* 1. 사업장 / 공개코드 */}
                       <td className="px-4 py-3.5">
                         <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center font-bold text-xs shrink-0">
+                          <div className="w-8 h-8 rounded-lg bg-slate-900/10 text-slate-500 border border-slate-400 flex items-center justify-center font-bold text-xs shrink-0">
                             <Building2 className="w-4 h-4" />
                           </div>
                           <div>
-                            <div className="font-bold text-white text-sm group-hover:text-indigo-300 transition-colors">
+                            <div className="font-bold text-white text-sm group-hover:text-slate-400 transition-colors">
                               {tenant.name}
                             </div>
                             <span className="text-[11px] text-slate-400 font-mono">
@@ -439,7 +432,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
                           <span className="text-slate-600">/</span>
                           <span
                             title="등록 고객/원생 수"
-                            className="inline-flex items-center gap-1 text-indigo-400 font-semibold"
+                            className="inline-flex items-center gap-1 text-slate-500 font-semibold"
                           >
                             <UserCheck className="w-3.5 h-3.5" />
                             {tenant.customerCount}명
@@ -456,7 +449,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
                             onChange={(e) =>
                               handlePlanChange(tenant, e.target.value as SubscriptionPlan)
                             }
-                            className="bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-[11px] font-bold text-indigo-300 focus:outline-none"
+                            className="bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-[11px] font-bold text-slate-400 focus:outline-none"
                           >
                             <option value="Basic">Basic</option>
                             <option value="Pro">Pro</option>
@@ -507,7 +500,7 @@ export const SuperAdminTenantsPage: React.FC = () => {
                         {/* 1) 대리 접속 (Impersonation) */}
                         <button
                           onClick={() => handleImpersonate(tenant)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/30 text-[11px] font-bold transition-all"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900/20 hover:bg-slate-800/30 text-slate-400 border border-slate-400 text-[11px] font-bold transition-all"
                           title="해당 사업장 관리자 화면으로 즉시 전환하여 문제를 점검합니다"
                         >
                           <ExternalLink className="w-3 h-3" />
@@ -520,13 +513,13 @@ export const SuperAdminTenantsPage: React.FC = () => {
                             setSelectedTenantForAddon(tenant);
                             setIsAddonModalOpen(true);
                           }}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 text-[11px] font-bold transition-all"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900/20 hover:bg-slate-900/30 text-slate-400 border border-slate-400 text-[11px] font-bold transition-all"
                           title="테넌트별 유료 Capability 애드온을 추가하거나 삭제합니다"
                         >
-                          <Sparkles className="w-3 h-3 text-purple-400" />
+                          <Sparkles className="w-3 h-3 text-slate-500" />
                           애드온 관리
                           {tenant.customAddons && tenant.customAddons.length > 0 && (
-                            <span className="ml-0.5 px-1 py-0.2 rounded-full bg-purple-500/40 text-purple-200 text-[10px]">
+                            <span className="ml-0.5 px-1 py-0.2 rounded-full bg-slate-900/40 text-slate-300 text-[10px]">
                               {tenant.customAddons.length}
                             </span>
                           )}

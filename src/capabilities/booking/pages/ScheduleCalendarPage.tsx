@@ -418,7 +418,7 @@ export function ScheduleCalendarPage() {
 
       {/* 회원 필터 활성화 알림 배너 */}
       {selectedMember && (
-        <div className="rounded-2xl border border-slate-200 bg-slate-50/90 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-indigo-950 font-bold shadow-xs">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50/90 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-slate-950 font-bold shadow-xs">
           <div className="flex items-center gap-2">
             <span className="inline-block w-2.5 h-2.5 rounded-full bg-slate-900 animate-pulse" />
             <span>
@@ -465,8 +465,8 @@ export function ScheduleCalendarPage() {
                 <div
                   className={`h-full rounded-xl p-2 text-xs flex flex-col justify-between transition-all border ${
                     isFilteredTarget
-                      ? 'bg-slate-900 text-white border-indigo-700 shadow-md ring-2 ring-indigo-400'
-                      : 'bg-white text-slate-800 border-slate-200/90 shadow-2xs hover:border-indigo-300'
+                      ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-slate-400'
+                      : 'bg-white text-slate-800 border-slate-200/90 shadow-2xs hover:border-slate-300'
                   }`}
                 >
                   <div className="min-w-0">
@@ -488,7 +488,7 @@ export function ScheduleCalendarPage() {
                     </div>
                     <p
                       className={`text-[11px] truncate mt-0.5 ${
-                        isFilteredTarget ? 'text-indigo-100' : 'text-slate-500'
+                        isFilteredTarget ? 'text-slate-200' : 'text-slate-500'
                       }`}
                     >
                       {event.subtitle}
@@ -498,7 +498,7 @@ export function ScheduleCalendarPage() {
                   <div
                     className={`mt-1.5 pt-1 border-t text-[10px] truncate ${
                       isFilteredTarget
-                        ? 'border-white/20 text-indigo-100'
+                        ? 'border-white/20 text-slate-200'
                         : 'border-slate-100 text-slate-600'
                     }`}
                   >
@@ -588,7 +588,7 @@ export function ScheduleCalendarPage() {
                     onClick={() => handleSelectMember(member.id)}
                     className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between gap-2.5 cursor-pointer min-h-[46px] ${
                       isSelected
-                        ? 'bg-slate-50/80 border-indigo-400 ring-2 ring-indigo-500/20 text-indigo-950 font-bold'
+                        ? 'bg-slate-50/80 border-slate-300 ring-2 ring-slate-900 text-slate-950 font-bold'
                         : 'bg-white hover:bg-slate-50 border-slate-200/80 text-slate-800'
                     }`}
                   >

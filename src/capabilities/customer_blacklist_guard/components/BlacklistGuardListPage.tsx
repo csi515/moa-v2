@@ -8,6 +8,8 @@ import {
   type IncidentReason,
 } from '../domain/blacklistGuardEngine';
 import { showToast } from '@/shared/feedback/uiFeedback';
+import { useConfirmDialog } from '@/shared/feedback/useConfirmDialog';
+import { useAsyncLock } from '@/shared/hooks/useAsyncLock';
 import {
   PageHeader,
   StandardDataTable,
@@ -26,6 +28,10 @@ export const BlacklistGuardListPage: React.FC = () => {
   const [incidentSummary, setIncidentSummary] = useState('');
   const [restrictedUntil, setRestrictedUntil] = useState('');
 
+  const confirm = useConfirmDialog();
+  const { isLocked: isCreating, runWithLock: withCreateLock } = useAsyncLock();
+  const { isLocked: isDeactivating, runWithLock: withDeactivateLock } = useAsyncLock();
+
   const { query } = useList<BlacklistRecord>({
     resource: 'blacklist_records',
     sorters: [{ field: 'created_at', order: 'desc' }],
@@ -39,7 +45,7 @@ export const BlacklistGuardListPage: React.FC = () => {
   const { mutate: createRecord } = useCreate();
   const { mutate: updateRecord } = useUpdate();
 
-  const handleCreate = (e: React.FormEvent) => {
+  const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     const validation = validateBlacklistInput(targetName, targetPhone, incidentSummary);
     if (!validation.isValid) {
@@ -47,61 +53,80 @@ export const BlacklistGuardListPage: React.FC = () => {
       return;
     }
 
-    createRecord(
-      {
-        resource: 'blacklist_records',
-        values: {
-          target_name: targetName.trim(),
-          target_phone: targetPhone.trim(),
-          severity,
-          reason,
-          incident_summary: incidentSummary.trim(),
-          restricted_until: severity === 'TEMPORARY_SUSPENSION' ? restrictedUntil || undefined : undefined,
-          is_active: true,
-          registered_by: '보안 담당자',
-          created_at: new Date().toISOString(),
-        },
-      },
-      {
-        onSuccess: () => {
-          showToast(`[${targetName}] 출입제한 등록 완료`, 'success');
-          setIsModalOpen(false);
-          setTargetName('');
-          setTargetPhone('');
-          setIncidentSummary('');
-          setRestrictedUntil('');
-          refetch();
-        },
-        onError: (err: any) => {
-          showToast(`등록 실패: ${err?.message || 'DB 에러'}`, 'error');
-        },
-      }
-    );
+    await withCreateLock(async () => {
+      await new Promise<void>((resolve, reject) => {
+        createRecord(
+          {
+            resource: 'blacklist_records',
+            values: {
+              target_name: targetName.trim(),
+              target_phone: targetPhone.trim(),
+              severity,
+              reason,
+              incident_summary: incidentSummary.trim(),
+              restricted_until: severity === 'TEMPORARY_SUSPENSION' ? restrictedUntil || undefined : undefined,
+              is_active: true,
+              registered_by: '보안 담당자',
+              created_at: new Date().toISOString(),
+            },
+          },
+          {
+            onSuccess: () => {
+              showToast(`[${targetName}] 출입제한 등록 완료`, 'success');
+              setIsModalOpen(false);
+              setTargetName('');
+              setTargetPhone('');
+              setIncidentSummary('');
+              setRestrictedUntil('');
+              refetch();
+              resolve();
+            },
+            onError: (err: any) => {
+              showToast(`등록 실패: ${err?.message || 'DB 에러'}`, 'error');
+              reject(err);
+            },
+          }
+        );
+      });
+    });
   };
 
-  const handleDeactivate = (id: string, name: string) => {
-    if (!window.confirm(`[${name}] 님의 출입 제한 조치를 해제하시겠습니까?`)) return;
+  const handleDeactivate = async (id: string, name: string) => {
+    const ok = await confirm({
+      title: '출입 제한 조치 해제',
+      message: `[${name}] 님의 출입 제한 조치를 해제하시겠습니까?`,
+      confirmText: '해제',
+      cancelText: '취소',
+      isDestructive: false,
+    });
+    if (!ok) return;
 
-    updateRecord(
-      {
-        resource: 'blacklist_records',
-        id,
-        values: {
-          is_active: false,
-          lifted_at: new Date().toISOString(),
-          lifted_by: '원장/관리자',
-        },
-      },
-      {
-        onSuccess: () => {
-          showToast(`[${name}] 출입 제한 해제 완료`, 'info');
-          refetch();
-        },
-        onError: (err: any) => {
-          showToast(`해제 실패: ${err?.message}`, 'error');
-        },
-      }
-    );
+    await withDeactivateLock(async () => {
+      await new Promise<void>((resolve, reject) => {
+        updateRecord(
+          {
+            resource: 'blacklist_records',
+            id,
+            values: {
+              is_active: false,
+              lifted_at: new Date().toISOString(),
+              lifted_by: '원장/관리자',
+            },
+          },
+          {
+            onSuccess: () => {
+              showToast(`[${name}] 출입 제한 해제 완료`, 'info');
+              refetch();
+              resolve();
+            },
+            onError: (err: any) => {
+              showToast(`해제 실패: ${err?.message || 'DB 에러'}`, 'error');
+              reject(err);
+            },
+          }
+        );
+      });
+    });
   };
 
   const columns: StandardColumn<BlacklistRecord>[] = useMemo(
@@ -163,6 +188,7 @@ export const BlacklistGuardListPage: React.FC = () => {
               <Button
                 variant="outline"
                 size="sm"
+                disabled={isDeactivating}
                 onClick={() => handleDeactivate(r.id, r.target_name)}
               >
                 제한 해제
@@ -213,6 +239,7 @@ export const BlacklistGuardListPage: React.FC = () => {
           description="출입 제한 대상으로 등록 시, 키오스크 셀프 출결 및 회원 가입이 사전 차단됩니다."
           onSubmit={handleCreate}
           submitLabel="등록 및 차단"
+          isSubmitting={isCreating}
           maxWidth="lg"
         >
           <div className="space-y-3">

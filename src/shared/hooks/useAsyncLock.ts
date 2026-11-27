@@ -47,5 +47,6 @@ export function useAsyncLock(options: UseAsyncLockOptions = {}) {
   return {
     isLocked,
     runWithLock,
+    withLock: runWithLock,
   };
 }

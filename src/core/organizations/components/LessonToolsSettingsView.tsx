@@ -39,16 +39,16 @@ const LESSON_MANAGEMENT_TOOLS: ToolTileItem[] = [
     label: '연습실 예약',
     description: '원생 피아노 연습실 예약 현황 및 공실 확인',
     icon: DoorOpen,
-    iconColor: 'text-indigo-600',
-    iconBg: 'bg-indigo-50',
+    iconColor: 'text-slate-800',
+    iconBg: 'bg-slate-50',
   },
   {
     tab: 'practice',
     label: '연습 기록',
     description: '원생별 자율 연습 일지 및 주간 누적 시간',
     icon: Music,
-    iconColor: 'text-purple-600',
-    iconBg: 'bg-purple-50',
+    iconColor: 'text-slate-800',
+    iconBg: 'bg-slate-50',
   },
   {
     tab: 'assignments',
@@ -90,8 +90,8 @@ const TEXTBOOK_CURRICULUM_TOOLS: ToolTileItem[] = [
     label: '커리큘럼·진도',
     description: '바이엘, 체르니, 작품집 등 단계별 표준 진도표',
     icon: GraduationCap,
-    iconColor: 'text-indigo-600',
-    iconBg: 'bg-indigo-50',
+    iconColor: 'text-slate-800',
+    iconBg: 'bg-slate-50',
   },
   {
     tab: 'resources',
@@ -125,8 +125,8 @@ const ACHIEVEMENT_MOTIVATION_TOOLS: ToolTileItem[] = [
     label: '시험·등급',
     description: '급수 시험 결과 및 레벨업 인증 관리',
     icon: Medal,
-    iconColor: 'text-indigo-600',
-    iconBg: 'bg-indigo-50',
+    iconColor: 'text-slate-800',
+    iconBg: 'bg-slate-50',
   },
   {
     tab: 'reports',
@@ -157,8 +157,8 @@ const EXTRA_KNOWN_TOOLS: Record<string, Omit<ToolTileItem, 'tab'>> = {
     label: '추천·패밀리',
     description: '형제·자매 원생 및 지인 추천 네트워크',
     icon: Network,
-    iconColor: 'text-purple-600',
-    iconBg: 'bg-purple-50',
+    iconColor: 'text-slate-800',
+    iconBg: 'bg-slate-50',
   },
   supplies: {
     label: '소모품 재고',
@@ -196,7 +196,7 @@ export const LessonToolsSettingsView: FC<{
       {/* 카드 1: 레슨 & 연습실 관리 */}
       <section className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4">
         <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center">
             <Music className="w-4 h-4" />
           </div>
           <div>
@@ -213,20 +213,20 @@ export const LessonToolsSettingsView: FC<{
                 key={tool.tab}
                 type="button"
                 onClick={() => setActiveTab(tool.tab)}
-                className="group flex items-start gap-3.5 p-3.5 text-left rounded-xl border border-slate-200/70 hover:border-indigo-300 hover:bg-indigo-50/30 bg-white transition-all min-h-[64px]"
+                className="group flex items-start gap-3.5 p-3.5 text-left rounded-xl border border-slate-200/70 hover:border-slate-300 hover:bg-slate-50 bg-white transition-all min-h-[64px]"
               >
                 <div className={`w-9 h-9 rounded-xl ${tool.iconBg} ${tool.iconColor} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform`}>
                   <Icon className="w-4 h-4" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                  <p className="text-xs font-bold text-slate-900 group-hover:text-slate-900 transition-colors">
                     {tool.label}
                   </p>
                   <p className="text-[11px] text-slate-500 line-clamp-2 mt-0.5 leading-snug">
                     {tool.description}
                   </p>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
+                <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-700 group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
               </button>
             );
           })}
@@ -317,7 +317,7 @@ export const LessonToolsSettingsView: FC<{
       {additionalExtras.length > 0 && (
         <section className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-            <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center">
               <Layers className="w-4 h-4" />
             </div>
             <div>
@@ -330,8 +330,8 @@ export const LessonToolsSettingsView: FC<{
             {additionalExtras.map((item) => {
               const known = EXTRA_KNOWN_TOOLS[item.tab];
               const Icon = known?.icon || Layers;
-              const iconColor = known?.iconColor || 'text-purple-600';
-              const iconBg = known?.iconBg || 'bg-purple-50';
+              const iconColor = known?.iconColor || 'text-slate-800';
+              const iconBg = known?.iconBg || 'bg-slate-50';
               const label = known?.label || item.label;
               const description = known?.description || '추가 운영 편의 기능';
 
@@ -340,20 +340,20 @@ export const LessonToolsSettingsView: FC<{
                   key={item.tab}
                   type="button"
                   onClick={() => setActiveTab(item.tab)}
-                  className="group flex items-start gap-3.5 p-3.5 text-left rounded-xl border border-slate-200/70 hover:border-purple-300 hover:bg-purple-50/30 bg-white transition-all min-h-[64px]"
+                  className="group flex items-start gap-3.5 p-3.5 text-left rounded-xl border border-slate-200/70 hover:border-slate-300 hover:bg-slate-50 bg-white transition-all min-h-[64px]"
                 >
                   <div className={`w-9 h-9 rounded-xl ${iconBg} ${iconColor} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform`}>
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
+                    <p className="text-xs font-bold text-slate-900 group-hover:text-slate-900 transition-colors">
                       {label}
                     </p>
                     <p className="text-[11px] text-slate-500 line-clamp-2 mt-0.5 leading-snug">
                       {description}
                     </p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-purple-500 group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
+                  <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-900 group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
                 </button>
               );
             })}

@@ -98,7 +98,7 @@ export const MobileEventBriefingView: React.FC<MobileEventBriefingViewProps> = (
               <span className="text-[11px] font-semibold text-slate-900 block flex items-center gap-1">
                 <Sparkles className="w-3.5 h-3.5 text-slate-700" /> 스태프/플래너 세팅
               </span>
-              <span className="text-sm font-black text-indigo-950 mt-0.5 block">
+              <span className="text-sm font-black text-slate-950 mt-0.5 block">
                 {data.setupStartTime} 입실 가능
               </span>
               <span className="text-[10px] text-slate-700">철수 완료: {data.teardownEndTime}까지</span>

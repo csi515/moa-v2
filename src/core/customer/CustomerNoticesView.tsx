@@ -77,7 +77,7 @@ export function CustomerNoticesView({
               className="p-3 rounded-xl border border-slate-100 bg-slate-50/80"
             >
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-indigo-50 text-indigo-700">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-50 text-slate-800">
                   {PARENT_PORTAL_NOTIFICATION_LABEL[n.type as ParentPortalNotificationKind] ||
                     '안내'}
                 </span>

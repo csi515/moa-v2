@@ -187,7 +187,7 @@ export const PublicStoreLandingPage: React.FC = () => {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50">
         <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent" />
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-slate-900 border-t-transparent" />
           <p className="mt-3 text-sm font-medium text-slate-600">매장 정보를 불러오는 중...</p>
         </div>
       </div>

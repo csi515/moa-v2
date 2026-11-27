@@ -77,8 +77,8 @@ export const ClaimTokenPage: React.FC = () => {
   }, [token, isAuthenticated, user, authLoading, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-slate-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-slate-100 p-8 text-center animate-in fade-in duration-200">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-xl border border-slate-100 p-8 text-center animate-in fade-in duration-200">
         <div className="inline-flex items-center justify-center w-14 h-14 bg-slate-900 rounded-2xl text-white shadow-lg mb-6">
           <ShieldCheck className="w-8 h-8" />
         </div>

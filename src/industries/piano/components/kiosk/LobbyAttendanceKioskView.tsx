@@ -123,14 +123,14 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
       {/* 상단 바: 학원 이름, 실시간 날짜/시계, 관리자 탈출 버튼 */}
       <header className="flex items-center justify-between border-b border-slate-800 pb-6">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-slate-800 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
             <Music className="w-6 h-6" />
           </div>
           <div>
             <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white">
               {academyName}
             </h1>
-            <p className="text-xs sm:text-sm text-indigo-300 font-medium">
+            <p className="text-xs sm:text-sm text-slate-400 font-medium">
               원생 로비 출결 키오스크
             </p>
           </div>
@@ -140,7 +140,7 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
         <div className="text-right flex items-center gap-4">
           <div className="hidden sm:block">
             <p className="text-xs text-slate-400 font-medium">{formattedDate}</p>
-            <p className="text-2xl font-black text-indigo-400 tracking-wider">
+            <p className="text-2xl font-black text-slate-500 tracking-wider">
               {formattedTime}
             </p>
           </div>
@@ -178,7 +178,7 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
                 key={idx}
                 className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-black transition-all duration-150 border-2 ${
                   hasDigit
-                    ? 'bg-slate-900 border-indigo-400 text-white shadow-lg shadow-indigo-600/30 scale-105'
+                    ? 'bg-slate-900 border-slate-300 text-white shadow-lg shadow-indigo-600/30 scale-105'
                     : 'bg-slate-900 border-slate-800 text-slate-600'
                 }`}
               >
@@ -202,7 +202,7 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
               key={digit}
               type="button"
               onClick={() => handleDigit(digit)}
-              className="h-16 sm:h-20 rounded-2xl bg-slate-900/90 border border-slate-800 hover:bg-slate-900/80 hover:border-indigo-500 text-2xl sm:text-3xl font-bold text-white transition-all active:scale-95 shadow-md flex items-center justify-center cursor-pointer"
+              className="h-16 sm:h-20 rounded-2xl bg-slate-900/90 border border-slate-800 hover:bg-slate-900/80 hover:border-slate-400 text-2xl sm:text-3xl font-bold text-white transition-all active:scale-95 shadow-md flex items-center justify-center cursor-pointer"
             >
               {digit}
             </button>
@@ -217,7 +217,7 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
           <button
             type="button"
             onClick={() => handleDigit('0')}
-            className="h-16 sm:h-20 rounded-2xl bg-slate-900/90 border border-slate-800 hover:bg-slate-900/80 hover:border-indigo-500 text-2xl sm:text-3xl font-bold text-white transition-all active:scale-95 shadow-md flex items-center justify-center cursor-pointer"
+            className="h-16 sm:h-20 rounded-2xl bg-slate-900/90 border border-slate-800 hover:bg-slate-900/80 hover:border-slate-400 text-2xl sm:text-3xl font-bold text-white transition-all active:scale-95 shadow-md flex items-center justify-center cursor-pointer"
           >
             0
           </button>
@@ -240,20 +240,20 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
       {/* 출석 성공 환영 팝업 모달 */}
       {result && result.success && (
         <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-6 animate-in fade-in zoom-in duration-200">
-          <div className="bg-gradient-to-b from-slate-900 to-indigo-950 border border-indigo-500/50 rounded-3xl p-8 sm:p-12 max-w-md w-full text-center shadow-2xl shadow-indigo-500/30">
+          <div className="bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-400 rounded-xl p-8 sm:p-12 max-w-md w-full text-center shadow-2xl shadow-indigo-500/30">
             <div className="w-20 h-20 rounded-full bg-emerald-500/20 border-2 border-emerald-400 text-emerald-400 flex items-center justify-center mx-auto mb-6 animate-bounce">
               <CheckCircle2 className="w-12 h-12" />
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-500/20 border border-indigo-400/30 rounded-full text-indigo-300 text-xs font-semibold mb-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-900/20 border border-slate-300 rounded-full text-slate-400 text-xs font-semibold mb-3">
               <Sparkles className="w-3.5 h-3.5" />
               등원 확인 완료
             </div>
 
             {/* 엣지 6번: 당일 임시 슬롯 자동 배정 뱃지 */}
             {result.temporaryMoveApplied && (
-              <div className="mb-4 px-3.5 py-2 rounded-2xl bg-purple-900/50 border border-purple-500/50 text-purple-200 text-xs font-bold flex items-center justify-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+              <div className="mb-4 px-3.5 py-2 rounded-2xl bg-slate-900 border border-slate-400 text-slate-300 text-xs font-bold flex items-center justify-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                 <span>
                   오늘 임시 수업({result.assignedSlotTime})으로 자동 출결 배정되었습니다.
                 </span>
@@ -288,10 +288,10 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
       {/* 관리자 탈출 확인 모달 */}
       {isExitModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 sm:p-8 max-w-sm w-full shadow-2xl">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2 text-white font-bold text-lg">
-                <Lock className="w-5 h-5 text-indigo-400" />
+                <Lock className="w-5 h-5 text-slate-500" />
                 관리자 키오스크 탈출
               </div>
               <button
@@ -344,7 +344,7 @@ export const LobbyAttendanceKioskView: React.FC<LobbyAttendanceKioskViewProps> =
               <button
                 type="button"
                 onClick={handleVerifyExit}
-                className="flex-1 py-3 bg-slate-900 hover:bg-indigo-500 text-white font-bold rounded-xl text-sm transition-colors"
+                className="flex-1 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm transition-colors"
               >
                 종료 확인
               </button>

@@ -74,7 +74,7 @@ function EnrollmentSection({
           className={`w-full flex items-center justify-between p-4 rounded-2xl border text-left min-h-[44px] transition-colors ${
             muted
               ? 'bg-slate-50 border-slate-200 hover:border-slate-300'
-              : 'bg-white border-slate-200 hover:border-indigo-300 hover:bg-slate-50/40'
+              : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/40'
           }`}
         >
           <div className="flex items-center gap-3 min-w-0">

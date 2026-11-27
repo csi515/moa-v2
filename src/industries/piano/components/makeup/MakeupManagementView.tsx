@@ -250,7 +250,7 @@ export const MakeupManagementView: React.FC = () => {
                     {item.absentReason && ` · ${item.absentReason}`}
                   </p>
                   {formatSlot(item) && (
-                    <p className="text-xs text-purple-800 font-semibold mt-1.5 inline-flex items-center gap-1.5 rounded-lg bg-slate-50 px-2 py-1">
+                    <p className="text-xs text-slate-800 font-semibold mt-1.5 inline-flex items-center gap-1.5 rounded-lg bg-slate-50 px-2 py-1">
                       <Calendar className="w-3.5 h-3.5" />
                       보강: {formatSlot(item)}
                     </p>

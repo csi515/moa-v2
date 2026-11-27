@@ -421,7 +421,7 @@ export const PurchaseRequisitionFormModal: React.FC<PurchaseRequisitionFormModal
                   {/* 직전 구매처 및 계정 자동 채움 배지 */}
                   {item.lastVendor && (
                     <div className="flex items-center gap-2 pt-1 text-[11px] text-slate-600 bg-white/70 px-2 py-1 rounded-md border border-slate-100">
-                      <ShoppingBag className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                      <ShoppingBag className="w-3.5 h-3.5 text-slate-700 shrink-0" />
                       <span>
                         직전 구매처: <strong className="text-slate-800">{item.lastVendor}</strong>
                         {item.purchaseAccount && ` (${item.purchaseAccount})`}

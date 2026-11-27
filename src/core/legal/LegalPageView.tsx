@@ -37,7 +37,7 @@ export const LegalPageView: React.FC<LegalPageViewProps> = ({ page }) => {
             </div>
             <Link
               to="/login"
-              className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 px-3 py-2 rounded-lg hover:bg-indigo-50"
+              className="text-xs font-semibold text-slate-800 hover:text-slate-900 px-3 py-2 rounded-lg hover:bg-slate-50"
             >
               로그인 / 회원가입
             </Link>
@@ -49,7 +49,7 @@ export const LegalPageView: React.FC<LegalPageViewProps> = ({ page }) => {
               to="/terms"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${
                 page === 'terms'
-                  ? 'bg-indigo-600 text-white shadow-xs'
+                  ? 'bg-slate-900 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -60,7 +60,7 @@ export const LegalPageView: React.FC<LegalPageViewProps> = ({ page }) => {
               to="/privacy"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${
                 page === 'privacy'
-                  ? 'bg-indigo-600 text-white shadow-xs'
+                  ? 'bg-slate-900 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -71,7 +71,7 @@ export const LegalPageView: React.FC<LegalPageViewProps> = ({ page }) => {
               to="/support"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${
                 page === 'support'
-                  ? 'bg-indigo-600 text-white shadow-xs'
+                  ? 'bg-slate-900 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -82,7 +82,7 @@ export const LegalPageView: React.FC<LegalPageViewProps> = ({ page }) => {
               to="/pricing"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${
                 page === 'pricing'
-                  ? 'bg-indigo-600 text-white shadow-xs'
+                  ? 'bg-slate-900 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >

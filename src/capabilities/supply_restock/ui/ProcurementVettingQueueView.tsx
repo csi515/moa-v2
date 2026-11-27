@@ -105,7 +105,7 @@ export const ProcurementVettingQueueView: React.FC<ProcurementVettingQueueViewPr
       {/* 큐 상단 안내 바 및 필터 */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-slate-900 text-white p-4 rounded-2xl">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-indigo-500/20 text-indigo-400 rounded-xl">
+          <div className="p-2.5 bg-slate-900/20 text-slate-500 rounded-xl">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
@@ -168,7 +168,7 @@ export const ProcurementVettingQueueView: React.FC<ProcurementVettingQueueViewPr
             <button
               type="button"
               onClick={handleStartContractPackage}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-indigo-500 hover:bg-slate-900 text-white font-bold text-xs rounded-xl shadow-xs transition"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-900 text-white font-bold text-xs rounded-xl shadow-xs transition"
             >
               <FileCheck2 className="w-4 h-4" />
               선택 건 계약 묶음 진행 ({selectedForContractIds.length}건)
@@ -199,7 +199,7 @@ export const ProcurementVettingQueueView: React.FC<ProcurementVettingQueueViewPr
                     ? 'border-emerald-200 shadow-xs'
                     : isRejected
                     ? 'border-rose-200 bg-rose-50/20'
-                    : 'border-slate-200 shadow-xs hover:border-indigo-300'
+                    : 'border-slate-200 shadow-xs hover:border-slate-300'
                 } p-5 space-y-4`}
               >
                 {/* 상단 메타 */}
@@ -316,7 +316,7 @@ export const ProcurementVettingQueueView: React.FC<ProcurementVettingQueueViewPr
                                   창고 내 대체 재고 충분 ({check.inStockQuantity}개 보유)
                                 </span>
                               ) : check.hasPartialStock ? (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-50 text-indigo-800 text-[11px] rounded-lg border border-slate-200">
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-50 text-slate-800 text-[11px] rounded-lg border border-slate-200">
                                   일부 재고 보유 ({check.inStockQuantity}개 보유)
                                 </span>
                               ) : (

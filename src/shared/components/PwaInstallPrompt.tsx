@@ -175,7 +175,7 @@ export const PwaInstallPrompt: React.FC = () => {
               type="button"
               disabled={installing}
               onClick={() => void handleInstall()}
-              className="w-full sm:w-auto px-5 py-3 min-h-[44px] text-sm font-bold bg-slate-900 hover:bg-slate-800 disabled:bg-indigo-400 text-white rounded-xl"
+              className="w-full sm:w-auto px-5 py-3 min-h-[44px] text-sm font-bold bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 text-white rounded-xl"
             >
               {PWA_INSTALL_COPY.installCta}
             </button>

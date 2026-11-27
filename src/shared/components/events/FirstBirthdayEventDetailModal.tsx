@@ -237,7 +237,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
             onClick={() => setActiveTab('overview')}
             className={`pb-2 px-3 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'overview'
-                ? 'border-indigo-600 text-slate-800'
+                ? 'border-slate-900 text-slate-800'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -248,7 +248,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
             onClick={() => setActiveTab('timeline')}
             className={`pb-2 px-3 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'timeline'
-                ? 'border-indigo-600 text-slate-800'
+                ? 'border-slate-900 text-slate-800'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -259,7 +259,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
             onClick={() => setActiveTab('styling')}
             className={`pb-2 px-3 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'styling'
-                ? 'border-indigo-600 text-slate-800'
+                ? 'border-slate-900 text-slate-800'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -270,7 +270,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
             onClick={() => setActiveTab('rules')}
             className={`pb-2 px-3 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'rules'
-                ? 'border-indigo-600 text-slate-800'
+                ? 'border-slate-900 text-slate-800'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -281,7 +281,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
             onClick={() => setActiveTab('planner')}
             className={`pb-2 px-3 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'planner'
-                ? 'border-indigo-600 text-slate-800'
+                ? 'border-slate-900 text-slate-800'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -302,7 +302,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
               </div>
               <div>
                 <span className="text-slate-500 flex items-center gap-1.5 mb-1 font-medium">
-                  <Calendar className="w-4 h-4 text-indigo-500" /> 행사 일자 및 장소
+                  <Calendar className="w-4 h-4 text-slate-700" /> 행사 일자 및 장소
                 </span>
                 <p className="font-semibold text-slate-800">{formState.eventDate}</p>
                 <p className="text-xs text-slate-600">{formState.roomName}</p>
@@ -344,7 +344,7 @@ export const FirstBirthdayEventDetailModal: React.FC<FirstBirthdayEventDetailMod
 
                 <div className="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1">
                   <span className="text-slate-700 font-semibold block flex items-center gap-1">
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-500" /> 세팅 입실 & 철수 완료 버퍼
+                    <Sparkles className="w-3.5 h-3.5 text-slate-700" /> 세팅 입실 & 철수 완료 버퍼
                   </span>
                   <div className="flex items-center gap-2">
                     <div>

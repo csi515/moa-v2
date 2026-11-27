@@ -186,7 +186,7 @@ export const StaffInviteQrModal: React.FC<StaffInviteQrModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-md bg-white rounded-xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[90vh]">
         {/* 모달 헤더 */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
           <div className="flex items-center space-x-2">
@@ -329,7 +329,7 @@ export const StaffInviteQrModal: React.FC<StaffInviteQrModalProps> = ({
               <div className="flex items-center space-x-2">
                 {remainingSeconds > 0 ? (
                   <div className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">
-                    <Clock className="w-3.5 h-3.5 text-indigo-500" />
+                    <Clock className="w-3.5 h-3.5 text-slate-700" />
                     <span>남은 시간: {formatTimer(remainingSeconds)}</span>
                   </div>
                 ) : (

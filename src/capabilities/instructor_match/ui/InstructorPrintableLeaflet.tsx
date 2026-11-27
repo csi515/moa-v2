@@ -152,7 +152,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
       {viewMode === 'a4_poster' && (
         <div className="max-w-[210mm] mx-auto bg-white border border-slate-300 rounded-xl shadow-lg p-8 a4-print-canvas text-slate-900">
           {/* 상단 브랜드 & 타이틀 바 */}
-          <div className="flex items-center justify-between border-b-2 border-indigo-600 pb-4 mb-6">
+          <div className="flex items-center justify-between border-b-2 border-slate-900 pb-4 mb-6">
             <div>
               <span className="text-[11px] font-extrabold tracking-widest text-slate-700 uppercase">
                 {leafletData.footer.centerName}
@@ -334,7 +334,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
 
       {/* 2. 모바일 웹 카드 뷰 */}
       {viewMode === 'mobile_card' && (
-        <div className="max-w-sm mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200 text-slate-900">
+        <div className="max-w-sm mx-auto bg-white rounded-xl shadow-xl overflow-hidden border border-slate-200 text-slate-900">
           {/* 모바일 상단 커버 이미지 */}
           <div className="relative h-48 bg-slate-900 overflow-hidden">
             <img
@@ -348,7 +348,7 @@ export const InstructorPrintableLeaflet: React.FC<InstructorPrintableLeafletProp
                 {leafletData.footer.centerName}
               </span>
               <h2 className="text-xl font-black">{leafletData.header.instructorName} 강사</h2>
-              <p className="text-xs text-indigo-200 font-medium truncate">
+              <p className="text-xs text-slate-300 font-medium truncate">
                 {leafletData.header.headlineTitle}
               </p>
             </div>

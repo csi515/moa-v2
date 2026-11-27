@@ -224,7 +224,7 @@ export const LevelAssessmentView: React.FC = () => {
       {/* 전자 합격증 미리보기 모달 */}
       {previewCertSvg && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-white rounded-xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-base font-bold text-slate-900">모바일 전자 합격증 미리보기 (W3C 표준 SVG)</h3>
               <button

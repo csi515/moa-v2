@@ -83,7 +83,7 @@ export const CustomerHubView: FC<{
     <div className="space-y-4 pb-4">
       <PageHeader
         density="compact"
-        icon={<Users className="w-6 h-6 text-indigo-600" />}
+        icon={<Users className="w-6 h-6 text-slate-800" />}
         title={`${customerLabel} 관리`}
         description="등록 원생의 인적사항, 수강 과정, 연락처 및 상담 이력 통합 조회"
         actions={

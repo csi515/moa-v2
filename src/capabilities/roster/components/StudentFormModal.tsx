@@ -655,7 +655,7 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
           {!isEdit && classes.length > 0 && !showDetails && (
             <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/35 space-y-2.5">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
+                <label className="text-xs font-bold text-slate-950 flex items-center gap-1.5">
                   <Calendar className="w-4 h-4 text-slate-800" />
                   {serviceLabel} 시간표 바로 배정 (선택)
                 </label>
@@ -688,14 +688,14 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
               <button
                 type="button"
                 onClick={() => setShowDetails((v) => !v)}
-                className="w-full py-3 px-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50/40 hover:bg-slate-50/80 hover:border-indigo-300 transition-all flex items-center justify-between text-left group cursor-pointer"
+                className="w-full py-3 px-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50/40 hover:bg-slate-50/80 hover:border-slate-300 transition-all flex items-center justify-between text-left group cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-slate-100 group-hover:bg-indigo-200 text-slate-700 flex items-center justify-center shrink-0 transition-colors">
+                  <div className="w-7 h-7 rounded-lg bg-slate-100 group-hover:bg-slate-200 text-slate-700 flex items-center justify-center shrink-0 transition-colors">
                     {showDetails ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-indigo-950">
+                    <p className="text-xs font-bold text-slate-950">
                       {showDetails ? '상세 정보 접기' : '학교, 수업, 수강료 등 상세 정보 입력하기'}
                     </p>
                     {!showDetails && (

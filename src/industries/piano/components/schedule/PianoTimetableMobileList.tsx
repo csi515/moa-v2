@@ -64,13 +64,13 @@ export const PianoTimetableMobileList: FC<PianoTimetableMobileListProps> = ({
             >
               {day}요일
               {day === todayDay && (
-                <span className={`ml-1 text-[10px] ${selected ? 'text-indigo-100' : 'text-slate-800'}`}>
+                <span className={`ml-1 text-[10px] ${selected ? 'text-slate-200' : 'text-slate-800'}`}>
                   오늘
                 </span>
               )}
               <span
                 className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full ${
-                  selected ? 'bg-indigo-700 text-indigo-100' : 'bg-slate-100 text-slate-500'
+                  selected ? 'bg-slate-900 text-slate-200' : 'bg-slate-100 text-slate-500'
                 }`}
               >
                 {count}
@@ -81,7 +81,7 @@ export const PianoTimetableMobileList: FC<PianoTimetableMobileListProps> = ({
       </div>
 
       {pending && (
-        <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-bold text-indigo-800">
+        <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-bold text-slate-800">
           {pending.name} 학생을 배치할 시간대를 탭하세요
         </div>
       )}

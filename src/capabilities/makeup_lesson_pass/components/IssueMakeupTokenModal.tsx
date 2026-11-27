@@ -91,7 +91,7 @@ export const IssueMakeupTokenModal: React.FC<IssueMakeupTokenModalProps> = ({
           {/* 기본 안내 카드 */}
           <div className="p-3.5 bg-slate-50/60 rounded-xl border border-slate-200 text-xs text-slate-900 space-y-1">
             <div className="flex items-center justify-between font-semibold">
-              <span>대상 학생: <strong className="text-indigo-950 font-bold text-sm">{student.name}</strong></span>
+              <span>대상 학생: <strong className="text-slate-950 font-bold text-sm">{student.name}</strong></span>
               <span className="flex items-center gap-1 text-slate-700">
                 <Calendar className="w-3.5 h-3.5" />
                 결석일: {originDate}
@@ -113,7 +113,7 @@ export const IssueMakeupTokenModal: React.FC<IssueMakeupTokenModalProps> = ({
                 onClick={() => setOriginReason('advance_request')}
                 className={`py-2 px-2 rounded-xl text-xs font-bold border transition-all text-center cursor-pointer ${
                   originReason === 'advance_request'
-                    ? 'bg-slate-900 text-white border-indigo-600 shadow-xs'
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -124,7 +124,7 @@ export const IssueMakeupTokenModal: React.FC<IssueMakeupTokenModalProps> = ({
                 onClick={() => setOriginReason('absence')}
                 className={`py-2 px-2 rounded-xl text-xs font-bold border transition-all text-center cursor-pointer ${
                   originReason === 'absence'
-                    ? 'bg-slate-900 text-white border-indigo-600 shadow-xs'
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -135,7 +135,7 @@ export const IssueMakeupTokenModal: React.FC<IssueMakeupTokenModalProps> = ({
                 onClick={() => setOriginReason('instructor_cancel')}
                 className={`py-2 px-2 rounded-xl text-xs font-bold border transition-all text-center cursor-pointer ${
                   originReason === 'instructor_cancel'
-                    ? 'bg-slate-900 text-white border-indigo-600 shadow-xs'
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >

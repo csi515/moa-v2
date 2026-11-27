@@ -240,9 +240,9 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
             onDrop={(e) => handleDropClass(e, cls)}
             className={`rounded-2xl border bg-white overflow-hidden shadow-xs transition-all ${
               isDropTarget
-                ? 'ring-2 ring-indigo-500 border-indigo-400 bg-slate-50/20 shadow-md'
+                ? 'ring-2 ring-slate-900 border-slate-300 bg-slate-50/20 shadow-md'
                 : isNow
-                  ? 'border-indigo-300 ring-1 ring-indigo-200'
+                  ? 'border-slate-300 ring-1 ring-slate-200'
                   : isNext
                     ? 'border-emerald-200'
                     : 'border-slate-200'
@@ -374,7 +374,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                         onDrop={(e) => handleDropOnStudentCard(e, student, cls)}
                         className={`transition-colors ${
                           isStudentSwapTarget
-                            ? 'bg-slate-100/70 ring-2 ring-purple-500 ring-inset'
+                            ? 'bg-slate-100/70 ring-2 ring-slate-900 ring-inset'
                             : 'hover:bg-slate-50/50'
                         }`}
                       >
@@ -654,7 +654,7 @@ export const TodayLessonClassList: FC<TodayLessonClassListProps> = ({
                                 <button
                                   type="button"
                                   onClick={() => onOpenSession({ student, classItem: cls })}
-                                  className="min-h-[40px] px-2.5 py-1.5 rounded-xl text-xs font-bold inline-flex items-center gap-1 bg-slate-100 text-slate-700 hover:bg-purple-200 transition-colors cursor-pointer"
+                                  className="min-h-[40px] px-2.5 py-1.5 rounded-xl text-xs font-bold inline-flex items-center gap-1 bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer"
                                 >
                                   <Edit3 className="w-3.5 h-3.5" />
                                   <span className="hidden sm:inline">노트</span>

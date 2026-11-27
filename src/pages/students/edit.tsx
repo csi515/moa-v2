@@ -56,7 +56,7 @@ export const StudentEditPage: React.FC = () => {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="inline-flex items-center gap-2 text-slate-500 text-sm">
-          <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-slate-900 border-t-transparent" />
           {customerWord} 정보 및 권한을 확인하는 중...
         </div>
       </div>

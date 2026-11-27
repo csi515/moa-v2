@@ -116,7 +116,7 @@ export const PaginationBar: React.FC<PaginationBarProps> = ({
                 onClick={() => onPageChange(p)}
                 className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-indigo-600 text-white shadow-xs'
+                    ? 'bg-slate-900 text-white shadow-xs'
                     : 'text-slate-700 hover:bg-slate-100'
                 }`}
                 aria-current={isActive ? 'page' : undefined}

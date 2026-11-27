@@ -347,7 +347,7 @@ export const QualityInspectionManagementView: React.FC = () => {
       {/* 신규 검사 실적 등록 모달 */}
       {isRecordModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100">
+          <div className="bg-white rounded-xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100">
             <h3 className="text-base font-extrabold text-slate-900">품질 검사 실측치 등록</h3>
             <form onSubmit={handleRecordSubmit} className="space-y-3.5">
               <div>
@@ -440,7 +440,7 @@ export const QualityInspectionManagementView: React.FC = () => {
       {/* 신규 규격 등록 모달 */}
       {isStdModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100">
             <h3 className="text-base font-extrabold text-slate-900">신규 품질 검사 규격표 등록</h3>
             <form onSubmit={handleStdSubmit} className="space-y-3.5">
               <div>

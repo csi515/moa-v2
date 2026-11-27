@@ -331,7 +331,7 @@ export const DataExportCenterCard: React.FC<DataExportCenterCardProps> = ({
           {/* 1. 원생 명부 대장 */}
           <div className="bg-white border border-slate-200/80 rounded-lg p-3.5 flex items-center justify-between gap-3 hover:border-slate-300 transition-colors">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center font-bold">
+              <div className="w-9 h-9 rounded-lg bg-slate-50 text-slate-800 flex items-center justify-center font-bold">
                 <Users className="w-4 h-4" />
               </div>
               <div>

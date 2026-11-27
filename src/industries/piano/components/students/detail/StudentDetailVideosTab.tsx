@@ -212,7 +212,7 @@ export const StudentDetailVideosTab: React.FC<StudentDetailVideosTabProps> = ({
             return (
               <div
                 key={video.id}
-                className="rounded-2xl border border-slate-200 overflow-hidden bg-white hover:border-indigo-300 transition-colors shadow-2xs"
+                className="rounded-2xl border border-slate-200 overflow-hidden bg-white hover:border-slate-300 transition-colors shadow-2xs"
               >
                 <div className="relative w-full aspect-video bg-slate-900 group">
                   {thumb && (

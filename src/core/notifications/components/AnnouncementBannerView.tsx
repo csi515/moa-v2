@@ -56,7 +56,7 @@ export const AnnouncementBannerView: React.FC<AnnouncementBannerViewProps> = ({
               ? 'bg-rose-600 text-white'
               : currentBanner.priority === 'URGENT'
               ? 'bg-amber-500 text-white'
-              : 'bg-indigo-600 text-white'
+              : 'bg-slate-900 text-white'
           }`}
         >
           <div
@@ -98,7 +98,7 @@ export const AnnouncementBannerView: React.FC<AnnouncementBannerViewProps> = ({
           <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border space-y-4">
             <div className="flex items-center justify-between border-b pb-3">
               <div className="flex items-center gap-2">
-                <Bell className="w-5 h-5 text-indigo-600" />
+                <Bell className="w-5 h-5 text-slate-800" />
                 <h3 className="font-bold text-slate-900 text-base">사업장 주요 공지</h3>
               </div>
               <button
@@ -120,7 +120,7 @@ export const AnnouncementBannerView: React.FC<AnnouncementBannerViewProps> = ({
               <span>게시 기간: {popupList[0].startDate} ~ {popupList[0].endDate}</span>
               <button
                 onClick={() => handleDismissPopup(popupList[0].id)}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                className="px-4 py-2 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition-colors"
               >
                 확인 (닫기)
               </button>

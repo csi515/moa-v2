@@ -237,7 +237,7 @@ export function CustomerPracticeRoomView({ organizationId }: { organizationId: s
             <button
               type="submit"
               disabled={submitting}
-              className="w-full min-h-[44px] rounded-xl bg-indigo-600 text-white text-xs font-bold disabled:bg-slate-300"
+              className="w-full min-h-[44px] rounded-xl bg-slate-900 text-white text-xs font-bold disabled:bg-slate-300"
             >
               {submitting ? '신청 중...' : '예약 신청'}
             </button>

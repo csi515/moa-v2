@@ -533,7 +533,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
       {/* 새 사규 등록 모달 */}
       {activeModal === 'create' && (
         <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl animate-in fade-in">
+          <div className="bg-white rounded-xl max-w-lg w-full p-6 space-y-4 shadow-2xl animate-in fade-in">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-lg font-bold text-slate-900">새 매장 사규·내규 등록</h3>
               <button
@@ -621,7 +621,7 @@ export const WorkplacePolicyManagementView: React.FC = () => {
       {/* 모바일 캔버스 터치 서명 모달 */}
       {activeModal === 'sign' && selectedPolicy && (
         <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl animate-in fade-in">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl animate-in fade-in">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
                 <span className="text-[10px] font-bold text-slate-800 uppercase tracking-wider">

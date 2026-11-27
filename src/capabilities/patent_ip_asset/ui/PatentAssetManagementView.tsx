@@ -261,7 +261,7 @@ export const PatentAssetManagementView: React.FC = () => {
                     </span>
                   )}
                   {isApproved && (
-                    <span className="px-2.5 py-1 bg-slate-100 text-indigo-800 text-xs font-bold rounded-lg flex items-center gap-1">
+                    <span className="px-2.5 py-1 bg-slate-100 text-slate-800 text-xs font-bold rounded-lg flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       심의 완료 [{patent.review?.grade}등급]
                     </span>
@@ -358,7 +358,7 @@ export const PatentAssetManagementView: React.FC = () => {
               {patent.review && (
                 <div className="p-3 bg-slate-50/50 border border-slate-200 rounded-xl space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-indigo-950 flex items-center gap-1">
+                    <span className="text-xs font-bold text-slate-950 flex items-center gap-1">
                       <ShieldCheck className="w-3.5 h-3.5 text-slate-800" />
                       사내 특허심의위원회 평가: {patent.review.grade}등급 ({PATENT_GRADE_DESCRIPTIONS[patent.review.grade || 'B']})
                     </span>

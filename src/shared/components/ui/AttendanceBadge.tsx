@@ -57,9 +57,9 @@ const ATTENDANCE_CONFIG: Record<
   },
   make_up: {
     label: '보강',
-    bgClass: 'bg-indigo-50',
-    textClass: 'text-indigo-700',
-    borderClass: 'border-indigo-200',
+    bgClass: 'bg-slate-50',
+    textClass: 'text-slate-800',
+    borderClass: 'border-slate-200',
     icon: Ticket,
   },
   pending: {

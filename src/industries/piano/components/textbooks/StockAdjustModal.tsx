@@ -106,7 +106,7 @@ export const StockAdjustModal: React.FC<StockAdjustModalProps> = ({
                 }}
                 className={`py-2 px-2 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1 transition-all ${
                   transactionType === 'inbound'
-                    ? 'bg-slate-900 text-white border-indigo-600 shadow-xs'
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >

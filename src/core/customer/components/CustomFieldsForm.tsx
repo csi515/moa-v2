@@ -42,7 +42,7 @@ export const CustomFieldsForm: React.FC<CustomFieldsFormProps> = ({
                 placeholder={field.placeholder}
                 disabled={disabled}
                 onChange={(e) => onChange(field.key, e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:bg-slate-50"
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition-all disabled:bg-slate-50"
               />
             )}
 
@@ -53,7 +53,7 @@ export const CustomFieldsForm: React.FC<CustomFieldsFormProps> = ({
                 placeholder={field.placeholder}
                 disabled={disabled}
                 onChange={(e) => onChange(field.key, e.target.value === '' ? '' : Number(e.target.value))}
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:bg-slate-50"
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition-all disabled:bg-slate-50"
               />
             )}
 
@@ -62,7 +62,7 @@ export const CustomFieldsForm: React.FC<CustomFieldsFormProps> = ({
                 value={value}
                 disabled={disabled}
                 onChange={(e) => onChange(field.key, e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:bg-slate-50"
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition-all disabled:bg-slate-50"
               >
                 <option value="">선택해주세요</option>
                 {field.options?.map((opt) => {
@@ -84,7 +84,7 @@ export const CustomFieldsForm: React.FC<CustomFieldsFormProps> = ({
                   checked={Boolean(value)}
                   disabled={disabled}
                   onChange={(e) => onChange(field.key, e.target.checked)}
-                  className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4"
+                  className="rounded border-slate-300 text-slate-800 focus:ring-slate-900 w-4 h-4"
                 />
                 <span className="text-xs text-slate-600">{field.description || field.label}</span>
               </label>
@@ -97,7 +97,7 @@ export const CustomFieldsForm: React.FC<CustomFieldsFormProps> = ({
                 disabled={disabled}
                 rows={3}
                 onChange={(e) => onChange(field.key, e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:bg-slate-50 resize-none"
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition-all disabled:bg-slate-50 resize-none"
               />
             )}
 

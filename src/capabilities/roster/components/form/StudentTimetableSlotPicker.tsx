@@ -181,16 +181,16 @@ export const StudentTimetableSlotPicker: React.FC<StudentTimetableSlotPickerProp
                 onClick={() => handleToggle(classItem)}
                 className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between relative cursor-pointer min-h-[72px] ${
                   isSelected
-                    ? 'border-indigo-600 bg-slate-50 ring-2 ring-indigo-500/20 shadow-xs'
+                    ? 'border-slate-900 bg-slate-50 ring-2 ring-slate-900 shadow-xs'
                     : isFull
                       ? 'border-slate-200 bg-slate-50/60 hover:bg-slate-100/60 text-slate-500'
-                      : 'border-slate-200 bg-white hover:border-indigo-300 hover:shadow-2xs'
+                      : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-2xs'
                 }`}
               >
                 <div>
                   <div className="flex items-center justify-between gap-1.5 mb-1">
                     <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-200">
-                      <Calendar className="w-3 h-3 text-indigo-500" />
+                      <Calendar className="w-3 h-3 text-slate-700" />
                       {daysText} {timeText}
                     </span>
 

@@ -529,7 +529,7 @@ export const TaskPipelineKanbanView: React.FC<TaskPipelineKanbanViewProps> = ({
                 출고 대기
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-slate-900 inline-block"></span>
                 완료
               </span>
             </div>
@@ -704,7 +704,7 @@ const NewTaskOrderModal: React.FC<NewModalProps> = ({ defaultOrderType, onClose,
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-      <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl border border-slate-100">
+      <div className="bg-white rounded-xl max-w-md w-full p-6 space-y-5 shadow-2xl border border-slate-100">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
             <Workflow className="w-5 h-5 text-blue-600" />

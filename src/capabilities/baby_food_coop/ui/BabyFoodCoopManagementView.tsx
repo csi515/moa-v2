@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Baby, CheckCircle2, Circle, Plus, Users } from 'lucide-react';
-import { ActionableEmptyState } from '@/components/common/ActionableEmptyState';
-import { WeekStripBar } from '@/components/common/WeekStripBar';
+import { EmptyState } from '@/shared/components/ui/EmptyState';
+import { WeekStripBar } from '@/shared/components/ui/WeekStripBar';
 import { Button } from '@/shared/components/ui/Button';
 import type { WeaningStageGuide } from '@/domain/babyFood/babyFoodLogic';
 import { BabyProfileCard, type BabyProfile } from './BabyProfileCard';
@@ -70,10 +70,10 @@ export const BabyFoodCoopManagementView: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-6">
+      <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-slate-800 via-slate-500/10 to-pink-500/10 p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-indigo-800">
+            <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-800">
               <Baby className="h-4 w-4" />
               {BABY_FOOD_COOP_COPY.heroBadge}
             </div>
@@ -106,7 +106,7 @@ export const BabyFoodCoopManagementView: React.FC = () => {
       </section>
 
       <section className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-        <h2 className="text-sm font-black text-indigo-950">
+        <h2 className="text-sm font-black text-slate-950">
           {BABY_FOOD_COOP_COPY.checklistTitle} ({checklistDone}/{checklist.length})
         </h2>
         <ul className="mt-3 space-y-2">
@@ -140,7 +140,7 @@ export const BabyFoodCoopManagementView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setSelectedBabyIds(new Set(babies.map((b) => b.id)))}
-                  className="min-h-11 font-semibold text-slate-800 hover:text-indigo-800"
+                  className="min-h-11 font-semibold text-slate-800 hover:text-slate-900"
                 >
                   {BABY_FOOD_COOP_COPY.selectAll}
                 </button>
@@ -157,12 +157,12 @@ export const BabyFoodCoopManagementView: React.FC = () => {
           </div>
 
           {babies.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-slate-200 bg-white">
-              <ActionableEmptyState
+            <div className="rounded-xl border border-dashed border-slate-200 bg-white">
+              <EmptyState
+                icon={<Users className="h-7 w-7 text-slate-400" />}
                 title={BABY_FOOD_COOP_COPY.emptyTitle}
                 description={BABY_FOOD_COOP_COPY.emptyDescription}
-                iconName="users"
-                actionButton={{
+                action={{
                   label: BABY_FOOD_COOP_COPY.emptyAction,
                   onClick: () => setIsAddModalOpen(true),
                 }}

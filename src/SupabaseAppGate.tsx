@@ -72,8 +72,8 @@ export const SupabaseAppGate: FC<SupabaseAppGateProps> = ({ children }) => {
     return null;
   }
 
-  // 3. 사업장 / 멤버십 로딩 중
-  if (orgLoading || organizationsStatus === 'loading') {
+  // 3. 사업장 / 멤버십 로딩 중 (단, 이미 currentOrganization이 확정된 백그라운드 갱신 시에는 화면 보존)
+  if ((orgLoading || organizationsStatus === 'loading') && !currentOrganization) {
     return (
       <LoadingScreen
         message={JOURNEY_LOADING_MESSAGES.loadingOrganizations}

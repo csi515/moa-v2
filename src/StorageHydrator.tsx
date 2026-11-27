@@ -97,7 +97,7 @@ export const StorageHydrator: React.FC<StorageHydratorProps> = ({
         <button
           type="button"
           onClick={() => setAttempt((n) => n + 1)}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px] hover:bg-indigo-700 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl min-h-[44px] hover:bg-slate-800 transition-colors"
         >
           <RefreshCw className="w-4 h-4" />
           다시 시도

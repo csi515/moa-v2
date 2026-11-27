@@ -192,15 +192,15 @@ export function CustomerSignUpFlow() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-3xl shadow-xl border border-slate-100 p-8 text-center">
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-xl shadow-xl border border-slate-100 p-8 text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-slate-900 mb-2">로그인이 필요합니다</h2>
           <p className="text-slate-600 mb-6">가입 신청을 하려면 먼저 로그인해주세요</p>
           <button
             type="button"
             onClick={() => navigate('/login?returnUrl=/signup/customer')}
-            className="w-full py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors min-h-[44px]"
+            className="w-full py-3 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition-colors min-h-[44px]"
           >
             로그인하기
           </button>
@@ -210,7 +210,7 @@ export function CustomerSignUpFlow() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
@@ -227,17 +227,17 @@ export function CustomerSignUpFlow() {
           {/* 3단계 스텝 인디케이터 */}
           <div className="grid grid-cols-3 gap-2 mt-4 text-center">
             <div className={`flex flex-col items-center gap-1 pb-1.5 border-b-2 transition-all ${
-              step === 'search' ? 'border-indigo-600 text-indigo-700 font-bold' : 'border-indigo-200 text-slate-500 font-medium'
+              step === 'search' ? 'border-slate-900 text-slate-800 font-bold' : 'border-slate-200 text-slate-500 font-medium'
             }`}>
               <span className="text-[11px]">1. 매장 검색</span>
             </div>
             <div className={`flex flex-col items-center gap-1 pb-1.5 border-b-2 transition-all ${
-              step === 'form' ? 'border-indigo-600 text-indigo-700 font-bold' : step === 'pending' ? 'border-indigo-200 text-slate-500 font-medium' : 'border-slate-200 text-slate-400'
+              step === 'form' ? 'border-slate-900 text-slate-800 font-bold' : step === 'pending' ? 'border-slate-200 text-slate-500 font-medium' : 'border-slate-200 text-slate-400'
             }`}>
               <span className="text-[11px]">2. 신청서 작성</span>
             </div>
             <div className={`flex flex-col items-center gap-1 pb-1.5 border-b-2 transition-all ${
-              step === 'pending' ? 'border-indigo-600 text-indigo-700 font-bold' : 'border-slate-200 text-slate-400'
+              step === 'pending' ? 'border-slate-900 text-slate-800 font-bold' : 'border-slate-200 text-slate-400'
             }`}>
               <span className="text-[11px]">3. 승인 대기</span>
             </div>
@@ -281,14 +281,14 @@ export function CustomerSignUpFlow() {
                       setSearchResults([]);
                     }}
                     placeholder="사업장 이름, 코드, 주소로 검색"
-                    className="w-full pl-12 pr-4 py-4 border-2 border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 text-lg"
+                    className="w-full pl-12 pr-4 py-4 border-2 border-slate-200 rounded-xl focus:outline-none focus:border-slate-900 text-lg"
                   />
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 </div>
                 <button
                   type="submit"
                   disabled={searching || !searchQuery.trim()}
-                  className="w-full py-4 bg-indigo-600 text-white rounded-xl font-semibold text-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
+                  className="w-full py-4 bg-slate-900 text-white rounded-xl font-semibold text-lg hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
                 >
                   {searching ? '검색 중...' : '검색'}
                 </button>
@@ -300,7 +300,7 @@ export function CustomerSignUpFlow() {
                   setJustSubmitted(false);
                   setStep('pending');
                 }}
-                className="w-full mt-4 py-3 text-sm font-bold text-indigo-600 min-h-[44px]"
+                className="w-full mt-4 py-3 text-sm font-bold text-slate-800 min-h-[44px]"
               >
                 내 신청 현황 보기
               </button>
@@ -321,11 +321,11 @@ export function CustomerSignUpFlow() {
                     key={org.id}
                     type="button"
                     onClick={() => handleSelectOrg(org)}
-                    className="w-full bg-white rounded-xl border-2 border-slate-200 p-4 hover:border-indigo-500 hover:bg-indigo-50 transition-all duration-200 text-left min-h-[44px]"
+                    className="w-full bg-white rounded-xl border-2 border-slate-200 p-4 hover:border-slate-400 hover:bg-slate-50 transition-all duration-200 text-left min-h-[44px]"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Building2 className="w-6 h-6 text-indigo-600" />
+                      <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Building2 className="w-6 h-6 text-slate-800" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="font-semibold text-slate-900 mb-1">{org.name}</h4>
@@ -358,7 +358,7 @@ export function CustomerSignUpFlow() {
               <button
                 type="button"
                 onClick={() => setStep('search')}
-                className="text-indigo-600 hover:text-indigo-700 font-medium mb-4 min-h-[44px]"
+                className="text-slate-800 hover:text-slate-900 font-medium mb-4 min-h-[44px]"
               >
                 ← 다른 사업장 검색
               </button>
@@ -371,7 +371,7 @@ export function CustomerSignUpFlow() {
               </div>
 
               <h2 className="text-2xl font-bold text-slate-900 mb-2">가입 신청서</h2>
-              <div className="rounded-xl border border-indigo-100 bg-indigo-50/70 p-3.5 mb-6 text-xs text-indigo-900 leading-relaxed">
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 mb-6 text-xs text-slate-900 leading-relaxed">
                 <span className="font-bold">안내:</span> 온라인 신청서 작성 후 매장 담당자(원장님/매니저)의 확인 및 승인을 거쳐 정식 등록됩니다.
               </div>
 
@@ -385,7 +385,7 @@ export function CustomerSignUpFlow() {
                     required
                     value={form.applicantName}
                     onChange={(e) => setForm({ ...form, applicantName: e.target.value })}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                     placeholder="이름을 입력하세요"
                   />
                 </div>
@@ -399,7 +399,7 @@ export function CustomerSignUpFlow() {
                     required
                     value={form.applicantPhone}
                     onChange={(e) => setForm({ ...form, applicantPhone: e.target.value })}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                     placeholder="010-0000-0000"
                   />
                 </div>
@@ -410,7 +410,7 @@ export function CustomerSignUpFlow() {
                     type="email"
                     value={form.applicantEmail}
                     onChange={(e) => setForm({ ...form, applicantEmail: e.target.value })}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                     placeholder="예: name@example.com"
                   />
                 </div>
@@ -423,7 +423,7 @@ export function CustomerSignUpFlow() {
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     rows={4}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 resize-none"
                     placeholder="사업장에 전하고 싶은 말씀을 자유롭게 작성해주세요"
                   />
                 </div>
@@ -431,7 +431,7 @@ export function CustomerSignUpFlow() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-4 bg-indigo-600 text-white rounded-xl font-semibold text-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
+                  className="w-full py-4 bg-slate-900 text-white rounded-xl font-semibold text-lg hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
                 >
                   {submitting ? '제출 중...' : '가입 신청'}
                 </button>
@@ -527,7 +527,7 @@ export function CustomerSignUpFlow() {
                             type="button"
                             onClick={() => void openStudentPortal()}
                             disabled={openingPortal}
-                            className="mt-3 w-full py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold min-h-[44px] disabled:opacity-60"
+                            className="mt-3 w-full py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold min-h-[44px] disabled:opacity-60"
                           >
                             {openingPortal ? '포털 여는 중...' : '수강생 포털 열기'}
                           </button>
@@ -554,7 +554,7 @@ export function CustomerSignUpFlow() {
                   setSearchResults([]);
                   setSelectedOrg(null);
                 }}
-                className="w-full mt-6 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors min-h-[44px]"
+                className="w-full mt-6 py-3 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition-colors min-h-[44px]"
               >
                 다른 사업장 신청하기
               </button>

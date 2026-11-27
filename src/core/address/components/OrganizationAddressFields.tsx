@@ -62,7 +62,7 @@ export const OrganizationAddressFields: FC<OrganizationAddressFieldsProps> = ({
             type="button"
             data-testid="btn-address-search"
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 text-sm font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 rounded-xl min-h-[44px] min-w-[44px] shrink-0"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 text-sm font-bold text-slate-800 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl min-h-[44px] min-w-[44px] shrink-0"
           >
             <Search className="w-4 h-4" aria-hidden />
             <span className="hidden sm:inline">주소 검색</span>

@@ -128,7 +128,7 @@ export function ParentAttendanceView({
               return (
                 <div
                   key={token.id}
-                  className="p-3.5 rounded-xl border border-slate-200 bg-gradient-to-r from-indigo-50/60 to-purple-50/40 space-y-2 shadow-2xs"
+                  className="p-3.5 rounded-xl border border-slate-200 bg-gradient-to-r from-slate-50 to-slate-50 space-y-2 shadow-2xs"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -226,7 +226,7 @@ export function ParentAttendanceView({
       <Section title={title}>
         {loading && sessions.length === 0 ? (
           <div className="flex justify-center py-8">
-            <Loader2 className="w-6 h-6 text-indigo-500 animate-spin" />
+            <Loader2 className="w-6 h-6 text-slate-700 animate-spin" />
           </div>
         ) : hasSessions ? (
           sessions.map((s) => {

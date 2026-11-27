@@ -101,7 +101,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
         {/* 헤더 */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-slate-50 dark:bg-indigo-950/60 text-slate-800 dark:text-indigo-400 rounded-lg">
+            <div className="p-2 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-500 rounded-lg">
               <Tag className="w-5 h-5" />
             </div>
             <div>
@@ -232,7 +232,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 <span className="flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-indigo-500" />
+                  <Calendar className="w-3.5 h-3.5 text-slate-700" />
                   특가 시작 일시 <span className="text-red-500">*</span>
                 </span>
               </label>
@@ -247,7 +247,7 @@ export const PromotionFormModal: React.FC<PromotionFormModalProps> = ({
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 <span className="flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-indigo-500" />
+                  <Calendar className="w-3.5 h-3.5 text-slate-700" />
                   특가 종료 일시 <span className="text-red-500">*</span>
                 </span>
               </label>

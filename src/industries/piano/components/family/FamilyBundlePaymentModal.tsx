@@ -115,7 +115,7 @@ export const FamilyBundlePaymentModal: React.FC<FamilyBundlePaymentModalProps> =
       }
 
       showToast(
-        `🎉 ${detail.group.familyName} 수강료 ${calc.finalOutOfPocketAmount.toLocaleString()}원 묶음 수납이 완료되었습니다.`,
+        `${detail.group.familyName} 수강료 ${calc.finalOutOfPocketAmount.toLocaleString()}원 묶음 수납이 완료되었습니다.`,
         'success'
       );
       onPaymentSuccess?.();
@@ -235,7 +235,7 @@ export const FamilyBundlePaymentModal: React.FC<FamilyBundlePaymentModalProps> =
                   fontSize: '13px',
                 }}
               >
-                🎉 현재 미납된 수강료 청구서가 없습니다.
+                현재 미납된 수강료 청구서가 없습니다.
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -484,7 +484,7 @@ export const FamilyBundlePaymentModal: React.FC<FamilyBundlePaymentModalProps> =
           >
             {isSubmitting
               ? '수납 처리 중...'
-              : `🎉 ${calc.finalOutOfPocketAmount.toLocaleString()}원 1클릭 묶음 수납 완료`}
+              : `${calc.finalOutOfPocketAmount.toLocaleString()}원 1클릭 묶음 수납 완료`}
           </button>
         </div>
       </div>

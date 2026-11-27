@@ -78,7 +78,7 @@ export const DepartmentTreeView: React.FC<Props> = ({
           }}
           className={`mt-1 flex min-h-12 items-center gap-2 rounded-xl border px-3 text-sm transition-colors ${
             selectedId === node.id
-              ? 'border-indigo-500 bg-slate-50'
+              ? 'border-slate-400 bg-slate-50'
               : 'border-slate-200 bg-white hover:bg-slate-50'
           }`}
           style={{ marginLeft: depth * 12 }}

@@ -64,9 +64,9 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+          <div className="inline-block w-12 h-12 border-4 border-slate-900 border-t-transparent rounded-full animate-spin" />
           <p className="mt-4 text-slate-600">조직 정보를 불러오는 중...</p>
         </div>
       </div>
@@ -75,8 +75,8 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
 
   if (error || !org) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-3xl shadow-xl border border-slate-100 p-8 text-center">
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-xl shadow-xl border border-slate-100 p-8 text-center">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Building2 className="w-8 h-8 text-red-600" />
           </div>
@@ -84,7 +84,7 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
           <p className="text-slate-600 mb-6">{error || '입력하신 코드가 올바르지 않습니다'}</p>
           <button
             onClick={() => navigate('/')}
-            className="w-full py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors"
+            className="w-full py-3 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition-colors"
           >
             홈으로 돌아가기
           </button>
@@ -96,7 +96,7 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
   const currentUrl = window.location.origin + `/c/${org.public_code}`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-slate-50">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <button
@@ -107,7 +107,7 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
             <span className="hidden sm:inline">뒤로 가기</span>
           </button>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
               <Building2 className="w-5 h-5 text-white" />
             </div>
             <span className="font-medium text-slate-900">{appBrand.shortName}</span>
@@ -118,16 +118,16 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
       <main className="max-w-2xl mx-auto px-4 py-8 space-y-6">
         <section className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 sm:p-8">
           <div className="flex items-start gap-4 mb-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl flex items-center justify-center flex-shrink-0">
               <Building2 className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
             </div>
             <div className="flex-1 min-w-0">
               <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">{org.name}</h1>
               {isConsultationMode ? (
-                <p className="text-base font-semibold text-indigo-700">상담 신청</p>
+                <p className="text-base font-semibold text-slate-800">상담 신청</p>
               ) : (
                 <p className="text-sm text-slate-600 inline-flex items-center gap-2 flex-wrap">
-                  <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-medium">
+                  <span className="px-3 py-1 bg-slate-100 text-slate-800 rounded-full text-xs font-medium">
                     {getIndustryLabel(org.industry_type)}
                   </span>
                   <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-mono">
@@ -159,7 +159,7 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
                   <div>
                     <dt className="text-sm font-medium text-slate-500">전화</dt>
                     <dd className="text-slate-900">
-                      <a href={`tel:${org.phone}`} className="hover:text-indigo-600 transition-colors">
+                      <a href={`tel:${org.phone}`} className="hover:text-slate-900 transition-colors">
                         {org.phone}
                       </a>
                     </dd>
@@ -203,7 +203,7 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
                       className={`w-full py-4 rounded-xl font-semibold text-lg transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 min-h-[44px] ${
                         adultFirst
                           ? 'bg-white text-slate-800 border-2 border-slate-200 hover:bg-slate-50'
-                          : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200'
+                          : 'bg-slate-900 text-white hover:bg-slate-800 shadow-lg shadow-indigo-200'
                       }`}
                     >
                       <Link2 className="w-6 h-6" />
@@ -223,11 +223,11 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
                       onClick={handleJoinRequest}
                       className={`w-full py-4 rounded-xl font-semibold text-lg transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 min-h-[44px] ${
                         adultFirst
-                          ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200'
+                          ? 'bg-slate-900 text-white hover:bg-slate-800 shadow-lg shadow-indigo-200'
                           : 'bg-white text-slate-800 border-2 border-slate-200 hover:bg-slate-50'
                       }`}
                     >
-                      <CheckCircle2 className={`w-6 h-6 ${adultFirst ? '' : 'text-indigo-600'}`} />
+                      <CheckCircle2 className={`w-6 h-6 ${adultFirst ? '' : 'text-slate-800'}`} />
                       성인 수강생 · 회원 가입
                     </button>
                     <p className="text-xs text-slate-500 text-center">
@@ -244,7 +244,7 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
                       setShowConsultForm(true);
                       setConsultSubmitted(false);
                     }}
-                    className="w-full py-4 bg-white text-indigo-600 border-2 border-indigo-600 rounded-xl font-semibold text-lg hover:bg-indigo-50 transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 min-h-[44px]"
+                    className="w-full py-4 bg-white text-slate-800 border-2 border-slate-900 rounded-xl font-semibold text-lg hover:bg-slate-50 transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 min-h-[44px]"
                   >
                     <MessageSquare className="w-6 h-6" />
                     상담만 문의
@@ -278,7 +278,7 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
             <div className="text-center">
               <button
                 onClick={() => setShowQR(!showQR)}
-                className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium min-h-[44px]"
+                className="inline-flex items-center gap-2 text-slate-800 hover:text-slate-900 font-medium min-h-[44px]"
               >
                 <QrCode className="w-5 h-5" />
                 {showQR ? 'QR 코드 숨기기' : 'QR 코드 보기'}
@@ -299,7 +299,7 @@ export function PublicOrgLanding({ code, mode = 'default' }: PublicOrgLandingPro
             <button
               type="button"
               onClick={() => navigate(`/c/${code}`)}
-              className="text-sm font-bold text-slate-500 hover:text-indigo-600 min-h-[44px]"
+              className="text-sm font-bold text-slate-500 hover:text-slate-900 min-h-[44px]"
             >
               {placeLabel} 소개 페이지로 이동
             </button>

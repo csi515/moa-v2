@@ -84,7 +84,7 @@ export const StaffInviteResultModal: React.FC<StaffInviteResultModalProps> = ({
           <div className="min-w-0">
             <p className="text-xs font-bold text-slate-500">초대 코드</p>
             <p
-              className="text-lg font-black font-mono tracking-widest text-indigo-700"
+              className="text-lg font-black font-mono tracking-widest text-slate-800"
               data-testid="staff-invite-code"
             >
               {code}
@@ -108,7 +108,7 @@ export const StaffInviteResultModal: React.FC<StaffInviteResultModalProps> = ({
           <button
             type="button"
             onClick={() => void copy('link', url)}
-            className="py-2.5 bg-indigo-50 text-indigo-700 text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px]"
+            className="py-2.5 bg-slate-50 text-slate-800 text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px]"
           >
             {copied === 'link' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             링크 복사
@@ -116,7 +116,7 @@ export const StaffInviteResultModal: React.FC<StaffInviteResultModalProps> = ({
           <button
             type="button"
             onClick={() => void handleShare()}
-            className="py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px]"
+            className="py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 min-h-[44px]"
           >
             <Share2 className="w-4 h-4" />
             공유

@@ -232,7 +232,7 @@ export const ChangeManagementView: React.FC = () => {
       case 'man':
         return 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200';
       case 'machine':
-        return 'bg-slate-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200';
+        return 'bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-300';
       case 'material':
         return 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200';
       case 'method':
@@ -554,7 +554,7 @@ export const ChangeManagementView: React.FC = () => {
                     )}
 
                     {selectedOrder.status === 'applied' && (
-                      <div className="text-xs text-slate-800 dark:text-indigo-400 font-bold">
+                      <div className="text-xs text-slate-800 dark:text-slate-500 font-bold">
                         ✓ {selectedOrder.applied_at?.slice(0, 10)} 현장 적용 완료됨 ({selectedOrder.applied_by})
                       </div>
                     )}

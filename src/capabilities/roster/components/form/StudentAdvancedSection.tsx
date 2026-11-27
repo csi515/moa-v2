@@ -170,7 +170,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                         }}
                         className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                           isSelected
-                            ? 'bg-slate-900 text-white border-indigo-600 shadow-2xs'
+                            ? 'bg-slate-900 text-white border-slate-900 shadow-2xs'
                             : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
                         }`}
                       >
@@ -217,14 +217,14 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                         onClick={() => onChange({ billingMode: opt.value })}
                         className={`min-h-[52px] rounded-xl border px-3 py-2 text-left transition-colors cursor-pointer ${
                           active
-                            ? 'bg-slate-900 text-white border-indigo-600'
-                            : 'bg-white text-slate-700 border-slate-200 hover:border-indigo-300'
+                            ? 'bg-slate-900 text-white border-slate-900'
+                            : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
                         }`}
                       >
                         <span className="block text-sm font-bold">{opt.label}</span>
                         <span
                           className={`block text-[10px] mt-0.5 ${
-                            active ? 'text-indigo-100' : 'text-slate-400'
+                            active ? 'text-slate-200' : 'text-slate-400'
                           }`}
                         >
                           {opt.hint}
@@ -256,7 +256,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                             const nextFee = applyTuitionStep(formData.tuitionFee, step.value);
                             onChange({ tuitionFee: nextFee });
                           }}
-                          className="px-2 py-0.5 rounded-lg text-[10px] font-extrabold border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-50 hover:border-indigo-300 hover:text-slate-800 transition-colors cursor-pointer"
+                          className="px-2 py-0.5 rounded-lg text-[10px] font-extrabold border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-800 transition-colors cursor-pointer"
                         >
                           {step.label}
                         </button>
@@ -309,7 +309,7 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                           onClick={() => onChange({ paymentDay: day })}
                           className={`px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition-colors cursor-pointer ${
                             formData.paymentDay === day
-                              ? 'bg-slate-50 border-indigo-400 text-slate-700'
+                              ? 'bg-slate-50 border-slate-300 text-slate-700'
                               : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                           }`}
                         >
@@ -330,11 +330,11 @@ export const StudentAdvancedSection: React.FC<Props> = ({
                           className="w-4 h-4 text-slate-800 rounded border-slate-300 focus:ring-slate-900 shrink-0"
                         />
                         <div className="text-xs">
-                          <span className="font-bold text-indigo-950 inline-flex items-center">
+                          <span className="font-bold text-slate-950 inline-flex items-center">
                             <span>첫 달 {regularFeeLabel} 청구서 자동 발행하기</span>
                             <MicroGuideTooltip guideKey="auto_invoice" />
                           </span>
-                          <span className="block text-[11px] text-indigo-800/80 mt-0.5">
+                          <span className="block text-[11px] text-slate-800 mt-0.5">
                             등록 완료 시 당월 청구서({Number(formData.tuitionFee || 0).toLocaleString()}원)를 즉시 생성하여 바로 현장 결제할 수 있습니다.
                           </span>
                         </div>

@@ -117,11 +117,11 @@ export const LeaveRequestModal: React.FC<LeaveRequestModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 overflow-y-auto">
-      <div className="w-full max-w-lg rounded-3xl bg-white shadow-2xl dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden my-8">
+      <div className="w-full max-w-lg rounded-xl bg-white shadow-2xl dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden my-8">
         {/* 모달 헤더 */}
         <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4 dark:border-slate-800">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 text-slate-800 dark:bg-indigo-950 dark:text-indigo-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-500">
               <Clock className="h-5 w-5" />
             </div>
             <div>
@@ -144,15 +144,15 @@ export const LeaveRequestModal: React.FC<LeaveRequestModalProps> = ({
         {/* 모달 본문 */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {/* (1) 현재 잔여 시간 & 예상 잔여 시간 정보 카드 */}
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 dark:border-indigo-950 dark:bg-indigo-950/30">
-            <div className="flex items-center justify-between text-xs text-slate-900 dark:text-indigo-300">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 dark:border-slate-800 dark:bg-slate-900">
+            <div className="flex items-center justify-between text-xs text-slate-900 dark:text-slate-400">
               <span className="font-semibold flex items-center gap-1">
-                <Sparkles className="h-3.5 w-3.5 text-indigo-500" />
+                <Sparkles className="h-3.5 w-3.5 text-slate-700" />
                 {currentBalance.staffName} 님의 연차 시간
               </span>
               <span>총 {currentBalance.totalAccruedHours}시간 발생</span>
             </div>
-            <div className="mt-3 flex items-baseline justify-between border-t border-slate-200/50 pt-2 dark:border-indigo-900/50 text-xs">
+            <div className="mt-3 flex items-baseline justify-between border-t border-slate-200/50 pt-2 dark:border-slate-800 text-xs">
               <div>
                 <span className="text-slate-500">현재 잔여: </span>
                 <strong className="text-sm font-bold text-slate-900 dark:text-white">
@@ -166,8 +166,8 @@ export const LeaveRequestModal: React.FC<LeaveRequestModalProps> = ({
                 </strong>
               </div>
               <div>
-                <span className="text-slate-800 dark:text-indigo-400">승인 후 잔여: </span>
-                <strong className="text-sm font-bold text-slate-700 dark:text-indigo-300">
+                <span className="text-slate-800 dark:text-slate-500">승인 후 잔여: </span>
+                <strong className="text-sm font-bold text-slate-700 dark:text-slate-400">
                   {predictedRemainingHours}시간
                 </strong>
               </div>
@@ -188,7 +188,7 @@ export const LeaveRequestModal: React.FC<LeaveRequestModalProps> = ({
                 required
               />
               <div className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 shrink-0">
-                <Calendar className="h-3.5 w-3.5 text-indigo-500" />
+                <Calendar className="h-3.5 w-3.5 text-slate-700" />
                 <span>{scheduledDaily.dayLabel}</span>
               </div>
             </div>
@@ -209,7 +209,7 @@ export const LeaveRequestModal: React.FC<LeaveRequestModalProps> = ({
                 onClick={() => setUseMode('full_day')}
                 className={`rounded-xl border p-3 text-left transition-all ${
                   useMode === 'full_day'
-                    ? 'border-indigo-600 bg-slate-50/50 text-slate-900 font-bold dark:border-indigo-500 dark:bg-indigo-950/40 dark:text-indigo-200'
+                    ? 'border-slate-900 bg-slate-50/50 text-slate-900 font-bold dark:border-slate-400 dark:bg-slate-900 dark:text-slate-300'
                     : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-400'
                 }`}
               >
@@ -224,7 +224,7 @@ export const LeaveRequestModal: React.FC<LeaveRequestModalProps> = ({
                 onClick={() => setUseMode('time_slot')}
                 className={`rounded-xl border p-3 text-left transition-all ${
                   useMode === 'time_slot'
-                    ? 'border-indigo-600 bg-slate-50/50 text-slate-900 font-bold dark:border-indigo-500 dark:bg-indigo-950/40 dark:text-indigo-200'
+                    ? 'border-slate-900 bg-slate-50/50 text-slate-900 font-bold dark:border-slate-400 dark:bg-slate-900 dark:text-slate-300'
                     : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-400'
                 }`}
               >

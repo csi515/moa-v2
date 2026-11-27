@@ -33,7 +33,7 @@ export const CustomerLinkedOrgsShell: FC<Props> = ({
     <div className="min-h-screen bg-[#F8FAFC] text-slate-800 flex flex-col pb-safe">
       <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 py-3">
         <div className="max-w-3xl mx-auto">
-          <p className="text-[11px] font-bold text-indigo-600">MOA</p>
+          <p className="text-[11px] font-bold text-slate-800">MOA</p>
           <h1 className="text-base font-black text-slate-900">
             {pointsActive ? '포인트' : COPY.title}
           </h1>
@@ -56,7 +56,7 @@ export const CustomerLinkedOrgsShell: FC<Props> = ({
               <button
                 type="button"
                 onClick={() => navigate('/signup/customer')}
-                className="w-full min-h-[48px] rounded-xl bg-indigo-600 text-white text-sm font-bold inline-flex items-center justify-center gap-2"
+                className="w-full min-h-[48px] rounded-xl bg-slate-900 text-white text-sm font-bold inline-flex items-center justify-center gap-2"
               >
                 <UserPlus className="w-4 h-4" aria-hidden />
                 {COPY.joinCta}
@@ -64,7 +64,7 @@ export const CustomerLinkedOrgsShell: FC<Props> = ({
               <button
                 type="button"
                 onClick={onRefresh}
-                className="w-full min-h-[44px] rounded-xl border border-indigo-100 text-sm font-bold text-indigo-600"
+                className="w-full min-h-[44px] rounded-xl border border-slate-200 text-sm font-bold text-slate-800"
               >
                 {COPY.refresh}
               </button>

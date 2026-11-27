@@ -198,7 +198,7 @@ export const InstructorContractModal: React.FC<InstructorContractModalProps> = (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
       <div className="relative w-full max-w-4xl max-h-[92vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* 모달 헤더 */}
-        <div className="flex items-center justify-between px-6 py-4 border-b bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 text-white shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b bg-gradient-to-r from-blue-700 via-slate-850 to-blue-800 text-white shrink-0">
           <div className="flex items-center gap-2.5">
             <FileSignature className="w-5 h-5 text-blue-200" />
             <div>
@@ -399,7 +399,7 @@ export const InstructorContractModal: React.FC<InstructorContractModalProps> = (
           {/* 자필 전자서명 패드 */}
           <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/30 space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
+              <label className="text-xs font-bold text-slate-950 flex items-center gap-1.5">
                 <FileSignature className="w-4 h-4 text-slate-800" />
                 위탁 강사 자필 전자서명 (터치/마우스 드로잉) *
               </label>

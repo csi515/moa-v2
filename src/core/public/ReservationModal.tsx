@@ -72,7 +72,7 @@ export function ReservationModal({
                 <button
                     type="button"
                     onClick={() => setShowMyReservations(false)}
-                    className="text-sm font-bold text-indigo-600 min-h-[44px]"
+                    className="text-sm font-bold text-slate-800 min-h-[44px]"
                   >
                     완료 화면
                   </button>
@@ -102,7 +102,7 @@ export function ReservationModal({
                     <button
                       type="button"
                       onClick={() => setShowMyReservations(true)}
-                      className="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors min-h-[44px]"
+                      className="flex-1 py-3 bg-slate-900 text-white rounded-xl font-semibold hover:bg-slate-800 transition-colors min-h-[44px]"
                     >
                       내 예약 보기
                     </button>
@@ -113,7 +113,7 @@ export function ReservationModal({
           </div>
         ) : (
           <form onSubmit={handleBookingSubmit} className="p-6 space-y-6">
-            <div className="bg-indigo-50 rounded-xl p-4 space-y-2">
+            <div className="bg-slate-50 rounded-xl p-4 space-y-2">
               <h4 className="font-bold text-slate-900">{schedule.title}</h4>
               <p className="text-sm text-slate-600">{formatDateTime(schedule.starts_at)}</p>
               <p className="text-sm text-slate-600">잔여 {schedule.available_slots}자리</p>
@@ -129,7 +129,7 @@ export function ReservationModal({
                   required
                   value={bookingForm.applicant_name}
                   onChange={(e) => setBookingForm({ ...bookingForm, applicant_name: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                   placeholder="이름을 입력하세요"
                 />
               </div>
@@ -143,7 +143,7 @@ export function ReservationModal({
                   required
                   value={bookingForm.applicant_phone}
                   onChange={(e) => setBookingForm({ ...bookingForm, applicant_phone: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                   placeholder="010-0000-0000"
                 />
               </div>
@@ -154,7 +154,7 @@ export function ReservationModal({
                   type="email"
                   value={bookingForm.applicant_email}
                   onChange={(e) => setBookingForm({ ...bookingForm, applicant_email: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                   placeholder="예: name@example.com"
                 />
               </div>
@@ -167,7 +167,7 @@ export function ReservationModal({
                     setBookingForm({ ...bookingForm, request_message: e.target.value })
                   }
                   rows={3}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 resize-none"
                   placeholder="궁금한 사항이나 요청사항을 입력하세요"
                 />
               </div>
@@ -183,7 +183,7 @@ export function ReservationModal({
               </button>
               <button
                 type="submit"
-                className="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
+                className="flex-1 py-3 bg-slate-900 text-white rounded-xl font-semibold hover:bg-slate-800 transition-colors"
               >
                 예약 신청
               </button>

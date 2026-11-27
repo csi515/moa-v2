@@ -365,7 +365,7 @@ export const RolesPage: React.FC = () => {
       </div>
 
       {/* 직급 목록 카드 리스트 */}
-      <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xs">
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
         <div className="p-5 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center space-x-2 text-sm font-bold text-slate-800">
             <Shield className="w-4 h-4 text-slate-800" />
@@ -479,7 +479,7 @@ export const RolesPage: React.FC = () => {
       {/* 직급 추가/수정 모달 */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
-          <div className="w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-200 my-8">
+          <div className="w-full max-w-xl bg-white rounded-xl shadow-2xl border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-200 my-8">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
               <h2 className="text-lg font-bold text-slate-900">
                 {editingRole ? "직급 및 권한 수정" : "신규 직급 추가"}
@@ -515,7 +515,7 @@ export const RolesPage: React.FC = () => {
                       className="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100/80 text-xs font-semibold shadow-2xs transition-colors flex items-center gap-1.5"
                     >
                       <span>{tpl.name}</span>
-                      <span className="text-[10px] text-indigo-400 font-normal">
+                      <span className="text-[10px] text-slate-500 font-normal">
                         ({tpl.permissions.length}개 권한)
                       </span>
                     </button>
@@ -533,7 +533,7 @@ export const RolesPage: React.FC = () => {
                     type="text"
                     {...register("name", { required: "직급명을 입력하세요." })}
                     placeholder="예: 수석강사, 매니저, 알바"
-                    className="w-full h-12 px-4 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                    className="w-full h-12 px-4 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
                   />
                   {errors.name && (
                     <span className="text-xs text-rose-600 mt-1 block">
@@ -551,7 +551,7 @@ export const RolesPage: React.FC = () => {
                     inputMode="numeric"
                     {...register("rank_order", { valueAsNumber: true })}
                     placeholder="10"
-                    className="w-full h-12 px-4 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                    className="w-full h-12 px-4 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
                   />
                 </div>
               </div>

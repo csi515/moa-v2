@@ -105,9 +105,9 @@ export const BabyProfileCard: React.FC<BabyProfileCardProps> = ({
       case 'middle':
         return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'late':
-        return 'bg-slate-100 text-indigo-800 border-slate-200';
+        return 'bg-slate-100 text-slate-800 border-slate-200';
       case 'complete':
-        return 'bg-slate-100 text-purple-800 border-slate-200';
+        return 'bg-slate-100 text-slate-800 border-slate-200';
       default:
         return 'bg-slate-100 text-slate-800 border-slate-200';
     }
@@ -117,7 +117,7 @@ export const BabyProfileCard: React.FC<BabyProfileCardProps> = ({
     <div
       className={`relative rounded-xl border p-4 transition-all duration-200 shadow-sm ${
         isSelected
-          ? 'border-indigo-500 bg-slate-50/20 ring-2 ring-indigo-500/20'
+          ? 'border-slate-400 bg-slate-50/20 ring-2 ring-slate-900'
           : 'border-slate-200 bg-white hover:border-slate-300'
       }`}
     >

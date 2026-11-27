@@ -226,7 +226,7 @@ export const ConsultationRecordModal: React.FC<ConsultationRecordModalProps> = (
                   onClick={() => setResult(preset)}
                   className={`text-[11px] px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${
                     result === preset
-                      ? 'bg-slate-50 border-indigo-300 text-slate-700 font-bold'
+                      ? 'bg-slate-50 border-slate-300 text-slate-700 font-bold'
                       : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                   }`}
                 >

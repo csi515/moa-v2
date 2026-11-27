@@ -965,7 +965,7 @@ export const BookingCalendarView: React.FC = () => {
                   {inst.roleTitle && (
                     <span
                       className={`text-[10px] ${
-                        isSelected ? 'text-indigo-200' : 'text-slate-400'
+                        isSelected ? 'text-slate-300' : 'text-slate-400'
                       }`}
                     >
                       ({inst.roleTitle})

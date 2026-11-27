@@ -419,7 +419,7 @@ export const InventoryScannerModal: React.FC<InventoryScannerModalProps> = ({
           <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3 animate-fadeIn">
             <div className="flex items-start justify-between gap-2">
               <div className="space-y-0.5">
-                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold bg-purple-200 text-slate-900">
+                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold bg-slate-200 text-slate-900">
                   <Layers className="w-3 h-3" />
                   번들 세트 상품
                 </div>

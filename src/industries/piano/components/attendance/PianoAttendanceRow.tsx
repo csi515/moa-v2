@@ -74,7 +74,7 @@ export const PianoAttendanceRow: FC<PianoAttendanceRowProps> = ({
               className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-50 text-slate-700 border border-slate-200"
               title="키패드 PIN으로 체크인됨"
             >
-              <Smartphone className="w-3 h-3 text-indigo-500" />
+              <Smartphone className="w-3 h-3 text-slate-700" />
               PIN
             </span>
           )}

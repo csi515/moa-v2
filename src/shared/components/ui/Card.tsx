@@ -10,7 +10,7 @@ const CARD_VARIANTS = {
   flat: 'bg-slate-50/70 rounded-2xl border border-slate-200/60',
   elevated: 'bg-white rounded-2xl border border-slate-100 shadow-md',
   interactive:
-    'bg-white rounded-2xl border border-slate-200/80 shadow-2xs hover:border-indigo-300 hover:shadow-xs transition-all cursor-pointer',
+    'bg-white rounded-2xl border border-slate-200/80 shadow-2xs hover:border-slate-300 hover:shadow-xs transition-all cursor-pointer',
 };
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(

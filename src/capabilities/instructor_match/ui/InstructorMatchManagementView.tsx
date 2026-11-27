@@ -162,7 +162,7 @@ export const InstructorMatchManagementView: React.FC = () => {
         {instructors.map((inst) => (
           <div
             key={inst.staffId}
-            className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between hover:border-indigo-300 transition-all hover:shadow-md"
+            className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between hover:border-slate-300 transition-all hover:shadow-md"
           >
             <div>
               {/* 카드 상단 이미지 및 타이틀 */}
@@ -201,7 +201,7 @@ export const InstructorMatchManagementView: React.FC = () => {
 
                 <div className="text-xs text-slate-600 space-y-1 pt-1">
                   <div className="flex items-center gap-1.5 text-slate-700 font-medium truncate">
-                    <GraduationCap className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                    <GraduationCap className="w-3.5 h-3.5 text-slate-700 shrink-0" />
                     <span className="truncate">{inst.academicBackground}</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-slate-700 font-medium truncate">

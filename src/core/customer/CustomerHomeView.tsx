@@ -153,10 +153,10 @@ export function CustomerHomeView({
   return (
     <div className="space-y-4">
       {/* 키오스크 출결 PIN 번호 확인 카드 */}
-      <section className="rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50/80 via-white to-purple-50/50 p-4 shadow-sm">
+      <section className="rounded-2xl border border-slate-200 bg-gradient-to-r from-slate-50 via-white to-slate-50 p-4 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-sm">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm">
               <KeyRound className="h-4 w-4" />
             </div>
             <div>
@@ -174,7 +174,7 @@ export function CustomerHomeView({
               setNewPin('');
               setIsPinModalOpen(true);
             }}
-            className="inline-flex h-8 items-center rounded-lg border border-indigo-200 bg-white px-2.5 text-xs font-bold text-indigo-700 shadow-xs hover:bg-indigo-50"
+            className="inline-flex h-8 items-center rounded-lg border border-slate-200 bg-white px-2.5 text-xs font-bold text-slate-800 shadow-xs hover:bg-slate-50"
           >
             {hasPinConfigured ? 'PIN 재설정' : '직접 번호 지정'}
           </button>
@@ -202,9 +202,9 @@ export function CustomerHomeView({
           )}
 
           {lowPass && (
-            <div className="rounded-2xl border border-indigo-100 bg-indigo-50/80 p-4 text-xs text-indigo-950">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-950">
               <span className="font-bold">이용권 잔여 {passSummary.remaining}회</span>
-              <span className="text-indigo-800/90"> — 소진 전 재등록을 안내받으시려면 사업장에 문의해 주세요.</span>
+              <span className="text-slate-800"> — 소진 전 재등록을 안내받으시려면 사업장에 문의해 주세요.</span>
             </div>
           )}
         </section>
@@ -218,7 +218,7 @@ export function CustomerHomeView({
             <button
               type="button"
               onClick={onOpenAttendance}
-              className="text-xs font-bold text-indigo-600 min-h-[44px] min-w-[44px] inline-flex items-center justify-end"
+              className="text-xs font-bold text-slate-800 min-h-[44px] min-w-[44px] inline-flex items-center justify-end"
             >
               전체 출석
             </button>
@@ -314,7 +314,7 @@ export function CustomerHomeView({
               value={newPin}
               onChange={(e) => setNewPin(e.target.value.replace(/\D/g, ''))}
               placeholder="예: 1234 또는 휴대폰 뒤 4자리"
-              className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-center text-lg font-mono font-bold tracking-widest text-slate-900 shadow-xs focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-center text-lg font-mono font-bold tracking-widest text-slate-900 shadow-xs focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
             />
           </div>
           <div className="flex gap-2 pt-2">
@@ -328,7 +328,7 @@ export function CustomerHomeView({
             <button
               type="submit"
               disabled={pinSubmitting || newPin.trim().length < 4}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-indigo-600 py-2.5 text-xs font-bold text-white hover:bg-indigo-700 disabled:opacity-50 min-h-[44px]"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-slate-900 py-2.5 text-xs font-bold text-white hover:bg-slate-800 disabled:opacity-50 min-h-[44px]"
             >
               {pinSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : '저장하기'}
             </button>
@@ -374,13 +374,13 @@ export function CustomerHomeView({
             </div>
 
             {bankAccountText ? (
-              <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4 space-y-2">
-                <p className="text-xs font-bold text-indigo-800">사업장 계좌번호</p>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-2">
+                <p className="text-xs font-bold text-slate-800">사업장 계좌번호</p>
                 <p className="text-sm font-semibold text-slate-900 break-all">{bankAccountText}</p>
                 <button
                   type="button"
                   onClick={() => void handleCopyBank()}
-                  className="inline-flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-xl bg-white border border-indigo-200 text-xs font-bold text-indigo-700"
+                  className="inline-flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-800"
                 >
                   <Copy className="w-3.5 h-3.5" />
                   {copied ? '복사됨' : '계좌번호 복사'}

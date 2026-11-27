@@ -174,7 +174,7 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
               'w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2',
               error
                 ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-200'
-                : 'border-slate-300 focus:border-indigo-500 focus:ring-indigo-100',
+                : 'border-slate-300 focus:border-slate-900 focus:ring-slate-200',
               disabled && 'bg-slate-50 text-slate-400 cursor-not-allowed',
               smartType === 'currency' && 'text-right font-mono pr-8',
               className

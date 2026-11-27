@@ -256,7 +256,7 @@ export const SafetyConsentManagementView: React.FC = () => {
       {/* 감사 증명 상세 미리보기 모달 */}
       {previewRecord && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl border border-slate-100">
+          <div className="bg-white rounded-xl max-w-lg w-full p-6 space-y-5 shadow-2xl border border-slate-100">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-600" />
@@ -471,7 +471,7 @@ const SafetyConsentSigningModal: React.FC<SigningModalProps> = ({ templates, onC
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs overflow-y-auto">
-      <div className="bg-white rounded-3xl max-w-xl w-full p-6 my-8 space-y-6 shadow-2xl border border-slate-100">
+      <div className="bg-white rounded-xl max-w-xl w-full p-6 my-8 space-y-6 shadow-2xl border border-slate-100">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-amber-600" />

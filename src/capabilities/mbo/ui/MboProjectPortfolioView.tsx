@@ -39,7 +39,7 @@ const STATUS_STYLE: Record<MboStatus, string> = {
   submitted: 'bg-amber-50 text-amber-800',
   approved: 'bg-blue-50 text-blue-800',
   rejected: 'bg-rose-50 text-rose-800',
-  in_progress: 'bg-slate-50 text-indigo-800',
+  in_progress: 'bg-slate-50 text-slate-800',
   completed: 'bg-emerald-50 text-emerald-800',
   canceled: 'bg-slate-200 text-slate-500',
 };
@@ -72,7 +72,7 @@ function ProjectCard({
     <article
       className={[
         'rounded-xl border p-3 transition-shadow',
-        selected ? 'border-indigo-400 bg-slate-50/40 shadow-sm' : 'border-slate-200 bg-white hover:shadow-sm',
+        selected ? 'border-slate-300 bg-slate-50/40 shadow-sm' : 'border-slate-200 bg-white hover:shadow-sm',
       ].join(' ')}
     >
       <button type="button" className="w-full text-left" onClick={onSelect}>
@@ -220,7 +220,7 @@ export const MboProjectPortfolioView: React.FC<MboProjectPortfolioViewProps> = (
                 onClick={() => setViewMode(btn.mode)}
                 className={`inline-flex h-12 items-center gap-1.5 rounded-lg px-3 text-xs font-bold transition-all ${
                   viewMode === btn.mode
-                    ? 'bg-white text-indigo-800 shadow-xs'
+                    ? 'bg-white text-slate-800 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -239,7 +239,7 @@ export const MboProjectPortfolioView: React.FC<MboProjectPortfolioViewProps> = (
           type="button"
           className={`h-12 rounded-full px-3 text-xs font-bold ${
             selectedCategoryIds.length === 0 && !includeUncategorized
-              ? 'bg-indigo-700 text-white'
+              ? 'bg-slate-900 text-white'
               : 'bg-slate-100 text-slate-700'
           }`}
           onClick={() => {

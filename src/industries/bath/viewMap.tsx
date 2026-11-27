@@ -38,7 +38,7 @@ function BathDashboardView() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-6 pt-2 sm:pt-4" data-testid="director-home">
-      <div className="bg-gradient-to-r from-orange-600 to-amber-700 rounded-3xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden">
+      <div className="bg-gradient-to-r from-orange-600 to-amber-700 rounded-xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden">
         <div className="relative z-10 space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold">
             <Building2 className="w-3.5 h-3.5" />
@@ -85,7 +85,7 @@ function BathDashboardView() {
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-4 shadow-xs">
+      <div className="bg-white rounded-xl border border-slate-200 p-6 sm:p-8 space-y-4 shadow-xs">
         <h2 className="text-lg font-bold text-slate-900">자주 쓰는 업무</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button

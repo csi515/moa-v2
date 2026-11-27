@@ -260,7 +260,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
                         isBreak
                           ? 'opacity-40 bg-slate-100 border-slate-200 cursor-not-allowed'
                           : isSelected
-                            ? 'border-purple-600 bg-slate-50 ring-2 ring-purple-500'
+                            ? 'border-slate-900 bg-slate-50 ring-2 ring-slate-900'
                             : 'border-slate-200 hover:border-slate-200 hover:bg-slate-50'
                       }`}
                     >
@@ -289,7 +289,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
 
           {/* 엣지 5번: 타 강사 반 배정 시 [선생님 인수인계 카드] 자동 노출 */}
           {isDifferentTeacher && (
-            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-indigo-950 text-xs space-y-2.5 animate-in fade-in duration-200">
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-slate-950 text-xs space-y-2.5 animate-in fade-in duration-200">
               <div className="flex items-center gap-2 font-bold text-slate-900">
                 <UserCheck className="w-4 h-4 text-slate-800" />
                 <span>선생님 인수인계 (담당 강사 변경)</span>
@@ -299,7 +299,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
               </p>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] font-bold text-indigo-800 block mb-1">최근 교재/곡명</label>
+                  <label className="text-[10px] font-bold text-slate-800 block mb-1">최근 교재/곡명</label>
                   <input
                     type="text"
                     value={handoverSong}
@@ -309,7 +309,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-indigo-800 block mb-1">진도 현황</label>
+                  <label className="text-[10px] font-bold text-slate-800 block mb-1">진도 현황</label>
                   <input
                     type="text"
                     value={handoverProgress}
@@ -320,7 +320,7 @@ export const QuickTemporaryMoveModal: React.FC<QuickTemporaryMoveModalProps> = (
                 </div>
               </div>
               <div>
-                <label className="text-[10px] font-bold text-indigo-800 block mb-1">전달 주의사항</label>
+                <label className="text-[10px] font-bold text-slate-800 block mb-1">전달 주의사항</label>
                 <input
                   type="text"
                   value={handoverTeacherMemo}

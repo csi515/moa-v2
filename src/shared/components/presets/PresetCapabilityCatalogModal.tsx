@@ -128,7 +128,7 @@ export const PresetCapabilityCatalogModal: React.FC<PresetCapabilityCatalogModal
                 onClick={() => setSelectedPreset(isSelected ? null : preset)}
                 className={`cursor-pointer rounded-2xl border p-4 transition-all ${
                   isSelected
-                    ? 'border-indigo-500 bg-slate-50/40 ring-1 ring-indigo-500'
+                    ? 'border-slate-400 bg-slate-50/40 ring-1 ring-slate-900'
                     : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
                 }`}
               >

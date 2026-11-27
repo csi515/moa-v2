@@ -167,7 +167,7 @@ export const OmniSearchModal: React.FC<OmniSearchModalProps> = ({
       case 'pass':
         return <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-emerald-50 text-emerald-700 font-semibold"><Package className="w-2.5 h-2.5" />이용권/상품</span>;
       case 'policy':
-        return <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-purple-50 text-purple-700 font-semibold"><BookOpen className="w-2.5 h-2.5" />규정</span>;
+        return <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-50 text-slate-800 font-semibold"><BookOpen className="w-2.5 h-2.5" />규정</span>;
       default:
         return <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700 font-semibold"><Layers className="w-2.5 h-2.5" />메뉴</span>;
     }
@@ -229,7 +229,7 @@ export const OmniSearchModal: React.FC<OmniSearchModalProps> = ({
                       onClick={() => handleSelect(item)}
                       className={`w-full text-left px-3.5 py-2.5 rounded-xl flex items-center justify-between transition-colors ${
                         isSelected
-                          ? 'bg-indigo-50/80 border border-indigo-200'
+                          ? 'bg-slate-50 border border-slate-200'
                           : 'hover:bg-slate-50 border border-transparent'
                       }`}
                     >
@@ -240,7 +240,7 @@ export const OmniSearchModal: React.FC<OmniSearchModalProps> = ({
                         </div>
                         <div className="text-[11px] text-slate-500 pl-0.5">{item.subtitle}</div>
                       </div>
-                      <ArrowRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? 'text-indigo-600 translate-x-0.5' : 'text-slate-300'}`} />
+                      <ArrowRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? 'text-slate-800 translate-x-0.5' : 'text-slate-300'}`} />
                     </button>
                   );
                 })}
@@ -264,7 +264,7 @@ export const OmniSearchModal: React.FC<OmniSearchModalProps> = ({
                     onClick={() => handleSelect(item)}
                     className={`w-full text-left px-3.5 py-2.5 rounded-xl flex items-center justify-between transition-colors ${
                       isSelected
-                        ? 'bg-indigo-50/80 border border-indigo-200'
+                        ? 'bg-slate-50 border border-slate-200'
                         : 'hover:bg-slate-50 border border-transparent'
                     }`}
                   >
@@ -275,7 +275,7 @@ export const OmniSearchModal: React.FC<OmniSearchModalProps> = ({
                       </div>
                       <div className="text-[11px] text-slate-500 pl-0.5">{item.subtitle}</div>
                     </div>
-                    <ArrowRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? 'text-indigo-600 translate-x-0.5' : 'text-slate-300'}`} />
+                    <ArrowRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? 'text-slate-800 translate-x-0.5' : 'text-slate-300'}`} />
                   </button>
                 );
               })}

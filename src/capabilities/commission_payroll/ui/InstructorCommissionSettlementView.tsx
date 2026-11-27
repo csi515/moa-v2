@@ -294,7 +294,7 @@ export const InstructorCommissionSettlementView: React.FC = () => {
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm bg-slate-50/30">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-indigo-800 font-medium">센터 귀속 순이익</span>
+            <span className="text-xs text-slate-800 font-medium">센터 귀속 순이익</span>
             <Percent className="w-4 h-4 text-slate-800" />
           </div>
           <div className="mt-2">

@@ -64,7 +64,7 @@ export const WorkloadThresholdSettingsModal: React.FC<WorkloadThresholdSettingsM
         {/* 헤더 */}
         <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50 text-slate-800 dark:bg-indigo-950 dark:text-indigo-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-500">
               <Sliders className="h-5 w-5" />
             </div>
             <div>

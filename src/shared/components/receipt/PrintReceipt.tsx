@@ -1,5 +1,64 @@
 import React from 'react';
-import './printReceipt.css';
+
+const PRINT_RECEIPT_STYLES = `
+.receipt-screen-container {
+  max-width: 380px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #1e293b;
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .no-print,
+  nav,
+  header,
+  footer,
+  aside,
+  button {
+    display: none !important;
+  }
+
+  .receipt-screen-container,
+  .receipt-screen-container * {
+    visibility: visible;
+  }
+
+  .receipt-screen-container {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 76mm !important;
+    max-width: 76mm !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 2mm !important;
+    margin: 0 !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    box-shadow: none !important;
+  }
+
+  @page {
+    size: 80mm auto;
+    margin: 2mm;
+  }
+}
+`;
 
 export interface ReceiptItem {
   name: string;
@@ -57,12 +116,13 @@ export const PrintReceipt: React.FC<ReceiptProps> = ({
 
   return (
     <div className="flex flex-col items-center">
+      <style dangerouslySetInnerHTML={{ __html: PRINT_RECEIPT_STYLES }} />
       {/* 화면 상단 조작 버튼 (인쇄 시 자동 숨김) */}
       <div className="no-print mb-4 flex items-center gap-2">
         <button
           type="button"
           onClick={handlePrint}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition shadow"
+          className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition shadow-xs"
         >
           영수증 인쇄 (Ctrl+P)
         </button>
@@ -70,7 +130,7 @@ export const PrintReceipt: React.FC<ReceiptProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-3 py-2 bg-slate-100 text-slate-700 rounded-md text-sm font-medium hover:bg-slate-200 transition"
+            className="px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition"
           >
             닫기
           </button>

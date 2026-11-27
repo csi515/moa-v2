@@ -184,14 +184,14 @@ export const PianoConsultationHubView: FC = () => {
           onClick={() => setFilterStatus(filterStatus === 'PENDING' ? 'ALL' : 'PENDING')}
           className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
             filterStatus === 'PENDING'
-              ? 'bg-slate-900 text-white border-indigo-700 shadow-sm'
-              : 'bg-white border-slate-200/80 hover:border-indigo-300 hover:bg-slate-50/30'
+              ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+              : 'bg-white border-slate-200/80 hover:border-slate-300 hover:bg-slate-50/30'
           }`}
         >
           <div className="flex items-center justify-between">
             <span
               className={`text-xs font-bold flex items-center gap-1.5 ${
-                filterStatus === 'PENDING' ? 'text-indigo-100' : 'text-slate-500'
+                filterStatus === 'PENDING' ? 'text-slate-200' : 'text-slate-500'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
@@ -200,7 +200,7 @@ export const PianoConsultationHubView: FC = () => {
             {summaryCounts.pendingCount > 0 && (
               <span
                 className={`text-xs px-1.5 py-0.5 rounded font-extrabold ${
-                  filterStatus === 'PENDING' ? 'bg-indigo-700 text-white' : 'bg-amber-100 text-amber-800'
+                  filterStatus === 'PENDING' ? 'bg-slate-900 text-white' : 'bg-amber-100 text-amber-800'
                 }`}
               >
                 확인 필요
@@ -297,10 +297,10 @@ export const PianoConsultationHubView: FC = () => {
       </div>
 
       {/* 4. 메인 통합 상담 대장 테이블 */}
-      <div className="bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-2xs">
+      <div className="bg-white border border-slate-200/80 rounded-xl overflow-hidden shadow-2xs">
         {loadingAll ? (
           <div className="p-12 text-center text-slate-400 space-y-2">
-            <Clock className="w-6 h-6 animate-spin mx-auto text-indigo-500" />
+            <Clock className="w-6 h-6 animate-spin mx-auto text-slate-700" />
             <p className="text-xs font-semibold">통합 상담 대장을 불러오는 중입니다...</p>
           </div>
         ) : filteredRows.length === 0 ? (
@@ -449,7 +449,7 @@ export const PianoConsultationHubView: FC = () => {
                           <button
                             type="button"
                             onClick={() => handleOpenRecord(row)}
-                            className="min-h-[36px] px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 hover:text-slate-800 text-slate-600 font-bold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+                            className="min-h-[36px] px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 hover:text-slate-800 text-slate-600 font-bold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
                           >
                             <Plus className="w-3.5 h-3.5 text-slate-800" />
                             <span>기록 작성</span>
@@ -581,7 +581,7 @@ export const PianoConsultationHubView: FC = () => {
                       className={`min-h-[44px] px-3 rounded-xl border font-bold text-xs inline-flex items-center justify-center gap-1.5 flex-1 transition-colors ${
                         row.hasRecord
                           ? 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
-                          : 'border-slate-200 bg-white text-slate-700 hover:border-indigo-300 shadow-2xs'
+                          : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 shadow-2xs'
                       }`}
                     >
                       {row.hasRecord ? <FileText className="w-3.5 h-3.5 text-slate-800" /> : <Plus className="w-3.5 h-3.5 text-slate-800" />}

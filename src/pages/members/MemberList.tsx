@@ -312,7 +312,7 @@ export function MemberList(): React.JSX.Element {
                             대표 사업자
                           </span>
                         ) : member.role === 'admin' ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-purple-800">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-800">
                             관리자
                           </span>
                         ) : member.role === 'instructor' ? (
@@ -330,7 +330,7 @@ export function MemberList(): React.JSX.Element {
                       <td className="px-5 py-4">
                         {assignedRole ? (
                           <div className="space-y-1">
-                            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-indigo-800">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-800">
                               <ShieldCheck className="h-3 w-3 text-slate-800" />
                               {assignedRole.name}
                             </span>
@@ -490,7 +490,7 @@ export function MemberList(): React.JSX.Element {
                     <span
                       key={item.key}
                       title={item.key}
-                      className="rounded-md bg-white border border-slate-200 px-2 py-0.5 text-[11px] font-semibold text-indigo-800"
+                      className="rounded-md bg-white border border-slate-200 px-2 py-0.5 text-[11px] font-semibold text-slate-800"
                     >
                       ✓ {item.label}
                     </span>
@@ -678,7 +678,7 @@ export function MemberList(): React.JSX.Element {
                     key={feat.key}
                     className={`flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
                       isEnabled
-                        ? 'border-indigo-500 bg-slate-50/50 shadow-2xs'
+                        ? 'border-slate-400 bg-slate-50/50 shadow-2xs'
                         : 'border-slate-200 bg-white hover:bg-slate-50'
                     }`}
                   >

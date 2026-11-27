@@ -15,9 +15,9 @@ export function PrivacyContent() {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl bg-indigo-50/70 border border-indigo-100 p-4 mb-4">
-        <p className="text-xs font-bold text-indigo-900">개인정보처리방침 시행 안내</p>
-        <p className="text-xs text-indigo-700 mt-0.5">
+      <div className="rounded-xl bg-slate-50 border border-slate-200 p-4 mb-4">
+        <p className="text-xs font-bold text-slate-900">개인정보처리방침 시행 안내</p>
+        <p className="text-xs text-slate-800 mt-0.5">
           본 방침은 {privacyEffectiveDate}부터 적용되며, {legalEntityName}가 제공하는 {serviceName} 서비스의 모든 이용자에게 적용됩니다.
         </p>
       </div>
@@ -139,7 +139,7 @@ export function PrivacyContent() {
       </p>
       <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 mt-2 text-xs space-y-1">
         <p><strong>개인정보 보호책임자:</strong> {legalEntityName} CPO</p>
-        <p><strong>문의 이메일:</strong> <a href={`mailto:${contactEmail}`} className="text-indigo-600 underline font-bold">{contactEmail}</a></p>
+        <p><strong>문의 이메일:</strong> <a href={`mailto:${contactEmail}`} className="text-slate-800 underline font-bold">{contactEmail}</a></p>
         <p><strong>응대 시간:</strong> 평일 10:00 ~ 18:00 (주말 및 공휴일 제외)</p>
       </div>
 
@@ -243,7 +243,7 @@ export function TermsContent() {
       <ul className={legalListClass}>
         <li>
           회사가 제공하는 유료 SaaS 요금제의 결제 방식, 결제 주기, 이용 요금은{' '}
-          <a href="/pricing" className="text-indigo-600 font-bold underline">
+          <a href="/pricing" className="text-slate-800 font-bold underline">
             요금제 안내 페이지(/pricing)
           </a>
           및 고객 지원 안내에 따릅니다.
@@ -282,9 +282,9 @@ export function PricingContent() {
 
   return (
     <div className="space-y-4" data-testid="pricing-content">
-      <div className="rounded-xl bg-indigo-50 border border-indigo-100 p-4 mb-4">
-        <p className="text-xs font-bold text-indigo-900">{serviceName} 요금제 안내</p>
-        <p className="text-xs text-indigo-800 mt-1 leading-relaxed">
+      <div className="rounded-xl bg-slate-50 border border-slate-200 p-4 mb-4">
+        <p className="text-xs font-bold text-slate-900">{serviceName} 요금제 안내</p>
+        <p className="text-xs text-slate-800 mt-1 leading-relaxed">
           피아노·학원 Soft launch 기간에는 초대제 파일럿 요금으로 운영합니다. 공개 단가·결제 주기는
           확정 후 이 페이지에 게시합니다.
         </p>
@@ -300,7 +300,7 @@ export function PricingContent() {
       <h2 className={legalHeadingClass}>2. 정식 요금 문의</h2>
       <p className={legalParagraphClass}>
         사업장 규모·강사 수에 맞춘 견적은{' '}
-        <a href={`mailto:${contactEmail}?subject=${encodeURIComponent('요금제 문의')}`} className="text-indigo-600 font-bold underline">
+        <a href={`mailto:${contactEmail}?subject=${encodeURIComponent('요금제 문의')}`} className="text-slate-800 font-bold underline">
           {contactEmail}
         </a>
         로 문의해 주세요. 영업일 기준 24시간 내 회신을 목표로 합니다.
@@ -309,12 +309,12 @@ export function PricingContent() {
       <h2 className={legalHeadingClass}>3. 관련 문서</h2>
       <ul className={legalListClass}>
         <li>
-          <a href="/terms" className="text-indigo-600 font-bold underline">
+          <a href="/terms" className="text-slate-800 font-bold underline">
             서비스 이용약관
           </a>
         </li>
         <li>
-          <a href="/support" className="text-indigo-600 font-bold underline">
+          <a href="/support" className="text-slate-800 font-bold underline">
             고객 지원
           </a>
         </li>
@@ -339,7 +339,7 @@ export function SupportContent() {
       </div>
       <p className="text-xs text-slate-600">
         요금·파일럿 조건은{' '}
-        <a href="/pricing" className="text-indigo-600 font-bold underline">
+        <a href="/pricing" className="text-slate-800 font-bold underline">
           요금제 안내
         </a>
         를 참고해 주세요.
@@ -348,7 +348,7 @@ export function SupportContent() {
       <h2 className={legalHeadingClass}>1. 온라인 고객센터 접수</h2>
       <p className={legalParagraphClass}>
         공식 지원 이메일:{' '}
-        <a href={`mailto:${contactEmail}`} className="text-indigo-600 font-bold underline">
+        <a href={`mailto:${contactEmail}`} className="text-slate-800 font-bold underline">
           {contactEmail}
         </a>
       </p>

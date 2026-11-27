@@ -37,11 +37,11 @@ export const BulkActionToolbar: React.FC<BulkActionToolbarProps> = ({
       <div className="bg-slate-900/95 backdrop-blur-md text-white px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl shadow-2xl border border-slate-700/80 flex items-center gap-2 sm:gap-4 animate-in slide-in-from-bottom-4 duration-200">
         {/* 선택 카운터 */}
         <div className="flex items-center gap-2 shrink-0">
-          <div className="w-7 h-7 rounded-lg bg-indigo-600/80 text-white flex items-center justify-center font-bold text-xs">
+          <div className="w-7 h-7 rounded-lg bg-slate-900/80 text-white flex items-center justify-center font-bold text-xs">
             <CheckSquare className="w-4 h-4" />
           </div>
           <span className="text-xs sm:text-sm font-bold tracking-tight">
-            <strong className="text-indigo-400 font-extrabold">{selectedCount}</strong>
+            <strong className="text-slate-500 font-extrabold">{selectedCount}</strong>
             {totalCount ? ` / ${totalCount}` : ''}개 {itemName} 선택됨
           </span>
         </div>
@@ -53,7 +53,7 @@ export const BulkActionToolbar: React.FC<BulkActionToolbarProps> = ({
           {actions.map((act) => {
             let colorClass = 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700';
             if (act.variant === 'primary') {
-              colorClass = 'bg-indigo-600 hover:bg-indigo-500 text-white border-indigo-500 shadow-xs shadow-indigo-600/30';
+              colorClass = 'bg-slate-900 hover:bg-slate-800 text-white border-slate-400 shadow-xs shadow-indigo-600/30';
             } else if (act.variant === 'danger') {
               colorClass = 'bg-rose-600 hover:bg-rose-500 text-white border-rose-500';
             } else if (act.variant === 'success') {

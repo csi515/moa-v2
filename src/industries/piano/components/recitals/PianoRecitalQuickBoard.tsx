@@ -113,7 +113,7 @@ export const PianoRecitalQuickBoard: React.FC<PianoRecitalQuickBoardProps> = ({
   return (
     <div className={`bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden ${className}`}>
       {/* 헤더 및 통계 요약 */}
-      <div className="p-4 sm:p-5 bg-gradient-to-r from-indigo-50/70 via-purple-50/50 to-white border-b border-slate-100">
+      <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-50 via-slate-50 to-white border-b border-slate-100">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <div>
             <div className="flex items-center gap-2">
@@ -134,7 +134,7 @@ export const PianoRecitalQuickBoard: React.FC<PianoRecitalQuickBoardProps> = ({
             onClick={handleSyncToEvent}
             className={`min-h-[40px] px-3.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-xs ${
               hasUnsyncedChanges
-                ? 'bg-slate-900 hover:bg-slate-800 text-white ring-2 ring-indigo-300 animate-pulse'
+                ? 'bg-slate-900 hover:bg-slate-800 text-white ring-2 ring-slate-300 animate-pulse'
                 : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200'
             }`}
           >
@@ -198,7 +198,7 @@ export const PianoRecitalQuickBoard: React.FC<PianoRecitalQuickBoardProps> = ({
               <span className="text-xs font-black text-slate-600">{stats.declinedCount}명</span>
             </div>
             <div className="p-2 rounded-xl bg-white/80 border border-slate-200 flex items-center justify-between">
-              <span className="text-[11px] text-indigo-800 font-semibold flex items-center gap-1">
+              <span className="text-[11px] text-slate-800 font-semibold flex items-center gap-1">
                 <Coins className="w-3.5 h-3.5 text-slate-800" />
                 참가비 완납
               </span>
@@ -373,7 +373,7 @@ export const PianoRecitalQuickBoard: React.FC<PianoRecitalQuickBoardProps> = ({
                       !isParticipating
                         ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
                         : entry.feePaid
-                        ? 'bg-slate-900 text-white shadow-xs ring-1 ring-indigo-700'
+                        ? 'bg-slate-900 text-white shadow-xs ring-1 ring-slate-900'
                         : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-slate-800'
                     }`}
                   >

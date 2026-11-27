@@ -198,7 +198,7 @@ export const TrialFunnelKanbanView: React.FC = () => {
                             });
                             showToast(`[${lead.customer_name}] 고객의 상담 일지가 CRM에 자동 등록되었습니다.`, 'success');
                           }}
-                          className="text-[10px] text-slate-800 hover:text-indigo-800 font-semibold"
+                          className="text-[10px] text-slate-800 hover:text-slate-900 font-semibold"
                           title="상담 CRM에 즉시 연계 기록"
                         >
                           💬 CRM연계

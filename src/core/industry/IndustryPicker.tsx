@@ -20,7 +20,7 @@ interface IndustryPickerProps {
 }
 
 const selectedBtn =
-  'border-indigo-500 bg-indigo-50 text-indigo-900';
+  'border-slate-400 bg-slate-50 text-slate-900';
 const idleBtn = 'border-slate-200 hover:border-slate-300';
 
 /**
@@ -80,7 +80,7 @@ export function IndustryPicker({ value, onChange, variant = 'default' }: Industr
           <p className="text-xs font-bold text-slate-600">업종 분류</p>
           {value && (
             <p className="text-[11px] text-slate-500 truncate">
-              선택: <span className="font-semibold text-indigo-700">{selectedLabel}</span>
+              선택: <span className="font-semibold text-slate-800">{selectedLabel}</span>
             </p>
           )}
         </div>

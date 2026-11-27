@@ -29,7 +29,7 @@ export const UndoToastBanner: React.FC<UndoToastBannerProps> = ({
         <button
           type="button"
           onClick={activeUndo.undo}
-          className="px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs active:scale-95"
+          className="px-3 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs active:scale-95"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>실행 취소</span>

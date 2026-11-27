@@ -28,7 +28,7 @@ export const ParentChildCard: React.FC<{
     <button
       type="button"
       onClick={onSelect}
-      className="w-full flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200 hover:border-indigo-300 hover:bg-slate-50/40 transition-colors text-left min-h-[44px]"
+      className="w-full flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50/40 transition-colors text-left min-h-[44px]"
     >
       <div className="min-w-0">
         <p className="font-black text-slate-900 truncate">{child.displayName}</p>

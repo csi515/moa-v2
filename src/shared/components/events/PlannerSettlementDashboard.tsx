@@ -60,14 +60,14 @@ export const PlannerSettlementDashboard: React.FC<PlannerSettlementDashboardProp
   return (
     <div className="space-y-6">
       {/* 🏆 업계 표준 원칙 배너 & 내 지갑 총 누적 수수료 */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-indigo-900 text-white rounded-2xl p-6 shadow-md border border-indigo-800/40 space-y-4">
+      <div className="bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 text-white rounded-2xl p-6 shadow-md border border-slate-800/40 space-y-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="bg-amber-400 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1">
                 🏆 업계 표준
               </span>
-              <span className="text-xs font-semibold text-indigo-300">
+              <span className="text-xs font-semibold text-slate-400">
                 「D-Day 행사 완료 후 익월 정산」 원칙 적용
               </span>
             </div>
@@ -81,7 +81,7 @@ export const PlannerSettlementDashboard: React.FC<PlannerSettlementDashboardProp
           </div>
 
           <div className="text-right bg-white/10 px-5 py-3 rounded-xl backdrop-blur-md border border-white/10 shrink-0">
-            <span className="text-[11px] text-indigo-200 block font-medium">총 확보 성사 수수료 (누적)</span>
+            <span className="text-[11px] text-slate-300 block font-medium">총 확보 성사 수수료 (누적)</span>
             <span className="text-2xl font-black text-amber-300">
               ₩{summary.totalCommissionAmount.toLocaleString()}
             </span>
@@ -129,7 +129,7 @@ export const PlannerSettlementDashboard: React.FC<PlannerSettlementDashboardProp
 
         <Card className="p-4 border-slate-200 bg-slate-50/50 space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-indigo-800 font-semibold flex items-center gap-1">
+            <span className="text-xs text-slate-800 font-semibold flex items-center gap-1">
               <Coins className="w-3.5 h-3.5 text-slate-800" /> 정산 승인 대기
             </span>
             <Badge variant="brand">{summary.readyToSettleCount}건</Badge>
@@ -205,7 +205,7 @@ export const PlannerSettlementDashboard: React.FC<PlannerSettlementDashboardProp
               return (
                 <div
                   key={event.id}
-                  className="p-4 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 transition-all shadow-sm space-y-3"
+                  className="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-all shadow-sm space-y-3"
                 >
                   <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                     <div className="space-y-1.5 flex-1">
@@ -229,7 +229,7 @@ export const PlannerSettlementDashboard: React.FC<PlannerSettlementDashboardProp
 
                       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
                         <span className="flex items-center gap-1 font-medium text-slate-700">
-                          <Building2 className="w-3.5 h-3.5 text-indigo-500" />
+                          <Building2 className="w-3.5 h-3.5 text-slate-700" />
                           {getVenueName(event.venueId)} ({event.roomName})
                         </span>
                         <span className="flex items-center gap-1">

@@ -274,7 +274,7 @@ export const StudentDetailInfoTab: React.FC<StudentDetailInfoTabProps> = ({
     </div>
 
     {/* 피아노 특화: 관심 장르 & 배우고 싶은 곡 (위시리스트) */}
-    <div className="md:col-span-2 bg-gradient-to-r from-violet-50/70 via-indigo-50/50 to-slate-50 rounded-2xl p-4 border border-violet-200/70 space-y-2.5">
+    <div className="md:col-span-2 bg-gradient-to-r from-violet-50/70 via-slate-50 to-slate-50 rounded-2xl p-4 border border-violet-200/70 space-y-2.5">
       <div className="flex items-center justify-between">
         <h4 className="text-xs font-bold text-violet-900 uppercase tracking-wider flex items-center gap-1.5">
           <Music2 className="w-4 h-4 text-violet-600" />

@@ -195,7 +195,7 @@ export const SubstituteDispatchView: React.FC = () => {
                     <div>💰 강사료: {Number(req.offeredFee).toLocaleString()}원</div>
                     {req.assignedName && (
                       <div style={{ color: '#047857', fontWeight: 600 }}>
-                        ✨ 배정 강사: {req.assignedName} 선생님
+                        배정 강사: {req.assignedName} 선생님
                       </div>
                     )}
                   </div>

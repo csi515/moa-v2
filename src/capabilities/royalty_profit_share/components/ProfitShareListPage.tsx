@@ -223,7 +223,7 @@ export const ProfitShareListPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-3 bg-slate-50 dark:bg-indigo-950/40 rounded-lg space-y-1.5 text-xs">
+              <div className="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg space-y-1.5 text-xs">
                 <div className="flex justify-between">
                   <span>당월 순이익:</span>
                   <span className="font-bold text-slate-800 dark:text-slate-200">{preview.netProfit.toLocaleString()}원</span>

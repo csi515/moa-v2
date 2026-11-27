@@ -13,7 +13,7 @@ export interface CalendarMonthViewProps<T = any> {
 const WEEK_HEADER = ['일', '월', '화', '수', '목', '금', '토'];
 
 const COLOR_MAP: Record<string, { bg: string; text: string; dot: string }> = {
-  indigo: { bg: 'bg-slate-50 border-slate-200', text: 'text-slate-700', dot: 'bg-indigo-500' },
+  indigo: { bg: 'bg-slate-50 border-slate-200', text: 'text-slate-700', dot: 'bg-slate-900' },
   teal: { bg: 'bg-teal-50 border-teal-200', text: 'text-teal-700', dot: 'bg-teal-500' },
   rose: { bg: 'bg-rose-50 border-rose-200', text: 'text-rose-700', dot: 'bg-rose-500' },
   amber: { bg: 'bg-amber-50 border-amber-200', text: 'text-amber-700', dot: 'bg-amber-500' },
@@ -80,7 +80,7 @@ export const CalendarMonthView: FC<CalendarMonthViewProps> = ({
               onClick={() => handleCellClick(day)}
               className={`min-h-[88px] sm:min-h-[105px] p-1.5 flex flex-col transition-colors cursor-pointer group hover:bg-slate-50/20 ${
                 !day.isCurrentMonth ? 'bg-slate-50/50 text-slate-300' : 'bg-white'
-              } ${day.isToday ? 'bg-slate-50/40 ring-1 ring-indigo-500 ring-inset' : ''}`}
+              } ${day.isToday ? 'bg-slate-50/40 ring-1 ring-slate-900 ring-inset' : ''}`}
             >
               {/* 상단 날짜 번호 및 도트 */}
               <div className="flex items-center justify-between mb-1">

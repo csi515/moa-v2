@@ -115,7 +115,7 @@ export const AddressSearchModal: FC<AddressSearchModalProps> = ({
             type="button"
             data-testid="btn-address-manual-mode"
             onClick={() => setManualMode((prev) => !prev)}
-            className="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition min-h-[32px] px-2 rounded-lg hover:bg-indigo-50 inline-flex items-center gap-1 cursor-pointer"
+            className="text-xs font-bold text-slate-800 hover:text-slate-900 transition min-h-[32px] px-2 rounded-lg hover:bg-slate-50 inline-flex items-center gap-1 cursor-pointer"
           >
             {manualMode ? (
               <>
@@ -152,7 +152,7 @@ export const AddressSearchModal: FC<AddressSearchModalProps> = ({
                 placeholder="예: 서울시 강남구 테헤란로 123"
                 autoFocus
                 data-testid="input-address-search-keyword"
-                className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[44px]"
+                className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 min-h-[44px]"
               />
             </div>
             <div className="flex justify-end gap-2 pt-2">
@@ -168,7 +168,7 @@ export const AddressSearchModal: FC<AddressSearchModalProps> = ({
                 disabled={!manualInput.trim()}
                 data-testid="btn-address-search-submit"
                 onClick={() => handleManualSubmit()}
-                className="px-4 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl min-h-[40px] disabled:opacity-50 inline-flex items-center gap-1.5 cursor-pointer shadow-xs"
+                className="px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl min-h-[40px] disabled:opacity-50 inline-flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <Check className="w-4 h-4" />
                 <span>입력한 주소 적용</span>
@@ -180,7 +180,7 @@ export const AddressSearchModal: FC<AddressSearchModalProps> = ({
           <div className="relative min-h-[460px] rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
             {isLoadingScript && (
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/90 gap-2">
-                <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
+                <Loader2 className="w-8 h-8 text-slate-800 animate-spin" />
                 <p className="text-xs font-semibold text-slate-600">
                   카카오 주소 검색을 불러오는 중...
                 </p>
@@ -211,7 +211,7 @@ export const AddressSearchModal: FC<AddressSearchModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setManualMode(true)}
-                    className="px-3.5 py-2 text-xs font-bold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 inline-flex items-center gap-1 cursor-pointer"
+                    className="px-3.5 py-2 text-xs font-bold text-white bg-slate-900 rounded-xl hover:bg-slate-800 inline-flex items-center gap-1 cursor-pointer"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
                     <span>직접 주소 입력하기</span>

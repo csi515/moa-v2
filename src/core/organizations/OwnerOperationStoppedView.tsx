@@ -33,7 +33,7 @@ export const OwnerOperationStoppedView: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-3xl border border-slate-100 shadow-xl p-6 sm:p-8 space-y-5">
+      <div className="w-full max-w-md bg-white rounded-xl border border-slate-100 shadow-xl p-6 sm:p-8 space-y-5">
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-amber-100 text-amber-800">
           <Building2 className="w-6 h-6" />
         </div>
@@ -66,7 +66,7 @@ export const OwnerOperationStoppedView: React.FC = () => {
           <button
             type="button"
             onClick={enterCustomerPortal}
-            className="w-full min-h-[44px] rounded-2xl bg-indigo-600 text-white font-bold"
+            className="w-full min-h-[44px] rounded-2xl bg-slate-900 text-white font-bold"
           >
             내가 다니는 곳으로 이동
           </button>

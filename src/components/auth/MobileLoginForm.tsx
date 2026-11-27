@@ -203,7 +203,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="name@example.com"
-              className="w-full min-h-11 pl-10 pr-4 rounded-xl border border-slate-200 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all bg-slate-50/50 focus:bg-white"
+              className="w-full min-h-11 pl-10 pr-4 rounded-xl border border-slate-200 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all bg-slate-50/50 focus:bg-white"
             />
           </div>
         </div>
@@ -224,7 +224,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
                   navigate(forgotPath);
                 }
               }}
-              className="text-xs text-slate-800 hover:text-indigo-800 min-h-[32px] inline-flex items-center font-medium"
+              className="text-xs text-slate-800 hover:text-slate-900 min-h-[32px] inline-flex items-center font-medium"
               data-testid="link-forgot-password"
             >
               {isEn ? "Forgot password?" : "비밀번호 찾기"}
@@ -243,7 +243,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full min-h-11 pl-10 pr-4 rounded-xl border border-slate-200 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all bg-slate-50/50 focus:bg-white"
+              className="w-full min-h-11 pl-10 pr-4 rounded-xl border border-slate-200 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all bg-slate-50/50 focus:bg-white"
             />
           </div>
         </div>
@@ -276,7 +276,7 @@ export const MobileLoginForm: React.FC<MobileLoginFormProps> = ({
           type="submit"
           data-testid="btn-email-submit"
           disabled={isLoading}
-          className="w-full mt-2 h-11 min-h-[44px] flex items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white shadow-md bg-slate-900 shadow-indigo-600/20 hover:bg-indigo-500 disabled:opacity-50 transition-all active:scale-[0.99] cursor-pointer"
+          className="w-full mt-2 h-11 min-h-[44px] flex items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white shadow-md bg-slate-900 shadow-indigo-600/20 hover:bg-slate-800 disabled:opacity-50 transition-all active:scale-[0.99] cursor-pointer"
         >
           {isLoading ? (
             <>

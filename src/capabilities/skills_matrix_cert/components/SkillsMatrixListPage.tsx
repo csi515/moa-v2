@@ -158,7 +158,7 @@ export const SkillsMatrixListPage: React.FC = () => {
                   {r.skills.map((s, idx) => (
                     <span
                       key={idx}
-                      className="px-2.5 py-1 rounded-lg text-xs bg-slate-50 text-indigo-800 font-semibold border border-slate-200 flex items-center gap-1.5"
+                      className="px-2.5 py-1 rounded-lg text-xs bg-slate-50 text-slate-800 font-semibold border border-slate-200 flex items-center gap-1.5"
                     >
                       {s.skill_name}
                       <span className="bg-slate-900 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px]">

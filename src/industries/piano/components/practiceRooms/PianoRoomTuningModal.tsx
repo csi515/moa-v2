@@ -122,7 +122,7 @@ export const PianoRoomTuningModal: FC<PianoRoomTuningModalProps> = ({
                   onClick={() => setCurrentRecord({ ...currentRecord, pianoType: type })}
                   className={`py-2 px-3 rounded-xl border text-center font-bold text-xs transition-all cursor-pointer ${
                     active
-                      ? 'bg-slate-900 text-white border-indigo-600 shadow-2xs'
+                      ? 'bg-slate-900 text-white border-slate-900 shadow-2xs'
                       : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                   }`}
                 >

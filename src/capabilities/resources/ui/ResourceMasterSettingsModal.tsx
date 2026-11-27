@@ -307,7 +307,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
                     onClick={() => setCategory(cat.id)}
                     className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all ${
                       isSelected
-                        ? 'border-indigo-600 bg-slate-50/60 text-slate-900 font-bold shadow-2xs ring-1 ring-indigo-500'
+                        ? 'border-slate-900 bg-slate-50/60 text-slate-900 font-bold shadow-2xs ring-1 ring-slate-900'
                         : 'border-slate-200 hover:border-slate-300 text-slate-600 bg-white'
                     }`}
                   >
@@ -385,7 +385,7 @@ export const ResourceMasterSettingsModal: React.FC<ResourceMasterSettingsModalPr
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-slate-800" />
                 <div>
-                  <h4 className="text-xs font-bold text-indigo-950">예약 승인권자 거버넌스</h4>
+                  <h4 className="text-xs font-bold text-slate-950">예약 승인권자 거버넌스</h4>
                   <p className="text-[11px] text-slate-500">
                     신청 시 즉시 확정할지, 지정 관리자의 승인을 거칠지 결정합니다.
                   </p>

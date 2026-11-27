@@ -316,7 +316,7 @@ export const WorkplaceSettingsView: FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveTab('textbooks')}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 min-h-[44px]"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-800 min-h-[44px]"
               >
                 <BookOpen className="w-4 h-4" />
                 사용 교재는 교재 관리에서 등록

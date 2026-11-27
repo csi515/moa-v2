@@ -151,7 +151,7 @@ export const ResearchProjectManagementView: React.FC = () => {
                 <span className="w-24 shrink-0 truncate text-slate-700">{row.memberName}</span>
                 <div className="h-2 flex-1 rounded-full bg-slate-100">
                   <div
-                    className="h-2 rounded-full bg-indigo-500"
+                    className="h-2 rounded-full bg-slate-900"
                     style={{ width: `${(row.projectCount / maxLoad) * 100}%` }}
                   />
                 </div>
@@ -194,7 +194,7 @@ export const ResearchProjectManagementView: React.FC = () => {
                       onClick={() => ws.setSelectedId(p.id)}
                       className={`w-full rounded-lg border p-3 text-left text-sm ${
                         ws.selectedId === p.id
-                          ? 'border-indigo-500 bg-slate-50'
+                          ? 'border-slate-400 bg-slate-50'
                           : 'border-slate-200 bg-white'
                       }`}
                     >
@@ -225,7 +225,7 @@ export const ResearchProjectManagementView: React.FC = () => {
                 onClick={() => ws.setSelectedId(p.id)}
                 className={`w-full rounded-xl border p-4 text-left transition ${
                   ws.selectedId === p.id
-                    ? 'border-indigo-500 bg-slate-50/60'
+                    ? 'border-slate-400 bg-slate-50/60'
                     : 'border-slate-200 bg-white hover:border-slate-300'
                 }`}
               >

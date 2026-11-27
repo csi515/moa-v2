@@ -222,10 +222,10 @@ export function KitchenDisplaySystemView() {
               statusText = '접수 완료';
             } else if (ticket.status === 'COOKING') {
               statusBg = 'bg-amber-50 text-amber-700 border-amber-200';
-              statusText = '🔥 조리 중';
+              statusText = '조리 중';
             } else if (ticket.status === 'READY') {
               statusBg = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-              statusText = '✨ 준비 완료';
+              statusText = '준비 완료';
             }
 
             return (

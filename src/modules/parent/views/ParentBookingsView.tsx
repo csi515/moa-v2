@@ -121,7 +121,7 @@ export const MyReservationsView: React.FC<ParentBookingsViewProps> = () => {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
-          <div className="inline-block w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+          <div className="inline-block w-8 h-8 border-4 border-slate-900 border-t-transparent rounded-full animate-spin" />
           <PageListSkeleton rows={3} message="예약 목록을 불러오는 중..." />
         </div>
       </div>

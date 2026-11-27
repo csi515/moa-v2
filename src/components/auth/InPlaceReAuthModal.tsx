@@ -231,7 +231,7 @@ export function InPlaceReAuthModal() {
               placeholder="비밀번호 입력"
               value={secret}
               onChange={(event) => setSecret(event.target.value)}
-              className="mt-3 min-h-12 w-full rounded-xl border border-slate-200 px-3.5 text-sm focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+              className="mt-3 min-h-12 w-full rounded-xl border border-slate-200 px-3.5 text-sm focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-200"
               autoFocus
             />
             <div className="mt-3 flex gap-2">

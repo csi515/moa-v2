@@ -4,8 +4,8 @@ import { useAuth } from '@/core/auth/AuthProvider';
 import type { SandboxRole, SandboxRoleOption, SandboxIndustryOption } from './types';
 
 export const SANDBOX_ROLES: SandboxRoleOption[] = [
-  { role: 'owner', label: '원장/사업주', badgeColor: 'bg-slate-100 text-purple-800 border-slate-200' },
-  { role: 'admin', label: '운영관리자', badgeColor: 'bg-slate-100 text-indigo-800 border-slate-200' },
+  { role: 'owner', label: '원장/사업주', badgeColor: 'bg-slate-100 text-slate-800 border-slate-200' },
+  { role: 'admin', label: '운영관리자', badgeColor: 'bg-slate-100 text-slate-800 border-slate-200' },
   { role: 'staff', label: '강사/직원', badgeColor: 'bg-blue-100 text-blue-800 border-blue-200' },
   { role: 'customer', label: '고객/수강생', badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
   { role: 'parent', label: '학부모 포털', badgeColor: 'bg-amber-100 text-amber-800 border-amber-200' },
@@ -181,7 +181,7 @@ export function DevToolsSandboxBar() {
                     onClick={() => handleRoleChange(r.role)}
                     className={`py-1.5 px-2 rounded-lg text-center font-medium transition-all ${
                       isSelected
-                        ? 'bg-slate-900 text-white font-bold ring-2 ring-indigo-400/50 shadow-sm'
+                        ? 'bg-slate-900 text-white font-bold ring-2 ring-slate-400 shadow-sm'
                         : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white'
                     }`}
                   >

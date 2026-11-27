@@ -228,7 +228,7 @@ export const TeamWeeklyWorkloadView: React.FC<TeamWeeklyWorkloadViewProps> = ({
             <h2 className="text-xl font-bold text-slate-900 dark:text-white">
               주간 팀 업무 부하 모니터링
             </h2>
-            <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2.5 py-0.5 text-xs font-semibold text-slate-700 dark:bg-indigo-950/60 dark:text-indigo-300">
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2.5 py-0.5 text-xs font-semibold text-slate-700 dark:bg-slate-900 dark:text-slate-400">
               <Sparkles className="h-3 w-3" />
               신호등 동적 임계치
             </span>
@@ -262,9 +262,9 @@ export const TeamWeeklyWorkloadView: React.FC<TeamWeeklyWorkloadViewProps> = ({
             </div>
           ) : userScope.scopeType === 'department' ? (
             <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
-              <Building2 className="h-3.5 w-3.5 text-indigo-500" />
+              <Building2 className="h-3.5 w-3.5 text-slate-700" />
               <span>{currentUser.departmentName || '내 소속팀 고정'}</span>
-              <span className="rounded bg-slate-100 px-1 py-0.2 text-[10px] text-slate-700 dark:bg-indigo-950 dark:text-indigo-300">
+              <span className="rounded bg-slate-100 px-1 py-0.2 text-[10px] text-slate-700 dark:bg-slate-900 dark:text-slate-400">
                 격리됨
               </span>
             </div>
@@ -276,7 +276,7 @@ export const TeamWeeklyWorkloadView: React.FC<TeamWeeklyWorkloadViewProps> = ({
               onClick={() => setIsSettingsOpen(true)}
               className="flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
             >
-              <Sliders className="h-3.5 w-3.5 text-indigo-500" />
+              <Sliders className="h-3.5 w-3.5 text-slate-700" />
               임계치 설정
             </button>
           )}
@@ -420,7 +420,7 @@ export const TeamWeeklyWorkloadView: React.FC<TeamWeeklyWorkloadViewProps> = ({
                   currentUser.role === 'manager') && (
                   <button
                     onClick={() => handleOpenReassign(member)}
-                    className="flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-50 dark:text-indigo-400 dark:hover:bg-indigo-950/50"
+                    className="flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-50 dark:text-slate-500 dark:hover:bg-slate-900/50"
                   >
                     <ArrowRightLeft className="h-3.5 w-3.5" />
                     업무 재분배

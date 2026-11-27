@@ -347,7 +347,7 @@ export const InventoryManagementView: React.FC<InventoryManagementViewProps> = (
             <span>실사 감모손실액</span>
             <SlidersHorizontal className="w-4 h-4 text-slate-800" />
           </div>
-          <div className="text-2xl font-black text-indigo-950">
+          <div className="text-2xl font-black text-slate-950">
             {auditAnalysis.totalShortageAmount.toLocaleString('ko-KR')}원
           </div>
           <p className="text-[11px] text-slate-800 font-medium">
@@ -784,7 +784,7 @@ const FefoStockOutModal: React.FC<FefoStockOutModalProps> = ({ item, lots, onClo
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-      <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
+      <div className="bg-white rounded-xl max-w-lg w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div>
             <span className="text-[11px] font-bold text-blue-600">FEFO (First Expired, First Out)</span>
@@ -898,7 +898,7 @@ const StockInLotModal: React.FC<StockInLotModalProps> = ({ items, onClose, onCre
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-      <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
+      <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <h3 className="text-base font-bold text-slate-900">신규 로트 정밀 입고</h3>
           <button type="button" onClick={handleSafeClose} className="text-slate-400 hover:text-slate-600">✕</button>

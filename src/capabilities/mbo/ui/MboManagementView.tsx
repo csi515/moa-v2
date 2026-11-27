@@ -784,7 +784,7 @@ export const MboManagementView: React.FC = () => {
               type="button"
               className={`h-12 rounded-lg px-4 text-xs font-bold ${
                 projectSubView === 'portfolio'
-                  ? 'bg-white text-indigo-800 shadow-xs'
+                  ? 'bg-white text-slate-800 shadow-xs'
                   : 'text-slate-600'
               }`}
               onClick={() => setProjectSubView('portfolio')}
@@ -795,7 +795,7 @@ export const MboManagementView: React.FC = () => {
               type="button"
               className={`h-12 rounded-lg px-4 text-xs font-bold ${
                 projectSubView === 'quarterly'
-                  ? 'bg-white text-indigo-800 shadow-xs'
+                  ? 'bg-white text-slate-800 shadow-xs'
                   : 'text-slate-600'
               }`}
               onClick={() => setProjectSubView('quarterly')}
@@ -898,7 +898,7 @@ export const MboManagementView: React.FC = () => {
       {/* 신규 목표 등록 모달 */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100">
+          <div className="bg-white rounded-xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-extrabold text-slate-900">신규 MBO 목표 등록</h3>
               <button
@@ -1086,7 +1086,7 @@ export const MboManagementView: React.FC = () => {
       {/* 반려 사유 모달 */}
       {showRejectModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-100">
+          <div className="bg-white rounded-xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-100">
             <h3 className="text-base font-extrabold text-slate-900">목표 반려 사유 작성</h3>
             <textarea
               value={rejectionInput}

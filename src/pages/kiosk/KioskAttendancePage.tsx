@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Maximize2, Minimize2 } from 'lucide-react';
 import { KioskPinExitModal } from '@/components/kiosk/KioskPinExitModal';
-import { QuickNumberInput } from '@/components/ui/quick-number-input';
+import { QuickNumberInput } from '@/shared/components/ui/QuickNumberInput';
 import { CounterSearchPanel } from '@/components/counter/CounterSearchPanel';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { enqueueAttendance, flushAttendanceQueue, watchAttendanceOnline } from '@/core/attendance/offlineAttendanceQueue';

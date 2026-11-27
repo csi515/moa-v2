@@ -39,7 +39,7 @@ export const TextbookHistoryTab: React.FC<TextbookHistoryTabProps> = ({ transact
                 onClick={() => setHistoryFilterType(t)}
                 className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors ${
                   historyFilterType === t
-                    ? 'bg-slate-900 text-white border-indigo-600'
+                    ? 'bg-slate-900 text-white border-slate-900'
                     : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                 }`}
               >

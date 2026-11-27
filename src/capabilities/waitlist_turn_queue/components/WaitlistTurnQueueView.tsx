@@ -105,7 +105,7 @@ export function WaitlistTurnQueueView() {
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-12">
       {/* 상단 탭 전환 헤더 */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
           <h1 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
             <Volume2 className="w-5 h-5 text-slate-800" />
@@ -189,7 +189,7 @@ export function WaitlistTurnQueueView() {
 
       {/* 1. 카운터 호출 관리 화면 */}
       {viewMode === 'counter' && (
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="p-4 border-b border-slate-100 flex items-center justify-between">
             <h2 className="text-sm font-bold text-slate-800">실시간 현장 대기열 목록</h2>
             <span className="text-xs text-slate-400">총 {entries.length}건 등록</span>
@@ -308,7 +308,7 @@ export function WaitlistTurnQueueView() {
 
       {/* 2. 입구 태블릿 발권 모드 (키오스크 터치형) */}
       {viewMode === 'kiosk' && (
-        <div className="max-w-md mx-auto bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-lg">
+        <div className="max-w-md mx-auto bg-white rounded-xl p-6 sm:p-8 border border-slate-200 shadow-lg">
           {issuedTicket ? (
             <div className="text-center py-6 space-y-4">
               <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full mx-auto flex items-center justify-center">
@@ -350,7 +350,7 @@ export function WaitlistTurnQueueView() {
                       onClick={() => setKioskParty(num)}
                       className={`flex-1 py-2.5 rounded-xl text-xs font-bold border transition-all ${
                         kioskParty === num
-                          ? 'bg-slate-900 text-white border-indigo-600 shadow-xs'
+                          ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                           : 'border-slate-200 text-slate-700 hover:bg-slate-50'
                       }`}
                     >
@@ -369,7 +369,7 @@ export function WaitlistTurnQueueView() {
                   placeholder="예: 1234"
                   value={kioskPhone}
                   onChange={(e) => setKioskPhone(e.target.value)}
-                  className="w-full text-center text-xl font-bold tracking-widest px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:border-indigo-600"
+                  className="w-full text-center text-xl font-bold tracking-widest px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:border-slate-900"
                 />
               </div>
 
@@ -383,7 +383,7 @@ export function WaitlistTurnQueueView() {
                       onClick={() => setKioskPref(pref)}
                       className={`py-2 rounded-xl text-xs font-semibold border ${
                         kioskPref === pref
-                          ? 'bg-slate-50 border-indigo-600 text-slate-700 font-bold'
+                          ? 'bg-slate-50 border-slate-900 text-slate-700 font-bold'
                           : 'border-slate-200 text-slate-600'
                       }`}
                     >
@@ -419,7 +419,7 @@ export function WaitlistTurnQueueView() {
 
       {/* 3. 매장 TV 전광판 (DID) 모드 */}
       {viewMode === 'did' && (
-        <div className="bg-slate-950 text-white rounded-3xl p-8 sm:p-12 shadow-2xl border border-slate-800 text-center">
+        <div className="bg-slate-950 text-white rounded-xl p-8 sm:p-12 shadow-2xl border border-slate-800 text-center">
           <div className="flex items-center justify-between border-b border-slate-800 pb-6 mb-8">
             <div className="text-left">
               <span className="text-xs tracking-wider uppercase text-slate-400 font-semibold">WAITLIST BOARD</span>

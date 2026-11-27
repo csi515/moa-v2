@@ -52,7 +52,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-3xl overflow-hidden flex flex-col max-h-[95vh] cursor-default print:max-h-none print:shadow-none print:border-none print:rounded-none"
+        className="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-3xl overflow-hidden flex flex-col max-h-[95vh] cursor-default print:max-h-none print:shadow-none print:border-none print:rounded-none"
       >
         {/* 모달 툴바 (인쇄 시 숨김) */}
         <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0 print:hidden">
@@ -92,7 +92,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
         <div className="p-4 sm:p-8 overflow-y-auto bg-slate-100/60 flex justify-center print:p-0 print:bg-white">
           <article className="w-full max-w-[210mm] bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-10 space-y-6 text-slate-800 print:shadow-none print:border-none print:p-6 print:rounded-none">
             {/* 리포트 헤더 */}
-            <header className="border-b-2 border-indigo-600 pb-4 flex items-end justify-between">
+            <header className="border-b-2 border-slate-900 pb-4 flex items-end justify-between">
               <div>
                 <p className="text-xs font-extrabold text-slate-800 tracking-wider uppercase flex items-center gap-1">
                   <Sparkles className="w-3.5 h-3.5" /> MONTHLY GROWTH REPORT
@@ -161,7 +161,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
                 <ul className="space-y-1.5 text-xs">
                   {report.practicingSongs.map((song, i) => (
                     <li key={i} className="flex items-center gap-2 text-slate-700">
-                      <span className="w-4 h-4 rounded-full bg-slate-100 text-indigo-800 text-[10px] font-bold flex items-center justify-center shrink-0">
+                      <span className="w-4 h-4 rounded-full bg-slate-100 text-slate-800 text-[10px] font-bold flex items-center justify-center shrink-0">
                         {i + 1}
                       </span>
                       <span className="font-semibold">{song}</span>
@@ -172,7 +172,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
             </section>
 
             {/* 3. 담당 강사 종합 총평 */}
-            <section className="border border-slate-200 bg-gradient-to-br from-indigo-50/50 to-purple-50/30 rounded-2xl p-5 space-y-2">
+            <section className="border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-50 rounded-2xl p-5 space-y-2">
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-slate-800" />
@@ -182,7 +182,7 @@ export const StudentGrowthReportModal: React.FC<StudentGrowthReportModalProps> =
                   <button
                     type="button"
                     onClick={() => setIsEditingComment(true)}
-                    className="text-[11px] font-bold text-slate-800 hover:text-indigo-800 flex items-center gap-1 print:hidden cursor-pointer"
+                    className="text-[11px] font-bold text-slate-800 hover:text-slate-900 flex items-center gap-1 print:hidden cursor-pointer"
                   >
                     <Edit3 className="w-3 h-3" />
                     총평 수정

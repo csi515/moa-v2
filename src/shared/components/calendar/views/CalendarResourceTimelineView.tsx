@@ -46,13 +46,13 @@ export interface CalendarResourceTimelineViewProps<T = any> {
 const DND_EVENT_MIME = 'application/x-moa-calendar-event';
 
 const COLOR_MAP: Record<string, { bg: string; text: string; border: string; accent: string }> = {
-  indigo: { bg: 'bg-slate-50/95', text: 'text-indigo-950', border: 'border-indigo-300', accent: 'bg-slate-900' },
+  indigo: { bg: 'bg-slate-50/95', text: 'text-slate-950', border: 'border-slate-300', accent: 'bg-slate-900' },
   teal: { bg: 'bg-teal-50/95', text: 'text-teal-950', border: 'border-teal-300', accent: 'bg-teal-600' },
   rose: { bg: 'bg-rose-50/95', text: 'text-rose-950', border: 'border-rose-300', accent: 'bg-rose-600' },
   amber: { bg: 'bg-amber-50/95', text: 'text-amber-950', border: 'border-amber-300', accent: 'bg-amber-600' },
   emerald: { bg: 'bg-emerald-50/95', text: 'text-emerald-950', border: 'border-emerald-300', accent: 'bg-emerald-600' },
   slate: { bg: 'bg-slate-50/95', text: 'text-slate-950', border: 'border-slate-300', accent: 'bg-slate-600' },
-  purple: { bg: 'bg-slate-50/95', text: 'text-purple-950', border: 'border-purple-300', accent: 'bg-slate-900' },
+  purple: { bg: 'bg-slate-50/95', text: 'text-slate-950', border: 'border-slate-300', accent: 'bg-slate-900' },
   blue: { bg: 'bg-blue-50/95', text: 'text-blue-950', border: 'border-blue-300', accent: 'bg-blue-600' },
 };
 
@@ -260,7 +260,7 @@ export const CalendarResourceTimelineView: FC<CalendarResourceTimelineViewProps>
                   {/* 우측: 시간 트랙 (그리드 및 이벤트 막대) */}
                   <div
                     className={`flex-1 relative cursor-pointer ${
-                      isOver ? 'bg-slate-50/50 ring-2 ring-indigo-400 ring-inset' : ''
+                      isOver ? 'bg-slate-50/50 ring-2 ring-slate-400 ring-inset' : ''
                     }`}
                     onDragOver={(e) => handleTrackDragOver(e, resource.id)}
                     onDragLeave={handleTrackDragLeave}

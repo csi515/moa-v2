@@ -122,7 +122,7 @@ export const GuardianSection: React.FC<Props> = ({
               onClick={() => onUpdateGuardian(idx, { mode: 'existing' })}
               className={`flex-1 py-2 text-xs font-bold rounded-xl border ${
                 g.mode === 'existing'
-                  ? 'bg-slate-900 text-white border-indigo-600'
+                  ? 'bg-slate-900 text-white border-slate-900'
                   : 'bg-white border-slate-200 text-slate-600'
               }`}
             >
@@ -134,7 +134,7 @@ export const GuardianSection: React.FC<Props> = ({
               onClick={() => onUpdateGuardian(idx, { mode: 'new', existingParentId: '' })}
               className={`flex-1 py-2 text-xs font-bold rounded-xl border ${
                 g.mode === 'new'
-                  ? 'bg-slate-900 text-white border-indigo-600'
+                  ? 'bg-slate-900 text-white border-slate-900'
                   : 'bg-white border-slate-200 text-slate-600'
               }`}
             >

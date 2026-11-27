@@ -65,7 +65,7 @@ function ParentInvoiceDetailModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-xs">
-      <div className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-t-3xl sm:rounded-xl shadow-2xl border border-slate-200 w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white">
           <div>
             <h3 className="font-bold text-slate-900 text-base">{monthLabel} 수강료 청구서</h3>
@@ -105,7 +105,7 @@ function ParentInvoiceDetailModal({
 
           {bankAccountText ? (
             <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 space-y-2">
-              <p className="text-xs font-bold text-indigo-800">{placeLabel} 계좌번호</p>
+              <p className="text-xs font-bold text-slate-800">{placeLabel} 계좌번호</p>
               <p className="text-sm font-semibold text-slate-900 break-all">{bankAccountText}</p>
               <button
                 type="button"

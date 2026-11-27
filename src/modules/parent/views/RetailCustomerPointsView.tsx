@@ -55,11 +55,11 @@ export const RetailCustomerPointsView: FC<Props> = ({ student }) => {
     <div className="p-4 sm:p-6 space-y-6">
       <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-md flex items-center justify-between">
         <div>
-          <p className="text-indigo-200 text-sm font-medium mb-1">사용 가능 포인트</p>
+          <p className="text-slate-300 text-sm font-medium mb-1">사용 가능 포인트</p>
           <h2 className="text-3xl font-black">{balance.toLocaleString("ko-KR")} <span className="text-base font-bold">P</span></h2>
         </div>
         <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-          <Coins className="w-6 h-6 text-indigo-100" />
+          <Coins className="w-6 h-6 text-slate-200" />
         </div>
       </div>
 

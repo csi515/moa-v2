@@ -139,7 +139,7 @@ export const StoreQrPopPrintModal: React.FC<StoreQrPopPrintModalProps> = ({
             </div>
 
             {/* 중앙 대형 QR 코드 영역 */}
-            <div className="my-8 p-6 bg-slate-50 border-2 border-slate-200 rounded-3xl flex flex-col items-center shadow-xs">
+            <div className="my-8 p-6 bg-slate-50 border-2 border-slate-200 rounded-xl flex flex-col items-center shadow-xs">
               <QrCodeSvg value={qrTargetUrl} size={popPaperSize === 'A4' ? 200 : 160} />
               <div className="mt-4 flex items-center gap-1.5 text-xs font-mono font-bold text-slate-500">
                 <QrCode className="w-3.5 h-3.5" />

@@ -22,8 +22,7 @@ import {
 } from 'lucide-react';
 import { showToast } from '@/shared/feedback/uiFeedback';
 import { LocalStorageNoticeBanner } from '@/shared/components';
-import { ListLoadingSkeleton } from '@/components/common/LoadingSkeleton';
-import { ActionableEmptyState } from '@/components/common/ActionableEmptyState';
+import { ListLoadingSkeleton, EmptyState } from '@/shared/components/ui';
 import { commitOptimistic } from '@/core/feedback/optimisticStatus';
 import { celebrateSuccess, pulseError } from '@/core/feedback/sensoryFeedback';
 import { getTenantStorageKey } from '@/shared/utils/tenantStorage';
@@ -576,9 +575,8 @@ export const BillingInvoicingView: React.FC<BillingInvoicingViewProps> = ({
                     </tr>
                   ) : filteredInvoices.length === 0 ? (
                     <tr>
-                      <td colSpan={7}>
-                        <ActionableEmptyState
-                          iconName="check"
+                      <td colSpan={7} className="py-8">
+                        <EmptyState
                           title="미납된 청구서가 없습니다. 모든 수납이 완료되었습니다."
                           description="새 청구가 생기면 이 목록에 바로 나타납니다."
                         />
@@ -859,7 +857,7 @@ const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({ onClose, onCreated })
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-      <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95">
+      <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div className="flex items-center gap-2">
             <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">

@@ -232,7 +232,7 @@ export const ElectronicLabNotebookManagementView: React.FC = () => {
                   onClick={() => setSelectedNote(n)}
                   className={`w-full text-left rounded-xl p-3 border transition-all ${
                     isSelected
-                      ? 'border-indigo-500 bg-slate-50/40 shadow-sm'
+                      ? 'border-slate-400 bg-slate-50/40 shadow-sm'
                       : 'border-slate-200 bg-white hover:border-slate-300'
                   }`}
                 >

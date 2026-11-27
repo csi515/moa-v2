@@ -206,7 +206,7 @@ export const TreatmentPortfolioView: React.FC = () => {
                 }`}
               >
                 <div>
-                  <div className="w-full h-36 bg-gradient-to-br from-pink-100 to-indigo-50 rounded-lg flex items-center justify-center text-slate-400 mb-3">
+                  <div className="w-full h-36 bg-gradient-to-br from-pink-100 to-slate-50 rounded-lg flex items-center justify-center text-slate-400 mb-3">
                     <ImageIcon className="w-8 h-8 opacity-40" />
                   </div>
                   <div className="flex items-center justify-between">

@@ -141,7 +141,7 @@ export const MboObjectiveTreeViewer: React.FC<MboObjectiveTreeViewerProps> = ({
               onClick={() => onSelectObjective(obj.id)}
               className={`rounded-2xl border transition-all cursor-pointer p-4.5 bg-white shadow-xs ${
                 isSelected
-                  ? 'border-indigo-500 ring-2 ring-indigo-500/10'
+                  ? 'border-slate-400 ring-2 ring-slate-900'
                   : 'border-slate-200 hover:border-slate-300'
               } ${isChild ? 'ml-6 sm:ml-10 border-l-4 border-l-indigo-300' : ''}`}
             >

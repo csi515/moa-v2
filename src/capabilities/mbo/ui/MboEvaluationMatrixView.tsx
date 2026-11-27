@@ -125,7 +125,7 @@ export const MboEvaluationMatrixView: React.FC<MboEvaluationMatrixViewProps> = (
       <div className="bg-slate-900 text-white rounded-2xl p-4.5 shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-black px-2 py-0.5 bg-purple-500/30 text-purple-300 rounded border border-purple-500/40">
+            <span className="text-xs font-black px-2 py-0.5 bg-slate-900/30 text-slate-400 rounded border border-slate-400">
               MBO 정규분포 상대평가 가이드
             </span>
             {distributionResult.isCompliant ? (
@@ -146,7 +146,7 @@ export const MboEvaluationMatrixView: React.FC<MboEvaluationMatrixViewProps> = (
         <div className="flex items-center gap-2 bg-slate-800/80 p-2 rounded-xl border border-slate-700 text-xs">
           <div className="text-center px-2">
             <div className="text-[10px] text-slate-400">S ({distributionResult.percentages.S}%)</div>
-            <div className="font-bold text-purple-400">{distributionResult.counts.S}명</div>
+            <div className="font-bold text-slate-500">{distributionResult.counts.S}명</div>
           </div>
           <div className="w-px h-6 bg-slate-700" />
           <div className="text-center px-2">
@@ -251,7 +251,7 @@ export const MboEvaluationMatrixView: React.FC<MboEvaluationMatrixViewProps> = (
       {/* 신규 평가 모달 */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100">
             <h3 className="text-base font-extrabold text-slate-900">성과 평가서 작성</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

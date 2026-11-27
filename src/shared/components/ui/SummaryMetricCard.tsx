@@ -43,14 +43,14 @@ const VARIANT_STYLES: Record<
     value: 'text-emerald-950',
   },
   purple: {
-    container: 'bg-purple-50/80 border-purple-200/80',
-    label: 'text-purple-700 font-bold',
-    value: 'text-purple-950',
+    container: 'bg-slate-50 border-slate-200',
+    label: 'text-slate-800 font-bold',
+    value: 'text-slate-950',
   },
   indigo: {
-    container: 'bg-indigo-50/80 border-indigo-200/80',
-    label: 'text-indigo-700 font-bold',
-    value: 'text-indigo-950',
+    container: 'bg-slate-50 border-slate-200',
+    label: 'text-slate-800 font-bold',
+    value: 'text-slate-950',
   },
   teal: {
     container: 'bg-teal-50/80 border-teal-200/80',

@@ -210,7 +210,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
           <div className="bg-slate-50/40 p-4 rounded-xl border border-slate-200/70 space-y-3">
             {textbooks.length === 0 ? (
               <div className="text-center space-y-3 py-4">
-                <BookOpen className="w-8 h-8 text-indigo-300 mx-auto" />
+                <BookOpen className="w-8 h-8 text-slate-400 mx-auto" />
                 <div>
                   <p className="text-sm font-bold text-slate-800">등록된 교재가 없습니다</p>
                   <p className="text-xs text-slate-500 mt-1">
@@ -397,7 +397,7 @@ export const NewSaleModal: React.FC<NewSaleModalProps> = ({
                       onClick={() => setPaymentMethod(method)}
                       className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-medium border transition-colors ${
                         paymentMethod === method
-                          ? 'bg-slate-900 text-white border-indigo-600'
+                          ? 'bg-slate-900 text-white border-slate-900'
                           : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'
                       }`}
                     >

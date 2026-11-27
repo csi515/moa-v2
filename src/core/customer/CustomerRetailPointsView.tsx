@@ -139,7 +139,7 @@ export const CustomerRetailPointsView: FC<Props> = ({ organization, onBack }) =>
           <button
             type="button"
             onClick={() => void load()}
-            className="min-h-[44px] px-4 rounded-xl bg-indigo-600 text-white text-sm font-bold"
+            className="min-h-[44px] px-4 rounded-xl bg-slate-900 text-white text-sm font-bold"
           >
             다시 시도
           </button>

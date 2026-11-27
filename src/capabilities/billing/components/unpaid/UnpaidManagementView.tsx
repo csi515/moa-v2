@@ -6,7 +6,7 @@ import { useModuleLabels } from '@/core/labels';
 import { useStorageRefresh, useStudentNavigation } from '@/hooks';
 import { studentMatchesGuardianQuery } from '@/core/parent/guardianHelpers';
 import { billingStorage } from '@/capabilities/billing/infrastructure/billingStorage';
-import type { StudentUnpaidSummary } from '@/types';
+import type { StudentUnpaidSummary } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { StudentService } from '@/core/students';
 import type { Student } from '@/types/customer';
 import {

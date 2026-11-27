@@ -49,7 +49,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           } ${rightIcon || showClear ? 'pr-10' : ''} ${
             hasError
               ? 'border-rose-300 bg-rose-50/20 focus:ring-rose-500 focus:border-rose-400'
-              : 'border-slate-200 focus:ring-indigo-600 focus:border-transparent'
+              : 'border-slate-200 focus:ring-slate-900 focus:border-transparent'
           } ${SIZE_CLASSES[inputSize]} ${className}`}
           {...rest}
         />

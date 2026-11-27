@@ -270,7 +270,7 @@ export const MboQuarterlyReviewForm: React.FC<MboQuarterlyReviewFormProps> = ({
       {/* 신규 진척 일지 모달 */}
       {showLogModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100">
+          <div className="bg-white rounded-xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100">
             <h3 className="text-base font-extrabold text-slate-900">정기 진행 일지 작성</h3>
             <form onSubmit={handleLogSubmit} className="space-y-3.5">
               <div>

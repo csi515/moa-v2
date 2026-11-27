@@ -77,7 +77,7 @@ export function ExamGradeAnalyticsManagementView() {
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-12">
       {/* 헤더 */}
-      <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
             <Award className="w-5 h-5 text-slate-800" />
@@ -127,7 +127,7 @@ export function ExamGradeAnalyticsManagementView() {
       </div>
 
       {/* 회원/수험생별 성적 및 레이더 분석 목록 */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-4 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-sm font-bold text-slate-800">회원·수험생별 채점 성적표 및 취약 단원 진단</h2>
           <span className="text-xs text-slate-400">총 {submissions.length}명</span>
@@ -221,7 +221,7 @@ export function ExamGradeAnalyticsManagementView() {
       {/* 학부모 상담용 개인 성적표 모달 */}
       {selectedStudent && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-5">
+          <div className="bg-white rounded-xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-5">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
                 <span className="text-xs text-slate-800 font-bold uppercase tracking-wider">ACADEMIC REPORT</span>

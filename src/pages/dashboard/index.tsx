@@ -12,7 +12,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { ActionableEmptyState } from "@/components/common/ActionableEmptyState";
+import { EmptyState } from "@/shared/components/ui/EmptyState";
 import { useOptionalOrganization } from "@/core/organizations/OrganizationProvider";
 import { getIndustryPreset } from "@/app/presets/presetRegistry";
 import { useTenantTerms } from "@/core/i18n";
@@ -266,7 +266,7 @@ export const DashboardPage: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate("/customers/create")}
-            className="inline-flex items-center gap-1.5 min-h-[44px] rounded-xl bg-slate-900 px-4 py-2 text-xs sm:text-sm font-bold text-white shadow-xs hover:bg-indigo-500 transition-colors"
+            className="inline-flex items-center gap-1.5 min-h-[44px] rounded-xl bg-slate-900 px-4 py-2 text-xs sm:text-sm font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
           >
             <Users className="h-4 w-4" />
             + {customerTerm} 등록
@@ -322,11 +322,11 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* ── 4. 회원 미등록 시 안내 배너 ─────────────────────────────── */}
-      <ActionableEmptyState
-        iconName="users"
+      <EmptyState
+        icon={<Users className="h-7 w-7 text-slate-400" />}
         title={`등록된 ${customerTerm}이(가) 없습니다`}
         description={`첫 ${customerTerm}을 등록하면 출결, 예약, ${passTerm} 발급을 바로 시작할 수 있습니다.`}
-        actionButton={{
+        action={{
           label: `+ ${customerTerm} 등록하기`,
           onClick: () => navigate("/customers/create"),
         }}

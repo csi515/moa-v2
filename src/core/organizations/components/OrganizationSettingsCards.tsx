@@ -116,12 +116,12 @@ export const OrganizationProfileFields: FC<OrganizationProfileFieldsProps> = ({
 
       {/* 학부모 자가 연결 미사용 단계: 연결코드 배너 UI 임시 숨김
       {publicCode && (
-        <div className="rounded-lg border border-indigo-100 bg-indigo-50/60 p-4 space-y-2">
-          <p className="text-xs font-bold text-indigo-900">{contactLabel} {placeLabel} 연결코드</p>
-          <p className="font-mono text-lg font-black tracking-widest text-indigo-700">
+        <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-2">
+          <p className="text-xs font-bold text-slate-900">{contactLabel} {placeLabel} 연결코드</p>
+          <p className="font-mono text-lg font-black tracking-widest text-slate-800">
             {publicCode}
           </p>
-          <p className="text-xs text-indigo-800/80 leading-relaxed">
+          <p className="text-xs text-slate-800 leading-relaxed">
             {contactLabel}가 검색·공개 페이지에서 이 코드로 {placeLabel}을 찾아 연결을 요청할 수 있습니다.
             자동 연결되지 않으며, 등록 요청 승인 후 연결됩니다.
           </p>
@@ -129,7 +129,7 @@ export const OrganizationProfileFields: FC<OrganizationProfileFieldsProps> = ({
             href={`/c/${publicCode}`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center text-xs font-bold text-indigo-600 hover:underline min-h-[44px]"
+            className="inline-flex items-center text-xs font-bold text-slate-800 hover:underline min-h-[44px]"
           >
             공개 페이지 열기 (코드 {publicCode})
           </a>
@@ -155,8 +155,8 @@ export const OrganizationBackupCard: FC<OrganizationBackupCardProps> = ({
   placeLabel = '사업장',
   customerLabel = '고객',
   feeLabel = '이용료',
-  accentIcon = 'text-indigo-600',
-  accentHover = 'hover:bg-indigo-50/60',
+  accentIcon = 'text-slate-800',
+  accentHover = 'hover:bg-slate-50',
 }) => {
   const queryClient = useQueryClient();
   const { showToast, openConfirmDialog } = useApp();

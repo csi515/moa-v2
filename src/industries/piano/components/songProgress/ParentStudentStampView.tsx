@@ -94,7 +94,7 @@ export const ParentStudentStampView: FC<ParentStudentStampViewProps> = ({
     }
     if (stampCount > prevStampsRef.current) {
       fireSongCompletionConfetti();
-      onToast?.('새 완곡 스탬프가 도착했어요! 🎉', 'success');
+      onToast?.('새 완곡 스탬프가 도착했어요! ', 'success');
     }
     prevStampsRef.current = stampCount;
   }, [stampCount, onToast]);

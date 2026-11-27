@@ -94,7 +94,7 @@ export const ProjectCategoryManager: React.FC<Props> = ({
           />
           <button
             type="button"
-            className="inline-flex h-12 items-center justify-center gap-1 rounded-xl bg-indigo-700 px-4 text-sm font-bold text-white"
+            className="inline-flex h-12 items-center justify-center gap-1 rounded-xl bg-slate-900 px-4 text-sm font-bold text-white"
             onClick={() => void handleCreate()}
             disabled={busy}
           >

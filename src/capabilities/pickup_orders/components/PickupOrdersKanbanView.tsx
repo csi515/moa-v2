@@ -100,7 +100,7 @@ const STAGE_CONFIG: Record<
   READY_FOR_PICKUP: {
     label: '픽업 대기',
     color: 'text-slate-700 border-slate-200',
-    badgeBg: 'bg-slate-50 text-purple-800',
+    badgeBg: 'bg-slate-50 text-slate-800',
     nextStage: 'COMPLETED',
     nextLabel: '수령 완료 처리',
   },
@@ -155,7 +155,7 @@ export const PickupOrdersKanbanView: React.FC = () => {
         </div>
 
         <div className="flex gap-2">
-          <div className="px-3 py-2 bg-slate-50 text-indigo-800 rounded-lg text-sm font-medium flex items-center gap-1.5">
+          <div className="px-3 py-2 bg-slate-50 text-slate-800 rounded-lg text-sm font-medium flex items-center gap-1.5">
             <Clock className="w-4 h-4" />
             <span>오늘 픽업 예정: <strong>{summary.todayPickupCount}건</strong></span>
           </div>
@@ -198,7 +198,7 @@ export const PickupOrdersKanbanView: React.FC = () => {
                     return (
                       <div
                         key={order.id}
-                        className="bg-white p-3.5 rounded-lg border shadow-sm space-y-2 hover:border-indigo-300 transition-colors"
+                        className="bg-white p-3.5 rounded-lg border shadow-sm space-y-2 hover:border-slate-300 transition-colors"
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-mono font-medium text-slate-500">

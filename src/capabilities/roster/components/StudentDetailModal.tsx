@@ -122,7 +122,7 @@ const StudentDetailModalContent: React.FC<
       modal.attendance.setNewAttDate(todayIso);
       modal.attendance.setNewAttStatus('present');
       modal.attendance.onSave({ preventDefault: () => {} } as React.FormEvent);
-      showToast(`🎉 '${student.name}'님이 오늘 출석 처리되었습니다.`, 'success');
+      showToast(`'${student.name}'님이 오늘 출석 처리되었습니다.`, 'success');
     } catch {
       showToast('출결 처리 중 오류가 발생했습니다.', 'error');
     }
@@ -354,7 +354,7 @@ const StudentDetailModalContent: React.FC<
                     onClick={() => selectPrimaryTab(tab.id)}
                     className={`py-3 px-3.5 text-xs font-bold flex items-center gap-1.5 border-b-2 whitespace-nowrap transition-all cursor-pointer ${
                       isActive
-                        ? 'border-indigo-600 text-slate-800'
+                        ? 'border-slate-900 text-slate-800'
                         : 'border-transparent text-slate-500 hover:text-slate-900'
                     }`}
                   >
@@ -369,7 +369,7 @@ const StudentDetailModalContent: React.FC<
                   onClick={() => setShowMoreTabs((prev) => !prev)}
                   className={`py-3 px-3.5 text-xs font-bold flex items-center gap-1 border-b-2 whitespace-nowrap transition-all cursor-pointer ${
                     showMoreSection
-                      ? 'border-indigo-600 text-slate-800'
+                      ? 'border-slate-900 text-slate-800'
                       : 'border-transparent text-slate-500 hover:text-slate-900'
                   }`}
                   aria-expanded={showMoreSection}
@@ -391,7 +391,7 @@ const StudentDetailModalContent: React.FC<
                       onClick={() => modal.setCurrentTab(tab.id)}
                       className={`py-2.5 px-3 text-xs font-bold flex items-center gap-1.5 border-b-2 whitespace-nowrap transition-all cursor-pointer ${
                         isActive
-                          ? 'border-indigo-600 text-slate-800'
+                          ? 'border-slate-900 text-slate-800'
                           : 'border-transparent text-slate-500 hover:text-slate-900'
                       }`}
                     >

@@ -122,6 +122,7 @@ function readStoredPortalMode(): AppPortalMode {
 
 export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { user } = useAuth();
+  const userId = user?.id ?? null;
 
   // ── Source state ──────────────────────────────────────────────
   const [memberships, setMemberships] = useState<orgService.OrganizationMembership[]>([]);
@@ -139,6 +140,7 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
   >('loading');
   const [organizationsError, setOrganizationsError] = useState<string | null>(null);
   const hasMembershipsRef = useRef(false);
+  const hasLoadedInitialRef = useRef(false);
 
   // ── Derived: selection ────────────────────────────────────────
   const {
@@ -205,6 +207,7 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
   );
 
   const resetLoggedOutOrgState = useCallback(() => {
+    hasLoadedInitialRef.current = false;
     StorageService.clearOrganization();
     setMemberships([]);
     setSelectedMembership(null);
@@ -218,13 +221,16 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
   }, [commitPortalMode]);
 
   const refreshOrganizations = useCallback(async (opts?: { quiet?: boolean }) => {
-    if (!user) {
+    if (!userId) {
       resetLoggedOutOrgState();
       setLoading(false);
       return;
     }
 
-    if (!opts?.quiet) {
+    // 이미 초기 로드가 완료된 상태라면, 별도 opts.quiet=false를 명시하지 않는 한 화면 깜빡임을 방지하기 위해 기본 quiet 모드로 백그라운드 갱신
+    const isQuiet = opts?.quiet ?? hasLoadedInitialRef.current;
+
+    if (!isQuiet) {
       setLoading(true);
       setOrganizationsStatus('loading');
       setOrganizationsError(null);
@@ -290,6 +296,7 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
         membership: session.selectedMembership,
         storage: session.storage,
       });
+      hasLoadedInitialRef.current = true;
       setOrganizationsError(null);
       setOrganizationsStatus('ready');
     } catch (err) {
@@ -305,16 +312,16 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
           ? '네트워크 연결을 확인한 뒤 다시 시도해 주세요.'
           : rawMessage || '사업장 정보를 불러오지 못했습니다.';
       // quiet + 기존 데이터: 선택 유지. 초기/강제 새로고침 실패만 error.
-      if (opts?.quiet && hasMembershipsRef.current) {
+      if (isQuiet && hasMembershipsRef.current) {
         return;
       }
       setOrganizationsError(message);
       setOrganizationsStatus('error');
     } finally {
-      if (!opts?.quiet) setLoading(false);
+      if (!isQuiet) setLoading(false);
     }
   }, [
-    user,
+    userId,
     commitMembershipSelection,
     resetLoggedOutOrgState,
     commitPortalMode,

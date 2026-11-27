@@ -205,7 +205,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
                   }
                   className={`flex-1 py-2 px-3 text-xs rounded-lg font-medium border transition-colors ${
                     currentPolicy.type === 'FIXED_PER_BOOKING'
-                      ? 'bg-slate-900 text-white border-indigo-600'
+                      ? 'bg-slate-900 text-white border-slate-900'
                       : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
                   }`}
                 >
@@ -219,7 +219,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
                   }
                   className={`flex-1 py-2 px-3 text-xs rounded-lg font-medium border transition-colors ${
                     currentPolicy.type === 'PERCENTAGE'
-                      ? 'bg-slate-900 text-white border-indigo-600'
+                      ? 'bg-slate-900 text-white border-slate-900'
                       : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
                   }`}
                 >
@@ -264,7 +264,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
                 onClick={() => handleUpdatePolicy({ settlementRule: 'NEXT_MONTH_10TH' })}
                 className={`py-2 px-2.5 text-xs rounded-lg font-medium border text-left transition-colors ${
                   (currentPolicy.settlementRule || 'NEXT_MONTH_10TH') === 'NEXT_MONTH_10TH'
-                    ? 'bg-slate-900 text-white border-indigo-600'
+                    ? 'bg-slate-900 text-white border-slate-900'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -277,7 +277,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
                 onClick={() => handleUpdatePolicy({ settlementRule: 'NEXT_MONTH_25TH' })}
                 className={`py-2 px-2.5 text-xs rounded-lg font-medium border text-left transition-colors ${
                   currentPolicy.settlementRule === 'NEXT_MONTH_25TH'
-                    ? 'bg-slate-900 text-white border-indigo-600'
+                    ? 'bg-slate-900 text-white border-slate-900'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -290,7 +290,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
                 onClick={() => handleUpdatePolicy({ settlementRule: 'AFTER_14_DAYS' })}
                 className={`py-2 px-2.5 text-xs rounded-lg font-medium border text-left transition-colors ${
                   currentPolicy.settlementRule === 'AFTER_14_DAYS'
-                    ? 'bg-slate-900 text-white border-indigo-600'
+                    ? 'bg-slate-900 text-white border-slate-900'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -595,7 +595,7 @@ export const VenueProfileSettingCard: React.FC<VenueProfileSettingCardProps> = (
         {/* 5. 연회홀 목록 */}
         <div className="space-y-2">
           <label className="block text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-            <Users className="w-4 h-4 text-indigo-500" /> 운영 연회홀 및 수용 규모 ({profile.halls.length}개)
+            <Users className="w-4 h-4 text-slate-700" /> 운영 연회홀 및 수용 규모 ({profile.halls.length}개)
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {profile.halls.map((hall) => (

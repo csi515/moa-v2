@@ -250,7 +250,7 @@ export function StandardListView<T>({
   // 8. 에러 상태 처리
   if (error) {
     return (
-      <div className={`p-8 text-center bg-white rounded-3xl border border-rose-200/80 shadow-2xs ${className}`}>
+      <div className={`p-8 text-center bg-white rounded-xl border border-rose-200/80 shadow-2xs ${className}`}>
         <AlertCircle className="w-10 h-10 text-rose-500 mx-auto mb-3" />
         <h3 className="text-base font-bold text-slate-900 mb-1">데이터를 불러오지 못했습니다</h3>
         <p className="text-xs text-slate-500 max-w-md mx-auto mb-4">{userFacingErrorMessage(error)}</p>
@@ -258,7 +258,7 @@ export function StandardListView<T>({
           <button
             type="button"
             onClick={onRetry}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold hover:bg-indigo-700 transition-colors shadow-2xs active:scale-[0.98]"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-colors shadow-2xs active:scale-[0.98]"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             다시 시도

@@ -175,7 +175,7 @@ export const ShuttleRegisterView: React.FC = () => {
                   key={route.id}
                   className={`rounded-xl border px-3 py-2.5 ${
                     selected
-                      ? 'border-indigo-300 bg-slate-50/80'
+                      ? 'border-slate-300 bg-slate-50/80'
                       : 'border-slate-100 bg-slate-50/80'
                   }`}
                 >

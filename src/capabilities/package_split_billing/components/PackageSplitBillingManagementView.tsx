@@ -86,7 +86,7 @@ export function PackageSplitBillingManagementView() {
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-12">
       {/* 헤더 */}
-      <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
             <PieChart className="w-5 h-5 text-slate-800" />
@@ -138,7 +138,7 @@ export function PackageSplitBillingManagementView() {
       </div>
 
       {/* 패키지별 분할 귀속 상세 목록 */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-4 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-sm font-bold text-slate-800">회원별 복합 패키지 소진 및 매출 귀속 현황</h2>
           <span className="text-xs text-slate-400">총 {packages.length}개 계약</span>
@@ -226,7 +226,7 @@ export function PackageSplitBillingManagementView() {
       {/* 중도 해지 환불금 산출 모달 */}
       {refundTargetPkg && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="font-extrabold text-slate-800 text-sm flex items-center gap-2">
                 <Scissors className="w-4 h-4 text-rose-600" />

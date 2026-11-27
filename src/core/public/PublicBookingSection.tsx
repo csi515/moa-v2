@@ -106,7 +106,7 @@ export function PublicBookingSection({
     <>
       <section className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 sm:p-8">
         <h2 className="text-xl font-bold text-slate-900 mb-2 flex items-center gap-2">
-          <Calendar className="w-6 h-6 text-indigo-600" />
+          <Calendar className="w-6 h-6 text-slate-800" />
           {isConsultationMode ? '희망 날짜 · 시간' : '예약 가능한 일정'}
         </h2>
         <p className="text-sm text-slate-600 mb-6">
@@ -117,7 +117,7 @@ export function PublicBookingSection({
 
         {loadingSchedules ? (
           <div className="text-center py-8">
-            <div className="inline-block w-6 h-6 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+            <div className="inline-block w-6 h-6 border-4 border-slate-900 border-t-transparent rounded-full animate-spin" />
             <p className="mt-2 text-sm text-slate-600">일정을 불러오는 중...</p>
           </div>
         ) : bookableSchedules.length === 0 ? (
@@ -136,7 +136,7 @@ export function PublicBookingSection({
                     onClick={() => setSelectedDateKey(key)}
                     className={`min-h-[44px] px-3 py-2 rounded-xl text-sm font-bold transition-colors ${
                       effectiveDateKey === key
-                        ? 'bg-indigo-600 text-white'
+                        ? 'bg-slate-900 text-white'
                         : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                   >
@@ -157,7 +157,7 @@ export function PublicBookingSection({
                     className={`min-h-[44px] px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
                       schedule.available_slots === 0
                         ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                        : 'bg-white border-2 border-indigo-200 text-indigo-700 hover:bg-indigo-50'
+                        : 'bg-white border-2 border-slate-200 text-slate-800 hover:bg-slate-50'
                     }`}
                   >
                     {formatTimeOnly(schedule.starts_at)}
@@ -171,7 +171,7 @@ export function PublicBookingSection({
             {bookableSchedules.map((schedule) => (
               <div
                 key={schedule.id}
-                className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:shadow-md transition-all"
+                className="border border-slate-200 rounded-xl p-4 hover:border-slate-300 hover:shadow-md transition-all"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
@@ -196,7 +196,7 @@ export function PublicBookingSection({
                     className={`px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-1 transition-colors min-h-[44px] ${
                       schedule.available_slots === 0
                         ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                        : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                        : 'bg-slate-900 text-white hover:bg-slate-800'
                     }`}
                   >
                     예약

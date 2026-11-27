@@ -152,8 +152,8 @@ export const TeacherDirectPassModal: FC<TeacherDirectPassModalProps> = ({
                       onClick={() => setBookName(b)}
                       className={`min-h-[40px] px-2.5 rounded-xl text-xs font-bold border ${
                         selected
-                          ? 'bg-slate-900 text-white border-indigo-600'
-                          : 'bg-white text-slate-700 border-slate-200 hover:border-indigo-300'
+                          ? 'bg-slate-900 text-white border-slate-900'
+                          : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
                       }`}
                     >
                       {b}

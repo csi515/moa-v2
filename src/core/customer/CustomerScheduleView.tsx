@@ -83,7 +83,7 @@ export function CustomerScheduleView({
             {todayClasses.map((cls) => (
               <li
                 key={cls.id}
-                className="p-4 rounded-2xl border border-indigo-100 bg-indigo-50/50"
+                className="p-4 rounded-2xl border border-slate-200 bg-slate-50"
               >
                 <p className="font-extrabold text-base text-slate-900">
                   {cls.startTime}–{cls.endTime}

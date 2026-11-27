@@ -88,7 +88,7 @@ function ParentShellContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-slate-50">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
       {step !== 'portal' && (
         <header className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-200 px-4 py-3">
           <div className="max-w-lg mx-auto flex items-center justify-between gap-2">
@@ -175,7 +175,7 @@ function ParentShellContent() {
                       autoCapitalize="characters"
                       autoCorrect="off"
                       spellCheck={false}
-                      className="flex-1 px-3 py-2.5 text-sm font-mono uppercase border-2 border-slate-300 rounded-xl tracking-widest focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-indigo-100"
+                      className="flex-1 px-3 py-2.5 text-sm font-mono uppercase border-2 border-slate-300 rounded-xl tracking-widest focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
                       autoFocus
                     />
                     <button

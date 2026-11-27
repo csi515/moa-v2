@@ -131,7 +131,7 @@ const WORK_TYPE_INFO: Record<
   },
   electrical: {
     label: '정전/고압전기',
-    icon: <Zap className="w-4 h-4 text-purple-500" />,
+    icon: <Zap className="w-4 h-4 text-slate-700" />,
     color: 'border-slate-200 bg-slate-50 text-slate-700',
   },
   excavation: {
@@ -369,7 +369,7 @@ export const SafetyWorkPermitManagementView: React.FC = () => {
 
       {/* 상태 요약 대시보드 카드 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs">
+        <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 text-xs font-bold">
             <span>승인 대기 허가서</span>
             <Clock className="w-4 h-4 text-amber-500" />
@@ -380,7 +380,7 @@ export const SafetyWorkPermitManagementView: React.FC = () => {
           <p className="mt-1 text-xs text-slate-400">안전관리자 현장 확인 필요</p>
         </div>
 
-        <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs">
+        <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 text-xs font-bold">
             <span>현재 작업 진행 중</span>
             <Activity className="w-4 h-4 text-emerald-600" />
@@ -391,7 +391,7 @@ export const SafetyWorkPermitManagementView: React.FC = () => {
           <p className="mt-1 text-xs text-slate-400">현장 밀착 감시 및 비상벨 연동</p>
         </div>
 
-        <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs">
+        <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 text-xs font-bold">
             <span>누적 허가 발급 이력</span>
             <FileCheck className="w-4 h-4 text-slate-800" />
@@ -417,7 +417,7 @@ export const SafetyWorkPermitManagementView: React.FC = () => {
             return (
               <div
                 key={permit.id}
-                className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs hover:border-slate-300 transition-all space-y-4"
+                className="p-5 rounded-xl bg-white border border-slate-200 shadow-2xs hover:border-slate-300 transition-all space-y-4"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2">
@@ -551,7 +551,7 @@ export const SafetyWorkPermitManagementView: React.FC = () => {
       {/* 신규 허가서 신청 모달 */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
-          <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl border border-slate-100 space-y-4">
+          <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-2xl border border-slate-100 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">안전작업허가서 신규 신청</h3>
               <button

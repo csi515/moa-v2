@@ -17,11 +17,12 @@ import {
   isCapabilityRequired,
   toggleCapabilityVisibility,
 } from './menuVisibilityEngine';
+import { showToast as showGlobalToast } from '@/shared/feedback/uiFeedback';
 
 export const MenuVisibilitySettingsView: React.FC = () => {
   const { currentOrganization, hiddenCapabilities, updateHiddenCapabilities } = useOrganization();
   const [saving, setSaving] = useState(false);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  
 
   // 현재 사업장의 업종 프리셋 조회
   const industryId = currentOrganization?.industry_type || 'general_academy';
@@ -43,8 +44,7 @@ export const MenuVisibilitySettingsView: React.FC = () => {
   const optionalItems = useMemo(() => menuItems.filter((i) => !i.isRequired), [menuItems]);
 
   const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
+    showGlobalToast(msg);
   };
 
   const handleToggle = async (capId: string) => {
@@ -81,12 +81,7 @@ export const MenuVisibilitySettingsView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-16">
       {/* 토스트 알림 */}
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-lg border border-slate-700 animate-in fade-in slide-in-from-bottom-2">
-          <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-          <span className="text-sm font-medium">{toastMessage}</span>
-        </div>
-      )}
+      
 
       {/* 헤더 섹션 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
@@ -120,7 +115,7 @@ export const MenuVisibilitySettingsView: React.FC = () => {
       </div>
 
       {/* 현재 업종 프리셋 화이트리스트 안내 배너 */}
-      <div className="bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-indigo-500/5 rounded-2xl p-5 border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-slate-800 via-blue-500/10 to-slate-900 rounded-2xl p-5 border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
           <div className="p-2.5 bg-slate-900 text-white rounded-xl shadow-sm mt-0.5 sm:mt-0">
             <Sparkles className="w-5 h-5" />
@@ -138,7 +133,7 @@ export const MenuVisibilitySettingsView: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 text-xs text-slate-500 bg-white/80 backdrop-blur-sm px-3.5 py-2 rounded-xl border border-indigo-50 self-stretch sm:self-auto justify-between sm:justify-start">
+        <div className="flex items-center gap-3 text-xs text-slate-500 bg-white/80 backdrop-blur-sm px-3.5 py-2 rounded-xl border border-slate-100 self-stretch sm:self-auto justify-between sm:justify-start">
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
             <span>표시 중 {menuItems.length - hiddenCount}개</span>
@@ -225,7 +220,7 @@ export const MenuVisibilitySettingsView: React.FC = () => {
                 key={item.id}
                 className={`flex items-start justify-between p-3.5 rounded-xl border transition-all cursor-pointer ${
                   item.isVisible
-                    ? 'border-slate-200 hover:border-indigo-300 hover:bg-slate-50/50 bg-white'
+                    ? 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/50 bg-white'
                     : 'border-dashed border-slate-200 bg-slate-50/80 opacity-70 hover:opacity-90'
                 }`}
               >
@@ -260,7 +255,7 @@ export const MenuVisibilitySettingsView: React.FC = () => {
 
                 <div className="p-1">
                   {item.isVisible ? (
-                    <Eye className="w-4 h-4 text-indigo-500" />
+                    <Eye className="w-4 h-4 text-slate-700" />
                   ) : (
                     <EyeOff className="w-4 h-4 text-slate-400" />
                   )}

@@ -965,7 +965,7 @@ export const TeacherManagementView: React.FC = () => {
                 />
               </div>
 
-              <div className="rounded-xl border border-indigo-100 bg-indigo-50/40 p-3 space-y-3">
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">정산 방식</label>
                   <select

@@ -342,7 +342,7 @@ const RentActionModal: React.FC<{
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-      <div className="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-100">
+      <div className="bg-white rounded-xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-100">
         <h3 className="text-base font-extrabold text-slate-900">비품 대여 처리</h3>
         <p className="text-xs text-slate-500 font-medium">대여 품목: {item.name}</p>
 
@@ -419,7 +419,7 @@ const NewEquipmentModal: React.FC<{
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-      <div className="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-100">
+      <div className="bg-white rounded-xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-100">
         <h3 className="text-base font-extrabold text-slate-900">신규 대여 비품 등록</h3>
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>

@@ -70,7 +70,7 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
                   key={cls.id}
                   className={`p-4 border rounded-xl flex flex-col gap-2 transition-all ${
                     isCurrent
-                      ? 'border-indigo-600 bg-slate-50/60 ring-1 ring-indigo-600 ring-offset-2'
+                      ? 'border-slate-900 bg-slate-50/60 ring-1 ring-slate-900 ring-offset-2'
                       : 'border-slate-100 bg-slate-50'
                   }`}
                 >
@@ -86,7 +86,7 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
                     </span>
                     <span className="text-xs text-slate-400">{cls.teacherName}</span>
                   </div>
-                  <p className={`text-sm font-bold ${isCurrent ? 'text-indigo-950' : 'text-slate-800'}`}>
+                  <p className={`text-sm font-bold ${isCurrent ? 'text-slate-950' : 'text-slate-800'}`}>
                     {cls.name}
                   </p>
                   <div className="flex items-center justify-between mt-1 text-xs">
@@ -128,7 +128,7 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
             {recentInvoices.length === 0 ? (
               <div className="text-center py-8 space-y-2">
                 <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto" />
-                <p className="text-xs font-bold text-slate-600">미납된 수강료가 없습니다! ✨</p>
+                <p className="text-xs font-bold text-slate-600">미납된 수강료가 없습니다! </p>
                 <p className="text-xs text-slate-400">모든 학생이 정상 수납되었습니다</p>
               </div>
             ) : (
@@ -290,8 +290,7 @@ export const DirectorDashboardPanels: React.FC<DirectorDashboardPanelsProps> = (
               <div className="text-center py-8">
                 <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
                 <p className="text-xs text-slate-500 font-medium">
-                  모든 교재의 재고가 충분합니다! ✨
-                </p>
+                  모든 교재의 재고가 충분합니다! </p>
               </div>
             ) : (
               lowStockBooks.slice(0, 4).map((book) => {

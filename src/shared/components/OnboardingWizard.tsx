@@ -473,8 +473,8 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
       data-testid="onboarding-wizard"
     >
-      <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col">
-                <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-indigo-50/70 via-white to-white flex items-center justify-between shrink-0">
+      <div className="bg-white rounded-xl shadow-2xl border border-slate-100 w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col">
+                <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 via-white to-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center shrink-0">
               <Sparkles className="w-4 h-4" />
@@ -517,7 +517,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
         <div className="px-6 pt-4 pb-2 shrink-0">
           <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
             <div
-              className="h-full bg-indigo-500 rounded-full transition-all"
+              className="h-full bg-slate-900 rounded-full transition-all"
               style={{ width: `${((step + 1) / TOTAL_STEPS) * 100}%` }}
             />
           </div>
@@ -553,7 +553,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
               <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 flex items-start gap-2.5">
                 <Sparkles className="w-4 h-4 text-slate-800 shrink-0 mt-0.5" />
                 <div className="space-y-0.5">
-                  <p className="font-bold text-indigo-950">학원명만 입력하시면 바로 시작할 수 있습니다!</p>
+                  <p className="font-bold text-slate-950">학원명만 입력하시면 바로 시작할 수 있습니다!</p>
                   <p className="text-slate-700/90 text-[11px] leading-relaxed">
                     운영시간·수강료 등은 표준 기본값으로 자동 구성되며, 언제든 설정 메뉴에서 자유롭게 수정하실 수 있습니다.
                   </p>
@@ -713,7 +713,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                     onClick={() => setLessonMinutes(mins)}
                     className={`min-h-[44px] rounded-xl border-2 text-sm font-bold ${
                       lessonMinutes === mins
-                        ? 'border-indigo-500 bg-slate-50 text-indigo-800'
+                        ? 'border-slate-400 bg-slate-50 text-slate-800'
                         : 'border-slate-200 text-slate-600'
                     }`}
                   >
@@ -941,7 +941,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                         }
                         className={`flex-1 py-2 rounded-xl text-xs font-bold transition min-h-[44px] border ${
                           active
-                            ? 'bg-slate-900 text-white border-indigo-600 shadow-2xs'
+                            ? 'bg-slate-900 text-white border-slate-900 shadow-2xs'
                             : isWeekend
                             ? 'bg-slate-50 text-slate-400 border-slate-200 hover:border-slate-300'
                             : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
@@ -964,7 +964,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                     type="time"
                     value={consultationStartTime}
                     onChange={(e) => setConsultationStartTime(e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 font-medium min-h-[44px]"
+                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 font-medium min-h-[44px]"
                   />
                 </div>
                 <div>
@@ -975,7 +975,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                     type="time"
                     value={consultationEndTime}
                     onChange={(e) => setConsultationEndTime(e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 font-medium min-h-[44px]"
+                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 font-medium min-h-[44px]"
                   />
                 </div>
                 <div>
@@ -985,7 +985,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                   <select
                     value={consultationSlotMinutes}
                     onChange={(e) => setConsultationSlotMinutes(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-600 font-medium min-h-[44px]"
+                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 font-medium min-h-[44px]"
                   >
                     <option value={15}>15분</option>
                     <option value={20}>20분</option>

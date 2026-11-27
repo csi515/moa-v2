@@ -77,7 +77,7 @@ export function ConsultationForm({
                 required
                 value={consultForm.contact_name}
                 onChange={(e) => setConsultForm({ ...consultForm, contact_name: e.target.value })}
-                className="w-full px-4 py-3 min-h-[44px] border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 min-h-[44px] border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                 placeholder="이름"
               />
             </div>
@@ -90,7 +90,7 @@ export function ConsultationForm({
                 required
                 value={consultForm.contact_phone}
                 onChange={(e) => setConsultForm({ ...consultForm, contact_phone: e.target.value })}
-                className="w-full px-4 py-3 min-h-[44px] border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 min-h-[44px] border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                 placeholder="010-0000-0000"
               />
             </div>
@@ -102,7 +102,7 @@ export function ConsultationForm({
                 type="text"
                 value={studentName}
                 onChange={(e) => setStudentName(e.target.value)}
-                className="w-full px-4 py-3 min-h-[44px] border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 min-h-[44px] border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                 placeholder="본인 또는 자녀 이름"
               />
             </div>
@@ -112,7 +112,7 @@ export function ConsultationForm({
                 type="text"
                 value={consultForm.preferred_time}
                 onChange={(e) => setConsultForm({ ...consultForm, preferred_time: e.target.value })}
-                className="w-full px-4 py-3 min-h-[44px] border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 min-h-[44px] border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                 placeholder="예: 평일 오후 3시 이후"
               />
             </div>
@@ -122,13 +122,13 @@ export function ConsultationForm({
                 value={consultForm.message}
                 onChange={(e) => setConsultForm({ ...consultForm, message: e.target.value })}
                 rows={4}
-                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900"
                 placeholder="상담하고 싶은 내용을 적어 주세요"
               />
             </div>
             <button
               type="submit"
-              className="w-full py-3.5 min-h-[44px] bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors"
+              className="w-full py-3.5 min-h-[44px] bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-colors"
             >
               상담 신청
             </button>

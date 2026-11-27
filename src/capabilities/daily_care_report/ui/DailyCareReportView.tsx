@@ -350,7 +350,7 @@ export const DailyCareReportView: React.FC = () => {
                   fontSize: '14px',
                 }}
               >
-                <option value="normal">✨ 정상 배변</option>
+                <option value="normal">정상 배변</option>
                 <option value="soft">💧 묽은 변/설사 주의</option>
                 <option value="constipation">🧱 변비</option>
                 <option value="none">⏳ 배변 없음</option>

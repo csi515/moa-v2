@@ -31,7 +31,7 @@ export const CompletionReport: FC<CompletionReportProps> = ({
   granterNameById,
 }) => {
   return (
-    <section className="bg-gradient-to-br from-indigo-50 via-white to-amber-50 rounded-2xl border border-slate-200 p-4 space-y-3">
+    <section className="bg-gradient-to-br from-slate-50 via-white to-amber-50 rounded-2xl border border-slate-200 p-4 space-y-3">
       <div className="flex items-start justify-between gap-2">
         <div>
           <h3 className="text-sm font-black text-slate-900">{SONG_PROGRESS_COPY.reportTitle}</h3>
@@ -63,7 +63,7 @@ export const CompletionReport: FC<CompletionReportProps> = ({
                 : null;
             return (
               <li key={r.id} className="relative">
-                <span className="absolute -left-[1.35rem] top-1 w-2.5 h-2.5 rounded-full bg-slate-900 ring-4 ring-indigo-100" />
+                <span className="absolute -left-[1.35rem] top-1 w-2.5 h-2.5 rounded-full bg-slate-900 ring-4 ring-slate-200" />
                 <p className="text-sm font-bold text-slate-900">
                   {r.book_name} · {r.song_title}
                 </p>

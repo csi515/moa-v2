@@ -51,7 +51,7 @@ export const ParentChildSelectorModal: React.FC<ParentChildSelectorModalProps> =
               key={child.studentId}
               type="button"
               onClick={() => onSelect(child)}
-              className="w-full flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-slate-50/40 transition-colors text-left min-h-[44px]"
+              className="w-full flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50/40 transition-colors text-left min-h-[44px]"
             >
               <div className="min-w-0">
                 <p className="font-bold text-slate-900 truncate">{child.displayName}</p>

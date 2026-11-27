@@ -538,7 +538,7 @@ export const InventoryListView: FC = () => {
                       <button
                         type="button"
                         onClick={() => openLabelPrint(row)}
-                        className="text-xs font-bold text-slate-800 hover:text-indigo-800 min-h-[44px] px-2 inline-flex items-center gap-1"
+                        className="text-xs font-bold text-slate-800 hover:text-slate-900 min-h-[44px] px-2 inline-flex items-center gap-1"
                       >
                         <Printer className="w-3.5 h-3.5" />
                         라벨

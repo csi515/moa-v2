@@ -234,7 +234,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
         label: '전자 결재',
         description: '기안·승인·반려',
         icon: <FileCheck className="h-8 w-8 text-white drop-shadow-sm" />,
-        gradient: 'from-indigo-500 to-blue-600',
+        gradient: 'from-slate-800 to-blue-600',
         requiredAnyCapability: ['approval_workflow'],
         badge: pendingBadgeCount || null,
         badgeColor: 'bg-rose-500 text-white',
@@ -245,7 +245,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
         label: '연구소',
         description: '과제·장비·특허',
         icon: <FlaskConical className="h-8 w-8 text-white drop-shadow-sm" />,
-        gradient: 'from-violet-500 to-purple-600',
+        gradient: 'from-violet-500 to-slate-900',
         requiredAnyCapability: ['research_project'],
         requiresPermissionCheck: true,
       },
@@ -264,7 +264,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
         label: '통근 셔틀',
         description: '탑승·노선·운행표',
         icon: <Bus className="h-8 w-8 text-white drop-shadow-sm" />,
-        gradient: 'from-blue-500 to-indigo-600',
+        gradient: 'from-blue-500 to-slate-900',
         requiredAnyCapability: ['shuttle_dispatch'],
       },
       {
@@ -327,7 +327,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
         label: '업무 파이프라인',
         description: '칸반·작업 지시',
         icon: <Kanban className="h-8 w-8 text-white drop-shadow-sm" />,
-        gradient: 'from-fuchsia-500 to-purple-700',
+        gradient: 'from-fuchsia-500 to-slate-900',
         requiredAnyCapability: ['task_pipeline'],
       },
       {
@@ -354,7 +354,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
         label: '노경 건의함',
         description: '건의·제보',
         icon: <MessageSquareWarning className="h-8 w-8 text-white drop-shadow-sm" />,
-        gradient: 'from-indigo-500 to-violet-600',
+        gradient: 'from-slate-800 to-violet-600',
         requiredAnyCapability: ['whistleblower_grievance'],
       },
       {
@@ -528,7 +528,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
               key={app.id}
               to={app.to}
               onClick={(e) => handleTileClick(app, e)}
-              className="group relative flex flex-col items-center justify-center rounded-3xl border border-slate-100 bg-white p-5 sm:p-6 text-center shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg active:scale-95"
+              className="group relative flex flex-col items-center justify-center rounded-xl border border-slate-100 bg-white p-5 sm:p-6 text-center shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg active:scale-95"
             >
               {app.badge ? (
                 <span
@@ -566,7 +566,7 @@ export const CompanyAppLauncherDashboard: React.FC<{
           aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-xs"
         >
-          <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
+          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 text-amber-700">

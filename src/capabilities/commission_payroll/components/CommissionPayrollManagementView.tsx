@@ -239,7 +239,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
         <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
           <div className="flex items-center justify-between text-slate-500 mb-2">
             <span className="text-sm font-medium">총 세전 인센티브/수당</span>
-            <DollarSign className="w-4 h-4 text-indigo-500" />
+            <DollarSign className="w-4 h-4 text-slate-700" />
           </div>
           <div className="text-2xl font-bold text-slate-800">
             {formatKoreanWon(summary.totalPreTaxEarnings)}
@@ -286,7 +286,7 @@ export const CommissionPayrollManagementView: React.FC = () => {
             >
               <Users className="w-4 h-4" />
               <span>{p.staffName}</span>
-              <span className={`text-xs px-1.5 py-0.5 rounded ${isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-200 text-slate-600'}`}>
+              <span className={`text-xs px-1.5 py-0.5 rounded ${isSelected ? 'bg-slate-900 text-white' : 'bg-slate-200 text-slate-600'}`}>
                 {p.role}
               </span>
             </button>

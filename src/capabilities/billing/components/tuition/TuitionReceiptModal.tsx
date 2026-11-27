@@ -8,6 +8,7 @@ import {
 } from '@/capabilities/billing/finance/latestTuitionPayment';
 import { TuitionService } from '@/capabilities/billing/finance';
 import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
+import { useAsyncLock } from '@/shared/hooks/useAsyncLock';
 import { generateReceiptPdfBlob } from '@/shared/components/receipt/PdfReceiptGenerator';
 
 interface TuitionReceiptModalProps {
@@ -53,35 +54,34 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
     ? paymentMethodLabel[latestPayment.paymentMethod] || latestPayment.paymentMethod
     : '수납 확인';
 
-  const [isPdfGenerating, setIsPdfGenerating] = useState(false);
+  const { isLocked: isPdfGenerating, runWithLock } = useAsyncLock();
 
   const handlePrint = () => {
     window.print();
   };
 
-  const handleDownloadPdf = async () => {
-    try {
-      setIsPdfGenerating(true);
-      const blob = await generateReceiptPdfBlob({
-        organizationName: orgName,
-        receiptNumber: receiptNo,
-        transactionDate: paymentDate,
-        customerName: invoice.studentName || '고객',
-        subtotal: invoice.totalAmount,
-        totalPaid: invoice.paidAmount || invoice.totalAmount,
-        paymentMethod: methodText,
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `receipt_${receiptNo}.pdf`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error('PDF receipt generation failed:', err);
-    } finally {
-      setIsPdfGenerating(false);
-    }
+  const handleDownloadPdf = () => {
+    runWithLock(async () => {
+      try {
+        const blob = await generateReceiptPdfBlob({
+          organizationName: orgName,
+          receiptNumber: receiptNo,
+          transactionDate: paymentDate,
+          customerName: invoice.studentName || '고객',
+          subtotal: invoice.totalAmount,
+          totalPaid: invoice.paidAmount || invoice.totalAmount,
+          paymentMethod: methodText,
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `receipt_${receiptNo}.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error('PDF receipt generation failed:', err);
+      }
+    });
   };
 
   // 선언적 ESC 키 닫기 훅
@@ -94,7 +94,7 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] cursor-default print:border-none print:shadow-none print:max-w-none print:w-full print:max-h-none"
+        className="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] cursor-default print:border-none print:shadow-none print:max-w-none print:w-full print:max-h-none"
       >
         {/* 상단 툴바 (인쇄 시 숨김) */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 no-print">
@@ -228,7 +228,7 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
                 <CheckCircle2 className="w-3.5 h-3.5 text-slate-800" />
                 실제 수납 납입액 (금회)
               </span>
-              <span className="text-sm font-black text-indigo-800">
+              <span className="text-sm font-black text-slate-800">
                 {formatCurrency(invoice.paidAmount)}
               </span>
             </div>

@@ -221,7 +221,7 @@ export const SongProgressStaffView: FC = () => {
             {filteredStudents.map((student) => (
               <div
                 key={student.id}
-                className="p-3.5 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 transition-all flex flex-col justify-between space-y-3 group"
+                className="p-3.5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-all flex flex-col justify-between space-y-3 group"
               >
                 {/* 상단 학생 기본 정보 */}
                 <div className="flex items-start justify-between gap-2">

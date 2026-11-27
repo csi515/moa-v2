@@ -21,7 +21,16 @@ export { ToggleSwitch } from './ToggleSwitch';
 export { AccordionSection } from './AccordionSection';
 export { SettingsCard } from './SettingsCard';
 export { FormField, FORM_CONTROL_CLASS, FORM_CONTROL_ERROR_CLASS } from './FormField';
-export { Skeleton, PageListSkeleton, InlineBusy } from './Skeleton';
+export {
+  Skeleton,
+  PageListSkeleton,
+  TableRowSkeleton,
+  CardListSkeleton,
+  TableSkeleton,
+  ListLoadingSkeleton,
+  MetricCardSkeleton,
+  InlineBusy,
+} from './Skeleton';
 export { BirthDateInput, formatBirthDateDigits } from './BirthDateInput';
 export { SegmentedControl } from './SegmentedControl';
 export { Section, type SectionProps } from './Section';
@@ -44,5 +53,7 @@ export { ListToolbar, type ListToolbarProps, type ListToolbarTabItem, type ListT
 export { StatusBadge, resolveSemanticStatusTone, type StatusBadgeProps, type StatusBadgeTone, type StatusBadgeSize } from './StatusBadge';
 export { StandardDataTable, type StandardDataTableProps, type StandardColumn } from './StandardDataTable';
 export { FormModal, type FormModalProps } from './FormModal';
+export { WeekStripBar, type WeekStripBarProps } from './WeekStripBar';
+export { QuickNumberInput, type QuickNumberInputProps } from './QuickNumberInput';
 
 

@@ -54,7 +54,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
               <button
                 type="button"
                 onClick={handleAgreeAndClose}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors shadow-sm"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-slate-900 rounded-xl hover:bg-slate-800 transition-colors shadow-sm"
               >
                 <Check className="w-3.5 h-3.5" />
                 확인 및 동의
@@ -71,7 +71,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
             onClick={() => setActiveTab('terms')}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold border-b-2 transition-all ${
               activeTab === 'terms'
-                ? 'border-indigo-600 text-indigo-600 bg-white rounded-t-lg'
+                ? 'border-slate-900 text-slate-800 bg-white rounded-t-lg'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -83,7 +83,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
             onClick={() => setActiveTab('privacy')}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold border-b-2 transition-all ${
               activeTab === 'privacy'
-                ? 'border-indigo-600 text-indigo-600 bg-white rounded-t-lg'
+                ? 'border-slate-900 text-slate-800 bg-white rounded-t-lg'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >

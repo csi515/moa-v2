@@ -50,8 +50,8 @@ export const IndustryAppRouter: React.FC = () => {
     loading,
   } = useOrganization();
 
-  // 조직 및 세션 로딩 중에는 로딩 화면 유지 (비동기 Role/Organization 확정 대기)
-  if (loading) {
+  // 조직 및 세션 최초 로딩 중에는 로딩 화면 유지 (단, 이미 currentOrganization이 확정된 백그라운드 갱신 시에는 화면 유지)
+  if (loading && !currentOrganization) {
     return <LoadingScreen message="사업장 환경을 구성하는 중..." />;
   }
 

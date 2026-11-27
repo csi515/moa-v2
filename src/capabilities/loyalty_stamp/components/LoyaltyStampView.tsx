@@ -146,7 +146,7 @@ export const LoyaltyStampView: React.FC = () => {
     if (res.isCompleted && res.issuedCoupon) {
       setCoupons((prev) => [res.issuedCoupon!, ...prev]);
       showToast(
-        `🎉 축하합니다! 스탬프 판이 완성되어 [${res.issuedCoupon.couponName}]이 자동 발급되었습니다!`,
+        `축하합니다! 스탬프 판이 완성되어 [${res.issuedCoupon.couponName}]이 자동 발급되었습니다!`,
         'success'
       );
     } else {
@@ -174,7 +174,7 @@ export const LoyaltyStampView: React.FC = () => {
       if (r.isCompleted && r.issuedCoupon) {
         setCoupons((prev) => [r.issuedCoupon!, ...prev]);
         showToast(
-          `🎉 [출결 연동] 판 완성! [${r.issuedCoupon.couponName}] 발급!`,
+          `[출결 연동] 판 완성! [${r.issuedCoupon.couponName}] 발급!`,
           'success'
         );
       } else {
@@ -205,7 +205,7 @@ export const LoyaltyStampView: React.FC = () => {
       if (r.isCompleted && r.issuedCoupon) {
         setCoupons((prev) => [r.issuedCoupon!, ...prev]);
         showToast(
-          `🎉 [결제 연동] ${amount.toLocaleString()}원 결제로 ${res.stampsCalculated}개 적립되어 판이 완성되었습니다!`,
+          `[결제 연동] ${amount.toLocaleString()}원 결제로 ${res.stampsCalculated}개 적립되어 판이 완성되었습니다!`,
           'success'
         );
       } else {
@@ -291,7 +291,7 @@ export const LoyaltyStampView: React.FC = () => {
 
       {/* 스탬프 판 렌더링 카드 */}
       {activeBoard && (
-        <div className="bg-gradient-to-br from-amber-50/70 via-white to-orange-50/40 p-6 rounded-3xl border border-amber-200 shadow-xs space-y-6">
+        <div className="bg-gradient-to-br from-amber-50/70 via-white to-orange-50/40 p-6 rounded-xl border border-amber-200 shadow-xs space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-amber-100 pb-4">
             <div>
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[11px] font-black">
@@ -406,7 +406,7 @@ export const LoyaltyStampView: React.FC = () => {
       )}
 
       {/* 발급된 리워드 쿠폰 보관함 */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 space-y-4 shadow-xs">
+      <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-4 shadow-xs">
         <div className="flex items-center justify-between">
           <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
             <Ticket className="w-5 h-5 text-slate-800" />
@@ -429,7 +429,7 @@ export const LoyaltyStampView: React.FC = () => {
                 className={`p-4 rounded-2xl border transition-all ${
                   cpn.isRedeemed
                     ? 'bg-slate-50 border-slate-200 opacity-60'
-                    : 'bg-white border-slate-200 shadow-xs hover:border-indigo-300'
+                    : 'bg-white border-slate-200 shadow-xs hover:border-slate-300'
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">

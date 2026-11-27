@@ -96,7 +96,7 @@ export const TextbookSalesTab: React.FC<TextbookSalesTabProps> = ({
 
         {unpaidSales.length === 0 ? (
           <div className="py-6 text-center bg-slate-50/70 rounded-xl border border-dashed border-slate-200 text-xs text-slate-600 font-medium">
-            🎉 현재 미납된 교재비가 없습니다! 모든 교재비가 완납되었습니다.
+            현재 미납된 교재비가 없습니다! 모든 교재비가 완납되었습니다.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -185,7 +185,7 @@ export const TextbookSalesTab: React.FC<TextbookSalesTabProps> = ({
                 onClick={() => setSalesStatusFilter(st)}
                 className={`px-3 py-2 min-h-[44px] sm:min-h-[38px] rounded-xl border font-bold transition-colors whitespace-nowrap cursor-pointer ${
                   salesStatusFilter === st
-                    ? 'bg-slate-900 text-white border-indigo-600 shadow-xs'
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                     : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                 }`}
               >

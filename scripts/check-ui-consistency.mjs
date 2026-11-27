@@ -49,7 +49,8 @@ export const ALLOWED_MODAL_FILES = new Set([
   'src/shared/components/ToastContainer.tsx',
   'src/shared/components/OnboardingWizard.tsx',
   'src/shared/components/notifications/NotificationDrawer.tsx',
-  'src/components/ui/app-drawer.tsx',
+  'src/shared/components/commandPalette/AppDrawer.tsx',
+  'src/shared/components/commandPalette/GlobalCommandPalette.tsx',
   'src/industries/piano/components/kiosk/LobbyAttendanceKioskView.tsx',
   'src/industries/piano/components/quickAction/PianoQuickActionBottomSheet.tsx',
   'src/components/kiosk/KioskPinExitModal.tsx',
@@ -68,8 +69,7 @@ export const ALLOWED_TABLE_FILES = new Set([
   "src/shared/components/ui/StandardDataTable.tsx",
   "src/shared/components/ui/ResponsiveTable.tsx",
   "src/shared/components/receipt/PrintReceipt.tsx",
-  "src/components/counter/VirtualRows.tsx",
-  "src/components/common/ResponsiveTable.tsx"
+  "src/components/counter/VirtualRows.tsx"
 ]);
 
 /**
@@ -159,7 +159,6 @@ export const LEGACY_TABLE_BASELINE = new Set([
   "src/capabilities/waitlist_queue/components/WaitlistPage.tsx",
   "src/capabilities/whistleblower_grievance/components/GrievanceListPage.tsx",
   "src/capabilities/work_attendance_payroll/components/WorkAttendancePayrollView.tsx",
-  "src/components/common/ResponsiveTable.tsx",
   "src/core/customer/components/PracticeRoomStatusGrid.tsx",
   "src/core/legal/legalContent.tsx",
   "src/core/locations/components/BranchConsolidationHqView.tsx",
@@ -190,6 +189,8 @@ export function scanUiConsistencyViolations() {
 
   const INLINE_MODAL_PATTERN = /(?:fixed\s+inset-0|inset-0\s+fixed)[^"'>]*?(?:z-[0-9]+|bg-)/;
   const INLINE_TABLE_PATTERN = /<table\b/;
+  const FORBIDDEN_THEME_PATTERN = /(?:[a-z0-9:-]+)?(?:bg|text|border|ring|divide|from|to|via)-(?:indigo|purple)-[a-z0-9/]+/;
+  const FORBIDDEN_ROUNDED_PATTERN = /\brounded-3xl\b/;
 
   for (const file of files) {
     const rel = toPosix(file);
@@ -216,6 +217,24 @@ export function scanUiConsistencyViolations() {
         });
       }
     }
+
+    // 3. 비표준 테마 색상(indigo/purple) 탐지
+    if (FORBIDDEN_THEME_PATTERN.test(source)) {
+      violations.push({
+        file: rel,
+        type: 'forbidden_theme_color',
+        message: '비표준 테마 색상(indigo-*, purple-*)이 감지되었습니다. Moa-v2 표준 B2B 토큰(slate-*, blue-*)을 사용하세요.',
+      });
+    }
+
+    // 4. 비표준 모서리 반경(rounded-3xl) 탐지
+    if (FORBIDDEN_ROUNDED_PATTERN.test(source)) {
+      violations.push({
+        file: rel,
+        type: 'forbidden_rounded_radius',
+        message: '과도한 모서리 반경(rounded-3xl)이 감지되었습니다. B2B 표준 모서리(rounded-lg, rounded-xl)를 사용하세요.',
+      });
+    }
   }
 
   return violations;
@@ -225,6 +244,7 @@ export function runSelfTest() {
   console.log('Running check-ui-consistency self-test...');
   const probeModalFile = join(srcDir, 'shared', '_ui_consistency_modal_probe.tmp.tsx');
   const probeTableFile = join(srcDir, 'shared', '_ui_consistency_table_probe.tmp.tsx');
+  const probeColorFile = join(srcDir, 'shared', '_ui_consistency_color_probe.tmp.tsx');
 
   try {
     writeFileSync(
@@ -237,16 +257,25 @@ export function runSelfTest() {
       'export const BadTable = () => (<table><tbody><tr><td>test</td></tr></tbody></table>);',
       'utf8'
     );
+    writeFileSync(
+      probeColorFile,
+      'export const BadColor = () => (<div className="bg-indigo-600 rounded-3xl">test</div>);',
+      'utf8'
+    );
 
     const violations = scanUiConsistencyViolations();
     const modalProbeHit = violations.some((v) => v.file.includes('_ui_consistency_modal_probe.tmp.tsx'));
     const tableProbeHit = violations.some((v) => v.file.includes('_ui_consistency_table_probe.tmp.tsx'));
+    const colorProbeHit = violations.some((v) => v.file.includes('_ui_consistency_color_probe.tmp.tsx'));
 
     if (!modalProbeHit) {
       throw new Error('check-ui-consistency: self-test modal probe violation not detected.');
     }
     if (!tableProbeHit) {
       throw new Error('check-ui-consistency: self-test table probe violation not detected.');
+    }
+    if (!colorProbeHit) {
+      throw new Error('check-ui-consistency: self-test color probe violation not detected.');
     }
     console.log('Self-test: probe violations successfully caught ok');
   } finally {
@@ -255,6 +284,9 @@ export function runSelfTest() {
     }
     if (existsSync(probeTableFile)) {
       unlinkSync(probeTableFile);
+    }
+    if (existsSync(probeColorFile)) {
+      unlinkSync(probeColorFile);
     }
   }
 

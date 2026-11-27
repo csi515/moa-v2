@@ -354,7 +354,7 @@ export const MaintenanceChecklistManagementView: React.FC = () => {
       {/* CAPA 티켓 확인 모달 */}
       {selectedCapaTicket && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <span className="p-1.5 bg-rose-100 text-rose-700 rounded-xl">
@@ -462,7 +462,7 @@ const NewChecklistItemModal: React.FC<{
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-      <div className="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-100">
+      <div className="bg-white rounded-xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-100">
         <h3 className="text-base font-extrabold text-slate-900">신규 점검 항목 추가</h3>
         <form onSubmit={handleSubmit} className="space-y-3.5">
           <div>

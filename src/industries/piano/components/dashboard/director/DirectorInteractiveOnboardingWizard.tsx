@@ -95,7 +95,7 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
       });
 
       setSavedStudentId(saved.id);
-      showToast(`🎉 '${saved.name}' 원생이 등록되었습니다!`, 'success');
+      showToast(`'${saved.name}' 원생이 등록되었습니다!`, 'success');
       setStep(3);
     } catch {
       showToast('원생 등록 중 오류가 발생했습니다. 다시 시도해 주세요.', 'error');
@@ -642,7 +642,7 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
                   ONBOARDING COMPLETE!
                 </span>
                 <h3 style={{ fontSize: '22px', fontWeight: 800, color: '#0f172a', margin: '4px 0 8px 0' }}>
-                  🎉 축하합니다! 우리 학원 기본 세팅이 끝났습니다
+                  축하합니다! 우리 학원 기본 세팅이 끝났습니다
                 </h3>
                 <p style={{ fontSize: '14px', color: '#64748b', maxWidth: '440px', margin: '0 auto', lineHeight: 1.5 }}>
                   운영 시간표와 첫 원생 배치가 완료되었습니다. 이제 메인 대시보드에서 오늘 등원 출결 체크와 원비 수납을 편리하게 시작해 보세요!
@@ -847,7 +847,7 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
                 boxShadow: '0 2px 4px rgba(22, 163, 74, 0.3)',
               }}
             >
-              <span>시간표에 배정 완료 🎉</span>
+              <span>시간표에 배정 완료 </span>
               <ArrowRight className="w-4 h-4" />
             </button>
           )}
@@ -871,7 +871,7 @@ export const DirectorInteractiveOnboardingWizard: React.FC<DirectorInteractiveOn
                 boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.4)',
               }}
             >
-              <span>우리 학원 대시보드 시작하기 🚀</span>
+              <span>우리 학원 대시보드 시작하기 </span>
             </button>
           )}
         </div>

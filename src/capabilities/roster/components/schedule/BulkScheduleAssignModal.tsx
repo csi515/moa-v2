@@ -349,7 +349,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
         {assignedResult ? (
           /* 배정 완료 화면 (2번: 주간 시간표 즉시 연결 내비게이션) */
           <div className="py-4 text-center space-y-5">
-            <div className="w-16 h-16 rounded-3xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">
+            <div className="w-16 h-16 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">
               <CheckCircle2 className="w-9 h-9" />
             </div>
             <div>
@@ -383,7 +383,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
           <>
             {/* 선택된 명단 미리보기 배너 */}
             <div className="p-3 bg-slate-50/50 rounded-xl border border-slate-200/60 flex items-center gap-2 overflow-x-auto text-xs">
-              <span className="font-bold text-indigo-950 shrink-0 flex items-center gap-1">
+              <span className="font-bold text-slate-950 shrink-0 flex items-center gap-1">
                 <Users className="w-3.5 h-3.5 text-slate-800" />
                 배정 대상:
               </span>
@@ -586,14 +586,14 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                   </label>
                   {customTimePerDay && (
                     <div className="mt-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                      <p className="text-[11px] font-bold text-indigo-950">선택한 요일별 시작 시간</p>
+                      <p className="text-[11px] font-bold text-slate-950">선택한 요일별 시작 시간</p>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         {selectedDays.map((d) => (
                           <div
                             key={d}
                             className="p-2 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-1 shadow-2xs"
                           >
-                            <span className="font-black text-xs text-indigo-950">{d}요일</span>
+                            <span className="font-black text-xs text-slate-950">{d}요일</span>
                             <select
                               value={dayTimes[d] || startTime}
                               onChange={(e) =>
@@ -691,7 +691,7 @@ export const BulkScheduleAssignModal: React.FC<BulkScheduleAssignModalProps> = (
                           onClick={() => setSelectedExistingClassId(cls.id)}
                           className={`w-full text-left p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-2 ${
                             isSelected
-                              ? 'border-indigo-600 bg-slate-50 ring-1 ring-indigo-500'
+                              ? 'border-slate-900 bg-slate-50 ring-1 ring-slate-900'
                               : 'border-slate-200 hover:border-slate-200 hover:bg-slate-50'
                           }`}
                         >

@@ -211,7 +211,7 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
         {/* 상단 안내 배너 */}
         <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3">
           <Sparkles className="w-5 h-5 text-slate-800 shrink-0 mt-0.5" />
-          <div className="text-xs text-indigo-950 leading-relaxed">
+          <div className="text-xs text-slate-950 leading-relaxed">
             <p className="font-bold text-slate-900">
               학부모님이 간편하게 출결·시간표·알림장을 확인할 수 있는 모바일 전용 초대장입니다.
             </p>
@@ -321,7 +321,7 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
                 onClick={() => setActiveTab('individual')}
                 className={`pb-2.5 px-3 border-b-2 transition-colors cursor-pointer ${
                   activeTab === 'individual'
-                    ? 'border-indigo-600 text-slate-800'
+                    ? 'border-slate-900 text-slate-800'
                     : 'border-transparent text-slate-500 hover:text-slate-700'
                 }`}
               >
@@ -332,7 +332,7 @@ export const ParentInviteShareModal: React.FC<ParentInviteShareModalProps> = ({
                 onClick={() => setActiveTab('bulk')}
                 className={`pb-2.5 px-3 border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${
                   activeTab === 'bulk'
-                    ? 'border-indigo-600 text-slate-800'
+                    ? 'border-slate-900 text-slate-800'
                     : 'border-transparent text-slate-500 hover:text-slate-700'
                 }`}
               >

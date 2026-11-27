@@ -33,11 +33,11 @@ export const StaffDashboardView: React.FC = () => {
 
   return (
     <div className="space-y-4 pb-4" data-testid="staff-home">
-      <div className="bg-gradient-to-br from-indigo-800 via-indigo-900 to-slate-900 rounded-2xl px-4 py-3 text-white">
-        <p className="text-indigo-200 text-[11px] font-semibold">선생님 홈</p>
+      <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-900 rounded-2xl px-4 py-3 text-white">
+        <p className="text-slate-300 text-[11px] font-semibold">선생님 홈</p>
         <div className="flex flex-wrap items-end justify-between gap-2">
           <h2 className="text-lg font-bold tracking-tight">{currentUser.name} 선생님</h2>
-          <p className="text-[11px] text-indigo-200">
+          <p className="text-[11px] text-slate-300">
             {formatKoreanDate(today)} · 예정 {expected.length}명
           </p>
         </div>
@@ -58,7 +58,7 @@ export const StaffDashboardView: React.FC = () => {
               }}
               className="shrink-0 inline-flex items-center gap-1.5 min-h-[44px] px-2.5 rounded-lg bg-white/10 border border-white/15 text-xs font-bold"
             >
-              <span className="text-indigo-200">{label}</span>
+              <span className="text-slate-300">{label}</span>
               <span className="tabular-nums text-sm">{value}</span>
             </button>
           ))}
@@ -115,7 +115,7 @@ export const StaffDashboardView: React.FC = () => {
         <button
           type="button"
           onClick={() => setActiveTab('timetable')}
-          className="w-full min-h-[48px] px-4 py-2.5 rounded-xl border bg-slate-900 border-indigo-600 text-white text-sm font-bold flex items-center justify-center gap-2 hover:bg-slate-800 shadow-2xs"
+          className="w-full min-h-[48px] px-4 py-2.5 rounded-xl border bg-slate-900 border-slate-900 text-white text-sm font-bold flex items-center justify-center gap-2 hover:bg-slate-800 shadow-2xs"
         >
           <CalendarDays className="w-4 h-4" />
           오늘 수업 시간표 확인
@@ -179,7 +179,7 @@ export const StaffDashboardView: React.FC = () => {
                 key={tab}
                 type="button"
                 onClick={() => setActiveTab(tab)}
-                className="min-h-[44px] px-2.5 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 hover:border-indigo-300 flex items-center gap-1.5"
+                className="min-h-[44px] px-2.5 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 hover:border-slate-300 flex items-center gap-1.5"
               >
                 <Icon className="w-3.5 h-3.5 text-slate-800" />
                 {label}

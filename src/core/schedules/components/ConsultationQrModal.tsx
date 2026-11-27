@@ -122,7 +122,7 @@ export const ConsultationQrModal: FC<ConsultationQrModalProps> = ({
             <button
               type="button"
               onClick={handleOpenCustomerView}
-              className="min-h-[44px] px-4 py-2.5 rounded-xl border border-indigo-200 bg-indigo-50/50 hover:bg-indigo-50 text-indigo-700 text-sm font-bold inline-flex items-center justify-center gap-2 transition-colors"
+              className="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-50 text-slate-800 text-sm font-bold inline-flex items-center justify-center gap-2 transition-colors"
             >
               <ExternalLink className="w-4 h-4" />
               <span>고객 화면 미리보기</span>
@@ -140,7 +140,7 @@ export const ConsultationQrModal: FC<ConsultationQrModalProps> = ({
             <button
               type="button"
               onClick={handlePrint}
-              className="min-h-[44px] px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold inline-flex items-center justify-center gap-2 transition-colors"
+              className="min-h-[44px] px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold inline-flex items-center justify-center gap-2 transition-colors"
             >
               <Printer className="w-4 h-4" />
               <span>인쇄하기</span>

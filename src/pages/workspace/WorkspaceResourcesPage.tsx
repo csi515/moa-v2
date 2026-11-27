@@ -184,7 +184,7 @@ export const WorkspaceResourcesPage: React.FC = () => {
       <div className="mb-4">
         <Link
           to="/workspace/intranet"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-800 hover:text-indigo-800 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-800 hover:text-slate-900 transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>사내 앱 런처로 돌아가기</span>
@@ -206,7 +206,7 @@ export const WorkspaceResourcesPage: React.FC = () => {
               type="button"
               className={`min-h-12 flex-1 rounded-xl border px-3 text-sm font-medium sm:flex-none sm:px-5 ${
                 tab === id
-                  ? 'border-indigo-600 bg-slate-50 text-indigo-800'
+                  ? 'border-slate-900 bg-slate-50 text-slate-800'
                   : 'border-slate-200 bg-white'
               }`}
               onClick={() => setTab(id)}

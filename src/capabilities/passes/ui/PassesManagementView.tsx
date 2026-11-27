@@ -153,7 +153,7 @@ function IssuePassModal({
                       'rounded-lg px-2.5 py-1 text-xs font-semibold transition-all',
                       passName === tpl.name
                         ? 'bg-slate-900 text-white shadow-xs'
-                        : 'bg-white text-slate-700 border border-slate-200 hover:border-indigo-300 hover:text-slate-800'
+                        : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:text-slate-800'
                     )}
                   >
                     {tpl.badge ? `[${tpl.badge}] ` : ''}{tpl.name}
@@ -547,13 +547,13 @@ export const PassesManagementView: React.FC = () => {
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         {loading ? (
           <div className="p-12 text-center">
-            <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
+            <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-slate-900 border-t-transparent" />
             <p className="mt-2 text-xs text-slate-500">{passTerm} 목록을 불러오는 중...</p>
           </div>
         ) : filteredPasses.length === 0 ? (
           <div className="p-4 sm:p-8 space-y-6">
             {starterTemplates.length > 0 && (
-              <div className="rounded-2xl border border-slate-200 bg-linear-to-r from-indigo-50/70 via-white to-purple-50/50 p-5 shadow-xs">
+              <div className="rounded-2xl border border-slate-200 bg-linear-to-r from-slate-50 via-white to-slate-50 p-5 shadow-xs">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{badgeEmoji}</span>
@@ -572,7 +572,7 @@ export const PassesManagementView: React.FC = () => {
                         setSelectedStarterTemplate(tpl);
                         setIsIssueModalOpen(true);
                       }}
-                      className="group flex flex-col justify-between rounded-xl border border-slate-200/90 bg-white p-4 text-left shadow-2xs hover:border-indigo-400 hover:shadow-sm transition-all"
+                      className="group flex flex-col justify-between rounded-xl border border-slate-200/90 bg-white p-4 text-left shadow-2xs hover:border-slate-400 hover:shadow-sm transition-all"
                     >
                       <div className="flex items-center justify-between">
                         <span className="rounded-md bg-slate-50 px-2 py-0.5 text-[11px] font-bold text-slate-700">

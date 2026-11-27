@@ -101,7 +101,7 @@ export const UniversalActivityTimelineView: React.FC<UniversalActivityTimelineVi
     <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
       <div className="flex items-center justify-between border-b pb-3">
         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-          <Clock className="w-4 h-4 text-indigo-600" />
+          <Clock className="w-4 h-4 text-slate-800" />
           <span>{title}</span>
         </h3>
         <span className="text-xs text-slate-400">총 {activities.length}건</span>
@@ -114,12 +114,12 @@ export const UniversalActivityTimelineView: React.FC<UniversalActivityTimelineVi
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           placeholder="진행 상황이나 메모를 남겨보세요..."
-          className="flex-1 text-xs px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="flex-1 text-xs px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900"
         />
         <button
           type="submit"
           disabled={!newComment.trim() || isSubmitting}
-          className="px-3 py-2 bg-indigo-600 text-white rounded-lg text-xs font-semibold hover:bg-indigo-700 disabled:opacity-50 transition flex items-center gap-1"
+          className="px-3 py-2 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 disabled:opacity-50 transition flex items-center gap-1"
         >
           <Send className="w-3.5 h-3.5" />
           <span>등록</span>

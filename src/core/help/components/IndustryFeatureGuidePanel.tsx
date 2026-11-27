@@ -16,7 +16,7 @@ export const IndustryFeatureGuidePanel: FC<Props> = ({ industry }) => {
   return (
     <SettingsCard>
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center shrink-0">
           <BookOpen className="w-5 h-5" />
         </div>
         <div className="min-w-0">
@@ -38,7 +38,7 @@ export const IndustryFeatureGuidePanel: FC<Props> = ({ industry }) => {
                   <p className="text-xs font-bold text-slate-800">{item.title}</p>
                   <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">{item.summary}</p>
                   {item.howTo && (
-                    <p className="text-[11px] text-indigo-700 mt-1.5 bg-indigo-50 rounded-lg px-2 py-1.5 leading-relaxed">
+                    <p className="text-[11px] text-slate-800 mt-1.5 bg-slate-50 rounded-lg px-2 py-1.5 leading-relaxed">
                       사용 팁: {item.howTo}
                     </p>
                   )}

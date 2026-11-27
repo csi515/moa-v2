@@ -75,7 +75,7 @@ export const CustomerPortalBody: FC<Props> = ({
     <div className="min-h-screen bg-[#F8FAFC] text-slate-800 flex flex-col">
       <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 py-3">
         <div className="max-w-3xl mx-auto">
-          <p className="text-[11px] font-bold text-indigo-600">{orgName}</p>
+          <p className="text-[11px] font-bold text-slate-800">{orgName}</p>
           <h1 className="text-base font-black text-slate-900">{displayName}</h1>
           {enrollments.length > 1 && (
             <select
@@ -173,7 +173,7 @@ export const CustomerPortalBody: FC<Props> = ({
             type="button"
             onClick={() => onTabChange(t.id)}
             className={`flex flex-col items-center py-1 px-1 min-h-[44px] flex-1 text-[10px] ${
-              tab === t.id ? 'text-indigo-600 font-bold' : 'text-slate-500'
+              tab === t.id ? 'text-slate-800 font-bold' : 'text-slate-500'
             }`}
           >
             <t.icon className="w-5 h-5" />

@@ -79,7 +79,7 @@ export function CustomerAttendanceView({
           type="button"
           onClick={() => void handleRefresh()}
           disabled={loading || refreshing}
-          className="flex items-center gap-1 text-xs font-bold text-indigo-600 min-h-[44px] px-2"
+          className="flex items-center gap-1 text-xs font-bold text-slate-800 min-h-[44px] px-2"
         >
           {loading || refreshing ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -136,7 +136,7 @@ export function CustomerAttendanceView({
         <h2 className="text-sm font-black text-slate-900">기록</h2>
         {loading && sessions.length === 0 ? (
           <div className="flex justify-center py-8">
-            <Loader2 className="w-6 h-6 text-indigo-500 animate-spin" />
+            <Loader2 className="w-6 h-6 text-slate-700 animate-spin" />
           </div>
         ) : sessions.length > 0 ? (
           sessions.map((s) => {

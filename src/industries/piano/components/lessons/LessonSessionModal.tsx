@@ -199,8 +199,8 @@ export const LessonSessionModal: FC<LessonSessionModalProps> = ({
                     active
                       ? isOptAbsent
                         ? 'bg-rose-600 text-white border-rose-600 shadow-xs'
-                        : 'bg-slate-900 text-white border-indigo-600 shadow-xs'
-                      : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'
+                        : 'bg-slate-900 text-white border-slate-900 shadow-xs'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
                   }`}
                 >
                   {opt.label}

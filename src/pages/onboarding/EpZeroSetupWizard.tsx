@@ -236,7 +236,7 @@ export const EpZeroSetupWizard: React.FC = () => {
       </div>
 
       {/* 스텝 내용 */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
         {step === 1 && (
           <div className="space-y-5">
             <div className="flex items-center gap-2 text-slate-800 font-bold border-b border-slate-100 pb-3">
@@ -332,7 +332,7 @@ export const EpZeroSetupWizard: React.FC = () => {
                   <span className="text-[10px] font-bold text-slate-400 block mb-1">파싱된 부서 트리 미리보기:</span>
                   {parsedDepartments.map((d) => (
                     <div key={d.id} className="text-[11px] text-slate-700 flex items-center gap-1.5">
-                      <span className="text-indigo-500 font-bold">•</span>
+                      <span className="text-slate-700 font-bold">•</span>
                       <span>{d.parentPath ? `${d.parentPath} > ` : ''}</span>
                       <span className="font-bold text-slate-900">{d.name}</span>
                     </div>
@@ -418,7 +418,7 @@ export const EpZeroSetupWizard: React.FC = () => {
                   ))}
                 </div>
 
-                <div className="p-3 bg-slate-50/50 rounded-2xl border border-indigo-150 space-y-2">
+                <div className="p-3 bg-slate-50/50 rounded-2xl border border-slate-200 space-y-2">
                   <span className="font-bold text-slate-900 block text-[11px]">+ 차량 바로 등록</span>
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -467,7 +467,7 @@ export const EpZeroSetupWizard: React.FC = () => {
                   ))}
                 </div>
 
-                <div className="p-3 bg-slate-50/50 rounded-2xl border border-indigo-150 space-y-2">
+                <div className="p-3 bg-slate-50/50 rounded-2xl border border-slate-200 space-y-2">
                   <span className="font-bold text-slate-900 block text-[11px]">+ 회의실 바로 등록</span>
                   <div className="grid grid-cols-2 gap-2">
                     <input

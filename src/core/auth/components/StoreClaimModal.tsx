@@ -154,7 +154,7 @@ export const StoreClaimModal: React.FC<StoreClaimModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
           <div>
@@ -175,7 +175,7 @@ export const StoreClaimModal: React.FC<StoreClaimModalProps> = ({
         {/* Content */}
         <div className="p-6 flex flex-col items-center">
           {toastMessage && (
-            <div className="w-full mb-4 px-3 py-2 bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs rounded-xl text-center font-medium">
+            <div className="w-full mb-4 px-3 py-2 bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-xl text-center font-medium">
               {toastMessage}
             </div>
           )}
@@ -237,7 +237,7 @@ export const StoreClaimModal: React.FC<StoreClaimModalProps> = ({
                   type="button"
                   onClick={generateClaimToken}
                   disabled={loading}
-                  className="h-12 flex items-center justify-center space-x-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition disabled:opacity-50 shadow-md shadow-indigo-100"
+                  className="h-12 flex items-center justify-center space-x-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition disabled:opacity-50 shadow-md shadow-indigo-100"
                 >
                   <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                   <span>QR 새로고침</span>

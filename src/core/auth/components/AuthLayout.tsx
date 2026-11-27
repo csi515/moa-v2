@@ -19,12 +19,12 @@ export function AuthLayout({ mode, children }: AuthLayoutProps) {
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-slate-50 flex justify-center items-center p-4"
+      className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 flex justify-center items-center p-4"
       data-testid="auth-page"
     >
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl text-white shadow-lg mb-4">
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-slate-900 rounded-2xl text-white shadow-lg mb-4">
             <Layers className="w-7 h-7" />
           </div>
           <h1 className="text-2xl font-bold text-slate-900">모아</h1>
@@ -32,7 +32,7 @@ export function AuthLayout({ mode, children }: AuthLayoutProps) {
           <p className="text-xs text-slate-400 mt-1">{appBrand.description}</p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 sm:p-8">
+        <div className="bg-white rounded-xl shadow-xl border border-slate-100 p-6 sm:p-8">
           {children}
         </div>
 

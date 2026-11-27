@@ -60,7 +60,7 @@ function ChoiceButton({
       onClick={onSelect}
       className={`w-full min-h-[44px] px-4 py-3 rounded-xl border-2 text-sm font-bold text-left ${
         selected
-          ? 'border-indigo-500 bg-slate-50 text-slate-900'
+          ? 'border-slate-400 bg-slate-50 text-slate-900'
           : 'border-slate-200 bg-white text-slate-700'
       }`}
     >

@@ -86,7 +86,7 @@ export const TeacherJoinFlow: React.FC<TeacherJoinFlowProps> = ({ onBack }) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-slate-800 animate-spin" />
       </div>
     );
   }
@@ -95,7 +95,7 @@ export const TeacherJoinFlow: React.FC<TeacherJoinFlowProps> = ({ onBack }) => {
   const hasApprovedRequest = myRequests.some((r) => r.status === 'approved');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-slate-50">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
       <div className="max-w-2xl mx-auto p-4 pb-8">
         {onBack && (
           <div className="mb-3">
@@ -112,8 +112,8 @@ export const TeacherJoinFlow: React.FC<TeacherJoinFlowProps> = ({ onBack }) => {
         )}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-              <Building2 className="w-6 h-6 text-indigo-600" />
+            <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center">
+              <Building2 className="w-6 h-6 text-slate-800" />
             </div>
             <div>
               <h1 className="text-xl font-black text-slate-900">사업장 찾기</h1>
@@ -160,14 +160,14 @@ export const TeacherJoinFlow: React.FC<TeacherJoinFlowProps> = ({ onBack }) => {
                     }
                   }}
                   placeholder="사업장 이름을 입력하세요"
-                  className="w-full pl-10 pr-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white min-h-[44px]"
+                  className="w-full pl-10 pr-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 focus:bg-white min-h-[44px]"
                 />
               </div>
               <button
                 type="button"
                 onClick={handleSearch}
                 disabled={searching || !searchQuery.trim()}
-                className="px-5 py-3 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px] hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-5 py-3 bg-slate-900 text-white text-sm font-bold rounded-xl min-h-[44px] hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : '검색'}
               </button>
@@ -186,7 +186,7 @@ export const TeacherJoinFlow: React.FC<TeacherJoinFlowProps> = ({ onBack }) => {
                       key={org.id}
                       className={`border rounded-xl transition-colors ${
                         isSelected
-                          ? 'border-indigo-500 bg-indigo-50'
+                          ? 'border-slate-400 bg-slate-50'
                           : 'border-slate-200 bg-white hover:border-slate-300'
                       }`}
                     >
@@ -221,14 +221,14 @@ export const TeacherJoinFlow: React.FC<TeacherJoinFlowProps> = ({ onBack }) => {
                               onChange={(e) => setRequestMessage(e.target.value)}
                               placeholder="간단한 소개나 근무 희망 사항을 적어주세요"
                               rows={3}
-                              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white resize-none"
+                              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 focus:bg-white resize-none"
                             />
                           </div>
                           <button
                             type="button"
                             onClick={() => handleSubmitRequest(org.id, org.name)}
                             disabled={submitting}
-                            className="w-full py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px] hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                            className="w-full py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl min-h-[44px] hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                           >
                             {submitting ? (
                               <Loader2 className="w-4 h-4 animate-spin" />

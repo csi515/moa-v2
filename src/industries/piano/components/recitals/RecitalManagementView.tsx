@@ -235,7 +235,7 @@ export const RecitalManagementView: React.FC = () => {
                   onClick={() => setSelectedEventId(ev.id)}
                   className={`w-full text-left bg-white rounded-2xl border p-4 transition-all ${
                     isSelected
-                      ? 'border-indigo-400 ring-2 ring-indigo-100 shadow-sm'
+                      ? 'border-slate-300 ring-2 ring-slate-200 shadow-sm'
                       : 'border-slate-200/80 hover:border-slate-200'
                   }`}
                 >
@@ -307,7 +307,7 @@ export const RecitalManagementView: React.FC = () => {
               </div>
 
               <div className="flex-1 overflow-y-auto lg:overflow-visible">
-            <div className="bg-white rounded-3xl lg:border border-slate-200/80 lg:shadow-xs overflow-hidden">
+            <div className="bg-white rounded-xl lg:border border-slate-200/80 lg:shadow-xs overflow-hidden">
               <div className="p-5 border-b border-slate-100 bg-slate-50/70">
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -360,7 +360,7 @@ export const RecitalManagementView: React.FC = () => {
                   onClick={() => setDetailTab('quickBoard')}
                   className={`pb-2.5 px-3 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-all ${
                     detailTab === 'quickBoard'
-                      ? 'border-indigo-600 text-slate-700'
+                      ? 'border-slate-900 text-slate-700'
                       : 'border-transparent text-slate-500 hover:text-slate-800'
                   }`}
                 >
@@ -372,7 +372,7 @@ export const RecitalManagementView: React.FC = () => {
                   onClick={() => setDetailTab('participants')}
                   className={`pb-2.5 px-3 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-all ${
                     detailTab === 'participants'
-                      ? 'border-indigo-600 text-slate-700'
+                      ? 'border-slate-900 text-slate-700'
                       : 'border-transparent text-slate-500 hover:text-slate-800'
                   }`}
                 >

@@ -66,7 +66,7 @@ export const StudentBasicInfoSection: React.FC<Props> = ({
     return (
       <section className="space-y-3">
         <h5 className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-          <Calendar className="w-3.5 h-3.5 text-indigo-500" /> 학적 및 신상 정보
+          <Calendar className="w-3.5 h-3.5 text-slate-700" /> 학적 및 신상 정보
         </h5>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>

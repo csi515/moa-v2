@@ -86,7 +86,7 @@ export const QuickNumberInput: React.FC<QuickNumberInputProps> = ({
           value={currentValue}
           placeholder={placeholder}
           aria-label="숫자 입력 필드"
-          className="w-full h-14 rounded-2xl border-2 border-slate-200 bg-slate-50 px-4 text-center text-2xl font-bold tracking-[0.25em] text-slate-900 transition-colors focus:border-indigo-600 focus:bg-white focus:outline-none disabled:opacity-50"
+          className="w-full h-14 rounded-2xl border-2 border-slate-200 bg-slate-50 px-4 text-center text-2xl font-bold tracking-[0.25em] text-slate-900 transition-colors focus:border-slate-900 focus:bg-white focus:outline-none disabled:opacity-50"
         />
         {currentValue.length > 0 && !disabled && (
           <button

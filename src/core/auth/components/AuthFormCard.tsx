@@ -60,7 +60,7 @@ export function AuthFormCard({
       <button
         type="button"
         onClick={(e) => openLegalModal('terms', e)}
-        className="text-indigo-600 underline font-semibold hover:text-indigo-800"
+        className="text-slate-800 underline font-semibold hover:text-slate-900"
       >
         이용약관
       </button>
@@ -68,7 +68,7 @@ export function AuthFormCard({
       <button
         type="button"
         onClick={(e) => openLegalModal('privacy', e)}
-        className="text-indigo-600 underline font-semibold hover:text-indigo-800"
+        className="text-slate-800 underline font-semibold hover:text-slate-900"
       >
         개인정보처리방침
       </button>
@@ -85,7 +85,7 @@ export function AuthFormCard({
             data-testid="tab-login" onClick={() => onSwitchMode('login')}
             className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-colors min-h-[44px] ${
               mode === 'login'
-                ? 'bg-white text-indigo-700 shadow-sm'
+                ? 'bg-white text-slate-800 shadow-sm'
                 : 'text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -96,7 +96,7 @@ export function AuthFormCard({
             data-testid="tab-signup" onClick={() => onSwitchMode('signup')}
             className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-colors min-h-[44px] ${
               mode === 'signup'
-                ? 'bg-white text-indigo-700 shadow-sm'
+                ? 'bg-white text-slate-800 shadow-sm'
                 : 'text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -111,7 +111,7 @@ export function AuthFormCard({
           <button
             type="button"
             onClick={() => onSwitchMode('login')}
-            className="text-sm font-bold text-indigo-600 hover:text-indigo-800 min-h-[44px] flex items-center"
+            className="text-sm font-bold text-slate-800 hover:text-slate-900 min-h-[44px] flex items-center"
           >
             로그인으로 돌아가기
           </button>
@@ -133,7 +133,7 @@ export function AuthFormCard({
                 value={fullName}
                 onChange={(e) => onFullNameChange(e.target.value)}
                 data-testid="signup-name-input" placeholder="홍길동"
-                className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
+                className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all text-sm"
               />
             </div>
           </div>
@@ -149,7 +149,7 @@ export function AuthFormCard({
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
               data-testid="signup-email-input" placeholder="director@example.com"
-              className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
             />
           </div>
         </div>
@@ -162,7 +162,7 @@ export function AuthFormCard({
                 <button
                   type="button"
                   onClick={() => onSwitchMode('forgot')}
-                  className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold"
+                  className="text-xs text-slate-800 hover:text-slate-900 font-semibold"
                 >
                   비밀번호를 잊으셨나요?
                 </button>
@@ -180,7 +180,7 @@ export function AuthFormCard({
                 data-testid="signup-password-input"
                 placeholder={mode === 'signup' ? '6자 이상 입력' : '••••••••'}
                 minLength={6}
-                className="w-full pl-10 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
+                className="w-full pl-10 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all text-sm"
               />
               <button
                 type="button"
@@ -201,7 +201,7 @@ export function AuthFormCard({
                 type="checkbox"
                 checked={agreedToTerms}
                 data-testid="signup-terms-checkbox" onChange={(e) => onAgreedToTermsChange(e.target.checked)}
-                className="mt-1 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-800 focus:ring-slate-900"
               />
               <span className="text-xs text-slate-600 leading-relaxed">{termsLabel}</span>
             </label>
@@ -228,11 +228,11 @@ export function AuthFormCard({
 
         {emailPending && onResendConfirmation && (
           <div
-            className="p-3 rounded-xl bg-indigo-50 border border-indigo-100 text-sm text-indigo-900 space-y-2"
+            className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 space-y-2"
             data-testid="email-pending-panel"
           >
             <p className="font-semibold">이메일 확인이 필요합니다</p>
-            <p className="text-xs text-indigo-800/80">
+            <p className="text-xs text-slate-800">
               메일이 보이지 않으면 스팸함을 확인하거나 아래 버튼으로 다시 받아 주세요.
             </p>
             <button
@@ -240,7 +240,7 @@ export function AuthFormCard({
               onClick={onResendConfirmation}
               disabled={resendLoading}
               data-testid="resend-confirmation-btn"
-              className="w-full py-2.5 rounded-xl bg-white border border-indigo-200 text-indigo-700 text-xs font-bold min-h-[44px] disabled:opacity-50"
+              className="w-full py-2.5 rounded-xl bg-white border border-slate-200 text-slate-800 text-xs font-bold min-h-[44px] disabled:opacity-50"
             >
               {resendLoading ? (
                 <span className="inline-flex items-center gap-2">
@@ -253,7 +253,7 @@ export function AuthFormCard({
             <button
               type="button"
               onClick={() => onSwitchMode('login')}
-              className="w-full text-xs font-bold text-indigo-600 hover:underline min-h-[44px]"
+              className="w-full text-xs font-bold text-slate-800 hover:underline min-h-[44px]"
             >
               로그인 화면으로 이동
             </button>
@@ -264,7 +264,7 @@ export function AuthFormCard({
           <button
             type="submit" data-testid="signup-submit-btn"
             disabled={loading}
-            className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 min-h-[44px]"
+            className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 min-h-[44px]"
           >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
             {mode === 'login' && '이메일로 로그인'}

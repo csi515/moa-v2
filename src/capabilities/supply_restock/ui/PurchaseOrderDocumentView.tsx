@@ -150,10 +150,10 @@ export const PurchaseOrderDocumentView: React.FC<PurchaseOrderDocumentViewProps>
             </div>
 
             <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
-              <span className="text-[11px] font-bold text-indigo-500 tracking-wider">
+              <span className="text-[11px] font-bold text-slate-700 tracking-wider">
                 [공급처 (Supplier)]
               </span>
-              <p className="font-bold text-sm text-indigo-950">{po.vendorName}</p>
+              <p className="font-bold text-sm text-slate-950">{po.vendorName}</p>
               <p className="text-slate-600">
                 계약 방식:{' '}
                 <strong>

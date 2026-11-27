@@ -111,7 +111,7 @@ export function DriverCommuteDashboardView({
   return (
     <div className="max-w-md mx-auto space-y-4 pb-12">
       {/* 1. 기사용 상단 헤더 카드 */}
-      <div className="bg-slate-900 text-white p-5 rounded-3xl shadow-xl space-y-3">
+      <div className="bg-slate-900 text-white p-5 rounded-xl shadow-xl space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="p-2 rounded-xl bg-blue-600 text-white">
@@ -168,7 +168,7 @@ export function DriverCommuteDashboardView({
       </div>
 
       {/* 2. 현재 정차지 메인 카드 */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200 dark:border-slate-800 shadow-md space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-md space-y-4">
         {/* 정차지 라벨 및 순번 */}
         <div className="flex items-start justify-between gap-3">
           <div>

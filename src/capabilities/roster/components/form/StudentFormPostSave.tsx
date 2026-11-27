@@ -60,7 +60,7 @@ export const StudentFormPostSave: React.FC<Props> = ({
           <button
             type="button"
             onClick={onPayNow}
-            className="min-h-[44px] px-4 rounded-xl text-xs font-black flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white shadow-xs transition-colors cursor-pointer ring-2 ring-indigo-400/40"
+            className="min-h-[44px] px-4 rounded-xl text-xs font-black flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white shadow-xs transition-colors cursor-pointer ring-2 ring-slate-400"
           >
             <CreditCard className="w-4 h-4" />
             <span>첫 달 수강료 지금 수납하기</span>
@@ -74,7 +74,7 @@ export const StudentFormPostSave: React.FC<Props> = ({
             className={`min-h-[44px] px-3.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs ${
               hasClassesAssigned || hasAutoInvoice
                 ? 'bg-white border border-slate-200 text-slate-800 hover:bg-slate-50'
-                : 'bg-slate-900 text-white border border-indigo-600 hover:bg-slate-800'
+                : 'bg-slate-900 text-white border border-slate-900 hover:bg-slate-800'
             }`}
           >
             <Calendar className="w-3.5 h-3.5" />

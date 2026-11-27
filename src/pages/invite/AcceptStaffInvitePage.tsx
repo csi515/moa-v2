@@ -99,8 +99,8 @@ export const AcceptStaffInvitePage: React.FC = () => {
   }, [token, isAuthenticated, user, authLoading, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50/70 via-white to-slate-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-slate-100 p-8 text-center animate-in fade-in duration-200">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-xl border border-slate-100 p-8 text-center animate-in fade-in duration-200">
         <div className="inline-flex items-center justify-center w-14 h-14 bg-slate-900 rounded-2xl text-white shadow-lg shadow-indigo-100 mb-6">
           <UserCheck className="w-7 h-7" />
         </div>
@@ -153,7 +153,7 @@ export const AcceptStaffInvitePage: React.FC = () => {
               className="text-left rounded-2xl border border-slate-200 bg-slate-50/60 p-3 space-y-2"
               data-testid="staff-invite-aftercare"
             >
-              <p className="text-xs font-bold text-indigo-800">{STAFF_INVITE_AFTERCARE.title}</p>
+              <p className="text-xs font-bold text-slate-800">{STAFF_INVITE_AFTERCARE.title}</p>
               <ol className="space-y-1.5">
                 {STAFF_INVITE_AFTERCARE.steps.map((step, idx) => (
                   <li key={idx} className="flex items-start gap-2 text-[11px] text-slate-600">
@@ -195,7 +195,7 @@ export const AcceptStaffInvitePage: React.FC = () => {
         )}
 
         <div className="pt-6 border-t border-slate-100 mt-6 flex items-center justify-center space-x-1.5 text-[11px] text-slate-400">
-          <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
+          <ShieldCheck className="w-3.5 h-3.5 text-slate-700" />
           <span>보안 검증된 1회용 단회성 초대 프로토콜</span>
         </div>
       </div>

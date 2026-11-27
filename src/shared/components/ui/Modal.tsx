@@ -123,7 +123,7 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 w-full ${MAX_WIDTH_CLASS[maxWidth]} max-h-[90vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 sm:duration-200`}
+        className={`bg-white rounded-t-3xl sm:rounded-xl shadow-2xl border border-slate-200 w-full ${MAX_WIDTH_CLASS[maxWidth]} max-h-[90vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 sm:duration-200`}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"

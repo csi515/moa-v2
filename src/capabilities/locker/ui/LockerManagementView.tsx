@@ -276,7 +276,7 @@ export const LockerManagementView: React.FC<LockerManagementViewProps> = ({
       {/* Grid Tiles */}
       {loading ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center">
-          <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
+          <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-slate-900 border-t-transparent" />
           <p className="mt-2 text-xs text-slate-500">사물함 목록을 불러오는 중...</p>
         </div>
       ) : filteredLockers.length === 0 ? (

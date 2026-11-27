@@ -118,7 +118,7 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
           <div className="p-3.5 bg-slate-50/60 border border-slate-200 rounded-xl flex items-center justify-between text-xs">
             <div>
               <span className="text-slate-500 block">현재 만료일</span>
-              <span className="font-bold text-indigo-950 text-sm">
+              <span className="font-bold text-slate-950 text-sm">
                 {tenant.subscriptionExpiresAt || '설정 없음 (체험중)'}
               </span>
             </div>
@@ -143,7 +143,7 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
                   onClick={() => handleSelectMonths(opt)}
                   className={`py-2 px-3 rounded-xl border text-left transition-all ${
                     selectedMonths === opt.value
-                      ? 'border-indigo-600 bg-slate-50/50 text-slate-900 font-bold shadow-2xs'
+                      ? 'border-slate-900 bg-slate-50/50 text-slate-900 font-bold shadow-2xs'
                       : 'border-slate-200 hover:border-slate-300 text-slate-700'
                   }`}
                 >

@@ -159,18 +159,18 @@ export const RoleContextSwitcher: React.FC = () => {
         aria-haspopup="menu"
         aria-controls="role-context-menu"
         aria-label={`역할: ${currentRoleLabel || '선택'}`}
-        className="flex items-center gap-2 pl-2 pr-3 py-1.5 min-h-[44px] rounded-xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 transition-colors cursor-pointer text-left max-w-[180px] sm:max-w-none"
+        className="flex items-center gap-2 pl-2 pr-3 py-1.5 min-h-[44px] rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer text-left max-w-[180px] sm:max-w-none"
       >
-        <div className="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0">
+        <div className="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0">
           <Briefcase className="w-4 h-4" />
         </div>
         <div className="hidden sm:block min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-indigo-500">전환</p>
-          <p className="text-xs font-bold text-indigo-950 leading-tight truncate">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-700">전환</p>
+          <p className="text-xs font-bold text-slate-950 leading-tight truncate">
             {currentRoleLabel || '역할'}
           </p>
         </div>
-        <ChevronDown className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+        <ChevronDown className="w-3.5 h-3.5 text-slate-500 shrink-0" />
       </button>
 
       {open && (
@@ -278,14 +278,14 @@ export const RoleContextSwitcher: React.FC = () => {
                         onClick={() => void handleSwitchMembership(membership.id)}
                         className={`w-full text-left p-2.5 rounded-xl flex items-center justify-between text-xs transition-colors min-h-[44px] disabled:opacity-60 ${
                           isSelected
-                            ? 'bg-indigo-50 text-indigo-900 font-bold border border-indigo-200'
+                            ? 'bg-slate-50 text-slate-900 font-bold border border-slate-200'
                             : 'hover:bg-slate-100 text-slate-700'
                         }`}
                       >
                         <div className="flex items-center gap-2 min-w-0">
                           <div
                             className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                              isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'
+                              isSelected ? 'bg-slate-900 text-white' : 'bg-slate-200 text-slate-600'
                             }`}
                           >
                             {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : getRoleIcon(membership.role)}
@@ -295,7 +295,7 @@ export const RoleContextSwitcher: React.FC = () => {
                             <p className="text-[10px] text-slate-500">{roleSectionLabel(membership.role, fullMembership?.organization.industry_type)}</p>
                           </div>
                         </div>
-                        {isSelected && !busy && <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0" />}
+                        {isSelected && !busy && <CheckCircle2 className="w-4 h-4 text-slate-800 shrink-0" />}
                       </button>
                     );
                   })}
@@ -311,7 +311,7 @@ export const RoleContextSwitcher: React.FC = () => {
                 clearOrganization();
                 closeMenu();
               }}
-              className="w-full flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold text-indigo-600 hover:bg-indigo-50 min-h-[44px]"
+              className="w-full flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold text-slate-800 hover:bg-slate-50 min-h-[44px]"
             >
               <Building2 className="w-4 h-4 shrink-0" />
               사업장 추가/선택
@@ -331,7 +331,7 @@ export const RoleContextSwitcher: React.FC = () => {
                       enterParentPortal();
                       closeMenu();
                     }}
-                    className="w-full flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold text-indigo-600 hover:bg-indigo-50 min-h-[44px]"
+                    className="w-full flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold text-slate-800 hover:bg-slate-50 min-h-[44px]"
                   >
                     <Users className="w-4 h-4" />
                     학부모 포털
@@ -346,7 +346,7 @@ export const RoleContextSwitcher: React.FC = () => {
                       enterCustomerPortal();
                       closeMenu();
                     }}
-                    className="w-full flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold text-indigo-600 hover:bg-indigo-50 min-h-[44px]"
+                    className="w-full flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold text-slate-800 hover:bg-slate-50 min-h-[44px]"
                   >
                     <UserRound className="w-4 h-4" />
                     이용자 포털
@@ -373,7 +373,7 @@ export const RoleContextSwitcher: React.FC = () => {
                   closeMenu();
                   navigate('/signup/customer');
                 }}
-                className="w-full flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold text-indigo-600 hover:bg-indigo-50 min-h-[44px]"
+                className="w-full flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold text-slate-800 hover:bg-slate-50 min-h-[44px]"
               >
                 <UserPlus className="w-4 h-4 shrink-0" />
                 다른 사업장에 이용 신청

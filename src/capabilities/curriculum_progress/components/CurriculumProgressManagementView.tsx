@@ -467,7 +467,7 @@ export function CurriculumProgressManagementView() {
                           <span className="text-xs font-bold text-slate-700">
                             {rep.studentName} • {rep.yearMonth} 리포트
                           </span>
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-indigo-800">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-800">
                             {rep.performanceGrade}
                           </span>
                         </div>

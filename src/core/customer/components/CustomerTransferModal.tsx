@@ -143,11 +143,11 @@ export const CustomerTransferModal: React.FC<CustomerTransferModalProps> = ({
 
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs cursor-pointer">
-      <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in-95 duration-150 cursor-default">
+      <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in-95 duration-150 cursor-default">
         {/* 헤더 */}
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
+            <div className="p-2 rounded-xl bg-slate-50 text-slate-800">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
@@ -187,7 +187,7 @@ export const CustomerTransferModal: React.FC<CustomerTransferModalProps> = ({
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
                 placeholder="예: 홍길동"
-                className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
 
@@ -203,7 +203,7 @@ export const CustomerTransferModal: React.FC<CustomerTransferModalProps> = ({
                 onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                 placeholder="01012345678 (- 없이 숫자만)"
                 maxLength={11}
-                className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
 
@@ -216,7 +216,7 @@ export const CustomerTransferModal: React.FC<CustomerTransferModalProps> = ({
               type="button"
               disabled={loading}
               onClick={handleIssueToken}
-              className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all min-h-[48px] disabled:opacity-50"
+              className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all min-h-[48px] disabled:opacity-50"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <KeyRound className="w-4 h-4" />}
               <span>2차 검증 토큰 발급 (5분 유효)</span>
@@ -227,22 +227,22 @@ export const CustomerTransferModal: React.FC<CustomerTransferModalProps> = ({
         {/* 2단계: 토큰 검증 및 인계 실행 */}
         {step === 'verify' && (
           <div className="space-y-4">
-            <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 text-center space-y-2">
-              <div className="flex items-center justify-between border-b border-indigo-100/70 pb-2">
-                <span className="text-[11px] text-indigo-700 font-bold flex items-center gap-1.5">
-                  <QrCode className="w-3.5 h-3.5 text-indigo-600" />
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center space-y-2">
+              <div className="flex items-center justify-between border-b border-slate-200/70 pb-2">
+                <span className="text-[11px] text-slate-800 font-bold flex items-center gap-1.5">
+                  <QrCode className="w-3.5 h-3.5 text-slate-800" />
                   카운터 1회용 인증 QR 및 토큰
                 </span>
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-800">
                   5분 TTL
                 </span>
               </div>
 
-              <p className="text-3xl font-black font-mono tracking-widest text-indigo-900 py-1">
+              <p className="text-3xl font-black font-mono tracking-widest text-slate-900 py-1">
                 {issuedToken}
               </p>
 
-              <div className="flex items-center justify-center gap-1 text-[11px] text-indigo-600 font-bold">
+              <div className="flex items-center justify-center gap-1 text-[11px] text-slate-800 font-bold">
                 <Clock className="w-3.5 h-3.5" />
                 <span>만료까지 남은 시간: {formatTimer(remainingSeconds)}</span>
               </div>
@@ -260,7 +260,7 @@ export const CustomerTransferModal: React.FC<CustomerTransferModalProps> = ({
                 value={tokenInput}
                 onChange={(e) => setTokenInput(e.target.value.replace(/\D/g, ''))}
                 placeholder="6자리 숫자 입력"
-                className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-center text-lg font-mono font-bold tracking-widest focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-center text-lg font-mono font-bold tracking-widest focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
 
@@ -270,7 +270,7 @@ export const CustomerTransferModal: React.FC<CustomerTransferModalProps> = ({
                 type="checkbox"
                 checked={isIdentityMatched}
                 onChange={(e) => setIsIdentityMatched(e.target.checked)}
-                className="mt-0.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                className="mt-0.5 rounded border-slate-300 text-slate-800 focus:ring-slate-900"
               />
               <span className="text-xs text-slate-700 font-medium leading-snug">
                 <strong>[2차 확인]</strong> 회원 성명(<strong>{customerName}</strong>) 및 수강·출결 인계 대상 명의가 일치함을 현장 카운터에서 확인했습니다.

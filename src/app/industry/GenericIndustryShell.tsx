@@ -368,7 +368,7 @@ function GenericDashboardView({ onNavigate, enabledCaps = [] }: GenericDashboard
   return (
     <div className="max-w-5xl mx-auto space-y-6 pt-2 sm:pt-4" data-testid="director-home">
       {/* 환영 및 사업장 헤더 */}
-      <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-3xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden">
+      <div className="bg-gradient-to-r from-slate-800 to-slate-950 rounded-xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden">
         <div className="relative z-10 space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold">
             <Building2 className="w-3.5 h-3.5" />
@@ -377,7 +377,7 @@ function GenericDashboardView({ onNavigate, enabledCaps = [] }: GenericDashboard
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
             {currentOrganization?.name || placeWord}
           </h1>
-          <p className="text-indigo-100 text-sm max-w-xl">
+          <p className="text-slate-200 text-sm max-w-xl">
             {industryLabel} 운영을 위한 범용 워크스페이스입니다. {customerWord} 관리, 일정, 시설 및 설정을 효율적으로 운영해보세요.
           </p>
         </div>
@@ -443,7 +443,7 @@ function GenericDashboardView({ onNavigate, enabledCaps = [] }: GenericDashboard
       {showRiskWidget && <ExecutiveRiskDashboardWidget />}
 
       {/* 빠른 작업 */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-4 shadow-xs">
+      <div className="bg-white rounded-xl border border-slate-200 p-6 sm:p-8 space-y-4 shadow-xs">
         <h2 className="text-lg font-bold text-slate-900">자주 쓰는 업무</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button
@@ -1293,7 +1293,7 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
 
     if (!isCurrentTabAllowed) {
       return (
-        <div className="max-w-xl mx-auto mt-10 p-6 sm:p-8 text-center bg-white rounded-3xl border border-slate-200 shadow-xs" data-testid="disabled-feature-notice">
+        <div className="max-w-xl mx-auto mt-10 p-6 sm:p-8 text-center bg-white rounded-xl border border-slate-200 shadow-xs" data-testid="disabled-feature-notice">
           <div className="w-12 h-12 mx-auto mb-3.5 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
             <Lock className="w-6 h-6" />
           </div>
@@ -1331,7 +1331,7 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
       // Capability는 활성화되어 있으나 화면 구현이 Tier 3(화면 연기)인 경우
       if (TAB_REQUIRED_CAPABILITIES[activeTab]) {
         return (
-          <div className="max-w-xl mx-auto mt-10 p-6 sm:p-8 text-center bg-white rounded-3xl border border-slate-200 shadow-xs" data-testid="deferred-feature-notice">
+          <div className="max-w-xl mx-auto mt-10 p-6 sm:p-8 text-center bg-white rounded-xl border border-slate-200 shadow-xs" data-testid="deferred-feature-notice">
             <div className="w-12 h-12 mx-auto mb-3.5 rounded-2xl bg-slate-50 text-slate-800 flex items-center justify-center">
               <Building2 className="w-6 h-6" />
             </div>
@@ -1368,7 +1368,7 @@ export const GenericIndustryShell: FC<{ viewMap?: Record<string, () => ReactNode
       // 정의되지 않은 미등록 탭
       if (activeTab !== 'dashboard') {
         return (
-          <div className="max-w-xl mx-auto mt-10 p-6 sm:p-8 text-center bg-white rounded-3xl border border-slate-200 shadow-xs" data-testid="not-found-notice">
+          <div className="max-w-xl mx-auto mt-10 p-6 sm:p-8 text-center bg-white rounded-xl border border-slate-200 shadow-xs" data-testid="not-found-notice">
             <div className="w-12 h-12 mx-auto mb-3.5 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
               <Lock className="w-6 h-6" />
             </div>

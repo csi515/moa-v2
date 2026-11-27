@@ -51,13 +51,13 @@ export const BirthDateInput: React.FC<Props> = ({
           onChange={(e) => onChange(formatBirthDateDigits(e.target.value))}
           maxLength={10}
           aria-describedby={showHint ? `${inputId}-hint` : undefined}
-          className="w-full px-3 py-2.5 pr-12 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none min-h-[44px] placeholder:text-slate-300 tracking-wide"
+          className="w-full px-3 py-2.5 pr-12 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:outline-none min-h-[44px] placeholder:text-slate-300 tracking-wide"
         />
         <button
           type="button"
           onClick={openPicker}
           aria-label="달력에서 생년월일 선택"
-          className="absolute right-2 p-1.5 text-slate-400 hover:text-indigo-600 rounded-lg hover:bg-white transition-colors"
+          className="absolute right-2 p-1.5 text-slate-400 hover:text-slate-900 rounded-lg hover:bg-white transition-colors"
         >
           <Calendar className="w-5 h-5" />
         </button>

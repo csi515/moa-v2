@@ -126,7 +126,7 @@ export function DepositEscrowManagementView() {
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-12">
       {/* 헤더 */}
-      <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-slate-800" />
@@ -178,7 +178,7 @@ export function DepositEscrowManagementView() {
       </div>
 
       {/* 보증금 예약 관리 목록 */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-4 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-sm font-bold text-slate-800">예약 보증금 관리 대장</h2>
           <span className="text-xs text-slate-400">총 {records.length}건</span>
@@ -300,7 +300,7 @@ export function DepositEscrowManagementView() {
       {/* 정산 결산 모달 */}
       {settlingRecord && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-5 animate-in fade-in zoom-in-95">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-5 animate-in fade-in zoom-in-95">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="font-extrabold text-slate-800 text-base flex items-center gap-2">
                 <CreditCard className="w-4 h-4 text-emerald-600" />
@@ -338,7 +338,7 @@ export function DepositEscrowManagementView() {
                 type="number"
                 value={actualTotalFee}
                 onChange={(e) => setActualTotalFee(Number(e.target.value))}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-800 focus:outline-none focus:border-indigo-600"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-800 focus:outline-none focus:border-slate-900"
               />
             </div>
 

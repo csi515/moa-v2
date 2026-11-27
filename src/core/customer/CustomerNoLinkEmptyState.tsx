@@ -85,14 +85,14 @@ export const CustomerNoLinkEmptyState: FC<Props> = ({
           onClick={() =>
             navigate('/signup/customer', { state: { openPending: pending.length > 0 } })
           }
-          className="w-full px-4 py-3 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px]"
+          className="w-full px-4 py-3 bg-slate-900 text-white text-sm font-bold rounded-xl min-h-[44px]"
         >
           {pending.length > 0 ? '신청 현황·추가 신청' : '사업장 가입 신청하기'}
         </button>
         <button
           type="button"
           onClick={() => void onReload()}
-          className="w-full px-4 py-2.5 text-sm font-bold text-indigo-600 border border-indigo-100 rounded-xl min-h-[44px]"
+          className="w-full px-4 py-2.5 text-sm font-bold text-slate-800 border border-slate-200 rounded-xl min-h-[44px]"
         >
           승인 여부 새로고침
         </button>

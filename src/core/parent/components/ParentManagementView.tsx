@@ -254,7 +254,7 @@ export const ParentManagementView: React.FC = () => {
               });
               setIsAddModalOpen(true);
             }}
-            className="min-h-[44px] px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md inline-flex items-center gap-1.5 cursor-pointer shrink-0"
+            className="min-h-[44px] px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md inline-flex items-center gap-1.5 cursor-pointer shrink-0"
           >
             <UserPlus className="w-4 h-4" />
             <span>{contactLabel} 등록</span>
@@ -298,16 +298,16 @@ export const ParentManagementView: React.FC = () => {
           return (
             <div
               key={parent.id}
-              className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs hover:border-indigo-200 transition-all"
+              className="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs hover:border-slate-200 transition-all"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-sm">
+                  <div className="w-10 h-10 rounded-2xl bg-slate-50 text-slate-800 flex items-center justify-center font-bold text-sm">
                     {parent.name.slice(0, 1) || '학'}
                   </div>
                   <div>
                     <h4 className="font-bold text-slate-900 text-sm">{parent.name}</h4>
-                    <p className="font-mono text-xs text-indigo-600 font-semibold mt-0.5">
+                    <p className="font-mono text-xs text-slate-800 font-semibold mt-0.5">
                       {formatPhone(parent.phone)}
                     </p>
                     <div className="mt-1">
@@ -330,7 +330,7 @@ export const ParentManagementView: React.FC = () => {
                       setInviteTarget(parent);
                       setInviteEmail(parent.email || '');
                     }}
-                    className="flex-1 px-3 py-1.5 bg-indigo-600 text-white text-[11px] font-bold rounded-lg flex items-center justify-center gap-1"
+                    className="flex-1 px-3 py-1.5 bg-slate-900 text-white text-[11px] font-bold rounded-lg flex items-center justify-center gap-1"
                   >
                     <Link2 className="w-3 h-3" /> 포털 초대
                   </button>
@@ -353,7 +353,7 @@ export const ParentManagementView: React.FC = () => {
                     <button
                       key={st!.id}
                       onClick={() => handleStudentClick(st!.id)}
-                      className="w-full p-2 rounded-xl bg-slate-50 hover:bg-indigo-50 flex items-center justify-between text-xs"
+                      className="w-full p-2 rounded-xl bg-slate-50 hover:bg-slate-50 flex items-center justify-between text-xs"
                     >
                       <span className="font-bold flex items-center gap-1.5">
                         {st!.name}
@@ -411,7 +411,7 @@ export const ParentManagementView: React.FC = () => {
             <button
               type="submit"
               form="add-parent-form"
-              className="px-5 py-2 text-xs sm:text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl min-h-[40px] shadow-sm cursor-pointer"
+              className="px-5 py-2 text-xs sm:text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl min-h-[40px] shadow-sm cursor-pointer"
             >
               저장 완료
             </button>
@@ -430,7 +430,7 @@ export const ParentManagementView: React.FC = () => {
                 placeholder="예: 김영희"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] focus:ring-2 focus:ring-slate-900"
               />
             </div>
             <div>
@@ -443,7 +443,7 @@ export const ParentManagementView: React.FC = () => {
                 placeholder="010-0000-0000"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] focus:ring-2 focus:ring-indigo-500 font-mono"
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] focus:ring-2 focus:ring-slate-900 font-mono"
               />
             </div>
           </div>
@@ -457,7 +457,7 @@ export const ParentManagementView: React.FC = () => {
                 required
                 value={formData.studentId}
                 onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] bg-white focus:ring-2 focus:ring-indigo-500 font-bold"
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] bg-white focus:ring-2 focus:ring-slate-900 font-bold"
               >
                 <option value="">{customerLabel} 선택</option>
                 {activeStudents.map((s) => (
@@ -479,7 +479,7 @@ export const ParentManagementView: React.FC = () => {
                     relationship: e.target.value as GuardianRelationship,
                   })
                 }
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] bg-white focus:ring-2 focus:ring-indigo-500 font-semibold"
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] bg-white focus:ring-2 focus:ring-slate-900 font-semibold"
               >
                 <option value="mother">어머니</option>
                 <option value="father">아버지</option>
@@ -488,13 +488,13 @@ export const ParentManagementView: React.FC = () => {
             </div>
           </div>
 
-          <div className="rounded-xl border border-indigo-100 bg-indigo-50/60 p-3.5">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5">
             <label className="flex items-start gap-2.5 cursor-pointer">
               <input
                 type="checkbox"
                 checked={formData.isPrimary}
                 onChange={(e) => setFormData({ ...formData, isPrimary: e.target.checked })}
-                className="mt-0.5 w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                className="mt-0.5 w-4 h-4 rounded border-slate-300 text-slate-800 focus:ring-slate-900"
               />
               <span>
                 <span className="block text-xs font-bold text-slate-800">
@@ -516,7 +516,7 @@ export const ParentManagementView: React.FC = () => {
               placeholder="예: parent@example.com"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -529,7 +529,7 @@ export const ParentManagementView: React.FC = () => {
               placeholder="특이사항이나 통화 가능 시간 등"
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl min-h-[44px] focus:ring-2 focus:ring-slate-900"
             />
           </div>
         </form>
@@ -559,7 +559,7 @@ export const ParentManagementView: React.FC = () => {
             <button
               onClick={handleInvite}
               disabled={inviting}
-              className="w-full py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2"
+              className="w-full py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2"
             >
               {inviting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
               초대 보내기

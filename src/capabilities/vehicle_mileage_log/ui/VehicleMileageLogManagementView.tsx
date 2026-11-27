@@ -277,7 +277,7 @@ export const VehicleMileageLogManagementView: React.FC = () => {
 
       {/* 차량별 국세청 업무사용비율 대시보드 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs">
+        <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 text-xs font-bold">
             <span>총 누적 주행거리</span>
             <Gauge className="w-4 h-4 text-slate-800" />
@@ -288,7 +288,7 @@ export const VehicleMileageLogManagementView: React.FC = () => {
           <p className="mt-1 text-xs text-slate-400">등록 운행 {logs.length}건 합산</p>
         </div>
 
-        <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs">
+        <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 text-xs font-bold">
             <span>법인 업무 사용 비율</span>
             <TrendingUp className="w-4 h-4 text-emerald-600" />
@@ -299,7 +299,7 @@ export const VehicleMileageLogManagementView: React.FC = () => {
           <p className="mt-1 text-xs text-slate-400">국세청 법인세 손금 산입 100% 충족</p>
         </div>
 
-        <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs">
+        <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between text-slate-500 text-xs font-bold">
             <span>총 유류비 지출</span>
             <Fuel className="w-4 h-4 text-amber-600" />
@@ -312,7 +312,7 @@ export const VehicleMileageLogManagementView: React.FC = () => {
       </div>
 
       {/* 운행기록부 목록 표 */}
-      <div className="rounded-3xl border border-slate-200 bg-white shadow-2xs overflow-hidden">
+      <div className="rounded-xl border border-slate-200 bg-white shadow-2xs overflow-hidden">
         <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <FileSpreadsheet className="w-5 h-5 text-slate-800" />
@@ -360,7 +360,7 @@ export const VehicleMileageLogManagementView: React.FC = () => {
                     <span
                       className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-bold ${
                         row.tripPurpose === 'business'
-                          ? 'bg-slate-50 text-slate-700 border border-indigo-150'
+                          ? 'bg-slate-50 text-slate-700 border border-slate-200'
                           : row.tripPurpose === 'commute'
                           ? 'bg-emerald-50 text-emerald-700 border border-emerald-150'
                           : 'bg-slate-100 text-slate-600'
@@ -392,7 +392,7 @@ export const VehicleMileageLogManagementView: React.FC = () => {
       {/* 작성 모달 */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
-          <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl border border-slate-100 space-y-4">
+          <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-2xl border border-slate-100 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">운행기록부 신규 등록</h3>
               <button

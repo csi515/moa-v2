@@ -288,7 +288,7 @@ export const PromotionListPage: React.FC = () => {
                           <span
                             className={`px-2 py-0.5 rounded-md text-[10px] font-semibold ${
                               deal.target_type === 'PASS'
-                                ? 'bg-slate-50 dark:bg-purple-950/60 text-slate-800 dark:text-purple-400 border border-slate-200 dark:border-purple-800'
+                                ? 'bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-500 border border-slate-200 dark:border-slate-800'
                                 : 'bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-800'
                             }`}
                           >
@@ -344,7 +344,7 @@ export const PromotionListPage: React.FC = () => {
                               <span>
                                 {deal.sold_quantity} / {deal.limited_quantity}개
                               </span>
-                              <span className="font-semibold text-slate-800 dark:text-indigo-400">
+                              <span className="font-semibold text-slate-800 dark:text-slate-500">
                                 {percentSold}%
                               </span>
                             </div>
@@ -380,7 +380,7 @@ export const PromotionListPage: React.FC = () => {
                           title={deal.is_active ? '이벤트 조기 마감하기' : '이벤트 다시 활성화하기'}
                           className={`p-1 rounded-lg transition-colors ${
                             deal.is_active
-                              ? 'text-slate-800 hover:text-slate-700 dark:text-indigo-400'
+                              ? 'text-slate-800 hover:text-slate-700 dark:text-slate-500'
                               : 'text-slate-400 hover:text-slate-600'
                           }`}
                         >

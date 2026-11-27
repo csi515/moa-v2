@@ -71,7 +71,7 @@ export const MicroGuideTooltip: React.FC<MicroGuideTooltipProps> = ({
           setIsOpen(false);
         }}
         aria-label={displayTitle ? `${displayTitle} 가이드 보기` : '도움말 가이드 보기'}
-        className="text-slate-400 hover:text-indigo-600 focus:text-indigo-600 focus:outline-none transition-colors rounded-full p-0.5 hover:bg-indigo-50/70 cursor-pointer"
+        className="text-slate-400 hover:text-slate-900 focus:text-slate-800 focus:outline-none transition-colors rounded-full p-0.5 hover:bg-slate-50 cursor-pointer"
       >
         <HelpCircle className={sizeClass} />
       </button>
@@ -103,7 +103,7 @@ export const MicroGuideTooltip: React.FC<MicroGuideTooltipProps> = ({
             {displayTitle && (
               <div className="flex items-center justify-between pb-1 border-b border-slate-100">
                 <span className="text-xs font-black text-slate-800 flex items-center gap-1">
-                  <Info className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                  <Info className="w-3.5 h-3.5 text-slate-800 shrink-0" />
                   <span>{displayTitle}</span>
                 </span>
                 <button
@@ -119,7 +119,7 @@ export const MicroGuideTooltip: React.FC<MicroGuideTooltipProps> = ({
               {displayContent}
             </p>
             {displayTip && (
-              <p className="text-[10px] text-indigo-700 bg-indigo-50/80 p-1.5 rounded-lg font-semibold leading-snug">
+              <p className="text-[10px] text-slate-800 bg-slate-50 p-1.5 rounded-lg font-semibold leading-snug">
                 {displayTip}
               </p>
             )}

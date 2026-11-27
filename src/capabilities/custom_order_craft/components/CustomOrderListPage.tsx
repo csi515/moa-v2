@@ -105,7 +105,7 @@ export const CustomOrderListPage: React.FC = () => {
       case 'QUALITY_INSPECTED':
         return <span className="px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-800 font-semibold">3. 품질 검수완료</span>;
       case 'READY_FOR_PICKUP':
-        return <span className="px-2 py-0.5 rounded text-xs bg-slate-100 text-purple-800 font-bold animate-pulse">4. 픽업 대기</span>;
+        return <span className="px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-800 font-bold animate-pulse">4. 픽업 대기</span>;
       case 'FULFILLED':
         return <span className="px-2 py-0.5 rounded text-xs bg-emerald-100 text-emerald-800 font-bold">5. 전달 완료</span>;
     }

@@ -43,7 +43,7 @@ export const SecurityDataSettingsView: FC = () => {
       <section className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-10 h-10 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center shrink-0 mt-0.5">
               <Shield className="w-5 h-5" />
             </div>
             <div>
@@ -56,7 +56,7 @@ export const SecurityDataSettingsView: FC = () => {
           <button
             type="button"
             onClick={() => navigate('/workspace/settings/roles')}
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl transition-all shadow-xs shrink-0 min-h-[44px]"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-all shadow-xs shrink-0 min-h-[44px]"
           >
             직급 및 권한 관리 열기
             <ChevronRight className="w-3.5 h-3.5" />

@@ -32,7 +32,7 @@ export const ImpersonationFloatingBanner: React.FC = () => {
   };
 
   return (
-    <div className="sticky top-0 z-50 bg-gradient-to-r from-amber-600 via-rose-600 to-indigo-700 text-white px-4 py-2 shadow-md flex items-center justify-between text-xs sm:text-sm font-medium animate-in slide-in-from-top-2 duration-200">
+    <div className="sticky top-0 z-50 bg-gradient-to-r from-amber-600 via-rose-600 to-slate-900 text-white px-4 py-2 shadow-md flex items-center justify-between text-xs sm:text-sm font-medium animate-in slide-in-from-top-2 duration-200">
       <div className="flex items-center gap-2 max-w-[70%] truncate">
         <ShieldAlert className="w-4 h-4 shrink-0 text-amber-200 animate-pulse" />
         <span className="font-bold text-amber-100">최고관리자 대리 접속 중:</span>

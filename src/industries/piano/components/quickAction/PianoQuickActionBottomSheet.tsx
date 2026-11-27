@@ -76,7 +76,7 @@ export const PianoQuickActionBottomSheet: FC = () => {
           type="button"
           onClick={() => setIsOpen(true)}
           aria-label="자주 쓰는 업무 열기"
-          className="group min-h-[48px] px-3.5 py-2.5 rounded-full bg-gradient-to-r from-indigo-600 via-indigo-700 to-indigo-800 text-white font-black text-xs shadow-xl shadow-indigo-600/30 active:scale-95 transition-all flex items-center gap-1.5 border border-indigo-400/40 ring-4 ring-indigo-500/10 cursor-pointer"
+          className="group min-h-[48px] px-3.5 py-2.5 rounded-full bg-gradient-to-r from-slate-800 via-slate-850 to-slate-950 text-white font-black text-xs shadow-xl shadow-indigo-600/30 active:scale-95 transition-all flex items-center gap-1.5 border border-slate-300 ring-4 ring-slate-900 cursor-pointer"
         >
           <div className="relative">
             <Zap className="w-4 h-4 fill-amber-300 text-amber-300 animate-pulse" />
@@ -184,7 +184,7 @@ export const PianoQuickActionBottomSheet: FC = () => {
           onClose={() => setShowStudentForm(false)}
           onSaved={() => {
             setShowStudentForm(false);
-            showToast('🎉 신규 원생이 성공적으로 등록되었습니다.', 'success');
+            showToast('신규 원생이 성공적으로 등록되었습니다.', 'success');
           }}
         />
       )}

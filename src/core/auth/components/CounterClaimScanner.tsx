@@ -74,7 +74,7 @@ export const CounterClaimScanner: React.FC<CounterClaimScannerProps> = ({
   return (
     <div className="w-full bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
       <div className="flex items-center space-x-3 mb-4">
-        <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+        <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-800">
           <QrCode className="w-5 h-5" />
         </div>
         <div>
@@ -93,7 +93,7 @@ export const CounterClaimScanner: React.FC<CounterClaimScannerProps> = ({
             onChange={(e) => setTokenInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="바코드 스캐너 입력 또는 CQ-XXXXXX"
-            className="w-full h-12 px-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-mono tracking-wide"
+            className="w-full h-12 px-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 text-sm font-mono tracking-wide"
             autoFocus
           />
         </div>
@@ -102,7 +102,7 @@ export const CounterClaimScanner: React.FC<CounterClaimScannerProps> = ({
           type="button"
           onClick={() => handleConsumeToken()}
           disabled={loading || !tokenInput.trim()}
-          className="h-12 px-6 flex items-center justify-center space-x-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition disabled:opacity-50 shrink-0 shadow-sm"
+          className="h-12 px-6 flex items-center justify-center space-x-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition disabled:opacity-50 shrink-0 shadow-sm"
         >
           {loading ? (
             <RefreshCw className="w-4 h-4 animate-spin" />

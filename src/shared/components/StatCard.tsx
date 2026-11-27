@@ -43,16 +43,16 @@ export const StatCard: React.FC<StatCardProps> = ({
           : undefined
       }
       className={`relative p-3.5 sm:p-4 rounded-2xl border transition-all duration-200 ${
-        onClick ? 'cursor-pointer hover:shadow-md hover:border-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500' : ''
+        onClick ? 'cursor-pointer hover:shadow-md hover:border-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900' : ''
       } ${
         highlight
-          ? 'bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 text-white border-indigo-700 shadow-sm'
+          ? 'bg-gradient-to-br from-slate-900 via-slate-900 to-slate-900 text-white border-slate-900 shadow-sm'
           : 'bg-white text-slate-800 border-slate-200 shadow-sm'
       }`}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
-          <p className={`text-xs font-medium ${highlight ? 'text-indigo-200' : 'text-slate-500'}`}>
+          <p className={`text-xs font-medium ${highlight ? 'text-slate-300' : 'text-slate-500'}`}>
             {title}
           </p>
           <div className="flex items-baseline gap-2 mt-0.5">
@@ -72,7 +72,7 @@ export const StatCard: React.FC<StatCardProps> = ({
           </div>
           {subtitle && (
             <p
-              className={`text-xs mt-1 font-normal ${highlight ? 'text-indigo-200/80' : 'text-slate-400'}`}
+              className={`text-xs mt-1 font-normal ${highlight ? 'text-slate-300' : 'text-slate-400'}`}
             >
               {subtitle}
             </p>

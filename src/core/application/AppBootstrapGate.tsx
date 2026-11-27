@@ -21,7 +21,12 @@ interface AppBootstrapGateProps {
  */
 export const AppBootstrapGate: FC<AppBootstrapGateProps> = ({ children }) => {
   const { user, loading: authLoading } = useAuth();
-  const { loading: orgLoading, organizationsStatus, refreshOrganizations } = useOrganization();
+  const {
+    loading: orgLoading,
+    organizationsStatus,
+    refreshOrganizations,
+    currentOrganization,
+  } = useOrganization();
 
   if (authLoading) {
     return <LoadingScreen message={JOURNEY_LOADING_MESSAGES.checkingSession} />;
@@ -31,7 +36,9 @@ export const AppBootstrapGate: FC<AppBootstrapGateProps> = ({ children }) => {
     return <>{children}</>;
   }
 
-  if (orgLoading || organizationsStatus === 'loading') {
+  // 최초 로드 시(currentOrganization 미확정)에만 전체 로딩 스피너 표시
+  // 이미 사업장이 로드된 후의 백그라운드 재검증 중에는 기존 화면과 모달/입력 상태 보존
+  if ((orgLoading || organizationsStatus === 'loading') && !currentOrganization) {
     return (
       <LoadingScreen
         message={JOURNEY_LOADING_MESSAGES.loadingOrganizations}

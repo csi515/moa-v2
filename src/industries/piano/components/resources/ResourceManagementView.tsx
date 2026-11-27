@@ -196,7 +196,7 @@ export const ResourceManagementView: React.FC = () => {
       </FilterBar>
 
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-3xl p-12 border border-slate-200/80 shadow-xs text-center">
+        <div className="bg-white rounded-xl p-12 border border-slate-200/80 shadow-xs text-center">
           <p className="text-sm text-slate-400">등록된 교재/곡이 없습니다.</p>
           <p className="text-xs text-slate-400 mt-1">상단 버튼으로 첫 자료를 추가해 보세요.</p>
         </div>
@@ -205,7 +205,7 @@ export const ResourceManagementView: React.FC = () => {
           {filtered.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:border-slate-200 transition-all flex flex-col justify-between space-y-4"
+              className="bg-white rounded-xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:border-slate-200 transition-all flex flex-col justify-between space-y-4"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -249,7 +249,7 @@ export const ResourceManagementView: React.FC = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden">
+          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
               <h3 className="font-bold text-slate-900 text-base">교재 / 악보 추가</h3>
               <button

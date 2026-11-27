@@ -344,7 +344,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
                   </div>
 
                   {quest.helpTip && !isDone && (
-                    <div className="mt-2.5 p-2 bg-slate-50/60 rounded-xl text-[11px] text-indigo-800 leading-relaxed border border-slate-200/50">
+                    <div className="mt-2.5 p-2 bg-slate-50/60 rounded-xl text-[11px] text-slate-800 leading-relaxed border border-slate-200/50">
                       팁: {quest.helpTip}
                     </div>
                   )}
@@ -357,7 +357,7 @@ export const GettingStartedQuestWidget: FC<GettingStartedQuestWidgetProps> = ({
                     className={`inline-flex items-center gap-1.5 text-xs font-bold transition-colors cursor-pointer ${
                       isDone
                         ? 'text-slate-400 hover:text-slate-600'
-                        : 'text-slate-800 hover:text-indigo-800'
+                        : 'text-slate-800 hover:text-slate-900'
                     }`}
                   >
                     <span>{quest.actionText}</span>

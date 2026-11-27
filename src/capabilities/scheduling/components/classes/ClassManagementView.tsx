@@ -223,7 +223,7 @@ export const ClassManagementView: React.FC = () => {
 
       {/* Class Cards Grid */}
       {classes.length === 0 ? (
-        <div className="bg-white rounded-3xl p-12 text-center border border-slate-200">
+        <div className="bg-white rounded-xl p-12 text-center border border-slate-200">
           <GraduationCap className="w-12 h-12 text-slate-300 mx-auto mb-3" />
           <p className="font-bold text-slate-700 mb-2">등록된 {serviceLabel}이(가) 없습니다</p>
           <p className="text-sm text-slate-500 mb-4">
@@ -246,7 +246,7 @@ export const ClassManagementView: React.FC = () => {
           return (
             <div
               key={cls.id}
-              className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+              className="bg-white rounded-xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -311,7 +311,7 @@ export const ClassManagementView: React.FC = () => {
                           setSelectedStudentId(st.id);
                           setActiveTab('students');
                         }}
-                        className="px-2 py-0.5 text-[11px] font-semibold bg-slate-100 hover:bg-slate-100 text-slate-700 hover:text-indigo-800 rounded-lg transition-colors cursor-pointer"
+                        className="px-2 py-0.5 text-[11px] font-semibold bg-slate-100 hover:bg-slate-100 text-slate-700 hover:text-slate-900 rounded-lg transition-colors cursor-pointer"
                       >
                         {st.name}
                       </button>
@@ -343,7 +343,7 @@ export const ClassManagementView: React.FC = () => {
       {/* Class Form Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden">
+          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
               <h3 className="font-bold text-slate-900 text-base">
                 {editingClass ? `${serviceLabel} 수정` : `${serviceLabel} 추가`}
@@ -385,7 +385,7 @@ export const ClassManagementView: React.FC = () => {
                         onClick={() => handleDayToggle(d)}
                         className={`py-2.5 min-h-[44px] text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                           isChecked
-                            ? 'bg-slate-900 text-white border-indigo-600 shadow-xs'
+                            ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                             : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                         }`}
                       >

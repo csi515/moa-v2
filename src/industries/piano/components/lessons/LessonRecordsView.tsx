@@ -246,7 +246,7 @@ export const LessonRecordsView: React.FC = () => {
         {filteredLessons.map((l) => (
           <div
             key={l.id}
-            className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:border-slate-200 transition-all flex flex-col justify-between space-y-4"
+            className="bg-white rounded-xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:border-slate-200 transition-all flex flex-col justify-between space-y-4"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -324,7 +324,7 @@ export const LessonRecordsView: React.FC = () => {
       {/* Lesson Form Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden">
+          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
               <h3 className="font-bold text-slate-900 text-base">
                 {editingLesson ? '수업 일지 수정' : '새 수업 일지 작성'}

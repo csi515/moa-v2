@@ -231,7 +231,7 @@ export function ShuttleRouteScheduleManagerView({
 
       {/* 3. 선택된 노선 상세 요약 카드 */}
       {currentRoute && (
-        <div className="bg-gradient-to-r from-blue-500/5 via-indigo-500/5 to-purple-500/5 dark:from-blue-900/10 dark:to-purple-900/10 border border-blue-100 dark:border-slate-800 p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4">
+        <div className="bg-gradient-to-r from-blue-500/5 via-slate-500/5 to-slate-900 dark:from-blue-900/10 dark:to-slate-900/10 border border-blue-100 dark:border-slate-800 p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
               <Bus className="w-6 h-6" />
@@ -434,7 +434,7 @@ export function ShuttleRouteScheduleManagerView({
                                 className={`text-[10px] font-semibold px-1.5 py-0.2 rounded-sm ${
                                   staff.rideType === 'regular'
                                     ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
-                                    : 'bg-slate-100 text-slate-700 dark:bg-purple-900/40 dark:text-purple-300'
+                                    : 'bg-slate-100 text-slate-700 dark:bg-slate-900 dark:text-slate-400'
                                 }`}
                               >
                                 {staff.rideType === 'regular' ? '매일정기' : '1회탑승'}

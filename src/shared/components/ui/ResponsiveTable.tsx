@@ -1,7 +1,7 @@
 import React from "react";
 import { ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
-import { ListLoadingSkeleton } from "@/components/common/LoadingSkeleton";
-import { ActionableEmptyState } from "@/components/common/ActionableEmptyState";
+import { ListLoadingSkeleton } from "./Skeleton";
+import { EmptyState } from "./EmptyState";
 
 export interface ResponsiveColumn<T> {
   key: string;
@@ -39,10 +39,9 @@ export function ResponsiveTable<T>({
 
   if (data.length === 0) {
     return (
-      <div className="w-full py-16 flex flex-col items-center justify-center text-center bg-white rounded-2xl border border-dashed border-slate-200 p-6">
+      <div className="w-full py-16 flex flex-col items-center justify-center text-center bg-white rounded-xl border border-dashed border-slate-200 p-6">
         {emptyState || (
-          <ActionableEmptyState
-            iconName="check"
+          <EmptyState
             title="등록된 항목이 없습니다"
             description="새 항목을 등록하면 여기에 표시됩니다."
           />
@@ -56,7 +55,7 @@ export function ResponsiveTable<T>({
       {/* =========================================================================
           데스크톱 표준 테이블 뷰 (화면 폭 md 이상)
           ========================================================================= */}
-      <div className="hidden md:block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
+      <div className="hidden md:block overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm text-slate-600">
             <thead className="bg-slate-50/80 text-xs font-semibold text-slate-700 border-b border-slate-200">
@@ -80,14 +79,14 @@ export function ResponsiveTable<T>({
                           type="button"
                           onClick={col.onSort}
                           className={`inline-flex items-center gap-1.5 hover:text-slate-900 transition-colors ${
-                            col.sortOrder ? "text-indigo-600 font-bold" : ""
+                            col.sortOrder ? "text-blue-600 font-bold" : ""
                           }`}
                         >
                           <span>{col.header}</span>
                           {col.sortOrder === "asc" ? (
-                            <ChevronUp className="h-3.5 w-3.5 text-indigo-600" />
+                            <ChevronUp className="h-3.5 w-3.5 text-blue-600" />
                           ) : col.sortOrder === "desc" ? (
-                            <ChevronDown className="h-3.5 w-3.5 text-indigo-600" />
+                            <ChevronDown className="h-3.5 w-3.5 text-blue-600" />
                           ) : (
                             <ArrowUpDown className="h-3.5 w-3.5 text-slate-400" />
                           )}

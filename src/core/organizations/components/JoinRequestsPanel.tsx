@@ -88,7 +88,7 @@ export const JoinRequestsPanel: React.FC = () => {
     return (
       <div className="bg-white rounded-2xl border border-slate-200 p-6">
         <div className="flex items-center justify-center">
-          <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
+          <Loader2 className="w-6 h-6 text-slate-800 animate-spin" />
         </div>
       </div>
     );

@@ -317,7 +317,7 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
                 onPaste={handlePasteEvent}
                 placeholder={`이름\t생년월일\t연락처\t보호자명\t과목\n김민준\t2015-03-12\t010-1111-2222\t김철수\t바이엘\n김서아\t2018-07-25\t010-1111-2222\t김철수\t유치부`}
                 rows={6}
-                className="w-full font-mono text-xs p-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent bg-slate-50/50 focus:bg-white transition-all placeholder:text-slate-400"
+                className="w-full font-mono text-xs p-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent bg-slate-50/50 focus:bg-white transition-all placeholder:text-slate-400"
               />
               {pasteText && (
                 <button
@@ -371,8 +371,8 @@ export const StudentBulkImportModal: React.FC<StudentBulkImportModalProps> = ({
               onDrop={onDrop}
               className={`w-full min-h-[110px] rounded-2xl border-2 border-dashed px-4 py-5 text-center transition-colors disabled:opacity-50 ${
                 dragOver
-                  ? 'border-indigo-400 bg-slate-50'
-                  : 'border-slate-200 bg-slate-50 hover:border-indigo-300 hover:bg-slate-50/40'
+                  ? 'border-slate-300 bg-slate-50'
+                  : 'border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-slate-50/40'
               }`}
             >
               <Upload

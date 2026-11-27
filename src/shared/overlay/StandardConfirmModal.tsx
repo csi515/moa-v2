@@ -37,7 +37,7 @@ export const StandardConfirmModal: React.FC<StandardConfirmModalProps> = ({
             className={`px-4 py-2 text-xs font-bold text-white rounded-xl shadow-xs transition-colors ${
               isDestructive
                 ? 'bg-rose-600 hover:bg-rose-700'
-                : 'bg-indigo-600 hover:bg-indigo-700'
+                : 'bg-slate-900 hover:bg-slate-800'
             }`}
           >
             {confirmText}
@@ -50,7 +50,7 @@ export const StandardConfirmModal: React.FC<StandardConfirmModalProps> = ({
           className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
             isDestructive
               ? 'bg-rose-50 text-rose-600'
-              : 'bg-indigo-50 text-indigo-600'
+              : 'bg-slate-50 text-slate-800'
           }`}
         >
           {isDestructive ? (

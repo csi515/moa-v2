@@ -98,7 +98,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
 
   if (!hasFinanceAccess) {
     return (
-      <div className="bg-white rounded-3xl border border-slate-200 p-8 text-center max-w-md mx-auto my-12 shadow-sm space-y-4">
+      <div className="bg-white rounded-xl border border-slate-200 p-8 text-center max-w-md mx-auto my-12 shadow-sm space-y-4">
         <div className="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mx-auto">
           <ShieldAlert className="w-6 h-6" />
         </div>

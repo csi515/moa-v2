@@ -466,7 +466,7 @@ const NewShiftModal: React.FC<NewShiftModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-      <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
+      <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <h3 className="text-base font-bold text-slate-900">신규 근무 시프트 편성</h3>
           <button type="button" onClick={onClose} className="text-slate-400 hover:text-slate-600">✕</button>
@@ -535,7 +535,7 @@ const NewShiftModal: React.FC<NewShiftModalProps> = ({
               validation.alertLevel === 'BLOCKED_52H'
                 ? 'bg-rose-50 border-rose-300 text-rose-900'
                 : validation.alertLevel === 'SPECIAL_APPROVED'
-                ? 'bg-slate-50 border-purple-300 text-slate-900'
+                ? 'bg-slate-50 border-slate-300 text-slate-900'
                 : validation.alertLevel === 'WARNING_OVERTIME'
                 ? 'bg-amber-50 border-amber-300 text-amber-900'
                 : 'bg-slate-50 border-slate-200 text-slate-700'
@@ -610,7 +610,7 @@ const CycleTemplateModal: React.FC<CycleTemplateModalProps> = ({ onClose, onGene
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-      <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
+      <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <h3 className="text-base font-bold text-slate-900">교대조 순환 템플릿 1개월 일괄 생성</h3>
           <button type="button" onClick={onClose} className="text-slate-400 hover:text-slate-600">✕</button>
@@ -678,7 +678,7 @@ const ProximityCheckModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-      <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
+      <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <h3 className="text-base font-bold text-slate-900">GPS & Wi-Fi 근태 인증 시뮬레이터</h3>
           <button type="button" onClick={onClose} className="text-slate-400 hover:text-slate-600">✕</button>

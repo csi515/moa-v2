@@ -104,7 +104,7 @@ function RequestCard({ request, onApprove, onReject }: RequestCardProps) {
             {request.applicant_phone && (
               <div className="flex items-center gap-2 text-slate-700">
                 <Phone className="w-4 h-4 text-slate-400" />
-                <a href={`tel:${request.applicant_phone}`} className="hover:text-indigo-600">
+                <a href={`tel:${request.applicant_phone}`} className="hover:text-slate-900">
                   {request.applicant_phone}
                 </a>
               </div>
@@ -112,7 +112,7 @@ function RequestCard({ request, onApprove, onReject }: RequestCardProps) {
             {request.applicant_email && (
               <div className="flex items-center gap-2 text-slate-700">
                 <Mail className="w-4 h-4 text-slate-400" />
-                <a href={`mailto:${request.applicant_email}`} className="hover:text-indigo-600">
+                <a href={`mailto:${request.applicant_email}`} className="hover:text-slate-900">
                   {request.applicant_email}
                 </a>
               </div>
@@ -122,7 +122,7 @@ function RequestCard({ request, onApprove, onReject }: RequestCardProps) {
           {request.message && (
             <button
               onClick={() => setExpanded(!expanded)}
-              className="w-full mt-3 flex items-center justify-between text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+              className="w-full mt-3 flex items-center justify-between text-sm text-slate-800 hover:text-slate-900 font-medium"
             >
               <span className="flex items-center gap-2">
                 <MessageSquare className="w-4 h-4" />
@@ -143,7 +143,7 @@ function RequestCard({ request, onApprove, onReject }: RequestCardProps) {
               <button
                 onClick={handleApprove}
                 disabled={processing}
-                className="flex-1 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex-1 py-2.5 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 승인
@@ -318,7 +318,7 @@ export function CustomerJoinRequestsPanel({
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <Users className="w-6 h-6 text-indigo-600" />
+              <Users className="w-6 h-6 text-slate-800" />
               {title}
             </h2>
             <p className="text-sm text-slate-600 mt-1">{subtitle}</p>
@@ -338,7 +338,7 @@ export function CustomerJoinRequestsPanel({
           onClick={() => setFilter('pending')}
           className={`px-4 py-2 min-h-[44px] rounded-lg font-medium transition-colors ${
             filter === 'pending'
-              ? 'bg-indigo-600 text-white'
+              ? 'bg-slate-900 text-white'
               : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
         >
@@ -352,7 +352,7 @@ export function CustomerJoinRequestsPanel({
           onClick={() => setFilter('all')}
           className={`px-4 py-2 min-h-[44px] rounded-lg font-medium transition-colors ${
             filter === 'all'
-              ? 'bg-indigo-600 text-white'
+              ? 'bg-slate-900 text-white'
               : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
         >
@@ -362,7 +362,7 @@ export function CustomerJoinRequestsPanel({
 
       {loading ? (
         <div className="text-center py-12">
-          <div className="inline-block w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+          <div className="inline-block w-8 h-8 border-4 border-slate-900 border-t-transparent rounded-full animate-spin" />
           <p className="mt-4 text-slate-600">로딩 중...</p>
         </div>
       ) : requests.length === 0 ? (

@@ -143,7 +143,7 @@ export const ParentRequestEnrollmentModal: React.FC<ParentRequestEnrollmentModal
                     key={org.id}
                     type="button"
                     onClick={() => onSelectOrg(org)}
-                    className="w-full text-left p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-slate-50/40 transition-colors"
+                    className="w-full text-left p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50/40 transition-colors"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">

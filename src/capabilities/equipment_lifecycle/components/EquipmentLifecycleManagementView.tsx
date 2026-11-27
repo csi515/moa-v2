@@ -100,7 +100,7 @@ export function EquipmentLifecycleManagementView() {
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-12">
       {/* 헤더 */}
-      <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
             <Wrench className="w-5 h-5 text-slate-800" />
@@ -152,7 +152,7 @@ export function EquipmentLifecycleManagementView() {
       </div>
 
       {/* 장비 자산 목록 */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="p-4 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-sm font-bold text-slate-800">보유 기구 자산 및 수명 주기 관리</h2>
           <span className="text-xs text-slate-400">총 {assets.length}개 자산</span>
@@ -276,7 +276,7 @@ export function EquipmentLifecycleManagementView() {
       {/* 고장 신고 모달 */}
       {reportingAsset && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="font-extrabold text-slate-800 text-sm flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-rose-600" />
@@ -303,7 +303,7 @@ export function EquipmentLifecycleManagementView() {
                 placeholder="예: 와이어 케이블 유격, 스프링 파손, 누수 증상 등"
                 value={breakdownNotes}
                 onChange={(e) => setBreakdownNotes(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-indigo-600"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-slate-900"
               />
             </div>
 

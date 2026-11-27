@@ -7,7 +7,7 @@ interface SegmentedControlProps<T extends string> {
   value: T;
   options: SegmentOption<T>[];
   onChange: (value: any) => void;
-  /** Tailwind 활성 색 (예: bg-indigo-600) */
+  /** Tailwind 활성 색 (예: bg-slate-900) */
   activeClassName?: string;
   className?: string;
   /** 모바일에서 전체 너비 */

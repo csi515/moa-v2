@@ -5,7 +5,7 @@ import { Database } from 'lucide-react';
 export const SupabaseRequiredScreen: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-      <div className="max-w-md w-full bg-white rounded-3xl border border-slate-200 shadow-sm p-8 text-center space-y-4">
+      <div className="max-w-md w-full bg-white rounded-xl border border-slate-200 shadow-sm p-8 text-center space-y-4">
         <div className="mx-auto w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center">
           <Database className="w-7 h-7 text-slate-800" />
         </div>

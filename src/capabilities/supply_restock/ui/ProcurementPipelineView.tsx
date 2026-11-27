@@ -185,7 +185,7 @@ export const ProcurementPipelineView: React.FC = () => {
             <span className="text-[11px] font-bold text-slate-800 bg-slate-50 px-2 py-0.5 rounded-md">
               2단계: 필요성 검수
             </span>
-            <ShieldCheck className="w-4 h-4 text-indigo-500" />
+            <ShieldCheck className="w-4 h-4 text-slate-700" />
           </div>
           <p className="font-bold text-sm text-slate-900 mt-2">사내 창고 재고 대조</p>
           <p className="text-xs text-slate-500 mt-0.5">

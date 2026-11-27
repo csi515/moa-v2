@@ -9,7 +9,7 @@ import {
   type GateApprovalAssignee,
   type GateLinkedApprovalStatus,
 } from '../domain/researchProjectApproval';
-import { createApprovalWithChosenLine } from '@/capabilities/approval_workflow/services/approvalWorkflowService';
+import { createApprovalWithChosenLine } from '@/capabilities/approval_workflow';
 import {
   canDirectDecideGate,
   createResearchProject,

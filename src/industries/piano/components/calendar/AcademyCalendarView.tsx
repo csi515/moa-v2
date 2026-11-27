@@ -360,7 +360,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
                 {hasItems && !isSelected && (
                   <span
                     className={`w-1.5 h-1.5 rounded-full mt-0.5 ${
-                      isHoliday ? 'bg-rose-500' : 'bg-indigo-500'
+                      isHoliday ? 'bg-rose-500' : 'bg-slate-900'
                     }`}
                   />
                 )}
@@ -418,7 +418,7 @@ export const AcademyCalendarView: React.FC<{ embedded?: boolean }> = ({
                   key={dayNum}
                   onClick={() => setSelectedDay(dayNum)}
                   className={`min-h-[72px] p-1.5 hover:bg-slate-50/30 transition-colors cursor-pointer space-y-0.5 ${
-                    selectedDay === dayNum ? 'bg-slate-50/50 ring-2 ring-indigo-600 ring-inset' : ''
+                    selectedDay === dayNum ? 'bg-slate-50/50 ring-2 ring-slate-900 ring-inset' : ''
                   }`}
                 >
                   <span

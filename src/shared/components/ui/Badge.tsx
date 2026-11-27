@@ -19,7 +19,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 const BADGE_VARIANTS: Record<BadgeVariant, string> = {
-  brand: 'bg-indigo-50 text-indigo-700 border-indigo-200/80',
+  brand: 'bg-slate-50 text-slate-800 border-slate-200',
   neutral: 'bg-slate-100 text-slate-700 border-slate-200/80',
   success: 'bg-emerald-50 text-emerald-700 border-emerald-200/80',
   warning: 'bg-amber-50 text-amber-700 border-amber-200/80',

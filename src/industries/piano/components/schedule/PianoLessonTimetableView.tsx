@@ -295,7 +295,7 @@ export const PianoLessonTimetableView: FC = () => {
       `}</style>
 
       {pendingStudentId && (
-        <div className="rounded-2xl border border-slate-200 bg-slate-50/90 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-indigo-950 font-bold shadow-xs">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50/90 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-slate-950 font-bold shadow-xs">
           <div className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-slate-900 animate-pulse" />
             <span>배치할 시간대를 시간표에서 클릭하세요.</span>
@@ -447,7 +447,7 @@ export const PianoLessonTimetableView: FC = () => {
               >
                 {day}요일
                 {day === todayDay && (
-                  <span className={`ml-1 text-[9px] ${selected ? 'text-indigo-200' : 'text-slate-800 font-extrabold'}`}>
+                  <span className={`ml-1 text-[9px] ${selected ? 'text-slate-300' : 'text-slate-800 font-extrabold'}`}>
                     • 오늘
                   </span>
                 )}

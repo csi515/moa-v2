@@ -159,7 +159,7 @@ export const ParentEnrollmentConsentModal: React.FC<ParentEnrollmentConsentModal
       <div className="space-y-4">
         <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl">
           <p className="text-sm font-bold text-slate-900 mb-2">등록 정보</p>
-          <div className="space-y-1 text-sm text-indigo-800">
+          <div className="space-y-1 text-sm text-slate-800">
             <p>• 자녀: <span className="font-bold">{student.displayName}</span></p>
             <p>• {place}: <span className="font-bold">{organization.name}</span></p>
           </div>

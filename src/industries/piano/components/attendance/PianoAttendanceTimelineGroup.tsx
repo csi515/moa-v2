@@ -56,7 +56,7 @@ export const PianoAttendanceTimelineGroup: FC<PianoAttendanceTimelineGroupProps>
       aria-label={`${timeLabel} 시간대 출결`}
       className={`rounded-2xl border transition-all overflow-hidden ${
         isCurrentSlot
-          ? 'border-indigo-300 ring-2 ring-indigo-500/15 bg-white shadow-sm'
+          ? 'border-slate-300 ring-2 ring-slate-900 bg-white shadow-sm'
           : 'border-slate-200/90 bg-white shadow-xs'
       }`}
     >
@@ -64,7 +64,7 @@ export const PianoAttendanceTimelineGroup: FC<PianoAttendanceTimelineGroupProps>
       <div
         className={`px-4 py-3 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 ${
           isCurrentSlot
-            ? 'bg-gradient-to-r from-indigo-50/80 via-white to-indigo-50/40 border-slate-200'
+            ? 'bg-gradient-to-r from-slate-50 via-white to-slate-50 border-slate-200'
             : isAllCompleted
               ? 'bg-slate-50/60 border-slate-100'
               : 'bg-slate-50/90 border-slate-150'

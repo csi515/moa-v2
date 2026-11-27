@@ -243,7 +243,7 @@ export const InstructorProfileModal: React.FC<InstructorProfileModalProps> = ({
               <button
                 type="button"
                 onClick={handleAddCourse}
-                className="text-xs text-slate-800 hover:text-indigo-800 font-semibold flex items-center gap-1"
+                className="text-xs text-slate-800 hover:text-slate-900 font-semibold flex items-center gap-1"
               >
                 <Plus className="w-3.5 h-3.5" /> 강좌 추가
               </button>

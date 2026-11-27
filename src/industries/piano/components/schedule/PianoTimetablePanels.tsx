@@ -233,8 +233,8 @@ export const PianoTimetableStudentPool: FC<StudentPoolProps> = ({
                 }}
                 className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold cursor-grab active:cursor-grabbing border ${
                   highlighted
-                    ? 'bg-slate-900 text-white border-indigo-600 ring-2 ring-indigo-200'
-                    : 'bg-slate-100 text-slate-800 border-slate-200 hover:border-indigo-300 hover:bg-slate-50'
+                    ? 'bg-slate-900 text-white border-slate-900 ring-2 ring-slate-200'
+                    : 'bg-slate-100 text-slate-800 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                 }`}
               >
                 {s.name}

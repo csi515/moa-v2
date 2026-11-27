@@ -492,7 +492,7 @@ export const LostFoundManagementView: React.FC = () => {
                           </span>
                         )}
                         {effectiveStatus === 'DONATED' && (
-                          <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-purple-800">
+                          <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
                             기부 완료
                           </span>
                         )}

@@ -188,7 +188,7 @@ export const SubleaseListPage: React.FC = () => {
               {(() => {
                 const res = computeMonthlySubleaseSettlement(selectedContract, simulationRevenue);
                 return (
-                  <div className="p-3 bg-slate-50 dark:bg-indigo-950/40 rounded-lg space-y-1.5 text-xs">
+                  <div className="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg space-y-1.5 text-xs">
                     <div className="flex justify-between">
                       <span className="text-slate-500">기본 임대료:</span>
                       <span className="font-semibold">{res.baseRent.toLocaleString()}원</span>
@@ -201,7 +201,7 @@ export const SubleaseListPage: React.FC = () => {
                       <span className="text-slate-500">공과금/관리비:</span>
                       <span className="font-semibold">{res.utilityFee.toLocaleString()}원</span>
                     </div>
-                    <div className="pt-2 border-t flex justify-between text-sm font-bold text-slate-900 dark:text-indigo-200">
+                    <div className="pt-2 border-t flex justify-between text-sm font-bold text-slate-900 dark:text-slate-300">
                       <span>최종 청구 총액:</span>
                       <span>{res.totalSettlementAmount.toLocaleString()}원</span>
                     </div>

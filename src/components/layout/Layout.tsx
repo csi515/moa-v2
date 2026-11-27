@@ -18,7 +18,7 @@ const THEME_ACTIVE_NAV_STYLES: Record<string, { bg: string; icon: string }> = {
   amber: { bg: "bg-amber-50 text-amber-800 font-semibold", icon: "text-amber-600" },
   sky: { bg: "bg-sky-50 text-sky-800 font-semibold", icon: "text-sky-600" },
   teal: { bg: "bg-teal-50 text-teal-800 font-semibold", icon: "text-teal-600" },
-  purple: { bg: "bg-slate-50 text-purple-800 font-semibold", icon: "text-slate-800" },
+  purple: { bg: "bg-slate-50 text-slate-800 font-semibold", icon: "text-slate-800" },
   slate: { bg: "bg-slate-100 text-slate-900 font-semibold", icon: "text-slate-700" },
   indigo: { bg: "bg-slate-50 text-slate-700 font-semibold", icon: "text-slate-800" },
 };

@@ -40,7 +40,7 @@ export const TextbookPaymentsTab: React.FC<TextbookPaymentsTabProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {unpaidSales.length === 0 ? (
             <div className="col-span-full py-8 text-center text-slate-400">
-              🎉 현재 미납된 교재비가 없습니다! 모든 교재비가 완납되었습니다.
+              현재 미납된 교재비가 없습니다! 모든 교재비가 완납되었습니다.
             </div>
           ) : (
             unpaidSales.map((sale) => (

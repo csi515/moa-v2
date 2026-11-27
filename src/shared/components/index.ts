@@ -8,7 +8,6 @@ export { AppErrorBoundary } from './AppErrorBoundary';
 export { PluginErrorBoundary } from './PluginErrorBoundary';
 export { WorkStatusBanner } from './WorkStatusBanner';
 export { PwaInstallPrompt } from './PwaInstallPrompt';
-export { DirectorFloatingFab } from './DirectorFloatingFab';
 export { ToastContainer } from './ToastContainer';
 export { ConfirmDialog } from './ConfirmDialog';
 export { CurrencyInput } from './CurrencyInput';

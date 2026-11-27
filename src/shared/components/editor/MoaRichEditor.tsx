@@ -70,7 +70,7 @@ export const MoaRichEditor: React.FC<MoaRichEditorProps> = ({
   return (
     <div
       className={cn(
-        'w-full rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-2xs focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 transition-all',
+        'w-full rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-2xs focus-within:border-slate-400 focus-within:ring-2 focus-within:ring-slate-200 transition-all',
         disabled && 'opacity-60 bg-slate-50 cursor-not-allowed',
         className
       )}

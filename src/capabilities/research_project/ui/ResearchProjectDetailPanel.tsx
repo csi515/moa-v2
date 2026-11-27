@@ -223,7 +223,7 @@ export const ResearchProjectDetailPanel: React.FC<ResearchProjectDetailPanelProp
             <button
               type="button"
               onClick={() => setShowAddDeliverable((prev) => !prev)}
-              className="flex items-center gap-1 text-xs text-slate-800 hover:text-indigo-800 font-medium"
+              className="flex items-center gap-1 text-xs text-slate-800 hover:text-slate-900 font-medium"
             >
               <Plus className="h-3.5 w-3.5" /> 산출물 추가
             </button>

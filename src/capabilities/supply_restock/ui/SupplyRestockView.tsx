@@ -580,7 +580,7 @@ export const SupplyRestockView: React.FC = () => {
       {/* 발주서 미리보기 모달 */}
       {activePo && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100">
             <h3 className="text-base font-extrabold text-slate-900">간이 발주서 (PO) 조립 완료</h3>
             <textarea
               readOnly
@@ -611,7 +611,7 @@ export const SupplyRestockView: React.FC = () => {
       {/* 신규 PR 모달 */}
       {isPrModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100">
             <h3 className="text-base font-extrabold text-slate-900">신규 구매 요청서 (PR) 기안</h3>
             <form onSubmit={handleCreatePr} className="space-y-3.5">
               <div>

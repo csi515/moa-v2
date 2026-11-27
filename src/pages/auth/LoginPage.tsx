@@ -177,7 +177,7 @@ export const LoginPage: React.FC = () => {
           ========================================================================= */}
       <div
         data-testid="desktop-brand-panel"
-        className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white p-12 lg:p-16 flex-col justify-between relative overflow-hidden"
+        className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white p-12 lg:p-16 flex-col justify-between relative overflow-hidden"
       >
         {/* 장식용 글로우 효과 */}
         <div className="absolute top-1/4 -left-20 w-96 h-96 bg-slate-900/15 rounded-full blur-3xl pointer-events-none" />
@@ -190,15 +190,15 @@ export const LoginPage: React.FC = () => {
               <Layers className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-semibold tracking-wider text-indigo-400 uppercase">
+              <span className="text-xs font-semibold tracking-wider text-slate-500 uppercase">
                 {appBrand.acronym}
               </span>
               <h2 className="text-xl font-extrabold tracking-tight">모아</h2>
             </div>
           </div>
 
-          <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-indigo-200 text-xs font-medium mb-6">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-300" />
+          <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-slate-300 text-xs font-medium mb-6">
+            <Sparkles className="w-3.5 h-3.5 text-slate-400" />
             <span>{appBrand.tagline}</span>
           </div>
 
@@ -208,14 +208,14 @@ export const LoginPage: React.FC = () => {
               <>
                 Attendance, passes, and the shop
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-indigo-200 to-blue-200">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-200 via-slate-100 to-blue-200">
                   in one hand
                 </span>
               </>
             ) : (
               <>
                 출결, 회원권, 매장 운영을<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-indigo-200 to-blue-200">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-200 via-slate-100 to-blue-200">
                   종이 장부 없이 한 손으로
                 </span>
               </>
@@ -231,7 +231,7 @@ export const LoginPage: React.FC = () => {
         {/* 신뢰도 및 핵심 기능 그래픽 카드 */}
         <div className="relative z-10 grid grid-cols-2 gap-4 my-8">
           <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
-            <div className="w-8 h-8 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-300 mb-2.5">
+            <div className="w-8 h-8 rounded-xl bg-slate-900/20 flex items-center justify-center text-slate-400 mb-2.5">
               <QrCode className="w-4 h-4" />
             </div>
             <h4 className="text-xs font-bold text-slate-200 mb-1">
@@ -266,7 +266,7 @@ export const LoginPage: React.FC = () => {
             <span>{isEn ? "Safe data isolation & protection" : "안전한 데이터 분리 및 보호"}</span>
           </div>
           <div className="flex items-center space-x-1">
-            <CheckCircle2 className="w-4 h-4 text-indigo-400" />
+            <CheckCircle2 className="w-4 h-4 text-slate-500" />
             <span>{isEn ? "Financial-grade security system" : "안심 금융급 보안 체계"}</span>
           </div>
         </div>
@@ -276,7 +276,7 @@ export const LoginPage: React.FC = () => {
           우측 영역 (w-full lg:w-1/2): 중앙 정렬 로그인 폼 (모바일 단일 카드 뷰 전환)
           ========================================================================= */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:p-8 lg:p-12">
-        <div className="w-full max-w-[420px] lg:max-w-md bg-white rounded-3xl shadow-xl lg:shadow-none border border-slate-100 lg:border-none p-6 sm:p-10">
+        <div className="w-full max-w-[420px] lg:max-w-md bg-white rounded-xl shadow-xl lg:shadow-none border border-slate-100 lg:border-none p-6 sm:p-10">
           {/* 모바일 전용 로고 헤더 (< lg) */}
           <div className="lg:hidden text-center mb-8">
             <div className="inline-flex items-center justify-center w-13 h-13 bg-slate-900 rounded-2xl text-white shadow-lg shadow-indigo-100 mb-3">

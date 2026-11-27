@@ -151,7 +151,7 @@ export const PurchaseContractPackageModal: React.FC<PurchaseContractPackageModal
         {/* 헤더 */}
         <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-indigo-500/20 text-indigo-400 rounded-xl">
+            <div className="p-2 bg-slate-900/20 text-slate-500 rounded-xl">
               <FileSpreadsheet className="w-5 h-5" />
             </div>
             <div>
@@ -218,7 +218,7 @@ export const PurchaseContractPackageModal: React.FC<PurchaseContractPackageModal
               <label
                 className={`p-3.5 rounded-xl border cursor-pointer transition flex items-start gap-3 ${
                   contractType === 'bidding'
-                    ? 'border-indigo-600 bg-slate-50/50 shadow-xs'
+                    ? 'border-slate-900 bg-slate-50/50 shadow-xs'
                     : 'border-slate-200 bg-white hover:border-slate-300'
                 }`}
               >
@@ -274,7 +274,7 @@ export const PurchaseContractPackageModal: React.FC<PurchaseContractPackageModal
             <div className="p-4 bg-slate-50/40 rounded-xl border border-slate-200/80 space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
+                  <h3 className="text-xs font-bold text-slate-950 flex items-center gap-1.5">
                     <Scale className="w-3.5 h-3.5 text-slate-800" />
                     복수 공급사 견적 비교 대사표 (최소 2개사 이상)
                   </h3>
@@ -298,7 +298,7 @@ export const PurchaseContractPackageModal: React.FC<PurchaseContractPackageModal
                     key={idx}
                     className={`p-3 rounded-xl border transition ${
                       q.isSelectedWinner
-                        ? 'bg-white border-indigo-500 shadow-xs'
+                        ? 'bg-white border-slate-400 shadow-xs'
                         : 'bg-white/80 border-slate-200'
                     }`}
                   >

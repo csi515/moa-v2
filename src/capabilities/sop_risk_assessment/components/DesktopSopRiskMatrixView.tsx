@@ -105,7 +105,7 @@ export const DesktopSopRiskMatrixView: React.FC = () => {
             ))}
           </select>
           {canCreate ? (
-          <button type="button" className="inline-flex h-11 items-center gap-1 rounded-xl border border-dashed border-indigo-300 bg-slate-50 px-3 text-xs font-bold text-slate-700" onClick={() => setShowNew(true)}>
+          <button type="button" className="inline-flex h-11 items-center gap-1 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-3 text-xs font-bold text-slate-700" onClick={() => setShowNew(true)}>
             <Plus className="h-3.5 w-3.5" />
             신규 공정 표준 등록
           </button>
@@ -168,7 +168,7 @@ export const DesktopSopRiskMatrixView: React.FC = () => {
 
       {doc ? (
         <>
-          <section className="rounded-3xl border border-slate-200 bg-white p-6">
+          <section className="rounded-xl border border-slate-200 bg-white p-6">
             <p className="text-xs font-bold text-slate-700">
               {workspace.body.deptCode} {workspace.body.deptName} · {doc.document_no}_{formatRevisionNo(doc.current_version - 1)}
             </p>
@@ -221,7 +221,7 @@ export const DesktopSopRiskMatrixView: React.FC = () => {
             ) : null}
           </section>
 
-          <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white">
+          <section className="overflow-hidden rounded-xl border border-slate-200 bg-white">
             <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3 print:hidden">
               <h2 className="text-sm font-black text-slate-800">작업 단계 · 위험성평가</h2>
               {workspace.editable ? (

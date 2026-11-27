@@ -81,7 +81,7 @@ export const PianoAttendanceView: FC = () => {
       value: 'ALL',
       label: isToday ? '오늘 예정' : '예정',
       count: stats.expected,
-      activeClass: 'bg-slate-900 text-white border-indigo-600',
+      activeClass: 'bg-slate-900 text-white border-slate-900',
     },
     {
       value: 'unchecked',

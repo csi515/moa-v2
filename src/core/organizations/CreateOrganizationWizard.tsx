@@ -219,10 +219,10 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 z-10 px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-indigo-50 to-white flex items-center justify-between">
+      <div className="bg-white rounded-xl shadow-2xl border border-slate-100 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 z-10 px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-indigo-600" />
+            <Sparkles className="w-5 h-5 text-slate-800" />
             <h2 className="font-bold text-slate-900">새 사업장 등록</h2>
           </div>
           {step < 3 && (
@@ -246,12 +246,12 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
                 <React.Fragment key={s.label}>
                   <div
                     className={`flex items-center gap-1.5 text-xs font-bold ${
-                      isActive ? 'text-indigo-600' : isDone ? 'text-emerald-600' : 'text-slate-400'
+                      isActive ? 'text-slate-800' : isDone ? 'text-emerald-600' : 'text-slate-400'
                     }`}
                   >
                     <div
                       className={`w-7 h-7 rounded-lg flex items-center justify-center ${
-                        isActive ? 'bg-indigo-100' : isDone ? 'bg-emerald-50' : 'bg-slate-100'
+                        isActive ? 'bg-slate-100' : isDone ? 'bg-emerald-50' : 'bg-slate-100'
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -269,9 +269,9 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
         {step === 0 && (
           <div className="p-6 space-y-5">
             {/* 업종 선택 및 맞춤 기능 안내 배너 */}
-            <div className="p-3.5 rounded-2xl bg-indigo-50/80 border border-indigo-100/90 flex items-center gap-2.5 shadow-2xs">
-              <Sparkles className="w-4 h-4 text-indigo-600 shrink-0" />
-              <p className="text-xs text-indigo-900 font-medium">
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-center gap-2.5 shadow-2xs">
+              <Sparkles className="w-4 h-4 text-slate-800 shrink-0" />
+              <p className="text-xs text-slate-900 font-medium">
                 운영하시는 업종을 먼저 선택해 주세요. 선택하신 업종에 맞춰 필수 도구와 명칭({guideFeatureText})이 자동으로 최적화됩니다.
               </p>
             </div>
@@ -314,7 +314,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
                   setStep(1);
                 }}
                 data-testid="btn-wizard-next"
-                className="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl min-h-[44px] inline-flex items-center gap-1.5 shadow-xs transition"
+                className="px-5 py-2.5 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl min-h-[44px] inline-flex items-center gap-1.5 shadow-xs transition"
               >
                 <span>다음: {getPlaceLabel(formData.industryType)} 정보 입력</span>
                 <ArrowRight className="w-4 h-4" />
@@ -327,12 +327,12 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
         {step === 1 && (
           <form onSubmit={handleStepInfo} className="p-6 space-y-4">
             {/* 선택된 업종 확인 및 재선택 배너 */}
-            <div className="p-3.5 rounded-2xl bg-indigo-50/80 border border-indigo-100 flex items-center justify-between gap-3 shadow-2xs">
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3 shadow-2xs">
               <div className="flex items-center gap-2 min-w-0">
-                <Sparkles className="w-4 h-4 text-indigo-600 shrink-0" />
+                <Sparkles className="w-4 h-4 text-slate-800 shrink-0" />
                 <div className="text-xs text-slate-600 truncate">
                   선택된 업종:{' '}
-                  <span className="font-bold text-indigo-900">
+                  <span className="font-bold text-slate-900">
                     [{selectedCategoryLabel}] {selectedIndustryLabel}
                   </span>
                 </div>
@@ -340,7 +340,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
               <button
                 type="button"
                 onClick={() => setStep(0)}
-                className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 underline shrink-0 min-h-[36px] px-2 flex items-center gap-1"
+                className="text-xs font-semibold text-slate-800 hover:text-slate-900 underline shrink-0 min-h-[36px] px-2 flex items-center gap-1"
               >
                 <ArrowLeft className="w-3 h-3" />
                 <span>업종 변경</span>
@@ -393,7 +393,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
               <button
                 type="submit"
                 data-testid="btn-wizard-next"
-                className="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl min-h-[44px] inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
+                className="px-5 py-2.5 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl min-h-[44px] inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
               >
                 <span>다음: 강의실 설정</span>
                 <ArrowRight className="w-4 h-4" />
@@ -412,7 +412,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                 운영 중인 강의실이나 연습실 목록을 등록해 두면 시간표를 방별로 편리하게 관리할 수 있습니다.
                 <br />
-                <span className="text-indigo-600 font-semibold">
+                <span className="text-slate-800 font-semibold">
                   방 구분이 필요 없거나 나중에 설정하시려면 건너뛰셔도 됩니다.
                 </span>
               </p>
@@ -435,7 +435,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
                       className={`px-2.5 py-1 text-xs rounded-lg font-medium transition flex items-center gap-1 ${
                         alreadyExists
                           ? 'bg-slate-200/70 text-slate-400 cursor-not-allowed'
-                          : 'bg-white hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 text-slate-700 shadow-2xs cursor-pointer'
+                          : 'bg-white hover:bg-slate-50 hover:text-slate-900 border border-slate-200 text-slate-700 shadow-2xs cursor-pointer'
                       }`}
                     >
                       <Plus className="w-3 h-3" />
@@ -450,12 +450,12 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-bold text-slate-700">
-                  등록할 방 목록 {rooms.length > 0 && <span className="text-indigo-600">({rooms.length}개)</span>}
+                  등록할 방 목록 {rooms.length > 0 && <span className="text-slate-800">({rooms.length}개)</span>}
                 </label>
                 <button
                   type="button"
                   onClick={() => addRoom()}
-                  className="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 min-h-[32px] px-2 cursor-pointer"
+                  className="text-xs font-bold text-slate-800 hover:text-slate-900 flex items-center gap-1 min-h-[32px] px-2 cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>직접 추가</span>
@@ -485,7 +485,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
                         value={room.name}
                         onChange={(e) => updateRoomName(room.id, e.target.value)}
                         placeholder="방 또는 강의실 이름"
-                        className="flex-1 px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500 font-semibold"
+                        className="flex-1 px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 font-semibold"
                       />
                       <button
                         type="button"
@@ -533,7 +533,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
                   disabled={isSaving}
                   data-testid="btn-wizard-submit"
                   onClick={() => void handleFinish(rooms)}
-                  className="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl min-h-[44px] disabled:opacity-50 inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer"
+                  className="px-5 py-2.5 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl min-h-[44px] disabled:opacity-50 inline-flex items-center gap-1.5 shadow-xs transition cursor-pointer"
                 >
                   {isSaving ? (
                     <>
@@ -569,14 +569,14 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
               </p>
             </div>
             <div
-              className="text-left rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4 space-y-2"
+              className="text-left rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-2"
               data-testid="create-org-next-steps"
             >
-              <p className="text-xs font-bold text-indigo-800">들어가신 뒤 다음에 할 일</p>
+              <p className="text-xs font-bold text-slate-800">들어가신 뒤 다음에 할 일</p>
               <ol className="space-y-2">
                 {nextSteps.map((stepItem, idx) => (
                   <li key={stepItem.id} className="flex items-start gap-2.5">
-                    <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-5 h-5 rounded-full bg-slate-900 text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                       {idx + 1}
                     </span>
                     <div className="min-w-0">
@@ -598,7 +598,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
                   disabled={isEntering || !createdOrgId}
                   data-testid="btn-wizard-retry-enter"
                   onClick={() => void handleEnterOrganization({ refreshFirst: true })}
-                  className="w-full px-3 py-2.5 text-xs font-bold text-indigo-700 bg-white border border-indigo-200 rounded-xl min-h-[44px]"
+                  className="w-full px-3 py-2.5 text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-xl min-h-[44px]"
                 >
                   목록 새로고침 후 다시 들어가기
                 </button>
@@ -609,7 +609,7 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
               disabled={isEntering || !createdOrgId}
               data-testid="btn-wizard-enter"
               onClick={() => void handleEnterOrganization()}
-              className="w-full px-5 py-3 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl flex items-center justify-center gap-2 min-h-[44px] disabled:opacity-50"
+              className="w-full px-5 py-3 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl flex items-center justify-center gap-2 min-h-[44px] disabled:opacity-50"
             >
               {isEntering ? (
                 <>

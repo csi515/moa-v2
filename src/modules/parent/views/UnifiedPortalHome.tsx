@@ -54,7 +54,7 @@ export function UnifiedPortalHome({
       <ParentHeroCard
         student={student}
         subtitle={`${customerLabel} · ${placeLabel}`}
-        gradientClass="bg-gradient-to-br from-indigo-600 to-slate-800"
+        gradientClass="bg-gradient-to-br from-slate-800 to-slate-800"
       />
 
       {/* 2. 핵심 요약 메트릭 그리드 */}

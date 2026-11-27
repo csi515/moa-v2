@@ -177,7 +177,7 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-xs transition-opacity">
-      <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh] animate-in slide-in-from-bottom duration-200">
+      <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh] animate-in slide-in-from-bottom duration-200">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
           <div>
@@ -214,7 +214,7 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
                     onClick={() => setIsSelf(true)}
                     className={`h-12 flex items-center justify-center space-x-2 rounded-xl border text-sm font-semibold transition ${
                       isSelf
-                        ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 shadow-xs'
+                        ? 'border-slate-900 bg-slate-50 text-slate-800 shadow-xs'
                         : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                     }`}
                   >
@@ -227,7 +227,7 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
                     onClick={() => setIsSelf(false)}
                     className={`h-12 flex items-center justify-center space-x-2 rounded-xl border text-sm font-semibold transition ${
                       !isSelf
-                        ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 shadow-xs'
+                        ? 'border-slate-900 bg-slate-50 text-slate-800 shadow-xs'
                         : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                     }`}
                   >
@@ -248,7 +248,7 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="홍길동"
-                    className="w-full h-12 px-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                    className="w-full h-12 px-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 text-sm"
                   />
                 </div>
 
@@ -262,7 +262,7 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="01012345678"
-                    className="w-full h-12 px-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                    className="w-full h-12 px-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 text-sm"
                   />
                 </div>
 
@@ -275,7 +275,7 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="moa@example.com"
-                    className="w-full h-12 px-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                    className="w-full h-12 px-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 text-sm"
                   />
                 </div>
               </div>
@@ -290,7 +290,7 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
                     <button
                       type="button"
                       onClick={handleAddChild}
-                      className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold inline-flex items-center space-x-1"
+                      className="text-xs text-slate-800 hover:text-slate-900 font-semibold inline-flex items-center space-x-1"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>자녀 추가</span>
@@ -346,7 +346,7 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
                 type="button"
                 onClick={handleGenerateQr}
                 disabled={loading}
-                className="w-full h-12 flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition disabled:opacity-50 shadow-md shadow-indigo-100"
+                className="w-full h-12 flex items-center justify-center rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition disabled:opacity-50 shadow-md shadow-indigo-100"
               >
                 {loading ? <RefreshCw className="w-5 h-5 animate-spin" /> : '1회용 QR 코드 생성하기'}
               </button>
@@ -405,7 +405,7 @@ export const CustomerQrDrawer: React.FC<CustomerQrDrawerProps> = ({
                       type="button"
                       onClick={handleGenerateQr}
                       disabled={loading}
-                      className="h-12 flex items-center justify-center space-x-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition shadow-md shadow-indigo-100"
+                      className="h-12 flex items-center justify-center space-x-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition shadow-md shadow-indigo-100"
                     >
                       <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                       <span>재발급</span>

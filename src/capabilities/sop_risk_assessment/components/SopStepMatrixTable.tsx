@@ -183,7 +183,7 @@ export const SopStepMatrixTable: React.FC<Props> = ({ docNo, steps, editable, on
                     onChange={(event) => change(step.id, { sopControlMeasure: event.target.value })}
                   />
                 ) : (
-                  <p className="font-bold text-indigo-950">🛡️ {step.sopControlMeasure}</p>
+                  <p className="font-bold text-slate-950">🛡️ {step.sopControlMeasure}</p>
                 )}
               </td>
               <td className="px-4 py-4">

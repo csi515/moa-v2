@@ -413,7 +413,7 @@ export const CalendarWeekView: FC<CalendarWeekViewProps> = ({
                                 {!readOnly && ev.isResizable !== false && (
                                   <div
                                     onPointerDown={(e) => handleResizeStart(e, ev)}
-                                    className="absolute bottom-0 left-0 right-0 h-1.5 cursor-ns-resize opacity-0 group-hover:opacity-100 bg-slate-300 hover:bg-indigo-500 rounded-b transition-all"
+                                    className="absolute bottom-0 left-0 right-0 h-1.5 cursor-ns-resize opacity-0 group-hover:opacity-100 bg-slate-300 hover:bg-slate-800 rounded-b transition-all"
                                   />
                                 )}
                               </div>
@@ -455,7 +455,7 @@ export const CalendarWeekView: FC<CalendarWeekViewProps> = ({
                               {!readOnly && ev.isResizable !== false && (
                                 <div
                                   onPointerDown={(e) => handleResizeStart(e, ev)}
-                                  className="absolute bottom-0 left-0 right-0 h-1.5 cursor-ns-resize opacity-0 group-hover:opacity-100 bg-slate-300 hover:bg-indigo-500 rounded-b transition-all"
+                                  className="absolute bottom-0 left-0 right-0 h-1.5 cursor-ns-resize opacity-0 group-hover:opacity-100 bg-slate-300 hover:bg-slate-800 rounded-b transition-all"
                                 />
                               )}
                             </div>

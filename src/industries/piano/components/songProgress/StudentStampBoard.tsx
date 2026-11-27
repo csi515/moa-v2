@@ -79,7 +79,7 @@ export const StudentStampBoard: FC<StudentStampBoardProps> = ({
     }
     if (stampCount > prevApprovedRef.current) {
       fireSongCompletionConfetti();
-      onToast?.('완곡 승인! 스탬프가 찍혔어요 🎉', 'success');
+      onToast?.('완곡 승인! 스탬프가 찍혔어요 ', 'success');
     }
     prevApprovedRef.current = stampCount;
   }, [stampCount, onToast]);
@@ -215,7 +215,7 @@ export const StudentStampBoard: FC<StudentStampBoardProps> = ({
           <button
             type="submit"
             disabled={submitting}
-            className="w-full min-h-[48px] rounded-xl bg-slate-900 hover:bg-slate-800 disabled:bg-indigo-300 text-white text-sm font-bold"
+            className="w-full min-h-[48px] rounded-xl bg-slate-900 hover:bg-slate-800 disabled:bg-slate-200 text-white text-sm font-bold"
           >
             {submitting ? '신청 중...' : SONG_PROGRESS_COPY.requestCta}
           </button>

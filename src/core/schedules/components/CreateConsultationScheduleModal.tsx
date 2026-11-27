@@ -154,7 +154,7 @@ export const CreateConsultationScheduleModal: FC<CreateConsultationScheduleModal
           <button
             type="submit"
             disabled={saving}
-            className="w-full min-h-[44px] mt-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white text-sm font-bold inline-flex items-center justify-center gap-2"
+            className="w-full min-h-[44px] mt-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 text-white text-sm font-bold inline-flex items-center justify-center gap-2"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
             등록

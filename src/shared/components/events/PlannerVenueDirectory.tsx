@@ -253,14 +253,14 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-semibold text-slate-700 flex items-center gap-1">
-                        <Users className="w-3.5 h-3.5 text-indigo-500" /> 보유 연회홀
+                        <Users className="w-3.5 h-3.5 text-slate-700" /> 보유 연회홀
                       </span>
                       <button
                         type="button"
                         onClick={() => handleOpenVendors(venue.venueId)}
                         className="text-[11px] text-slate-800 font-medium hover:underline flex items-center gap-1"
                       >
-                        <Tag className="w-3 h-3 text-indigo-500" />
+                        <Tag className="w-3 h-3 text-slate-700" />
                         공식 제휴업체 {vendorCount}곳 확인 &gt;
                       </button>
                     </div>
@@ -268,7 +268,7 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
                       {venue.halls.map((hall) => (
                         <div
                           key={hall.id}
-                          className="text-[11px] bg-slate-50/60 text-indigo-800 px-2.5 py-1 rounded border border-slate-200"
+                          className="text-[11px] bg-slate-50/60 text-slate-800 px-2.5 py-1 rounded border border-slate-200"
                         >
                           <span className="font-bold">{hall.name}</span> (수용 {hall.capacity}석 / 최소 {hall.minGuaranteed}명)
                         </div>
@@ -313,7 +313,7 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
       {/* 모드 2: 공식 제휴업체 목록 디렉토리 뷰 (Partner Vendor Directory) */}
       {viewMode === 'vendors' && (
         <div className="space-y-4">
-          <Card className="p-4 border-slate-200 bg-gradient-to-r from-indigo-50/70 to-white space-y-3">
+          <Card className="p-4 border-slate-200 bg-gradient-to-r from-slate-50 to-white space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2">
@@ -380,7 +380,7 @@ export const PlannerVenueDirectory: React.FC<PlannerVenueDirectoryProps> = ({
             {filteredVendors.map((vendor) => (
               <Card
                 key={vendor.id}
-                className="p-4 border-slate-200 bg-white hover:border-indigo-300 transition-all flex flex-col justify-between space-y-3"
+                className="p-4 border-slate-200 bg-white hover:border-slate-300 transition-all flex flex-col justify-between space-y-3"
               >
                 <div className="space-y-2">
                   <div className="flex justify-between items-start">

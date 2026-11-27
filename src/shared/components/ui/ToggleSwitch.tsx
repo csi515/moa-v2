@@ -13,7 +13,7 @@ export const ToggleSwitch: React.FC<Props> = ({
   enabled,
   onChange,
   ariaLabel,
-  activeClassName = 'bg-indigo-600',
+  activeClassName = 'bg-slate-900',
   disabled = false,
 }) => (
   <button

@@ -122,7 +122,7 @@ export const CombinedPaymentModal: React.FC<CombinedPaymentModalProps> = ({
                 <div
                   key={inv.id}
                   className={`p-3 rounded-xl border space-y-2 ${
-                    isChecked ? 'border-indigo-300 bg-slate-50/50' : 'border-slate-200'
+                    isChecked ? 'border-slate-300 bg-slate-50/50' : 'border-slate-200'
                   }`}
                 >
                   <button

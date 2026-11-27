@@ -446,7 +446,7 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
           onClick={() => setIsKioskActive(true)}
           className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
         >
-          <Lock className="w-4 h-4 text-indigo-400" />
+          <Lock className="w-4 h-4 text-slate-500" />
           <span>로비 출결 키오스크 실행</span>
         </button>
       }
@@ -458,7 +458,7 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
       {headerBlock}
 
       {!embedded && (
-        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-indigo-50 to-white p-4">
+        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4">
           <div className="flex items-center justify-between gap-3 mb-2.5">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0">

@@ -364,7 +364,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
                 )}
                 <span
                   className={`text-[11px] px-1.5 py-0.5 rounded-full ${
-                    isSelected ? 'bg-indigo-700 text-indigo-100' : 'bg-slate-100 text-slate-500'
+                    isSelected ? 'bg-slate-900 text-slate-200' : 'bg-slate-100 text-slate-500'
                   }`}
                 >
                   {count}
@@ -421,7 +421,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
                     key={m.attendanceId}
                     type="button"
                     onClick={() => setActiveTab('makeups')}
-                    className="w-full text-left rounded-xl bg-white border border-slate-200 px-3 py-2.5 min-h-[44px] hover:border-purple-300"
+                    className="w-full text-left rounded-xl bg-white border border-slate-200 px-3 py-2.5 min-h-[44px] hover:border-slate-300"
                   >
                     <p className="text-sm font-bold text-slate-900">{m.studentName}</p>
                     <p className="text-xs text-slate-700 mt-0.5">
@@ -474,7 +474,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
 
       {selectedClass && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-xs no-print animate-in fade-in duration-200">
-          <div className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 w-full sm:max-w-md overflow-hidden max-h-[90vh] flex flex-col">
+          <div className="bg-white rounded-t-3xl sm:rounded-xl shadow-2xl border border-slate-200 w-full sm:max-w-md overflow-hidden max-h-[90vh] flex flex-col">
             <div
               className="p-5 text-white flex items-center justify-between"
               style={{ backgroundColor: selectedClass.color || '#4f46e5' }}

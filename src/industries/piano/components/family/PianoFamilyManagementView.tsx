@@ -208,7 +208,7 @@ export const PianoFamilyManagementView: React.FC = () => {
         <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-2xs">
           <div className="text-xs font-semibold text-slate-500 mb-1 flex items-center justify-between">
             <span>등록 패밀리 가구</span>
-            <Users className="w-4 h-4 text-indigo-500" />
+            <Users className="w-4 h-4 text-slate-700" />
           </div>
           <div className="text-2xl font-extrabold text-slate-900">
             {totalFamilies} <span className="text-sm font-bold text-slate-500">가구</span>
@@ -221,7 +221,7 @@ export const PianoFamilyManagementView: React.FC = () => {
         <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-2xs">
           <div className="text-xs font-semibold text-slate-500 mb-1 flex items-center justify-between">
             <span>형제 자동 결합 할인</span>
-            <Sparkles className="w-4 h-4 text-indigo-500" />
+            <Sparkles className="w-4 h-4 text-slate-700" />
           </div>
           <div className="text-2xl font-extrabold text-slate-800">
             2인 10% / 3인 15%

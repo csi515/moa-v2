@@ -231,8 +231,8 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
                       style={{ height: `${heightPercent}%` }}
                       className={`w-full rounded-t-xl transition-all duration-300 ${
                         isSelected
-                          ? 'bg-gradient-to-t from-indigo-600 to-indigo-500 shadow-md shadow-indigo-600/30 ring-2 ring-indigo-400/50'
-                          : 'bg-slate-200 group-hover:bg-indigo-300'
+                          ? 'bg-gradient-to-t from-slate-800 to-slate-900 shadow-md shadow-indigo-600/30 ring-2 ring-slate-400'
+                          : 'bg-slate-200 group-hover:bg-slate-200'
                       }`}
                     />
                   </div>
@@ -255,17 +255,17 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
         {selectedBar !== null && (
           <div className="bg-slate-50/60 rounded-xl p-3 sm:p-4 border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-indigo-950 text-sm">
+              <span className="font-extrabold text-slate-950 text-sm">
                 {SAMPLE_MONTHLY_TREND[selectedBar].month} 세부 지표
               </span>
-              <span className="text-[11px] bg-slate-100 text-indigo-800 px-2 py-0.5 rounded-md font-bold">
+              <span className="text-[11px] bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md font-bold">
                 총 {SAMPLE_MONTHLY_TREND[selectedBar].totalStudents}명 재원
               </span>
             </div>
             <div className="flex items-center gap-4 text-slate-700">
               <span>신규: <strong className="text-emerald-700 font-bold tabular-nums">+{SAMPLE_MONTHLY_TREND[selectedBar].newStudents}명</strong></span>
               <span>퇴원/휴원: <strong className="text-rose-700 font-bold tabular-nums">-{SAMPLE_MONTHLY_TREND[selectedBar].withdrawnStudents}명</strong></span>
-              <span>수납 총액: <strong className="text-indigo-950 font-bold tabular-nums">{SAMPLE_MONTHLY_TREND[selectedBar].revenue.toLocaleString()}만원</strong></span>
+              <span>수납 총액: <strong className="text-slate-950 font-bold tabular-nums">{SAMPLE_MONTHLY_TREND[selectedBar].revenue.toLocaleString()}만원</strong></span>
             </div>
           </div>
         )}
@@ -351,8 +351,8 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
               <span>여유</span>
               <div className="flex gap-0.5">
                 <span className="w-2.5 h-2.5 rounded-xs bg-slate-100" />
-                <span className="w-2.5 h-2.5 rounded-xs bg-indigo-200" />
-                <span className="w-2.5 h-2.5 rounded-xs bg-indigo-400" />
+                <span className="w-2.5 h-2.5 rounded-xs bg-slate-200" />
+                <span className="w-2.5 h-2.5 rounded-xs bg-slate-300" />
                 <span className="w-2.5 h-2.5 rounded-xs bg-slate-900" />
               </div>
               <span>혼잡</span>
@@ -379,8 +379,8 @@ export const ExecutiveAnalyticsHubView: React.FC<{ embedded?: boolean }> = ({ em
 
                       let bgClass = 'bg-slate-100 text-slate-400';
                       if (rate >= 90) bgClass = 'bg-slate-900 text-white font-extrabold';
-                      else if (rate >= 75) bgClass = 'bg-indigo-400 text-white font-bold';
-                      else if (rate >= 50) bgClass = 'bg-indigo-200 text-slate-900 font-semibold';
+                      else if (rate >= 75) bgClass = 'bg-slate-300 text-white font-bold';
+                      else if (rate >= 50) bgClass = 'bg-slate-200 text-slate-900 font-semibold';
                       else if (rate >= 25) bgClass = 'bg-slate-50 text-slate-700';
 
                       return (

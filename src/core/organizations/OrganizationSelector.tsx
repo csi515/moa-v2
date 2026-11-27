@@ -81,7 +81,7 @@ export const OrganizationSelector: React.FC = () => {
         data-testid="organization-selector-loading"
       >
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mx-auto" />
+          <Loader2 className="w-8 h-8 text-slate-800 animate-spin mx-auto" />
           <p className="mt-3 text-xs font-semibold text-slate-500">
             {signingOut ? '로그아웃 중...' : '사업장 정보를 불러오는 중...'}
           </p>
@@ -94,14 +94,14 @@ export const OrganizationSelector: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-b from-indigo-50/60 via-white to-slate-50 flex items-center justify-center p-4 py-8"
+      className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 flex items-center justify-center p-4 py-8"
       data-testid="organization-selector"
     >
       <div className="w-full max-w-lg">
         {/* 상단 단정화된 계정 식별 및 로그아웃 바 */}
         <div className="mb-5 flex items-center justify-between bg-white/80 border border-slate-200/80 rounded-2xl p-2 px-3.5 shadow-2xs backdrop-blur-xs">
           <div className="flex items-center gap-2 min-w-0">
-            <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-[10px] font-bold shrink-0">
+            <div className="w-6 h-6 rounded-full bg-slate-100 text-slate-800 flex items-center justify-center text-[10px] font-bold shrink-0">
               {user?.email?.charAt(0).toUpperCase() || 'M'}
             </div>
             <span className="text-xs text-slate-600 font-medium truncate max-w-[200px] sm:max-w-[260px]" title={user?.email || ''}>
@@ -121,7 +121,7 @@ export const OrganizationSelector: React.FC = () => {
 
         {/* 메인 타이틀 영역 */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl text-white shadow-lg shadow-indigo-100 mb-3.5">
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-slate-900 rounded-2xl text-white shadow-lg shadow-indigo-100 mb-3.5">
             {isNewUser ? <Compass className="w-7 h-7" /> : <Building2 className="w-7 h-7" />}
           </div>
           <h1 className="text-2xl font-bold text-slate-900">
@@ -156,23 +156,23 @@ export const OrganizationSelector: React.FC = () => {
         </div>
 
         {/* 본문 카드 */}
-        <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-5 sm:p-7 space-y-4">
+        <div className="bg-white rounded-xl shadow-xl border border-slate-100 p-5 sm:p-7 space-y-4">
           {/* =========================================================================
               CASE A: 신규 가입자 (소속 사업장 0개) — 사업장 vs 고객 2대 경로 선택
               ========================================================================= */}
           {isNewUser ? (
             <div className="space-y-4">
               {/* 1. 사업장으로 시작 (사업주 또는 직원) */}
-              <div className="rounded-2xl border-2 border-indigo-500/30 bg-gradient-to-br from-indigo-50/80 via-white to-purple-50/40 p-4 sm:p-5 shadow-xs">
+              <div className="rounded-2xl border-2 border-slate-400 bg-gradient-to-br from-slate-50 via-white to-slate-50 p-4 sm:p-5 shadow-xs">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-indigo-200">
+                    <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-sm shadow-indigo-200">
                       <Building2 className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
                         <h3 className="text-base font-bold text-slate-900">사업장으로 시작</h3>
-                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-indigo-600 text-white font-extrabold">
+                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-extrabold">
                           매장 운영·근무
                         </span>
                       </div>
@@ -184,12 +184,12 @@ export const OrganizationSelector: React.FC = () => {
                 </div>
 
                 {/* 사업장 내부: 사업주 vs 직원 2분기 */}
-                <div className="mt-4 pt-3.5 border-t border-indigo-100/80 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="mt-4 pt-3.5 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {/* 사업주 / 원장님 */}
-                  <div className="p-3 bg-white rounded-xl border border-indigo-200/80 hover:border-indigo-400 transition-all flex flex-col justify-between">
+                  <div className="p-3 bg-white rounded-xl border border-slate-200 hover:border-slate-400 transition-all flex flex-col justify-between">
                     <div>
                       <div className="flex items-center gap-1.5 mb-1">
-                        <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                        <Sparkles className="w-3.5 h-3.5 text-slate-800" />
                         <span className="text-xs font-bold text-slate-900">사업주 · 원장님</span>
                       </div>
                       <p className="text-xs text-slate-500 leading-normal">
@@ -200,7 +200,7 @@ export const OrganizationSelector: React.FC = () => {
                       type="button"
                       data-testid="btn-open-create-org-wizard"
                       onClick={() => setShowWizard(true)}
-                      className="mt-3 w-full inline-flex items-center justify-center gap-1 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-xs font-bold rounded-lg shadow-2xs transition-all min-h-[44px]"
+                      className="mt-3 w-full inline-flex items-center justify-center gap-1 px-3 py-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-900 text-white text-xs font-bold rounded-lg shadow-2xs transition-all min-h-[44px]"
                     >
                       <span>새 매장 개설하기</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -271,25 +271,25 @@ export const OrganizationSelector: React.FC = () => {
                 <button
                   type="button"
                   onClick={enterCustomerPortal}
-                  className="w-full flex items-center justify-between p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200 hover:bg-indigo-100 hover:border-indigo-300 transition-all text-left min-h-[44px] shadow-xs"
+                  className="w-full flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:border-slate-300 transition-all text-left min-h-[44px] shadow-xs"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-indigo-200">
+                    <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-sm shadow-indigo-200">
                       <UserRound className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
                         <span className="text-sm font-bold text-slate-900">내 수강권 · 회원권 포털로 이동</span>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-200 text-indigo-900 font-bold">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-900 font-bold">
                           고객 전용
                         </span>
                       </div>
-                      <p className="text-xs text-indigo-700 font-medium mt-0.5">
+                      <p className="text-xs text-slate-800 font-medium mt-0.5">
                         등록된 매장의 출석·이용권·예약 현황을 확인합니다
                       </p>
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-indigo-500 shrink-0" />
+                  <ChevronRight className="w-5 h-5 text-slate-700 shrink-0" />
                 </button>
               )}
 
@@ -342,11 +342,11 @@ export const OrganizationSelector: React.FC = () => {
                         className={`w-full flex items-center justify-between p-4 rounded-2xl border text-left min-h-[44px] disabled:opacity-60 shadow-2xs ${
                           operationStopped
                             ? 'border-amber-200 bg-amber-50/70 cursor-not-allowed'
-                            : 'border-slate-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/40 hover:shadow-xs'
+                            : 'border-slate-200 bg-white hover:border-slate-400 hover:bg-slate-50 hover:shadow-xs'
                         }`}
                       >
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold">
+                          <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center shrink-0 font-bold">
                             <Building2 className="w-5 h-5" />
                           </div>
                           <div className="min-w-0">
@@ -366,7 +366,7 @@ export const OrganizationSelector: React.FC = () => {
                           </div>
                         </div>
                         {selectingId === membership.organizationId ? (
-                          <Loader2 className="w-5 h-5 text-indigo-600 animate-spin shrink-0" />
+                          <Loader2 className="w-5 h-5 text-slate-800 animate-spin shrink-0" />
                         ) : (
                           <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
                         )}
@@ -382,7 +382,7 @@ export const OrganizationSelector: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowMoreActions((prev) => !prev)}
-                  className="w-full min-h-[44px] flex items-center justify-between py-2.5 px-3 text-xs font-bold text-slate-600 hover:text-indigo-600 rounded-xl hover:bg-slate-50 transition-colors"
+                  className="w-full min-h-[44px] flex items-center justify-between py-2.5 px-3 text-xs font-bold text-slate-600 hover:text-slate-900 rounded-xl hover:bg-slate-50 transition-colors"
                 >
                   <span className="flex items-center gap-1.5">
                     <Plus className="w-4 h-4 text-slate-400" />
@@ -402,16 +402,16 @@ export const OrganizationSelector: React.FC = () => {
                       type="button"
                       data-testid="btn-open-create-org-wizard"
                       onClick={() => setShowWizard(true)}
-                      className="w-full flex items-center justify-between p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200 text-indigo-900 font-bold hover:bg-indigo-100 transition-all text-left min-h-[44px]"
+                      className="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-bold hover:bg-slate-100 transition-all text-left min-h-[44px]"
                     >
                       <div className="flex items-center gap-2.5">
-                        <Sparkles className="w-4 h-4 text-indigo-600" />
+                        <Sparkles className="w-4 h-4 text-slate-800" />
                         <div>
                           <p className="text-xs font-bold">새 매장 · 사업장 추가 개설</p>
-                          <p className="text-[11px] text-indigo-700/80 font-normal">원하는 업종을 골라 새 사업장을 즉시 등록합니다</p>
+                          <p className="text-[11px] text-slate-800/80 font-normal">원하는 업종을 골라 새 사업장을 즉시 등록합니다</p>
                         </div>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-indigo-500" />
+                      <ChevronRight className="w-4 h-4 text-slate-700" />
                     </button>
 
                     <div className="grid grid-cols-2 gap-2">

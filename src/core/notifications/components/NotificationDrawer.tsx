@@ -24,7 +24,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
           {/* Header */}
           <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+              <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-800">
                 <Bell className="w-4 h-4" />
               </div>
               <div>
@@ -54,7 +54,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
           <div className="flex-1 overflow-y-auto divide-y divide-slate-100 p-2">
             {isLoading ? (
               <div className="p-12 text-center text-slate-400 text-xs">
-                <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent mb-2" />
+                <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-slate-900 border-t-transparent mb-2" />
                 <p>알림을 불러오는 중...</p>
               </div>
             ) : notifications.length === 0 ? (
@@ -77,13 +77,13 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                   className={`p-4 rounded-2xl transition-all cursor-pointer ${
                     item.isRead
                       ? 'bg-white hover:bg-slate-50/80 opacity-75'
-                      : 'bg-indigo-50/40 hover:bg-indigo-50/70 border border-indigo-100/60'
+                      : 'bg-slate-50 hover:bg-slate-50 border border-slate-200/60'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <div className="flex items-center gap-1.5">
                       {!item.isRead && (
-                        <span className="w-2 h-2 rounded-full bg-indigo-600 shrink-0" />
+                        <span className="w-2 h-2 rounded-full bg-slate-900 shrink-0" />
                       )}
                       <span className="text-xs font-bold text-slate-900">{item.title}</span>
                     </div>
@@ -107,7 +107,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                       {item.category || '공지'}
                     </span>
                     {!item.isRead && (
-                      <span className="text-indigo-600 font-bold text-[11px] hover:underline">
+                      <span className="text-slate-800 font-bold text-[11px] hover:underline">
                         읽음 표시
                       </span>
                     )}

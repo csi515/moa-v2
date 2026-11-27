@@ -19,6 +19,7 @@ import {
   reviewResourceReservation,
 } from '../reservationService';
 import { listResources, canUserApproveReservation } from '../resourceService';
+import { showToast as showGlobalToast } from '@/shared/feedback/uiFeedback';
 
 interface ResourceApprovalInboxViewProps {
   organizationId: string;
@@ -39,7 +40,6 @@ export const ResourceApprovalInboxView: React.FC<ResourceApprovalInboxViewProps>
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // 반려 사유 모달 상태
   const [rejectingItem, setRejectingItem] = useState<ResourceReservation | null>(null);
@@ -68,8 +68,7 @@ export const ResourceApprovalInboxView: React.FC<ResourceApprovalInboxViewProps>
   }, [organizationId]);
 
   const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
+    showGlobalToast(msg);
   };
 
   const resourceMap = useMemo(() => {
@@ -128,14 +127,6 @@ export const ResourceApprovalInboxView: React.FC<ResourceApprovalInboxViewProps>
 
   return (
     <div className="space-y-4">
-      {/* 토스트 */}
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 animate-in fade-in">
-          <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-          <span className="text-sm font-medium">{toastMessage}</span>
-        </div>
-      )}
-
       {/* 헤더 바 */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-200">
         <div className="flex items-center gap-2">
@@ -165,7 +156,7 @@ export const ResourceApprovalInboxView: React.FC<ResourceApprovalInboxViewProps>
       {/* 목록 컨텐츠 */}
       {loading ? (
         <div className="py-12 text-center text-slate-400">
-          <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-indigo-500" />
+          <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-slate-700" />
           결재 대기 목록을 불러오는 중...
         </div>
       ) : myActionableList.length === 0 ? (
@@ -186,7 +177,7 @@ export const ResourceApprovalInboxView: React.FC<ResourceApprovalInboxViewProps>
             return (
               <div
                 key={item.id}
-                className="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs hover:border-indigo-300 transition-all flex flex-col justify-between space-y-3"
+                className="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs hover:border-slate-300 transition-all flex flex-col justify-between space-y-3"
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">

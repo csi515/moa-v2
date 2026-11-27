@@ -75,7 +75,7 @@ export const PracticeRoomStatusGrid: FC<Props> = ({
             가능
           </span>
           <span className="inline-flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-sm bg-indigo-100 border border-indigo-200" />
+            <span className="w-2.5 h-2.5 rounded-sm bg-slate-100 border border-slate-200" />
             확정
           </span>
           <span className="inline-flex items-center gap-1">
@@ -147,7 +147,7 @@ export const PracticeRoomStatusGrid: FC<Props> = ({
                           className={`w-full min-h-[40px] rounded-lg px-1.5 py-1 text-[10px] font-bold truncate text-left transition-colors ${
                             pending
                               ? 'bg-amber-100 text-amber-900 border border-amber-200'
-                              : 'bg-indigo-100 text-indigo-900 border border-indigo-200'
+                              : 'bg-slate-100 text-slate-900 border border-slate-200'
                           } ${onPickBusySlot ? 'hover:opacity-90' : 'cursor-default'}`}
                           title={`${label} · ${occ.status}`}
                         >
@@ -173,7 +173,7 @@ export const PracticeRoomStatusGrid: FC<Props> = ({
                         }
                         className={`w-full min-h-[40px] rounded-lg px-1.5 py-1 text-[10px] font-bold border transition-colors ${
                           canPick
-                            ? 'bg-emerald-50 text-emerald-800 border-emerald-100 hover:border-indigo-300 hover:bg-indigo-50'
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-100 hover:border-slate-300 hover:bg-slate-50'
                             : 'bg-emerald-50/60 text-emerald-700/70 border-emerald-50 cursor-default'
                         }`}
                       >

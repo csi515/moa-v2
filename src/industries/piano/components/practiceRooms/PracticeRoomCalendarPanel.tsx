@@ -74,7 +74,7 @@ export const PracticeRoomCalendarPanel: FC<Props> = ({
     return (
       <div className="flex h-64 items-center justify-center bg-white rounded-2xl border border-slate-200">
         <div className="inline-flex items-center gap-2 text-slate-500 text-sm">
-          <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-slate-900 border-t-transparent" />
           연습실 예약 현황을 불러오는 중...
         </div>
       </div>
@@ -172,7 +172,7 @@ export const PracticeRoomCalendarPanel: FC<Props> = ({
                                 </span>
                               </div>
                               {isFirstSlotOfBooking && (
-                                <span className="text-[10px] text-indigo-100 font-mono truncate">
+                                <span className="text-[10px] text-slate-200 font-mono truncate">
                                   {seoulTimeFromIso(booking.starts_at)}~
                                   {seoulTimeFromIso(booking.ends_at)}
                                 </span>
@@ -199,7 +199,7 @@ export const PracticeRoomCalendarPanel: FC<Props> = ({
                                 endTime: nextSlotTime,
                               })
                             }
-                            className="w-full h-full min-h-[34px] rounded-lg border border-dashed border-transparent hover:border-indigo-300 hover:bg-slate-50/40 text-transparent hover:text-slate-800 flex items-center justify-center text-[11px] font-semibold transition-all cursor-pointer"
+                            className="w-full h-full min-h-[34px] rounded-lg border border-dashed border-transparent hover:border-slate-300 hover:bg-slate-50/40 text-transparent hover:text-slate-800 flex items-center justify-center text-[11px] font-semibold transition-all cursor-pointer"
                             title={`${room.name} ${slotTime} 예약하기`}
                           >
                             <Plus className="w-3.5 h-3.5" />
@@ -336,7 +336,7 @@ export const PracticeRoomCalendarPanel: FC<Props> = ({
                                 endTime: nextSlotTime,
                               })
                             }
-                            className="w-full h-full min-h-[32px] rounded border border-transparent hover:border-dashed hover:border-indigo-300 hover:bg-slate-50/50 text-transparent hover:text-slate-800 flex items-center justify-center text-[10px] transition-all cursor-pointer"
+                            className="w-full h-full min-h-[32px] rounded border border-transparent hover:border-dashed hover:border-slate-300 hover:bg-slate-50/50 text-transparent hover:text-slate-800 flex items-center justify-center text-[10px] transition-all cursor-pointer"
                             title={`${date} ${slotTime} 예약하기`}
                           >
                             <Plus className="w-3 h-3" />
@@ -407,7 +407,7 @@ export const PracticeRoomCalendarPanel: FC<Props> = ({
               onClick={() => onSelectDate(date)}
               className={`min-h-[100px] p-2 text-left align-top transition-all flex flex-col justify-between cursor-pointer ${
                 selected
-                  ? 'bg-slate-50 ring-2 ring-indigo-600 ring-inset'
+                  ? 'bg-slate-50 ring-2 ring-slate-900 ring-inset'
                   : 'hover:bg-slate-50/80'
               }`}
             >
@@ -467,7 +467,7 @@ export const PracticeRoomCalendarPanel: FC<Props> = ({
                       endTime: '15:00',
                     });
                   }}
-                  className="text-[10px] font-bold text-slate-800 hover:text-indigo-800 hover:underline inline-flex items-center gap-0.5"
+                  className="text-[10px] font-bold text-slate-800 hover:text-slate-900 hover:underline inline-flex items-center gap-0.5"
                 >
                   <Plus className="w-3 h-3" />
                   <span>예약</span>

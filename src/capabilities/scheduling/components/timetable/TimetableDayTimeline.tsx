@@ -45,10 +45,10 @@ export const TimetableDayTimeline: FC<TimetableDayTimelineProps> = ({
         const isFull = enrolledCount >= cls.capacity;
         const highlightClass =
           highlight === 'now'
-            ? 'border-indigo-400 bg-slate-50/80 ring-1 ring-indigo-200'
+            ? 'border-slate-300 bg-slate-50/80 ring-1 ring-slate-200'
             : highlight === 'next'
               ? 'border-emerald-300 bg-emerald-50/50'
-              : 'border-slate-200/90 bg-white hover:border-indigo-300';
+              : 'border-slate-200/90 bg-white hover:border-slate-300';
 
         return (
           <li key={cls.id} className="relative pl-5 pb-3 last:pb-0">
@@ -58,7 +58,7 @@ export const TimetableDayTimeline: FC<TimetableDayTimelineProps> = ({
                   ? 'bg-slate-900'
                   : highlight === 'next'
                     ? 'bg-emerald-500'
-                    : 'bg-indigo-300'
+                    : 'bg-slate-200'
               }`}
               aria-hidden
             />

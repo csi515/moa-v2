@@ -14,7 +14,7 @@ import {
   Settings,
 } from "lucide-react";
 import { useApp } from "@/context/AppContext";
-import { requestCommandPalette } from "@/components/common/GlobalCommandPalette";
+import { requestCommandPalette } from "@/shared/components/commandPalette/GlobalCommandPalette";
 import { useOrganization } from "@/core/organizations/OrganizationProvider";
 import { getIndustryLabel } from "@/core/industry/types";
 import { getIndustryPreset } from "@/app/presets/presetRegistry";

@@ -88,7 +88,7 @@ export const StaffInviteAcceptModal: React.FC<StaffInviteAcceptModalProps> = ({
               type="button"
               onClick={() => void runPreview(code)}
               disabled={busy}
-              className="w-full py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px] flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl min-h-[44px] flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {busy && <Loader2 className="w-4 h-4 animate-spin" />}
               코드 확인
@@ -96,9 +96,9 @@ export const StaffInviteAcceptModal: React.FC<StaffInviteAcceptModalProps> = ({
           </>
         ) : (
           <>
-            <div className="p-4 rounded-xl bg-indigo-50 border border-indigo-100 flex items-start gap-3">
-              <Building2 className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
-              <div className="text-sm text-indigo-900">
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+              <Building2 className="w-5 h-5 text-slate-800 shrink-0 mt-0.5" />
+              <div className="text-sm text-slate-900">
                 <p className="font-bold">{preview.organizationName}</p>
                 <p className="text-xs mt-0.5">
                   <strong>{preview.staffName}</strong> 직원·강사 자리로 초대되었습니다.
@@ -122,7 +122,7 @@ export const StaffInviteAcceptModal: React.FC<StaffInviteAcceptModalProps> = ({
                 type="button"
                 onClick={() => void handleAccept()}
                 disabled={busy}
-                className="py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl min-h-[44px] flex items-center justify-center gap-2 disabled:opacity-60"
+                className="py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl min-h-[44px] flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 {busy && <Loader2 className="w-4 h-4 animate-spin" />}
                 초대 수락
