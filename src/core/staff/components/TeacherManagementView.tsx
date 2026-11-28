@@ -962,6 +962,10 @@ export const TeacherManagementView: React.FC = () => {
                 />
               </div>
 
+              <p className="text-[11px] text-slate-500 leading-relaxed rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+                화면 권한은 설정 &gt; 직급에서 관리합니다. 수납·재무는 사업주 전용입니다.
+              </p>
+
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">정산 방식</label>

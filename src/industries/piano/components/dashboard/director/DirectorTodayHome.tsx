@@ -46,7 +46,7 @@ export const DirectorTodayHome: FC = () => {
   const queryClient = useQueryClient();
   const { currentUser } = useApp();
   const { currentOrganization } = useOrganization();
-  const { isAdmin } = usePermissions();
+  const { isAdmin, isOwner } = usePermissions();
   const navigate = usePianoNavigate();
   const data = useDirectorTodayDashboard();
 
@@ -96,8 +96,8 @@ export const DirectorTodayHome: FC = () => {
       });
     }
 
-    // 2. 미납 원생 수납/독촉 안내
-    if (unpaidStudentCount > 0) {
+    // 2. 미납 원생 수납/독촉 안내 (사업주만 — 재무 탭 접근 가능)
+    if (isOwner && unpaidStudentCount > 0) {
       items.push({
         id: 'unpaid',
         label: '미납 수납 대상',
@@ -154,6 +154,7 @@ export const DirectorTodayHome: FC = () => {
 
     return items;
   }, [
+    isOwner,
     todayAttendanceCounts.unchecked,
     unpaidStudentCount,
     pendingInquiryCount,
@@ -176,11 +177,12 @@ export const DirectorTodayHome: FC = () => {
     <div className="space-y-3 sm:space-y-4 pb-4 max-w-5xl mx-auto w-full" data-testid="director-home">
       <PianoDirector3SecBriefingCard
         students={students}
-        invoices={unpaidInvoices}
+        invoices={isOwner ? unpaidInvoices : []}
         todayIso={today}
         attendanceCounts={todayAttendanceCounts}
         makeupPendingCount={makeupPendingCount}
         onNavigate={navigate}
+        showFinance={isOwner}
       />
 
       <FavoriteMenuQuickDock onNavigate={navigate} activeTab="dashboard" />
@@ -203,9 +205,11 @@ export const DirectorTodayHome: FC = () => {
                   ? `등원 ${todayAttendanceCounts.present}/${todayAttendanceCounts.total}명`
                   : null,
                 pendingTaskTotal > 0 ? `처리할 업무 ${pendingTaskTotal}건` : null,
-                unpaidStudentCount > 0
-                  ? `미납 ${unpaidStudentCount}명(${formatCurrency(unpaidTotal)})`
-                  : '미납 없음',
+                isOwner
+                  ? unpaidStudentCount > 0
+                    ? `미납 ${unpaidStudentCount}명(${formatCurrency(unpaidTotal)})`
+                    : '미납 없음'
+                  : null,
               ]
                 .filter(Boolean)
                 .join(' · ')}
@@ -265,12 +269,14 @@ export const DirectorTodayHome: FC = () => {
           onOpenAttendance={() => navigate('attendance')}
         />
         <DirectorTodayTasksSection items={taskItems} onOpen={handleOpenTask} />
-        <div className="lg:col-span-2">
-          <DirectorTodayUnpaidSection
-            invoices={unpaidInvoices}
-            onOpenUnpaid={() => navigate('unpaid')}
-          />
-        </div>
+        {isOwner ? (
+          <div className="lg:col-span-2">
+            <DirectorTodayUnpaidSection
+              invoices={unpaidInvoices}
+              onOpenUnpaid={() => navigate('unpaid')}
+            />
+          </div>
+        ) : null}
       </div>
 
       <DirectorInteractiveOnboardingWizard

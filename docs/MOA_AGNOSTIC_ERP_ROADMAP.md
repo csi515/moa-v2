@@ -6,7 +6,8 @@
 > **Phase 1 상세 스펙:** [docs/MOA_AGNOSTIC_ERP_PHASE1_SPEC.md](./MOA_AGNOSTIC_ERP_PHASE1_SPEC.md)  
 > **Phase 2 상세 스펙:** [docs/MOA_AGNOSTIC_ERP_PHASE2_SPEC.md](./MOA_AGNOSTIC_ERP_PHASE2_SPEC.md)  
 > **Phase 3 상세 스펙:** [docs/MOA_AGNOSTIC_ERP_PHASE3_SPEC.md](./MOA_AGNOSTIC_ERP_PHASE3_SPEC.md)  
-> **Phase 4 상세 스펙:** [docs/MOA_AGNOSTIC_ERP_PHASE4_SPEC.md](./MOA_AGNOSTIC_ERP_PHASE4_SPEC.md)
+> **Phase 4 상세 스펙:** [docs/MOA_AGNOSTIC_ERP_PHASE4_SPEC.md](./MOA_AGNOSTIC_ERP_PHASE4_SPEC.md)  
+> **클로즈아웃 계획:** [docs/MOA_AGNOSTIC_ERP_CLOSEOUT_PLAN.md](./MOA_AGNOSTIC_ERP_CLOSEOUT_PLAN.md)
 
 ---
 
@@ -237,7 +238,7 @@ core.lifecycle_side_effects (notify|deduct|approve …) 토글
 - [x] 커스텀 역할 + grants로 메뉴·담당 범위 제어 경로  
 - [x] 필드 ACL 최소 구현  
 - [x] 병렬 스택 폐기 일정 문서화  
-- [ ] 원격 DB 마이그레이션 승인·적용
+- [x] 원격 DB 마이그레이션 승인·적용
 
 ---
 
@@ -254,10 +255,10 @@ core.lifecycle_side_effects (notify|deduct|approve …) 토글
 | 순서 | 액션 | 상태 |
 | :--- | :--- | :--- |
 | 0 | 헌법·로드맵·AGENTS 색인 | 본 PR/커밋 |
-| 1 | Phase 1 마이그레이션 **승인** 후 SPEC 구현 | 앱 구현 완료 · 원격 DB 승인 대기 |
+| 1 | Phase 1 마이그레이션 **승인** 후 SPEC 구현 | 앱+원격 적용 완료 ([PHASE1_SPEC](./MOA_AGNOSTIC_ERP_PHASE1_SPEC.md)) |
 | 2 | Phase 2 프리셋 데이터화 | 단기 JSON 로더·Wizard 패리티 완료 ([PHASE2_SPEC](./MOA_AGNOSTIC_ERP_PHASE2_SPEC.md)) |
-| 3 | Phase 3a→3b→3c | 앱/마이그레이션 완료 · 원격 DB 승인 대기 ([PHASE3_SPEC](./MOA_AGNOSTIC_ERP_PHASE3_SPEC.md)) |
-| 4 | Phase 4 RBAC | 앱/마이그레이션 완료 · 원격 DB 승인 대기 ([PHASE4_SPEC](./MOA_AGNOSTIC_ERP_PHASE4_SPEC.md)) |
+| 3 | Phase 3a→3b→3c | 앱+원격 적용 완료 ([PHASE3_SPEC](./MOA_AGNOSTIC_ERP_PHASE3_SPEC.md)) |
+| 4 | Phase 4 RBAC | 앱+원격 적용 완료 · 클로즈아웃 배선 ([PHASE4_SPEC](./MOA_AGNOSTIC_ERP_PHASE4_SPEC.md) · [CLOSEOUT](./MOA_AGNOSTIC_ERP_CLOSEOUT_PLAN.md)) |
 
 ---
 

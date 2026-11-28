@@ -1,5 +1,5 @@
 import { useMemo, type FC } from 'react';
-import { BarChart3, CreditCard, ShieldAlert } from 'lucide-react';
+import { BarChart3, CreditCard } from 'lucide-react';
 import type { NavTab } from '@/shared/navigation/navigationTypes';
 import { useAppNavigation } from '@/shared/navigation/useAppNavigation';
 import { usePermissions } from '@/core/auth/usePermissions';
@@ -7,6 +7,7 @@ import { getFeeLabel, isAppointmentIndustry } from '@/core/industry/industryUi';
 import type { FinanceHubSegmentId } from '@/core/industry/pluginTypes';
 import { PageHeader, SegmentedControl } from '@/shared/components';
 import { resolveFinanceHubNav } from '../financeHubNav';
+import { FinanceAccessDenied } from './FinanceAccessDenied';
 import { FinanceOverviewView } from './FinanceOverviewView';
 import { IncomeManagementView } from './IncomeManagementView';
 import { ExpenseManagementView } from './ExpenseManagementView';
@@ -113,26 +114,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
   }, [billingEnabled, tuitionTabLabel]);
 
   if (!hasFinanceAccess) {
-    return (
-      <div className="bg-white rounded-xl border border-slate-200 p-8 text-center max-w-md mx-auto my-12 shadow-sm space-y-4">
-        <div className="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mx-auto">
-          <ShieldAlert className="w-6 h-6" />
-        </div>
-        <div className="space-y-1">
-          <h3 className="text-base font-black text-slate-900">재무 장부 열람 권한 제한</h3>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            수납 내역 및 매출 장부는 사업주(원장) 전용입니다.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setActiveTab('dashboard')}
-          className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors"
-        >
-          대시보드로 돌아가기
-        </button>
-      </div>
-    );
+    return <FinanceAccessDenied title="재무 장부 열람 권한 제한" />;
   }
 
   // --- A. 수납 전용 페이지 분리 뷰 ---

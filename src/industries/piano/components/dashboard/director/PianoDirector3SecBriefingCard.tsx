@@ -23,6 +23,8 @@ export interface PianoDirector3SecBriefingCardProps {
   };
   makeupPendingCount: number;
   onNavigate: (tab: NavTab) => void;
+  /** false면 수납·미납 브리핑 타일 숨김 (사업주 전용) */
+  showFinance?: boolean;
 }
 
 /**
@@ -35,6 +37,7 @@ export const PianoDirector3SecBriefingCard: React.FC<PianoDirector3SecBriefingCa
   attendanceCounts,
   makeupPendingCount,
   onNavigate,
+  showFinance = true,
 }) => {
   // 1. 오늘 생일 원생
   const birthdays = useMemo(
@@ -94,8 +97,12 @@ export const PianoDirector3SecBriefingCard: React.FC<PianoDirector3SecBriefingCa
         </p>
       </div>
 
-      {/* 4대 핵심 브리핑 지표 카드 그리드 */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5 pt-3.5">
+      {/* 핵심 브리핑 지표 카드 그리드 (재무 타일은 사업주만) */}
+      <div
+        className={`grid grid-cols-2 gap-2.5 sm:gap-3.5 pt-3.5 ${
+          showFinance ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
+        }`}
+      >
         {/* 1. 출결 / 등원 예정 */}
         <div
           onClick={() => onNavigate('attendance')}
@@ -156,34 +163,36 @@ export const PianoDirector3SecBriefingCard: React.FC<PianoDirector3SecBriefingCa
           </div>
         </div>
 
-        {/* 3. 오늘 수강료 결제 & 미납 */}
-        <div
-          onClick={() => onNavigate('unpaid')}
-          className="bg-slate-50/70 hover:bg-slate-100/70 border border-slate-200/80 rounded-lg p-3 sm:p-3.5 cursor-pointer transition-colors flex flex-col justify-between group"
-        >
-          <div>
-            <div className="flex items-center justify-between text-slate-500 text-xs font-medium mb-1">
-              <span className="flex items-center gap-1.5">
-                <CreditCard className="w-3.5 h-3.5 text-slate-400" strokeWidth={1.5} />
-                <span>수강료 납부일</span>
-              </span>
-              <ArrowRight className="w-3 h-3 text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-transform" strokeWidth={1.5} />
+        {/* 3. 오늘 수강료 결제 & 미납 (사업주 전용) */}
+        {showFinance ? (
+          <div
+            onClick={() => onNavigate('unpaid')}
+            className="bg-slate-50/70 hover:bg-slate-100/70 border border-slate-200/80 rounded-lg p-3 sm:p-3.5 cursor-pointer transition-colors flex flex-col justify-between group"
+          >
+            <div>
+              <div className="flex items-center justify-between text-slate-500 text-xs font-medium mb-1">
+                <span className="flex items-center gap-1.5">
+                  <CreditCard className="w-3.5 h-3.5 text-slate-400" strokeWidth={1.5} />
+                  <span>수강료 납부일</span>
+                </span>
+                <ArrowRight className="w-3 h-3 text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-transform" strokeWidth={1.5} />
+              </div>
+              <div className="text-xl sm:text-2xl font-bold text-slate-900 tabular-nums tracking-tight">
+                {payment.todayDueCount}
+                <span className="text-xs font-normal text-slate-500 ml-1">명 납부일</span>
+              </div>
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-slate-900 tabular-nums tracking-tight">
-              {payment.todayDueCount}
-              <span className="text-xs font-normal text-slate-500 ml-1">명 납부일</span>
+            <div className="text-[11px] mt-2 font-medium flex items-center gap-1 truncate">
+              {payment.totalUnpaidCount > 0 ? (
+                <span className="text-amber-700 font-semibold">
+                  미납 {payment.totalUnpaidCount}건 ({payment.totalUnpaidAmount.toLocaleString()}원)
+                </span>
+              ) : (
+                <span className="text-emerald-700 font-semibold">전체 완납 완료</span>
+              )}
             </div>
           </div>
-          <div className="text-[11px] mt-2 font-medium flex items-center gap-1 truncate">
-            {payment.totalUnpaidCount > 0 ? (
-              <span className="text-amber-700 font-semibold">
-                미납 {payment.totalUnpaidCount}건 ({payment.totalUnpaidAmount.toLocaleString()}원)
-              </span>
-            ) : (
-              <span className="text-emerald-700 font-semibold">전체 완납 완료</span>
-            )}
-          </div>
-        </div>
+        ) : null}
 
         {/* 4. 안심 케어 / 보강 주의 */}
         <div

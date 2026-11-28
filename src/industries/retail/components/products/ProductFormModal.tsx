@@ -1,8 +1,17 @@
 import { useEffect, useState, type FormEvent, type FC } from 'react';
-import { Plus, Trash2, Settings } from 'lucide-react';
+import { Plus, Trash2, Settings, SlidersHorizontal } from 'lucide-react';
 import { Modal } from '@/shared/components';
 import { Button, FORM_ACTION_BUTTON_CLASS, FormField, FORM_CONTROL_CLASS, SegmentedControl } from '@/shared/components/ui';
 import { useApp } from '@/context/AppContext';
+import { usePermissions } from '@/core/auth/usePermissions';
+import {
+  extractCustomFieldValues,
+  mergeCustomFieldValues,
+  validateCustomFields,
+  type CustomFieldDefinition,
+} from '@/core/customer/customFields';
+import { CustomFieldsForm } from '@/core/customer/components/CustomFieldsForm';
+import { resolveCustomFieldDefinitions } from '@/core/fields/fieldDefinitionService';
 import { openRetailSettingsPanel } from '../settings/retailSettingsIntent';
 import { productService } from '../../services/productService';
 import { inventoryService } from '../../services/inventoryService';
@@ -70,6 +79,7 @@ export const ProductFormModal: FC<Props> = ({
   requireSizeColorVariants = false,
 }) => {
   const { setActiveTab, openConfirmDialog } = useApp();
+  const { industry } = usePermissions();
   const selectableCategories = categories.filter((category) => category.isActive);
   const [name, setName] = useState('');
   const [spec, setSpec] = useState('');
@@ -84,6 +94,29 @@ export const ProductFormModal: FC<Props> = ({
   const [variants, setVariants] = useState<VariantDraft[]>([emptyVariant()]);
   const [saving, setSaving] = useState(false);
   const [hydrating, setHydrating] = useState(false);
+  const [customFieldsDef, setCustomFieldsDef] = useState<readonly CustomFieldDefinition[]>([]);
+  const [customFieldValues, setCustomFieldValues] = useState<Record<string, unknown>>({});
+  const [customFieldErrors, setCustomFieldErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (!isOpen) return;
+    let cancelled = false;
+    const orgId = organizationId === 'local-org' ? null : organizationId;
+    void resolveCustomFieldDefinitions(orgId, industry, 'product').then((fields) => {
+      if (!cancelled) setCustomFieldsDef(fields);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen, organizationId, industry]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setCustomFieldValues(
+      extractCustomFieldValues(editing?.metadata ?? null, customFieldsDef)
+    );
+    setCustomFieldErrors({});
+  }, [isOpen, editing, customFieldsDef]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -156,6 +189,16 @@ export const ProductFormModal: FC<Props> = ({
     };
   }, [isOpen, editing, requireSizeColorVariants]);
 
+  const updateCustomField = (key: string, value: unknown) => {
+    setCustomFieldValues((prev) => ({ ...prev, [key]: value }));
+    setCustomFieldErrors((prev) => {
+      if (!prev[key]) return prev;
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  };
+
   const updateVariant = (key: string, patch: Partial<VariantDraft>) => {
     setVariants((prev) => prev.map((v) => (v.key === key ? { ...v, ...patch } : v)));
   };
@@ -215,6 +258,15 @@ export const ProductFormModal: FC<Props> = ({
       }));
     }
 
+    if (customFieldsDef.length > 0) {
+      const fieldErrors = validateCustomFields(customFieldValues, customFieldsDef);
+      if (Object.keys(fieldErrors).length > 0) {
+        setCustomFieldErrors(fieldErrors);
+        return;
+      }
+    }
+    setCustomFieldErrors({});
+
     setSaving(true);
     try {
       const savedProduct = await productService.saveProduct(
@@ -230,6 +282,7 @@ export const ProductFormModal: FC<Props> = ({
           newCategoryName: null,
           isActive,
           variants: optionMode === 'none' ? [] : variantPayload,
+          metadata: mergeCustomFieldValues(editing?.metadata, customFieldValues),
         },
         editing?.id
       );
@@ -521,6 +574,21 @@ export const ProductFormModal: FC<Props> = ({
             </Button>
           </div>
         )}
+
+        {customFieldsDef.length > 0 ? (
+          <section className="rounded-2xl border border-slate-200 bg-slate-50/70 p-3.5 space-y-3">
+            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-slate-700" />
+              {COPY.customFieldsSection}
+            </h4>
+            <CustomFieldsForm
+              fields={customFieldsDef}
+              values={customFieldValues}
+              onChange={updateCustomField}
+              errors={customFieldErrors}
+            />
+          </section>
+        ) : null}
 
         <div className="rounded-2xl border border-teal-100 bg-teal-50/40 p-3.5 space-y-3">
           <p className="text-xs font-bold text-teal-900">

@@ -27,11 +27,17 @@ export type PermissionCatalogEntry = {
 
 export const PERMISSION_GROUP_TITLES: Record<PermissionCatalogGroupId, string> = {
   ops: '출결 및 수업 운영',
-  finance: '재무 및 매출 장부',
+  finance: '재무 및 매출 장부 (사업주 전용)',
   hr_rbac: '매장 운영 및 인사/권한 위임',
   facilities: '공용 자원 및 시설/공간 관리',
   intranet: '사내 인트라넷·복지',
 };
+
+/** 직급 매트릭스·위임 grants로 열 수 없는 재무 관련 키 */
+export const OWNER_ONLY_ROLE_PERMISSION_KEYS: readonly RolePermissionKey[] = [
+  'billing_invoices',
+  'statistics',
+] as const;
 
 export const PERMISSION_CATALOG: readonly PermissionCatalogEntry[] = [
   {
@@ -56,13 +62,15 @@ export const PERMISSION_CATALOG: readonly PermissionCatalogEntry[] = [
     key: 'billing_invoices',
     label: '수납/미납 장부 조회',
     group: 'finance',
-    description: '청구·수납·미납 장부 열람',
+    description: '사업주 전용 — 직급으로 위임할 수 없습니다',
+    hideInMatrix: true,
   },
   {
     key: 'statistics',
     label: '매출 통계',
     group: 'finance',
-    description: '매출·운영 통계 대시보드',
+    description: '사업주 전용 — 직급으로 위임할 수 없습니다',
+    hideInMatrix: true,
   },
   {
     key: 'members:manage',

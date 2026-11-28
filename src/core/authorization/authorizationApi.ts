@@ -14,6 +14,8 @@ export type AuthorizationApiInput = {
   locationId?: string | null;
   customerId?: string | null;
   extraGrants?: readonly AuthorizationGrant[] | null;
+  /** org settings.rbac.scope_fail_closed — SQL has_permission 과 동기 */
+  scopeFailClosed?: boolean;
 };
 
 export type CanInput = {
@@ -51,6 +53,7 @@ export function createAuthorizationApi(input: AuthorizationApiInput): Authorizat
         scopeId,
       }),
       extraGrants,
+      scopeFailClosed: input.scopeFailClosed === true,
     });
   };
 

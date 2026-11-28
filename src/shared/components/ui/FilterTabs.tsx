@@ -12,6 +12,8 @@ interface FilterTabsProps<T extends string> {
   onChange: (id: any) => void;
   activeClassName?: string;
   inactiveClassName?: string;
+  /** 탭 버튼에 추가할 클래스 (예: min-h-[44px]) */
+  className?: string;
 }
 
 export function FilterTabs<T extends string>({
@@ -20,6 +22,7 @@ export function FilterTabs<T extends string>({
   onChange,
   activeClassName = 'bg-slate-900 text-white shadow-xs',
   inactiveClassName = 'bg-slate-100 text-slate-600 hover:bg-slate-200/80',
+  className = '',
 }: FilterTabsProps<T>) {
   return (
     <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 sm:flex-wrap">
@@ -30,7 +33,7 @@ export function FilterTabs<T extends string>({
           onClick={() => onChange(tab.id)}
           className={`shrink-0 min-h-[36px] px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
             active === tab.id ? activeClassName : inactiveClassName
-          }`}
+          } ${className}`}
         >
           <span>{tab.label}</span>
           {tab.count !== undefined && <span className="ml-1 opacity-80">({tab.count})</span>}

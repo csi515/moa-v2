@@ -18,13 +18,16 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
+import { usePermissions } from '@/core/auth/usePermissions';
 import {
   PIANO_AVAILABLE_MENU_CATALOG,
-  DEFAULT_PIANO_FAVORITE_TABS,
   MAX_FAVORITE_DOCK_ITEMS,
   loadFavoriteTabs,
   saveFavoriteTabs,
   toggleFavoriteTab,
+  filterFavoriteCatalogForRole,
+  defaultFavoriteTabsForRole,
+  PIANO_OWNER_ONLY_FAVORITE_TABS,
   type AvailableMenuItem,
 } from './favoriteMenuHelpers';
 
@@ -35,13 +38,22 @@ interface Props {
 
 export const FavoriteMenuQuickDock: FC<Props> = ({ onNavigate, activeTab }) => {
   const { showToast } = useApp();
+  const { isOwner } = usePermissions();
   const [favoriteTabs, setFavoriteTabs] = useState<string[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [tempFavorites, setTempFavorites] = useState<string[]>([]);
 
+  const catalog = useMemo(
+    () => filterFavoriteCatalogForRole(PIANO_AVAILABLE_MENU_CATALOG, isOwner),
+    [isOwner]
+  );
+
   useEffect(() => {
-    setFavoriteTabs(loadFavoriteTabs());
-  }, []);
+    const loaded = loadFavoriteTabs().filter(
+      (tab) => isOwner || !PIANO_OWNER_ONLY_FAVORITE_TABS.has(tab)
+    );
+    setFavoriteTabs(loaded.length > 0 ? loaded : defaultFavoriteTabsForRole(isOwner));
+  }, [isOwner]);
 
   const handleOpenEdit = () => {
     setTempFavorites([...favoriteTabs]);
@@ -69,14 +81,14 @@ export const FavoriteMenuQuickDock: FC<Props> = ({ onNavigate, activeTab }) => {
   };
 
   const handleResetDefaults = () => {
-    setTempFavorites([...DEFAULT_PIANO_FAVORITE_TABS]);
-    showToast('기본 추천 6대 메뉴로 초기화되었습니다.', 'info');
+    setTempFavorites(defaultFavoriteTabsForRole(isOwner));
+    showToast('기본 추천 메뉴로 초기화되었습니다.', 'info');
   };
 
   const favoriteMenuItems = useMemo(() => {
-    const map = new Map(PIANO_AVAILABLE_MENU_CATALOG.map((m) => [m.tab, m]));
+    const map = new Map(catalog.map((m) => [m.tab, m]));
     return favoriteTabs.map((t) => map.get(t)).filter((m): m is AvailableMenuItem => Boolean(m));
-  }, [favoriteTabs]);
+  }, [favoriteTabs, catalog]);
 
   const renderIcon = (type: AvailableMenuItem['iconType'], className = 'w-4 h-4') => {
     switch (type) {
@@ -195,7 +207,7 @@ export const FavoriteMenuQuickDock: FC<Props> = ({ onNavigate, activeTab }) => {
         {/* 메뉴 선택 그리드 */}
         <div className="p-1 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {PIANO_AVAILABLE_MENU_CATALOG.map((item) => {
+            {catalog.map((item) => {
               const isChecked = tempFavorites.includes(item.tab);
               return (
                 <button

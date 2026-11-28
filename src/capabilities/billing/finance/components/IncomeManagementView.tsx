@@ -12,10 +12,11 @@ import {
   getCategoryLabel,
   buildYearMonthOptions,
 } from '@/capabilities/billing/finance/categories';
-import { TrendingUp, Plus, Trash2, Edit, X, Save, ShieldAlert } from 'lucide-react';
+import { TrendingUp, Plus, Trash2, Edit, X, Save } from 'lucide-react';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { EmptyState } from '@/shared/components/ui';
 import type { IncomeEntry } from '@/capabilities/billing/finance/types';
+import { FinanceAccessDenied } from './FinanceAccessDenied';
 
 
 function getLinkedSourceBadge(sourceType?: string): string | null {
@@ -160,19 +161,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
   useEscapeKey(() => setIsModalOpen(false), isModalOpen);
 
   if (!hasFinanceAccess) {
-    return (
-      <div className="bg-white rounded-lg border border-slate-200 p-8 text-center max-w-md mx-auto my-6 shadow-sm space-y-4">
-        <div className="w-12 h-12 bg-rose-50 text-rose-600 rounded-lg flex items-center justify-center mx-auto">
-          <ShieldAlert className="w-6 h-6" />
-        </div>
-        <div className="space-y-1">
-          <h3 className="text-base font-black text-slate-900">수입 장부 열람 권한 제한</h3>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            수입 내역 등록 및 열람은 사업주(원장) 전용입니다.
-          </p>
-        </div>
-      </div>
-    );
+    return <FinanceAccessDenied title="수입 장부 열람 권한 제한" />;
   }
 
   return (

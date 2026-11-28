@@ -127,6 +127,22 @@ export const DEFAULT_PIANO_FAVORITE_TABS: readonly string[] = [
   'students',
 ];
 
+/** 재무·수납 탭 — 사업주만 즐겨찾기/독에 노출 */
+export const PIANO_OWNER_ONLY_FAVORITE_TABS = new Set(['tuition', 'unpaid', 'finance']);
+
+export function filterFavoriteCatalogForRole(
+  catalog: readonly AvailableMenuItem[],
+  isOwner: boolean
+): AvailableMenuItem[] {
+  if (isOwner) return [...catalog];
+  return catalog.filter((item) => !PIANO_OWNER_ONLY_FAVORITE_TABS.has(item.tab));
+}
+
+export function defaultFavoriteTabsForRole(isOwner: boolean): string[] {
+  if (isOwner) return [...DEFAULT_PIANO_FAVORITE_TABS];
+  return DEFAULT_PIANO_FAVORITE_TABS.filter((tab) => !PIANO_OWNER_ONLY_FAVORITE_TABS.has(tab));
+}
+
 export const MAX_FAVORITE_DOCK_ITEMS = 6;
 export const STORAGE_KEY_PIANO_FAVORITES = 'moa_piano_favorite_dock_v1';
 

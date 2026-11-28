@@ -1,6 +1,6 @@
 # Phase 4 구현 스펙 — RBAC → RLS 단일화
 
-> **상태:** 앱/마이그레이션 파일 구현 완료 · **원격 DB 적용은 별도 승인**  
+> **상태:** 앱/마이그레이션 구현 · **원격 DB 적용 완료** (2026-11-28 승인) · 클로즈아웃 배선 포함  
 > **상위 로드맵:** [MOA_AGNOSTIC_ERP_ROADMAP.md](./MOA_AGNOSTIC_ERP_ROADMAP.md)
 
 마이그레이션: `supabase/migrations/20261128220000_phase4_rbac_permission_unification.sql`

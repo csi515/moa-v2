@@ -31,6 +31,12 @@ const SCOPE_OPTIONS: { value: AuthScopeType; label: string }[] = [
   { value: 'resource', label: COPY.resource },
 ];
 
+/** 재무·회계 조회는 사업주 전용 — 개별 grant로 위임하지 않음 */
+const OWNER_ONLY_GRANT_PERMISSIONS = new Set<Permission>(['finance.read']);
+const GRANTABLE_PERMISSIONS = PERMISSION_DEFINITIONS.filter(
+  (row) => !OWNER_ONLY_GRANT_PERMISSIONS.has(row.key)
+);
+
 type Props = {
   members: GrantMemberOption[];
 };
@@ -189,7 +195,7 @@ export const AuthorizationGrantsCard: FC<Props> = ({ members }) => {
             value={permission}
             onChange={(e) => setPermission(e.target.value as Permission)}
           >
-            {PERMISSION_DEFINITIONS.map((row) => (
+            {GRANTABLE_PERMISSIONS.map((row) => (
               <option key={row.key} value={row.key}>
                 {row.description} ({row.key})
               </option>

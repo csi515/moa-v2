@@ -79,6 +79,7 @@ export const SupabaseRoleSync: React.FC = () => {
         if (!activeOrgId) return null;
         return org?.currentLocation?.id ?? null;
       },
+      getOrganizationSettings: () => org?.currentOrganization?.settings ?? null,
     });
 
     return () => {

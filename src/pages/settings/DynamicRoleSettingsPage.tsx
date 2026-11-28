@@ -14,10 +14,10 @@ import {
 } from '@/core/organizations/services/dynamicRoleService';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { useAuthorization } from '@/hooks/useAuthorization';
+import { isOrgOwner } from '@/core/auth/permissionsRole';
 import {
   canManageRoles,
   EMPTY_ROLE_PERMISSIONS,
-  normalizeRolePermissions,
   type RolePermissionMap,
 } from '@/domain/permissions';
 import {
@@ -29,7 +29,7 @@ import { getPlaceLabel } from '@/core/industry/industryUi';
 import { RolePermissionMatrix } from './RolePermissionMatrix';
 import { OwnershipTransferCard } from './OwnershipTransferCard';
 import { AuthorizationGrantsCard } from '@/core/organizations/components/AuthorizationGrantsCard';
-import { matrixKeySatisfiesCanonical } from '@/core/authorization/permissionAliases';
+import { FinanceAccessDenied } from '@/capabilities/billing/finance/components/FinanceAccessDenied';
 
 type RoleRow = DynamicRoleRow;
 type MemberRow = DynamicMemberRow;
@@ -45,26 +45,16 @@ export function AccessDeniedBanner() {
       data-testid="forbidden-banner"
       className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800"
     >
-      403 Forbidden. 이 직급에는 해당 화면 권한이 없습니다.
+      이 직급에는 해당 화면 권한이 없습니다.
     </div>
   );
 }
 
+/** /billing 등 재무 단독 라우트 — 사업주(owner/director)만 통과 */
 export function FinanceRouteGate({ children }: { children: ReactNode }) {
   const { role } = useAuthorization();
-  let flags: Record<string, boolean> | null = null;
-  try {
-    const stored = StorageService.getActiveUser()?.customRole?.permissions;
-    flags = normalizeRolePermissions(stored);
-  } catch {
-    flags = null;
-  }
-  if (
-    role !== 'owner' &&
-    flags &&
-    !matrixKeySatisfiesCanonical(flags, 'finance.read')
-  ) {
-    return <AccessDeniedBanner />;
+  if (!isOrgOwner(role)) {
+    return <FinanceAccessDenied title="수납·재무 열람 권한 제한" showDashboardCta={false} />;
   }
   return <>{children}</>;
 }

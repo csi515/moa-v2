@@ -17,15 +17,20 @@ export function isProductLowStock(
 export function matchesProductStockFilter(
   quantity: number,
   safetyStock: number,
-  filter: ProductStockFilter
+  filter: ProductStockFilter,
+  alertsEnabled = true
 ): boolean {
   if (filter === 'ALL') return true;
   if (filter === 'OUT') return quantity <= 0;
-  return isProductLowStock(quantity, safetyStock);
+  return isProductLowStock(quantity, safetyStock, alertsEnabled);
 }
 
-export function productQtyToneClass(quantity: number, safetyStock: number): string {
+export function productQtyToneClass(
+  quantity: number,
+  safetyStock: number,
+  alertsEnabled = true
+): string {
   if (quantity <= 0) return 'text-rose-600';
-  if (isProductLowStock(quantity, safetyStock)) return 'text-amber-700';
+  if (isProductLowStock(quantity, safetyStock, alertsEnabled)) return 'text-amber-700';
   return 'text-slate-900';
 }

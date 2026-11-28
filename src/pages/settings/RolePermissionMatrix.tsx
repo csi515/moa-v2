@@ -32,6 +32,12 @@ export function RolePermissionMatrix({ value, onChange, activeCapabilityIds }: P
 
   return (
     <div className="space-y-4" data-testid="role-permission-matrix">
+      <p
+        className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900 leading-relaxed"
+        data-testid="finance-owner-only-note"
+      >
+        수납·미납·매출·장부 화면은 사업주 전용이며 직급 권한으로 위임할 수 없습니다.
+      </p>
       {groups.map((group) => (
         <fieldset key={group.title} className="rounded-xl border border-slate-200 p-3">
           <legend className="px-1 text-sm font-bold text-slate-800">{group.title}</legend>

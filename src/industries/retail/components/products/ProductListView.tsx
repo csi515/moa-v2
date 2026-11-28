@@ -1,5 +1,5 @@
 import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
-import { useCallback, useEffect, useMemo, useRef, useState, type FC } from 'react';
+import { useCallback, useEffect, useMemo, useState, type FC } from 'react';
 import {
   Package,
   Plus,
@@ -49,6 +49,7 @@ import { openRetailSettingsPanel } from '../settings/retailSettingsIntent';
 import { ProductBulkImportModal } from './ProductBulkImportModal';
 import { PRODUCT_LIST_COPY as COPY } from './productListCopy';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
+import { resolveAllocationPolicy } from '@/core/policies/allocationPolicyService';
 import {
   matchesProductStockFilter,
   productQtyToneClass,
@@ -65,7 +66,7 @@ import { StocktakeAuditModal } from '../inventory/StocktakeAuditModal';
 import { INVENTORY_LIST_COPY as INV_COPY } from '../inventory/inventoryListCopy';
 
 type CategoryFilter = 'ALL' | 'NONE' | string;
-/** 'ALL' = 전체 창고 합산 */
+/** null = 미확정, 'ALL' = 전체 창고 합산 */
 type LocationFilter = 'ALL' | string;
 
 export const ProductListView: FC = () => {
@@ -78,14 +79,13 @@ export const ProductListView: FC = () => {
   const requireSizeColorVariants = Boolean(
     getIndustryPreset(currentOrganization?.industry_type)?.businessRules?.sizeColorSkuSupport
   );
-  const locationInitializedRef = useRef(false);
 
   const [items, setItems] = useState<ProductListItem[]>([]);
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [stockRows, setStockRows] = useState<InventoryStockRow[]>([]);
   const [locations, setLocations] = useState<StockLocation[]>([]);
   const [locationsLoaded, setLocationsLoaded] = useState(false);
-  const [locationFilter, setLocationFilter] = useState<LocationFilter>('ALL');
+  const [locationFilter, setLocationFilter] = useState<LocationFilter | null>(null);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('ALL');
@@ -108,6 +108,7 @@ export const ProductListView: FC = () => {
   const [transferOpen, setTransferOpen] = useState(false);
   const [transferInitial, setTransferInitial] = useState<InventoryStockRow | null>(null);
   const [stocktakeOpen, setStocktakeOpen] = useState(false);
+  const [safetyAlertsEnabled, setSafetyAlertsEnabled] = useState(true);
 
   useEffect(() => {
     clearProductStockFilter();
@@ -117,7 +118,7 @@ export const ProductListView: FC = () => {
     if (!orgId || !isSupabaseConfigured()) {
       setLocations([]);
       setLocationsLoaded(false);
-      locationInitializedRef.current = false;
+      setLocationFilter(null);
       return;
     }
     try {
@@ -129,21 +130,16 @@ export const ProductListView: FC = () => {
         departmentPathById: memberScope.departmentPathById,
       });
       setLocations(scoped);
-      if (!locationInitializedRef.current) {
-        locationInitializedRef.current = true;
+      setLocationFilter((prev) => {
+        if (prev === 'ALL') return 'ALL';
+        if (prev && scoped.some((loc) => loc.id === prev)) return prev;
         const central = scoped.find((loc) => loc.code === 'central');
-        setLocationFilter(central?.id ?? scoped[0]?.id ?? 'ALL');
-      } else {
-        setLocationFilter((prev) => {
-          if (prev === 'ALL') return 'ALL';
-          if (scoped.some((loc) => loc.id === prev)) return prev;
-          const central = scoped.find((loc) => loc.code === 'central');
-          return central?.id ?? scoped[0]?.id ?? 'ALL';
-        });
-      }
+        return central?.id ?? scoped[0]?.id ?? 'ALL';
+      });
     } catch (err) {
       showToast.error(err, COPY.loadError);
       setLocations([]);
+      setLocationFilter('ALL');
     } finally {
       setLocationsLoaded(true);
     }
@@ -154,11 +150,15 @@ export const ProductListView: FC = () => {
       setItems([]);
       setCategories([]);
       setStockRows([]);
+      setSafetyAlertsEnabled(true);
+      return;
+    }
+    if (locationFilter == null) {
       return;
     }
     setLoading(true);
     try {
-      const [list, cats, rows] = await Promise.all([
+      const [list, cats, rows, allocation] = await Promise.all([
         productService.listProducts(orgId),
         productService.listCategories(orgId),
         inventoryService
@@ -169,10 +169,12 @@ export const ProductListView: FC = () => {
               : { stockLocationId: locationFilter }
           )
           .catch(() => [] as InventoryStockRow[]),
+        resolveAllocationPolicy(orgId),
       ]);
       setItems(list);
       setCategories(cats);
       setStockRows(rows);
+      setSafetyAlertsEnabled(allocation.enableSafetyStockAlert !== false);
     } catch (err) {
       showToast.error(err, COPY.loadError);
       setItems([]);
@@ -204,10 +206,11 @@ export const ProductListView: FC = () => {
     for (const item of items) {
       const qty = stockByProductId[item.id] ?? 0;
       if (qty <= 0) out += 1;
-      else if (matchesProductStockFilter(qty, item.safetyStock, 'LOW')) low += 1;
+      else if (matchesProductStockFilter(qty, item.safetyStock, 'LOW', safetyAlertsEnabled))
+        low += 1;
     }
     return { all: items.length, low, out };
-  }, [items, stockByProductId]);
+  }, [items, stockByProductId, safetyAlertsEnabled]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -229,13 +232,23 @@ export const ProductListView: FC = () => {
         return false;
       }
       const qty = stockByProductId[item.id] ?? 0;
-      if (!matchesProductStockFilter(qty, item.safetyStock, stockFilter)) return false;
+      if (!matchesProductStockFilter(qty, item.safetyStock, stockFilter, safetyAlertsEnabled))
+        return false;
       return true;
     });
-  }, [items, search, statusFilter, categoryFilter, stockFilter, stockByProductId]);
+  }, [
+    items,
+    search,
+    statusFilter,
+    categoryFilter,
+    stockFilter,
+    stockByProductId,
+    safetyAlertsEnabled,
+  ]);
 
-  const selectedLocationId = locationFilter === 'ALL' ? null : locationFilter;
-  const locationOpsLocked = locationFilter === 'ALL';
+  const selectedLocationId =
+    locationFilter == null || locationFilter === 'ALL' ? null : locationFilter;
+  const locationOpsLocked = locationFilter == null || locationFilter === 'ALL';
   const transferFromLocationId =
     selectedLocationId ??
     locations.find((loc) => loc.code === 'central')?.id ??
@@ -243,7 +256,7 @@ export const ProductListView: FC = () => {
     '';
 
   const resolveInboundLocationName = () => {
-    if (locationFilter !== 'ALL') {
+    if (locationFilter && locationFilter !== 'ALL') {
       return locations.find((loc) => loc.id === locationFilter)?.name ?? COPY.locationLabel;
     }
     return (
@@ -251,6 +264,13 @@ export const ProductListView: FC = () => {
       locations[0]?.name ??
       '기본 창고'
     );
+  };
+
+  const resetListFilters = () => {
+    setSearch('');
+    setCategoryFilter('ALL');
+    setStatusFilter('ALL');
+    setStockFilter('ALL');
   };
 
   const openCreate = () => {
@@ -271,7 +291,7 @@ export const ProductListView: FC = () => {
   };
 
   const openInboundForProduct = (item: ProductListItem) => {
-    if (!canMutate) return;
+    if (!canMutate || locationOpsLocked) return;
     const row = stockRows.find((r) => r.productId === item.id) ?? null;
     setInboundInitial(row);
     setInboundOpen(true);
@@ -323,31 +343,43 @@ export const ProductListView: FC = () => {
   const renderStockStatus = (item: ProductListItem) => {
     const stock = stockByProductId[item.id] ?? 0;
     return (
-      <div className="inline-flex items-center justify-center gap-1.5">
-        <span
-          className={cn(
-            'text-sm font-black tabular-nums',
-            productQtyToneClass(stock, item.safetyStock)
-          )}
-        >
-          {stock.toLocaleString()}개
-        </span>
-        {stock <= 0 ? (
-          <span className="inline-flex items-center gap-0.5 text-[11px] font-bold px-1.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">
-            <XCircle className="w-3 h-3" />
-            {COPY.stockBadgeOut}
+      <div className="inline-flex flex-col items-center justify-center gap-0.5">
+        <div className="inline-flex items-center justify-center gap-1.5">
+          <span
+            className={cn(
+              'text-sm font-black tabular-nums',
+              productQtyToneClass(stock, item.safetyStock, safetyAlertsEnabled)
+            )}
+          >
+            {stock.toLocaleString()}개
           </span>
-        ) : matchesProductStockFilter(stock, item.safetyStock, 'LOW') ? (
-          <span className="inline-flex items-center gap-0.5 text-[11px] font-bold px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
-            <AlertTriangle className="w-3 h-3" />
-            {COPY.stockBadgeLow}
+          {stock <= 0 ? (
+            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold px-1.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">
+              <XCircle className="w-3 h-3" />
+              {COPY.stockBadgeOut}
+            </span>
+          ) : matchesProductStockFilter(
+              stock,
+              item.safetyStock,
+              'LOW',
+              safetyAlertsEnabled
+            ) ? (
+            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+              <AlertTriangle className="w-3 h-3" />
+              {COPY.stockBadgeLow}
+            </span>
+          ) : null}
+        </div>
+        {item.safetyStock > 0 ? (
+          <span className="text-[10px] font-medium text-slate-400 tabular-nums">
+            {COPY.safetyHint(item.safetyStock)}
           </span>
         ) : null}
       </div>
     );
   };
 
-  const rowActions = (item: ProductListItem) => {
+  const mobileRowActions = (item: ProductListItem) => {
     if (!canMutate) return null;
     return (
       <div className="inline-flex items-center gap-1.5 justify-end flex-wrap">
@@ -355,6 +387,30 @@ export const ProductListView: FC = () => {
           type="button"
           variant="outline"
           size="default"
+          disabled={locationOpsLocked}
+          title={locationOpsLocked ? COPY.locationPickHint : COPY.inbound}
+          onClick={() => openInboundForProduct(item)}
+          leftIcon={<PackagePlus className="w-3.5 h-3.5" />}
+        >
+          {COPY.inbound}
+        </Button>
+        <Button type="button" variant="outline" size="default" onClick={() => openEdit(item)}>
+          {COPY.edit}
+        </Button>
+      </div>
+    );
+  };
+
+  const desktopRowActions = (item: ProductListItem) => {
+    if (!canMutate) return null;
+    return (
+      <div className="inline-flex items-center gap-1.5 justify-end flex-wrap">
+        <Button
+          type="button"
+          variant="outline"
+          size="default"
+          disabled={locationOpsLocked}
+          title={locationOpsLocked ? COPY.locationPickHint : COPY.inbound}
           onClick={() => openInboundForProduct(item)}
           leftIcon={<PackagePlus className="w-3.5 h-3.5" />}
         >
@@ -383,7 +439,7 @@ export const ProductListView: FC = () => {
         <EmptyState
           icon={<Package className="w-10 h-10" />}
           title={COPY.noOrg}
-          description="조직 선택 후 상품을 관리할 수 있습니다"
+          description={COPY.noOrgDescription}
         />
       </div>
     );
@@ -419,7 +475,7 @@ export const ProductListView: FC = () => {
                   onClick={() => setBulkImportOpen(true)}
                   leftIcon={<FileSpreadsheet className="w-4 h-4" />}
                 >
-                  엑셀 일괄 등록
+                  {COPY.bulkImport}
                 </Button>
               </div>
               <Button
@@ -443,63 +499,64 @@ export const ProductListView: FC = () => {
           placeholder={COPY.searchPlaceholder}
           className="w-full"
         />
-      </FilterBar>
-
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value as CategoryFilter)}
-          className={`${FORM_CONTROL_CLASS} sm:w-auto`}
-          aria-label={COPY.categoryLabel}
-        >
-          <option value="ALL">{COPY.categoryAll}</option>
-          <option value="NONE">{COPY.categoryNone}</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-bold text-slate-500 shrink-0">{COPY.locationLabel}</span>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full">
           <select
-            value={locationFilter}
-            onChange={(e) => setLocationFilter(e.target.value as LocationFilter)}
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value as CategoryFilter)}
             className={`${FORM_CONTROL_CLASS} sm:w-auto`}
-            aria-label={COPY.locationLabel}
+            aria-label={COPY.categoryLabel}
           >
-            <option value="ALL">{COPY.locationAll}</option>
-            {locations.map((loc) => (
-              <option key={loc.id} value={loc.id}>
-                {loc.name}
+            <option value="ALL">{COPY.categoryAll}</option>
+            <option value="NONE">{COPY.categoryNone}</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
               </option>
             ))}
           </select>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-bold text-slate-500 shrink-0">{COPY.locationLabel}</span>
+            <select
+              value={locationFilter ?? ''}
+              onChange={(e) => setLocationFilter(e.target.value as LocationFilter)}
+              disabled={locationFilter == null}
+              className={`${FORM_CONTROL_CLASS} sm:w-auto`}
+              aria-label={COPY.locationLabel}
+            >
+              <option value="ALL">{COPY.locationAll}</option>
+              {locations.map((loc) => (
+                <option key={loc.id} value={loc.id}>
+                  {loc.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      </div>
-
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-        <FilterTabs
-          tabs={[
-            { id: 'ALL', label: COPY.statusAll },
-            { id: 'ACTIVE', label: COPY.statusActive },
-            { id: 'INACTIVE', label: COPY.statusInactive },
-          ]}
-          active={statusFilter}
-          onChange={(id) => setStatusFilter(id as ProductStatusFilter)}
-          activeClassName="bg-teal-600 text-white"
-        />
-        <FilterTabs
-          tabs={[
-            { id: 'ALL', label: COPY.stockFilterAll, count: stockCounts.all },
-            { id: 'LOW', label: COPY.stockFilterLow, count: stockCounts.low },
-            { id: 'OUT', label: COPY.stockFilterOut, count: stockCounts.out },
-          ]}
-          active={stockFilter}
-          onChange={(id) => setStockFilter(id as ProductStockFilter)}
-          activeClassName="bg-amber-600 text-white"
-        />
-      </div>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full">
+          <FilterTabs
+            tabs={[
+              { id: 'ALL', label: COPY.statusAll },
+              { id: 'ACTIVE', label: COPY.statusActive },
+              { id: 'INACTIVE', label: COPY.statusInactive },
+            ]}
+            active={statusFilter}
+            onChange={(id) => setStatusFilter(id as ProductStatusFilter)}
+            activeClassName="bg-teal-600 text-white"
+            className="min-h-[44px]"
+          />
+          <FilterTabs
+            tabs={[
+              { id: 'ALL', label: COPY.stockFilterAll, count: stockCounts.all },
+              { id: 'LOW', label: COPY.stockFilterLow, count: stockCounts.low },
+              { id: 'OUT', label: COPY.stockFilterOut, count: stockCounts.out },
+            ]}
+            active={stockFilter}
+            onChange={(id) => setStockFilter(id as ProductStockFilter)}
+            activeClassName="bg-amber-600 text-white"
+            className="min-h-[44px]"
+          />
+        </div>
+      </FilterBar>
 
       {canMutate ? (
         <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2.5">
@@ -508,6 +565,8 @@ export const ProductListView: FC = () => {
             type="button"
             variant="outline"
             size="default"
+            disabled={locationOpsLocked}
+            title={locationOpsLocked ? COPY.locationPickHint : COPY.inbound}
             onClick={() => {
               setInboundInitial(null);
               setInboundOpen(true);
@@ -578,7 +637,7 @@ export const ProductListView: FC = () => {
         </div>
       ) : null}
 
-      {loading ? (
+      {loading || locationFilter == null ? (
         <PageListSkeleton rows={4} message="상품을 불러오는 중..." />
       ) : filtered.length === 0 ? (
         <EmptyState
@@ -592,7 +651,12 @@ export const ProductListView: FC = () => {
                   onClick: openCreate,
                   icon: <Plus className="w-4 h-4" />,
                 }
-              : undefined
+              : items.length > 0
+                ? {
+                    label: COPY.emptyFilterReset,
+                    onClick: resetListFilters,
+                  }
+                : undefined
           }
         />
       ) : (
@@ -635,7 +699,7 @@ export const ProductListView: FC = () => {
                   </div>
                 </div>
 
-                {canMutate ? <div className="pt-1">{rowActions(item)}</div> : null}
+                {canMutate ? <div className="pt-1">{mobileRowActions(item)}</div> : null}
               </li>
             ))}
           </ul>
@@ -647,10 +711,10 @@ export const ProductListView: FC = () => {
                   <th className="p-4">{COPY.nameLabel}</th>
                   <th className="p-4">{COPY.specLabel}</th>
                   <th className="p-4">{COPY.categoryLabel}</th>
-                  <th className="p-4 text-center">현재고</th>
+                  <th className="p-4 text-center">{COPY.colQty}</th>
                   <th className="p-4 text-right">{COPY.priceLabel}</th>
                   <th className="p-4 text-center">{COPY.activeLabel}</th>
-                  {canMutate ? <th className="p-4 text-right">관리</th> : null}
+                  {canMutate ? <th className="p-4 text-right">{COPY.colManage}</th> : null}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -739,7 +803,7 @@ export const ProductListView: FC = () => {
                         </span>
                       </td>
                       {canMutate ? (
-                        <td className="p-4 text-right">{rowActions(item)}</td>
+                        <td className="p-4 text-right">{desktopRowActions(item)}</td>
                       ) : null}
                     </tr>
                   );

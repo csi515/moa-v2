@@ -15,6 +15,7 @@ import { useStudentDetailModal } from './useStudentDetailModal';
 import type { DetailTab } from './detail/types';
 import { getStudentDetailExtension } from './detail/studentDetailExtensions';
 import { useStaffGrants } from '@/hooks';
+import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
 import { getResolvedPreset } from '@/core/presets/presetResolver';
 import { getTodayAttendanceStatus, getTuitionSummaryText } from './detail/student360Helpers';
@@ -56,6 +57,7 @@ const StudentDetailModalContent: React.FC<
     onEdit,
   });
   const { allow } = useStaffGrants();
+  const { isOwner } = usePermissions();
   const labels = useModuleLabels();
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const detailExtension = getStudentDetailExtension(modal.industryPlugin.id);
@@ -64,7 +66,8 @@ const StudentDetailModalContent: React.FC<
   const canCall = allow('guardianPhone');
   const canEdit = allow('editStudent');
   const canWithdraw = allow('withdrawStudent');
-  const canTuition = allow('tuition');
+  // 수납·즉시 수납은 사업주 전용 (강사 grants.tuition 미사용)
+  const canTuition = isOwner;
   const [showMoreTabs, setShowMoreTabs] = useState(false);
 
   const primaryTabs = useMemo(

@@ -38,5 +38,14 @@ assert.ok(!academyKeys.includes('volunteer:manage'));
 assert.ok(!academyKeys.includes('office_supply_request:manage'));
 assert.ok(academyKeys.includes('roles:assign'));
 assert.ok(academyKeys.includes('attendance'));
+// 재무 키는 사업주 전용 — 직급 매트릭스에 노출하지 않음
+assert.ok(!academyKeys.includes('billing_invoices'));
+assert.ok(!academyKeys.includes('statistics'));
+
+const allMatrixKeys = getPermissionCatalogGroupsForMatrix(null).flatMap((g) =>
+  g.items.map((i) => i.key)
+);
+assert.ok(!allMatrixKeys.includes('billing_invoices'));
+assert.ok(!allMatrixKeys.includes('statistics'));
 
 console.log('permissionCatalog.test.ts: ok');

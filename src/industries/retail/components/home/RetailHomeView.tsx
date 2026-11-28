@@ -32,13 +32,14 @@ import { type InventoryStockRow } from '../../types/inventory';
 import { RETAIL_HOME_COPY as COPY } from './retailHomeCopy';
 import { openProductStockFilter } from '../products/productStockIntent';
 import { isProductLowStock } from '../products/productStockUtils';
+import { resolveAllocationPolicy } from '@/core/policies/allocationPolicyService';
 
 const RECENT_SALES_LIMIT = 5;
 const LOW_STOCK_LIST_LIMIT = 5;
 
-function isLowStock(row: InventoryStockRow): boolean {
+function isLowStock(row: InventoryStockRow, alertsEnabled: boolean): boolean {
   return (
-    row.quantity <= 0 || isProductLowStock(row.quantity, row.safetyStock)
+    row.quantity <= 0 || isProductLowStock(row.quantity, row.safetyStock, alertsEnabled)
   );
 }
 
@@ -78,12 +79,14 @@ export const RetailHomeView: FC = () => {
   const [stockRows, setStockRows] = useState<InventoryStockRow[]>([]);
   const [revenueSummary, setRevenueSummary] = useState<RetailRevenueSummary | null>(null);
   const [loading, setLoading] = useState(false);
+  const [safetyAlertsEnabled, setSafetyAlertsEnabled] = useState(true);
 
   const load = useCallback(async () => {
     if (!orgId || !isSupabaseConfigured()) {
       setSales([]);
       setStockRows([]);
       setRevenueSummary(null);
+      setSafetyAlertsEnabled(true);
       return;
     }
     setLoading(true);
@@ -93,7 +96,7 @@ export const RetailHomeView: FC = () => {
         fromYmd: today,
         toYmd: today,
       });
-      const [todaySales, inventory, summary] = await Promise.all([
+      const [todaySales, inventory, summary, allocation] = await Promise.all([
         saleHistoryService.listSales({
           organizationId: orgId,
           date: today,
@@ -103,10 +106,12 @@ export const RetailHomeView: FC = () => {
           organizationId: orgId,
           range,
         }),
+        resolveAllocationPolicy(orgId),
       ]);
       setSales(todaySales);
       setStockRows(inventory);
       setRevenueSummary(summary);
+      setSafetyAlertsEnabled(allocation.enableSafetyStockAlert !== false);
     } catch (err) {
       showToast.error(err, COPY.loadError);
       setSales([]);
@@ -158,7 +163,10 @@ export const RetailHomeView: FC = () => {
       .reduce((sum, p) => sum + p.amount, 0);
   }, [revenueSummary]);
 
-  const lowStock = useMemo(() => stockRows.filter(isLowStock), [stockRows]);
+  const lowStock = useMemo(
+    () => stockRows.filter((row) => isLowStock(row, safetyAlertsEnabled)),
+    [stockRows, safetyAlertsEnabled]
+  );
   const recentSales = useMemo(() => sales.slice(0, RECENT_SALES_LIMIT), [sales]);
   const lowStockPreview = useMemo(
     () => lowStock.slice(0, LOW_STOCK_LIST_LIMIT),

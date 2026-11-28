@@ -32,6 +32,7 @@ import {
   type CustomerFormMode,
   type CustomerFormValues,
 } from '@/core/customer/components/CustomerForm';
+import { getCustomerMasked } from '@/core/authorization/fieldAclService';
 
 type Panel = 'list' | 'detail' | 'points';
 
@@ -91,7 +92,7 @@ export const RetailCustomerHubView: FC = () => {
       if (!orgId) return;
       setDetailLoading(true);
       try {
-        const [profile, txs, balMap, salesRes, wallet, creditTxs] = await Promise.all([
+        const [profile, txs, balMap, salesRes, wallet, creditTxs, masked] = await Promise.all([
           customerLinkService.getCustomerProfile(orgId, customerId),
           pointQueryService.listPointTransactions(orgId, customerId, {
             limit: DETAIL_RECENT_TXS,
@@ -102,10 +103,19 @@ export const RetailCustomerHubView: FC = () => {
           }),
           creditWalletService.getWallet(orgId, customerId).catch(() => ({ totalBalance: 0, cashBalance: 0, bonusBalance: 0, customerId, id: '', lastUpdatedAt: '' })),
           creditWalletService.listTransactions(orgId, customerId).catch(() => []),
+          getCustomerMasked(orgId, customerId).catch(() => null),
         ]);
         if (!profile) throw new Error('고객을 찾을 수 없습니다.');
+        const displayProfile =
+          masked?.pii_masked === true
+            ? {
+                ...profile,
+                phone: masked.phone,
+                email: masked.email,
+              }
+            : profile;
         setDetailData({
-          profile,
+          profile: displayProfile,
           recentTransactions: txs,
           recentSales: salesRes.data,
           balance: balMap.get(customerId) ?? 0,

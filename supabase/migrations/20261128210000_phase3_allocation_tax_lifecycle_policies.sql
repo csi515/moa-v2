@@ -67,7 +67,7 @@ LANGUAGE plpgsql
 STABLE
 SECURITY DEFINER
 SET search_path = core, public
-AS \$\$
+AS $$
 DECLARE
   v_row core.allocation_policies%ROWTYPE;
   v_settings jsonb;
@@ -105,7 +105,7 @@ BEGIN
     'default_safety_stock', COALESCE((v_settings->'capability_setup'->'inventory'->>'defaultSafetyStockCount')::int, 0)
   );
 END;
-\$\$;
+$$;
 
 REVOKE ALL ON FUNCTION core.resolve_allocation_policy(uuid) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION core.resolve_allocation_policy(uuid) TO authenticated;
@@ -118,7 +118,7 @@ RETURNS core.allocation_policies
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = core, public
-AS \$\$
+AS $$
 DECLARE
   v_row core.allocation_policies%ROWTYPE;
 BEGIN
@@ -146,7 +146,7 @@ BEGIN
 
   RETURN v_row;
 END;
-\$\$;
+$$;
 
 REVOKE ALL ON FUNCTION core.upsert_allocation_policy(uuid, jsonb) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION core.upsert_allocation_policy(uuid, jsonb) TO authenticated;
@@ -218,7 +218,7 @@ LANGUAGE plpgsql
 STABLE
 SECURITY DEFINER
 SET search_path = core, public
-AS \$\$
+AS $$
 DECLARE
   v_row core.tax_policies%ROWTYPE;
 BEGIN
@@ -228,7 +228,7 @@ BEGIN
   END IF;
   RETURN jsonb_build_object('mode', 'inclusive', 'rate', 0, 'exempt_codes', '[]'::jsonb);
 END;
-\$\$;
+$$;
 
 REVOKE ALL ON FUNCTION core.resolve_tax_policy(uuid) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION core.resolve_tax_policy(uuid) TO authenticated;
@@ -239,7 +239,7 @@ LANGUAGE plpgsql
 STABLE
 SECURITY DEFINER
 SET search_path = core, public
-AS \$\$
+AS $$
 DECLARE
   v_row core.rounding_policies%ROWTYPE;
 BEGIN
@@ -249,7 +249,7 @@ BEGIN
   END IF;
   RETURN jsonb_build_object('mode', 'round', 'unit', 1);
 END;
-\$\$;
+$$;
 
 REVOKE ALL ON FUNCTION core.resolve_rounding_policy(uuid) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION core.resolve_rounding_policy(uuid) TO authenticated;
@@ -325,7 +325,7 @@ RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = core, public
-AS \$\$
+AS $$
 BEGIN
   IF p_org_id IS NULL OR NOT core.is_org_member(p_org_id) THEN
     RETURN;
@@ -351,20 +351,20 @@ BEGIN
     (p_org_id, 'booking', 'cancel', 'notify', false)
   ON CONFLICT (organization_id, domain, transition_command, effect_key) DO NOTHING;
 END;
-\$\$;
+$$;
 
 REVOKE ALL ON FUNCTION core.seed_booking_lifecycle(uuid) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION core.seed_booking_lifecycle(uuid) TO authenticated;
 
 -- seed lifecycle for existing orgs
-DO \$\$
+DO $$
 DECLARE r record;
 BEGIN
   FOR r IN SELECT id FROM core.organizations LOOP
     PERFORM core.seed_booking_lifecycle(r.id);
   END LOOP;
 END;
-\$\$;
+$$;
 
 
 CREATE OR REPLACE FUNCTION core.apply_stock_movement(

@@ -38,12 +38,31 @@ import { executeBookingCreate } from './executeBookingCreate';
 import { mergeScopedBookingsWithInbox, useBookingFilters } from './useBookingFilters';
 import { useBookingForm } from './useBookingForm';
 import { enqueueTurnaroundAfterBookingEnd } from '@/capabilities/booking/domain/bookingTurnaroundBridge';
+import {
+  defaultBookingLifecycleCatalog,
+  isBookingSideEffectEnabled,
+  loadBookingLifecycleCatalog,
+  type BookingLifecycleCatalog,
+} from '@/core/policies/bookingLifecycleService';
 
 export const BookingCalendarView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const { industry, isOwner, isAdmin, isStaff } = usePermissions();
   const { currentOrganization } = useOrganization();
   const labels = useModuleLabels();
   const bookingUi = resolveBookingUi(industry);
+  const [bookingLifecycle, setBookingLifecycle] = React.useState<BookingLifecycleCatalog>(
+    () => defaultBookingLifecycleCatalog()
+  );
+
+  React.useEffect(() => {
+    let cancelled = false;
+    void loadBookingLifecycleCatalog(currentOrganization?.id).then((catalog) => {
+      if (!cancelled) setBookingLifecycle(catalog);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [currentOrganization?.id]);
   const appointment = bookingUi.flow === 'appointmentCards';
   const classSlots = bookingUi.flow === 'classSlots';
   const staffLabel = labels.staff.singular;
@@ -677,7 +696,14 @@ export const BookingCalendarView: React.FC<{ embedded?: boolean }> = ({ embedded
       });
     }
     const notice = bookingChangeNotice(booking, status, bookingUi.sessionNoun || '예약');
-    const shouldNotify = bookingUi.notifyOnStatus.includes(status);
+    const lifecycleAllowsNotify =
+      status === 'confirmed'
+        ? isBookingSideEffectEnabled(bookingLifecycle, 'confirm', 'notify')
+        : status === 'cancelled'
+          ? isBookingSideEffectEnabled(bookingLifecycle, 'cancel', 'notify')
+          : true;
+    const shouldNotify =
+      bookingUi.notifyOnStatus.includes(status) && lifecycleAllowsNotify;
     if (notice && shouldNotify) notifyCustomer(booking, notice.title, notice.message);
     if (status === 'completed' && appointment && !booking.skinCondition && !booking.chartNote) {
       showToast('시술 기록이 없습니다. 고객 상세의 시술 기록에서 작성할 수 있습니다.', 'info');

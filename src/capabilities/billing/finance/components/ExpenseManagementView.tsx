@@ -25,11 +25,12 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { CurrencyInput } from '@/shared/components/CurrencyInput';
 import { EmptyState } from '@/shared/components/ui';
 import type { FinanceExpense } from '@/capabilities/billing/finance/types';
+import { FinanceAccessDenied } from './FinanceAccessDenied';
 
 const PAYROLL_RELATED_CATEGORIES = new Set(['teacher_salary', 'instructor_fee', 'salary']);
 
 export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
-  const { industry } = usePermissions();
+  const { industry, isOwner } = usePermissions();
   const refreshKey = useStorageRefresh('finance');
   const settingsRefreshKey = useStorageRefresh('settings');
   const currentSettings = useMemo(() => billingStorage.getSettings(), [settingsRefreshKey]);
@@ -190,6 +191,10 @@ export const ExpenseManagementView: React.FC<{ embedded?: boolean }> = ({ embedd
   };
 
   useEscapeKey(() => setIsModalOpen(false), isModalOpen);
+
+  if (!isOwner) {
+    return <FinanceAccessDenied title="지출 장부 열람 권한 제한" />;
+  }
 
   return (
     <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>

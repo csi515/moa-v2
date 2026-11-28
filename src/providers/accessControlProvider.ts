@@ -8,8 +8,16 @@ import type { AuthorizationGrant, AuthScopeType, Permission } from "@/core/autho
 import type { User } from '@/core/auth/types/sessionUser';
 import { isOrgOwner } from '@/core/auth/permissionsRole';
 import { evaluateCustomPermission } from "@/core/authorization";
+import { matrixKeySatisfiesCanonical } from "@/core/authorization/permissionAliases";
 import { hasStandardPermission, resolveStandardPermissionKey } from "@/core/authorization/standardPermissionKeys";
 import { canManageRoles, canTransferOwnership, evaluateMemberAccess, isRolePermissionMap } from "@/domain/permissions";
+
+function readScopeFailClosed(settings: unknown): boolean {
+  if (!settings || typeof settings !== "object") return false;
+  const rbac = (settings as Record<string, unknown>).rbac;
+  if (!rbac || typeof rbac !== "object") return false;
+  return (rbac as Record<string, unknown>).scope_fail_closed === true;
+}
 
 /**
  * AccessControl Context Resolver.
@@ -21,6 +29,8 @@ export interface AccessControlContextResolver {
   getOrganizationId: () => string | null;
   getLocationId: (organizationId?: string | null) => string | null;
   listAccessGrants?: (organizationId: string) => Promise<AuthorizationGrant[]>;
+  /** Phase 4: settings.rbac.scope_fail_closed */
+  getOrganizationSettings?: () => unknown;
 }
 
 type GrantsCacheEntry = {
@@ -252,6 +262,10 @@ export function createAccessControlProvider(
       activeContextResolver?.listAccessGrants?.(orgId) ??
       customResolver?.listAccessGrants?.(orgId) ??
       locationService.listAccessGrants(orgId),
+    getOrganizationSettings: () =>
+      activeContextResolver?.getOrganizationSettings?.() ??
+      customResolver?.getOrganizationSettings?.() ??
+      null,
   };
 
   const grantsCache = new Map<string, GrantsCacheEntry>();
@@ -352,15 +366,30 @@ export function createAccessControlProvider(
                   : resource === "passes"
                     ? "passes"
                     : null;
-        if (
-          resourceKey &&
-          !evaluateMemberAccess(
-            { role, customRole: { permissions: flagMap } },
-            resourceKey,
-            action || "read"
-          )
-        ) {
-          return { can: false, reason: "이 직급에는 해당 업무 권한이 없습니다." };
+        if (resourceKey) {
+          const matrixAllows =
+            resourceKey === "billing_invoices"
+              ? matrixKeySatisfiesCanonical(flagMap, "finance.read") ||
+                evaluateMemberAccess(
+                  { role, customRole: { permissions: flagMap } },
+                  resourceKey,
+                  action || "read"
+                )
+              : resourceKey === "statistics"
+                ? matrixKeySatisfiesCanonical(flagMap, "reports.read") ||
+                  evaluateMemberAccess(
+                    { role, customRole: { permissions: flagMap } },
+                    resourceKey,
+                    action || "read"
+                  )
+                : evaluateMemberAccess(
+                    { role, customRole: { permissions: flagMap } },
+                    resourceKey,
+                    action || "read"
+                  );
+          if (!matrixAllows) {
+            return { can: false, reason: "이 직급에는 해당 업무 권한이 없습니다." };
+          }
         }
       }
 
@@ -487,12 +516,14 @@ export function createAccessControlProvider(
 
 
       // 6. Delegate to MOA Canonical Authorization API
+      const scopeFailClosed = readScopeFailClosed(resolver.getOrganizationSettings?.());
       const authApi = createAuthorizationApi({
         organizationId,
         role,
         locationId: scopeType === "location" ? (scopeId || activeLocationId) : activeLocationId,
         customerId: parentCustomerId,
         extraGrants,
+        scopeFailClosed,
       });
 
       const allowed = authApi.can({

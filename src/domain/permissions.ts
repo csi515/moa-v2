@@ -329,7 +329,12 @@ export function evaluateMemberAccess(
   targetResource: string,
   action: string
 ): boolean {
-  if (member.role === 'owner') return true;
+  if (member.role === 'owner' || member.role === 'director') return true;
+
+  // 재무·수납·매출 통계는 사업주 전용 — 직급 매트릭스 플래그로 위임 불가
+  if (targetResource === 'billing_invoices' || targetResource === 'statistics') {
+    return false;
+  }
 
   const flags = normalizeRolePermissions(member.customRole?.permissions ?? null);
   if (flags) {

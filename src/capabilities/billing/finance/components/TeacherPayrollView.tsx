@@ -1,7 +1,9 @@
 import React from 'react';
 import { Wallet } from 'lucide-react';
 import { formatPayrollPeriod, resolveEditableQuantity } from '@/capabilities/billing/finance/teacherPayroll';
+import { usePermissions } from '@/core/auth/usePermissions';
 import { PageHeader } from '@/shared/components';
+import { FinanceAccessDenied } from './FinanceAccessDenied';
 import { TeacherPayrollDetailModal } from './TeacherPayrollDetailModal';
 import { TeacherPayrollList } from './TeacherPayrollList';
 import { TeacherPayrollSummaryCards } from './TeacherPayrollSummaryCards';
@@ -19,8 +21,13 @@ const WORKFLOW_STEPS = [
 export const TeacherPayrollView: React.FC<{ embedded?: boolean }> = ({
   embedded = false,
 }) => {
+  const { isOwner } = usePermissions();
   const payroll = useTeacherPayroll();
   const selected = payroll.selectedRow;
+
+  if (!isOwner) {
+    return <FinanceAccessDenied title="강사 정산 열람 권한 제한" />;
+  }
 
   return (
     <div className={embedded ? 'space-y-4' : 'space-y-4 pb-4'}>

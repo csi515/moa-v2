@@ -14,9 +14,9 @@ import {
   TrendingDown,
   DollarSign,
   BarChart3,
-  ShieldAlert,
   Plus,
 } from 'lucide-react';
+import { FinanceAccessDenied } from './FinanceAccessDenied';
 import {
   ResponsiveContainer,
   BarChart,
@@ -105,19 +105,7 @@ export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded
   const showLinkedBillingIncome = resolveFinanceHubNav(industry).showLinkedBillingIncome;
 
   if (!hasFinanceAccess) {
-    return (
-      <div className="bg-white rounded-lg border border-slate-200 p-8 text-center max-w-md mx-auto my-6 shadow-2xs space-y-4">
-        <div className="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center mx-auto">
-          <ShieldAlert className="w-6 h-6" />
-        </div>
-        <div className="space-y-1">
-          <h3 className="text-base font-bold text-slate-900">재무 요약 열람 권한 제한</h3>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            매출 및 수입/지출 장부 요약은 사업주(원장) 전용입니다.
-          </p>
-        </div>
-      </div>
-    );
+    return <FinanceAccessDenied title="재무 요약 열람 권한 제한" />;
   }
 
   return (

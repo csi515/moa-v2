@@ -37,9 +37,10 @@ assert.equal(
   true
 );
 
+// 재무 키는 매트릭스에 켜져 있어도 사업주 전용 — staff 거부
 assert.equal(
   evaluateMemberAccess({ role: 'staff', customRole: { permissions: financeOn } }, 'billing_invoices', 'read'),
-  true
+  false
 );
 assert.equal(
   evaluateMemberAccess({ role: 'staff', customRole: { permissions: financeOff } }, 'billing_invoices', 'read'),
@@ -47,11 +48,15 @@ assert.equal(
 );
 assert.equal(
   evaluateMemberAccess({ role: 'staff', customRole: { permissions: financeOn } }, 'statistics', 'list'),
-  true
+  false
 );
 assert.equal(
   evaluateMemberAccess({ role: 'staff', customRole: { permissions: financeOff } }, 'statistics', 'list'),
   false
+);
+assert.equal(
+  evaluateMemberAccess({ role: 'director', customRole: { permissions: financeOff } }, 'billing_invoices', 'read'),
+  true
 );
 
 assert.equal(evaluateMemberAccess({ role: 'staff', customRole: null }, 'attendance', 'write'), true);
