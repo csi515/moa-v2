@@ -10,17 +10,13 @@ import {
   Users,
   CreditCard,
   MessageSquare,
-  Database,
-  RotateCcw,
   CheckSquare,
 } from 'lucide-react';
 import { StorageService } from '@/services/storage';
-import { showToast } from '@/shared/feedback/uiFeedback';
-import { DemoSandboxEngine } from '../demo/demoSandboxEngine';
 
 interface AcademyOpenQuestWidgetProps {
   onNavigateTab: (tab: string) => void;
-  onRefreshData?: () => void;
+  onRefreshData?: () => void; // 하위 호환용(미사용)
 }
 
 interface QuestItem {
@@ -36,16 +32,13 @@ const HIDE_QUEST_KEY = 'moa_dismiss_open_quest';
 
 export const AcademyOpenQuestWidget: React.FC<AcademyOpenQuestWidgetProps> = ({
   onNavigateTab,
-  onRefreshData,
 }) => {
   const [isDismissed, setIsDismissed] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isDemoActive, setIsDemoActive] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setIsDismissed(localStorage.getItem(HIDE_QUEST_KEY) === 'true');
-      setIsDemoActive(DemoSandboxEngine.isDemoActive());
     }
   }, []);
 
@@ -114,23 +107,6 @@ export const AcademyOpenQuestWidget: React.FC<AcademyOpenQuestWidgetProps> = ({
     }
   };
 
-  const handleInjectDemo = () => {
-    const result = DemoSandboxEngine.injectDemoData();
-    setIsDemoActive(true);
-    showToast(
-      `샘플 데이터 ${result.insertedStudents}건과 출결 내역이 생성되었습니다.`,
-      'success'
-    );
-    if (onRefreshData) onRefreshData();
-  };
-
-  const handleClearDemo = () => {
-    const result = DemoSandboxEngine.clearDemoData();
-    setIsDemoActive(false);
-    showToast(`샘플 데이터 ${result.removedCount}건이 정리되었습니다.`, 'info');
-    if (onRefreshData) onRefreshData();
-  };
-
   if (isDismissed) return null;
 
   return (
@@ -159,53 +135,29 @@ export const AcademyOpenQuestWidget: React.FC<AcademyOpenQuestWidgetProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* 샘플 데이터 둘러보기 버튼 (Ghost/Outline 스타일) */}
-          {!isDemoActive ? (
-            <button
-              type="button"
-              onClick={handleInjectDemo}
-              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 active:bg-slate-100 border border-slate-200 rounded-md transition-colors cursor-pointer"
-            >
-              <Database className="w-3.5 h-3.5 text-slate-500" strokeWidth={1.5} />
-              <span>샘플 데이터로 둘러보기</span>
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handleClearDemo}
-              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-md transition-colors cursor-pointer"
-              title="주입된 샘플 데이터를 정리합니다"
-            >
-              <RotateCcw className="w-3.5 h-3.5 text-rose-500" strokeWidth={1.5} />
-              <span>샘플 데이터 초기화</span>
-            </button>
-          )}
-
-          <div className="flex items-center gap-1 border-l border-slate-200 pl-2">
-            <button
-              type="button"
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-              title={isCollapsed ? '펼치기' : '접기'}
-              aria-label={isCollapsed ? '설정 펼치기' : '설정 접기'}
-            >
-              {isCollapsed ? (
-                <ChevronDown className="w-4 h-4" strokeWidth={1.5} />
-              ) : (
-                <ChevronUp className="w-4 h-4" strokeWidth={1.5} />
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={handleDismiss}
-              className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-              title="체크리스트 닫기"
-              aria-label="체크리스트 닫기"
-            >
-              <X className="w-4 h-4" strokeWidth={1.5} />
-            </button>
-          </div>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            title={isCollapsed ? '펼치기' : '접기'}
+            aria-label={isCollapsed ? '설정 펼치기' : '설정 접기'}
+          >
+            {isCollapsed ? (
+              <ChevronDown className="w-4 h-4" strokeWidth={1.5} />
+            ) : (
+              <ChevronUp className="w-4 h-4" strokeWidth={1.5} />
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={handleDismiss}
+            className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            title="체크리스트 닫기"
+            aria-label="체크리스트 닫기"
+          >
+            <X className="w-4 h-4" strokeWidth={1.5} />
+          </button>
         </div>
       </div>
 
@@ -270,28 +222,6 @@ export const AcademyOpenQuestWidget: React.FC<AcademyOpenQuestWidgetProps> = ({
             ))}
           </div>
 
-          {/* 모바일용 샘플 데이터 버튼 */}
-          <div className="sm:hidden pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-            {!isDemoActive ? (
-              <button
-                type="button"
-                onClick={handleInjectDemo}
-                className="w-full py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold border border-slate-200 rounded-lg transition-colors flex items-center justify-center gap-1.5"
-              >
-                <Database className="w-3.5 h-3.5 text-slate-500" strokeWidth={1.5} />
-                <span>샘플 데이터로 둘러보기</span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={handleClearDemo}
-                className="w-full py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold border border-rose-200 rounded-lg transition-colors flex items-center justify-center gap-1.5"
-              >
-                <RotateCcw className="w-3.5 h-3.5 text-rose-500" strokeWidth={1.5} />
-                <span>샘플 데이터 초기화</span>
-              </button>
-            )}
-          </div>
         </>
       )}
     </section>

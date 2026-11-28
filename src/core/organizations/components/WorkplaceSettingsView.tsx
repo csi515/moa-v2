@@ -41,6 +41,7 @@ import {
   type OrganizationAddressValue,
 } from '@/core/address';
 import { OrganizationProfileFields } from './OrganizationSettingsCards';
+import { StoreSealSetting } from './StoreSealSetting';
 import { buildWorkplaceSettingsSavePayload } from '../workplaceSettingsSave';
 
 export const WorkplaceSettingsView: FC = () => {
@@ -247,6 +248,22 @@ export const WorkplaceSettingsView: FC = () => {
                 address: formatOrganizationAddress(next) || prev.address,
               }));
             }}
+          />
+
+          <StoreSealSetting
+            sealUrl={
+              (settings as { sealUrl?: string; stampImageUrl?: string })?.sealUrl ||
+              (settings as { stampImageUrl?: string })?.stampImageUrl ||
+              null
+            }
+            disabled={isSaving}
+            onChange={(nextUrl) =>
+              setSettings((prev) => ({
+                ...prev,
+                sealUrl: nextUrl || undefined,
+                stampImageUrl: nextUrl || undefined,
+              }))
+            }
           />
 
           <div className="pt-6 border-t border-slate-100 space-y-4">

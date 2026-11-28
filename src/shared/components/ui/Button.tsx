@@ -1,5 +1,6 @@
 import React, { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { Loader2 } from 'lucide-react';
+import { UI_RADIUS, UI_SIZES } from '@/shared/styles/density';
 
 export type ButtonVariant =
   | 'primary'
@@ -10,7 +11,10 @@ export type ButtonVariant =
   | 'danger'
   | 'success';
 
-export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon-sm' | 'icon-md';
+export type ButtonSize = 'sm' | 'default' | 'touch' | 'md' | 'lg' | 'icon-sm' | 'icon-md';
+
+/** 폼 하단 제출·취소. 모바일은 한 줄, 데스크톱은 내용 너비로 제한한다. */
+export const FORM_ACTION_BUTTON_CLASS = 'w-full sm:w-auto sm:min-w-[120px]';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -38,13 +42,28 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
     'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white shadow-xs shadow-emerald-200 focus-visible:ring-emerald-600',
 };
 
+function controlSize(token: (typeof UI_SIZES)[keyof typeof UI_SIZES], weight = ''): string {
+  return [token.height, token.text, token.padding, token.gap, UI_RADIUS.control, weight]
+    .filter(Boolean)
+    .join(' ');
+}
+
+/** density.ts UI_SIZES. md=44px 표준 터치, lg=48px 카운터. default/touch 는 그 별칭. */
 const SIZE_CLASSES: Record<ButtonSize, string> = {
-  sm: 'min-h-[36px] h-9 px-3 text-xs gap-1.5 rounded-xl font-semibold',
-  md: 'min-h-[44px] h-11 px-4 text-sm gap-2 rounded-xl font-bold',
-  lg: 'min-h-[48px] h-12 px-5 text-sm sm:text-base gap-2.5 rounded-xl font-bold',
-  'icon-sm': 'min-h-[36px] min-w-[36px] w-9 h-9 p-0 rounded-xl justify-center',
-  'icon-md': 'min-h-[44px] min-w-[44px] w-11 h-11 p-0 rounded-xl justify-center',
+  sm: controlSize(UI_SIZES.sm, 'font-medium'),
+  md: controlSize(UI_SIZES.md, 'font-semibold'),
+  default: controlSize(UI_SIZES.md, 'font-semibold'),
+  lg: controlSize(UI_SIZES.lg),
+  touch: controlSize(UI_SIZES.lg),
+  'icon-sm': `${UI_SIZES.sm.height} min-w-9 w-9 p-0 ${UI_RADIUS.control} justify-center`,
+  'icon-md': `${UI_SIZES.md.height} min-w-11 w-11 p-0 ${UI_RADIUS.control} justify-center`,
 };
+
+function spinnerClass(size: ButtonSize): string {
+  if (size === 'sm' || size === 'icon-sm') return UI_SIZES.sm.icon;
+  if (size === 'lg' || size === 'touch') return UI_SIZES.lg.icon;
+  return UI_SIZES.md.icon;
+}
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -69,18 +88,20 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type}
         disabled={disabled || isLoading}
-        className={`inline-flex items-center justify-center transition-all select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.99] cursor-pointer ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]} ${className}`}
+        className={`inline-flex items-center justify-center whitespace-nowrap shrink-0 transition-all select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.99] cursor-pointer ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]} ${className}`}
         {...rest}
       >
         {isLoading ? (
           <>
-            <Loader2 className={`animate-spin ${size === 'sm' || size === 'icon-sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'}`} />
+            <Loader2 className={`animate-spin ${spinnerClass(size)}`} />
             {!isIconOnly && <span>처리 중...</span>}
           </>
         ) : (
           <>
             {leftIcon && <span className="shrink-0">{leftIcon}</span>}
-            {children}
+            {children != null && children !== false && (
+              <span className="whitespace-nowrap shrink-0">{children}</span>
+            )}
             {rightIcon && <span className="shrink-0">{rightIcon}</span>}
           </>
         )}

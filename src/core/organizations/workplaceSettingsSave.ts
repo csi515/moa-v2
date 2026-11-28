@@ -55,6 +55,8 @@ export function buildWorkplaceSettingsSavePayload(
     phone: settings.phone,
     businessNumber: settings.businessNumber,
     address: options.displayAddress,
+    sealUrl: settings.sealUrl,
+    stampImageUrl: settings.stampImageUrl || settings.sealUrl,
     defaultTuitionFee: settings.defaultTuitionFee,
     defaultPaymentDay: settings.defaultPaymentDay,
     defaultBillingMode: settings.defaultBillingMode,

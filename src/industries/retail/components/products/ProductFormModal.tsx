@@ -1,7 +1,9 @@
 import { useEffect, useState, useCallback, type FormEvent, type FC } from 'react';
-import { Plus, Trash2, Barcode, Sparkles, RefreshCw } from 'lucide-react';
+import { Plus, Trash2, Barcode, Sparkles, RefreshCw, Settings } from 'lucide-react';
 import { Modal } from '@/shared/components';
-import { FormField, FORM_CONTROL_CLASS, SegmentedControl } from '@/shared/components/ui';
+import { Button, FORM_ACTION_BUTTON_CLASS, FormField, FORM_CONTROL_CLASS, SegmentedControl } from '@/shared/components/ui';
+import { useApp } from '@/context/AppContext';
+import { openRetailSettingsPanel } from '../settings/retailSettingsIntent';
 import { useBarcodeScanner, playScannerSound } from '@/capabilities/inventory';
 import { productService } from '../../services/productService';
 import { inventoryService } from '../../services/inventoryService';
@@ -68,14 +70,16 @@ export const ProductFormModal: FC<Props> = ({
   onError,
   requireSizeColorVariants = false,
 }) => {
+  const { setActiveTab, openConfirmDialog } = useApp();
+  const selectableCategories = categories.filter((category) => category.isActive);
   const [name, setName] = useState('');
   const [productCode, setProductCode] = useState('');
   const [showBarcodeOption, setShowBarcodeOption] = useState(false);
   const [price, setPrice] = useState('');
   const [cost, setCost] = useState('');
+  const [safetyStock, setSafetyStock] = useState('0');
   const [initialStock, setInitialStock] = useState('');
   const [categoryId, setCategoryId] = useState('');
-  const [newCategoryName, setNewCategoryName] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [optionMode, setOptionMode] = useState<OptionMode>('none');
   const [variants, setVariants] = useState<VariantDraft[]>([emptyVariant()]);
@@ -115,9 +119,9 @@ export const ProductFormModal: FC<Props> = ({
         setShowBarcodeOption(false);
         setPrice('');
         setCost('');
+        setSafetyStock('0');
         setInitialStock('');
         setCategoryId('');
-        setNewCategoryName('');
         setIsActive(true);
         setOptionMode(requireSizeColorVariants ? 'yes' : 'none');
         setVariants([
@@ -134,8 +138,8 @@ export const ProductFormModal: FC<Props> = ({
       setShowBarcodeOption(Boolean(code));
       setPrice(String(editing.price));
       setCost(editing.cost != null ? String(editing.cost) : '');
+      setSafetyStock(String(editing.safetyStock ?? 0));
       setCategoryId(editing.categoryId || '');
-      setNewCategoryName('');
       setIsActive(editing.isActive);
 
       try {
@@ -186,6 +190,26 @@ export const ProductFormModal: FC<Props> = ({
     setShowBarcodeOption(true);
   };
 
+  const goToCategorySettings = () => {
+    const leave = () => {
+      openRetailSettingsPanel('categories');
+      onClose();
+      setActiveTab('settings');
+    };
+    const dirty = Boolean(name.trim() || price.trim() || cost.trim() || productCode.trim());
+    if (!dirty) {
+      leave();
+      return;
+    }
+    openConfirmDialog({
+      title: COPY.categoryLeaveTitle,
+      message: COPY.categoryLeaveMessage,
+      confirmText: COPY.categoryLeaveConfirm,
+      cancelText: COPY.cancel,
+      onConfirm: leave,
+    });
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim() || saving || hydrating) return;
@@ -193,6 +217,12 @@ export const ProductFormModal: FC<Props> = ({
     const priceNum = Number(price);
     if (!Number.isFinite(priceNum) || priceNum < 0) {
       onError('판매가격을 입력해 주세요.');
+      return;
+    }
+
+    const safetyNum = Number(safetyStock);
+    if (!Number.isFinite(safetyNum) || safetyNum < 0) {
+      onError('안전재고는 0 이상의 수량이어야 합니다.');
       return;
     }
 
@@ -222,8 +252,9 @@ export const ProductFormModal: FC<Props> = ({
           productCode: productCode.trim() || null,
           price: priceNum,
           cost: parseOptionalNumber(cost),
+          safetyStock: Math.floor(safetyNum),
           categoryId: categoryId || null,
-          newCategoryName: categoryId ? null : newCategoryName.trim() || null,
+          newCategoryName: null,
           isActive,
           variants: optionMode === 'none' ? [] : variantPayload,
         },
@@ -331,25 +362,50 @@ export const ProductFormModal: FC<Props> = ({
           </FormField>
         </div>
 
+        <FormField label={COPY.safetyStockLabel} hint={COPY.safetyStockHint}>
+          <input
+            type="number"
+            min={0}
+            step={1}
+            inputMode="numeric"
+            value={safetyStock}
+            onChange={(e) => setSafetyStock(e.target.value)}
+            className={`${FORM_CONTROL_CLASS} min-h-[44px] text-base font-bold tabular-nums w-full sm:w-40`}
+            placeholder="0"
+          />
+        </FormField>
+
         {/* 카테고리 및 초기 재고 수량 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <FormField label={COPY.categoryLabel}>
-            <select
-              value={categoryId}
-              onChange={(e) => {
-                setCategoryId(e.target.value);
-                if (e.target.value) setNewCategoryName('');
-              }}
-              className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
-            >
-              <option value="">{COPY.categoryNone}</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </FormField>
+          {selectableCategories.length === 0 ? (
+            <div className="sm:col-span-2 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-3 space-y-2">
+              <p className="text-sm text-slate-700">{COPY.categoryFormEmpty}</p>
+              <Button
+                type="button"
+                variant="outline"
+                size="default"
+                onClick={goToCategorySettings}
+                leftIcon={<Settings className="w-4 h-4" />}
+              >
+                {COPY.categoryGoSettings}
+              </Button>
+            </div>
+          ) : (
+            <FormField label={COPY.categoryLabel} hint={COPY.categoryFormHint}>
+              <select
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+                className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
+              >
+                <option value="">{COPY.categoryNone}</option>
+                {selectableCategories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </FormField>
+          )}
 
           {!editing && optionMode === 'none' ? (
             <FormField
@@ -380,17 +436,6 @@ export const ProductFormModal: FC<Props> = ({
             </div>
           )}
         </div>
-
-        {!categoryId && (
-          <FormField label={COPY.newCategoryLabel}>
-            <input
-              value={newCategoryName}
-              onChange={(e) => setNewCategoryName(e.target.value)}
-              placeholder={COPY.newCategoryPlaceholder}
-              className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
-            />
-          </FormField>
-        )}
 
         {!editing && optionMode === 'none' && (
           <label className="flex items-center gap-2 min-h-[44px] text-sm font-semibold text-slate-700">
@@ -570,37 +615,43 @@ export const ProductFormModal: FC<Props> = ({
               </div>
             ))}
 
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="default"
               onClick={() =>
                 setVariants((prev) => [
                   ...prev,
                   emptyVariant({ price: Number(price) || undefined }),
                 ])
               }
-              className="w-full inline-flex items-center justify-center gap-1.5 min-h-[44px] rounded-xl border border-dashed border-teal-300 text-teal-700 text-sm font-bold bg-teal-50/50"
+              leftIcon={<Plus className="w-4 h-4" />}
             >
-              <Plus className="w-4 h-4" />
               {COPY.addOption}
-            </button>
+            </Button>
           </div>
         )}
 
-        <div className="flex gap-2 pt-2 sticky bottom-0 bg-white pb-1">
-          <button
+        <div className="flex flex-wrap items-center justify-end gap-2 pt-2 sticky bottom-0 bg-white pb-1">
+          <Button
             type="button"
+            variant="outline"
+            size="default"
+            className={FORM_ACTION_BUTTON_CLASS}
             onClick={onClose}
-            className="flex-1 min-h-[44px] rounded-xl border border-slate-200 text-sm font-bold text-slate-600"
           >
             {COPY.cancel}
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
+            variant="primary"
+            size="default"
+            className={FORM_ACTION_BUTTON_CLASS}
             disabled={saving || hydrating}
-            className="flex-1 min-h-[44px] rounded-xl bg-teal-600 text-white text-sm font-bold disabled:opacity-60"
+            isLoading={saving}
           >
-            {saving ? COPY.saving : COPY.save}
-          </button>
+            {COPY.save}
+          </Button>
         </div>
       </form>
     </Modal>

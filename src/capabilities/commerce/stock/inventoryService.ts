@@ -19,6 +19,7 @@ type ProductRow = {
   name: string;
   product_code: string | null;
   is_active: boolean;
+  safety_stock?: number | string | null;
 };
 
 type VariantRow = {
@@ -190,7 +191,7 @@ export const inventoryService = {
     const [productsRes, variantsRes, inventoryRes] = await Promise.all([
       client
         .from('products')
-        .select('id, name, product_code, is_active')
+        .select('id, name, product_code, is_active, safety_stock')
         .eq('organization_id', organizationId)
         .order('name', { ascending: true }),
       client.from('product_variants').select('id, product_id, name, is_active'),
@@ -242,6 +243,7 @@ export const inventoryService = {
             variantId: variant.id,
             variantName: variant.name,
             quantity: qtyByVariant.get(variant.id) ?? 0,
+            safetyStock: Math.max(0, Math.floor(toNumber(product.safety_stock))),
             isActive: variant.is_active && product.is_active,
             productIsActive: product.is_active,
             stockLocationId,
@@ -256,6 +258,7 @@ export const inventoryService = {
           variantId: null,
           variantName: null,
           quantity: qtyByProductOnly.get(product.id) ?? 0,
+          safetyStock: Math.max(0, Math.floor(toNumber(product.safety_stock))),
           isActive: product.is_active,
           productIsActive: product.is_active,
           stockLocationId,

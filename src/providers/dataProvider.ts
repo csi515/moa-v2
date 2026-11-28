@@ -1,6 +1,7 @@
 import { dataProvider as refineSupabaseDataProvider } from "@refinedev/supabase";
 import type { BaseRecord, CrudFilter, DataProvider, GetManyParams, GetOneParams } from "@refinedev/core";
-import { supabase } from "@/lib/supabase/client";
+import { getCoreClient, supabase } from "@/lib/supabase/client";
+import { parseSupabaseError } from "@/shared/errors/supabaseErrorParser";
 import * as orgService from "@/core/organizations/services/organizationService";
 import { StorageService } from "@/services/storage";
 import { notifyStorageFromRefineResource } from "@/core/query/crossCacheBridge";
@@ -430,6 +431,22 @@ export function guardTenantDataProvider(
             throw err;
           }
         }
+      }
+
+      // customers 는 RLS WITH CHECK(deleted_at IS NULL) 때문에 클라이언트 UPDATE 로
+      // deleted_at 을 쓸 수 없다. meta.softDelete 일 때만 SECURITY DEFINER RPC 로 숨긴다.
+      if (params.resource === "customers" && params.meta?.softDelete === true) {
+        const { error } = await getCoreClient().rpc("soft_delete_record" as never, {
+          p_table_name: "customers",
+          p_record_id: params.id,
+        } as never);
+        if (error) {
+          throw new Error(
+            parseSupabaseError(error, { entity: "고객", action: "삭제" }).userMessage
+          );
+        }
+        notifyStorageFromRefineResource(params.resource);
+        return { data: { id: params.id } as TData };
       }
 
       const res = await baseProvider.deleteOne<TData, TVariables>(params);

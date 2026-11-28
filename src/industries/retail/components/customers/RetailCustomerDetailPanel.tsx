@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { ArrowLeft, Coins, Receipt, Wallet, Plus, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
+import { ArrowLeft, Coins, Receipt, Wallet, Plus, Pencil, Trash2 } from 'lucide-react';
 import { CoreCustomerInfoCard } from '@/core/customer/components/CoreCustomerInfoCard';
 import type { CustomerProfile } from '@/core/customer/services/customerLinkService';
 import {
@@ -7,7 +7,7 @@ import {
   type PointTransaction,
 } from '@/capabilities/commerce';
 import type { WalletTransaction } from '@/capabilities/credit_wallet';
-import { PageHeader } from '@/shared/components';
+import { Button, PageHeader } from '@/shared/components/ui';
 import { formatCurrency } from '@/utils/formatters';
 import {
   formatSaleNumber,
@@ -38,6 +38,9 @@ interface Props {
   onOpenPoints: () => void;
   onOpenSale: (saleId: string) => void;
   onOpenChargeCredit?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  isDeleting?: boolean;
 }
 
 /**
@@ -51,20 +54,38 @@ export const RetailCustomerDetailPanel: FC<Props> = ({
   onOpenPoints,
   onOpenSale,
   onOpenChargeCredit,
+  onEdit,
+  onDelete,
+  isDeleting = false,
 }) => (
   <div className="space-y-4">
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="default"
       onClick={onBack}
-      className="inline-flex lg:hidden items-center gap-1.5 min-h-[44px] text-sm font-bold text-slate-600"
+      className="lg:hidden"
+      leftIcon={<ArrowLeft className="w-4 h-4" aria-hidden />}
     >
-      <ArrowLeft className="w-4 h-4" aria-hidden />
       {COPY.detailBack}
-    </button>
+    </Button>
 
     <PageHeader
       title={COPY.detailTitle}
       description={data?.profile.name ?? ''}
+      actions={
+        onEdit ? (
+          <Button
+            type="button"
+            variant="outline"
+            size="default"
+            onClick={onEdit}
+            leftIcon={<Pencil className="w-4 h-4" />}
+          >
+            {COPY.editInfo}
+          </Button>
+        ) : null
+      }
     />
 
     {loading || !data ? (
@@ -155,14 +176,15 @@ export const RetailCustomerDetailPanel: FC<Props> = ({
               선불 예치금
             </h3>
             {onOpenChargeCredit && (
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={onOpenChargeCredit}
-                className="inline-flex items-center gap-1 text-xs font-bold text-teal-600 hover:text-teal-700 min-h-[32px] px-2 rounded-lg hover:bg-teal-50 cursor-pointer"
+                leftIcon={<Plus className="w-3.5 h-3.5" />}
               >
-                <Plus className="w-3.5 h-3.5" />
                 충전하기
-              </button>
+              </Button>
             )}
           </div>
           <div className="rounded-xl border border-teal-100 bg-teal-50/70 p-4 flex items-center justify-between">
@@ -175,14 +197,15 @@ export const RetailCustomerDetailPanel: FC<Props> = ({
               </p>
             </div>
             {onOpenChargeCredit && (
-              <button
+              <Button
                 type="button"
+                variant="primary"
+                size="sm"
                 onClick={onOpenChargeCredit}
-                className="inline-flex items-center gap-1.5 px-3 py-2 bg-teal-600 text-white text-xs font-bold rounded-xl hover:bg-teal-700 min-h-[40px] shadow-2xs cursor-pointer"
+                leftIcon={<Wallet className="w-4 h-4" />}
               >
-                <Wallet className="w-4 h-4" />
                 예치금 충전
-              </button>
+              </Button>
             )}
           </div>
 
@@ -317,6 +340,22 @@ export const RetailCustomerDetailPanel: FC<Props> = ({
             <Coins className="w-5 h-5 text-teal-600 shrink-0" aria-hidden />
           </button>
         </section>
+
+        {onDelete && (
+          <div className="flex justify-end border-t border-slate-200 pt-4">
+            <Button
+              type="button"
+              variant="destructive"
+              size="default"
+              onClick={onDelete}
+              disabled={isDeleting}
+              isLoading={isDeleting}
+              leftIcon={<Trash2 className="w-4 h-4" />}
+            >
+              {COPY.deleteCustomer}
+            </Button>
+          </div>
+        )}
       </>
     )}
   </div>

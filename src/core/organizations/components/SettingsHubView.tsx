@@ -77,21 +77,21 @@ export const SettingsHubView: FC<SettingsHubViewProps> = ({
   }
 
   return (
-    <div className="space-y-4 pb-4">
+    <div className="space-y-4 pb-4 min-w-0 w-full overflow-x-clip">
       <PageHeader
         density="compact"
         icon={<Settings className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}
         title={`${workplaceLabel} 운영 설정`}
         description="사업장 기본 정보, 공간 및 연습실 등록, 수납 정책 및 데이터 관리"
         actions={
-          <div className="w-full sm:w-auto overflow-x-auto no-scrollbar -mx-1 px-1 py-0.5">
+          <div className="w-full min-w-0 max-w-full overflow-x-auto no-scrollbar py-0.5">
             <SegmentedControl
               value={uiSegment}
               options={options}
               onChange={(next) => setUiSegment(next as SettingsHubSegment)}
               aria-label="설정 카테고리 메뉴"
               fullWidth
-              className="w-full sm:w-auto min-w-[360px]"
+              className="w-full min-w-0 sm:min-w-[360px]"
             />
           </div>
         }

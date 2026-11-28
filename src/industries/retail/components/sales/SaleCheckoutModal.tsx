@@ -8,6 +8,7 @@ import {
 } from '@/capabilities/commerce';
 import { creditWalletService } from '@/capabilities/credit_wallet';
 import { Modal } from '@/shared/components';
+import { Button, FORM_ACTION_BUTTON_CLASS } from '@/shared/components/ui';
 import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 import { formatCurrency } from '@/utils/formatters';
 import { idempotencyCapability } from '@/core/idempotency';
@@ -890,25 +891,30 @@ export const SaleCheckoutModal: FC<Props> = ({
           )}
         </div>
 
-        <div className="flex gap-2 p-4 sm:p-6 border-t border-slate-100 bg-white">
-          <button
+        <div className="flex flex-wrap items-center justify-end gap-2 p-4 sm:p-6 border-t border-slate-100 bg-white">
+          <Button
             type="button"
+            variant="outline"
+            size="touch"
+            className={FORM_ACTION_BUTTON_CLASS}
             onClick={handleSafeClose}
-            className="flex-1 min-h-[48px] rounded-xl border border-slate-200 text-sm font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
           >
             {COPY.cancel}
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
+            variant="primary"
+            size="touch"
+            className={FORM_ACTION_BUTTON_CLASS}
             disabled={
               saving ||
               lines.length === 0 ||
               (selectedMethod === 'deposit' && (!customer || depositBalance < payable))
             }
-            className="flex-[1.4] min-h-[48px] rounded-xl bg-teal-600 text-white text-sm font-bold hover:bg-teal-700 disabled:opacity-60 transition-colors cursor-pointer"
+            isLoading={saving}
           >
-            {saving ? COPY.confirming : COPY.confirmSale}
-          </button>
+            {COPY.confirmSale}
+          </Button>
         </div>
       </form>
     </Modal>

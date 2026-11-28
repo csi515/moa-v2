@@ -22,6 +22,8 @@ export interface Product {
   cost: number | null;
   imageUrl: string | null;
   isActive: boolean;
+  /** 0이면 재고 부족 기준 없음 */
+  safetyStock: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -64,6 +66,8 @@ export interface ProductSaveInput {
   price: number;
   cost?: number | null;
   isActive?: boolean;
+  /** 생략하면 수정 시 기존 안전재고를 유지하고, 생성 시 0이다. */
+  safetyStock?: number;
   /**
    * undefined: 옵션 변경 없음
    * []: 옵션 전부 제거

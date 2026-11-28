@@ -5,7 +5,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { AcademyOpenQuestWidget } from './AcademyOpenQuestWidget';
 
 describe('AcademyOpenQuestWidget Component', () => {
-  it('renders open quest title, progress bar, and demo sandbox buttons in clean B2B style', () => {
+  it('renders open quest title and progress without demo sandbox injection', () => {
     const html = renderToStaticMarkup(
       React.createElement(AcademyOpenQuestWidget, {
         onNavigateTab: () => {},
@@ -16,6 +16,7 @@ describe('AcademyOpenQuestWidget Component', () => {
     assert.match(html, /진행률/);
     assert.match(html, /사업장 정보 등록/);
     assert.match(html, /첫 번째 고객\/원생 등록/);
-    assert.match(html, /샘플 데이터로 둘러보기/);
+    assert.doesNotMatch(html, /샘플 데이터로 둘러보기/);
+    assert.doesNotMatch(html, /샘플 데이터 초기화/);
   });
 });

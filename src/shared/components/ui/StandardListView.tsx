@@ -348,7 +348,7 @@ export function StandardListView<T>({
               <button
                 type="button"
                 onClick={handleExport}
-                className="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs min-h-[44px]"
+                className="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs min-h-[44px]"
                 title="CSV로 내보내기"
               >
                 <Download className="w-3.5 h-3.5 text-slate-500" />

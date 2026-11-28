@@ -8,6 +8,8 @@ export type StockLocation = {
   code: string;
   departmentId: string | null;
   isActive: boolean;
+  /** 설정 화면에서 이름을 저장한 창고 */
+  configured: boolean;
 };
 
 type StockLocationRow = {
@@ -17,6 +19,7 @@ type StockLocationRow = {
   code: string;
   department_id: string | null;
   is_active: boolean;
+  metadata: Record<string, unknown> | null;
 };
 
 function ensureClient() {
@@ -34,7 +37,27 @@ function mapRow(row: StockLocationRow): StockLocation {
     code: row.code,
     departmentId: row.department_id,
     isActive: row.is_active,
+    configured: row.metadata?.configured === true,
   };
+}
+
+const LOCATION_COLUMNS =
+  'id, organization_id, name, code, department_id, is_active, metadata';
+
+function locationCode(): string {
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  let body = '';
+  for (let i = 0; i < 8; i += 1) {
+    body += alphabet[Math.floor(Math.random() * alphabet.length)];
+  }
+  return `wh_${body}`;
+}
+
+function withConfigured(
+  metadata: Record<string, unknown> | null,
+  extra: Record<string, unknown>
+): Record<string, unknown> {
+  return { ...(metadata ?? {}), ...extra, configured: true };
 }
 
 /** 자재 창고(부서 연동) CRUD·스코프 필터 */
@@ -51,15 +74,21 @@ export const stockLocationService = {
     return id;
   },
 
-  async listLocations(organizationId: string): Promise<StockLocation[]> {
+  async listLocations(
+    organizationId: string,
+    options?: { includeInactive?: boolean }
+  ): Promise<StockLocation[]> {
     const client = ensureClient();
     await this.ensureCentral(organizationId);
-    const { data, error } = await client
+    let query = client
       .from('stock_locations' as never)
-      .select('id, organization_id, name, code, department_id, is_active')
+      .select(LOCATION_COLUMNS)
       .eq('organization_id', organizationId)
-      .eq('is_active', true)
       .order('code', { ascending: true });
+    if (!options?.includeInactive) {
+      query = query.eq('is_active', true);
+    }
+    const { data, error } = await query;
     if (error) throw error;
     return ((data as StockLocationRow[] | null) ?? []).map(mapRow);
   },
@@ -102,9 +131,102 @@ export const stockLocationService = {
         code,
         department_id: input.departmentId,
         is_active: true,
-        metadata: { kind: 'department' },
+        metadata: { kind: 'department', configured: true },
       } as never)
-      .select('id, organization_id, name, code, department_id, is_active')
+      .select(LOCATION_COLUMNS)
+      .single();
+    if (error) throw error;
+    return mapRow(data as StockLocationRow);
+  },
+
+  async createNamedLocation(input: {
+    organizationId: string;
+    name: string;
+    departmentId?: string | null;
+  }): Promise<StockLocation> {
+    const name = input.name.trim();
+    if (!name) throw new Error('창고 이름을 입력해 주세요.');
+    if (input.departmentId) {
+      return this.createDepartmentLocation({
+        organizationId: input.organizationId,
+        name,
+        code: locationCode(),
+        departmentId: input.departmentId,
+      });
+    }
+    const client = ensureClient();
+    const { data, error } = await client
+      .from('stock_locations' as never)
+      .insert({
+        organization_id: input.organizationId,
+        name,
+        code: locationCode(),
+        department_id: null,
+        is_active: true,
+        metadata: { kind: 'store', configured: true },
+      } as never)
+      .select(LOCATION_COLUMNS)
+      .single();
+    if (error) throw error;
+    return mapRow(data as StockLocationRow);
+  },
+
+  async renameLocation(
+    organizationId: string,
+    locationId: string,
+    name: string
+  ): Promise<StockLocation> {
+    const trimmed = name.trim();
+    if (!trimmed) throw new Error('창고 이름을 입력해 주세요.');
+    const client = ensureClient();
+    const { data: current, error: readError } = await client
+      .from('stock_locations' as never)
+      .select(LOCATION_COLUMNS)
+      .eq('id', locationId)
+      .eq('organization_id', organizationId)
+      .single();
+    if (readError) throw readError;
+    const row = current as StockLocationRow;
+    const { data, error } = await client
+      .from('stock_locations' as never)
+      .update({
+        name: trimmed,
+        metadata: withConfigured(row.metadata, {}),
+      } as never)
+      .eq('id', locationId)
+      .eq('organization_id', organizationId)
+      .select(LOCATION_COLUMNS)
+      .single();
+    if (error) throw error;
+    return mapRow(data as StockLocationRow);
+  },
+
+  async setLocationActive(
+    organizationId: string,
+    locationId: string,
+    isActive: boolean
+  ): Promise<StockLocation> {
+    const client = ensureClient();
+    const { data: current, error: readError } = await client
+      .from('stock_locations' as never)
+      .select(LOCATION_COLUMNS)
+      .eq('id', locationId)
+      .eq('organization_id', organizationId)
+      .single();
+    if (readError) throw readError;
+    const row = current as StockLocationRow;
+    if (row.code === 'central' && !isActive) {
+      throw new Error('판매에 연결된 기본 창고는 끌 수 없습니다. 이름만 바꿀 수 있습니다.');
+    }
+    const { data, error } = await client
+      .from('stock_locations' as never)
+      .update({
+        is_active: isActive,
+        metadata: withConfigured(row.metadata, {}),
+      } as never)
+      .eq('id', locationId)
+      .eq('organization_id', organizationId)
+      .select(LOCATION_COLUMNS)
       .single();
     if (error) throw error;
     return mapRow(data as StockLocationRow);

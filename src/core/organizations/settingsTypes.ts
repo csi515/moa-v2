@@ -46,6 +46,9 @@ export interface CommonWorkplaceSettings {
   address: string;
   phone: string;
   businessNumber?: string;
+  /** 납입증명서 직인(도장) — Canvas 정규화 data URL 또는 Storage URL */
+  sealUrl?: string;
+  stampImageUrl?: string;
   announcement?: string;
   business_hours?: string;
   bankAccount?: string | {

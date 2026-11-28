@@ -13,6 +13,7 @@ import {
   Package,
 } from 'lucide-react';
 import { Modal } from '@/shared/components';
+import { Button, FORM_ACTION_BUTTON_CLASS } from '@/shared/components/ui';
 import { formatCurrency } from '@/utils/formatters';
 import {
   parseProductCsv,
@@ -160,14 +161,15 @@ export const ProductBulkImportModal: React.FC<Props> = ({
                   상품명, 바코드, 판매가, 원가, 카테고리, 옵션, 기초재고를 한 번에 작성할 수 있습니다.
                 </p>
               </div>
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="sm"
                 onClick={handleDownloadTemplate}
-                className="shrink-0 min-h-[40px] px-3.5 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 flex items-center gap-1.5 shadow-xs cursor-pointer"
+                leftIcon={<Download className="w-4 h-4" />}
               >
-                <Download className="w-4 h-4 text-slate-500" />
                 샘플 양식 다운로드
-              </button>
+              </Button>
             </div>
 
             {/* 드래그 앤 드롭 업로드 영역 */}
@@ -307,23 +309,27 @@ export const ProductBulkImportModal: React.FC<Props> = ({
             </div>
 
             {/* 하단 버튼 바 */}
-            <div className="flex gap-2 pt-2 border-t border-slate-100">
-              <button
+            <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <Button
                 type="button"
+                variant="outline"
+                size="default"
+                className={FORM_ACTION_BUTTON_CLASS}
                 onClick={() => setStep('upload')}
-                className="flex-1 min-h-[44px] rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer"
               >
                 다시 선택
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="primary"
+                size="default"
+                className={FORM_ACTION_BUTTON_CLASS}
                 onClick={handleExecuteImport}
                 disabled={parseSummary.groups.length === 0}
-                className="flex-[2] min-h-[44px] rounded-xl bg-teal-600 text-white text-xs font-bold hover:bg-teal-700 disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+                leftIcon={<Check className="w-4 h-4" />}
               >
-                <Check className="w-4 h-4" />
-                {parseSummary.groups.length}개 품목 일괄 등록 시작하기
-              </button>
+                {parseSummary.groups.length}개 품목 일괄 등록
+              </Button>
             </div>
           </div>
         )}
@@ -392,13 +398,17 @@ export const ProductBulkImportModal: React.FC<Props> = ({
               </div>
             )}
 
-            <button
-              type="button"
-              onClick={handleModalClose}
-              className="w-full min-h-[46px] rounded-xl bg-teal-600 text-white text-xs font-bold hover:bg-teal-700 shadow-sm cursor-pointer"
-            >
-              상품 목록 확인하기
-            </button>
+            <div className="flex justify-end">
+              <Button
+                type="button"
+                variant="primary"
+                size="default"
+                className={FORM_ACTION_BUTTON_CLASS}
+                onClick={handleModalClose}
+              >
+                상품 목록 확인하기
+              </Button>
+            </div>
           </div>
         )}
       </div>

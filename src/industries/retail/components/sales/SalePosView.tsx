@@ -10,7 +10,6 @@ import {
   PlayCircle,
   Trash2,
   Tag,
-  Keyboard,
   Clock,
   Check,
   Flame,
@@ -18,7 +17,6 @@ import {
   PlusCircle,
   Package,
   RotateCcw,
-  HelpCircle,
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
@@ -26,7 +24,7 @@ import { useApp } from '@/context/AppContext';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { EmptyState, PageHeader, Modal } from '@/shared/components';
-import { SearchField } from '@/shared/components/ui';
+import { Button, FORM_ACTION_BUTTON_CLASS, SearchField } from '@/shared/components/ui';
 import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 import { formatCurrency } from '@/utils/formatters';
 import {
@@ -52,7 +50,6 @@ import { SaleCheckoutModal } from './SaleCheckoutModal';
 import { SaleQuickReturnModal } from './SaleQuickReturnModal';
 import { SaleReceiptPrintModal, type ReceiptData } from './SaleReceiptPrintModal';
 import { SaleQuickProductCreateModal } from './SaleQuickProductCreateModal';
-import { SalePosGuideModal } from './SalePosGuideModal';
 import { matchCatalogItem } from './saleCatalogMatch';
 
 interface HeldCart {
@@ -95,9 +92,6 @@ export const SalePosView: FC = () => {
 
   // [개선안 2] 스마트 영수증 반품 모달 상태
   const [quickReturnOpen, setQuickReturnOpen] = useState(false);
-
-  // [사용자 친절도] POS 사용 가이드 모달 상태
-  const [guideOpen, setGuideOpen] = useState(false);
 
   // [빠른 터치 매대] 펼치기/접기 상태
   const [quickTouchExpanded, setQuickTouchExpanded] = useState(false);
@@ -404,68 +398,57 @@ export const SalePosView: FC = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-[calc(100dvh-8rem)] pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-8">
-      <div className={cn(DESKTOP_CONTAINERS.wide, 'space-y-3 flex-1')}>
+    <div className="flex h-[calc(100dvh-4.5rem)] min-h-0 flex-col pb-[calc(3.5rem+env(safe-area-inset-bottom))] md:pb-3">
+      <div className={cn(DESKTOP_CONTAINERS.wide, 'flex min-h-0 flex-1 flex-col gap-2')}>
         <PageHeader
           icon={<ShoppingCart className="w-5 h-5" />}
           iconClassName="text-teal-600"
           title={COPY.title}
           description={COPY.description}
           actions={
-            <div className="flex items-center gap-2 flex-wrap">
-              {/* 실시간 접객 핵심 액션 */}
+            <div className="flex flex-wrap items-center justify-end gap-2">
               {heldCarts.length > 0 && (
-                <button
+                <Button
                   type="button"
+                  variant="secondary"
+                  size="default"
                   onClick={() => setHeldModalOpen(true)}
-                  className="px-3 py-2 rounded-xl bg-amber-50 border border-amber-300 text-amber-800 text-xs font-bold hover:bg-amber-100 flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                  leftIcon={<Clock className="w-4 h-4" />}
                 >
-                  <Clock className="w-4 h-4 text-amber-600" />
-                  <span>보류 주문 ({heldCarts.length})</span>
-                </button>
+                  보류 주문 ({heldCarts.length})
+                </Button>
               )}
-
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="default"
                 onClick={() => setQuickReturnOpen(true)}
-                className="px-3 py-2 rounded-xl bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold hover:bg-teal-100 flex items-center gap-1.5 cursor-pointer"
                 title="단말기 영수증 금액/고객명으로 즉시 반품"
+                leftIcon={<RotateCcw className="w-4 h-4" />}
               >
-                <RotateCcw className="w-4 h-4 text-teal-600" />
-                <span>영수증 반품</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setGuideOpen(true)}
-                className="px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-50 flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                title="POS 실무 사용 가이드 및 키보드 단축키 모음"
-              >
-                <HelpCircle className="w-4 h-4 text-teal-600" />
-                <span>사용 가이드</span>
-              </button>
-
-              {/* 보조 관리 도구 (프로모션 / 마감 정산 - 데스크톱 전용 콤팩트 링크) */}
+                영수증 반품
+              </Button>
               <div className="hidden sm:flex items-center gap-1 pl-1 border-l border-slate-200">
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="default"
                   onClick={() => setPromoModalOpen(true)}
-                  className="px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-rose-600 hover:bg-rose-50 text-xs font-medium flex items-center gap-1 cursor-pointer transition-colors"
                   title="기간 한정 특가 및 프로모션 관리"
+                  leftIcon={<Flame className="w-3.5 h-3.5" />}
                 >
-                  <Flame className="w-3.5 h-3.5 text-rose-500" />
-                  <span>프로모션</span>
-                </button>
-
-                <button
+                  프로모션
+                </Button>
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="default"
                   onClick={() => setReconciliationModalOpen(true)}
-                  className="px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 text-xs font-medium flex items-center gap-1 cursor-pointer transition-colors"
                   title="일일 현금 시재 정산 및 POS 마감"
+                  leftIcon={<Calculator className="w-3.5 h-3.5" />}
                 >
-                  <Calculator className="w-3.5 h-3.5 text-slate-500" />
-                  <span>시재 마감</span>
-                </button>
+                  시재 마감
+                </Button>
               </div>
             </div>
           }
@@ -488,23 +471,17 @@ export const SalePosView: FC = () => {
                 자주 찾는 품목 빠른 터치 매대
                 <span className="text-[10px] font-normal text-slate-400">({noBarcodeItems.length}종)</span>
               </span>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] text-slate-400 hidden sm:inline">터치 시 즉시 +1 담김</span>
-                {noBarcodeItems.length > 3 && (
-                  <button
-                    type="button"
-                    onClick={() => setQuickTouchExpanded((prev) => !prev)}
-                    className="text-[11px] font-bold text-teal-700 hover:text-teal-800 flex items-center gap-0.5 px-1.5 py-0.5 rounded hover:bg-teal-50 cursor-pointer"
-                  >
-                    <span>{quickTouchExpanded ? '접기' : '펼치기'}</span>
-                    {quickTouchExpanded ? (
-                      <ChevronUp className="w-3 h-3" />
-                    ) : (
-                      <ChevronDown className="w-3 h-3" />
-                    )}
-                  </button>
-                )}
-              </div>
+              {noBarcodeItems.length > 3 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setQuickTouchExpanded((prev) => !prev)}
+                  rightIcon={quickTouchExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                >
+                  {quickTouchExpanded ? '접기' : '펼치기'}
+                </Button>
+              )}
             </div>
 
             {quickTouchExpanded ? (
@@ -553,21 +530,7 @@ export const SalePosView: FC = () => {
           </div>
         )}
 
-        {/* 접객 안내 및 단축키 안내 뱃지 */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-3 py-1.5 bg-slate-100/90 rounded-xl text-[11px] text-slate-600 font-medium gap-1">
-          <div className="flex items-center gap-1.5">
-            <Keyboard className="w-3.5 h-3.5 text-teal-600" />
-            <span>상품명/초성 검색 또는 매대 품목을 클릭하여 장바구니에 담으세요</span>
-          </div>
-          <div className="flex items-center gap-2 text-slate-500 font-mono text-[10px]">
-            <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.5 bg-white border border-slate-200 rounded text-[9px] shadow-2xs">Space</kbd> 결제
-            </span>
-            <span>·</span>
-            <span><kbd className="px-1 py-0.5 bg-white border border-slate-200 rounded text-[9px] shadow-2xs">Del</kbd> 비우기</span>
-          </div>
-        </div>
-
+        <div className="min-h-0 flex-1 overflow-y-auto">
         {loading ? (
           <PageListSkeleton rows={3} message="목록을 불러오는 중..." />
         ) : filtered.length === 0 ? (
@@ -638,9 +601,10 @@ export const SalePosView: FC = () => {
             })}
           </ul>
         )}
+        </div>
 
         {/* 데스크톱 장바구니 패널 */}
-        <section className="hidden md:block mt-4 bg-white rounded-2xl border border-slate-200 p-4 space-y-3">
+        <section className="hidden md:block shrink-0 bg-white rounded-2xl border border-slate-200 p-4 space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <h2 className="font-bold text-slate-900">{COPY.cartTitle}</h2>
@@ -649,28 +613,34 @@ export const SalePosView: FC = () => {
               </span>
             </div>
             {cart.length > 0 && (
-              <div className="flex items-center gap-1.5">
-                <button
+              <div className="flex flex-wrap items-center justify-end gap-1.5">
+                <Button
                   type="button"
+                  variant="secondary"
+                  size="sm"
                   onClick={() => setTotalDiscountModalOpen(true)}
-                  className="px-2.5 py-1 text-xs font-bold text-teal-700 bg-teal-50 hover:bg-teal-100 rounded-lg flex items-center gap-1 cursor-pointer"
+                  leftIcon={<Tag className="w-3 h-3" />}
                 >
-                  <Tag className="w-3 h-3" /> 전체 할인
-                </button>
-                <button
+                  전체 할인
+                </Button>
+                <Button
                   type="button"
+                  variant="secondary"
+                  size="sm"
                   onClick={handleHoldCart}
-                  className="px-2.5 py-1 text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg flex items-center gap-1 cursor-pointer"
+                  leftIcon={<PauseCircle className="w-3 h-3" />}
                 >
-                  <PauseCircle className="w-3 h-3" /> 주문 보류
-                </button>
-                <button
+                  주문 보류
+                </Button>
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setCart([])}
-                  className="px-2 py-1 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-lg flex items-center gap-0.5 cursor-pointer"
+                  leftIcon={<Trash2 className="w-3 h-3" />}
                 >
-                  <Trash2 className="w-3 h-3" /> 비우기
-                </button>
+                  비우기
+                </Button>
               </div>
             )}
           </div>
@@ -699,15 +669,18 @@ export const SalePosView: FC = () => {
               {formatCurrency(total)}
             </span>
           </div>
-          <button
-            type="button"
-            disabled={cart.length === 0}
-            onClick={() => setCheckoutOpen(true)}
-            className="w-full min-h-[48px] rounded-xl bg-teal-600 text-white text-sm font-bold hover:bg-teal-700 disabled:opacity-60 transition-colors cursor-pointer flex items-center justify-center gap-2"
-          >
-            <span>{COPY.checkout}</span>
-            <span className="text-xs font-normal opacity-80">(Space)</span>
-          </button>
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              variant="primary"
+              size="touch"
+              className={FORM_ACTION_BUTTON_CLASS}
+              disabled={cart.length === 0}
+              onClick={() => setCheckoutOpen(true)}
+            >
+              {COPY.checkout}
+            </Button>
+          </div>
         </section>
       </div>
 
@@ -717,21 +690,13 @@ export const SalePosView: FC = () => {
           <div className="max-h-[35vh] overflow-y-auto px-4 pt-3 space-y-2 border-b border-slate-100">
             <div className="flex items-center justify-between pb-1">
               <span className="text-xs font-bold text-slate-600">장바구니 품목</span>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setTotalDiscountModalOpen(true)}
-                  className="text-xs font-bold text-teal-700"
-                >
+              <div className="flex items-center gap-1">
+                <Button type="button" variant="ghost" size="default" onClick={() => setTotalDiscountModalOpen(true)}>
                   전체할인
-                </button>
-                <button
-                  type="button"
-                  onClick={handleHoldCart}
-                  className="text-xs font-bold text-amber-700"
-                >
+                </Button>
+                <Button type="button" variant="ghost" size="default" onClick={handleHoldCart}>
                   보류
-                </button>
+                </Button>
               </div>
             </div>
             {cart.map((line) => (
@@ -757,14 +722,15 @@ export const SalePosView: FC = () => {
               {formatCurrency(total)}
             </p>
           </div>
-          <button
+          <Button
             type="button"
+            variant="primary"
+            size="touch"
             disabled={cart.length === 0}
             onClick={() => setCheckoutOpen(true)}
-            className="shrink-0 min-h-[48px] px-5 rounded-xl bg-teal-600 text-white text-sm font-bold hover:bg-teal-700 disabled:opacity-60 transition-colors cursor-pointer"
           >
             {COPY.checkout}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -823,12 +789,6 @@ export const SalePosView: FC = () => {
           void load();
         }}
         onError={(msg) => showToast(msg, 'error')}
-      />
-
-      {/* [사용자 친절도] POS 사용 가이드 모달 */}
-      <SalePosGuideModal
-        isOpen={guideOpen}
-        onClose={() => setGuideOpen(false)}
       />
 
       {/* [기성품 바코드] 미등록 바코드 즉석 상품 등록 모달 */}

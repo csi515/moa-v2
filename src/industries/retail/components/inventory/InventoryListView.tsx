@@ -4,21 +4,21 @@ import { cn } from '@/shared/lib/utils';
 import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import {
   ArrowLeftRight,
+  ClipboardCheck,
   PackagePlus,
+  Settings,
   SlidersHorizontal,
   Warehouse,
-  Plus,
 } from 'lucide-react';
-import { useList } from '@refinedev/core';
 import { useApp } from '@/context/AppContext';
 import { usePermissions } from '@/core/auth/usePermissions';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { isSupabaseConfigured } from '@/lib/supabase';
-import { EmptyState, Modal, PageHeader } from '@/shared/components';
+import { EmptyState, PageHeader } from '@/shared/components';
 import {
+  Button,
   FilterBar,
   FilterTabs,
-  FormField,
   FORM_CONTROL_CLASS,
   SearchField,
 } from '@/shared/components/ui';
@@ -28,8 +28,10 @@ import {
 } from '@/capabilities/commerce/stock';
 import { useWorkspaceMemberScope } from '@/pages/workspace/useWorkspaceMemberScope';
 import { inventoryService } from '../../services/inventoryService';
+import { productService } from '../../services/productService';
+import { openRetailSettingsPanel } from '../settings/retailSettingsIntent';
+import { SafetyStockEditor } from './SafetyStockEditor';
 import {
-  INVENTORY_LOW_STOCK_THRESHOLD,
   type InventoryStockFilter,
   type InventoryStockRow,
 } from '../../types/inventory';
@@ -39,20 +41,24 @@ import { StockInboundModal } from './StockInboundModal';
 import { StockTransferModal } from './StockTransferModal';
 import { StocktakeAuditModal } from './StocktakeAuditModal';
 
+function isLowStock(row: InventoryStockRow): boolean {
+  return row.safetyStock > 0 && row.quantity > 0 && row.quantity <= row.safetyStock;
+}
+
 function matchesStockFilter(row: InventoryStockRow, filter: InventoryStockFilter): boolean {
   if (filter === 'ALL') return true;
   if (filter === 'OUT') return row.quantity <= 0;
-  return row.quantity > 0 && row.quantity <= INVENTORY_LOW_STOCK_THRESHOLD;
+  return isLowStock(row);
 }
 
-function qtyToneClass(quantity: number): string {
+function qtyToneClass(quantity: number, safetyStock: number): string {
   if (quantity <= 0) return 'text-rose-600';
-  if (quantity <= INVENTORY_LOW_STOCK_THRESHOLD) return 'text-amber-700';
+  if (safetyStock > 0 && quantity <= safetyStock) return 'text-amber-700';
   return 'text-slate-900';
 }
 
 export const InventoryListView: FC = () => {
-  const { showToast } = useApp();
+  const { showToast, setActiveTab } = useApp();
   const { isAdmin } = usePermissions();
   const { currentOrganization } = useOrganization();
   const memberScope = useWorkspaceMemberScope();
@@ -66,6 +72,7 @@ export const InventoryListView: FC = () => {
 
   const [rows, setRows] = useState<InventoryStockRow[]>([]);
   const [locations, setLocations] = useState<StockLocation[]>([]);
+  const [locationsLoaded, setLocationsLoaded] = useState(false);
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -76,25 +83,14 @@ export const InventoryListView: FC = () => {
   const [adjustInitial, setAdjustInitial] = useState<InventoryStockRow | null>(null);
   const [transferOpen, setTransferOpen] = useState(false);
   const [transferInitial, setTransferInitial] = useState<InventoryStockRow | null>(null);
-  const [addLocOpen, setAddLocOpen] = useState(false);
-  const [newLocName, setNewLocName] = useState('');
-  const [newLocDeptId, setNewLocDeptId] = useState('');
-  const [savingLoc, setSavingLoc] = useState(false);
   const [stocktakeOpen, setStocktakeOpen] = useState(false);
-
-  const { query: deptQuery } = useList<{ id: string; name: string }>({
-    resource: 'departments',
-    meta: { schema: 'core' },
-    sorters: [{ field: 'name', order: 'asc' }],
-    pagination: { pageSize: 200 },
-    queryOptions: { enabled: Boolean(orgId) && canMutate },
-  });
-  const departments = (deptQuery?.data?.data as { id: string; name: string }[]) ?? [];
+  const [savingSafetyId, setSavingSafetyId] = useState<string | null>(null);
 
   const loadLocations = useCallback(async () => {
     if (!orgId || !isSupabaseConfigured()) {
       setLocations([]);
       setSelectedLocationId(null);
+      setLocationsLoaded(false);
       return;
     }
     try {
@@ -114,6 +110,8 @@ export const InventoryListView: FC = () => {
     } catch (err) {
       showToast.error(err, COPY.loadError);
       setLocations([]);
+    } finally {
+      setLocationsLoaded(true);
     }
   }, [orgId, memberScope, showToast]);
 
@@ -158,7 +156,7 @@ export const InventoryListView: FC = () => {
     let out = 0;
     for (const row of rows) {
       if (row.quantity <= 0) out += 1;
-      else if (row.quantity <= INVENTORY_LOW_STOCK_THRESHOLD) low += 1;
+      else if (isLowStock(row)) low += 1;
     }
     return { all: rows.length, low, out };
   }, [rows]);
@@ -167,6 +165,27 @@ export const InventoryListView: FC = () => {
     if (!canMutate) return;
     setInboundInitial(row ?? null);
     setInboundOpen(true);
+  };
+
+  const openWarehouseSettings = () => {
+    openRetailSettingsPanel('warehouses');
+    setActiveTab('settings');
+  };
+
+  const saveSafetyStock = async (productId: string, next: number) => {
+    if (!orgId || savingSafetyId) return;
+    setSavingSafetyId(productId);
+    try {
+      const saved = await productService.updateSafetyStock(orgId, productId, next);
+      setRows((prev) =>
+        prev.map((row) => (row.productId === productId ? { ...row, safetyStock: saved } : row))
+      );
+      showToast(COPY.safetySaved, 'success');
+    } catch (err) {
+      showToast.error(err, COPY.safetyError);
+    } finally {
+      setSavingSafetyId(null);
+    }
   };
 
   const openAdjust = (row?: InventoryStockRow) => {
@@ -203,40 +222,53 @@ export const InventoryListView: FC = () => {
               : COPY.descriptionReadOnly
         }
         actions={
-          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <div className="flex flex-wrap items-center justify-end gap-2">
             {canMutate && (
               <>
-                <button
+                <Button
                   type="button"
+                  variant="primary"
+                  size="default"
                   onClick={() => openInbound()}
                   disabled={rows.length === 0}
-                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 min-h-[44px] bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold rounded-xl shadow-xs disabled:opacity-60 cursor-pointer flex-1 sm:flex-initial"
+                  leftIcon={<PackagePlus className="w-4 h-4" />}
                 >
-                  <PackagePlus className="w-4 h-4" />
                   {COPY.inbound}
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  variant="outline"
+                  size="default"
                   onClick={() => openAdjust()}
                   disabled={rows.length === 0}
-                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-sm font-bold rounded-xl shadow-2xs disabled:opacity-60 cursor-pointer flex-1 sm:flex-initial"
+                  leftIcon={<SlidersHorizontal className="w-4 h-4" />}
                 >
-                  <SlidersHorizontal className="w-4 h-4 text-slate-500" />
-                  <span>수량 직접 조정</span>
-                </button>
+                  수량 직접 조정
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="default"
+                  onClick={() => setStocktakeOpen(true)}
+                  disabled={rows.length === 0}
+                  leftIcon={<ClipboardCheck className="w-4 h-4" />}
+                >
+                  {COPY.stocktake}
+                </Button>
                 {locations.length > 1 && (
-                  <button
+                  <Button
                     type="button"
+                    variant="outline"
+                    size="default"
                     onClick={() => {
                       setTransferInitial(null);
                       setTransferOpen(true);
                     }}
                     disabled={rows.length === 0}
-                    className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 min-h-[44px] bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-sm font-bold rounded-xl shadow-2xs disabled:opacity-60 cursor-pointer flex-1 sm:flex-initial"
+                    leftIcon={<ArrowLeftRight className="w-4 h-4" />}
                   >
-                    <ArrowLeftRight className="w-4 h-4 text-slate-500" />
-                    <span>창고간 이동</span>
-                  </button>
+                    창고간 이동
+                  </Button>
                 )}
               </>
             )}
@@ -254,24 +286,21 @@ export const InventoryListView: FC = () => {
           >
             {locations.map((loc) => (
               <option key={loc.id} value={loc.id}>
-                {loc.code === 'central' ? COPY.locationCentral : loc.name}
+                {loc.name}
               </option>
             ))}
           </select>
         </label>
         {canMutate && (
-          <button
+          <Button
             type="button"
-            onClick={() => {
-              setNewLocName('');
-              setNewLocDeptId(departments[0]?.id ?? '');
-              setAddLocOpen(true);
-            }}
-            className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] text-sm font-bold text-teal-700 bg-teal-50 rounded-xl border border-teal-100"
+            variant="secondary"
+            size="default"
+            onClick={openWarehouseSettings}
+            leftIcon={<Settings className="w-4 h-4" />}
           >
-            <Plus className="w-4 h-4" />
-            {COPY.addDeptLocation}
-          </button>
+            {COPY.locationGoSettings}
+          </Button>
         )}
         <SearchField
           value={search}
@@ -290,6 +319,24 @@ export const InventoryListView: FC = () => {
           activeClassName="bg-teal-600 text-white"
         />
       </FilterBar>
+
+      {locationsLoaded && !locations.some((loc) => loc.configured) ? (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-bold text-slate-900">{COPY.locationUnsetTitle}</p>
+            <p className="text-xs text-slate-600 mt-1">{COPY.locationUnsetDescription}</p>
+          </div>
+          <Button
+            type="button"
+            variant="primary"
+            size="default"
+            onClick={openWarehouseSettings}
+            leftIcon={<Settings className="w-4 h-4" />}
+          >
+            {COPY.locationGoSettings}
+          </Button>
+        </div>
+      ) : null}
 
       {loading ? (
         <PageListSkeleton rows={3} message="목록을 불러오는 중..." />
@@ -333,43 +380,55 @@ export const InventoryListView: FC = () => {
                   {row.variantName ?? COPY.singleOption}
                 </p>
                 <div className="flex items-end justify-between gap-2 mt-3">
-                  <p className={`text-lg font-bold tabular-nums ${qtyToneClass(row.quantity)}`}>
+                  <p className={`text-lg font-bold tabular-nums ${qtyToneClass(row.quantity, row.safetyStock)}`}>
                     {row.quantity}
                     <span className="text-xs font-semibold text-slate-400 ml-1">
                       {COPY.qtyUnit}
                     </span>
                   </p>
-                    <div className="flex flex-col items-end gap-1">
-                      <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                          row.isActive
-                            ? 'bg-teal-50 text-teal-700'
-                            : 'bg-slate-100 text-slate-500'
-                        }`}
-                      >
-                        {row.isActive ? COPY.statusActive : COPY.statusInactive}
-                      </span>
-                      <div className="flex gap-2">
-                        {canMutate && (
-                          <>
-                            <button
-                              type="button"
-                              onClick={() => openAdjust(row)}
-                              className="text-xs font-bold text-slate-700 min-h-[44px] px-1"
-                            >
-                              {COPY.adjust}
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => openInbound(row)}
-                              className="text-xs font-bold text-teal-700 min-h-[44px] px-1"
-                            >
-                              {COPY.inbound}
-                            </button>
-                          </>
-                        )}
-                      </div>
+                  <div className="flex flex-col items-end gap-1">
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        row.isActive ? 'bg-teal-50 text-teal-700' : 'bg-slate-100 text-slate-500'
+                      }`}
+                    >
+                      {row.isActive ? COPY.statusActive : COPY.statusInactive}
+                    </span>
+                    <div className="flex gap-2">
+                      {canMutate && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => openAdjust(row)}
+                            className="text-xs font-bold text-slate-700 min-h-[44px] px-1"
+                          >
+                            {COPY.adjust}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => openInbound(row)}
+                            className="text-xs font-bold text-teal-700 min-h-[44px] px-1"
+                          >
+                            {COPY.inbound}
+                          </button>
+                        </>
+                      )}
                     </div>
+                  </div>
+                </div>
+                <div className="mt-3">
+                  {canMutate ? (
+                    <SafetyStockEditor
+                      value={row.safetyStock}
+                      saving={savingSafetyId === row.productId}
+                      onSave={(next) => void saveSafetyStock(row.productId, next)}
+                    />
+                  ) : (
+                    <p className="text-xs text-slate-500 tabular-nums">
+                      {COPY.safetyLabel} {row.safetyStock}
+                      {COPY.qtyUnit}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
@@ -382,6 +441,7 @@ export const InventoryListView: FC = () => {
                   <th className="px-4 py-3 font-bold">{productColumnLabel}</th>
                   <th className="px-4 py-3 font-bold">{COPY.colOption}</th>
                   <th className="px-4 py-3 font-bold text-right">{COPY.colQty}</th>
+                  <th className="px-4 py-3 font-bold">{COPY.safetyLabel}</th>
                   <th className="px-4 py-3 font-bold">{COPY.colStatus}</th>
                   <th className="px-4 py-3 font-bold text-right">관리</th>
                 </tr>
@@ -397,13 +457,25 @@ export const InventoryListView: FC = () => {
                     </td>
                     <td
                       className={`px-4 py-3 text-right font-bold tabular-nums ${qtyToneClass(
-                        row.quantity
+                        row.quantity,
+                        row.safetyStock
                       )}`}
                     >
                       {row.quantity}
                       <span className="text-xs font-semibold text-slate-400 ml-1">
                         {COPY.qtyUnit}
                       </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {canMutate ? (
+                        <SafetyStockEditor
+                          value={row.safetyStock}
+                          saving={savingSafetyId === row.productId}
+                          onSave={(next) => void saveSafetyStock(row.productId, next)}
+                        />
+                      ) : (
+                        <span className="tabular-nums font-semibold">{row.safetyStock}</span>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <span
@@ -489,90 +561,6 @@ export const InventoryListView: FC = () => {
             onError={(message) => showToast(message, 'error')}
           />
 
-          <Modal
-            isOpen={addLocOpen}
-            onClose={() => setAddLocOpen(false)}
-            title={COPY.addDeptLocationTitle}
-            maxWidth="md"
-          >
-            <form
-              className="p-4 sm:p-6 space-y-4"
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (savingLoc || !orgId) return;
-                const name = newLocName.trim();
-                if (!name) {
-                  showToast(COPY.addDeptLocationNeedName, 'error');
-                  return;
-                }
-                if (!newLocDeptId) {
-                  showToast(COPY.addDeptLocationNeedDept, 'error');
-                  return;
-                }
-                setSavingLoc(true);
-                void stockLocationService
-                  .createDepartmentLocation({
-                    organizationId: orgId,
-                    name,
-                    code: `dept_${newLocDeptId.slice(0, 8)}`,
-                    departmentId: newLocDeptId,
-                  })
-                  .then(async (created) => {
-                    showToast(`${created.name} 창고가 추가되었습니다.`, 'success');
-                    setAddLocOpen(false);
-                    await loadLocations();
-                    setSelectedLocationId(created.id);
-                  })
-                  .catch((err) => {
-                    showToast.error(err, COPY.addDeptLocationError);
-                  })
-                  .finally(() => setSavingLoc(false));
-              }}
-            >
-              <FormField label={COPY.addDeptLocationName} required>
-                <input
-                  required
-                  value={newLocName}
-                  onChange={(e) => setNewLocName(e.target.value)}
-                  className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
-                  placeholder="예: 생산1팀 자재고"
-                />
-              </FormField>
-              <FormField label={COPY.addDeptLocationDept} required>
-                <select
-                  required
-                  value={newLocDeptId}
-                  onChange={(e) => setNewLocDeptId(e.target.value)}
-                  className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
-                >
-                  <option value="" disabled>
-                    {COPY.addDeptLocationDept}
-                  </option>
-                  {departments.map((d) => (
-                    <option key={d.id} value={d.id}>
-                      {d.name}
-                    </option>
-                  ))}
-                </select>
-              </FormField>
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setAddLocOpen(false)}
-                  className="min-h-[44px] px-4 rounded-xl border border-slate-200 text-sm font-bold"
-                >
-                  {COPY.cancel}
-                </button>
-                <button
-                  type="submit"
-                  disabled={savingLoc || departments.length === 0}
-                  className="min-h-[44px] px-4 rounded-xl bg-teal-600 text-white text-sm font-bold disabled:opacity-60"
-                >
-                  {COPY.addDeptLocationSubmit}
-                </button>
-              </div>
-            </form>
-          </Modal>
         </>
       )}
 

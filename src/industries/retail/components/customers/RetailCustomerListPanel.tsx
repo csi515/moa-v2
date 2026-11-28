@@ -1,10 +1,9 @@
 import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
 import type { FC } from 'react';
-import { Users, Coins, Wallet } from 'lucide-react';
+import { Plus, Users, Coins, Wallet } from 'lucide-react';
 import type { CustomerSearchResult } from '@/core/customer/services/customerLinkService';
 import { EmptyState } from '@/shared/components';
-import { PageHeader } from '@/shared/components/ui';
-import { FilterBar, SearchField } from '@/shared/components/ui';
+import { Button, PageHeader, FilterBar, SearchField } from '@/shared/components/ui';
 import { RETAIL_CUSTOMER_COPY as COPY } from './customerCopy';
 
 interface Props {
@@ -17,6 +16,7 @@ interface Props {
   onSelect: (customer: CustomerSearchResult) => void;
   onOpenManualPoint?: () => void;
   onOpenCreditCharge?: () => void;
+  onCreate?: () => void;
 }
 
 export const RetailCustomerListPanel: FC<Props> = ({
@@ -29,6 +29,7 @@ export const RetailCustomerListPanel: FC<Props> = ({
   onSelect,
   onOpenManualPoint,
   onOpenCreditCharge,
+  onCreate,
 }) => (
   <div className="space-y-4">
     <PageHeader 
@@ -36,24 +37,21 @@ export const RetailCustomerListPanel: FC<Props> = ({
       description={COPY.listDescription}
       icon={<Users className="w-5 h-5 text-slate-800" />}
       actions={
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2">
           {onOpenCreditCharge && (
-            <button
-              onClick={onOpenCreditCharge}
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-teal-50 text-teal-800 text-xs sm:text-sm font-bold rounded-xl hover:bg-teal-100 min-h-[44px] cursor-pointer"
-            >
-              <Wallet className="w-4 h-4" />
+            <Button type="button" variant="secondary" size="default" onClick={onOpenCreditCharge} leftIcon={<Wallet className="w-4 h-4" />}>
               예치금 충전
-            </button>
+            </Button>
           )}
           {onOpenManualPoint && (
-            <button
-              onClick={onOpenManualPoint}
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold rounded-xl hover:bg-slate-100 min-h-[44px] cursor-pointer"
-            >
-              <Coins className="w-4 h-4" />
+            <Button type="button" variant="outline" size="default" onClick={onOpenManualPoint} leftIcon={<Coins className="w-4 h-4" />}>
               포인트 조정
-            </button>
+            </Button>
+          )}
+          {onCreate && (
+            <Button type="button" variant="primary" size="default" onClick={onCreate} leftIcon={<Plus className="w-4 h-4" />}>
+              {COPY.register}
+            </Button>
           )}
         </div>
       }

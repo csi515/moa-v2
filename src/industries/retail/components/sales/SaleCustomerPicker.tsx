@@ -1,10 +1,16 @@
 import { useEffect, useMemo, useState, type FC, type KeyboardEvent } from 'react';
+import { useUpdate } from '@refinedev/core';
 import { UserPlus, Check, Phone } from 'lucide-react';
 import {
   customerLinkService,
   type CustomerSearchResult,
 } from '@/core/customer/services/customerLinkService';
-import { FormField, FORM_CONTROL_CLASS, SearchField } from '@/shared/components/ui';
+import {
+  CustomerForm,
+  toCustomerWriteValues,
+  type CustomerFormValues,
+} from '@/core/customer/components/CustomerForm';
+import { Button, SearchField } from '@/shared/components/ui';
 import { SALE_POS_COPY as COPY } from './salePosCopy';
 
 interface Props {
@@ -29,9 +35,8 @@ export const SaleCustomerPicker: FC<Props> = ({
   const [results, setResults] = useState<CustomerSearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
-  const [regName, setRegName] = useState('');
-  const [regPhone, setRegPhone] = useState('');
   const [registering, setRegistering] = useState(false);
+  const { mutateAsync: updateCustomer } = useUpdate();
 
   useEffect(() => {
     let cancelled = false;
@@ -74,9 +79,9 @@ export const SaleCustomerPicker: FC<Props> = ({
     }
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (values: CustomerFormValues) => {
     if (registering) return;
-    const name = regName.trim();
+    const name = values.name.trim();
     if (!name) {
       onError(COPY.customerNeedName);
       return;
@@ -84,22 +89,36 @@ export const SaleCustomerPicker: FC<Props> = ({
 
     setRegistering(true);
     try {
+      const phoneDigits = values.phone.replace(/\D/g, '');
+      let matchedExisting = false;
+      if (phoneDigits) {
+        const found = await customerLinkService.searchCustomers(organizationId, phoneDigits, 8);
+        matchedExisting = found.some(
+          (row) => (row.phone ?? '').replace(/\D/g, '') === phoneDigits
+        );
+      }
       const id = await customerLinkService.ensureGuestCustomer({
         organizationId,
         name,
-        phone: regPhone.trim() || null,
+        phone: phoneDigits || null,
         source: 'retail_sale',
       });
+      if (!matchedExisting && (values.memo.trim() || values.tags.length > 0)) {
+        const payload = toCustomerWriteValues(values, { source: 'retail_sale', guest: true });
+        await updateCustomer({
+          resource: 'customers',
+          id,
+          values: { memo: payload.memo, metadata: payload.metadata },
+        });
+      }
       const created =
         (await customerLinkService.getCustomerById(organizationId, id)) ?? {
           id,
           name,
-          phone: regPhone.trim() || null,
+          phone: phoneDigits || null,
         };
       onChange(created);
       setRegisterOpen(false);
-      setRegName('');
-      setRegPhone('');
       setQuery('');
     } catch (err) {
       onError(err instanceof Error ? err.message : COPY.customerRegisterError);
@@ -141,13 +160,9 @@ export const SaleCustomerPicker: FC<Props> = ({
               <p className="text-xs text-slate-400 ml-5">{COPY.customerNoPhone}</p>
             )}
           </div>
-          <button
-            type="button"
-            onClick={() => onChange(null)}
-            className="shrink-0 text-xs font-bold text-slate-600 hover:text-slate-800 min-h-[44px] px-2 cursor-pointer"
-          >
+          <Button type="button" variant="ghost" size="sm" onClick={() => onChange(null)}>
             {COPY.customerClear}
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -162,46 +177,27 @@ export const SaleCustomerPicker: FC<Props> = ({
             고객 조회 및 포인트 적립
           </h3>
         </div>
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => setRegisterOpen((v) => !v)}
-          className="inline-flex items-center gap-1 text-xs font-bold text-teal-700 min-h-[36px] px-2 rounded-lg hover:bg-teal-50 cursor-pointer"
+          leftIcon={<UserPlus className="w-3.5 h-3.5" />}
         >
-          <UserPlus className="w-3.5 h-3.5" />
           {registerOpen ? COPY.customerRegisterCancel : COPY.customerRegister}
-        </button>
+        </Button>
       </div>
 
       {registerOpen ? (
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-3">
-          <FormField label={COPY.customerName} required>
-            <input
-              type="text"
-              value={regName}
-              onChange={(e) => setRegName(e.target.value)}
-              className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
-              placeholder={COPY.customerNamePlaceholder}
-              autoComplete="name"
-            />
-          </FormField>
-          <FormField label={COPY.customerPhone}>
-            <input
-              type="tel"
-              value={regPhone}
-              onChange={(e) => setRegPhone(e.target.value)}
-              className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
-              placeholder={COPY.customerPhonePlaceholder}
-              autoComplete="tel"
-            />
-          </FormField>
-          <button
-            type="button"
-            disabled={registering}
-            onClick={() => void handleRegister()}
-            className="w-full min-h-[44px] rounded-xl bg-slate-800 text-white text-sm font-bold hover:bg-slate-900 disabled:opacity-60 cursor-pointer"
-          >
-            {registering ? COPY.customerRegistering : COPY.customerRegisterSubmit}
-          </button>
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+          <CustomerForm
+            mode="create"
+            onSubmit={handleRegister}
+            onCancel={() => setRegisterOpen(false)}
+            isSubmitting={registering}
+            submitLabel={registering ? COPY.customerRegistering : COPY.customerRegisterSubmit}
+            idPrefix="sale-customer"
+          />
         </div>
       ) : (
         <div className="space-y-2">

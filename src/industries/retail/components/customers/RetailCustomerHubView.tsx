@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState, type FC } from 'react';
+import { useCallback, useMemo, useState, type FC } from 'react';
 import { Users } from 'lucide-react';
+import { useCreate, useDelete, useUpdate } from '@refinedev/core';
 import { useApp } from '@/context/AppContext';
 import { MasterDetailLayout } from '@/shared/components/layout/MasterDetailLayout';
 import {
@@ -9,7 +10,7 @@ import {
 import { pointQueryService, type PointTransaction } from '@/capabilities/commerce';
 import { creditWalletService } from '@/capabilities/credit_wallet';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
-import { isSupabaseConfigured } from '@/lib/supabase';
+import { RETAIL_CUSTOMER_COPY as COPY } from './customerCopy';
 import { saleHistoryService } from '../../services/saleHistoryService';
 import { customerPurchaseService } from '../../services/customerPurchaseService';
 import { saleReturnService } from '../../services/saleReturnService';
@@ -23,6 +24,14 @@ import { RetailCustomerListPanel } from './RetailCustomerListPanel';
 import { RetailCustomerPointsPanel } from './RetailCustomerPointsPanel';
 import { ManualPointModal } from './ManualPointModal';
 import { CreditChargeModal } from './CreditChargeModal';
+import { RetailCustomerFormHost } from './RetailCustomerFormHost';
+import { useRetailCustomerDirectory, type RetailCustomerRow } from './useRetailCustomerDirectory';
+import {
+  toCustomerFormValues,
+  toCustomerWriteValues,
+  type CustomerFormMode,
+  type CustomerFormValues,
+} from '@/core/customer/components/CustomerForm';
 
 type Panel = 'list' | 'detail' | 'points';
 
@@ -32,21 +41,23 @@ const DETAIL_RECENT_TXS = 5;
 export const RetailCustomerHubView: FC = () => {
   const { currentOrganization } = useOrganization();
   const orgId = currentOrganization?.id;
-  const { showToast } = useApp();
+  const { showToast, openConfirmDialog } = useApp();
+  const directory = useRetailCustomerDirectory(orgId);
+  const { mutate: createCustomer, mutation: createMutation } = useCreate();
+  const { mutate: updateCustomer, mutation: updateMutation } = useUpdate();
+  const { mutate: deleteCustomer, mutation: deleteMutation } = useDelete();
 
   const [panel, setPanel] = useState<Panel>('list');
-  const [loading, setLoading] = useState(true);
+  const [formMode, setFormMode] = useState<CustomerFormMode | null>(null);
 
   // --- List State ---
   const [search, setSearch] = useState('');
-  const [customers, setCustomers] = useState<CustomerSearchResult[]>([]);
-  const [balances, setBalances] = useState<Map<string, number>>(new Map());
   const [manualPointOpen, setManualPointOpen] = useState(false);
   const [creditChargeOpen, setCreditChargeOpen] = useState(false);
   const [creditChargeTarget, setCreditChargeTarget] = useState<CustomerSearchResult | null>(null);
 
   // --- Detail State ---
-  const [selectedCustomer, setSelectedCustomer] = useState<CustomerSearchResult | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<RetailCustomerRow | null>(null);
   const [detailData, setDetailData] = useState<RetailCustomerDetailData | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
 
@@ -59,35 +70,20 @@ export const RetailCustomerHubView: FC = () => {
   const [saleModalOpen, setSaleModalOpen] = useState(false);
   const [saleModalData, setSaleModalData] = useState<SaleDetailData | null>(null);
 
-  const loadList = useCallback(async () => {
-    if (!orgId || !isSupabaseConfigured()) return;
-    setLoading(true);
-    try {
-      const res = await customerLinkService.searchCustomers(orgId, '', 300);
-      setCustomers(res);
-
-      if (res.length > 0) {
-        const cids = res.map((c) => c.id);
-        const map = await pointQueryService.getPointBalances(orgId, cids);
-        setBalances(map);
-      }
-    } catch (err: any) {
-      showToast(err.message, 'error');
-    } finally {
-      setLoading(false);
-    }
-  }, [orgId, showToast]);
-
-  useEffect(() => {
-    void loadList();
-  }, [loadList]);
+  const { customers, balances, loading } = directory;
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
+    const digits = q.replace(/\D/g, '');
     if (!q) return customers;
-    return customers.filter(
-      (c) => c.name.toLowerCase().includes(q) || (c.phone && c.phone.includes(q))
-    );
+    return customers.filter((c) => {
+      const phoneDigits = (c.phone ?? '').replace(/\D/g, '');
+      return (
+        c.name.toLowerCase().includes(q) ||
+        (c.phone?.includes(q) ?? false) ||
+        (digits.length > 0 && phoneDigits.includes(digits))
+      );
+    });
   }, [customers, search]);
 
   const loadDetail = useCallback(
@@ -130,12 +126,115 @@ export const RetailCustomerHubView: FC = () => {
 
   const handleSelectCustomer = useCallback(
     (c: CustomerSearchResult) => {
-      setSelectedCustomer(c);
+      const full = customers.find((row) => row.id === c.id) ?? {
+        id: c.id,
+        name: c.name,
+        phone: c.phone,
+        memo: null,
+      };
+      setSelectedCustomer(full);
       setPanel('detail');
       void loadDetail(c.id);
     },
-    [loadDetail]
+    [customers, loadDetail]
   );
+
+  const resetSelection = useCallback(() => {
+    setSelectedCustomer(null);
+    setDetailData(null);
+    setPanel('list');
+    setFormMode(null);
+  }, []);
+
+  const handleFormSubmit = useCallback(
+    (values: CustomerFormValues) => {
+      if (!orgId || !formMode) return;
+      if (formMode === 'create') {
+        const payload = toCustomerWriteValues(values, { source: 'retail_hub' });
+        createCustomer(
+          {
+            resource: 'customers',
+            values: { ...payload, status: 'active' },
+          },
+          {
+            onSuccess: (result) => {
+              const created = result?.data as { id?: string } | undefined;
+              showToast(COPY.created, 'success');
+              setFormMode(null);
+              void directory.refetch();
+              if (created?.id) {
+                setSelectedCustomer({
+                  id: created.id,
+                  name: payload.name,
+                  phone: payload.phone,
+                  memo: payload.memo,
+                  metadata: payload.metadata,
+                });
+                setPanel('detail');
+                void loadDetail(created.id);
+              }
+            },
+            onError: (err) => showToast.error(err, COPY.saveError),
+          }
+        );
+        return;
+      }
+      if (!selectedCustomer) return;
+      const payload = toCustomerWriteValues(values, selectedCustomer.metadata);
+      updateCustomer(
+        {
+          resource: 'customers',
+          id: selectedCustomer.id,
+          values: payload,
+        },
+        {
+          onSuccess: () => {
+            showToast(COPY.updated, 'success');
+            setSelectedCustomer({
+              ...selectedCustomer,
+              name: payload.name,
+              phone: payload.phone,
+              memo: payload.memo,
+              metadata: payload.metadata,
+            });
+            setFormMode(null);
+            void directory.refetch();
+            void loadDetail(selectedCustomer.id);
+          },
+            onError: (err) => showToast.error(err, COPY.saveError),
+        }
+      );
+    },
+    [orgId, formMode, createCustomer, updateCustomer, selectedCustomer, showToast, directory, loadDetail]
+  );
+
+  const handleDelete = useCallback(() => {
+    if (!selectedCustomer) return;
+    const target = selectedCustomer;
+    openConfirmDialog({
+      title: COPY.deleteTitle,
+      message: `${target.name} — ${COPY.deleteMessage}`,
+      confirmText: COPY.deleteConfirm,
+      isDestructive: true,
+      onConfirm: () => {
+        deleteCustomer(
+          {
+            resource: 'customers',
+            id: target.id,
+            meta: { softDelete: true },
+          },
+          {
+            onSuccess: () => {
+              showToast(COPY.deleted, 'success');
+              resetSelection();
+              void directory.refetch();
+            },
+            onError: (err) => showToast.error(err, COPY.saveError),
+          }
+        );
+      },
+    });
+  }, [selectedCustomer, openConfirmDialog, deleteCustomer, showToast, resetSelection, directory]);
 
   const loadPoints = useCallback(
     async (customerId: string, _type: CustomerPointsTypeFilter) => {
@@ -200,6 +299,7 @@ export const RetailCustomerHubView: FC = () => {
         setCreditChargeTarget(null);
         setCreditChargeOpen(true);
       }}
+      onCreate={() => setFormMode('create')}
     />
   );
 
@@ -238,9 +338,12 @@ export const RetailCustomerHubView: FC = () => {
           setCreditChargeTarget(selectedCustomer);
           setCreditChargeOpen(true);
         }}
+        onEdit={() => setFormMode('edit')}
+        onDelete={handleDelete}
+        isDeleting={deleteMutation.isPending}
       />
     );
-  }, [selectedCustomer, panel, detailData, pointTypeFilter, pointLoading, pointTxs, handleOpenPoints, handleOpenSale, loadPoints, detailLoading]);
+  }, [selectedCustomer, panel, detailData, pointTypeFilter, pointLoading, pointTxs, handleOpenPoints, handleOpenSale, loadPoints, detailLoading, handleDelete, deleteMutation.isPending]);
 
   const emptyDetailContent = (
     <div className="py-24 text-center text-slate-400 space-y-3" data-testid="customer-empty-detail">
@@ -283,7 +386,7 @@ export const RetailCustomerHubView: FC = () => {
           onClose={() => setManualPointOpen(false)}
           onCompleted={() => {
             showToast('수동 포인트 지급/차감이 완료되었습니다.', 'success');
-            void loadList();
+            void directory.refreshBalances();
           }}
           onError={(msg) => showToast(msg, 'error')}
         />
@@ -304,6 +407,20 @@ export const RetailCustomerHubView: FC = () => {
           onError={(msg) => showToast(msg, 'error')}
         />
       )}
+
+      <RetailCustomerFormHost
+        open={formMode !== null}
+        mode={formMode ?? 'create'}
+        title={formMode === 'edit' ? COPY.editInfo : COPY.register}
+        initialValues={
+          formMode === 'edit' && selectedCustomer
+            ? toCustomerFormValues(selectedCustomer)
+            : undefined
+        }
+        isSubmitting={createMutation.isPending || updateMutation.isPending}
+        onClose={() => setFormMode(null)}
+        onSubmit={handleFormSubmit}
+      />
     </div>
   );
 };

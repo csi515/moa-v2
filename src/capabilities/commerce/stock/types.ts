@@ -53,6 +53,8 @@ export interface InventoryStockRow {
   variantId: string | null;
   variantName: string | null;
   quantity: number;
+  /** 상품 단위 안전재고. 옵션 행도 같은 상품 값을 쓴다. */
+  safetyStock: number;
   isActive: boolean;
   productIsActive: boolean;
   stockLocationId?: string | null;

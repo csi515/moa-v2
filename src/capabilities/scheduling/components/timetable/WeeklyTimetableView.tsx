@@ -238,10 +238,10 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="px-3.5 py-2 min-h-[44px] bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer no-print"
+                className="hidden lg:inline-flex px-3.5 py-2 min-h-[44px] bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all shadow-2xs items-center gap-1.5 cursor-pointer no-print"
               >
                 <Printer className="w-4 h-4" />
-                <span className="hidden sm:inline">인쇄</span>
+                <span>인쇄</span>
               </button>
             </div>
           }
@@ -273,10 +273,10 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-3.5 py-2 min-h-[44px] bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
+            className="hidden lg:inline-flex px-3.5 py-2 min-h-[44px] bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all shadow-2xs items-center gap-1.5 cursor-pointer"
           >
             <Printer className="w-4 h-4" />
-            <span className="hidden sm:inline">인쇄</span>
+            <span>인쇄</span>
           </button>
         </div>
       )}

@@ -304,7 +304,7 @@ export const StudentListView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => exportStudentsToCsv(filteredStudents, `${labels.customer.singular}명부_${getCurrentYearMonth()}.csv`)}
-                className="px-3 py-1.5 min-h-[36px] bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg transition-colors border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer"
+                className="hidden lg:inline-flex px-3 py-1.5 min-h-[36px] bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg transition-colors border border-slate-200 items-center justify-center gap-1.5 cursor-pointer"
                 title="현재 필터된 목록 엑셀 다운로드"
               >
                 <Download className="w-3.5 h-3.5 text-slate-500" strokeWidth={1.5} />
@@ -313,7 +313,7 @@ export const StudentListView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsBulkImportOpen(true)}
-                className="px-3 py-1.5 min-h-[36px] bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg transition-colors border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer"
+                className="hidden lg:inline-flex px-3 py-1.5 min-h-[36px] bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg transition-colors border border-slate-200 items-center justify-center gap-1.5 cursor-pointer"
               >
                 <FileSpreadsheet className="w-3.5 h-3.5 text-slate-500" strokeWidth={1.5} />
                 <span>엑셀/CSV 가져오기</span>

@@ -148,21 +148,21 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur-sm sm:px-6">
-        <div className="flex items-center gap-3">
-          <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+      <header className="sticky top-0 z-30 flex h-14 w-full max-w-full min-w-0 items-center justify-between gap-2 border-b border-slate-200 bg-white/95 px-3 sm:px-6 backdrop-blur-sm overflow-x-clip">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+          <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity shrink-0">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-900 font-bold text-white shadow-2xs">
               M
             </div>
-            <span className="text-base font-bold tracking-tight text-slate-900">
+            <span className="text-base font-bold tracking-tight text-slate-900 hidden xs:inline sm:inline">
               MOA <span className="text-[11px] font-medium text-slate-500 bg-slate-100 border border-slate-200/70 px-1.5 py-0.5 rounded">v2</span>
             </span>
           </Link>
           {currentOrganization && (
-            <div ref={orgSwitcherRef} className="relative flex items-center gap-2 border-l border-slate-200 pl-3 min-w-0">
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-slate-100 border border-slate-200/80 px-2 py-1 text-xs font-medium text-slate-700 max-w-[120px] truncate sm:max-w-xs">
+            <div ref={orgSwitcherRef} className="relative flex items-center gap-2 border-l border-slate-200 pl-2 sm:pl-3 min-w-0">
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-slate-100 border border-slate-200/80 px-2 py-1 text-xs font-medium text-slate-700 min-w-0 max-w-[40vw] sm:max-w-xs truncate">
                 <Building2 className="h-3.5 w-3.5 text-slate-400 shrink-0" strokeWidth={1.5} />
-                <span className="truncate">{currentOrganization.name}</span>
+                <span className="truncate min-w-0">{currentOrganization.name}</span>
               </span>
               <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium border border-slate-200/80 bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md">
                 <span>{badgeEmoji}</span>
@@ -241,13 +241,13 @@ export const Header: React.FC = () => {
           )}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {/* 복합 권한(사업주+고객) 보유 시 모드 전환 토글 버튼 */}
           {canAccessCustomerPortal && (
             <button
               type="button"
               onClick={handleToggleMode}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1.5 sm:px-3 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors shadow-xs shrink-0"
+              className="hidden lg:inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1.5 sm:px-3 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors shadow-xs shrink-0"
               title={isCustomerView ? "사업주 운영 모드로 전환" : "고객 이용권 모드로 전환"}
             >
               {isCustomerView ? (
@@ -294,13 +294,13 @@ export const Header: React.FC = () => {
             )}
           </button>
 
-          {/* 사업장 운영 설정 버튼 */}
+          {/* 사업장 운영 설정 / 계정 / 로그아웃 — 데스크탑 전용 (모바일 수평 오버플로우 차단) */}
           {!isCustomerView && (
             <button
               type="button"
               onClick={handleSettingsClick}
               className={cn(
-                "rounded-full p-2 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer",
+                "hidden lg:flex rounded-full p-2 transition-colors min-h-[44px] min-w-[44px] items-center justify-center cursor-pointer",
                 isSettingsActive
                   ? "bg-slate-100 text-slate-900 font-bold shadow-2xs"
                   : "text-slate-500 hover:bg-slate-100 hover:text-slate-700"
@@ -312,11 +312,11 @@ export const Header: React.FC = () => {
             </button>
           )}
 
-          <div className="flex items-center gap-2 border-l border-slate-200 pl-3">
+          <div className="hidden lg:flex items-center gap-2 border-l border-slate-200 pl-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-600">
               <User className="h-4 w-4" />
             </div>
-            <span className="hidden text-sm font-medium text-slate-700 sm:inline-block">
+            <span className="hidden text-sm font-medium text-slate-700 xl:inline-block">
               {user?.name || user?.email || "사업자"}
             </span>
             <button

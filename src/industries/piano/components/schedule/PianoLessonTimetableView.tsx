@@ -42,6 +42,8 @@ export const PianoLessonTimetableView: FC = () => {
   const [calendarView, setCalendarView] = useState<CalendarViewMode>('week');
   const [selectedDayFilter, setSelectedDayFilter] = useState<'ALL' | DayOfWeek>('ALL');
   const [moveTargetPlacement, setMoveTargetPlacement] = useState<SlotPlacement | null>(null);
+  const [collapseEmptySlots, setCollapseEmptySlots] = useState(true);
+  const [selectedStaffIds, setSelectedStaffIds] = useState<string[]>([]);
 
   const {
     useDragGrid,
@@ -241,7 +243,12 @@ export const PianoLessonTimetableView: FC = () => {
         classes={sectionClasses}
         students={students}
         pendingStudentId={pendingStudentId}
-        onSelectDay={setSelectedDay}
+        hideDayTabs
+        collapseEmptySlots={collapseEmptySlots}
+        onSelectDay={(day) => {
+          setSelectedDay(day);
+          setSelectedDayFilter(day);
+        }}
         onPickSlotForAdd={(day, startTime) => openPickerForSlot(day, startTime, sectionTeacherId, sectionRoom)}
         onPlacePending={(day, startTime) => placePending(day, startTime, sectionTeacherId, sectionRoom)}
         onRemove={handleRemove}
@@ -403,7 +410,7 @@ export const PianoLessonTimetableView: FC = () => {
           <button
             type="button"
             onClick={() => window.print()}
-            className="no-print inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition shadow-2xs cursor-pointer"
+            className="no-print hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition shadow-2xs cursor-pointer"
             title="A4 가로 시간표 인쇄"
           >
             <Printer className="w-3.5 h-3.5 text-slate-500" />
@@ -498,45 +505,78 @@ export const PianoLessonTimetableView: FC = () => {
         </div>
       )}
 
-      {/* 시간표 렌더링 (선생님별, 강의실별, 또는 전체) */}
-      {layoutMode === 'byTeacher' ? (
-        <div className="space-y-5">
-          {teacherSections.length === 0 ? (
-            <p className="text-sm text-slate-400 text-center py-8">표시할 수업이 없습니다.</p>
-          ) : (
-            teacherSections.map((section) => (
-              <section key={section.id} className="space-y-2">
-                <div className="flex items-center gap-2 px-0.5">
-                  <h3 className="text-sm font-black text-slate-900">{section.name} 선생님</h3>
-                  <span className="text-[11px] font-bold text-slate-400 tabular-nums">
-                    반 {section.classes.length}
-                  </span>
-                </div>
-                {renderTimetable(section.classes, section.id === '__none__' ? undefined : section.id)}
-              </section>
-            ))
-          )}
+      {/* 직원 모아보기 칩 바 + 빈 시간 접기 (2단 컴팩트 헤더의 직원 레인) */}
+      {(layoutMode === 'byTeacher' || layoutMode === 'week') && teachers.length > 0 && (
+        <div className="bg-white p-2 rounded-2xl border border-slate-200/80 shadow-2xs flex flex-wrap items-center gap-2 min-w-0">
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar min-w-0 flex-1">
+            <button
+              type="button"
+              onClick={() => {
+                setTeacherFilter('ALL');
+                setSelectedStaffIds([]);
+              }}
+              className={`px-2.5 py-1.5 min-h-[36px] rounded-lg text-[11px] font-bold shrink-0 border ${
+                teacherFilter === 'ALL' && selectedStaffIds.length === 0
+                  ? 'bg-slate-900 text-white border-slate-900'
+                  : 'bg-slate-50 text-slate-600 border-slate-200'
+              }`}
+            >
+              ☑ 전체
+            </button>
+            {teachers.map((tItem, idx) => {
+              const active =
+                teacherFilter === tItem.id || selectedStaffIds.includes(tItem.id);
+              const chipColors = [
+                'border-blue-200 bg-blue-50 text-blue-800',
+                'border-emerald-200 bg-emerald-50 text-emerald-800',
+                'border-slate-300 bg-slate-100 text-slate-800',
+                'border-amber-200 bg-amber-50 text-amber-800',
+              ];
+              const color = chipColors[idx % chipColors.length];
+              return (
+                <button
+                  key={tItem.id}
+                  type="button"
+                  onClick={() => {
+                    setLayoutMode('byTeacher');
+                    setTeacherFilter(tItem.id);
+                    setSelectedStaffIds([tItem.id]);
+                  }}
+                  className={`px-2.5 py-1.5 min-h-[36px] rounded-lg text-[11px] font-bold shrink-0 border ${
+                    active ? `${color} ring-1 ring-slate-300` : 'bg-white text-slate-600 border-slate-200'
+                  }`}
+                >
+                  ☑ {tItem.name}
+                </button>
+              );
+            })}
+          </div>
+          <button
+            type="button"
+            onClick={() => setCollapseEmptySlots((v) => !v)}
+            className="px-2.5 py-1.5 min-h-[36px] rounded-lg text-[11px] font-bold shrink-0 border border-slate-200 bg-slate-50 text-slate-700"
+          >
+            {collapseEmptySlots ? '빈 시간 펼치기' : '빈 시간 접기'}
+          </button>
         </div>
-      ) : layoutMode === 'byRoom' ? (
-        <div className="space-y-5">
-          {roomSections.length === 0 ? (
-            <p className="text-sm text-slate-400 text-center py-8">표시할 수업이 없습니다.</p>
-          ) : (
-            roomSections.map((section) => (
-              <section key={section.id} className="space-y-2">
-                <div className="flex items-center gap-2 px-0.5">
-                  <h3 className="text-sm font-black text-slate-900">{section.name}</h3>
-                  <span className="text-[11px] font-bold text-slate-400 tabular-nums">
-                    반 {section.classes.length}
-                  </span>
-                </div>
-                {renderTimetable(section.classes, undefined, section.name)}
-              </section>
-            ))
-          )}
-        </div>
+      )}
+
+      {/* 단일 통합 타임라인 (선생님별 세로 스택 폐기) */}
+      {layoutMode === 'byRoom' ? (
+        renderTimetable(
+          roomFilter === 'ALL'
+            ? visibleClasses
+            : visibleClasses.filter((c) => (c.room || '') === roomFilter),
+          undefined,
+          roomFilter === 'ALL' ? undefined : roomFilter
+        )
       ) : (
-        renderTimetable(visibleClasses)
+        renderTimetable(
+          teacherFilter === 'ALL'
+            ? visibleClasses
+            : visibleClasses.filter((c) => c.teacherId === teacherFilter),
+          teacherFilter === 'ALL' ? undefined : teacherFilter
+        )
       )}
 
       {/* 클릭 시 오픈되는 학생 검색 및 정기 반복 배치 모달 */}

@@ -13,6 +13,7 @@ const locs: StockLocation[] = [
     code: 'central',
     departmentId: null,
     isActive: true,
+    configured: false,
   },
   {
     id: 'loc-a',
@@ -21,6 +22,7 @@ const locs: StockLocation[] = [
     code: 'dept_a',
     departmentId: 'dept-a',
     isActive: true,
+    configured: false,
   },
   {
     id: 'loc-b',
@@ -29,6 +31,7 @@ const locs: StockLocation[] = [
     code: 'dept_b',
     departmentId: 'dept-b',
     isActive: true,
+    configured: false,
   },
 ];
 

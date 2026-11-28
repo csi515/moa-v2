@@ -17,7 +17,7 @@ import { useApp } from '@/context/AppContext';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { EmptyState, PageHeader, Modal } from '@/shared/components';
-import { FilterBar, FilterTabs, SearchField } from '@/shared/components/ui';
+import { Button, FORM_ACTION_BUTTON_CLASS, FilterBar, FilterTabs, SearchField } from '@/shared/components/ui';
 import { BarcodeLabelPrintModal, type InventoryItem } from '@/capabilities/inventory';
 import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import { cn } from '@/shared/lib/utils';
@@ -30,7 +30,7 @@ import type {
   ProductStatusFilter,
 } from '../../types/product';
 import { ProductFormModal } from './ProductFormModal';
-import { ProductCategoryManageModal } from './ProductCategoryManageModal';
+import { openRetailSettingsPanel } from '../settings/retailSettingsIntent';
 import { ProductBulkImportModal } from './ProductBulkImportModal';
 import { PRODUCT_LIST_COPY as COPY } from './productListCopy';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
@@ -38,7 +38,7 @@ import { getIndustryPreset } from '@/app/presets/presetRegistry';
 type CategoryFilter = 'ALL' | 'NONE' | string;
 
 export const ProductListView: FC = () => {
-  const { showToast, openConfirmDialog } = useApp();
+  const { showToast, openConfirmDialog, setActiveTab } = useApp();
   const { currentOrganization } = useOrganization();
   const orgId = currentOrganization?.id;
   const organizationName = currentOrganization?.name || '매장';
@@ -54,7 +54,6 @@ export const ProductListView: FC = () => {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('ALL');
   const [statusFilter, setStatusFilter] = useState<ProductStatusFilter>('ALL');
   const [formOpen, setFormOpen] = useState(false);
-  const [categoryOpen, setCategoryOpen] = useState(false);
   const [bulkImportOpen, setBulkImportOpen] = useState(false);
   const [editing, setEditing] = useState<ProductListItem | null>(null);
   const [printItem, setPrintItem] = useState<InventoryItem | null>(null);
@@ -247,31 +246,39 @@ export const ProductListView: FC = () => {
         title={COPY.title}
         description={COPY.description}
         actions={
-          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-            <button
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <Button
               type="button"
-              onClick={() => setCategoryOpen(true)}
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] bg-white border border-teal-200 text-teal-800 text-sm font-bold rounded-xl w-full sm:w-auto cursor-pointer hover:bg-teal-50"
+              variant="outline"
+              size="default"
+              onClick={() => {
+                openRetailSettingsPanel('categories');
+                setActiveTab('settings');
+              }}
+              leftIcon={<FolderOpen className="w-4 h-4" />}
             >
-              <FolderOpen className="w-4 h-4" />
               {COPY.categoryManage}
-            </button>
-            <button
+            </Button>
+            <div className="hidden lg:block">
+              <Button
+                type="button"
+                variant="outline"
+                size="default"
+                onClick={() => setBulkImportOpen(true)}
+                leftIcon={<FileSpreadsheet className="w-4 h-4" />}
+              >
+                엑셀 일괄 등록
+              </Button>
+            </div>
+            <Button
               type="button"
-              onClick={() => setBulkImportOpen(true)}
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm font-bold rounded-xl w-full sm:w-auto shadow-2xs cursor-pointer"
-            >
-              <FileSpreadsheet className="w-4 h-4 text-teal-600" />
-              엑셀 일괄 등록
-            </button>
-            <button
-              type="button"
+              variant="primary"
+              size="default"
               onClick={openCreate}
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] bg-teal-600 text-white text-sm font-bold rounded-xl w-full sm:w-auto cursor-pointer hover:bg-teal-700"
+              leftIcon={<Plus className="w-4 h-4" />}
             >
-              <Plus className="w-4 h-4" />
               {COPY.add}
-            </button>
+            </Button>
           </div>
         }
       />
@@ -367,25 +374,22 @@ export const ProductListView: FC = () => {
                   </div>
 
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <button
+                    <Button
                       type="button"
+                      variant="outline"
+                      size="sm"
+                      title="10개 즉시 입고"
                       onClick={() => {
                         setQuickInboundItem(item);
                         setQuickInboundQty('10');
                       }}
-                      className="text-xs font-bold text-teal-700 hover:bg-teal-50 min-h-[32px] px-2.5 rounded-lg border border-teal-200 bg-teal-50/50 flex items-center gap-1 cursor-pointer"
-                      title="10개 즉시 입고"
+                      leftIcon={<PlusCircle className="w-3.5 h-3.5" />}
                     >
-                      <PlusCircle className="w-3.5 h-3.5" />
-                      <span>+10</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => openEdit(item)}
-                      className="text-xs font-bold text-slate-700 hover:bg-slate-100 min-h-[32px] px-2.5 rounded-lg border border-slate-200 bg-white flex items-center cursor-pointer"
-                    >
+                      +10
+                    </Button>
+                    <Button type="button" variant="outline" size="sm" onClick={() => openEdit(item)}>
                       {COPY.edit}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </li>
@@ -432,18 +436,19 @@ export const ProductListView: FC = () => {
                             {(stockByProductId[item.id] ?? 0).toLocaleString()}개
                           </span>
                           {renderStockBadge(item.id)}
-                          <button
+                          <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
+                            title="즉시 10개 간편 입고"
                             onClick={() => {
                               setQuickInboundItem(item);
                               setQuickInboundQty('10');
                             }}
-                            className="inline-flex items-center gap-0.5 px-2 py-1 text-xs font-bold text-teal-700 bg-teal-50 border border-teal-200 rounded-lg hover:bg-teal-100 cursor-pointer transition-colors"
-                            title="즉시 10개 간편 입고"
+                            leftIcon={<PlusCircle className="w-3.5 h-3.5" />}
                           >
-                            <PlusCircle className="w-3.5 h-3.5" />
-                            <span>+10</span>
-                          </button>
+                            +10
+                          </Button>
                         </div>
                       </td>
                       {/* 인라인 빠른 가격 수정 */}
@@ -463,23 +468,27 @@ export const ProductListView: FC = () => {
                               className="w-24 px-2 py-1 bg-white border border-teal-500 rounded-lg text-right font-bold tabular-nums text-slate-900 text-sm focus:outline-none"
                               autoFocus
                             />
-                            <button
+                            <Button
                               type="button"
+                              variant="primary"
+                              size="icon-sm"
                               disabled={inlinePriceSaving}
                               onClick={() => void handleSaveInlinePrice(item)}
-                              className="p-1 rounded-md bg-teal-600 text-white hover:bg-teal-700 cursor-pointer"
                               title="저장"
+                              aria-label="가격 저장"
                             >
                               <Check className="w-3.5 h-3.5" />
-                            </button>
-                            <button
+                            </Button>
+                            <Button
                               type="button"
+                              variant="ghost"
+                              size="icon-sm"
                               onClick={() => setInlinePriceEditingId(null)}
-                              className="p-1 rounded-md text-slate-400 hover:text-slate-600 cursor-pointer"
                               title="취소"
+                              aria-label="가격 수정 취소"
                             >
                               <X className="w-3.5 h-3.5" />
-                            </button>
+                            </Button>
                           </div>
                         ) : (
                           <div
@@ -512,25 +521,22 @@ export const ProductListView: FC = () => {
                       </td>
                       <td className="p-4 text-right">
                         <div className="inline-flex items-center gap-1.5 justify-end">
-                          <button
+                          <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
+                            title="간편 입고 수량 입력"
                             onClick={() => {
                               setQuickInboundItem(item);
                               setQuickInboundQty('');
                             }}
-                            className="text-xs font-bold text-teal-700 hover:bg-teal-50 min-h-[32px] px-2.5 rounded-lg border border-teal-200 bg-teal-50/50 flex items-center gap-1 cursor-pointer"
-                            title="간편 입고 수량 입력"
+                            leftIcon={<PlusCircle className="w-3.5 h-3.5" />}
                           >
-                            <PlusCircle className="w-3.5 h-3.5" />
-                            <span>입고</span>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => openEdit(item)}
-                            className="text-xs font-bold text-slate-700 hover:bg-slate-100 min-h-[32px] px-2.5 rounded-lg border border-slate-200 bg-white flex items-center cursor-pointer"
-                          >
+                            입고
+                          </Button>
+                          <Button type="button" variant="outline" size="sm" onClick={() => openEdit(item)}>
                             {COPY.edit}
-                          </button>
+                          </Button>
                         </div>
                       </td>
                     </tr>
@@ -579,35 +585,41 @@ export const ProductListView: FC = () => {
             </div>
 
             {/* 빠른 수량 추가 버튼 */}
-            <div className="flex gap-1.5">
+            <div className="flex flex-wrap items-center gap-2">
               {[5, 10, 20, 50, 100].map((q) => (
-                <button
+                <Button
                   key={q}
                   type="button"
+                  variant="secondary"
+                  size="sm"
                   onClick={() => setQuickInboundQty(String(q))}
-                  className="flex-1 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 text-xs font-bold hover:bg-slate-100 cursor-pointer"
                 >
                   +{q}
-                </button>
+                </Button>
               ))}
             </div>
 
-            <div className="flex gap-2 pt-2">
-              <button
+            <div className="flex flex-wrap items-center justify-end gap-2 pt-2">
+              <Button
                 type="button"
+                variant="outline"
+                size="default"
+                className={FORM_ACTION_BUTTON_CLASS}
                 onClick={() => setQuickInboundItem(null)}
-                className="flex-1 min-h-[44px] rounded-xl border border-slate-200 text-sm font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
               >
                 취소
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="primary"
+                size="touch"
+                className={FORM_ACTION_BUTTON_CLASS}
                 disabled={quickInboundSaving}
+                isLoading={quickInboundSaving}
                 onClick={handleQuickInboundSubmit}
-                className="flex-1 min-h-[44px] rounded-xl bg-teal-600 text-white text-sm font-bold hover:bg-teal-700 disabled:opacity-60 cursor-pointer flex items-center justify-center gap-1"
               >
-                {quickInboundSaving ? '입고 중...' : '즉시 입고하기'}
-              </button>
+                즉시 입고하기
+              </Button>
             </div>
           </div>
         )}
@@ -636,15 +648,6 @@ export const ProductListView: FC = () => {
           void load();
         }}
         onError={(message) => showToast(message, 'error')}
-      />
-
-      <ProductCategoryManageModal
-        isOpen={categoryOpen}
-        organizationId={orgId}
-        onClose={() => setCategoryOpen(false)}
-        onChanged={() => void load()}
-        onError={(message) => showToast(message, 'error')}
-        onToast={showToast}
       />
 
       <ProductBulkImportModal

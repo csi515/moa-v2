@@ -4,6 +4,7 @@ import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 import type { TextbookSale, TextbookPayment } from '@/capabilities/commerce/textbookTypes';
 import { useApp } from '@/context/AppContext';
 import { Printer, X, CheckCircle2, FileText, Building2, Calendar, User, BookOpen, CreditCard } from 'lucide-react';
+import { formatIssuerLabel } from '@/shared/utils/formatIssuerLabel';
 
 interface TextbookReceiptModalProps {
   sale: TextbookSale;
@@ -162,9 +163,26 @@ export const TextbookReceiptModal: React.FC<TextbookReceiptModalProps> = ({
           {/* Academy Stamp & Verification */}
           <div className="pt-2 text-center text-xs text-slate-500 space-y-1">
             <p>위 금액을 정히 영수(청구)합니다.</p>
-            <p className="font-medium text-slate-700">
-              {academySettings.name || '하모니 피아노 음악학원'} 대표 {academySettings.representative || '이세진'} (인)
-            </p>
+            <div className="inline-flex items-center justify-center gap-2">
+              <p className="font-medium text-slate-700 whitespace-nowrap">
+                {formatIssuerLabel({
+                  organizationName: academySettings?.name || '학원',
+                  representative:
+                    academySettings?.representative || academySettings?.directorName || '',
+                })}
+              </p>
+              {academySettings?.sealUrl || academySettings?.stampImageUrl ? (
+                <img
+                  src={academySettings.sealUrl || academySettings.stampImageUrl}
+                  alt="직인"
+                  className="w-12 h-12 object-contain"
+                />
+              ) : (
+                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full border-2 border-rose-600 text-rose-600 font-black text-[10px]">
+                  (인)
+                </span>
+              )}
+            </div>
             <p className="text-[11px] text-slate-400">
               사업자등록번호: {academySettings.businessNumber || '214-88-99432'} | 전화: {academySettings.phone || '02-588-7723'}
             </p>

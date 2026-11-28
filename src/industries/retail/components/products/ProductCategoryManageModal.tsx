@@ -1,24 +1,22 @@
 import { useCallback, useEffect, useState, type FormEvent, type FC } from 'react';
 import { FolderOpen, Pencil, Plus } from 'lucide-react';
 import { EmptyState, Modal } from '@/shared/components';
-import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
+import { Button, FORM_ACTION_BUTTON_CLASS, FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { productService } from '../../services/productService';
 import type { ProductCategory } from '../../types/product';
 import { PRODUCT_LIST_COPY as COPY } from './productListCopy';
 
-interface Props {
-  isOpen: boolean;
+interface EditorProps {
   organizationId: string;
-  onClose: () => void;
-  onChanged: () => void;
+  active?: boolean;
+  onChanged?: () => void;
   onError: (message: string) => void;
   onToast: (message: string, type?: 'success' | 'error' | 'info' | 'warning') => void;
 }
 
-export const ProductCategoryManageModal: FC<Props> = ({
-  isOpen,
+export const ProductCategoryEditor: FC<EditorProps> = ({
   organizationId,
-  onClose,
+  active = true,
   onChanged,
   onError,
   onToast,
@@ -47,12 +45,12 @@ export const ProductCategoryManageModal: FC<Props> = ({
   }, [organizationId, onError]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!active) return;
     setNewName('');
     setEditingId(null);
     setEditName('');
     void load();
-  }, [isOpen, load]);
+  }, [active, load]);
 
   const handleAdd = async (e: FormEvent) => {
     e.preventDefault();
@@ -63,7 +61,7 @@ export const ProductCategoryManageModal: FC<Props> = ({
       setNewName('');
       onToast(COPY.categoryAdded, 'success');
       await load();
-      onChanged();
+      onChanged?.();
     } catch (err) {
       onError(err instanceof Error ? err.message : COPY.categorySaveError);
     } finally {
@@ -89,7 +87,7 @@ export const ProductCategoryManageModal: FC<Props> = ({
       cancelEdit();
       onToast(COPY.categoryRenamed, 'success');
       await load();
-      onChanged();
+      onChanged?.();
     } catch (err) {
       onError(err instanceof Error ? err.message : COPY.categorySaveError);
     } finally {
@@ -104,7 +102,7 @@ export const ProductCategoryManageModal: FC<Props> = ({
       await productService.setCategoryActive(organizationId, cat.id, !cat.isActive);
       onToast(cat.isActive ? COPY.categoryDeactivated : COPY.categoryActivated, 'success');
       await load();
-      onChanged();
+      onChanged?.();
     } catch (err) {
       onError(err instanceof Error ? err.message : COPY.categorySaveError);
     } finally {
@@ -113,8 +111,7 @@ export const ProductCategoryManageModal: FC<Props> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={COPY.categoryManageTitle} maxWidth="md">
-      <div className="p-4 sm:p-6 space-y-4">
+      <div className="space-y-4">
         <p className="text-xs text-slate-500">{COPY.categoryManageHint}</p>
 
         <form onSubmit={handleAdd} className="flex flex-col sm:flex-row gap-2">
@@ -126,14 +123,17 @@ export const ProductCategoryManageModal: FC<Props> = ({
               className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
             />
           </FormField>
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            size="default"
+            className="sm:self-end"
             disabled={!newName.trim() || busyId === 'new'}
-            className="inline-flex items-center justify-center gap-1 min-h-[44px] px-4 rounded-xl bg-teal-600 text-white text-sm font-bold disabled:opacity-60 sm:self-end"
+            isLoading={busyId === 'new'}
+            leftIcon={<Plus className="w-4 h-4" />}
           >
-            <Plus className="w-4 h-4" />
             {COPY.categoryAdd}
-          </button>
+          </Button>
         </form>
 
         {loading ? (
@@ -159,22 +159,20 @@ export const ProductCategoryManageModal: FC<Props> = ({
                       className={`${FORM_CONTROL_CLASS} min-h-[44px] flex-1`}
                       autoFocus
                     />
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={cancelEdit}
-                        className="flex-1 min-h-[44px] px-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-600"
-                      >
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button type="button" variant="outline" size="sm" onClick={cancelEdit}>
                         {COPY.cancel}
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         type="button"
+                        variant="primary"
+                        size="sm"
                         onClick={() => void saveEdit(cat.id)}
                         disabled={busyId === cat.id}
-                        className="flex-1 min-h-[44px] px-3 rounded-xl bg-teal-600 text-white text-xs font-bold disabled:opacity-60"
+                        isLoading={busyId === cat.id}
                       >
                         {COPY.save}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 ) : (
@@ -191,23 +189,25 @@ export const ProductCategoryManageModal: FC<Props> = ({
                         {cat.isActive ? COPY.categoryActive : COPY.categoryInactive}
                       </span>
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-1 shrink-0">
-                      <button
+                    <div className="flex flex-wrap items-center justify-end gap-1 shrink-0">
+                      <Button
                         type="button"
+                        variant="ghost"
+                        size="sm"
                         onClick={() => startEdit(cat)}
-                        className="inline-flex items-center justify-center gap-1 min-h-[44px] px-2 text-xs font-bold text-teal-700"
+                        leftIcon={<Pencil className="w-3.5 h-3.5" />}
                       >
-                        <Pencil className="w-3.5 h-3.5" />
                         {COPY.categoryRename}
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         type="button"
+                        variant="ghost"
+                        size="sm"
                         onClick={() => void toggleActive(cat)}
                         disabled={busyId === cat.id}
-                        className="min-h-[44px] px-2 text-xs font-bold text-slate-600 disabled:opacity-60"
                       >
                         {cat.isActive ? COPY.categoryDeactivate : COPY.categoryActivate}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 )}
@@ -215,15 +215,34 @@ export const ProductCategoryManageModal: FC<Props> = ({
             ))}
           </ul>
         )}
-
-        <button
-          type="button"
-          onClick={onClose}
-          className="w-full min-h-[44px] rounded-xl border border-slate-200 text-sm font-bold text-slate-600"
-        >
-          {COPY.cancel}
-        </button>
       </div>
-    </Modal>
   );
 };
+
+interface ModalProps extends EditorProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const ProductCategoryManageModal: FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  ...editorProps
+}) => (
+  <Modal isOpen={isOpen} onClose={onClose} title={COPY.categoryManageTitle} maxWidth="md">
+    <div className="p-4 sm:p-6 space-y-4">
+      {isOpen ? <ProductCategoryEditor {...editorProps} active={isOpen} /> : null}
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          size="default"
+          className={FORM_ACTION_BUTTON_CLASS}
+          onClick={onClose}
+        >
+          {COPY.cancel}
+        </Button>
+      </div>
+    </div>
+  </Modal>
+);

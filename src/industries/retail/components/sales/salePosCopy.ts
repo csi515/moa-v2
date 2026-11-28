@@ -7,7 +7,7 @@ import {
 export const SALE_POS_COPY = {
   title: '판매',
   description: '상품을 담고 결제수단을 선택한 뒤 판매를 완료합니다',
-  searchPlaceholder: '상품명 검색',
+  searchPlaceholder: '상품명·초성 검색',
   emptyCatalog: '판매 가능한 상품이 없습니다',
   emptyCatalogHint: '상품 메뉴에서 판매중 상품을 등록해 주세요',
   emptySearch: '검색 결과가 없습니다',

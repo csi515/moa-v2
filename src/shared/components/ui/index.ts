@@ -1,4 +1,10 @@
-export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from './Button';
+export {
+  Button,
+  FORM_ACTION_BUTTON_CLASS,
+  type ButtonProps,
+  type ButtonVariant,
+  type ButtonSize,
+} from './Button';
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from './Badge';
 export {
   Card,

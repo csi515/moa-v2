@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { TuitionInvoice } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { formatCurrency } from '@/utils/formatters';
@@ -10,6 +10,7 @@ import { TuitionService } from '@/capabilities/billing/finance';
 import { useEscapeKey } from '@/shared/hooks/useMoaHotkeys';
 import { useAsyncLock } from '@/shared/hooks/useAsyncLock';
 import { generateReceiptPdfBlob } from '@/shared/components/receipt/PdfReceiptGenerator';
+import { formatIssuerLabel } from '@/shared/utils/formatIssuerLabel';
 
 interface TuitionReceiptModalProps {
   invoice: TuitionInvoice;
@@ -24,13 +25,35 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
   const tuitionPayments = TuitionService.getTuitionPayments();
   const latestPayment = getLatestTuitionPaymentForInvoice(tuitionPayments, invoice.id);
 
-  const orgSettings = (currentOrganization?.settings ?? {}) as Record<string, any>;
+  const orgSettings = (currentOrganization?.settings ?? {}) as Record<string, unknown>;
   const orgName = currentOrganization?.name || '모아 센터';
-  const representative = orgSettings.representative || orgSettings.ownerName || '대표';
-  const businessNumber = orgSettings.businessNumber || orgSettings.biz_number || '등록번호 미등록';
-  const phone = orgSettings.phone || orgSettings.contactPhone || '-';
-  const address = orgSettings.address || orgSettings.roadAddress || '';
-  const sealUrl = orgSettings.sealUrl || orgSettings.stampImageUrl || null;
+  const representativeRaw =
+    (typeof orgSettings.representative === 'string' && orgSettings.representative) ||
+    (typeof orgSettings.ownerName === 'string' && orgSettings.ownerName) ||
+    (typeof orgSettings.directorName === 'string' && orgSettings.directorName) ||
+    '';
+  const issuerLabel = formatIssuerLabel({
+    organizationName: orgName,
+    representative: representativeRaw,
+    title: '대표',
+  });
+  const businessNumber =
+    (typeof orgSettings.businessNumber === 'string' && orgSettings.businessNumber) ||
+    (typeof orgSettings.biz_number === 'string' && orgSettings.biz_number) ||
+    '등록번호 미등록';
+  const phone =
+    (typeof orgSettings.phone === 'string' && orgSettings.phone) ||
+    (typeof orgSettings.contactPhone === 'string' && orgSettings.contactPhone) ||
+    '-';
+  const address =
+    (typeof orgSettings.address === 'string' && orgSettings.address) ||
+    (typeof orgSettings.roadAddress === 'string' && orgSettings.roadAddress) ||
+    '';
+  const sealUrl =
+    (typeof orgSettings.sealUrl === 'string' && orgSettings.sealUrl) ||
+    (typeof orgSettings.stampImageUrl === 'string' && orgSettings.stampImageUrl) ||
+    (typeof orgSettings.seal_image_url === 'string' && orgSettings.seal_image_url) ||
+    null;
 
   const receiptNo = latestPayment?.receiptNumber || `RCP-TUI-${invoice.id.slice(0, 8).toUpperCase()}`;
   const paymentDate = latestPayment?.paymentDate
@@ -84,8 +107,9 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
     });
   };
 
-  // 선언적 ESC 키 닫기 훅
   useEscapeKey(onClose);
+
+  const itemTitle = `${invoice.yearMonth} 정기 음악 수강료`;
 
   return (
     <div
@@ -96,49 +120,49 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
         onClick={(e) => e.stopPropagation()}
         className="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] cursor-default print:border-none print:shadow-none print:max-w-none print:w-full print:max-h-none"
       >
-        {/* 상단 툴바 (인쇄 시 숨김) */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 no-print">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center font-bold">
+        {/* 상단 제목 + 닫기 */}
+        <div className="px-4 sm:px-6 py-3 border-b border-slate-100 flex items-center justify-between gap-2 bg-slate-50 no-print min-w-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-8 h-8 rounded-xl bg-slate-50 text-slate-800 flex items-center justify-center font-bold shrink-0">
               <FileText className="w-4 h-4" />
             </div>
-            <div>
-              <h3 className="font-bold text-slate-800 text-sm">교육비 수강료 납입증명서</h3>
-              <p className="text-[11px] text-slate-400 font-mono">영수번호: {receiptNo}</p>
+            <div className="min-w-0">
+              <h3 className="font-bold text-slate-800 text-sm truncate">교육비 수강료 납입증명서</h3>
+              <p className="text-[11px] text-slate-400 font-mono truncate">영수번호: {receiptNo}</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleDownloadPdf}
-              disabled={isPdfGenerating}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition-colors shadow-2xs cursor-pointer min-h-[36px]"
-              title="모바일/PC PDF 파일로 직접 다운로드"
-            >
-              <Download className="w-3.5 h-3.5 text-slate-500" />
-              {isPdfGenerating ? 'PDF 생성 중...' : 'PDF 다운로드'}
-            </button>
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-xs cursor-pointer min-h-[36px]"
-            >
-              <Printer className="w-3.5 h-3.5" />
-              인쇄
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 rounded-xl transition-colors cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 rounded-xl transition-colors cursor-pointer shrink-0"
+            aria-label="닫기"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
-        {/* 인쇄 본문 영역 */}
+        {/* 독립 버튼 바 — 모바일 줄바꿈 방지 */}
+        <div className="no-print px-4 sm:px-6 py-2.5 border-b border-slate-100 grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={handleDownloadPdf}
+            disabled={isPdfGenerating}
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition-colors shadow-2xs cursor-pointer min-h-[44px] whitespace-nowrap disabled:opacity-50"
+          >
+            <Download className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+            <span className="whitespace-nowrap">{isPdfGenerating ? 'PDF 생성 중...' : 'PDF 다운로드'}</span>
+          </button>
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-bold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-xs cursor-pointer min-h-[44px] whitespace-nowrap"
+          >
+            <Printer className="w-3.5 h-3.5 shrink-0" />
+            <span className="whitespace-nowrap">인쇄</span>
+          </button>
+        </div>
+
         <div className="p-6 sm:p-8 overflow-y-auto space-y-6 text-slate-700 printable-area print:p-6">
-          {/* 헤더 타이틀 */}
           <div className="text-center pb-4 border-b-2 border-slate-900">
             <span className="text-[11px] font-bold tracking-widest text-slate-800 uppercase">
               Official Tuition Receipt
@@ -149,7 +173,6 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
             <p className="text-xs text-slate-500 mt-1">소득공제 증빙 및 학부모 제출용</p>
           </div>
 
-          {/* 메타 정보 테이블 */}
           <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-100 print:bg-white print:border-slate-300">
             <div>
               <span className="text-slate-400">발행일자:</span>{' '}
@@ -179,79 +202,81 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
             </div>
           </div>
 
-          {/* 내역 명세 테이블 */}
+          {/* 품목명 1줄 전체폭 + 금액 하단 분리 */}
           <div className="border border-slate-200 rounded-2xl overflow-hidden print:border-slate-400">
-            <table className="w-full text-xs text-left">
-              <thead className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 print:bg-slate-200">
-                <tr>
-                  <th className="py-2.5 px-3.5">수강 항목</th>
-                  <th className="py-2.5 px-3 text-right">기본 수강료</th>
-                  <th className="py-2.5 px-3 text-right">할인·감면</th>
-                  <th className="py-2.5 px-3.5 text-right">실 청구액</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 print:divide-slate-200">
-                <tr>
-                  <td className="py-3.5 px-3.5 font-medium text-slate-900">
-                    <p className="font-bold">{invoice.yearMonth} 정기 음악 수강료</p>
-                    {((invoice.textbookFee || 0) > 0 || (invoice.extraFee || 0) > 0) && (
-                      <p className="text-[11px] text-slate-400 mt-0.5">
-                        {(invoice.textbookFee || 0) > 0 ? `교재비 ₩${Number(invoice.textbookFee).toLocaleString()} 포함` : ''}
-                        {(invoice.extraFee || 0) > 0 ? ` / 부가비 ₩${Number(invoice.extraFee).toLocaleString()} 포함` : ''}
-                      </p>
-                    )}
-                  </td>
-                  <td className="py-3.5 px-3 text-right text-slate-600 font-mono">
+            <div className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 px-3.5 py-2.5 text-xs">
+              수강 항목 내역
+            </div>
+            <div className="p-3.5 space-y-3">
+              <p className="w-full text-sm font-bold text-slate-900 leading-snug">{itemTitle}</p>
+              {((invoice.textbookFee || 0) > 0 || (invoice.extraFee || 0) > 0) && (
+                <p className="text-[11px] text-slate-400">
+                  {(invoice.textbookFee || 0) > 0
+                    ? `교재비 ₩${Number(invoice.textbookFee).toLocaleString()} 포함`
+                    : ''}
+                  {(invoice.extraFee || 0) > 0
+                    ? ` / 부가비 ₩${Number(invoice.extraFee).toLocaleString()} 포함`
+                    : ''}
+                </p>
+              )}
+              <div className="grid grid-cols-3 gap-2 text-xs border-t border-slate-100 pt-3">
+                <div className="text-center">
+                  <p className="text-slate-400 mb-1 whitespace-nowrap">청구금액</p>
+                  <p className="font-mono font-semibold text-slate-700 tabular-nums">
                     {formatCurrency(invoice.baseFee || invoice.totalAmount)}
-                  </td>
-                  <td className="py-3.5 px-3 text-right text-rose-500 font-mono">
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p className="text-slate-400 mb-1 whitespace-nowrap">할인·감면</p>
+                  <p className="font-mono font-semibold text-rose-500 tabular-nums">
                     {(invoice.discountAmount ?? invoice.discount ?? 0) > 0
                       ? `-${formatCurrency(invoice.discountAmount ?? invoice.discount ?? 0)}`
                       : '-'}
-                  </td>
-                  <td className="py-3.5 px-3.5 text-right font-black text-slate-900 font-mono">
-                    {formatCurrency(invoice.totalAmount)}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p className="text-slate-400 mb-1 whitespace-nowrap">실수납액</p>
+                  <p className="font-mono font-black text-slate-900 tabular-nums">
+                    {formatCurrency(invoice.paidAmount || invoice.totalAmount)}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* 수납 요약 박스 */}
           <div className="bg-slate-50 p-4 rounded-2xl space-y-2 text-xs border border-slate-100 print:bg-white print:border-slate-300">
             <div className="flex justify-between text-slate-600">
               <span>총 청구 금액</span>
-              <span className="font-bold text-slate-800">{formatCurrency(invoice.totalAmount)}</span>
+              <span className="font-bold text-slate-800 tabular-nums">{formatCurrency(invoice.totalAmount)}</span>
             </div>
             <div className="flex justify-between items-center text-slate-700 font-bold">
               <span className="flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5 text-slate-800" />
                 실제 수납 납입액 (금회)
               </span>
-              <span className="text-sm font-black text-slate-800">
+              <span className="text-sm font-black text-slate-800 tabular-nums">
                 {formatCurrency(invoice.paidAmount)}
               </span>
             </div>
             {invoice.unpaidAmount > 0 && (
               <div className="flex justify-between text-rose-600 pt-1 border-t border-slate-200">
                 <span>미납 잔액</span>
-                <span className="font-bold">{formatCurrency(invoice.unpaidAmount)}</span>
+                <span className="font-bold tabular-nums">{formatCurrency(invoice.unpaidAmount)}</span>
               </div>
             )}
           </div>
 
-          {/* 직인 및 사업장 서명란 */}
           <div className="pt-4 text-center text-xs text-slate-600 space-y-2 border-t border-slate-200 print:border-slate-400">
             <p className="font-semibold text-slate-700">위 금액을 정히 영수·확인합니다.</p>
             <div className="relative inline-flex items-center justify-center gap-2 py-2">
-              <span className="text-base font-black text-slate-900 tracking-tight">
-                {orgName} 대표 {representative}
+              <span className="text-base font-black text-slate-900 tracking-tight whitespace-nowrap">
+                {issuerLabel}
               </span>
               {sealUrl ? (
                 <img
                   src={sealUrl}
                   alt="직인"
-                  className="w-12 h-12 object-contain inline-block ml-1"
+                  className="w-12 h-12 sm:w-14 sm:h-14 object-contain inline-block ml-1"
                 />
               ) : (
                 <span className="inline-flex items-center justify-center w-9 h-9 rounded-full border-2 border-rose-600 text-rose-600 font-black text-xs tracking-tighter ml-1 rotate-[-8deg] select-none">
@@ -259,19 +284,18 @@ export const TuitionReceiptModal: React.FC<TuitionReceiptModalProps> = ({
                 </span>
               )}
             </div>
-            <p className="text-[11px] text-slate-400 font-mono">
+            <p className="text-[11px] text-slate-400 font-mono break-keep">
               사업자등록번호: {businessNumber} | 전화: {phone}
               {address && ` | 소재지: ${address}`}
             </p>
           </div>
         </div>
 
-        {/* 하단 닫기 (인쇄 시 숨김) */}
         <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-end no-print">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
+            className="px-4 py-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer whitespace-nowrap"
           >
             닫기
           </button>

@@ -18,6 +18,7 @@ type ProductRow = {
   cost: number | string | null;
   image_url: string | null;
   is_active: boolean;
+  safety_stock?: number | string | null;
   created_at: string;
   updated_at: string;
 };
@@ -60,6 +61,7 @@ function mapProduct(row: ProductRow): Product {
     cost: toNumber(row.cost),
     imageUrl: row.image_url,
     isActive: row.is_active,
+    safetyStock: Math.max(0, Math.floor(toNumber(row.safety_stock) ?? 0)),
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -288,6 +290,12 @@ export const productService = {
       cost: input.cost == null || Number.isNaN(input.cost) ? null : Math.max(0, input.cost),
       is_active: input.isActive !== false,
     };
+    if (!productId || input.safetyStock != null) {
+      Object.assign(payload, {
+        safety_stock:
+          input.safetyStock == null ? 0 : Math.max(0, Math.floor(input.safetyStock)),
+      });
+    }
 
     let saved: ProductRow;
     if (productId) {
@@ -318,6 +326,23 @@ export const productService = {
     }
 
     return mapProduct(saved);
+  },
+
+  async updateSafetyStock(
+    organizationId: string,
+    productId: string,
+    safetyStock: number
+  ): Promise<number> {
+    const next = Math.max(0, Math.floor(safetyStock));
+    if (!Number.isFinite(next)) throw new Error('안전재고 수량을 입력해 주세요.');
+    const client = ensureClient();
+    const { error } = await client
+      .from('products')
+      .update({ safety_stock: next })
+      .eq('id', productId)
+      .eq('organization_id', organizationId);
+    if (error) throw error;
+    return next;
   },
 
   /** 기존 id 유지·갱신, 빠진 행만 삭제 */
