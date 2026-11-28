@@ -3,3 +3,4 @@
  */
 
 export * from './dynamicFieldEngine';
+export * from './fieldDefinitionService';

@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
-  Barcode,
   CheckCircle2,
   AlertTriangle,
   RotateCcw,
-  Sparkles,
   ArrowRight,
   Plus,
   Minus,
@@ -90,7 +88,7 @@ export const StocktakeAuditModal: React.FC<Props> = ({
           (item) => item.productCode && item.productCode.trim().toLowerCase() === clean
         );
         if (idx === -1) {
-          onError(`바코드 [${code}]에 일치하는 상품이 재고 목록에 없습니다.`);
+          onError('일치하는 상품이 재고 목록에 없습니다.');
           return prev;
         }
 
@@ -238,28 +236,13 @@ export const StocktakeAuditModal: React.FC<Props> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="바코드 연속 스캔 재고 실사 (Stocktake)" maxWidth="2xl">
+    <Modal isOpen={isOpen} onClose={onClose} title="재고 실사" maxWidth="2xl">
       <div className="flex flex-col max-h-[88vh]">
         {/* 상단 스캔 상태 & 통계 안내 */}
         <div className="p-4 sm:p-5 border-b border-slate-200 bg-slate-50 space-y-3">
-          {/* 바코드 감지 안내 배너 */}
-          <div className="flex items-center justify-between p-3 rounded-xl bg-teal-600 text-white shadow-sm">
-            <div className="flex items-center gap-2 text-xs font-bold">
-              <Barcode className="w-5 h-5 text-teal-200 shrink-0 animate-pulse" />
-              <div>
-                <p>무선 바코드 스캐너 상시 대기 중</p>
-                <p className="text-[11px] text-teal-100 font-normal">
-                  진열대를 돌며 바코드를 연속으로 '삑-삑' 찍으면 실사 수량이 1씩 자동 누적됩니다.
-                </p>
-              </div>
-            </div>
-            {lastScannedName && (
-              <div className="bg-white/20 px-3 py-1.5 rounded-lg text-xs font-bold text-white flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span className="truncate max-w-[200px]">{lastScannedName}</span>
-              </div>
-            )}
-          </div>
+          {lastScannedName && (
+            <p className="text-xs font-bold text-teal-700">방금 반영: {lastScannedName}</p>
+          )}
 
           {/* 실사 통계 요약 카드 */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
@@ -297,7 +280,7 @@ export const StocktakeAuditModal: React.FC<Props> = ({
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="상품명, 바코드 검색"
+                placeholder="상품명 검색"
                 className="w-full min-h-[38px] rounded-lg border border-slate-300 bg-white pl-9 pr-3 text-xs font-medium text-slate-900 focus:outline-teal-600"
               />
             </div>
@@ -355,9 +338,6 @@ export const StocktakeAuditModal: React.FC<Props> = ({
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] font-mono text-slate-400 mt-0.5">
-                      {item.productCode ? `바코드: ${item.productCode}` : '무바코드'}
-                    </p>
                   </div>
 
                   {/* 전산 재고 */}

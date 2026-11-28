@@ -9,6 +9,8 @@ import { PageHeader } from '@/shared/components';
 import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import { cn } from '@/shared/lib/utils';
 import {
+  Button,
+  FORM_ACTION_BUTTON_CLASS,
   FormField,
   FORM_CONTROL_CLASS,
   SettingsCard,
@@ -113,14 +115,9 @@ export const RetailPointsSettingsView: FC<Props> = ({ onBack }) => {
         title={COPY.pointsTitle}
         description={COPY.pointsDescription}
         actions={
-          <button
-            type="button"
-            onClick={onBack}
-            className="inline-flex items-center gap-1 min-h-[44px] px-2 text-sm font-bold text-slate-600"
-          >
-            <ArrowLeft className="w-4 h-4" />
+          <Button type="button" variant="ghost" size="default" onClick={onBack} leftIcon={<ArrowLeft className="w-4 h-4" />}>
             {COPY.back}
-          </button>
+          </Button>
         }
       />
 
@@ -197,14 +194,17 @@ export const RetailPointsSettingsView: FC<Props> = ({ onBack }) => {
         {!canEdit && <p className="text-[11px] text-amber-700">{COPY.needAdmin}</p>}
 
         {canEdit && (
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            size="touch"
+            className={FORM_ACTION_BUTTON_CLASS}
             disabled={saving}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 min-h-[48px] px-5 rounded-xl bg-teal-600 text-white text-sm font-bold disabled:opacity-60"
+            isLoading={saving}
+            leftIcon={<Save className="w-4 h-4" />}
           >
-            <Save className="w-4 h-4" />
-            {saving ? COPY.saving : COPY.save}
-          </button>
+            {COPY.save}
+          </Button>
         )}
       </form>
     </div>

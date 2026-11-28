@@ -47,6 +47,27 @@ export {
   scopeTargetId,
 } from './scopes';
 export { evaluateCustomPermission } from './permissions';
+export {
+  CANONICAL_TO_LEGACY_MATRIX,
+  matrixKeySatisfiesCanonical,
+  PERMISSION_KEY_ALIASES,
+  resolveCanonicalPermission,
+  resolveCanonicalPermissionKey,
+} from './permissionAliases';
+export {
+  canViewEntityColumn,
+  canViewSensitiveColumn,
+  getCustomerMasked,
+  listSensitiveFieldPolicies,
+  maskPhoneLocal,
+} from './fieldAclService';
+export type { MaskedCustomer, SensitiveFieldPolicy } from './fieldAclService';
+export {
+  deactivateAuthorizationGrant,
+  listOrganizationGrants,
+  upsertAuthorizationGrant,
+} from './authorizationGrantService';
+export type { GrantUpsertInput } from './authorizationGrantService';
 export { AUTH_SCOPE_TYPES, SIX_LEVEL_USER_ROLES } from './types';
 export type {
   AuthorizationGrant,

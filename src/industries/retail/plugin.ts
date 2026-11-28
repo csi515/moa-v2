@@ -6,8 +6,8 @@ import { retailExpenseCategories } from './expenseCategories';
  * 소매업 플러그인 매니페스트.
  * 권한은 OrganizationMembership.role + 기존 getAllowedTabs 재사용.
  *
- * Owner/Admin(manager): 상품·재고(변경)·판매·고객·매출·판매내역·직원·설정
- * Staff: 판매·고객·판매내역·재고(조회만) — 상품·매출·직원·설정 제외
+ * Owner/Admin(manager): 상품(재고 포함)·판매·고객·매출·판매내역·직원·설정
+ * Staff: 판매·고객·판매내역·상품(조회만) — 매출·직원·설정 제외
  */
 export const retailPluginManifest: IndustryPluginManifest = {
   id: 'retail',
@@ -83,7 +83,7 @@ export const retailPluginManifest: IndustryPluginManifest = {
   staffTabs: withNoticesTabs([
     'dashboard',
     'sales',
-    'inventory',
+    'retail',
     'members',
     'income',
     'calendar',

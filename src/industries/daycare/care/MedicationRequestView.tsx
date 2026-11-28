@@ -16,7 +16,7 @@ import { notifyBookingChange } from '@/capabilities/booking';
 
 type StatusFilter = 'ALL' | MedicationStatus;
 
-export const MedicationRequestView: FC = () => {
+export const MedicationRequestView: FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const { showToast, openConfirmDialog, currentUser } = useApp();
   const { scopeStudents } = useStaffScope();
   const refreshKey = useStorageRefresh();
@@ -159,25 +159,31 @@ export const MedicationRequestView: FC = () => {
     return 'bg-amber-50 text-amber-800';
   };
 
+  const createButton = (
+    <button
+      type="button"
+      onClick={openCreate}
+      disabled={students.length === 0}
+      className="inline-flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white text-xs font-bold"
+    >
+      <Plus className="w-4 h-4" />
+      투약 의뢰 등록
+    </button>
+  );
+
   return (
-    <div className="space-y-4 pb-4">
-      <PageHeader
-        icon={<Pill className="w-6 h-6" />}
-        iconClassName="text-sky-600"
-        title="투약 관리"
-        description="보호자 투약 의뢰를 접수하고 투약 완료를 기록합니다"
-        actions={
-          <button
-            type="button"
-            onClick={openCreate}
-            disabled={students.length === 0}
-            className="inline-flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white text-xs font-bold"
-          >
-            <Plus className="w-4 h-4" />
-            투약 의뢰 등록
-          </button>
-        }
-      />
+    <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
+      {!embedded ? (
+        <PageHeader
+          icon={<Pill className="w-6 h-6" />}
+          iconClassName="text-sky-600"
+          title="투약 관리"
+          description="보호자 투약 의뢰를 접수하고 투약 완료를 기록합니다"
+          actions={createButton}
+        />
+      ) : (
+        <div className="flex justify-end">{createButton}</div>
+      )}
 
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         <CareDateSearchBar

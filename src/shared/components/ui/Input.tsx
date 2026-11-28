@@ -11,7 +11,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const SIZE_CLASSES = {
   sm: 'min-h-[36px] h-9 text-xs px-3',
-  md: 'min-h-[44px] h-11 text-sm px-3.5',
+  md: 'min-h-[44px] h-11 text-base px-3.5',
   lg: 'min-h-[48px] h-12 text-sm sm:text-base px-4',
 };
 

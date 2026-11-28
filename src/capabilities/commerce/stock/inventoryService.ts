@@ -183,10 +183,18 @@ export const inventoryService = {
     options?: StockListOptions
   ): Promise<InventoryStockRow[]> {
     const client = ensureClient();
-    const stockLocationId = await resolveStockLocationId(
-      organizationId,
-      options?.stockLocationId
-    );
+    const allLocations = Boolean(options?.allLocations);
+    const stockLocationId = allLocations
+      ? null
+      : await resolveStockLocationId(organizationId, options?.stockLocationId);
+
+    let inventoryQuery = client
+      .from('inventory')
+      .select('id, product_id, variant_id, quantity, stock_location_id')
+      .eq('organization_id', organizationId);
+    if (stockLocationId) {
+      inventoryQuery = inventoryQuery.eq('stock_location_id', stockLocationId);
+    }
 
     const [productsRes, variantsRes, inventoryRes] = await Promise.all([
       client
@@ -195,11 +203,7 @@ export const inventoryService = {
         .eq('organization_id', organizationId)
         .order('name', { ascending: true }),
       client.from('product_variants').select('id, product_id, name, is_active'),
-      client
-        .from('inventory')
-        .select('id, product_id, variant_id, quantity, stock_location_id')
-        .eq('organization_id', organizationId)
-        .eq('stock_location_id', stockLocationId),
+      inventoryQuery,
     ]);
 
     if (productsRes.error) throw productsRes.error;
@@ -222,9 +226,12 @@ export const inventoryService = {
     for (const row of (inventoryRes.data as InventoryRow[] | null) ?? []) {
       const qty = toNumber(row.quantity);
       if (row.variant_id) {
-        qtyByVariant.set(row.variant_id, qty);
+        qtyByVariant.set(row.variant_id, (qtyByVariant.get(row.variant_id) ?? 0) + qty);
       } else if (row.product_id) {
-        qtyByProductOnly.set(row.product_id, qty);
+        qtyByProductOnly.set(
+          row.product_id,
+          (qtyByProductOnly.get(row.product_id) ?? 0) + qty
+        );
       }
     }
 

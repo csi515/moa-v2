@@ -39,7 +39,7 @@ import { mergeScopedBookingsWithInbox, useBookingFilters } from './useBookingFil
 import { useBookingForm } from './useBookingForm';
 import { enqueueTurnaroundAfterBookingEnd } from '@/capabilities/booking/domain/bookingTurnaroundBridge';
 
-export const BookingCalendarView: React.FC = () => {
+export const BookingCalendarView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const { industry, isOwner, isAdmin, isStaff } = usePermissions();
   const { currentOrganization } = useOrganization();
   const labels = useModuleLabels();
@@ -823,57 +823,63 @@ export const BookingCalendarView: React.FC = () => {
     );
   };
 
+  const headerActions = (
+    <div className="flex items-center gap-2 flex-wrap">
+      <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-1 text-xs font-bold text-slate-600">
+        <button
+          type="button"
+          onClick={() => setDisplayMode('calendar')}
+          className={`px-3 py-1.5 min-h-[36px] rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+            displayMode === 'calendar'
+              ? 'bg-white text-slate-700 shadow-2xs font-extrabold'
+              : 'hover:text-slate-900'
+          }`}
+        >
+          <Calendar className="w-4 h-4" />
+          캘린더
+        </button>
+        <button
+          type="button"
+          onClick={() => setDisplayMode('list')}
+          className={`px-3 py-1.5 min-h-[36px] rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+            displayMode === 'list'
+              ? 'bg-white text-slate-700 shadow-2xs font-extrabold'
+              : 'hover:text-slate-900'
+          }`}
+        >
+          <List className="w-4 h-4" />
+          목록
+        </button>
+      </div>
+      <button
+        type="button"
+        onClick={() => {
+          if (!classSlots && !appointment) {
+            showToast('이 업종에는 예약 규칙이 없어 등록할 수 없습니다.', 'warning');
+            return;
+          }
+          form.openCreateModal();
+        }}
+        className={`px-4 py-2.5 ${accentBtn} text-white text-sm font-bold rounded-xl min-h-[44px] cursor-pointer`}
+      >
+        + 예약 등록
+      </button>
+    </div>
+  );
+
   return (
-    <div className="space-y-4 pb-4">
-      <PageHeader
-        icon={<span className="text-xl">📅</span>}
-        iconClassName="text-teal-600"
-        title={labels.schedule.management}
-        description={`${staffLabel}별로 같은 시간이라도 따로 예약·정원·모집 마감됩니다`}
-        actions={
-          <div className="flex items-center gap-2 flex-wrap">
-            <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-1 text-xs font-bold text-slate-600">
-              <button
-                type="button"
-                onClick={() => setDisplayMode('calendar')}
-                className={`px-3 py-1.5 min-h-[36px] rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
-                  displayMode === 'calendar'
-                    ? 'bg-white text-slate-700 shadow-2xs font-extrabold'
-                    : 'hover:text-slate-900'
-                }`}
-              >
-                <Calendar className="w-4 h-4" />
-                캘린더
-              </button>
-              <button
-                type="button"
-                onClick={() => setDisplayMode('list')}
-                className={`px-3 py-1.5 min-h-[36px] rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
-                  displayMode === 'list'
-                    ? 'bg-white text-slate-700 shadow-2xs font-extrabold'
-                    : 'hover:text-slate-900'
-                }`}
-              >
-                <List className="w-4 h-4" />
-                목록
-              </button>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                if (!classSlots && !appointment) {
-                  showToast('이 업종에는 예약 규칙이 없어 등록할 수 없습니다.', 'warning');
-                  return;
-                }
-                form.openCreateModal();
-              }}
-              className={`px-4 py-2.5 ${accentBtn} text-white text-sm font-bold rounded-xl min-h-[44px] cursor-pointer`}
-            >
-              + 예약 등록
-            </button>
-          </div>
-        }
-      />
+    <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
+      {!embedded ? (
+        <PageHeader
+          icon={<span className="text-xl">📅</span>}
+          iconClassName="text-teal-600"
+          title={labels.schedule.management}
+          description={`${staffLabel}별로 같은 시간이라도 따로 예약·정원·모집 마감됩니다`}
+          actions={headerActions}
+        />
+      ) : (
+        <div className="flex justify-end">{headerActions}</div>
+      )}
 
       {/* 동료 스케줄 상호 조회 및 가시성 제어 필터 바 */}
       <div className="bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-4 shadow-2xs space-y-3">

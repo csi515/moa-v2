@@ -30,6 +30,7 @@ export const STAFF_DEFAULT_PERMISSIONS: readonly Permission[] = [
   'rooms.read',
   'staff.read',
   'reports.read',
+  'inventory.read',
 ];
 
 const STAFF_DEFAULT_SET = new Set<string>(STAFF_DEFAULT_PERMISSIONS);

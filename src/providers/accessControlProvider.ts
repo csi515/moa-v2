@@ -6,6 +6,7 @@ import { createAuthorizationApi } from "@/core/authorization/authorizationApi";
 import { isKnownPermission, isKnownScopeType } from "@/core/authorization/registry";
 import type { AuthorizationGrant, AuthScopeType, Permission } from "@/core/authorization/types";
 import type { User } from '@/core/auth/types/sessionUser';
+import { isOrgOwner } from '@/core/auth/permissionsRole';
 import { evaluateCustomPermission } from "@/core/authorization";
 import { hasStandardPermission, resolveStandardPermissionKey } from "@/core/authorization/standardPermissionKeys";
 import { canManageRoles, canTransferOwnership, evaluateMemberAccess, isRolePermissionMap } from "@/domain/permissions";
@@ -165,6 +166,24 @@ export function resolveMoaPermission(resource?: string, action?: string): Permis
     case "analytics":
       if (act === "list" || act === "show" || act === "read" || act === "export") {
         return "reports.read";
+      }
+      return null;
+
+    case "products":
+    case "inventory":
+    case "stock":
+      if (act === "list" || act === "show" || act === "read" || act === "export") {
+        return "inventory.read";
+      }
+      if (
+        act === "create" ||
+        act === "edit" ||
+        act === "delete" ||
+        act === "write" ||
+        act === "manage" ||
+        act === "import"
+      ) {
+        return "inventory.write";
       }
       return null;
 
@@ -375,7 +394,7 @@ export function createAccessControlProvider(
         resolver.listAccessGrants
       );
 
-      // 2.6 Guard Sensitive Financial / Ledger Resources for Non-Owner/Non-Admin Staff
+      // 2.6 재무·수납·정산 리소스는 사업주(owner/director) 전용 — staff grant·admin/manager 우회 금지
       const isFinancialResource = [
         "tuition_invoices",
         "billing",
@@ -389,31 +408,11 @@ export function createAccessControlProvider(
         "simple_ledgers",
       ].includes((resource || "").trim().toLowerCase());
 
-      if (isFinancialResource && role !== "owner" && role !== "admin" && role !== "manager") {
-        const hasFinancialGrant = extraGrants.some(
-          (g) => g.active && (g.permission === "finance.read" || g.permission === "sales.read" || g.permission === "sales.create")
-        );
-        const hasFinancialPerm = hasFinancialGrant || (Array.isArray(userPermissions) && userPermissions.some((p) => {
-          const perm = String(p).toLowerCase().trim();
-          return (
-            perm === "settlement:*" ||
-            perm === "settlement:view" ||
-            perm === "billing:*" ||
-            perm === "billing:invoice" ||
-            perm === "billing:collect" ||
-            perm === "finance:*" ||
-            perm === "finance:read" ||
-            perm === "sales:*" ||
-            perm === "*"
-          );
-        }));
-
-        if (!hasFinancialPerm) {
-          return {
-            can: false,
-            reason: "민감 재무 정보(수납 장부/매출 요약/미납 명부)에 접근할 수 있는 권한(settlement:*, billing:*)이 없습니다.",
-          };
-        }
+      if (isFinancialResource && !isOrgOwner(role)) {
+        return {
+          can: false,
+          reason: "민감 재무 정보(수납 장부/매출 요약/미납 명부)는 사업주(원장) 전용입니다.",
+        };
       }
 
       // 3. Resolve Target Canonical Permission (Fail-Closed)

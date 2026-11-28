@@ -30,9 +30,11 @@ import { spacePresets } from './categories/spacePresets';
 import { carePresets } from './categories/carePresets';
 import { retailPresets } from './categories/retailPresets';
 import { enterprisePresets } from './categories/enterprisePresets';
+import { mergeJsonPresetsInto } from './presetDataLoader';
 
 /**
- * 52개 전체 업종 프리셋 선언적 통합 레지스트리
+ * 52개+ 업종 프리셋 선언적 통합 레지스트리.
+ * Phase 2: src/app/presets/data JSON이 동일 id를 덮어쓴다.
  */
 export const INDUSTRY_PRESETS: Record<string, IndustryPresetDefinition> = {
   ...educationPresets,
@@ -43,6 +45,8 @@ export const INDUSTRY_PRESETS: Record<string, IndustryPresetDefinition> = {
   ...retailPresets,
   ...enterprisePresets,
 };
+
+mergeJsonPresetsInto(INDUSTRY_PRESETS);
 
 export const PRESET_ALIASES: Record<string, string> = {
   corporate_general_affairs: 'general_enterprise',

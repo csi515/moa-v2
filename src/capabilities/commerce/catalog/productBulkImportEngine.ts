@@ -219,7 +219,7 @@ export function parseProductCsv(csvContent: string): CsvParseSummary {
 export function generateSampleProductCsv(): string {
   const headers = [
     '상품명',
-    '바코드',
+    '상품코드',
     '판매가',
     '원가',
     '카테고리',

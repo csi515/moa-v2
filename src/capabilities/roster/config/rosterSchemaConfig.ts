@@ -1,5 +1,8 @@
 import { getIndustryPlugin } from '@/core/industry/registry';
-import { getCustomFieldsForIndustry } from '@/core/customer/customFields';
+import {
+  getCustomFieldsForIndustry,
+  type CustomFieldDefinition,
+} from '@/core/customer/customFields';
 import {
   getStudentLevelLabel,
   getStudentLevelOptions,
@@ -19,6 +22,8 @@ export interface RosterConfigOptions {
   staffLabel?: string;
   serviceLabel?: string;
   placeLabel?: string;
+  /** DB field_definitions 등 런타임 정의. 없으면 업종 시드 템플릿 폴백 */
+  customFields?: readonly CustomFieldDefinition[];
 }
 
 /**
@@ -31,7 +36,8 @@ export function getRosterConfigForIndustry(
   const plugin = getIndustryPlugin(industry);
   const showSchool = getShowSchoolFields(industry);
   const showPickup = getPluginFlag(plugin, 'showPickupFields');
-  const customFieldsDef = getCustomFieldsForIndustry(industry);
+  const customFieldsDef =
+    options?.customFields ?? getCustomFieldsForIndustry(industry);
 
   const entityLabel = options?.customerLabel || plugin.customerLabel || '고객';
   const staffLabel = options?.staffLabel || '강사';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useWorkUi as useApp } from '@/shared/navigation/useWorkUi';
-import { useStaffScope, useIsDesktop, useStorageRefresh } from '@/hooks';
+import { useStaffScope, useIsMdUp, useStorageRefresh } from '@/hooks';
 import { schedulingStorage } from '@/capabilities/scheduling/infrastructure/schedulingStorage';
 import { PageHeader, UnifiedScheduleCalendar, type CalendarEventItem } from '@/shared/components';
 import type { ClassItem } from '@/types/classItem';
@@ -86,7 +86,7 @@ export const WeeklyTimetableView: React.FC<WeeklyTimetableViewProps> = ({
   const [teacherFilter, setTeacherFilter] = useState('ALL');
   const [roomFilter, setRoomFilter] = useState('ALL');
   const [selectedClass, setSelectedClass] = useState<ClassItem | null>(null);
-  const isDesktop = useIsDesktop();
+  const isDesktop = useIsMdUp();
 
   const showDailyView = viewMode === 'daily' || (viewMode === 'auto' && !isDesktop);
   const showWeeklyView = viewMode === 'weekly' || (viewMode === 'auto' && isDesktop);

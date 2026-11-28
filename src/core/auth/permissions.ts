@@ -66,9 +66,17 @@ export function getAllowedTabs(
   const kind = resolveRoleAccessKind(role);
 
   if (kind === 'admin') {
+    const OWNER_ONLY_FINANCE_TABS: NavTab[] = [
+      'tuition',
+      'unpaid',
+      'finance',
+      'income',
+      'expenses',
+      'payroll',
+    ];
     const base = isOrgOwner(role)
       ? withOwnerFinanceTabs(plugin.adminTabs)
-      : plugin.adminTabs;
+      : plugin.adminTabs.filter((tab) => !OWNER_ONLY_FINANCE_TABS.includes(tab));
     return appendAccountTab(
       filterAttendancePinTab(filterIndustryNavTabs(base, industry), attendanceEnabled)
     );

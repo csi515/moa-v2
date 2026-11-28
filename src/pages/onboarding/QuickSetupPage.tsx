@@ -28,11 +28,11 @@ import {
   Factory,
   Wrench,
 } from 'lucide-react';
-import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
-import { callRpc } from '@/shared/kernel';
+import { isSupabaseConfigured } from '@/lib/supabase';
 import { createInitialDepartments } from '@/core/organizations/services/organizationService';
 import { useTenant } from '@/core/auth/context/TenantContext';
 import { applyDomainErrorToForm } from '@/core/utils/formErrorAdapter';
+import { createOrganizationWithPresetSeed } from '@/app/onboarding/organizationPresetSeed';
 import {
   listIndustryPresets,
   listMoaVisiblePresets,
@@ -46,7 +46,6 @@ import {
 import {
   getQuestionsForIndustry,
   getStandardPresetsForIndustry,
-  buildPresetPayload,
   type PresetRoleConfig,
   type PresetRoomConfig,
   type PresetOperatingHoursConfig,
@@ -61,7 +60,6 @@ import {
 import type { CapabilityId } from '@/capabilities/_shared/capabilityTypes';
 import { getCapabilityDisplayName } from '@/capabilities';
 import { OrganizationOnboardingCard } from '@/pages/organization/OrganizationOnboardingCard';
-import { mergeOpsRuntimeSettings } from '@/core/capabilities/opsRuntimeSettings';
 import { shouldAskDepartmentSetup } from '@/core/organizations/departmentScope';
 
 interface QuickSetupFormData {
@@ -155,7 +153,7 @@ const CUSTOM_MODE_CATEGORIES: Array<{
     description: '결제 청구서, 재고 관리 및 특가 이벤트',
     tools: [
       { id: 'billing_invoicing', label: '청구 / 수납 인보이스', desc: '이용료 청구서 및 수납 영수증' },
-      { id: 'inventory', label: '상품 판매 및 재고', desc: '소매 제품 입출고 및 바코드 재고' },
+      { id: 'inventory', label: '상품 판매 및 재고', desc: '소매 제품 입출고 및 재고' },
       { id: 'promotional_deal', label: '기간 한정 특가 & 이벤트', desc: '얼리버드 및 시즌 할인 스케줄러' },
       { id: 'ledger_simple', label: '간편 매출 장부', desc: '일일 수납액 및 간편 손익 집계' },
       { id: 'credit_wallet', label: '선불 충전금 크레딧', desc: '선불 적립금 충전 및 차감' },
@@ -606,61 +604,44 @@ export const QuickSetupPage: React.FC = () => {
         return r;
       });
 
-      const basePayload = buildPresetPayload(selectedIndustry, {
-        ...data,
-        name: trimmedName,
-        roles: effectiveRoles,
-        rooms: needsSpace ? rooms : (rooms.length > 0 ? rooms : undefined),
-        locker_count: needsLocker ? lockerCount : undefined,
-        operating_hours: operatingHours,
-        active_capabilities: activeCapabilitiesPayload,
-      });
-      const payload = {
-        ...basePayload,
-        custom_terms: activePreset?.terms ? {
-          'term.customer': activePreset.terms.customer,
-          'term.instructor': activePreset.terms.instructor,
-          'term.space': activePreset.terms.space,
-          'term.pass': activePreset.terms.pass,
-          'term.fee': activePreset.terms.fee,
-          'term.lesson': activePreset.terms.lesson,
-        } : undefined,
-        ...mergeOpsRuntimeSettings((basePayload as Record<string, unknown>) ?? {}, {
+      const seeded = await createOrganizationWithPresetSeed({
+        orgName: trimmedName,
+        industry: selectedIndustry,
+        formValues: {
+          ...data,
+          name: trimmedName,
+          roles: effectiveRoles,
+          rooms: needsSpace ? rooms : rooms.length > 0 ? rooms : undefined,
+          locker_count: needsLocker ? lockerCount : undefined,
+          operating_hours: operatingHours,
+          active_capabilities: activeCapabilitiesPayload,
           turnaround_buffer_minutes:
             Number((data as { turnaround_buffer_minutes?: number }).turnaround_buffer_minutes) ||
             activePreset?.facilities?.turnaroundBufferMinutes ||
             15,
-          seat_capacity_default: rooms[0]?.capacity || 1,
-          require_cleaning_checklist: true,
-        }),
-        org_chart_enabled:
-          activePreset?.defaultSettings?.org_chart_enabled === true ||
-          (shouldAskDepartmentSetup(selectedIndustry, activePreset?.category) && setupDepartments.length > 0),
-        setup_departments: shouldAskDepartmentSetup(selectedIndustry, activePreset?.category) ? setupDepartments : [],
-      };
-
-      const { data: rpcResult, error } = await callRpc<{ success?: boolean; organization_id?: string }>(getCoreClient(), 'create_organization_with_preset', {
-        p_org_name: trimmedName,
-        p_industry: selectedIndustry,
-        p_custom_config: payload,
+        },
+        settingsExtras: {
+          org_chart_enabled:
+            activePreset?.defaultSettings?.org_chart_enabled === true ||
+            (shouldAskDepartmentSetup(selectedIndustry, activePreset?.category) &&
+              setupDepartments.length > 0),
+          setup_departments: shouldAskDepartmentSetup(selectedIndustry, activePreset?.category)
+            ? setupDepartments
+            : [],
+        },
       });
-      if (error) throw new Error(error.message);
-      const result = rpcResult;
-      if (!result?.success || !result?.organization_id) {
-        throw new Error('사업장 생성 결과가 올바르지 않습니다.');
-      }
 
       // 기업/제조업 프리셋: 다중 부서 동시 인서트 (소상공인은 Auto-Skip)
       if (isEnterpriseOrManufacturing && enableDepartments && departments.length > 0) {
         try {
-          await createInitialDepartments(result.organization_id, departments);
+          await createInitialDepartments(seeded.organizationId, departments);
         } catch {
           // 부서 인서트 실패 시 기본 사업장 생성은 유지 (Graceful fallback)
         }
       }
 
       // 테넌트 즉시 전환 및 워크스페이스 이동
-      await switchTenant(result.organization_id);
+      await switchTenant(seeded.organizationId);
       navigate('/workspace');
     } catch (err: unknown) {
       const applied = applyDomainErrorToForm(err, setError, 'name');

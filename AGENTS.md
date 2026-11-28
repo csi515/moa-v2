@@ -57,10 +57,11 @@ Moa-v2의 최종 아키텍처는 다음 3개 계층으로 단일화된다. **중
 | :--- | :--- | :--- |
 | **1. 아키텍처 & 경계** | [`docs/rules/1_ARCHITECTURE_BOUNDARIES.md`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/rules/1_ARCHITECTURE_BOUNDARIES.md) | 3계층 경계, 61개 원자적 번들, 포털 격리, Shim 동결, SSOT, 공통 자산 재사용, 용어 다형성 |
 | **2. 데이터 & 보안** | [`docs/rules/2_DATA_AND_SECURITY.md`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/rules/2_DATA_AND_SECURITY.md) | Supabase RLS, 원자적 RPC, Refine 데이터 페칭, 캐시 동기화, 타임존 결정론, 비즈니스 불변성, 기능 플래그 |
-| **3. 상용 UX & 신뢰성** | [`docs/rules/3_COMMERCIAL_UX.md`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/rules/3_COMMERCIAL_UX.md) | 4-State UI, 정직한 UX, 이중 제출 락, 모바일 44px, 다역할 세션 격리, 오프라인 큐, 미저장 폼, 대량작업 리포트 |
+| **3. 상용 UX & 신뢰성** | [`docs/rules/3_COMMERCIAL_UX.md`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/rules/3_COMMERCIAL_UX.md) | 4-State UI, 정직한 UX, 이중 제출 락, 모바일 44px, **태블릿 768–1023 표준**, 데스크톱 ≥1024, 다역할 세션 격리, 오프라인 큐, 미저장 폼, 대량작업 리포트 |
 | **4. 디자인 & 모션** | [`docs/rules/4_DESIGN_AND_MOTION.md`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/rules/4_DESIGN_AND_MOTION.md) | 4-Tier 모션 위계, 고정폭 숫자(`tabular-nums`), 시맨틱 컬러 토큰 |
 | **5. 외부 연동 어댑터** | [`docs/rules/5_EXTERNAL_INTEGRATION.md`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/rules/5_EXTERNAL_INTEGRATION.md) | 포트-어댑터 패턴, PG사/알림톡 SDK 도메인 직접 import 금지 |
 | **6. 프리셋 라이프사이클** | [`docs/rules/6_PRESET_LIFECYCLE.md`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/rules/6_PRESET_LIFECYCLE.md) | 비파괴 프리셋 전환, 온보딩 멱등성, 스위치보드 데이터 보존 |
+| **7. 범용 설정·규칙 엔진** | [`docs/rules/7_AGNOSTIC_CONFIGURATION.md`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/rules/7_AGNOSTIC_CONFIGURATION.md) | 업종 if-branch 금지, 테넌트 필드/정책 DB SSOT, setupSchema 실연결, [로드맵](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/MOA_AGNOSTIC_ERP_ROADMAP.md) · [P1](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/MOA_AGNOSTIC_ERP_PHASE1_SPEC.md) · [P2](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/MOA_AGNOSTIC_ERP_PHASE2_SPEC.md) · [P3](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/MOA_AGNOSTIC_ERP_PHASE3_SPEC.md) · [P4](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/MOA_AGNOSTIC_ERP_PHASE4_SPEC.md) |
 
 ---
 

@@ -3,6 +3,8 @@ import { usePermissions } from '@/core/auth/usePermissions';
 import { useModuleLabels } from '@/core/labels';
 import { getPlaceLabel, getCustomerLabel, getFeeLabel } from '@/core/industry/industryUi';
 import { DataExportCenterCard } from './DataExportCenterCard';
+import { FieldDefinitionsSettingsCard } from './FieldDefinitionsSettingsCard';
+import { PolicySettingsCard } from './PolicySettingsCard';
 import { OrganizationBackupCard, OrganizationDangerZoneCard } from './OrganizationSettingsCards';
 import { LegalLinks } from '@/core/legal';
 
@@ -17,6 +19,9 @@ export const OrganizationDataSettingsView: FC = () => {
 
   return (
     <div className="space-y-6 max-w-4xl">
+      <FieldDefinitionsSettingsCard />
+      <PolicySettingsCard />
+
       {/* 1. 엑셀 데이터 내보내기 */}
       <DataExportCenterCard
         placeLabel={placeLabel}

@@ -42,7 +42,7 @@ const STATUS_TABS: FilterTabItem<MakeupStatus | 'all'>[] = [
   { id: 'all', label: '전체' },
 ];
 
-export const MakeupManagementView: React.FC = () => {
+export const MakeupManagementView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const { showToast } = useApp();
   const { openStudent } = useStudentNavigation();
   const refreshKey = useStorageRefresh();
@@ -187,13 +187,15 @@ export const MakeupManagementView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4 pb-4">
-      <PageHeader
-        icon={<Sparkles className="w-6 h-6" />}
-        iconClassName="text-slate-800"
-        title="보강 일정"
-        description="결석 원생의 보강 요청 접수, 잔여 보강 횟수 추적 및 일정 배정"
+    <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
+      {!embedded && (
+        <PageHeader
+          icon={<Sparkles className="w-6 h-6" />}
+          iconClassName="text-slate-800"
+          title="보강 일정"
+          description="결석 원생의 보강 요청 접수, 잔여 보강 횟수 추적 및 일정 배정"
         />
+      )}
 
       <div className="grid grid-cols-3 gap-3">
         <SummaryMetricCard label="미보강" value={`${counts.pending}건`} variant="rose" />

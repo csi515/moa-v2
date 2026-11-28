@@ -26,8 +26,7 @@ import { todayIsoLocal } from '@/shared/utils/localDate';
 import type { Teacher } from '@/types/teacher';
 import type { TeacherPayType } from '@/capabilities/billing/finance/billingLedgerTypes';
 import { payTypeLabel, payTypeRateUnitLabel, payTypeUsesUnitRate } from '@/capabilities/billing/finance/teacherPayroll';
-import { normalizeStaffGrants, type StaffGrants } from '@/core/staff/staffGrants';
-import { StaffGrantFields, emptyStaffGrants } from './StaffGrantFields';
+import { EMPTY_STAFF_GRANTS, type StaffGrants } from '@/core/staff/staffGrants';
 import { formatCurrency } from '@/utils/formatters';
 import {
   GraduationCap,
@@ -259,7 +258,6 @@ export const TeacherManagementView: React.FC = () => {
     payType: 'hourly' as TeacherPayType,
     hourlyRate: 30000,
     salary: 0,
-    grants: emptyStaffGrants(),
   });
 
   const handleOpenCreate = () => {
@@ -275,7 +273,6 @@ export const TeacherManagementView: React.FC = () => {
       payType: 'hourly',
       hourlyRate: 30000,
       salary: 0,
-      grants: emptyStaffGrants(),
     });
     setIsModalOpen(true);
   };
@@ -296,7 +293,6 @@ export const TeacherManagementView: React.FC = () => {
       payType: inferred,
       hourlyRate: t.hourlyRate || 0,
       salary: t.salary || 0,
-      grants: normalizeStaffGrants(t.grants),
     });
     setIsModalOpen(true);
   };
@@ -340,7 +336,8 @@ export const TeacherManagementView: React.FC = () => {
             ? Number(formData.hourlyRate) || 0
             : undefined,
         salary: formData.payType === 'monthly' ? Number(formData.salary) || 0 : undefined,
-        grants: formData.grants,
+        // 강사별 세부 권한 선택 UI 제거 — 저장 시 항상 비움(재무·수납 등 사업주 전용)
+        grants: EMPTY_STAFF_GRANTS,
       }
     };
 
@@ -1017,11 +1014,6 @@ export const TeacherManagementView: React.FC = () => {
                   재무 &gt; 강사정산에서 월별 실적을 확인하고 정산 확정·지출 등록을 진행합니다.
                 </p>
               </div>
-
-              <StaffGrantFields
-                value={formData.grants}
-                onChange={(grants: StaffGrants) => setFormData({ ...formData, grants })}
-              />
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">대표 색상</label>

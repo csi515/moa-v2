@@ -30,8 +30,8 @@ import {
 
 export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const { setActiveTab } = useAppNavigation();
-  const { industry, isOwner, isAdmin, canPermission } = usePermissions();
-  const hasFinanceAccess = isOwner || isAdmin || canPermission('finance.read');
+  const { industry, isOwner } = usePermissions();
+  const hasFinanceAccess = isOwner;
   const refreshKey = useStorageRefresh('finance');
   const [selectedMonth, setSelectedMonth] = useState(yearMonthLocal());
 
@@ -113,7 +113,7 @@ export const FinanceOverviewView: React.FC<{ embedded?: boolean }> = ({ embedded
         <div className="space-y-1">
           <h3 className="text-base font-bold text-slate-900">재무 요약 열람 권한 제한</h3>
           <p className="text-xs text-slate-500 leading-relaxed">
-            매출 및 수입/지출 장부 요약은 관리자 전용 정보입니다.
+            매출 및 수입/지출 장부 요약은 사업주(원장) 전용입니다.
           </p>
         </div>
       </div>

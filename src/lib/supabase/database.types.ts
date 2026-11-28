@@ -2116,6 +2116,184 @@ export interface Database {
         Update: Partial<Database['core']['Tables']['expenses']['Insert']>;
         Relationships: [];
       };
+      allocation_policies: {
+        Row: {
+          organization_id: string;
+          overbook_mode: string;
+          negative_stock_mode: string;
+          hold_ttl_seconds: number;
+          allow_waitlist: boolean;
+          enable_safety_stock_alert: boolean;
+          default_safety_stock: number;
+          metadata: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          organization_id: string;
+          overbook_mode?: string;
+          negative_stock_mode?: string;
+          hold_ttl_seconds?: number;
+          allow_waitlist?: boolean;
+          enable_safety_stock_alert?: boolean;
+          default_safety_stock?: number;
+          metadata?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['allocation_policies']['Insert']>;
+        Relationships: [];
+      };
+      tax_policies: {
+        Row: {
+          organization_id: string;
+          mode: string;
+          rate: number;
+          exempt_codes: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          organization_id: string;
+          mode?: string;
+          rate?: number;
+          exempt_codes?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['tax_policies']['Insert']>;
+        Relationships: [];
+      };
+      rounding_policies: {
+        Row: {
+          organization_id: string;
+          mode: string;
+          unit: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          organization_id: string;
+          mode?: string;
+          unit?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['rounding_policies']['Insert']>;
+        Relationships: [];
+      };
+      lifecycle_definitions: {
+        Row: {
+          id: string;
+          organization_id: string;
+          domain: string;
+          status_key: string;
+          label: string;
+          sort_order: number;
+          is_terminal: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          domain: string;
+          status_key: string;
+          label: string;
+          sort_order?: number;
+          is_terminal?: boolean;
+          created_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['lifecycle_definitions']['Insert']>;
+        Relationships: [];
+      };
+      lifecycle_transitions: {
+        Row: {
+          id: string;
+          organization_id: string;
+          domain: string;
+          from_status: string;
+          command: string;
+          to_status: string;
+          is_enabled: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          domain: string;
+          from_status: string;
+          command: string;
+          to_status: string;
+          is_enabled?: boolean;
+          created_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['lifecycle_transitions']['Insert']>;
+        Relationships: [];
+      };
+      lifecycle_side_effects: {
+        Row: {
+          id: string;
+          organization_id: string;
+          domain: string;
+          transition_command: string;
+          effect_key: string;
+          is_enabled: boolean;
+          config: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          domain: string;
+          transition_command: string;
+          effect_key: string;
+          is_enabled?: boolean;
+          config?: Json;
+          created_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['lifecycle_side_effects']['Insert']>;
+        Relationships: [];
+      };
+      field_definitions: {
+        Row: {
+          id: string;
+          organization_id: string;
+          entity_type: string;
+          key: string;
+          label: string;
+          data_type: string;
+          required: boolean;
+          placeholder: string | null;
+          description: string | null;
+          options: Json | null;
+          default_value: Json | null;
+          sort_order: number;
+          is_active: boolean;
+          deleted_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          entity_type: string;
+          key: string;
+          label: string;
+          data_type: string;
+          required?: boolean;
+          placeholder?: string | null;
+          description?: string | null;
+          options?: Json | null;
+          default_value?: Json | null;
+          sort_order?: number;
+          is_active?: boolean;
+          deleted_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['field_definitions']['Insert']>;
+        Relationships: [];
+      };
       income_entries: {
         Row: {
           id: string;
@@ -2195,6 +2373,7 @@ export interface Database {
           id: string;
           organization_id: string;
           name: string;
+          parent_id: string | null;
           is_active: boolean;
           created_at: string;
           updated_at: string;
@@ -2203,6 +2382,7 @@ export interface Database {
           id?: string;
           organization_id: string;
           name: string;
+          parent_id?: string | null;
           is_active?: boolean;
           created_at?: string;
           updated_at?: string;
@@ -2215,6 +2395,7 @@ export interface Database {
           id: string;
           organization_id: string;
           name: string;
+          spec: string | null;
           category_id: string | null;
           product_code: string | null;
           price: number;
@@ -2222,6 +2403,7 @@ export interface Database {
           image_url: string | null;
           is_active: boolean;
           safety_stock: number;
+          metadata: Json;
           created_at: string;
           updated_at: string;
         };
@@ -2229,6 +2411,7 @@ export interface Database {
           id?: string;
           organization_id: string;
           name: string;
+          spec?: string | null;
           category_id?: string | null;
           product_code?: string | null;
           price: number;
@@ -2236,6 +2419,7 @@ export interface Database {
           image_url?: string | null;
           is_active?: boolean;
           safety_stock?: number;
+          metadata?: Json;
           created_at?: string;
           updated_at?: string;
         };
@@ -3136,6 +3320,40 @@ export interface Database {
           description: string;
         };
         Update: Partial<Database['core']['Tables']['permission_catalog']['Insert']>;
+        Relationships: [];
+      };
+      permission_key_aliases: {
+        Row: {
+          legacy_key: string;
+          canonical_key: string;
+          notes: string | null;
+          created_at: string;
+        };
+        Insert: {
+          legacy_key: string;
+          canonical_key: string;
+          notes?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['permission_key_aliases']['Insert']>;
+        Relationships: [];
+      };
+      sensitive_field_policies: {
+        Row: {
+          id: string;
+          entity: string;
+          column_name: string;
+          required_permission: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          entity: string;
+          column_name: string;
+          required_permission: string;
+          created_at?: string;
+        };
+        Update: Partial<Database['core']['Tables']['sensitive_field_policies']['Insert']>;
         Relationships: [];
       };
       authorization_grants: {
@@ -6989,6 +7207,33 @@ export interface Database {
         };
         Returns: boolean;
       };
+      seed_field_definitions_from_preset: {
+        Args: {
+          p_org_id: string;
+          p_fields: Json;
+        };
+        Returns: number;
+      };
+      resolve_allocation_policy: {
+        Args: { p_org_id: string };
+        Returns: Json;
+      };
+      upsert_allocation_policy: {
+        Args: { p_org_id: string; p_patch?: Json };
+        Returns: Database['core']['Tables']['allocation_policies']['Row'];
+      };
+      resolve_tax_policy: {
+        Args: { p_org_id: string };
+        Returns: Json;
+      };
+      resolve_rounding_policy: {
+        Args: { p_org_id: string };
+        Returns: Json;
+      };
+      seed_booking_lifecycle: {
+        Args: { p_org_id: string };
+        Returns: undefined;
+      };
       clear_active_membership: {
         Args: Record<PropertyKey, never>;
         Returns: boolean;
@@ -7549,6 +7794,22 @@ export interface Database {
           p_scope_id?: string | null;
         };
         Returns: boolean;
+      };
+      resolve_canonical_permission: {
+        Args: { p_key: string };
+        Returns: string;
+      };
+      member_has_permission: {
+        Args: { p_org: string; p_key: string };
+        Returns: boolean;
+      };
+      org_rbac_scope_fail_closed: {
+        Args: { p_org: string };
+        Returns: boolean;
+      };
+      get_customer_masked: {
+        Args: { p_org_id: string; p_customer_id: string };
+        Returns: Json;
       };
       is_org_owner_or_admin: {
         Args: { org_id: string };

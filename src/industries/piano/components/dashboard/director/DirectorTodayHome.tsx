@@ -18,7 +18,6 @@ import { FavoriteMenuQuickDock } from './FavoriteMenuQuickDock';
 import { useApp } from '@/context/AppContext';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { GettingStartedQuestWidget } from '@/app/onboarding/GettingStartedQuestWidget';
-import { AcademyOpenQuestWidget } from '@/core/onboarding/AcademyOpenQuestWidget';
 import { usePermissions } from '@/core/auth/usePermissions';
 import type { NavTab } from '@/context/AppContext';
 import { mapExpectedWithDayStatus } from '../../attendance/usePianoExpectedDay';
@@ -175,8 +174,6 @@ export const DirectorTodayHome: FC = () => {
 
   return (
     <div className="space-y-3 sm:space-y-4 pb-4 max-w-5xl mx-auto w-full" data-testid="director-home">
-      <AcademyOpenQuestWidget onNavigateTab={handleQuestNavigate} />
-
       <PianoDirector3SecBriefingCard
         students={students}
         invoices={unpaidInvoices}

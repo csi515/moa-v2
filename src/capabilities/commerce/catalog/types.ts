@@ -7,6 +7,8 @@ export interface ProductCategory {
   id: string;
   organizationId: string;
   name: string;
+  /** 상위 카테고리 (NULL=루트). Phase 1은 1단 부모만 UI 지원 */
+  parentId: string | null;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -16,6 +18,8 @@ export interface Product {
   id: string;
   organizationId: string;
   name: string;
+  /** 사양/규격 (예: M6 x 20, 스테인리스). null이면 미입력 */
+  spec: string | null;
   categoryId: string | null;
   productCode: string | null;
   price: number;
@@ -24,6 +28,8 @@ export interface Product {
   isActive: boolean;
   /** 0이면 재고 부족 기준 없음 */
   safetyStock: number;
+  /** UMS/커스텀 필드 및 확장 속성 */
+  metadata: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
 }
@@ -59,6 +65,8 @@ export interface ProductSaveInput {
   /** 생성 시에만 — 레거시 카탈로그 id 보존용(선택) */
   id?: string;
   name: string;
+  /** 사양/규격. 빈 문자열이면 null로 저장 */
+  spec?: string | null;
   categoryId?: string | null;
   /** categoryId 없을 때 생성 */
   newCategoryName?: string | null;
@@ -68,6 +76,8 @@ export interface ProductSaveInput {
   isActive?: boolean;
   /** 생략하면 수정 시 기존 안전재고를 유지하고, 생성 시 0이다. */
   safetyStock?: number;
+  /** UMS metadata 병합 (undefined면 변경 없음) */
+  metadata?: Record<string, unknown>;
   /**
    * undefined: 옵션 변경 없음
    * []: 옵션 전부 제거

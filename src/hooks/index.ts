@@ -3,4 +3,11 @@ export type { StorageRefreshDomain } from './useStorageRefresh';
 export { useStudentNavigation } from './useStudentNavigation';
 export { useStaffScope } from './useStaffScope';
 export { useStaffGrants } from './useStaffGrants';
-export { useMediaQuery, useIsDesktop } from './useMediaQuery';
+export {
+  useMediaQuery,
+  useIsPhone,
+  useIsTablet,
+  useIsDesktopLayout,
+  useIsMdUp,
+  useIsDesktop,
+} from './useMediaQuery';

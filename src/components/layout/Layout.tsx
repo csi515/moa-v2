@@ -5,7 +5,6 @@ import { LayoutDashboard } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { MobileBottomDock } from "./MobileBottomDock";
 import { OmniSearchModal } from "@/core/search/components/OmniSearchModal";
-import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
 import { KeyboardShortcutsModal } from "@/core/platform/KeyboardShortcutsModal";
 import { useOptionalOrganization } from "@/core/organizations/OrganizationProvider";
 import { shouldUseModuleChrome } from "@/app/industry/resolveModuleIndustry";
@@ -112,7 +111,6 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {children}
         <OmniSearchModal />
-        <ConfirmDialog />
         <KeyboardShortcutsModal />
       </div>
     );
@@ -128,7 +126,6 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       </div>
       <MobileBottomDock />
       <OmniSearchModal />
-      <ConfirmDialog />
       <KeyboardShortcutsModal />
     </div>
   );

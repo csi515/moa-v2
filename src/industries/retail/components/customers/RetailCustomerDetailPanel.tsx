@@ -7,7 +7,7 @@ import {
   type PointTransaction,
 } from '@/capabilities/commerce';
 import type { WalletTransaction } from '@/capabilities/credit_wallet';
-import { Button, PageHeader } from '@/shared/components/ui';
+import { Button } from '@/shared/components/ui';
 import { formatCurrency } from '@/utils/formatters';
 import {
   formatSaleNumber,
@@ -70,23 +70,26 @@ export const RetailCustomerDetailPanel: FC<Props> = ({
       {COPY.detailBack}
     </Button>
 
-    <PageHeader
-      title={COPY.detailTitle}
-      description={data?.profile.name ?? ''}
-      actions={
-        onEdit ? (
-          <Button
-            type="button"
-            variant="outline"
-            size="default"
-            onClick={onEdit}
-            leftIcon={<Pencil className="w-4 h-4" />}
-          >
-            {COPY.editInfo}
-          </Button>
-        ) : null
-      }
-    />
+    {/* Master-Detail 우측: 목록 PageHeader와 중복되지 않도록 섹션 타이틀만 사용 */}
+    <div className="flex items-start justify-between gap-3">
+      <div className="min-w-0">
+        <h2 className="text-base font-bold text-slate-900 truncate">
+          {data?.profile.name || COPY.detailTitle}
+        </h2>
+        <p className="text-xs text-slate-500 mt-0.5">{COPY.detailTitle}</p>
+      </div>
+      {onEdit ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="default"
+          onClick={onEdit}
+          leftIcon={<Pencil className="w-4 h-4" />}
+        >
+          {COPY.editInfo}
+        </Button>
+      ) : null}
+    </div>
 
     {loading || !data ? (
       <p className="text-sm text-slate-500 py-8 text-center">{COPY.detailLoading}</p>

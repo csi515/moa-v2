@@ -46,6 +46,12 @@ export function parseBookingRpcError(error: { message?: string; details?: string
   if (msg.includes('NO_REMAINING_PASS_UNITS') || msg.includes('잔여 수강권')) {
     return new Error('잔여 수강권 횟수가 부족합니다.');
   }
+  if (msg.includes('CAPACITY_EXCEEDED_WAITLIST')) {
+    return new Error('예약 정원이 마감되었습니다. 대기 접수를 이용해 주세요.');
+  }
+  if (msg.includes('CAPACITY_EXCEEDED')) {
+    return new Error('예약 정원이 모두 마감되었습니다.');
+  }
   const parsed = parseResourceLockError(error);
   if (parsed.code !== 'UNKNOWN') {
     return new Error(parsed.message);

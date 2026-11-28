@@ -11,21 +11,21 @@ function run(): void {
   const main = getRetailMainTabs(retailModuleLabels);
   assert.deepEqual(
     main.map((t) => t.label),
-    ['홈', '판매', '상품', '재고', '고객']
+    ['홈', '판매', '상품', '고객']
   );
   assert.deepEqual(
     main.map((t) => t.tab),
-    ['dashboard', 'sales', 'retail', 'inventory', 'members']
+    ['dashboard', 'sales', 'retail', 'members']
   );
 
   const more = getRetailMoreTabs(retailModuleLabels);
   assert.deepEqual(
     more.map((t) => t.label),
-    ['매출', '판매내역', '시재 마감', '근무표', '매장 점검', '직원', '설정']
+    ['매출', '판매내역', '캘린더', '시재 마감', '근무표', '매장 점검', '직원', '설정']
   );
   assert.deepEqual(
     more.map((t) => t.tab),
-    ['reports', 'income', 'ledger', 'shifts', 'maintenance', 'instructors', 'settings']
+    ['reports', 'income', 'calendar', 'ledger', 'shifts', 'maintenance', 'instructors', 'settings']
   );
 
   const sections = getRetailSidebarSections(retailModuleLabels);
@@ -40,16 +40,17 @@ function run(): void {
     );
   }
 
-  // Staff 최소 권한 — 상품·매출·직원·설정 제외, 판매내역·재고(조회) 포함
+  // Staff — 상품은 조회 전용, 매출·직원·설정 제외
   const staffCore = retailPluginManifest.staffTabs.filter((t) => t !== 'notices');
   assert.deepEqual(staffCore, [
     'dashboard',
     'sales',
-    'inventory',
+    'retail',
     'members',
     'income',
+    'calendar',
   ]);
-  for (const denied of ['retail', 'reports', 'instructors', 'settings'] as const) {
+  for (const denied of ['reports', 'instructors', 'settings'] as const) {
     assert.ok(
       !retailPluginManifest.staffTabs.includes(denied),
       `staff must not have: ${denied}`

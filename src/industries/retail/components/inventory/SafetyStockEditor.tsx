@@ -1,5 +1,5 @@
 import { useEffect, useState, type FC } from 'react';
-import { Button } from '@/shared/components/ui';
+import { Button, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 
 interface Props {
   value: number;
@@ -21,17 +21,19 @@ export const SafetyStockEditor: FC<Props> = ({ value, disabled = false, saving =
 
   return (
     <div className="inline-flex items-center gap-1.5">
-      <input
-        type="number"
-        min={0}
-        step={1}
-        inputMode="numeric"
-        value={draft}
-        disabled={disabled || saving}
-        onChange={(e) => setDraft(e.target.value)}
-        aria-label="안전재고"
-        className="h-11 w-20 rounded-xl border border-slate-200 bg-white px-2 text-base font-bold tabular-nums text-slate-900"
-      />
+      <div className="w-20">
+        <input
+          type="number"
+          min={0}
+          step={1}
+          inputMode="numeric"
+          value={draft}
+          disabled={disabled || saving}
+          onChange={(e) => setDraft(e.target.value)}
+          aria-label="안전재고"
+          className={`${FORM_CONTROL_CLASS} px-2 text-center font-bold tabular-nums`}
+        />
+      </div>
       <Button
         type="button"
         variant="outline"

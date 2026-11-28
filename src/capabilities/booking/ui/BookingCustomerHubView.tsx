@@ -5,11 +5,12 @@ import { useModuleLabels } from '@/core/labels';
 import { PageHeader, SegmentedControl } from '@/shared/components';
 
 type CustomerSegment = 'members' | 'passes';
+type EmbeddedView = FC<{ embedded?: boolean }>;
 
-/** 예약형 고객 허브 — 회원/고객·이용권/관리권 */
+/** 예약형 고객 허브 — 회원/고객·이용권/관리권. 자식은 embedded로 PageHeader 중복을 막는다. */
 export const BookingCustomerHubView: FC<{
-  membersView: FC;
-  passesView: FC;
+  membersView: EmbeddedView;
+  passesView: EmbeddedView;
   membersLabel?: string;
   passesLabel?: string;
 }> = ({
@@ -48,7 +49,7 @@ export const BookingCustomerHubView: FC<{
           />
         }
       />
-      {segment === 'members' ? <MembersView /> : <PassesView />}
+      {segment === 'members' ? <MembersView embedded /> : <PassesView embedded />}
     </div>
   );
 };

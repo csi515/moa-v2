@@ -101,8 +101,10 @@ export interface StockTransferInput {
 }
 
 export interface StockListOptions {
-  /** 지정 시 해당 창고 잔량만. 미지정 시 central */
+  /** 지정 시 해당 창고 잔량만. 미지정 시 central (allLocations면 무시) */
   stockLocationId?: string | null;
+  /** true면 모든 창고 수량을 품목별로 합산 */
+  allLocations?: boolean;
 }
 
 /** sale movement: quantity 음수, reference_type=sale | textbook_sale */

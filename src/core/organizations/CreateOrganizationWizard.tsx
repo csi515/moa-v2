@@ -34,6 +34,7 @@ import {
   type OrganizationAddressValue,
 } from '@/core/address';
 import { getPostCreateNextSteps } from '@/core/help/educationCopy';
+import { createOrganizationWithPresetSeed } from './organizationPresetSeedPort';
 
 interface CreateOrganizationWizardProps {
   initialIndustryType?: IndustryType;
@@ -110,13 +111,19 @@ export const CreateOrganizationWizard: React.FC<CreateOrganizationWizardProps> =
       if (orgId) {
         await ensureOrganizationDefaultLocation(orgId);
       } else {
-        orgId = await org.createOrganization(formData.name.trim(), formData.industryType, {
-          directorName: StorageService.getActiveUser().name.trim(),
-          representativeName: StorageService.getActiveUser().name.trim(),
-          address: formatOrganizationAddress(addressParts),
+        const directorName = StorageService.getActiveUser().name.trim();
+        const addressDisplay = formatOrganizationAddress(addressParts);
+        const seeded = await createOrganizationWithPresetSeed({
+          orgName: formData.name.trim(),
+          industry: formData.industryType,
+          directorName,
           addressParts,
-          rooms: [], // 온보딩에서는 기본 생성, 상세 룸/시설 설정은 개설 이후 설정 메뉴에서 구성
+          addressDisplay,
+          formValues: {
+            rooms: [],
+          },
         });
+        orgId = seeded.organizationId;
         setCreatedOrgId(orgId);
       }
 

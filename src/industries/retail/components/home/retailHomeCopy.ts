@@ -17,6 +17,6 @@ export const RETAIL_HOME_COPY = {
   guestName: '비회원',
   qtyUnit: '개',
   goSalesHistory: '판매내역으로',
-  goInventory: '재고로',
+  goInventory: '상품에서 보기',
   moreSales: (n: number) => `외 ${n}건`,
 } as const;

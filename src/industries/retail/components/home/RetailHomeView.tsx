@@ -28,17 +28,18 @@ import {
   SALE_PAYMENT_METHOD_LABELS,
   type SaleListItem,
 } from '../../types/sale';
-import {
-  INVENTORY_LOW_STOCK_THRESHOLD,
-  type InventoryStockRow,
-} from '../../types/inventory';
+import { type InventoryStockRow } from '../../types/inventory';
 import { RETAIL_HOME_COPY as COPY } from './retailHomeCopy';
+import { openProductStockFilter } from '../products/productStockIntent';
+import { isProductLowStock } from '../products/productStockUtils';
 
 const RECENT_SALES_LIMIT = 5;
 const LOW_STOCK_LIST_LIMIT = 5;
 
 function isLowStock(row: InventoryStockRow): boolean {
-  return row.quantity <= INVENTORY_LOW_STOCK_THRESHOLD;
+  return (
+    row.quantity <= 0 || isProductLowStock(row.quantity, row.safetyStock)
+  );
 }
 
 function formatSaleTime(iso: string): string {
@@ -238,7 +239,10 @@ export const RetailHomeView: FC = () => {
 
             <button
               type="button"
-              onClick={() => setActiveTab('inventory')}
+              onClick={() => {
+                openProductStockFilter('LOW');
+                setActiveTab('retail');
+              }}
               className="min-h-[88px] rounded-2xl border border-slate-200 bg-white p-4 text-left hover:bg-slate-50 active:bg-slate-50"
             >
               <p className="text-[11px] font-bold text-slate-500 flex items-center gap-1.5">
@@ -365,7 +369,10 @@ export const RetailHomeView: FC = () => {
                 </h2>
                 <button
                   type="button"
-                  onClick={() => setActiveTab('inventory')}
+                  onClick={() => {
+                    openProductStockFilter('LOW');
+                    setActiveTab('retail');
+                  }}
                   className="text-xs font-bold text-teal-700 hover:underline"
                 >
                   {COPY.goInventory}

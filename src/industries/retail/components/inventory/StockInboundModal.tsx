@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState, useCallback, type FormEvent, type FC } from 'react';
-import { Barcode, Sparkles } from 'lucide-react';
 import { Modal } from '@/shared/components';
 import { FormField, FORM_CONTROL_CLASS } from '@/shared/components/ui';
 import { useBarcodeScanner, playScannerSound } from '@/capabilities/inventory';
@@ -47,7 +46,6 @@ export const StockInboundModal: FC<Props> = ({
   const [vendorName, setVendorName] = useState('');
   const [memo, setMemo] = useState('');
   const [saving, setSaving] = useState(false);
-  const [scannedFeedback, setScannedFeedback] = useState<string | null>(null);
 
   // 핸드스캐너(HID) 바코드 입고 자동 매칭
   const handleBarcodeScan = useCallback(
@@ -67,8 +65,6 @@ export const StockInboundModal: FC<Props> = ({
           setVariantId('');
         }
         playScannerSound('success');
-        setScannedFeedback(`${matched.productName}${matched.variantName ? ` (${matched.variantName})` : ''}`);
-        setTimeout(() => setScannedFeedback(null), 2500);
       } else {
         playScannerSound('error');
       }
@@ -206,20 +202,6 @@ export const StockInboundModal: FC<Props> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={COPY.inboundTitle} maxWidth="md">
       <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
-        {/* 바코드 스캐너 안내 및 스캔 성공 피드백 */}
-        <div className="flex items-center justify-between text-xs text-slate-500 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-          <div className="flex items-center gap-2">
-            <Barcode className="w-4 h-4 text-teal-600" />
-            <span>바코드 스캐너를 비추면 해당 품목이 자동 선택됩니다.</span>
-          </div>
-          {scannedFeedback && (
-            <span className="inline-flex items-center gap-1 font-bold text-teal-700 bg-teal-100 px-2 py-0.5 rounded-full animate-pulse">
-              <Sparkles className="w-3 h-3" />
-              {scannedFeedback} 선택됨
-            </span>
-          )}
-        </div>
-
         <FormField label={COPY.inboundProduct} required>
           <select
             required

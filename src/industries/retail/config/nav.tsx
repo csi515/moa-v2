@@ -14,7 +14,6 @@ import {
   Receipt,
   UserCog,
   Settings,
-  Warehouse,
   BookOpenCheck,
   CalendarDays,
   ClipboardList,
@@ -23,14 +22,13 @@ import {
 
 const icon = (node: ReactNode) => node;
 
-/** 홈 · 판매 · 상품 · 재고 · 고객 · (더보기: 매출·판매내역·시재·직원·설정) */
+/** 홈 · 판매 · 상품 · 고객 · (더보기: 매출·판매내역·시재·직원·설정) */
 export function getRetailSidebarSections(labels: ModuleLabels): NavMenuSection[] {
   return [
     buildNavSection('업무', [
       { tab: 'dashboard', label: '홈', icon: icon(<LayoutDashboard className="w-4 h-4" />) },
       { tab: 'sales', label: '판매', icon: icon(<ShoppingCart className="w-4 h-4" />) },
       { tab: 'retail', label: '상품', icon: icon(<Package className="w-4 h-4" />) },
-      { tab: 'inventory', label: '재고', icon: icon(<Warehouse className="w-4 h-4" />) },
       {
         tab: 'members',
         label: labels.customer.singular,
@@ -55,12 +53,12 @@ export function getRetailSidebarSections(labels: ModuleLabels): NavMenuSection[]
 }
 
 /**
- * 유통 POS는 판매·상품·재고·고객이 모두 카운터 핵심이라
- * 권장 4개를 넘긴다.
+ * 유통 POS는 판매·상품·고객이 카운터 핵심이다.
+ * 재고는 상품 화면의 창고·부족 필터로 본다.
  */
 export const RETAIL_MOBILE_MAIN = defineMobileMainNav({
-  tabs: ['dashboard', 'sales', 'retail', 'inventory', 'members'],
-  reason: '판매·상품·재고·고객이 카운터 핵심이라 권장 4개를 넘긴다.',
+  tabs: ['dashboard', 'sales', 'retail', 'members'],
+  reason: '판매·상품·고객이 카운터 핵심이고 재고는 상품 화면에 합쳤다.',
 });
 
 export function getRetailMainTabs(labels: ModuleLabels): NavMenuItem[] {
@@ -68,7 +66,6 @@ export function getRetailMainTabs(labels: ModuleLabels): NavMenuItem[] {
     { tab: 'dashboard', label: '홈', icon: icon(<LayoutDashboard className="w-5 h-5" />) },
     { tab: 'sales', label: '판매', icon: icon(<ShoppingCart className="w-5 h-5" />) },
     { tab: 'retail', label: '상품', icon: icon(<ShoppingBag className="w-5 h-5" />) },
-    { tab: 'inventory', label: '재고', icon: icon(<Warehouse className="w-5 h-5" />) },
     {
       tab: 'members',
       label: labels.customer.singular,

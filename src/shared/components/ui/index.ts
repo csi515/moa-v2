@@ -26,6 +26,7 @@ export { SummaryMetricCard } from './SummaryMetricCard';
 export { ToggleSwitch } from './ToggleSwitch';
 export { AccordionSection } from './AccordionSection';
 export { SettingsCard } from './SettingsCard';
+export { SettingsNavTile } from './SettingsNavTile';
 export { FormField, FORM_CONTROL_CLASS, FORM_CONTROL_ERROR_CLASS } from './FormField';
 export {
   Skeleton,

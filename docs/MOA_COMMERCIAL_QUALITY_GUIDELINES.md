@@ -132,6 +132,35 @@ export const MemberListSection: React.FC = () => {
 
 ---
 
+## 5.1 태블릿 프로덕션 레이아웃 (Tablet Production Layout)
+
+상세 규범은 [`docs/rules/3_COMMERCIAL_UX.md`](./rules/3_COMMERCIAL_UX.md) §5를 따른다. 요약:
+
+| 티어 | 너비 | 앱 크롬 | 콘텐츠 |
+| :--- | :--- | :--- | :--- |
+| Phone | `<768` | 하단 독, 패널 전환 | 1열 카드 |
+| **Tablet** | **768–1023** | **폰과 동일** (사이드바·스플릿 없음) | **md 2열·테이블** |
+| Desktop | `≥1024` | 사이드바 + Master-Detail 스플릿 | 다열·와이드 컨테이너 |
+
+```tsx
+import { useIsTablet, useIsDesktopLayout } from '@/hooks';
+import { VIEWPORT_BREAKPOINTS, classifyViewportWidth } from '@/shared/styles/density';
+
+// 사이드바/스플릿: Desktop만
+const showSplit = useIsDesktopLayout(); // ≥1024
+
+// 태블릿 전용 밀도 조정
+const isTablet = useIsTablet(); // 768–1023
+
+// 순수 함수 (테스트·E2E)
+classifyViewportWidth(768); // 'tablet'
+```
+
+- E2E 기준 뷰포트: **768×1024**.
+- `useIsDesktop()`는 md(768+) 레거시 별칭이므로, 신규 코드에서 데스크톱 크롬 판별에 사용하지 않는다.
+
+---
+
 ## 6. 회복 탄력적 에러 핸들링 및 가시성 (Resilient Observability)
 
 1. **기술 용어 숨김 및 번역**:

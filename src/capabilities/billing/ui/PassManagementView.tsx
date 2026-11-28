@@ -51,6 +51,8 @@ export interface PassManagementConfig {
 
 export interface PassManagementViewProps extends PassManagementConfig {
   config?: PassManagementConfig;
+  /** 허브 등 상위 PageHeader가 있을 때 자식 제목바 생략 */
+  embedded?: boolean;
 }
 
 const DEFAULT_CONFIG: Required<PassManagementConfig> = {
@@ -72,7 +74,7 @@ const DEFAULT_CONFIG: Required<PassManagementConfig> = {
 };
 
 export const PassManagementView: React.FC<PassManagementViewProps> = (props) => {
-  const { config: explicitConfig, ...directProps } = props;
+  const { config: explicitConfig, embedded = false, ...directProps } = props;
   const { t } = useTerminology();
 
   const cfg: Required<PassManagementConfig> = useMemo(() => {
@@ -232,24 +234,30 @@ export const PassManagementView: React.FC<PassManagementViewProps> = (props) => 
     showToast(`${cfg.passName}을 취소했습니다.`, 'info');
   };
 
+  const createButton = (
+    <button
+      type="button"
+      onClick={openCreate}
+      className={`inline-flex items-center gap-1.5 px-4 py-2.5 ${cfg.accent} ${cfg.accentHover} text-white text-sm font-bold rounded-xl min-h-[44px] cursor-pointer shadow-xs transition-colors`}
+    >
+      <Plus className="w-4 h-4" />
+      <span>{cfg.createLabel}</span>
+    </button>
+  );
+
   return (
-    <div className="space-y-4 pb-4">
-      <PageHeader
-        icon={<Ticket className="w-5 h-5" />}
-        iconClassName={cfg.accentText}
-        title={cfg.title}
-        description={cfg.description}
-        actions={
-          <button
-            type="button"
-            onClick={openCreate}
-            className={`inline-flex items-center gap-1.5 px-4 py-2.5 ${cfg.accent} ${cfg.accentHover} text-white text-sm font-bold rounded-xl min-h-[44px] cursor-pointer shadow-xs transition-colors`}
-          >
-            <Plus className="w-4 h-4" />
-            <span>{cfg.createLabel}</span>
-          </button>
-        }
-      />
+    <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
+      {!embedded ? (
+        <PageHeader
+          icon={<Ticket className="w-5 h-5" />}
+          iconClassName={cfg.accentText}
+          title={cfg.title}
+          description={cfg.description}
+          actions={createButton}
+        />
+      ) : (
+        <div className="flex justify-end">{createButton}</div>
+      )}
 
       <FilterTabs tabs={FILTERS} active={filter} onChange={setFilter} activeClassName={cfg.filterActive} />
 

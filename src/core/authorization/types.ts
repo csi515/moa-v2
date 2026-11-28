@@ -32,7 +32,10 @@ export type Permission =
   | 'staff.read'
   | 'staff.manage'
   | 'reports.read'
-  | 'finance.read';
+  | 'finance.read'
+  | 'inventory.read'
+  | 'inventory.write'
+  | 'org.manage';
 
 /** core.authorization_grants 행. organization grant는 하위 scope를 포함한다. */
 export type AuthorizationGrant = {
@@ -51,11 +54,14 @@ export type EvaluatePermissionInput = {
   /**
    * 해당 scope_type 배정 목록.
    * null/빈 배열은 배정 없음 → 전 범위 (core.has_permission 과 동일).
+   * scopeFailClosed=true 이면 배정 없음 → 거부 (org settings.rbac.scope_fail_closed).
    */
   assignedLocationIds?: readonly string[] | null;
   assignedCustomerIds?: readonly string[] | null;
   assignedResourceIds?: readonly string[] | null;
   extraGrants?: readonly AuthorizationGrant[] | null;
+  /** Phase 4 옵트인: 스코프 미배정 시 fail-closed */
+  scopeFailClosed?: boolean;
 };
 
 /** 6단계 확장 사용자 역할 체계 */

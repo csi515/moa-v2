@@ -17,6 +17,9 @@ export const PERMISSION_DEFINITIONS: readonly PermissionDefinition[] = [
   { key: 'staff.manage', resource: 'staff', action: 'manage', description: '직원 관리' },
   { key: 'reports.read', resource: 'reports', action: 'read', description: '리포트 조회' },
   { key: 'finance.read', resource: 'finance', action: 'read', description: '회계·정산 조회' },
+  { key: 'inventory.read', resource: 'inventory', action: 'read', description: '재고·상품 조회' },
+  { key: 'inventory.write', resource: 'inventory', action: 'write', description: '재고·상품 변경' },
+  { key: 'org.manage', resource: 'org', action: 'manage', description: '조직 설정 관리' },
 ] as const;
 
 export const PERMISSION_KEYS: readonly Permission[] = PERMISSION_DEFINITIONS.map((row) => row.key);

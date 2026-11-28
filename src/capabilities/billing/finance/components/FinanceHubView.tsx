@@ -44,8 +44,8 @@ function tabToSegment(
  */
 export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = true }) => {
   const { activeTab, setActiveTab } = useAppNavigation();
-  const { industry, isOwner, isAdmin, canPermission } = usePermissions();
-  const hasFinanceAccess = isOwner || isAdmin || canPermission('finance.read');
+  const { industry, isOwner } = usePermissions();
+  const hasFinanceAccess = isOwner;
   const billingEnabled = showBilling && !isAppointmentIndustry(industry);
   const feeLabel = getFeeLabel(industry);
   const tuitionTabLabel = feeLabel === '수강료' ? '수납' : feeLabel;
@@ -121,7 +121,7 @@ export const FinanceHubView: FC<{ showBilling?: boolean }> = ({ showBilling = tr
         <div className="space-y-1">
           <h3 className="text-base font-black text-slate-900">재무 장부 열람 권한 제한</h3>
           <p className="text-xs text-slate-500 leading-relaxed">
-            수납 내역 및 매출 장부는 관리자(원장) 또는 재무(finance.read) 권한이 부여된 사용자만 접근할 수 있습니다.
+            수납 내역 및 매출 장부는 사업주(원장) 전용입니다.
           </p>
         </div>
         <button

@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import { lazy, Suspense, useState, useEffect } from 'react';
 import { RetailHomeView } from './components/home/RetailHomeView';
 import { ProductListView } from './components/products/ProductListView';
-import { InventoryListView } from './components/inventory/InventoryListView';
 import { SalePosView } from './components/sales/SalePosView';
 import { SaleHistoryView } from './components/sales/SaleHistoryView';
 import { RetailRevenueView } from './components/revenue/RetailRevenueView';
@@ -96,7 +95,8 @@ const RETAIL_VIEW_MAP: Record<string, () => ReactNode> = {
   dashboard: () => <RetailHomeView />,
   sales: () => <SalePosView />,
   retail: () => <ProductListView />,
-  inventory: () => <InventoryListView />,
+  /** 예전 재고 탭 주소는 상품 화면으로 연결 */
+  inventory: () => <ProductListView />,
   members: () => <RetailCustomerHubView />,
   income: () => <SaleHistoryView />,
   reports: () => <RetailRevenueView />,

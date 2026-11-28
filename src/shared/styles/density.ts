@@ -1,7 +1,26 @@
 /**
  * Moa-v2 통일된 UI 디자인 토큰 및 밀도 규격 (Design Tokens & Density Standard)
  * Tailwind class 관례 — 모든 신규 및 개편 컴포넌트는 이 규격을 준수합니다.
+ *
+ * 뷰포트 티어 표준: docs/rules/3_COMMERCIAL_UX.md §5 (Tablet) · §6 (Desktop)
  */
+
+/** Tailwind 기본 screens와 동기화된 뷰포트 티어 경계 (px) */
+export const VIEWPORT_BREAKPOINTS = {
+  /** md — Tablet 하한 / Phone 상한 */
+  mdMin: 768,
+  /** lg — Desktop 크롬(사이드바·Master-Detail 스플릿) 하한 / Tablet 상한 */
+  lgMin: 1024,
+} as const;
+
+export type ViewportTier = 'phone' | 'tablet' | 'desktop';
+
+/** 너비(px) → 뷰포트 티어. 훅·E2E·문서의 단일 분류 규칙 */
+export function classifyViewportWidth(width: number): ViewportTier {
+  if (width < VIEWPORT_BREAKPOINTS.mdMin) return 'phone';
+  if (width < VIEWPORT_BREAKPOINTS.lgMin) return 'tablet';
+  return 'desktop';
+}
 
 export const DENSITY = {
   /** ModuleAppShell main */
@@ -74,7 +93,12 @@ export const DESKTOP_CONTAINERS = {
   wide: 'max-w-7xl mx-auto w-full',
 } as const;
 
-/** 데스크톱/태블릿 반응형 그리드 토큰 (Responsive Grid Tokens) */
+/**
+ * 반응형 그리드 토큰 (Responsive Grid Tokens)
+ * - Phone: 1열(또는 metrics 2열)
+ * - Tablet(`md`): 2열·테이블 밀도
+ * - Desktop(`lg`/`xl`): 스플릿·다열
+ */
 export const RESPONSIVE_GRIDS = {
   /** 일반 정보/엔티티 카드 3열 그리드 */
   cards: 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4',

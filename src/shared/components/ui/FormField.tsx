@@ -40,7 +40,7 @@ export const FormField: React.FC<Props> = ({
 };
 
 export const FORM_CONTROL_CLASS =
-  'w-full px-3.5 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-300';
+  'w-full min-h-[44px] px-3.5 py-2.5 text-base bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-300';
 
 export const FORM_CONTROL_ERROR_CLASS =
   'border-rose-300 bg-rose-50 focus:ring-rose-500 focus:border-rose-400';

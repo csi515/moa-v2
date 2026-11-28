@@ -62,6 +62,9 @@ async function testAccessControl() {
   assert.equal(resolveMoaPermission("rooms", "manage"), "rooms.manage");
   assert.equal(resolveMoaPermission("locations", "list"), "locations.read");
   assert.equal(resolveMoaPermission("reports", "list"), "reports.read");
+  assert.equal(resolveMoaPermission("products", "list"), "inventory.read");
+  assert.equal(resolveMoaPermission("inventory", "create"), "inventory.write");
+  assert.equal(resolveMoaPermission("stock", "edit"), "inventory.write");
 
   // unknown resource / action -> Fail-Closed (null)
   assert.equal(resolveMoaPermission("unknown_res", "list"), null);
@@ -126,7 +129,8 @@ async function testAccessControl() {
     });
     assert.equal((await managerProvider.can({ resource: "students", action: "list" })).can, true);
     assert.equal((await managerProvider.can({ resource: "staff", action: "manage" })).can, true);
-    assert.equal((await managerProvider.can({ resource: "finance", action: "read" })).can, true);
+    // 재무는 사업주(owner/director) 전용 — manager도 거부
+    assert.equal((await managerProvider.can({ resource: "finance", action: "read" })).can, false);
   }
 
   // ---------------------------------------------------------------------------
@@ -210,8 +214,8 @@ async function testAccessControl() {
       ],
     });
 
-    // extraGrant로 finance.read가 부여된 staff는 허용
-    assert.equal((await staffWithGrantsProvider.can({ resource: "finance", action: "read" })).can, true);
+    // extraGrant로 finance.read가 있어도 재무는 사업주 전용 — staff 거부
+    assert.equal((await staffWithGrantsProvider.can({ resource: "finance", action: "read" })).can, false);
     // 여전히 rooms.manage는 없음
     assert.equal((await staffWithGrantsProvider.can({ resource: "rooms", action: "manage" })).can, false);
   }

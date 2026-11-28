@@ -3,6 +3,7 @@
  * 기존 RLS / is_org_admin 화면 체크를 교체하지 않는다.
  */
 import { compatIsOrgAdmin } from './compatibility';
+import { resolveCanonicalPermissionKey } from './permissionAliases';
 import { isKnownPermission, isKnownScopeType } from './registry';
 import { roleHasDefaultPermission } from './roleDefaults';
 import { isValidScope, normalizeScopeId, organizationScopeCovers, scopeTargetId } from './scopes';
@@ -14,7 +15,9 @@ function grantMatchesPermission(
 ): boolean {
   if (!grant.active) return false;
   if (grant.organizationId !== input.scope.organizationId) return false;
-  if (grant.permission !== input.permission) return false;
+  const grantCanon = resolveCanonicalPermissionKey(grant.permission);
+  const inputCanon = resolveCanonicalPermissionKey(input.permission);
+  if (grantCanon !== inputCanon) return false;
   if (grant.scopeType === 'organization') return true;
   return (
     grant.scopeType === input.scope.type &&
@@ -43,7 +46,7 @@ function assignmentIds(
   return fromGrants.length > 0 ? fromGrants : null;
 }
 
-/** 해당 scope_type 배정이 없으면 전 범위. 있으면 scope_id가 일치해야 한다. */
+/** 해당 scope_type 배정이 없으면 전 범위(기본). scopeFailClosed면 거부. */
 function assignmentAllows(input: EvaluatePermissionInput): boolean {
   const { scope } = input;
   if (scope.type === 'organization') return true;
@@ -56,28 +59,33 @@ function assignmentAllows(input: EvaluatePermissionInput): boolean {
         ? assignmentIds(input.assignedCustomerIds, input.extraGrants, scope.organizationId, 'customer')
         : assignmentIds(input.assignedResourceIds, input.extraGrants, scope.organizationId, 'resource');
 
-  if (assigned == null || assigned.length === 0) return true;
+  if (assigned == null || assigned.length === 0) {
+    return input.scopeFailClosed !== true;
+  }
   return target != null && assigned.includes(target);
 }
 
 export function evaluatePermission(input: EvaluatePermissionInput): boolean {
-  if (!isKnownPermission(input.permission)) return false;
+  const canonical = resolveCanonicalPermissionKey(input.permission) ?? input.permission;
+  if (!isKnownPermission(canonical)) return false;
   if (!isValidScope(input.scope) || !isKnownScopeType(input.scope.type)) return false;
   if (!organizationScopeCovers(input.scope.type)) return false;
 
-  if ((input.extraGrants ?? []).some((grant) => grantMatchesPermission(grant, input))) {
+  const normalized: EvaluatePermissionInput = { ...input, permission: canonical };
+
+  if ((normalized.extraGrants ?? []).some((grant) => grantMatchesPermission(grant, normalized))) {
     return true;
   }
 
-  if (compatIsOrgAdmin(input.role)) {
+  if (compatIsOrgAdmin(normalized.role)) {
     return true;
   }
 
-  if (!roleHasDefaultPermission(input.role, input.permission)) {
+  if (!roleHasDefaultPermission(normalized.role, canonical)) {
     return false;
   }
 
-  return assignmentAllows(input);
+  return assignmentAllows(normalized);
 }
 
 export function canAuthorize(

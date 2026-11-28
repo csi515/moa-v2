@@ -354,7 +354,7 @@ export const InventoryListView: FC = () => {
                   title: '재고를 시작하려면',
                   tip: '상품을 등록한 뒤 입고로 수량을 맞추면 안전재고 알림을 쓸 수 있습니다.',
                   steps: [
-                    { stepNumber: 1, title: '상품 등록', detail: '이름·판매가·바코드를 등록합니다.' },
+                    { stepNumber: 1, title: '상품 등록', detail: '이름·판매가를 등록합니다.' },
                     { stepNumber: 2, title: '초기 입고', detail: '매장에 있는 실수량을 입력합니다.' },
                     { stepNumber: 3, title: '안전재고 설정', detail: '부족 임박 시 알림을 받도록 둡니다.' },
                   ],
@@ -394,23 +394,15 @@ export const InventoryListView: FC = () => {
                     >
                       {row.isActive ? COPY.statusActive : COPY.statusInactive}
                     </span>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap justify-end gap-2">
                       {canMutate && (
                         <>
-                          <button
-                            type="button"
-                            onClick={() => openAdjust(row)}
-                            className="text-xs font-bold text-slate-700 min-h-[44px] px-1"
-                          >
+                          <Button type="button" variant="outline" size="default" onClick={() => openAdjust(row)}>
                             {COPY.adjust}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => openInbound(row)}
-                            className="text-xs font-bold text-teal-700 min-h-[44px] px-1"
-                          >
+                          </Button>
+                          <Button type="button" variant="primary" size="default" onClick={() => openInbound(row)}>
                             {COPY.inbound}
-                          </button>
+                          </Button>
                         </>
                       )}
                     </div>
@@ -488,24 +480,16 @@ export const InventoryListView: FC = () => {
                         {row.isActive ? COPY.statusActive : COPY.statusInactive}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right space-x-2 whitespace-nowrap">
+                    <td className="px-4 py-3 text-right">
                       {canMutate && (
-                        <>
-                          <button
-                            type="button"
-                            onClick={() => openAdjust(row)}
-                            className="text-xs font-bold text-slate-700 min-h-[44px] px-2"
-                          >
+                        <div className="inline-flex flex-wrap justify-end gap-2">
+                          <Button type="button" variant="outline" size="default" onClick={() => openAdjust(row)}>
                             {COPY.adjust}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => openInbound(row)}
-                            className="text-xs font-bold text-teal-600 min-h-[44px] px-2"
-                          >
+                          </Button>
+                          <Button type="button" variant="primary" size="default" onClick={() => openInbound(row)}>
                             {COPY.inbound}
-                          </button>
-                        </>
+                          </Button>
+                        </div>
                       )}
                     </td>
                   </tr>

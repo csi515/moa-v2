@@ -31,7 +31,11 @@ export interface CustomFieldDefinition {
   description?: string;
 }
 
-/** 업종별 기본 커스텀 필드 프리셋 */
+/**
+ * 업종별 기본 커스텀 필드 프리셋 (시드 템플릿 전용).
+ * 런타임 조회는 `resolveCustomFieldDefinitions` / `listFieldDefinitions`를 사용하고,
+ * DB에 정의가 없을 때만 본 맵으로 폴백한다.
+ */
 export const INDUSTRY_CUSTOM_FIELDS: Record<string, readonly CustomFieldDefinition[]> = {
   piano: [
     { key: 'pianoLevel', label: '진도/과정', type: 'select', options: ['바이엘 상', '바이엘 하', '체르니 100', '체르니 30', '체르니 40', '작품집/성인'] },

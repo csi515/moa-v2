@@ -10,7 +10,7 @@ import { formatCurrency } from '@/utils/formatters';
 import { Calendar, Clock, Dumbbell, Trash2 } from 'lucide-react';
 import { resolveBookingUi } from './bookingIndustryAdapter';
 
-export const ServiceManagementView: React.FC = () => {
+export const ServiceManagementView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const { industry } = usePermissions();
   const labels = useModuleLabels();
   const bookingUi = resolveBookingUi(industry);
@@ -86,22 +86,29 @@ export const ServiceManagementView: React.FC = () => {
     });
   };
 
+  const createButton = (
+    <button
+      type="button"
+      onClick={openCreate}
+      className={`px-4 py-2.5 text-white text-sm font-bold rounded-xl min-h-[44px] ${bookingUi.serviceHeaderBtn}`}
+    >
+      + {labels.service.singular} 추가
+    </button>
+  );
+
   return (
-    <div className="space-y-4 pb-4">
-      <PageHeader
-        icon={<ServiceIcon className="w-6 h-6" />}
-        iconClassName={bookingUi.serviceIconClass}
-        title={`${serviceName} 관리`}
-        description={bookingUi.serviceDescription}
-        actions={
-          <button
-            onClick={openCreate}
-            className={`px-4 py-2.5 text-white text-sm font-bold rounded-xl ${bookingUi.serviceHeaderBtn}`}
-          >
-            + {labels.service.singular} 추가
-          </button>
-        }
-      />
+    <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
+      {!embedded ? (
+        <PageHeader
+          icon={<ServiceIcon className="w-6 h-6" />}
+          iconClassName={bookingUi.serviceIconClass}
+          title={`${serviceName} 관리`}
+          description={bookingUi.serviceDescription}
+          actions={createButton}
+        />
+      ) : (
+        <div className="flex justify-end">{createButton}</div>
+      )}
 
       {offerings.length === 0 ? (
         <EmptyState

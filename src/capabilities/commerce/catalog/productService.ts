@@ -1,4 +1,5 @@
 import { getCoreClient, isSupabaseConfigured } from '@/lib/supabase';
+import type { Json } from '@/lib/supabase/database.types';
 import type {
   Product,
   ProductCategory,
@@ -12,6 +13,7 @@ type ProductRow = {
   id: string;
   organization_id: string;
   name: string;
+  spec?: string | null;
   category_id: string | null;
   product_code: string | null;
   price: number | string;
@@ -19,6 +21,7 @@ type ProductRow = {
   image_url: string | null;
   is_active: boolean;
   safety_stock?: number | string | null;
+  metadata?: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
 };
@@ -39,6 +42,7 @@ type CategoryRow = {
   id: string;
   organization_id: string;
   name: string;
+  parent_id?: string | null;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -51,10 +55,16 @@ function toNumber(value: number | string | null | undefined): number | null {
 }
 
 function mapProduct(row: ProductRow): Product {
+  const rawSpec = row.spec?.trim() || null;
+  const metadata =
+    row.metadata && typeof row.metadata === 'object' && !Array.isArray(row.metadata)
+      ? (row.metadata as Record<string, unknown>)
+      : {};
   return {
     id: row.id,
     organizationId: row.organization_id,
     name: row.name,
+    spec: rawSpec,
     categoryId: row.category_id,
     productCode: row.product_code,
     price: toNumber(row.price) ?? 0,
@@ -62,6 +72,7 @@ function mapProduct(row: ProductRow): Product {
     imageUrl: row.image_url,
     isActive: row.is_active,
     safetyStock: Math.max(0, Math.floor(toNumber(row.safety_stock) ?? 0)),
+    metadata,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -86,6 +97,7 @@ function mapCategory(row: CategoryRow): ProductCategory {
     id: row.id,
     organizationId: row.organization_id,
     name: row.name,
+    parentId: row.parent_id ?? null,
     isActive: row.is_active,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -122,10 +134,15 @@ export const productService = {
     return ((data as CategoryRow[] | null) ?? []).map(mapCategory);
   },
 
-  async createCategory(organizationId: string, name: string): Promise<ProductCategory> {
+  async createCategory(
+    organizationId: string,
+    name: string,
+    options?: { parentId?: string | null }
+  ): Promise<ProductCategory> {
     const trimmed = name.trim();
     if (!trimmed) throw new Error('카테고리명이 필요합니다.');
     const client = ensureClient();
+    const parentId = options?.parentId ?? null;
 
     const { data: existingRows, error: findError } = await client
       .from('product_categories')
@@ -145,8 +162,29 @@ export const productService = {
       .insert({
         organization_id: organizationId,
         name: trimmed,
+        parent_id: parentId,
         is_active: true,
       })
+      .select('*')
+      .single();
+    if (error) throw error;
+    return mapCategory(data as CategoryRow);
+  },
+
+  async setCategoryParent(
+    organizationId: string,
+    categoryId: string,
+    parentId: string | null
+  ): Promise<ProductCategory> {
+    if (parentId === categoryId) {
+      throw new Error('자기 자신을 상위 카테고리로 지정할 수 없습니다.');
+    }
+    const client = ensureClient();
+    const { data, error } = await client
+      .from('product_categories')
+      .update({ parent_id: parentId })
+      .eq('id', categoryId)
+      .eq('organization_id', organizationId)
       .select('*')
       .single();
     if (error) throw error;
@@ -281,7 +319,18 @@ export const productService = {
       categoryId = cat.id;
     }
 
-    const payload = {
+    const payload: {
+      organization_id: string;
+      name: string;
+      category_id: string | null;
+      product_code: string | null;
+      price: number;
+      cost: number | null;
+      is_active: boolean;
+      spec?: string | null;
+      safety_stock?: number;
+      metadata?: Json;
+    } = {
       organization_id: organizationId,
       name,
       category_id: categoryId,
@@ -290,11 +339,17 @@ export const productService = {
       cost: input.cost == null || Number.isNaN(input.cost) ? null : Math.max(0, input.cost),
       is_active: input.isActive !== false,
     };
+    if (!productId || input.spec !== undefined) {
+      payload.spec = input.spec?.trim() || null;
+    }
     if (!productId || input.safetyStock != null) {
-      Object.assign(payload, {
-        safety_stock:
-          input.safetyStock == null ? 0 : Math.max(0, Math.floor(input.safetyStock)),
-      });
+      payload.safety_stock =
+        input.safetyStock == null ? 0 : Math.max(0, Math.floor(input.safetyStock));
+    }
+    if (input.metadata !== undefined) {
+      payload.metadata = input.metadata as Json;
+    } else if (!productId) {
+      payload.metadata = {};
     }
 
     let saved: ProductRow;

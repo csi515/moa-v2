@@ -24,9 +24,13 @@ export const ProductCategoryEditor: FC<EditorProps> = ({
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [loading, setLoading] = useState(false);
   const [newName, setNewName] = useState('');
+  const [newParentId, setNewParentId] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
+  const [editParentId, setEditParentId] = useState('');
   const [busyId, setBusyId] = useState<string | null>(null);
+
+  const rootCategories = categories.filter((c) => !c.parentId);
 
   const load = useCallback(async () => {
     if (!organizationId) return;
@@ -47,8 +51,10 @@ export const ProductCategoryEditor: FC<EditorProps> = ({
   useEffect(() => {
     if (!active) return;
     setNewName('');
+    setNewParentId('');
     setEditingId(null);
     setEditName('');
+    setEditParentId('');
     void load();
   }, [active, load]);
 
@@ -57,8 +63,11 @@ export const ProductCategoryEditor: FC<EditorProps> = ({
     if (!newName.trim() || busyId) return;
     setBusyId('new');
     try {
-      await productService.createCategory(organizationId, newName);
+      await productService.createCategory(organizationId, newName, {
+        parentId: newParentId || null,
+      });
       setNewName('');
+      setNewParentId('');
       onToast(COPY.categoryAdded, 'success');
       await load();
       onChanged?.();
@@ -72,11 +81,13 @@ export const ProductCategoryEditor: FC<EditorProps> = ({
   const startEdit = (cat: ProductCategory) => {
     setEditingId(cat.id);
     setEditName(cat.name);
+    setEditParentId(cat.parentId ?? '');
   };
 
   const cancelEdit = () => {
     setEditingId(null);
     setEditName('');
+    setEditParentId('');
   };
 
   const saveEdit = async (categoryId: string) => {
@@ -84,6 +95,11 @@ export const ProductCategoryEditor: FC<EditorProps> = ({
     setBusyId(categoryId);
     try {
       await productService.renameCategory(organizationId, categoryId, editName);
+      await productService.setCategoryParent(
+        organizationId,
+        categoryId,
+        editParentId || null
+      );
       cancelEdit();
       onToast(COPY.categoryRenamed, 'success');
       await load();
@@ -93,6 +109,11 @@ export const ProductCategoryEditor: FC<EditorProps> = ({
     } finally {
       setBusyId(null);
     }
+  };
+
+  const parentName = (parentId: string | null) => {
+    if (!parentId) return null;
+    return categories.find((c) => c.id === parentId)?.name ?? null;
   };
 
   const toggleActive = async (cat: ProductCategory) => {
@@ -114,26 +135,42 @@ export const ProductCategoryEditor: FC<EditorProps> = ({
       <div className="space-y-4">
         <p className="text-xs text-slate-500">{COPY.categoryManageHint}</p>
 
-        <form onSubmit={handleAdd} className="flex flex-col sm:flex-row gap-2">
-          <FormField label={COPY.categoryNameLabel} className="flex-1">
-            <input
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              placeholder={COPY.categoryNamePlaceholder}
-              className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
-            />
-          </FormField>
-          <Button
-            type="submit"
-            variant="primary"
-            size="default"
-            className="sm:self-end"
-            disabled={!newName.trim() || busyId === 'new'}
-            isLoading={busyId === 'new'}
-            leftIcon={<Plus className="w-4 h-4" />}
-          >
-            {COPY.categoryAdd}
-          </Button>
+        <form onSubmit={handleAdd} className="flex flex-col gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
+            <FormField label={COPY.categoryNameLabel} className="flex-1">
+              <input
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                placeholder={COPY.categoryNamePlaceholder}
+                className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
+              />
+            </FormField>
+            <FormField label={COPY.categoryParentLabel} className="sm:w-48">
+              <select
+                value={newParentId}
+                onChange={(e) => setNewParentId(e.target.value)}
+                className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
+              >
+                <option value="">{COPY.categoryParentNone}</option>
+                {rootCategories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </FormField>
+            <Button
+              type="submit"
+              variant="primary"
+              size="default"
+              className="sm:self-end"
+              disabled={!newName.trim() || busyId === 'new'}
+              isLoading={busyId === 'new'}
+              leftIcon={<Plus className="w-4 h-4" />}
+            >
+              {COPY.categoryAdd}
+            </Button>
+          </div>
         </form>
 
         {loading ? (
@@ -152,21 +189,35 @@ export const ProductCategoryEditor: FC<EditorProps> = ({
                 className="rounded-2xl border border-slate-200 bg-white p-3 space-y-2"
               >
                 {editingId === cat.id ? (
-                  <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="flex flex-col gap-2">
                     <input
                       value={editName}
                       onChange={(e) => setEditName(e.target.value)}
-                      className={`${FORM_CONTROL_CLASS} min-h-[44px] flex-1`}
+                      className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
                       autoFocus
                     />
+                    <select
+                      value={editParentId}
+                      onChange={(e) => setEditParentId(e.target.value)}
+                      className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
+                    >
+                      <option value="">{COPY.categoryParentNone}</option>
+                      {rootCategories
+                        .filter((c) => c.id !== cat.id)
+                        .map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.name}
+                          </option>
+                        ))}
+                    </select>
                     <div className="flex flex-wrap items-center gap-2">
-                      <Button type="button" variant="outline" size="sm" onClick={cancelEdit}>
+                      <Button type="button" variant="outline" size="default" onClick={cancelEdit}>
                         {COPY.cancel}
                       </Button>
                       <Button
                         type="button"
                         variant="primary"
-                        size="sm"
+                        size="default"
                         onClick={() => void saveEdit(cat.id)}
                         disabled={busyId === cat.id}
                         isLoading={busyId === cat.id}
@@ -178,7 +229,14 @@ export const ProductCategoryEditor: FC<EditorProps> = ({
                 ) : (
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <p className="font-bold text-slate-900 truncate">{cat.name}</p>
+                      <p className="font-bold text-slate-900 truncate">
+                        {cat.parentId ? `↳ ${cat.name}` : cat.name}
+                      </p>
+                      {parentName(cat.parentId) && (
+                        <p className="text-[11px] text-slate-500 mt-0.5">
+                          {parentName(cat.parentId)}
+                        </p>
+                      )}
                       <span
                         className={`inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                           cat.isActive
@@ -193,7 +251,7 @@ export const ProductCategoryEditor: FC<EditorProps> = ({
                       <Button
                         type="button"
                         variant="ghost"
-                        size="sm"
+                        size="default"
                         onClick={() => startEdit(cat)}
                         leftIcon={<Pencil className="w-3.5 h-3.5" />}
                       >
@@ -202,7 +260,7 @@ export const ProductCategoryEditor: FC<EditorProps> = ({
                       <Button
                         type="button"
                         variant="ghost"
-                        size="sm"
+                        size="default"
                         onClick={() => void toggleActive(cat)}
                         disabled={busyId === cat.id}
                       >

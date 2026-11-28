@@ -66,7 +66,7 @@ const signalClass = (tone: 'ok' | 'warn' | 'muted') => {
   return 'text-slate-400';
 };
 
-export const StudentListView: React.FC = () => {
+export const StudentListView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const {
     selectedStudentId,
@@ -289,50 +289,53 @@ export const StudentListView: React.FC = () => {
   }, [filteredStudents, currentPage, pageSize]);
 
 
+  const headerActions = !isScoped ? (
+    <div className="flex items-center gap-1.5 flex-wrap">
+      <button
+        type="button"
+        onClick={() => exportStudentsToCsv(filteredStudents, `${labels.customer.singular}명부_${getCurrentYearMonth()}.csv`)}
+        className="hidden lg:inline-flex px-3 py-1.5 min-h-[36px] bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg transition-colors border border-slate-200 items-center justify-center gap-1.5 cursor-pointer"
+        title="현재 필터된 목록 엑셀 다운로드"
+      >
+        <Download className="w-3.5 h-3.5 text-slate-500" strokeWidth={1.5} />
+        <span>엑셀 내보내기</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => setIsBulkImportOpen(true)}
+        className="hidden lg:inline-flex px-3 py-1.5 min-h-[36px] bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg transition-colors border border-slate-200 items-center justify-center gap-1.5 cursor-pointer"
+      >
+        <FileSpreadsheet className="w-3.5 h-3.5 text-slate-500" strokeWidth={1.5} />
+        <span>엑셀/CSV 가져오기</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          setEditingStudent(null);
+          setIsFormModalOpen(true);
+        }}
+        className="px-3.5 py-1.5 min-h-[36px] bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer"
+      >
+        <UserPlus className="w-3.5 h-3.5" strokeWidth={1.5} />
+        <span>신규 {labels.customer.singular} 등록</span>
+      </button>
+    </div>
+  ) : null;
+
   return (
-    <div className={cn(DESKTOP_CONTAINERS.wide, DENSITY.pageStack)}>
-      {/* 1. 상단 단일 헤더: 페이지 제목 + 우측 주요 액션 버튼 일원화 */}
-      <PageHeader
-        icon={<Users className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}
-        title={labels.customer.section || `${labels.customer.singular} 관리`}
-        badge={`${filteredStudents.length}명`}
-        description={`${labels.customer.singular} 명부 및 등록·출결·수강 현황을 관리합니다.`}
-        density="compact"
-        actions={
-          !isScoped ? (
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <button
-                type="button"
-                onClick={() => exportStudentsToCsv(filteredStudents, `${labels.customer.singular}명부_${getCurrentYearMonth()}.csv`)}
-                className="hidden lg:inline-flex px-3 py-1.5 min-h-[36px] bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg transition-colors border border-slate-200 items-center justify-center gap-1.5 cursor-pointer"
-                title="현재 필터된 목록 엑셀 다운로드"
-              >
-                <Download className="w-3.5 h-3.5 text-slate-500" strokeWidth={1.5} />
-                <span>엑셀 내보내기</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsBulkImportOpen(true)}
-                className="hidden lg:inline-flex px-3 py-1.5 min-h-[36px] bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-lg transition-colors border border-slate-200 items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <FileSpreadsheet className="w-3.5 h-3.5 text-slate-500" strokeWidth={1.5} />
-                <span>엑셀/CSV 가져오기</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setEditingStudent(null);
-                  setIsFormModalOpen(true);
-                }}
-                className="px-3.5 py-1.5 min-h-[36px] bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <UserPlus className="w-3.5 h-3.5" strokeWidth={1.5} />
-                <span>신규 {labels.customer.singular} 등록</span>
-              </button>
-            </div>
-          ) : undefined
-        }
-      />
+    <div className={cn(embedded ? DENSITY.embeddedStack : cn(DESKTOP_CONTAINERS.wide, DENSITY.pageStack))}>
+      {!embedded ? (
+        <PageHeader
+          icon={<Users className="w-5 h-5 text-slate-700" strokeWidth={1.5} />}
+          title={labels.customer.section || `${labels.customer.singular} 관리`}
+          badge={`${filteredStudents.length}명`}
+          description={`${labels.customer.singular} 명부 및 등록·출결·수강 현황을 관리합니다.`}
+          density="compact"
+          actions={headerActions ?? undefined}
+        />
+      ) : headerActions ? (
+        <div className="flex justify-end">{headerActions}</div>
+      ) : null}
 
       {/* 2. 압축된 검색 & 필터 바 (Toolbar): 상태 세그먼트 탭 + 인라인 검색창 + [필터] 버튼 */}
       <ListToolbar

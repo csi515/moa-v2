@@ -47,7 +47,7 @@ import {
 import { syncLessonHomeworkToWeeklyAssignment } from '../../services/lessonHomeworkSync';
 import { todayIsoLocal } from '@/shared/utils/localDate';
 
-export const LessonRecordsView: React.FC = () => {
+export const LessonRecordsView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const { showToast, openConfirmDialog, currentUser, setSelectedStudentId, setActiveTab } = useApp();
   const refreshKey = useStorageRefresh();
   const { staffId, scopeStudents, scopeLessons } = useStaffScope();
@@ -200,22 +200,29 @@ export const LessonRecordsView: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const createButton = (
+    <button
+      type="button"
+      onClick={handleOpenCreate}
+      className="px-4 py-2.5 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
+    >
+      <Plus className="w-4 h-4" />
+      수업 일지 작성
+    </button>
+  );
+
   return (
-    <div className="space-y-4 pb-4">
-      <PageHeader
-        icon={<Piano className="w-6 h-6" />}
-        title="수업 일지 및 진도 관리"
-        description="원생별 레슨 일지 작성, 연습 과제 부여 및 주간 진도 체크"
-        actions={
-          <button
-            onClick={handleOpenCreate}
-            className="px-4 py-2.5 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            수업 일지 작성
-          </button>
-        }
-      />
+    <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
+      {!embedded ? (
+        <PageHeader
+          icon={<Piano className="w-6 h-6" />}
+          title="수업 일지 및 진도 관리"
+          description="원생별 레슨 일지 작성, 연습 과제 부여 및 주간 진도 체크"
+          actions={createButton}
+        />
+      ) : (
+        <div className="flex justify-end">{createButton}</div>
+      )}
 
       <FilterBar>
         <select

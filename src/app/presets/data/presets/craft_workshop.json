@@ -1,0 +1,62 @@
+{
+  "id": "craft_workshop_data",
+  "name": "공방·워크숍 (데이터 프리셋)",
+  "description": "JSON 시드만으로 온보딩 가능한 공방 수직 예시. 기존 craft_repair TS 프리셋과 병행 검증용.",
+  "category": "studio",
+  "capabilities": [
+    "booking",
+    "attendance",
+    "passes",
+    "billing_invoicing",
+    "inventory"
+  ],
+  "requiredCapabilities": ["booking", "billing_invoicing"],
+  "optionalCapabilities": ["inventory", "passes", "attendance"],
+  "terms": {
+    "customer": "수강생",
+    "instructor": "작가",
+    "space": "작업실",
+    "pass": "수강권",
+    "fee": "수강료",
+    "lesson": "원데이클래스"
+  },
+  "operatingHours": {
+    "day_type": "WEEKDAY",
+    "start_time": "10:00",
+    "end_time": "20:00",
+    "slot_minutes": 60
+  },
+  "facilities": {
+    "needsLocker": false,
+    "turnaroundBufferMinutes": 15
+  },
+  "theme": {
+    "accentColor": "amber",
+    "badgeEmoji": "✂️"
+  },
+  "roles": [
+    {
+      "name": "대표",
+      "rank_order": 1,
+      "permissions": ["*"],
+      "description": "공방 총괄"
+    },
+    {
+      "name": "강사",
+      "rank_order": 2,
+      "permissions": ["attendance:*", "booking:*"],
+      "description": "클래스 진행"
+    }
+  ],
+  "resourceTypes": [
+    { "name": "메인 작업대", "type": "table", "capacity": 8 },
+    { "name": "소그룹룸", "type": "room", "capacity": 4 }
+  ],
+  "onboardingSteps": ["작업실 등록", "원데이클래스 요금제", "수강생 등록"],
+  "businessRules": {
+    "lessonDurationMinutes": 120,
+    "autoCheckInDeduct": false
+  },
+  "readinessLevel": "configured",
+  "hiddenInMoa": true
+}

@@ -423,15 +423,37 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
     showToast('임시 이동이 취소되고 원래 시간표 및 출결 기록이 복구되었습니다.', 'info');
   };
 
-  const headerBlock = compactHeader || embedded ? (
+  const kioskButton = (
+    <button
+      type="button"
+      onClick={() => setIsKioskActive(true)}
+      className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+    >
+      <Lock className="w-4 h-4 text-slate-500" />
+      <span>로비 출결 키오스크 실행</span>
+    </button>
+  );
+
+  // embedded: 허브 PageHeader만 유지 — 제목 중복 금지, 날짜·진행만 표시
+  const headerBlock = embedded ? (
+    <div className="flex items-center justify-between gap-3 px-0.5">
+      <p className="text-[11px] font-semibold text-slate-800">
+        {todayKorean}요일 · {today}
+      </p>
+      <div className="flex items-center gap-2">
+        <p className="text-xs font-bold text-slate-500 tabular-nums">
+          {stats.done}/{stats.total} 완료
+        </p>
+        {kioskButton}
+      </div>
+    </div>
+  ) : compactHeader ? (
     <div className="flex items-end justify-between gap-3 px-0.5">
       <div>
         <p className="text-[11px] font-semibold text-slate-800">
           {todayKorean}요일 · {today}
         </p>
-        <h2 className={`font-extrabold text-slate-900 tracking-tight ${embedded ? 'text-sm' : 'text-lg'}`}>
-          오늘 수업
-        </h2>
+        <h2 className="text-lg font-extrabold text-slate-900 tracking-tight">오늘 수업</h2>
       </div>
       <p className="text-xs font-bold text-slate-500 tabular-nums">
         {stats.done}/{stats.total} 완료
@@ -442,16 +464,7 @@ export const TodayLessonView: FC<{ compactHeader?: boolean; embedded?: boolean }
       icon={<Piano className="w-6 h-6" />}
       title="오늘 수업"
       description="오늘 예정된 레슨 일정과 담당 강사별 수강생 목록 실시간 확인"
-      actions={
-        <button
-          type="button"
-          onClick={() => setIsKioskActive(true)}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[44px] bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
-        >
-          <Lock className="w-4 h-4 text-slate-500" />
-          <span>로비 출결 키오스크 실행</span>
-        </button>
-      }
+      actions={kioskButton}
     />
   );
 

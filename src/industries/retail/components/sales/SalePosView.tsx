@@ -4,7 +4,6 @@ import { cn } from '@/shared/lib/utils';
 import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import {
   ShoppingCart,
-  Barcode,
   Sparkles,
   PauseCircle,
   PlayCircle,
@@ -28,6 +27,14 @@ import { Button, FORM_ACTION_BUTTON_CLASS, SearchField } from '@/shared/componen
 import { useDirtyFormGuard } from '@/shared/hooks/useDirtyFormGuard';
 import { formatCurrency } from '@/utils/formatters';
 import {
+  applyTaxToAmount,
+  defaultTaxPolicy,
+  resolveRoundingPolicy,
+  resolveTaxPolicy,
+  type RoundingPolicy,
+  type TaxPolicy,
+} from '@/core/policies/taxPolicyService';
+import {
   useBarcodeScanner,
   playScannerSound,
 } from '@/capabilities/inventory';
@@ -49,7 +56,6 @@ import { SaleCartLineRow } from './SaleCartLineRow';
 import { SaleCheckoutModal } from './SaleCheckoutModal';
 import { SaleQuickReturnModal } from './SaleQuickReturnModal';
 import { SaleReceiptPrintModal, type ReceiptData } from './SaleReceiptPrintModal';
-import { SaleQuickProductCreateModal } from './SaleQuickProductCreateModal';
 import { matchCatalogItem } from './saleCatalogMatch';
 
 interface HeldCart {
@@ -72,10 +78,10 @@ export const SalePosView: FC = () => {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [completedReceipt, setCompletedReceipt] = useState<ReceiptData | null>(null);
   const [lastAddedKey, setLastAddedKey] = useState<string | null>(null);
-
-  // [기성품 바코드] 미등록 바코드 즉석 등록 모달 상태
-  const [quickCreateOpen, setQuickCreateOpen] = useState(false);
-  const [scannedUnregisteredCode, setScannedUnregisteredCode] = useState('');
+  const [taxPolicy, setTaxPolicy] = useState<TaxPolicy>(() =>
+    defaultTaxPolicy(orgId || 'local-org')
+  );
+  const [roundingPolicy, setRoundingPolicy] = useState<RoundingPolicy | null>(null);
 
   // [개선안 3] 주문 보류(Hold / Park) 및 복원 상태
   const [heldCarts, setHeldCarts] = useState<HeldCart[]>([]);
@@ -129,6 +135,25 @@ export const SalePosView: FC = () => {
     void load();
   }, [load]);
 
+  useEffect(() => {
+    if (!orgId || !isSupabaseConfigured()) {
+      setTaxPolicy(defaultTaxPolicy(orgId || 'local-org'));
+      setRoundingPolicy(null);
+      return;
+    }
+    let cancelled = false;
+    void Promise.all([resolveTaxPolicy(orgId), resolveRoundingPolicy(orgId)]).then(
+      ([tax, rounding]) => {
+        if (cancelled) return;
+        setTaxPolicy(tax);
+        setRoundingPolicy(rounding);
+      }
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [orgId]);
+
   // 상품 ID별 활성 프로모션 매핑
   const promoMapByProductId = useMemo(() => {
     const map = new Map<string, PromotionalDeal>();
@@ -157,6 +182,10 @@ export const SalePosView: FC = () => {
   }, [catalog, search]);
 
   const total = useMemo(() => cartTotalAmount(cart), [cart]);
+  const taxed = useMemo(
+    () => applyTaxToAmount(total, taxPolicy, roundingPolicy ?? undefined),
+    [total, taxPolicy, roundingPolicy]
+  );
 
   // [promotional_deal 승격 엔진 연동] 상품 담을 때 특가 자동 판정
   const addToCart = useCallback(
@@ -307,8 +336,7 @@ export const SalePosView: FC = () => {
         addToCart(matched);
         showToast(`'${matched.productName}' 상품이 추가되었습니다 (+1)`, 'success');
       } else {
-        setScannedUnregisteredCode(cleanCode);
-        setQuickCreateOpen(true);
+        showToast('등록된 상품이 없습니다.', 'warning');
       }
     },
     [catalog, addToCart, showToast]
@@ -322,8 +350,7 @@ export const SalePosView: FC = () => {
       !totalDiscountModalOpen &&
       !heldModalOpen &&
       !promoModalOpen &&
-      !reconciliationModalOpen &&
-      !quickCreateOpen,
+      !reconciliationModalOpen,
     feedbackOnScan: false,
   });
 
@@ -335,8 +362,7 @@ export const SalePosView: FC = () => {
         totalDiscountModalOpen ||
         heldModalOpen ||
         promoModalOpen ||
-        reconciliationModalOpen ||
-        quickCreateOpen
+        reconciliationModalOpen
       ) {
         return;
       }
@@ -381,7 +407,6 @@ export const SalePosView: FC = () => {
     heldModalOpen,
     promoModalOpen,
     reconciliationModalOpen,
-    quickCreateOpen,
     openConfirmDialog,
   ]);
 
@@ -575,7 +600,6 @@ export const SalePosView: FC = () => {
                         </div>
                         <p className="text-xs text-slate-500 mt-0.5">
                           {item.variantName ?? COPY.singleOption}
-                          {item.productCode ? ` · 코드: ${item.productCode}` : ''}
                         </p>
                       </div>
                       <div className="text-right shrink-0">
@@ -665,9 +689,20 @@ export const SalePosView: FC = () => {
 
           <div className="flex items-center justify-between pt-2 border-t border-slate-100">
             <span className="font-bold text-slate-700">{COPY.totalLabel}</span>
-            <span className="text-xl font-bold tabular-nums text-teal-700">
-              {formatCurrency(total)}
-            </span>
+            <div className="text-right">
+              <span className="text-xl font-bold tabular-nums text-teal-700">
+                {formatCurrency(
+                  taxPolicy.rate > 0 && taxPolicy.mode === 'exclusive' ? taxed.gross : total
+                )}
+              </span>
+              {taxPolicy.rate > 0 && (
+                <p className="text-[11px] text-slate-500 tabular-nums">
+                  세액 {formatCurrency(taxed.tax)} (
+                  {taxPolicy.mode === 'inclusive' ? '내세' : '외세'}{' '}
+                  {Math.round(taxPolicy.rate * 1000) / 10}%)
+                </p>
+              )}
+            </div>
           </div>
           <div className="flex justify-end">
             <Button
@@ -787,20 +822,6 @@ export const SalePosView: FC = () => {
         onReturnCompleted={(refundAmount) => {
           showToast(`반품 환불(${formatCurrency(refundAmount)})이 정상 완료되었습니다. 재고가 복구되었습니다.`, 'success');
           void load();
-        }}
-        onError={(msg) => showToast(msg, 'error')}
-      />
-
-      {/* [기성품 바코드] 미등록 바코드 즉석 상품 등록 모달 */}
-      <SaleQuickProductCreateModal
-        isOpen={quickCreateOpen}
-        organizationId={orgId}
-        initialBarcode={scannedUnregisteredCode}
-        onClose={() => setQuickCreateOpen(false)}
-        onSuccess={(newItem) => {
-          setCatalog((prev) => [newItem, ...prev]);
-          addToCart(newItem);
-          showToast(`'${newItem.productName}' 등록 및 장바구니 추가 완료!`, 'success');
         }}
         onError={(msg) => showToast(msg, 'error')}
       />

@@ -182,24 +182,67 @@ function run() {
       join(root, 'supabase/migrations/20260924380000_locations_read_permission.sql'),
       'utf8'
     ),
+    readFileSync(
+      join(root, 'supabase/migrations/20261128220000_phase4_rbac_permission_unification.sql'),
+      'utf8'
+    ),
   ].join('\n');
   assert.match(sql, /CREATE TABLE core\.permission_catalog/);
   assert.match(sql, /CREATE TABLE core\.authorization_grants/);
   assert.match(sql, /CREATE OR REPLACE FUNCTION core\.has_permission/);
   assert.match(sql, /CREATE OR REPLACE FUNCTION core\.is_known_permission/);
   assert.match(sql, /CREATE OR REPLACE FUNCTION core\.role_has_default_permission/);
+  assert.match(sql, /CREATE TABLE IF NOT EXISTS core\.permission_key_aliases/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION core\.member_has_permission/);
+  assert.match(sql, /get_customer_masked/);
   assert.match(sql, /is_org_admin\(p_organization_id\)/);
   assert.match(sql, /is_org_staff_actor\(p_organization_id\)/);
   assert.doesNotMatch(sql, /DROP FUNCTION core\.is_org_admin/);
   assert.doesNotMatch(sql, /DROP FUNCTION core\.is_org_staff_actor/);
   assert.doesNotMatch(sql, /DROP FUNCTION core\.rls_staff_or_admin/);
-  assert.doesNotMatch(sql, /DROP POLICY IF EXISTS/);
   for (const row of PERMISSION_DEFINITIONS) {
     assert.match(sql, new RegExp(`'${row.key}'`));
   }
   for (const permission of STAFF_DEFAULT_PERMISSIONS) {
     assert.match(sql, new RegExp(`'${permission}'`));
   }
+
+  // Phase 4: 레거시 키 별칭 + 스코프 fail-closed 옵트인
+  assert.equal(
+    evaluatePermission({
+      role: 'staff',
+      permission: 'billing_invoices',
+      scope: org,
+      extraGrants: [
+        {
+          organizationId: ORG,
+          permission: 'finance.read',
+          scopeType: 'organization',
+          active: true,
+        },
+      ],
+    }),
+    true
+  );
+  assert.equal(
+    evaluatePermission({
+      role: 'staff',
+      permission: 'rooms.read',
+      scope: locA,
+      scopeFailClosed: true,
+    }),
+    false
+  );
+  assert.equal(
+    evaluatePermission({
+      role: 'staff',
+      permission: 'rooms.read',
+      scope: locA,
+      assignedLocationIds: [LOC_A],
+      scopeFailClosed: true,
+    }),
+    true
+  );
 
   const helpers = readFileSync(
     join(root, 'supabase/migrations/20260921170000_multi_role_permission_helpers.sql'),

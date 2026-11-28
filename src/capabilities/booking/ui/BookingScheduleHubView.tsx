@@ -6,10 +6,12 @@ import { PageHeader, SegmentedControl } from '@/shared/components';
 
 type ScheduleSegment = 'bookings' | 'services';
 
-/** 예약형 일정 허브 — 예약·서비스(수업/시술) */
+type EmbeddedView = FC<{ embedded?: boolean }>;
+
+/** 예약형 일정 허브 — 예약·서비스(수업/시술). 자식은 embedded로 PageHeader 중복을 막는다. */
 export const BookingScheduleHubView: FC<{
-  bookingsView: FC;
-  servicesView: FC;
+  bookingsView: EmbeddedView;
+  servicesView: EmbeddedView;
   bookingsLabel?: string;
   servicesLabel?: string;
 }> = ({
@@ -54,7 +56,7 @@ export const BookingScheduleHubView: FC<{
           />
         }
       />
-      {segment === 'bookings' ? <BookingsView /> : <ServicesView />}
+      {segment === 'bookings' ? <BookingsView embedded /> : <ServicesView embedded />}
     </div>
   );
 };

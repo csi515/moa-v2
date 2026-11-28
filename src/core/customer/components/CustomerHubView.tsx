@@ -17,8 +17,10 @@ export function registerCustomerHubGuardianEnrollment(view: FC): void {
   registeredGuardianEnrollmentView = view;
 }
 
+type EmbeddedView = FC<{ embedded?: boolean }>;
+
 export const CustomerHubView: FC<{
-  listView?: FC;
+  listView?: EmbeddedView;
   enrollmentLabel?: string;
   guardianEnrollmentView?: FC;
   showEnrollmentTab?: boolean; // 기본값 false
@@ -67,13 +69,13 @@ export const CustomerHubView: FC<{
     else setActiveTab(listTab);
   };
 
-  let body = ListView ? <ListView /> : null;
+  let body = ListView ? <ListView embedded /> : null;
   if (segment === 'parents') {
-    body = <ParentManagementView />;
+    body = <ParentManagementView embedded />;
   } else if (segment === 'enrollment') {
     body = (
       <div className="space-y-4">
-        <CustomerJoinRequestsPanel />
+        <CustomerJoinRequestsPanel embedded />
         {GuardianView ? <GuardianView /> : null}
       </div>
     );

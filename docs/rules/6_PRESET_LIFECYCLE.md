@@ -2,7 +2,7 @@
 
 > **문서 버전:** 1.0.0  
 > **상위 헌법:** [AGENTS.md](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/AGENTS.md)  
-> **관련 문서:** [docs/rules/1_ARCHITECTURE_BOUNDARIES.md](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/rules/1_ARCHITECTURE_BOUNDARIES.md)
+> **관련 문서:** [docs/rules/1_ARCHITECTURE_BOUNDARIES.md](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/rules/1_ARCHITECTURE_BOUNDARIES.md), [7_AGNOSTIC_CONFIGURATION.md](./7_AGNOSTIC_CONFIGURATION.md), [MOA_AGNOSTIC_ERP_ROADMAP.md](../MOA_AGNOSTIC_ERP_ROADMAP.md)
 
 ---
 

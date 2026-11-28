@@ -1,27 +1,41 @@
 import { PageListSkeleton } from '@/shared/components/ui/Skeleton';
-import { useCallback, useEffect, useMemo, useState, type FC } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type FC } from 'react';
 import {
   Package,
   Plus,
   FolderOpen,
   FileSpreadsheet,
   AlertTriangle,
-  CheckCircle2,
   XCircle,
   Pencil,
   Check,
   X,
-  PlusCircle,
+  PackagePlus,
+  SlidersHorizontal,
+  ClipboardCheck,
+  ArrowLeftRight,
+  Settings,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
+import { usePermissions } from '@/core/auth/usePermissions';
 import { useOrganization } from '@/core/organizations/OrganizationProvider';
 import { isSupabaseConfigured } from '@/lib/supabase';
-import { EmptyState, PageHeader, Modal } from '@/shared/components';
-import { Button, FORM_ACTION_BUTTON_CLASS, FilterBar, FilterTabs, SearchField } from '@/shared/components/ui';
-import { BarcodeLabelPrintModal, type InventoryItem } from '@/capabilities/inventory';
+import { EmptyState, PageHeader } from '@/shared/components';
+import {
+  Button,
+  FORM_CONTROL_CLASS,
+  FilterBar,
+  FilterTabs,
+  SearchField,
+} from '@/shared/components/ui';
 import { DESKTOP_CONTAINERS } from '@/shared/styles/density';
 import { cn } from '@/shared/lib/utils';
 import { formatCurrency } from '@/utils/formatters';
+import {
+  stockLocationService,
+  type StockLocation,
+} from '@/capabilities/commerce/stock';
+import { useWorkspaceMemberScope } from '@/pages/workspace/useWorkspaceMemberScope';
 import { productService } from '../../services/productService';
 import { inventoryService } from '../../services/inventoryService';
 import type {
@@ -29,85 +43,180 @@ import type {
   ProductListItem,
   ProductStatusFilter,
 } from '../../types/product';
+import type { InventoryStockRow } from '../../types/inventory';
 import { ProductFormModal } from './ProductFormModal';
 import { openRetailSettingsPanel } from '../settings/retailSettingsIntent';
 import { ProductBulkImportModal } from './ProductBulkImportModal';
 import { PRODUCT_LIST_COPY as COPY } from './productListCopy';
 import { getIndustryPreset } from '@/app/presets/presetRegistry';
+import {
+  matchesProductStockFilter,
+  productQtyToneClass,
+  type ProductStockFilter,
+} from './productStockUtils';
+import {
+  clearProductStockFilter,
+  peekProductStockFilter,
+} from './productStockIntent';
+import { StockInboundModal } from '../inventory/StockInboundModal';
+import { StockAdjustmentModal } from '../inventory/StockAdjustmentModal';
+import { StockTransferModal } from '../inventory/StockTransferModal';
+import { StocktakeAuditModal } from '../inventory/StocktakeAuditModal';
+import { INVENTORY_LIST_COPY as INV_COPY } from '../inventory/inventoryListCopy';
 
 type CategoryFilter = 'ALL' | 'NONE' | string;
+/** 'ALL' = 전체 창고 합산 */
+type LocationFilter = 'ALL' | string;
 
 export const ProductListView: FC = () => {
-  const { showToast, openConfirmDialog, setActiveTab } = useApp();
+  const { showToast, setActiveTab } = useApp();
+  const { isAdmin } = usePermissions();
   const { currentOrganization } = useOrganization();
+  const memberScope = useWorkspaceMemberScope();
   const orgId = currentOrganization?.id;
-  const organizationName = currentOrganization?.name || '매장';
+  const canMutate = isAdmin;
   const requireSizeColorVariants = Boolean(
     getIndustryPreset(currentOrganization?.industry_type)?.businessRules?.sizeColorSkuSupport
   );
+  const locationInitializedRef = useRef(false);
 
   const [items, setItems] = useState<ProductListItem[]>([]);
   const [categories, setCategories] = useState<ProductCategory[]>([]);
-  const [stockByProductId, setStockByProductId] = useState<Record<string, number>>({});
+  const [stockRows, setStockRows] = useState<InventoryStockRow[]>([]);
+  const [locations, setLocations] = useState<StockLocation[]>([]);
+  const [locationsLoaded, setLocationsLoaded] = useState(false);
+  const [locationFilter, setLocationFilter] = useState<LocationFilter>('ALL');
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('ALL');
   const [statusFilter, setStatusFilter] = useState<ProductStatusFilter>('ALL');
+  const [stockFilter, setStockFilter] = useState<ProductStockFilter>(
+    () => peekProductStockFilter() ?? 'ALL'
+  );
   const [formOpen, setFormOpen] = useState(false);
   const [bulkImportOpen, setBulkImportOpen] = useState(false);
   const [editing, setEditing] = useState<ProductListItem | null>(null);
-  const [printItem, setPrintItem] = useState<InventoryItem | null>(null);
 
-  // [개선안 7] 인라인 가격 수정 상태 (productId -> editingPrice)
   const [inlinePriceEditingId, setInlinePriceEditingId] = useState<string | null>(null);
-  const [inlinePriceInput, setInlinePriceInput] = useState<string>('');
+  const [inlinePriceInput, setInlinePriceInput] = useState('');
   const [inlinePriceSaving, setInlinePriceSaving] = useState(false);
 
-  // [개선안 7] 간편 빠른 입고 모달 상태
-  const [quickInboundItem, setQuickInboundItem] = useState<ProductListItem | null>(null);
-  const [quickInboundQty, setQuickInboundQty] = useState<string>('');
-  const [quickInboundSaving, setQuickInboundSaving] = useState(false);
+  const [inboundOpen, setInboundOpen] = useState(false);
+  const [inboundInitial, setInboundInitial] = useState<InventoryStockRow | null>(null);
+  const [adjustOpen, setAdjustOpen] = useState(false);
+  const [adjustInitial, setAdjustInitial] = useState<InventoryStockRow | null>(null);
+  const [transferOpen, setTransferOpen] = useState(false);
+  const [transferInitial, setTransferInitial] = useState<InventoryStockRow | null>(null);
+  const [stocktakeOpen, setStocktakeOpen] = useState(false);
+
+  useEffect(() => {
+    clearProductStockFilter();
+  }, []);
+
+  const loadLocations = useCallback(async () => {
+    if (!orgId || !isSupabaseConfigured()) {
+      setLocations([]);
+      setLocationsLoaded(false);
+      locationInitializedRef.current = false;
+      return;
+    }
+    try {
+      const all = await stockLocationService.listLocations(orgId);
+      const scoped = stockLocationService.filterByMemberScope(all, {
+        scopeType: memberScope.scopeType,
+        memberDepartmentId: memberScope.memberDepartmentId,
+        memberPath: memberScope.memberPath,
+        departmentPathById: memberScope.departmentPathById,
+      });
+      setLocations(scoped);
+      if (!locationInitializedRef.current) {
+        locationInitializedRef.current = true;
+        const central = scoped.find((loc) => loc.code === 'central');
+        setLocationFilter(central?.id ?? scoped[0]?.id ?? 'ALL');
+      } else {
+        setLocationFilter((prev) => {
+          if (prev === 'ALL') return 'ALL';
+          if (scoped.some((loc) => loc.id === prev)) return prev;
+          const central = scoped.find((loc) => loc.code === 'central');
+          return central?.id ?? scoped[0]?.id ?? 'ALL';
+        });
+      }
+    } catch (err) {
+      showToast.error(err, COPY.loadError);
+      setLocations([]);
+    } finally {
+      setLocationsLoaded(true);
+    }
+  }, [orgId, memberScope, showToast]);
 
   const load = useCallback(async () => {
     if (!orgId || !isSupabaseConfigured()) {
       setItems([]);
       setCategories([]);
-      setStockByProductId({});
+      setStockRows([]);
       return;
     }
     setLoading(true);
     try {
-      const [list, cats, stockRows] = await Promise.all([
+      const [list, cats, rows] = await Promise.all([
         productService.listProducts(orgId),
         productService.listCategories(orgId),
-        inventoryService.listStockRows(orgId).catch(() => []),
+        inventoryService
+          .listStockRows(
+            orgId,
+            locationFilter === 'ALL'
+              ? { allLocations: true }
+              : { stockLocationId: locationFilter }
+          )
+          .catch(() => [] as InventoryStockRow[]),
       ]);
-
-      const stockMap: Record<string, number> = {};
-      for (const row of stockRows) {
-        stockMap[row.productId] = (stockMap[row.productId] ?? 0) + row.quantity;
-      }
-
       setItems(list);
       setCategories(cats);
-      setStockByProductId(stockMap);
+      setStockRows(rows);
     } catch (err) {
       showToast.error(err, COPY.loadError);
       setItems([]);
+      setStockRows([]);
     } finally {
       setLoading(false);
     }
-  }, [orgId, showToast]);
+  }, [orgId, locationFilter, showToast]);
+
+  useEffect(() => {
+    void loadLocations();
+  }, [loadLocations]);
 
   useEffect(() => {
     void load();
   }, [load]);
 
+  const stockByProductId = useMemo(() => {
+    const map: Record<string, number> = {};
+    for (const row of stockRows) {
+      map[row.productId] = (map[row.productId] ?? 0) + row.quantity;
+    }
+    return map;
+  }, [stockRows]);
+
+  const stockCounts = useMemo(() => {
+    let low = 0;
+    let out = 0;
+    for (const item of items) {
+      const qty = stockByProductId[item.id] ?? 0;
+      if (qty <= 0) out += 1;
+      else if (matchesProductStockFilter(qty, item.safetyStock, 'LOW')) low += 1;
+    }
+    return { all: items.length, low, out };
+  }, [items, stockByProductId]);
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return items.filter((item) => {
-      if (q && !item.name.toLowerCase().includes(q) && !(item.productCode?.toLowerCase().includes(q) ?? false)) {
-        return false;
+      if (q) {
+        const nameHit = item.name.toLowerCase().includes(q);
+        const specHit = item.spec?.toLowerCase().includes(q) ?? false;
+        const codeHit = item.productCode?.toLowerCase().includes(q) ?? false;
+        if (!nameHit && !specHit && !codeHit) return false;
       }
       if (statusFilter === 'ACTIVE' && !item.isActive) return false;
       if (statusFilter === 'INACTIVE' && item.isActive) return false;
@@ -119,23 +228,64 @@ export const ProductListView: FC = () => {
       ) {
         return false;
       }
+      const qty = stockByProductId[item.id] ?? 0;
+      if (!matchesProductStockFilter(qty, item.safetyStock, stockFilter)) return false;
       return true;
     });
-  }, [items, search, statusFilter, categoryFilter]);
+  }, [items, search, statusFilter, categoryFilter, stockFilter, stockByProductId]);
+
+  const selectedLocationId = locationFilter === 'ALL' ? null : locationFilter;
+  const locationOpsLocked = locationFilter === 'ALL';
+  const transferFromLocationId =
+    selectedLocationId ??
+    locations.find((loc) => loc.code === 'central')?.id ??
+    locations[0]?.id ??
+    '';
+
+  const resolveInboundLocationName = () => {
+    if (locationFilter !== 'ALL') {
+      return locations.find((loc) => loc.id === locationFilter)?.name ?? COPY.locationLabel;
+    }
+    return (
+      locations.find((loc) => loc.code === 'central')?.name ??
+      locations[0]?.name ??
+      '기본 창고'
+    );
+  };
 
   const openCreate = () => {
+    if (!canMutate) return;
     setEditing(null);
     setFormOpen(true);
   };
 
   const openEdit = (item: ProductListItem) => {
+    if (!canMutate) return;
     setEditing(item);
     setFormOpen(true);
   };
 
-  // [개선안 7] 인라인 빠른 가격 저장
+  const openWarehouseSettings = () => {
+    openRetailSettingsPanel('warehouses');
+    setActiveTab('settings');
+  };
+
+  const openInboundForProduct = (item: ProductListItem) => {
+    if (!canMutate) return;
+    const row = stockRows.find((r) => r.productId === item.id) ?? null;
+    setInboundInitial(row);
+    setInboundOpen(true);
+  };
+
+  const openAdjustForProduct = (item: ProductListItem) => {
+    if (!canMutate || locationOpsLocked) return;
+    const row = stockRows.find((r) => r.productId === item.id) ?? null;
+    setAdjustInitial(row);
+    setAdjustOpen(true);
+  };
+
   const handleSaveInlinePrice = async (item: ProductListItem) => {
-    if (!orgId) return;
+    if (!orgId || !canMutate) return;
     const newPrice = Number(inlinePriceInput.replace(/[^\d]/g, ''));
     if (!Number.isFinite(newPrice) || newPrice < 0) {
       showToast('올바른 판매 가격을 입력해 주세요.', 'error');
@@ -148,6 +298,7 @@ export const ProductListView: FC = () => {
         orgId,
         {
           name: item.name,
+          spec: item.spec,
           categoryId: item.categoryId,
           productCode: item.productCode,
           price: newPrice,
@@ -169,60 +320,60 @@ export const ProductListView: FC = () => {
     }
   };
 
-  // [개선안 7] 간편 빠른 입고 실행
-  const handleQuickInboundSubmit = async () => {
-    if (!orgId || !quickInboundItem) return;
-    const qty = Number(quickInboundQty.replace(/[^\d]/g, ''));
-    if (!Number.isFinite(qty) || qty <= 0) {
-      showToast('입고 수량을 1개 이상 입력해 주세요.', 'error');
-      return;
-    }
-
-    setQuickInboundSaving(true);
-    try {
-      await inventoryService.applyInbound({
-        organizationId: orgId,
-        productId: quickInboundItem.id,
-        quantity: qty,
-        reason: '목록에서 간편 빠른 입고',
-      });
-
-      setStockByProductId((prev) => ({
-        ...prev,
-        [quickInboundItem.id]: (prev[quickInboundItem.id] ?? 0) + qty,
-      }));
-
-      showToast(`'${quickInboundItem.name}' 재고 ${qty}개가 즉시 입고되었습니다.`, 'success');
-      setQuickInboundItem(null);
-      setQuickInboundQty('');
-    } catch (err) {
-      showToast.error(err, '입고 처리에 실패했습니다.');
-    } finally {
-      setQuickInboundSaving(false);
-    }
+  const renderStockStatus = (item: ProductListItem) => {
+    const stock = stockByProductId[item.id] ?? 0;
+    return (
+      <div className="inline-flex items-center justify-center gap-1.5">
+        <span
+          className={cn(
+            'text-sm font-black tabular-nums',
+            productQtyToneClass(stock, item.safetyStock)
+          )}
+        >
+          {stock.toLocaleString()}개
+        </span>
+        {stock <= 0 ? (
+          <span className="inline-flex items-center gap-0.5 text-[11px] font-bold px-1.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">
+            <XCircle className="w-3 h-3" />
+            {COPY.stockBadgeOut}
+          </span>
+        ) : matchesProductStockFilter(stock, item.safetyStock, 'LOW') ? (
+          <span className="inline-flex items-center gap-0.5 text-[11px] font-bold px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+            <AlertTriangle className="w-3 h-3" />
+            {COPY.stockBadgeLow}
+          </span>
+        ) : null}
+      </div>
+    );
   };
 
-  // [개선안 6] 재고 상태 뱃지 렌더러
-  const renderStockBadge = (productId: string) => {
-    const stock = stockByProductId[productId] ?? 0;
-    if (stock <= 0) {
-      return (
-        <span className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">
-          <XCircle className="w-3 h-3" /> 품절
-        </span>
-      );
-    }
-    if (stock <= 5) {
-      return (
-        <span className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
-          <AlertTriangle className="w-3 h-3" /> 품절임박 ({stock}개)
-        </span>
-      );
-    }
+  const rowActions = (item: ProductListItem) => {
+    if (!canMutate) return null;
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-        <CheckCircle2 className="w-3 h-3" /> {stock}개
-      </span>
+      <div className="inline-flex items-center gap-1.5 justify-end flex-wrap">
+        <Button
+          type="button"
+          variant="outline"
+          size="default"
+          onClick={() => openInboundForProduct(item)}
+          leftIcon={<PackagePlus className="w-3.5 h-3.5" />}
+        >
+          {COPY.inbound}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="default"
+          disabled={locationOpsLocked}
+          title={locationOpsLocked ? COPY.locationPickHint : COPY.adjust}
+          onClick={() => openAdjustForProduct(item)}
+        >
+          {COPY.adjust}
+        </Button>
+        <Button type="button" variant="outline" size="default" onClick={() => openEdit(item)}>
+          {COPY.edit}
+        </Button>
+      </div>
     );
   };
 
@@ -244,104 +395,220 @@ export const ProductListView: FC = () => {
         icon={<Package className="w-5 h-5" />}
         iconClassName="text-teal-600"
         title={COPY.title}
-        description={COPY.description}
+        description={canMutate ? COPY.description : COPY.readOnlyHint}
         actions={
-          <div className="flex flex-wrap items-center justify-end gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="default"
-              onClick={() => {
-                openRetailSettingsPanel('categories');
-                setActiveTab('settings');
-              }}
-              leftIcon={<FolderOpen className="w-4 h-4" />}
-            >
-              {COPY.categoryManage}
-            </Button>
-            <div className="hidden lg:block">
+          canMutate ? (
+            <div className="flex flex-wrap items-center justify-end gap-2">
               <Button
                 type="button"
                 variant="outline"
                 size="default"
-                onClick={() => setBulkImportOpen(true)}
-                leftIcon={<FileSpreadsheet className="w-4 h-4" />}
+                onClick={() => {
+                  openRetailSettingsPanel('categories');
+                  setActiveTab('settings');
+                }}
+                leftIcon={<FolderOpen className="w-4 h-4" />}
               >
-                엑셀 일괄 등록
+                {COPY.categoryManage}
+              </Button>
+              <div className="hidden lg:block">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="default"
+                  onClick={() => setBulkImportOpen(true)}
+                  leftIcon={<FileSpreadsheet className="w-4 h-4" />}
+                >
+                  엑셀 일괄 등록
+                </Button>
+              </div>
+              <Button
+                type="button"
+                variant="primary"
+                size="default"
+                onClick={openCreate}
+                leftIcon={<Plus className="w-4 h-4" />}
+              >
+                {COPY.add}
               </Button>
             </div>
-            <Button
-              type="button"
-              variant="primary"
-              size="default"
-              onClick={openCreate}
-              leftIcon={<Plus className="w-4 h-4" />}
-            >
-              {COPY.add}
-            </Button>
-          </div>
+          ) : undefined
         }
       />
 
       <FilterBar>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:flex-1">
-          <SearchField
-            value={search}
-            onChange={setSearch}
-            placeholder="상품명 또는 규격 검색 (예: 둥근머리 볼트, 테이프, 엘보)"
-            className="w-full sm:flex-1 sm:min-w-[200px]"
-          />
+        <SearchField
+          value={search}
+          onChange={setSearch}
+          placeholder={COPY.searchPlaceholder}
+          className="w-full"
+        />
+      </FilterBar>
+
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value as CategoryFilter)}
+          className={`${FORM_CONTROL_CLASS} sm:w-auto`}
+          aria-label={COPY.categoryLabel}
+        >
+          <option value="ALL">{COPY.categoryAll}</option>
+          <option value="NONE">{COPY.categoryNone}</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-bold text-slate-500 shrink-0">{COPY.locationLabel}</span>
           <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value as CategoryFilter)}
-            className="w-full sm:w-auto min-h-[44px] px-3 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl"
-            aria-label={COPY.categoryLabel}
+            value={locationFilter}
+            onChange={(e) => setLocationFilter(e.target.value as LocationFilter)}
+            className={`${FORM_CONTROL_CLASS} sm:w-auto`}
+            aria-label={COPY.locationLabel}
           >
-            <option value="ALL">{COPY.categoryAll}</option>
-            <option value="NONE">{COPY.categoryNone}</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
+            <option value="ALL">{COPY.locationAll}</option>
+            {locations.map((loc) => (
+              <option key={loc.id} value={loc.id}>
+                {loc.name}
               </option>
             ))}
           </select>
         </div>
+      </div>
 
-        <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
-          <FilterTabs
-            tabs={[
-              { id: 'ALL', label: COPY.statusAll },
-              { id: 'ACTIVE', label: COPY.statusActive },
-              { id: 'INACTIVE', label: COPY.statusInactive },
-            ]}
-            active={statusFilter}
-            onChange={(id) => setStatusFilter(id as ProductStatusFilter)}
-            activeClassName="bg-teal-600 text-white"
-          />
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+        <FilterTabs
+          tabs={[
+            { id: 'ALL', label: COPY.statusAll },
+            { id: 'ACTIVE', label: COPY.statusActive },
+            { id: 'INACTIVE', label: COPY.statusInactive },
+          ]}
+          active={statusFilter}
+          onChange={(id) => setStatusFilter(id as ProductStatusFilter)}
+          activeClassName="bg-teal-600 text-white"
+        />
+        <FilterTabs
+          tabs={[
+            { id: 'ALL', label: COPY.stockFilterAll, count: stockCounts.all },
+            { id: 'LOW', label: COPY.stockFilterLow, count: stockCounts.low },
+            { id: 'OUT', label: COPY.stockFilterOut, count: stockCounts.out },
+          ]}
+          active={stockFilter}
+          onChange={(id) => setStockFilter(id as ProductStockFilter)}
+          activeClassName="bg-amber-600 text-white"
+        />
+      </div>
+
+      {canMutate ? (
+        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2.5">
+          <span className="text-[11px] font-bold text-slate-500 mr-1">{COPY.stockOpsLabel}</span>
+          <Button
+            type="button"
+            variant="outline"
+            size="default"
+            onClick={() => {
+              setInboundInitial(null);
+              setInboundOpen(true);
+            }}
+            leftIcon={<PackagePlus className="w-4 h-4" />}
+          >
+            {COPY.inbound}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="default"
+            disabled={locationOpsLocked}
+            title={locationOpsLocked ? COPY.locationPickHint : COPY.adjust}
+            onClick={() => {
+              setAdjustInitial(null);
+              setAdjustOpen(true);
+            }}
+            leftIcon={<SlidersHorizontal className="w-4 h-4" />}
+          >
+            {COPY.adjust}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="default"
+            disabled={locationOpsLocked}
+            title={locationOpsLocked ? COPY.locationPickHint : COPY.stocktake}
+            onClick={() => setStocktakeOpen(true)}
+            leftIcon={<ClipboardCheck className="w-4 h-4" />}
+          >
+            {COPY.stocktake}
+          </Button>
+          {locations.length > 1 ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="default"
+              disabled={locationOpsLocked}
+              title={locationOpsLocked ? COPY.locationPickHint : COPY.transfer}
+              onClick={() => {
+                setTransferInitial(null);
+                setTransferOpen(true);
+              }}
+              leftIcon={<ArrowLeftRight className="w-4 h-4" />}
+            >
+              {COPY.transfer}
+            </Button>
+          ) : null}
         </div>
-      </FilterBar>
+      ) : null}
+
+      {locationsLoaded && !locations.some((loc) => loc.configured) ? (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <p className="text-sm font-bold text-slate-900">{COPY.locationUnsetTitle}</p>
+            <p className="text-xs text-slate-600 mt-1">{COPY.locationUnsetDescription}</p>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="default"
+            onClick={openWarehouseSettings}
+            leftIcon={<Settings className="w-4 h-4" />}
+          >
+            {COPY.locationGoSettings}
+          </Button>
+        </div>
+      ) : null}
 
       {loading ? (
         <PageListSkeleton rows={4} message="상품을 불러오는 중..." />
       ) : filtered.length === 0 ? (
         <EmptyState
           icon={<Package className="w-10 h-10" />}
-          title={items.length === 0 ? COPY.emptyTitle : '검색 결과가 없습니다'}
-          description={items.length === 0 ? COPY.emptyDescription : '검색어나 필터 조건을 변경해 보세요.'}
+          title={items.length === 0 ? COPY.emptyTitle : COPY.emptyFilterTitle}
+          description={items.length === 0 ? COPY.emptyDescription : COPY.emptyFilterDescription}
+          action={
+            items.length === 0 && canMutate
+              ? {
+                  label: COPY.emptyAddAction,
+                  onClick: openCreate,
+                  icon: <Plus className="w-4 h-4" />,
+                }
+              : undefined
+          }
         />
       ) : (
         <>
-          {/* 모바일 카드 뷰 (슬림 2단 정돈) */}
           <ul className="space-y-2.5 sm:hidden">
             {filtered.map((item) => (
               <li
                 key={item.id}
                 className="bg-white rounded-2xl border border-slate-200 p-3.5 space-y-2 shadow-2xs"
               >
-                {/* 1행: 상품명 및 카테고리/옵션/상태 */}
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <p className="font-bold text-slate-900 text-sm truncate">{item.name}</p>
+                    {item.spec ? (
+                      <p className="text-xs text-slate-500 mt-0.5 truncate">{item.spec}</p>
+                    ) : null}
                     <p className="text-xs text-slate-500 mt-0.5 truncate">
                       {item.categoryName ? `${item.categoryName} · ` : ''}
                       {COPY.optionBadge(item.variantCount)}
@@ -358,56 +625,32 @@ export const ProductListView: FC = () => {
                   </span>
                 </div>
 
-                {/* 2행: 단가 & 재고 현황 & 액션 버튼 */}
-                <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs gap-2">
+                <div className="flex items-center justify-between pt-2 border-t border-slate-100 gap-2">
                   <div className="flex items-center gap-2 flex-wrap min-w-0">
                     <span className="font-black tabular-nums text-teal-700 text-base">
                       {formatCurrency(item.price)}
                     </span>
                     <span className="text-slate-200">|</span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-bold tabular-nums text-slate-900">
-                        재고 {(stockByProductId[item.id] ?? 0).toLocaleString()}개
-                      </span>
-                      {renderStockBadge(item.id)}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      title="10개 즉시 입고"
-                      onClick={() => {
-                        setQuickInboundItem(item);
-                        setQuickInboundQty('10');
-                      }}
-                      leftIcon={<PlusCircle className="w-3.5 h-3.5" />}
-                    >
-                      +10
-                    </Button>
-                    <Button type="button" variant="outline" size="sm" onClick={() => openEdit(item)}>
-                      {COPY.edit}
-                    </Button>
+                    {renderStockStatus(item)}
                   </div>
                 </div>
+
+                {canMutate ? <div className="pt-1">{rowActions(item)}</div> : null}
               </li>
             ))}
           </ul>
-          {/* 데스크톱 테이블 뷰 */}
+
           <div className="hidden sm:block bg-white rounded-2xl border border-slate-200 overflow-hidden">
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-50 text-slate-600 text-xs font-bold border-b border-slate-200">
                 <tr>
                   <th className="p-4">{COPY.nameLabel}</th>
+                  <th className="p-4">{COPY.specLabel}</th>
                   <th className="p-4">{COPY.categoryLabel}</th>
-                  <th className="p-4">{COPY.optionModeLabel}</th>
-                  <th className="p-4 text-center">현재고 수량</th>
+                  <th className="p-4 text-center">현재고</th>
                   <th className="p-4 text-right">{COPY.priceLabel}</th>
-                  <th className="p-4 text-right">매입원가</th>
                   <th className="p-4 text-center">{COPY.activeLabel}</th>
-                  <th className="p-4 text-right">관리</th>
+                  {canMutate ? <th className="p-4 text-right">관리</th> : null}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -415,63 +658,39 @@ export const ProductListView: FC = () => {
                   const isEditingPrice = inlinePriceEditingId === item.id;
                   return (
                     <tr key={item.id} className="hover:bg-slate-50/60">
-                      <td className="p-4 font-bold text-slate-900">{item.name}</td>
+                      <td className="p-4">
+                        <p className="font-bold text-slate-900">{item.name}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          {COPY.optionBadge(item.variantCount)}
+                        </p>
+                      </td>
+                      <td className="p-4 text-slate-600 text-xs max-w-[12rem]">
+                        {item.spec || '-'}
+                      </td>
                       <td className="p-4 text-slate-600">{item.categoryName || '-'}</td>
-                      <td className="p-4 text-slate-600">
-                        {COPY.optionBadge(item.variantCount)}
-                      </td>
-                      {/* 현재고 수량 및 빠른 입고 버튼 */}
-                      <td className="p-4 text-center">
-                        <div className="inline-flex items-center justify-center gap-2">
-                          <span
-                            className={cn(
-                              'text-sm font-black tabular-nums',
-                              (stockByProductId[item.id] ?? 0) <= 0
-                                ? 'text-rose-600'
-                                : (stockByProductId[item.id] ?? 0) <= 5
-                                ? 'text-amber-700'
-                                : 'text-slate-900'
-                            )}
-                          >
-                            {(stockByProductId[item.id] ?? 0).toLocaleString()}개
-                          </span>
-                          {renderStockBadge(item.id)}
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            title="즉시 10개 간편 입고"
-                            onClick={() => {
-                              setQuickInboundItem(item);
-                              setQuickInboundQty('10');
-                            }}
-                            leftIcon={<PlusCircle className="w-3.5 h-3.5" />}
-                          >
-                            +10
-                          </Button>
-                        </div>
-                      </td>
-                      {/* 인라인 빠른 가격 수정 */}
+                      <td className="p-4 text-center">{renderStockStatus(item)}</td>
                       <td className="p-4 text-right">
-                        {isEditingPrice ? (
+                        {canMutate && isEditingPrice ? (
                           <div className="inline-flex items-center gap-1 justify-end">
                             <input
                               type="text"
                               inputMode="numeric"
                               value={inlinePriceInput}
-                              onChange={(e) => setInlinePriceInput(e.target.value.replace(/[^\d]/g, ''))}
+                              onChange={(e) =>
+                                setInlinePriceInput(e.target.value.replace(/[^\d]/g, ''))
+                              }
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter') void handleSaveInlinePrice(item);
                                 if (e.key === 'Escape') setInlinePriceEditingId(null);
                               }}
                               disabled={inlinePriceSaving}
-                              className="w-24 px-2 py-1 bg-white border border-teal-500 rounded-lg text-right font-bold tabular-nums text-slate-900 text-sm focus:outline-none"
+                              className={`${FORM_CONTROL_CLASS} w-24 text-right font-bold tabular-nums`}
                               autoFocus
                             />
                             <Button
                               type="button"
                               variant="primary"
-                              size="icon-sm"
+                              size="icon-md"
                               disabled={inlinePriceSaving}
                               onClick={() => void handleSaveInlinePrice(item)}
                               title="저장"
@@ -482,15 +701,15 @@ export const ProductListView: FC = () => {
                             <Button
                               type="button"
                               variant="ghost"
-                              size="icon-sm"
+                              size="icon-md"
                               onClick={() => setInlinePriceEditingId(null)}
                               title="취소"
                               aria-label="가격 수정 취소"
                             >
-                              <X className="w-3.5 h-3.5" />
+                              <X className="w-3 h-3" />
                             </Button>
                           </div>
-                        ) : (
+                        ) : canMutate ? (
                           <div
                             onClick={() => {
                               setInlinePriceEditingId(item.id);
@@ -502,11 +721,11 @@ export const ProductListView: FC = () => {
                             <span>{formatCurrency(item.price)}</span>
                             <Pencil className="w-3 h-3 opacity-0 group-hover:opacity-100 text-slate-400 transition-opacity" />
                           </div>
+                        ) : (
+                          <span className="font-bold tabular-nums text-teal-700">
+                            {formatCurrency(item.price)}
+                          </span>
                         )}
-                      </td>
-                      {/* 매입원가 */}
-                      <td className="p-4 text-right text-slate-500 font-medium tabular-nums">
-                        {item.cost != null ? formatCurrency(item.cost) : '-'}
                       </td>
                       <td className="p-4 text-center">
                         <span
@@ -519,26 +738,9 @@ export const ProductListView: FC = () => {
                           {item.isActive ? COPY.statusActive : COPY.statusInactive}
                         </span>
                       </td>
-                      <td className="p-4 text-right">
-                        <div className="inline-flex items-center gap-1.5 justify-end">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            title="간편 입고 수량 입력"
-                            onClick={() => {
-                              setQuickInboundItem(item);
-                              setQuickInboundQty('');
-                            }}
-                            leftIcon={<PlusCircle className="w-3.5 h-3.5" />}
-                          >
-                            입고
-                          </Button>
-                          <Button type="button" variant="outline" size="sm" onClick={() => openEdit(item)}>
-                            {COPY.edit}
-                          </Button>
-                        </div>
-                      </td>
+                      {canMutate ? (
+                        <td className="p-4 text-right">{rowActions(item)}</td>
+                      ) : null}
                     </tr>
                   );
                 })}
@@ -548,117 +750,100 @@ export const ProductListView: FC = () => {
         </>
       )}
 
-      {/* [개선안 7] 간편 빠른 입고 모달 */}
-      <Modal
-        isOpen={Boolean(quickInboundItem)}
-        onClose={() => setQuickInboundItem(null)}
-        title="간편 재고 입고"
-        maxWidth="sm"
-      >
-        {quickInboundItem && (
-          <div className="p-4 sm:p-6 space-y-4">
-            <div>
-              <p className="font-bold text-slate-900 text-base">{quickInboundItem.name}</p>
-              <p className="text-xs text-slate-500 mt-0.5">
-                현재고: <span className="font-bold text-teal-700">{stockByProductId[quickInboundItem.id] ?? 0}개</span>
-              </p>
-            </div>
+      {canMutate && (
+        <>
+          <ProductFormModal
+            isOpen={formOpen}
+            organizationId={orgId}
+            categories={categories}
+            editing={editing}
+            requireSizeColorVariants={requireSizeColorVariants}
+            onClose={() => setFormOpen(false)}
+            onSaved={() => {
+              showToast(
+                editing ? '상품이 수정되었습니다.' : '상품이 등록되었습니다.',
+                'success'
+              );
+              void load();
+            }}
+            onError={(message) => showToast(message, 'error')}
+          />
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                입고할 수량
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  value={quickInboundQty}
-                  onChange={(e) => setQuickInboundQty(e.target.value.replace(/[^\d]/g, ''))}
-                  placeholder="수량 입력"
-                  className="w-full min-h-[44px] rounded-xl border border-slate-300 bg-white px-3 pr-10 text-base font-bold tabular-nums text-slate-900 focus:outline-teal-600"
-                  autoFocus
-                />
-                <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500">
-                  개
-                </span>
-              </div>
-            </div>
+          <ProductBulkImportModal
+            isOpen={bulkImportOpen}
+            organizationId={orgId}
+            onClose={() => setBulkImportOpen(false)}
+            onSuccess={() => {
+              showToast('상품 일괄 등록이 완료되었습니다.', 'success');
+              void load();
+            }}
+          />
 
-            {/* 빠른 수량 추가 버튼 */}
-            <div className="flex flex-wrap items-center gap-2">
-              {[5, 10, 20, 50, 100].map((q) => (
-                <Button
-                  key={q}
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setQuickInboundQty(String(q))}
-                >
-                  +{q}
-                </Button>
-              ))}
-            </div>
+          <StockInboundModal
+            isOpen={inboundOpen}
+            organizationId={orgId}
+            stockRows={stockRows}
+            initialRow={inboundInitial}
+            stockLocationId={selectedLocationId}
+            onClose={() => setInboundOpen(false)}
+            onCompleted={(quantityAfter) => {
+              showToast(
+                COPY.inboundDoneAt(resolveInboundLocationName(), quantityAfter),
+                'success'
+              );
+              void load();
+            }}
+            onError={(msg) => showToast(msg, 'error')}
+          />
 
-            <div className="flex flex-wrap items-center justify-end gap-2 pt-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="default"
-                className={FORM_ACTION_BUTTON_CLASS}
-                onClick={() => setQuickInboundItem(null)}
-              >
-                취소
-              </Button>
-              <Button
-                type="button"
-                variant="primary"
-                size="touch"
-                className={FORM_ACTION_BUTTON_CLASS}
-                disabled={quickInboundSaving}
-                isLoading={quickInboundSaving}
-                onClick={handleQuickInboundSubmit}
-              >
-                즉시 입고하기
-              </Button>
-            </div>
-          </div>
-        )}
-      </Modal>
+          <StockAdjustmentModal
+            isOpen={adjustOpen}
+            organizationId={orgId}
+            stockRows={stockRows}
+            initialRow={adjustInitial}
+            stockLocationId={selectedLocationId}
+            onClose={() => setAdjustOpen(false)}
+            onCompleted={(delta, quantityAfter) => {
+              showToast(INV_COPY.adjustDone(delta, quantityAfter), 'success');
+              void load();
+            }}
+            onError={(msg) => showToast(msg, 'error')}
+          />
 
-      {/* 바코드 & QR 라벨 스티커 인쇄 모달 */}
-      <BarcodeLabelPrintModal
-        isOpen={Boolean(printItem)}
-        onClose={() => setPrintItem(null)}
-        item={printItem}
-        organizationName={organizationName}
-      />
+          {transferFromLocationId ? (
+            <StockTransferModal
+              isOpen={transferOpen}
+              organizationId={orgId}
+              stockRows={stockRows}
+              locations={locations}
+              initialRow={transferInitial}
+              fromLocationId={transferFromLocationId}
+              onClose={() => setTransferOpen(false)}
+              onCompleted={() => {
+                showToast(INV_COPY.transferDone, 'success');
+                void load();
+              }}
+              onError={(msg) => showToast(msg, 'error')}
+            />
+          ) : null}
 
-      <ProductFormModal
-        isOpen={formOpen}
-        organizationId={orgId!}
-        categories={categories}
-        editing={editing}
-        requireSizeColorVariants={requireSizeColorVariants}
-        onClose={() => setFormOpen(false)}
-        onSaved={() => {
-          showToast(
-            editing ? '상품이 수정되었습니다.' : '상품이 등록되었습니다.',
-            'success'
-          );
-          void load();
-        }}
-        onError={(message) => showToast(message, 'error')}
-      />
-
-      <ProductBulkImportModal
-        isOpen={bulkImportOpen}
-        organizationId={orgId!}
-        onClose={() => setBulkImportOpen(false)}
-        onSuccess={() => {
-          showToast('상품 일괄 등록이 완료되었습니다.', 'success');
-          void load();
-        }}
-      />
+          <StocktakeAuditModal
+            isOpen={stocktakeOpen}
+            organizationId={orgId}
+            stockRows={stockRows}
+            stockLocationId={selectedLocationId}
+            onClose={() => setStocktakeOpen(false)}
+            onCompleted={(adjustedCount) => {
+              showToast(
+                `재고 실사가 완료되었습니다. (${adjustedCount}개 품목 오차 재고 조정 완료)`,
+                'success'
+              );
+              void load();
+            }}
+            onError={(msg) => showToast(msg, 'error')}
+          />
+        </>
+      )}
     </div>
   );
 };

@@ -1,8 +1,9 @@
 # 3. Moa-v2 상용 프로덕션 UX 및 품질 규칙 (Commercial UX Rules)
 
-> **문서 버전:** 2.0.0  
+> **문서 버전:** 2.1.0  
 > **상위 헌법:** [AGENTS.md](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/AGENTS.md)  
-> **상세 가이드:** [docs/MOA_COMMERCIAL_QUALITY_GUIDELINES.md](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/MOA_COMMERCIAL_QUALITY_GUIDELINES.md)
+> **상세 가이드:** [docs/MOA_COMMERCIAL_QUALITY_GUIDELINES.md](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/docs/MOA_COMMERCIAL_QUALITY_GUIDELINES.md)  
+> **뷰포트 SSOT:** [`src/shared/styles/density.ts`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/src/shared/styles/density.ts) `VIEWPORT_BREAKPOINTS`
 
 ---
 
@@ -52,7 +53,65 @@
 
 ---
 
-## 5. 데스크톱 프로덕션 레이아웃 표준 (Desktop Production Layout Standard)
+## 5. 태블릿 프로덕션 레이아웃 표준 (Tablet Production Layout Standard)
+
+현장 카운터·대기실·원장 태블릿(iPad Mini/Air 등)에서 **폰 셸과 데스크톱 콘텐츠가 섞여 일관성이 깨지는 것**을 막기 위해, 태블릿을 독립 뷰포트 티어로 정의한다.
+
+### 5.1 뷰포트 티어 (SSOT)
+
+| 티어 | 너비 | Tailwind | 훅 |
+| :--- | :--- | :--- | :--- |
+| **Phone** | `< 768px` | 기본 ~ `sm` | `useIsPhone()` |
+| **Tablet** | `768px ≤ w < 1024px` | `md` 이상 ~ `lg` 미만 | `useIsTablet()` |
+| **Desktop** | `≥ 1024px` | `lg` 이상 | `useIsDesktopLayout()` |
+
+- 기준 상수: `VIEWPORT_BREAKPOINTS` (`mdMin: 768`, `lgMin: 1024`).
+- 분류 헬퍼: `classifyViewportWidth(width)`.
+- E2E 기준 뷰포트: **768×1024** (세로 태블릿). 가로 모드에서 너비 ≥1024이면 **Desktop** 티어를 적용한다.
+- `useIsDesktop()`는 과거 호환용 **`md`(768+) 별칭**이다. 신규 코드는 `useIsMdUp` / `useIsTablet` / `useIsDesktopLayout`을 사용한다. “데스크톱 크롬” 판별에 `useIsDesktop()`(768)를 쓰지 않는다.
+
+### 5.2 앱 크롬 (App Chrome) — Phone과 동일
+
+`768 ≤ w < 1024`에서는 내비게이션·셸을 폰과 같게 유지한다.
+
+1. **사이드바 숨김**: 영구 좌측 사이드바는 `lg:`부터 표시 (`Layout` / `lg:flex`).
+2. **하단 독 유지**: `MobileBottomDock`는 태블릿에서도 노출 (`lg:hidden`까지).
+3. **Master-Detail**: 스플릿 금지. **패널 전환(Panel Switch)**만 허용 (`MasterDetailLayout`의 `lg:` 분기 유지).
+4. **모달**: 세로 태블릿은 중앙 모달 또는 바텀시트 모두 허용하되, 터치 닫기·44px·Safe Area를 준수한다.
+
+### 5.3 콘텐츠 밀도 (Content Density) — Desktop에 가깝게
+
+같은 구간에서 **본문 레이아웃**은 `md` 그리드·테이블을 사용한다 (1열 폰 스택에 고정 금지).
+
+1. **카드/타일**: `RESPONSIVE_GRIDS.cards` · `settings` · `form2Col` (`md:grid-cols-2` 등).
+2. **지표**: `RESPONSIVE_GRIDS.metrics` (`md:grid-cols-4`).
+3. **목록**: `StandardListView` / `ResponsiveTable`의 **테이블 전환(`md:`)** 허용. 가로 스크롤이 생기면 카드 폴백 또는 sticky 첫 열을 검토한다.
+4. **컨테이너**: 페이지 루트는 `DESKTOP_CONTAINERS.*`로 최대 너비를 제한한다. 태블릿에서 `w-full` 거대 버튼 스트레치를 금지한다.
+5. **터치**: 태블릿도 **최소 44×44px** (`UI_SIZES.md`). 호버 전용 조작만으로 핵심 기능을 완성하지 않는다.
+
+### 5.4 현장 태블릿·키오스크
+
+1. 로비 출결·서명·방명록 등 **전용 전체화면 라우트**는 일반 셸(하단 독)과 분리해도 된다.
+2. 그래도 터치 44px, Safe Area, 4-State UI, 오프라인 큐 규칙은 동일하게 적용한다.
+3. 공용 패드에서는 「로그인 상태 유지」 해제를 권장하는 UX를 유지한다.
+
+### 5.5 금지 사항
+
+1. 태블릿에서만 임의 브레이크포인트(예: `900px`)를 하드코딩하는 행위 — `VIEWPORT_BREAKPOINTS` / Tailwind `md`·`lg`만 사용.
+2. `useIsDesktop()`(768+)로 사이드바·스플릿·드래그 그리드 등 **데스크톱 크롬**을 켜는 행위 — `useIsDesktopLayout()`(1024+) 사용.
+3. 태블릿을 “작은 데스크톱”으로 보고 영구 사이드바+스플릿을 강제하는 행위.
+4. 태블릿을 “큰 폰”으로만 보고 `md` 2열·테이블을 막는 행위.
+
+### 5.6 페이지 헤더 단일화 (PageHeader SSOT)
+
+1. **앱 크롬**: 전역 `Header`는 `App.tsx`에서 1회만 마운트. `ModuleAppShell`은 `omitHeader`로 중복 방지.
+2. **화면 제목**: 라우트/허브당 `PageHeader` **1개**. 허브가 세그먼트를 가질 때 자식 뷰는 `embedded`로 제목바를 숨기고 액션 툴바만 남긴다 (`FinanceHubView` 패턴).
+3. **ConfirmDialog 호스트**: `App.tsx`에만 마운트. `Layout` 등에서 이중 마운트 금지.
+4. **Master-Detail 우측 패널**: 목록의 `PageHeader`와 겹치지 않도록 상세는 섹션 타이틀(h2)만 사용.
+
+---
+
+## 6. 데스크톱 프로덕션 레이아웃 표준 (Desktop Production Layout Standard)
 
 모바일 1열 스택 UI가 데스크톱 와이드 모니터(1400px~1920px)에서 좌우로 기형적으로 늘어나는 현상을 방지하기 위해 다음 4대 표준을 의무 적용한다:
 
@@ -63,18 +122,18 @@
      - `DESKTOP_CONTAINERS.dashboard` (`max-w-6xl mx-auto w-full`): 대시보드, 지표 관제 위젯, 통계 차트 (3~4열 그리드)
      - `DESKTOP_CONTAINERS.wide` (`max-w-7xl mx-auto w-full`): POS 판매대, 학생/고객 대형 명부, 마스터-디테일 스플릿 뷰
 2. **Master-Detail 2패널 스플릿 뷰 의무화 (`MasterDetailLayout`)**:
-   - 고객 허브, 상담 내역, 진도 일지 등 목록과 상세가 결합된 화면은 모바일에서는 화면 전환(Panel Switch)을 유지하되, **데스크톱(≥1024px)에서는 반드시 좌측 목록(35~40%) + 우측 상세(60~65%) 2패널 분할 뷰**를 적용한다.
+   - 고객 허브, 상담 내역, 진도 일지 등 목록과 상세가 결합된 화면은 **Phone·Tablet**에서는 화면 전환(Panel Switch)을 유지하되, **Desktop(≥1024px)에서는 반드시 좌측 목록(35~40%) + 우측 상세(60~65%) 2패널 분할 뷰**를 적용한다.
 3. **반응형 카드 그리드 의무화 (`RESPONSIVE_GRIDS`)**:
-   - 카드 목록이나 지표 요약은 모바일 1열에 머물지 않고 데스크톱 브레이크포인트에 따라 확장한다:
+   - 카드 목록이나 지표 요약은 Phone 1열에 머물지 않고 Tablet(`md`)·Desktop 브레이크포인트에 따라 확장한다:
      - 일반 카드: `RESPONSIVE_GRIDS.cards` (`grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4`)
      - 지표 요약: `RESPONSIVE_GRIDS.metrics` (`grid-cols-2 md:grid-cols-4 gap-3`)
      - 설정 타일: `RESPONSIVE_GRIDS.settings` (`grid-cols-1 md:grid-cols-2 gap-3.5`)
 4. **전체 너비 버튼(Full-width Button) 스트레치 금지**:
-   - 설정 메뉴나 조작 버튼이 화면 전체 폭(`w-full min-h-[64px]`)으로 거대하게 늘어나는 것을 금지하며, 데스크톱에서는 2열 타일 그리드 또는 고정폭 버튼 컨테이너를 적용한다.
+   - 설정 메뉴나 조작 버튼이 화면 전체 폭(`w-full min-h-[64px]`)으로 거대하게 늘어나는 것을 금지하며, Tablet·Desktop에서는 2열 타일 그리드 또는 고정폭 버튼 컨테이너를 적용한다.
 
 ---
 
-## 6. 회복 탄력적 에러 핸들링 및 가시성 (Resilient Observability)
+## 7. 회복 탄력적 에러 핸들링 및 가시성 (Resilient Observability)
 
 1. **기술 용어 숨김 및 한국어 번역 필수**:
    - Supabase RLS 오류(`42501`, `row-level security`), DB 제약조건명, 영문 시스템 에러를 사용자에게 그대로 노출하지 않고 반드시 **[`userFacingErrorMessage`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/src/shared/errors/userFacingError.ts)**를 거쳐 친절한 한국어 해결 가이드로 변환한다.
@@ -85,7 +144,7 @@
 
 ---
 
-## 7. 대규모 데이터 성능 및 개인정보 보호 (Performance & Compliance)
+## 8. 대규모 데이터 성능 및 개인정보 보호 (Performance & Compliance)
 
 1. **대량 목록 가상화(Virtualization)**:
    - 원생 목록, 출결 로그 등 100건 이상 데이터 목록은 `@tanstack/react-virtual` 가상 스크롤 또는 서버 페이징을 적용한다.
@@ -96,7 +155,7 @@
 
 ---
 
-## 8. 다역할(Multi-Role) 권한 및 테넌트 전환 보안 (Identity & Role Switching)
+## 9. 다역할(Multi-Role) 권한 및 테넌트 전환 보안 (Identity & Role Switching)
 
 1. **활성 멤버십 권한 검증 (Active Role Guard)**:
    - 사용자가 여러 사업장에서 다른 역할(예: A학원 원장, B학원 학부모)을 가질 수 있으므로, 단순 `user.role` 체크를 금지하고 반드시 현재 활성 테넌트의 권한(`canAccess` / `RoleGate`)을 기반으로 UI와 기능을 제어한다.
@@ -105,7 +164,7 @@
 
 ---
 
-## 9. 오프라인 우선 큐 및 현장 네트워크 복원력 (Offline-First Resilience)
+## 10. 오프라인 우선 큐 및 현장 네트워크 복원력 (Offline-First Resilience)
 
 1. **현장 필수 기능의 오프라인 큐화**:
    - 로비 키오스크 출결 체크, 셔틀버스 승하차 확인 등 순간적인 통신 두절이 잦은 현장 기능은 [`attendanceOfflineQueue`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/src/capabilities/attendance/offline/attendanceOfflineQueue.test.ts) 패턴을 적용한다.
@@ -114,7 +173,7 @@
 
 ---
 
-## 10. 마찰 없는 사용성 보장 규칙 (Frictionless UX Invariants)
+## 11. 마찰 없는 사용성 보장 규칙 (Frictionless UX Invariants)
 
 실제 사용자가 매일 운영하며 겪는 조작 피로도와 마찰(Friction)을 원천 차단하기 위해 아래 5대 규칙을 의무 적용한다.
 
@@ -132,7 +191,7 @@
 
 ---
 
-## 11. 표준 데이터 뷰 자동 바인딩 규격 (The Auto-Wired DataView Contract)
+## 12. 표준 데이터 뷰 자동 바인딩 규격 (The Auto-Wired DataView Contract)
 
 목록(List) 화면 개발 시 날것의 `<table>` 태그나 분절된 UI를 수동 조립하는 것을 금지하며, 공통 컨테이너인 [`StandardListView`](file:///c:/Users/USER/OneDrive/문서/GitHub/Moa-v2/src/shared/components/ui/StandardListView.tsx)를 통해 아래 6대 기본 운영 기능을 **선언적(Auto-wired)**으로 세팅한다:
 
@@ -142,8 +201,8 @@
    - `searchable` 설정 시 300ms 디바운스 검색창과 'X' 원클릭 지우기 버튼이 자동 배치되며, 검색 시 현재 페이지가 자동으로 1페이지로 리셋된다.
 3. **4-State 자동 폴백 (Auto 4-State Rendering)**:
    - `isLoading` 시 스켈레톤, 데이터 0건 시 Actionable CTA를 가진 `EmptyStateHero`, 에러 발생 시 `userFacingErrorMessage` 기반의 재시도 UI를 자동 렌더링한다.
-4. **반응형 모바일 카드 뷰 자동 지원 (Responsive Desktop Table & Mobile Card)**:
-   - 데스크톱에서는 반응형 테이블, 모바일에서는 터치 친화적 카드 레이아웃으로 자동 전환된다.
+4. **반응형 목록 자동 지원 (Phone Card / Tablet+ Table)**:
+   - Phone(`<768`)에서는 터치 친화적 카드, Tablet·Desktop(`md`+)에서는 반응형 테이블로 자동 전환된다.
 5. **원클릭 데이터 내보내기 (Auto Data Export)**:
    - `exportable` 설정 시 상단 [CSV/엑셀 다운로드] 버튼이 자동 배치되어 현재 필터링된 데이터셋을 안전하게 다운로드한다.
 6. **컬럼 정렬 인터랙션 (Auto Sorting Header)**:
@@ -151,7 +210,7 @@
 
 ---
 
-## 12. 대량 작업(Bulk Operations) 안전성 및 리포트 규격 (Bulk Action Safety Contract)
+## 13. 대량 작업(Bulk Operations) 안전성 및 리포트 규격 (Bulk Action Safety Contract)
 
 다수의 대상을 한 번에 처리하는 일괄 작업 시 조작 실수와 침묵의 실패를 방지한다.
 
@@ -162,7 +221,7 @@
 
 ---
 
-## 13. 폼 유효성 검사 및 첫 에러 필드 자동 포커스 규격 (Form Validation & Focus Contract)
+## 14. 폼 유효성 검사 및 첫 에러 필드 자동 포커스 규격 (Form Validation & Focus Contract)
 
 긴 입력 폼 작성 시 저장 버튼 클릭 후 화면이 멈춰있는 오해를 방지한다.
 
@@ -173,7 +232,7 @@
 
 ---
 
-## 14. 일관성 보장을 위한 표준 구현 레시피 (Canonical Code Recipes)
+## 15. 일관성 보장을 위한 표준 구현 레시피 (Canonical Code Recipes)
 
 Moa-v2의 전 화면에서 일관된 UX와 안정성을 담보하기 위해 아래 5대 표준 패턴을 의무 적용한다.
 

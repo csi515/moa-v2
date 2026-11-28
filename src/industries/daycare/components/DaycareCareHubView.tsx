@@ -14,11 +14,13 @@ const SEGMENT_COPY: Record<CareSegment, { title: string; description: string }> 
   records: { title: '보육', description: '예방접종·검진·귀가·사고' },
 };
 
-/** 어린이집 보육 허브 — 알림장·투약·법정 기록 */
+type EmbeddedView = FC<{ embedded?: boolean }>;
+
+/** 어린이집 보육 허브 — 알림장·투약·법정 기록. 자식은 embedded로 PageHeader 중복을 막는다. */
 export const DaycareCareHubView: FC<{
-  journalsView: FC;
-  medicationsView: FC;
-  recordsView: FC;
+  journalsView: EmbeddedView;
+  medicationsView: EmbeddedView;
+  recordsView: EmbeddedView | FC;
 }> = ({ journalsView: JournalsView, medicationsView: MedicationsView, recordsView: RecordsView }) => {
   const { activeTab, setActiveTab } = useApp();
   const [recordsOpen, setRecordsOpen] = useState(false);
@@ -80,7 +82,13 @@ export const DaycareCareHubView: FC<{
           />
         }
       />
-      {segment === 'journals' ? <JournalsView /> : segment === 'medications' ? <MedicationsView /> : <RecordsView />}
+      {segment === 'journals' ? (
+        <JournalsView embedded />
+      ) : segment === 'medications' ? (
+        <MedicationsView embedded />
+      ) : (
+        <RecordsView />
+      )}
     </div>
   );
 };

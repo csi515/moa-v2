@@ -1,6 +1,7 @@
 import { useEffect, useState, type FC } from 'react';
-import { BookOpenCheck, ChevronRight, Coins, FolderOpen, Settings, Warehouse } from 'lucide-react';
+import { BookOpenCheck, Coins, FolderOpen, Settings, Warehouse } from 'lucide-react';
 import { PageHeader } from '@/shared/components';
+import { SettingsNavTile } from '@/shared/components/ui';
 import { useApp } from '@/context/AppContext';
 import { DESKTOP_CONTAINERS, RESPONSIVE_GRIDS } from '@/shared/styles/density';
 import { cn } from '@/shared/lib/utils';
@@ -54,75 +55,30 @@ export const RetailSettingsView: FC = () => {
       </p>
 
       <nav className={RESPONSIVE_GRIDS.settings} aria-label="설정 메뉴">
-        <button
-          type="button"
+        <SettingsNavTile
+          title={COPY.menuCustomerPoints}
+          hint={COPY.menuCustomerPointsHint}
+          icon={<Coins className="w-5 h-5" />}
           onClick={() => setPanel('points')}
-          className="w-full flex items-center gap-3 text-left bg-white rounded-2xl border border-slate-200/90 p-4 min-h-[64px] hover:border-teal-400 hover:shadow-xs transition-all active:bg-slate-50 cursor-pointer"
-        >
-          <span className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 inline-flex items-center justify-center shrink-0">
-            <Coins className="w-5 h-5" />
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-sm font-bold text-slate-900">
-              {COPY.menuCustomerPoints}
-            </span>
-            <span className="block text-xs text-slate-500 mt-0.5">
-              {COPY.menuCustomerPointsHint}
-            </span>
-          </span>
-          <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
-        </button>
-
-        <button
-          type="button"
+        />
+        <SettingsNavTile
+          title={COPY.menuProductCategories}
+          hint={COPY.menuProductCategoriesHint}
+          icon={<FolderOpen className="w-5 h-5" />}
           onClick={() => setPanel('categories')}
-          className="w-full flex items-center gap-3 text-left bg-white rounded-2xl border border-slate-200/90 p-4 min-h-[64px] hover:border-teal-400 hover:shadow-xs transition-all active:bg-slate-50 cursor-pointer"
-        >
-          <span className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 inline-flex items-center justify-center shrink-0">
-            <FolderOpen className="w-5 h-5" />
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-sm font-bold text-slate-900">
-              {COPY.menuProductCategories}
-            </span>
-            <span className="block text-xs text-slate-500 mt-0.5">
-              {COPY.menuProductCategoriesHint}
-            </span>
-          </span>
-          <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
-        </button>
-
-        <button
-          type="button"
+        />
+        <SettingsNavTile
+          title={COPY.menuWarehouses}
+          hint={COPY.menuWarehousesHint}
+          icon={<Warehouse className="w-5 h-5" />}
           onClick={() => setPanel('warehouses')}
-          className="w-full flex items-center gap-3 text-left bg-white rounded-2xl border border-slate-200/90 p-4 min-h-[64px] hover:border-teal-400 hover:shadow-xs transition-all active:bg-slate-50 cursor-pointer"
-        >
-          <span className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 inline-flex items-center justify-center shrink-0">
-            <Warehouse className="w-5 h-5" />
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-sm font-bold text-slate-900">{COPY.menuWarehouses}</span>
-            <span className="block text-xs text-slate-500 mt-0.5">{COPY.menuWarehousesHint}</span>
-          </span>
-          <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
-        </button>
-
-        <button
-          type="button"
+        />
+        <SettingsNavTile
+          title="일일 시재 마감"
+          hint="현금 시재 대조 (POS 판매내역과 분리)"
+          icon={<BookOpenCheck className="w-5 h-5" />}
           onClick={() => setActiveTab('ledger')}
-          className="w-full flex items-center gap-3 text-left bg-white rounded-2xl border border-slate-200/90 p-4 min-h-[64px] hover:border-teal-400 hover:shadow-xs transition-all active:bg-slate-50 cursor-pointer"
-        >
-          <span className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 inline-flex items-center justify-center shrink-0">
-            <BookOpenCheck className="w-5 h-5" />
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-sm font-bold text-slate-900">일일 시재 마감</span>
-            <span className="block text-xs text-slate-500 mt-0.5">
-              현금 시재 대조 (POS 판매내역과 분리)
-            </span>
-          </span>
-          <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
-        </button>
+        />
       </nav>
     </div>
   );

@@ -35,8 +35,8 @@ function getLinkedSourceShort(sourceType?: string): string | null {
 }
 
 export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
-  const { industry, isOwner, isAdmin, canPermission } = usePermissions();
-  const hasFinanceAccess = isOwner || isAdmin || canPermission('finance.read');
+  const { industry, isOwner } = usePermissions();
+  const hasFinanceAccess = isOwner;
   const refreshKey = useStorageRefresh('finance');
   const settingsRefreshKey = useStorageRefresh('settings');
   const currentSettings = useMemo(() => billingStorage.getSettings(), [settingsRefreshKey]);
@@ -168,7 +168,7 @@ export const IncomeManagementView: React.FC<{ embedded?: boolean }> = ({ embedde
         <div className="space-y-1">
           <h3 className="text-base font-black text-slate-900">수입 장부 열람 권한 제한</h3>
           <p className="text-xs text-slate-500 leading-relaxed">
-            수입 내역 등록 및 열람은 관리자(원장) 또는 재무(finance.read) 권한자 전용입니다.
+            수입 내역 등록 및 열람은 사업주(원장) 전용입니다.
           </p>
         </div>
       </div>

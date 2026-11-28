@@ -115,7 +115,7 @@ export const PianoScheduleView: FC = () => {
           maxWidth="4xl"
         >
           <div className="p-1">
-            <MakeupManagementView />
+            <MakeupManagementView embedded />
           </div>
         </Modal>
       )}

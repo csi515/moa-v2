@@ -24,7 +24,7 @@ import { DailyCloseList } from './components/DailyCloseList';
 
 const MOOD_OPTIONS: CareJournalMood[] = ['good', 'normal', 'tired', 'sick'];
 
-export const CareJournalView: FC = () => {
+export const CareJournalView: FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const { showToast, openConfirmDialog, currentUser, setActiveTab } = useApp();
   const { scopeStudents } = useStaffScope();
   const refreshKey = useStorageRefresh();
@@ -192,25 +192,31 @@ export const CareJournalView: FC = () => {
     });
   };
 
+  const createButton = (
+    <button
+      type="button"
+      onClick={() => openCreate()}
+      disabled={students.length === 0}
+      className="inline-flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white text-xs font-bold"
+    >
+      <Plus className="w-4 h-4" />
+      알림장 작성
+    </button>
+  );
+
   return (
-    <div className="space-y-4 pb-4">
-      <PageHeader
-        icon={<BookOpen className="w-6 h-6" />}
-        iconClassName="text-sky-600"
-        title="알림장"
-        description="원아별 하루 생활·건강·활동을 보호자에게 전합니다"
-        actions={
-          <button
-            type="button"
-            onClick={() => openCreate()}
-            disabled={students.length === 0}
-            className="inline-flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white text-xs font-bold"
-          >
-            <Plus className="w-4 h-4" />
-            알림장 작성
-          </button>
-        }
-      />
+    <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
+      {!embedded ? (
+        <PageHeader
+          icon={<BookOpen className="w-6 h-6" />}
+          iconClassName="text-sky-600"
+          title="알림장"
+          description="원아별 하루 생활·건강·활동을 보호자에게 전합니다"
+          actions={createButton}
+        />
+      ) : (
+        <div className="flex justify-end">{createButton}</div>
+      )}
 
       <DailyCloseList
         close={close}

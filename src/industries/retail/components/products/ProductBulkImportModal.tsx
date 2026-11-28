@@ -158,13 +158,13 @@ export const ProductBulkImportModal: React.FC<Props> = ({
                   표준 CSV 양식을 사용해 주세요
                 </p>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  상품명, 바코드, 판매가, 원가, 카테고리, 옵션, 기초재고를 한 번에 작성할 수 있습니다.
+                  상품명, 판매가, 원가, 카테고리, 옵션, 기초재고를 한 번에 작성할 수 있습니다.
                 </p>
               </div>
               <Button
                 type="button"
                 variant="outline"
-                size="sm"
+                size="default"
                 onClick={handleDownloadTemplate}
                 leftIcon={<Download className="w-4 h-4" />}
               >
@@ -207,7 +207,7 @@ export const ProductBulkImportModal: React.FC<Props> = ({
                   onChange={(e) => setUpdateExisting(e.target.checked)}
                   className="rounded border-slate-300 text-teal-600 focus:ring-teal-500 w-4 h-4"
                 />
-                <span>기존에 등록된 바코드/상품명이 있는 경우 기존 상품 정보를 업데이트(수정)합니다.</span>
+                <span>같은 상품명이 있으면 기존 상품 정보를 업데이트합니다.</span>
               </label>
               <label className="flex items-center gap-2.5 text-xs text-slate-700 font-medium cursor-pointer">
                 <input
@@ -273,7 +273,7 @@ export const ProductBulkImportModal: React.FC<Props> = ({
                   <thead className="bg-slate-100 text-slate-600 sticky top-0">
                     <tr>
                       <th className="p-2">상품명</th>
-                      <th className="p-2">바코드</th>
+                      <th className="p-2">상품코드</th>
                       <th className="p-2">카테고리</th>
                       <th className="p-2 text-right">판매가</th>
                       <th className="p-2 text-center">옵션수</th>

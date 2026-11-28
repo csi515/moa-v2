@@ -28,6 +28,8 @@ import { resolveActiveCapabilityIds } from '@/domain/permissionVisibility';
 import { getPlaceLabel } from '@/core/industry/industryUi';
 import { RolePermissionMatrix } from './RolePermissionMatrix';
 import { OwnershipTransferCard } from './OwnershipTransferCard';
+import { AuthorizationGrantsCard } from '@/core/organizations/components/AuthorizationGrantsCard';
+import { matrixKeySatisfiesCanonical } from '@/core/authorization/permissionAliases';
 
 type RoleRow = DynamicRoleRow;
 type MemberRow = DynamicMemberRow;
@@ -50,14 +52,18 @@ export function AccessDeniedBanner() {
 
 export function FinanceRouteGate({ children }: { children: ReactNode }) {
   const { role } = useAuthorization();
-  let flags = null;
+  let flags: Record<string, boolean> | null = null;
   try {
     const stored = StorageService.getActiveUser()?.customRole?.permissions;
     flags = normalizeRolePermissions(stored);
   } catch {
     flags = null;
   }
-  if (role !== 'owner' && flags && flags.billing_invoices !== true) {
+  if (
+    role !== 'owner' &&
+    flags &&
+    !matrixKeySatisfiesCanonical(flags, 'finance.read')
+  ) {
     return <AccessDeniedBanner />;
   }
   return <>{children}</>;
@@ -374,6 +380,8 @@ export function DynamicRoleSettingsPage() {
               ))}
             </ul>
           </section>
+
+          <AuthorizationGrantsCard members={members} />
 
           <section className="pt-4">
             <OwnershipTransferCard />

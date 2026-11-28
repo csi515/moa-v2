@@ -27,7 +27,9 @@ import {
   extractCustomFieldValues,
   validateCustomFields,
   mergeCustomFieldValues,
+  type CustomFieldDefinition,
 } from '@/core/customer/customFields';
+import { resolveCustomFieldDefinitions } from '@/core/fields/fieldDefinitionService';
 import { CustomFieldsForm } from '@/core/customer/components/CustomFieldsForm';
 import { Save, RefreshCw, StickyNote, SlidersHorizontal, ChevronDown, ChevronUp, Calendar } from 'lucide-react';
 import { Modal } from '@/shared/components/ui/Modal';
@@ -93,6 +95,9 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
   const allStudents = useMemo(() => (isOpen ? rosterStorage.getStudents() : []), [isOpen]);
   const settings = useMemo(() => (isOpen ? settingsStorage.getSettings() : settingsStorage.getSettings()), [isOpen]);
   const defaultLevel = useMemo(() => getStudentLevelOptions(industry)[0], [industry]);
+  const [customFieldsDef, setCustomFieldsDef] = useState<readonly CustomFieldDefinition[]>(() =>
+    getCustomFieldsForIndustry(industry)
+  );
   const rosterConfig = useMemo(
     () =>
       getRosterConfigForIndustry(industry, {
@@ -100,14 +105,26 @@ export const StudentFormModal: React.FC<StudentFormModalProps> = ({
         staffLabel: labels.staff.singular,
         serviceLabel,
         placeLabel,
+        customFields: customFieldsDef,
       }),
-    [industry, customerLabel, labels.staff.singular, serviceLabel, placeLabel]
+    [industry, customerLabel, labels.staff.singular, serviceLabel, placeLabel, customFieldsDef]
   );
   const showPickupFields = rosterConfig.showPickupFields;
   const showSchoolFields = rosterConfig.showSchoolFields;
   const canInviteParent = isSupabaseConfigured() && organizationId !== 'local-org';
   const isEdit = Boolean(student?.id);
-  const customFieldsDef = useMemo(() => getCustomFieldsForIndustry(industry), [industry]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    let cancelled = false;
+    const orgId = organizationId === 'local-org' ? null : organizationId;
+    void resolveCustomFieldDefinitions(orgId, industry, 'customer').then((fields) => {
+      if (!cancelled) setCustomFieldsDef(fields);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen, organizationId, industry]);
 
   const [formData, setFormData] = useState<StudentFormData>({
     name: '',

@@ -1,10 +1,9 @@
-import { useEffect, useState, useCallback, type FormEvent, type FC } from 'react';
-import { Plus, Trash2, Barcode, Sparkles, RefreshCw, Settings } from 'lucide-react';
+import { useEffect, useState, type FormEvent, type FC } from 'react';
+import { Plus, Trash2, Settings } from 'lucide-react';
 import { Modal } from '@/shared/components';
 import { Button, FORM_ACTION_BUTTON_CLASS, FormField, FORM_CONTROL_CLASS, SegmentedControl } from '@/shared/components/ui';
 import { useApp } from '@/context/AppContext';
 import { openRetailSettingsPanel } from '../settings/retailSettingsIntent';
-import { useBarcodeScanner, playScannerSound } from '@/capabilities/inventory';
 import { productService } from '../../services/productService';
 import { inventoryService } from '../../services/inventoryService';
 import type {
@@ -73,8 +72,8 @@ export const ProductFormModal: FC<Props> = ({
   const { setActiveTab, openConfirmDialog } = useApp();
   const selectableCategories = categories.filter((category) => category.isActive);
   const [name, setName] = useState('');
+  const [spec, setSpec] = useState('');
   const [productCode, setProductCode] = useState('');
-  const [showBarcodeOption, setShowBarcodeOption] = useState(false);
   const [price, setPrice] = useState('');
   const [cost, setCost] = useState('');
   const [safetyStock, setSafetyStock] = useState('0');
@@ -85,27 +84,6 @@ export const ProductFormModal: FC<Props> = ({
   const [variants, setVariants] = useState<VariantDraft[]>([emptyVariant()]);
   const [saving, setSaving] = useState(false);
   const [hydrating, setHydrating] = useState(false);
-  const [lastScannedFeedback, setLastScannedFeedback] = useState(false);
-
-  // 기성품 바코드 핸드스캐너(HID) 자동 입력 리스너 (바코드 옵션 활성화 시에만 수신)
-  const handleBarcodeScanned = useCallback(
-    (code: string) => {
-      if (!isOpen || !showBarcodeOption) return;
-      const clean = code.trim();
-      if (clean) {
-        setProductCode(clean);
-        setLastScannedFeedback(true);
-        setTimeout(() => setLastScannedFeedback(false), 1500);
-      }
-    },
-    [isOpen, showBarcodeOption]
-  );
-
-  useBarcodeScanner({
-    onScan: handleBarcodeScanned,
-    enabled: isOpen && showBarcodeOption,
-    feedbackOnScan: false,
-  });
 
   useEffect(() => {
     if (!isOpen) return;
@@ -115,8 +93,8 @@ export const ProductFormModal: FC<Props> = ({
       setHydrating(true);
       if (!editing) {
         setName('');
+        setSpec('');
         setProductCode('');
-        setShowBarcodeOption(false);
         setPrice('');
         setCost('');
         setSafetyStock('0');
@@ -133,9 +111,9 @@ export const ProductFormModal: FC<Props> = ({
       }
 
       setName(editing.name);
+      setSpec(editing.spec || '');
       const code = editing.productCode || '';
       setProductCode(code);
-      setShowBarcodeOption(Boolean(code));
       setPrice(String(editing.price));
       setCost(editing.cost != null ? String(editing.cost) : '');
       setSafetyStock(String(editing.safetyStock ?? 0));
@@ -182,21 +160,15 @@ export const ProductFormModal: FC<Props> = ({
     setVariants((prev) => prev.map((v) => (v.key === key ? { ...v, ...patch } : v)));
   };
 
-  const handleGenerateInternalCode = () => {
-    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-    const dateStr = new Date().toISOString().slice(2, 10).replace(/-/g, '');
-    const generated = `NB-${dateStr}-${randomSuffix}`;
-    setProductCode(generated);
-    setShowBarcodeOption(true);
-  };
-
   const goToCategorySettings = () => {
     const leave = () => {
       openRetailSettingsPanel('categories');
       onClose();
       setActiveTab('settings');
     };
-    const dirty = Boolean(name.trim() || price.trim() || cost.trim() || productCode.trim());
+    const dirty = Boolean(
+      name.trim() || spec.trim() || price.trim() || cost.trim() || productCode.trim()
+    );
     if (!dirty) {
       leave();
       return;
@@ -249,6 +221,7 @@ export const ProductFormModal: FC<Props> = ({
         organizationId,
         {
           name,
+          spec: spec.trim() || null,
           productCode: productCode.trim() || null,
           price: priceNum,
           cost: parseOptionalNumber(cost),
@@ -331,7 +304,17 @@ export const ProductFormModal: FC<Props> = ({
             onChange={(e) => setName(e.target.value)}
             className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
             autoComplete="off"
-            placeholder="상품명 입력 (예: 둥근머리 볼트 M6, 방수 절연테이프, 배관 엘보 15A)"
+            placeholder="상품명 입력 (예: 둥근머리 볼트, 방수 절연테이프)"
+          />
+        </FormField>
+
+        <FormField label={COPY.specLabel} hint={COPY.specHint}>
+          <input
+            value={spec}
+            onChange={(e) => setSpec(e.target.value)}
+            className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
+            autoComplete="off"
+            placeholder={COPY.specPlaceholder}
           />
         </FormField>
 
@@ -362,94 +345,46 @@ export const ProductFormModal: FC<Props> = ({
           </FormField>
         </div>
 
-        <FormField label={COPY.safetyStockLabel} hint={COPY.safetyStockHint}>
-          <input
-            type="number"
-            min={0}
-            step={1}
-            inputMode="numeric"
-            value={safetyStock}
-            onChange={(e) => setSafetyStock(e.target.value)}
-            className={`${FORM_CONTROL_CLASS} min-h-[44px] text-base font-bold tabular-nums w-full sm:w-40`}
-            placeholder="0"
-          />
-        </FormField>
-
-        {/* 카테고리 및 초기 재고 수량 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {selectableCategories.length === 0 ? (
-            <div className="sm:col-span-2 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-3 space-y-2">
-              <p className="text-sm text-slate-700">{COPY.categoryFormEmpty}</p>
-              <Button
-                type="button"
-                variant="outline"
-                size="default"
-                onClick={goToCategorySettings}
-                leftIcon={<Settings className="w-4 h-4" />}
-              >
-                {COPY.categoryGoSettings}
-              </Button>
-            </div>
-          ) : (
-            <FormField label={COPY.categoryLabel} hint={COPY.categoryFormHint}>
-              <select
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
-              >
-                <option value="">{COPY.categoryNone}</option>
-                {selectableCategories.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </FormField>
-          )}
-
-          {!editing && optionMode === 'none' ? (
-            <FormField
-              label="현재고 수량 (초기 입고)"
-              hint="입력한 수량만큼 즉시 재고가 등록됩니다"
+        {selectableCategories.length === 0 ? (
+          <div className="rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-3 space-y-2">
+            <p className="text-sm text-slate-700">{COPY.categoryFormEmpty}</p>
+            <Button
+              type="button"
+              variant="outline"
+              size="default"
+              onClick={goToCategorySettings}
+              leftIcon={<Settings className="w-4 h-4" />}
             >
-              <input
-                type="number"
-                min={0}
-                step={1}
-                value={initialStock}
-                onChange={(e) => setInitialStock(e.target.value)}
-                className={`${FORM_CONTROL_CLASS} min-h-[44px] font-bold tabular-nums text-teal-800 bg-teal-50/40 border-teal-200 focus:border-teal-500`}
-                placeholder="0 (현재 매장 보유 수량)"
-              />
-            </FormField>
-          ) : (
-            <div className="flex items-center">
-              <label className="flex items-center gap-2 min-h-[44px] text-sm font-semibold text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={isActive}
-                  onChange={(e) => setIsActive(e.target.checked)}
-                  className="w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500"
-                />
-                {COPY.activeLabel} ({isActive ? COPY.statusActive : COPY.statusInactive})
-              </label>
-            </div>
-          )}
-        </div>
-
-        {!editing && optionMode === 'none' && (
-          <label className="flex items-center gap-2 min-h-[44px] text-sm font-semibold text-slate-700">
-            <input
-              type="checkbox"
-              checked={isActive}
-              onChange={(e) => setIsActive(e.target.checked)}
-              className="w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500"
-            />
-            {COPY.activeLabel} ({isActive ? COPY.statusActive : COPY.statusInactive})
-          </label>
+              {COPY.categoryGoSettings}
+            </Button>
+          </div>
+        ) : (
+          <FormField label={COPY.categoryLabel} hint={COPY.categoryFormHint}>
+            <select
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+              className={`${FORM_CONTROL_CLASS} min-h-[44px]`}
+            >
+              <option value="">{COPY.categoryNone}</option>
+              {selectableCategories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </FormField>
         )}
 
-        {/* 규격 및 옵션 설정 */}
+        <label className="flex items-center gap-2 min-h-[44px] text-sm font-semibold text-slate-700">
+          <input
+            type="checkbox"
+            checked={isActive}
+            onChange={(e) => setIsActive(e.target.checked)}
+            className="w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500"
+          />
+          {COPY.activeLabel} ({isActive ? COPY.statusActive : COPY.statusInactive})
+        </label>
+
         <div className="space-y-2 pt-2 border-t border-slate-100">
           <p className="text-xs font-semibold text-slate-700">{COPY.optionModeLabel}</p>
           {requireSizeColorVariants ? (
@@ -474,54 +409,9 @@ export const ProductFormModal: FC<Props> = ({
             fullWidth
             aria-label={COPY.optionModeLabel}
           />
-        </div>
-
-        {/* 보조 옵션: 바코드/관리코드 (기본 접힘) */}
-        <div className="pt-2 border-t border-slate-100">
-          <button
-            type="button"
-            onClick={() => setShowBarcodeOption((prev) => !prev)}
-            className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 cursor-pointer py-1"
-          >
-            <Barcode className="w-4 h-4 text-slate-400" />
-            <span>{showBarcodeOption ? '바코드/식별코드 접기' : '바코드/식별코드 입력 (선택)'}</span>
-            <span className="text-[10px] text-slate-400 font-normal">
-              {showBarcodeOption ? '▲' : '▼ (무바코드 상품은 비워두셔도 됩니다)'}
-            </span>
-          </button>
-
-          {showBarcodeOption && (
-            <div className="mt-2 space-y-2 p-3.5 bg-slate-50 border border-slate-200 rounded-2xl animate-in fade-in duration-150">
-              <div className="flex items-center justify-between gap-2">
-                <label className="text-xs font-bold text-slate-700">
-                  기성품 바코드 / 고유 관리코드
-                </label>
-                <button
-                  type="button"
-                  onClick={handleGenerateInternalCode}
-                  className="text-[11px] font-bold text-slate-600 hover:text-teal-700 flex items-center gap-1 cursor-pointer"
-                  title="바코드가 없는 제품용 임의 고유 코드 생성"
-                >
-                  <RefreshCw className="w-3 h-3" /> 관리코드 자동생성
-                </button>
-              </div>
-
-              <div className="relative">
-                <input
-                  value={productCode}
-                  onChange={(e) => setProductCode(e.target.value)}
-                  className={`${FORM_CONTROL_CLASS} min-h-[44px] font-mono text-sm`}
-                  placeholder="바코드 번호 입력 (스캐너 인식 시 자동 기입)"
-                  autoComplete="off"
-                />
-              </div>
-              {lastScannedFeedback && (
-                <p className="text-[11px] font-bold text-teal-600 flex items-center gap-0.5 animate-pulse">
-                  <Sparkles className="w-3.5 h-3.5" /> 스캐너로 입력되었습니다!
-                </p>
-              )}
-            </div>
-          )}
+          {!editing && optionMode === 'yes' ? (
+            <p className="text-xs text-slate-500">{COPY.optionInitialStockHint}</p>
+          ) : null}
         </div>
 
         {optionMode === 'yes' && (
@@ -534,16 +424,16 @@ export const ProductFormModal: FC<Props> = ({
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-xs font-bold text-slate-500">옵션 {index + 1}</p>
                   {variants.length > 1 && (
-                    <button
+                    <Button
                       type="button"
-                      onClick={() =>
-                        setVariants((prev) => prev.filter((v) => v.key !== row.key))
-                      }
-                      className="inline-flex items-center gap-1 text-xs font-bold text-rose-600 min-h-[44px] px-2"
+                      variant="ghost"
+                      size="default"
+                      onClick={() => setVariants((prev) => prev.filter((v) => v.key !== row.key))}
+                      leftIcon={<Trash2 className="w-4 h-4" />}
+                      className="text-rose-600 hover:bg-rose-50"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
                       {COPY.removeOption}
-                    </button>
+                    </Button>
                   )}
                 </div>
 
@@ -590,7 +480,7 @@ export const ProductFormModal: FC<Props> = ({
                 </div>
 
                 {!editing && (
-                  <FormField label="옵션 초기 입고 재고 (개)">
+                  <FormField label={COPY.initialStockLabel} hint={COPY.initialStockHint}>
                     <input
                       type="number"
                       min={0}
@@ -598,7 +488,7 @@ export const ProductFormModal: FC<Props> = ({
                       value={row.initialStock || ''}
                       onChange={(e) => updateVariant(row.key, { initialStock: e.target.value })}
                       className={`${FORM_CONTROL_CLASS} min-h-[44px] tabular-nums text-teal-700 bg-teal-50/30 border-teal-200`}
-                      placeholder="0 (선택)"
+                      placeholder="0"
                     />
                   </FormField>
                 )}
@@ -631,6 +521,39 @@ export const ProductFormModal: FC<Props> = ({
             </Button>
           </div>
         )}
+
+        <div className="rounded-2xl border border-teal-100 bg-teal-50/40 p-3.5 space-y-3">
+          <p className="text-xs font-bold text-teal-900">
+            {editing || optionMode === 'yes' ? COPY.safetyStockSection : COPY.openingStockSection}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <FormField label={COPY.safetyStockLabel} hint={COPY.safetyStockHint}>
+              <input
+                type="number"
+                min={0}
+                step={1}
+                inputMode="numeric"
+                value={safetyStock}
+                onChange={(e) => setSafetyStock(e.target.value)}
+                className={`${FORM_CONTROL_CLASS} min-h-[44px] text-base font-bold tabular-nums`}
+                placeholder="0"
+              />
+            </FormField>
+            {!editing && optionMode === 'none' ? (
+              <FormField label={COPY.initialStockLabel} hint={COPY.initialStockHint}>
+                <input
+                  type="number"
+                  min={0}
+                  step={1}
+                  value={initialStock}
+                  onChange={(e) => setInitialStock(e.target.value)}
+                  className={`${FORM_CONTROL_CLASS} min-h-[44px] font-bold tabular-nums text-teal-800 bg-white border-teal-200 focus:border-teal-500`}
+                  placeholder="0"
+                />
+              </FormField>
+            ) : null}
+          </div>
+        </div>
 
         <div className="flex flex-wrap items-center justify-end gap-2 pt-2 sticky bottom-0 bg-white pb-1">
           <Button

@@ -1,0 +1,86 @@
+{
+  "piano": {
+    "defaultCategories": [],
+    "allocationPolicyStub": {
+      "overbook_mode": "forbid",
+      "negative_stock_mode": "forbid",
+      "hold_ttl_seconds": 900
+    },
+    "taxPolicyStub": {
+      "mode": "inclusive",
+      "rate": 0
+    }
+  },
+  "pilates": {
+    "defaultCategories": [],
+    "allocationPolicyStub": {
+      "overbook_mode": "warn",
+      "negative_stock_mode": "forbid",
+      "hold_ttl_seconds": 600
+    },
+    "taxPolicyStub": {
+      "mode": "inclusive",
+      "rate": 0
+    }
+  },
+  "retail": {
+    "defaultCategories": ["음료", "스낵", "생활용품"],
+    "allocationPolicyStub": {
+      "overbook_mode": "allow",
+      "negative_stock_mode": "warn",
+      "hold_ttl_seconds": 300
+    },
+    "taxPolicyStub": {
+      "mode": "inclusive",
+      "rate": 0.1
+    }
+  },
+  "apparel": {
+    "defaultCategories": ["상의", "하의", "악세서리"],
+    "allocationPolicyStub": {
+      "overbook_mode": "allow",
+      "negative_stock_mode": "warn",
+      "hold_ttl_seconds": 300
+    },
+    "taxPolicyStub": {
+      "mode": "inclusive",
+      "rate": 0.1
+    }
+  },
+  "convenience": {
+    "defaultCategories": ["음료", "즉석식품", "생활"],
+    "allocationPolicyStub": {
+      "overbook_mode": "allow",
+      "negative_stock_mode": "forbid",
+      "hold_ttl_seconds": 180
+    },
+    "taxPolicyStub": {
+      "mode": "inclusive",
+      "rate": 0.1
+    }
+  },
+  "general_academy": {
+    "defaultCategories": [],
+    "allocationPolicyStub": {
+      "overbook_mode": "forbid",
+      "negative_stock_mode": "forbid",
+      "hold_ttl_seconds": 900
+    },
+    "taxPolicyStub": {
+      "mode": "inclusive",
+      "rate": 0
+    }
+  },
+  "daycare": {
+    "defaultCategories": [],
+    "allocationPolicyStub": {
+      "overbook_mode": "forbid",
+      "negative_stock_mode": "forbid",
+      "hold_ttl_seconds": 1200
+    },
+    "taxPolicyStub": {
+      "mode": "inclusive",
+      "rate": 0
+    }
+  }
+}

@@ -34,7 +34,7 @@ import {
   UserPlus,
 } from 'lucide-react';
 
-export const ParentManagementView: React.FC = () => {
+export const ParentManagementView: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const { setSelectedStudentId, setActiveTab, showToast, triggerRefresh } = useApp();
   const refreshKey = useStorageRefresh([
     STORAGE_KEYS.PARENTS,
@@ -233,34 +233,40 @@ export const ParentManagementView: React.FC = () => {
     triggerRefresh();
   };
 
+  const addContactButton = (
+    <button
+      type="button"
+      onClick={() => {
+        setFormData({
+          name: '',
+          phone: '',
+          email: '',
+          studentId: activeStudents[0]?.id || '',
+          relationship: 'mother',
+          isPrimary: true,
+          notes: '',
+        });
+        setIsAddModalOpen(true);
+      }}
+      className="min-h-[44px] px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md inline-flex items-center gap-1.5 cursor-pointer shrink-0"
+    >
+      <UserPlus className="w-4 h-4" />
+      <span>{contactLabel} 등록</span>
+    </button>
+  );
+
   return (
-    <div className="space-y-4 pb-4">
-      <PageHeader
-        icon={<UserSquare2 className="w-6 h-6" />}
-        title={contactManagement}
-        description={`${contactLabel} 계정을 관리하고 자녀와의 연결 관계를 설정합니다.`}
-        actions={
-          <button
-            type="button"
-            onClick={() => {
-              setFormData({
-                name: '',
-                phone: '',
-                email: '',
-                studentId: activeStudents[0]?.id || '',
-                relationship: 'mother',
-                isPrimary: true,
-                notes: '',
-              });
-              setIsAddModalOpen(true);
-            }}
-            className="min-h-[44px] px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md inline-flex items-center gap-1.5 cursor-pointer shrink-0"
-          >
-            <UserPlus className="w-4 h-4" />
-            <span>{contactLabel} 등록</span>
-          </button>
-        }
-      />
+    <div className={embedded ? 'space-y-4 pb-2' : 'space-y-4 pb-4'}>
+      {!embedded ? (
+        <PageHeader
+          icon={<UserSquare2 className="w-6 h-6" />}
+          title={contactManagement}
+          description={`${contactLabel} 계정을 관리하고 자녀와의 연결 관계를 설정합니다.`}
+          actions={addContactButton}
+        />
+      ) : (
+        <div className="flex justify-end">{addContactButton}</div>
+      )}
 
       {canInvite && parents.length > 0 && (
         <div className="grid grid-cols-3 gap-2">
